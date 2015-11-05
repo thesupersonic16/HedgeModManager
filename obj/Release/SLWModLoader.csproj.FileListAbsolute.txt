@@ -1,0 +1,10 @@
+C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\bin\Release\SLWModLoader.exe.config
+C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\bin\Release\cpkmakec.exe
+C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\bin\Release\CpkMaker.DLL
+C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\bin\Release\SLWModLoader.exe
+C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\bin\Release\SLWModLoader.pdb
+C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\obj\Release\SLWModLoader.Form1.resources
+C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\obj\Release\SLWModLoader.Properties.Resources.resources
+C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\obj\Release\SLWModLoader.csproj.GenerateResource.Cache
+C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\obj\Release\SLWModLoader.exe
+C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\obj\Release\SLWModLoader.pdb
