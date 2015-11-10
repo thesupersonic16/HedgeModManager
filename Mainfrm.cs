@@ -10,7 +10,7 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "2.0";
+        public static string versionstring = "2.1";
         public static Thread cpkpackthread, loadmodthread, updatethread;
         public static WebClient client = new WebClient();
 
@@ -30,7 +30,7 @@ namespace SLWModLoader
             {
                 if (!Directory.Exists(modsdir.Text+"\\mods") && MessageBox.Show("A \"mods\" folder does not exist within your Sonic Lost World installation directory. Would you like to create one?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) Directory.CreateDirectory(modsdir.Text + "\\mods");
             }
-            else { MessageBox.Show("SLW Mod Loader could not find your Sonic Lost World installation directory. You'll have to manually set your mod directory.","SLW Mod Loader",MessageBoxButtons.OK,MessageBoxIcon.Warning); modsdir.Text = ""; }
+            else { MessageBox.Show("SLW Mod Loader could not find your Sonic Lost World installation directory. You'll have to manually set it.","SLW Mod Loader",MessageBoxButtons.OK,MessageBoxIcon.Warning); modsdir.Text = ""; }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -194,7 +194,7 @@ namespace SLWModLoader
 
         private void modsdirbtn_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog() { ShowNewFolderButton = true, Description = "The folder which contains the Sonic Lost World mods you wish to load." };
+            FolderBrowserDialog fbd = new FolderBrowserDialog() { ShowNewFolderButton = true, Description = "The folder which contains the Sonic Lost World executable (slw.exe), as well as a \"disk\" folder." };
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 modsdir.Text = fbd.SelectedPath;
