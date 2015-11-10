@@ -9,3 +9,15 @@ C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\obj\Debug\SLWModLo
 C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\obj\Debug\SLWModLoader.pdb
 C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\bin\Debug\cpkmakec.exe
 C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\bin\Debug\CpkMaker.DLL
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\cpkmakec.exe
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\CpkMaker.DLL
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\SLWModLoader.exe.config
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\SLWModLoader.exe
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\SLWModLoader.pdb
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.mainFRM.resources
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.Properties.Resources.resources
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.csproj.GenerateResource.Cache
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.exe
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.pdb
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.Updatefrm.resources
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\Sonic Lost World.url

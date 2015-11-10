@@ -1,6 +1,6 @@
 ﻿namespace SLWModLoader
 {
-    partial class Form1
+    partial class Mainfrm
     {
         /// <summary>
         /// Required designer variable.
@@ -34,24 +34,27 @@
             this.authorcolumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.savecolumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.updatedcolumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panel = new System.Windows.Forms.Panel();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.MoveDownAll = new System.Windows.Forms.Button();
             this.MoveUpAll = new System.Windows.Forms.Button();
             this.MoveDownbtn = new System.Windows.Forms.Button();
             this.MoveUpbtn = new System.Windows.Forms.Button();
             this.modsdirbtn = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.label = new System.Windows.Forms.Label();
             this.modsdir = new System.Windows.Forms.TextBox();
             this.nomodsfound = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.refreshlbl = new System.Windows.Forms.LinkLabel();
             this.playbtn = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            this.refreshbtn = new System.Windows.Forms.Button();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statuslbl = new System.Windows.Forms.ToolStripStatusLabel();
+            this.panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // modslist
@@ -97,39 +100,39 @@
             this.updatedcolumn.Text = "Updated";
             this.updatedcolumn.Width = 90;
             // 
-            // panel1
+            // panel
             // 
-            this.panel1.Controls.Add(this.splitContainer1);
-            this.panel1.Controls.Add(this.modsdirbtn);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.modsdir);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(0, 50, 0, 0);
-            this.panel1.Size = new System.Drawing.Size(548, 459);
-            this.panel1.TabIndex = 1;
+            this.panel.Controls.Add(this.splitContainer);
+            this.panel.Controls.Add(this.modsdirbtn);
+            this.panel.Controls.Add(this.label);
+            this.panel.Controls.Add(this.modsdir);
+            this.panel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel.Location = new System.Drawing.Point(0, 0);
+            this.panel.Name = "panel";
+            this.panel.Padding = new System.Windows.Forms.Padding(0, 50, 0, 0);
+            this.panel.Size = new System.Drawing.Size(548, 459);
+            this.panel.TabIndex = 1;
             // 
-            // splitContainer1
+            // splitContainer
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.IsSplitterFixed = true;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 50);
-            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.IsSplitterFixed = true;
+            this.splitContainer.Location = new System.Drawing.Point(0, 50);
+            this.splitContainer.Name = "splitContainer";
             // 
-            // splitContainer1.Panel1
+            // splitContainer.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.modslist);
+            this.splitContainer.Panel1.Controls.Add(this.modslist);
             // 
-            // splitContainer1.Panel2
+            // splitContainer.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.MoveDownAll);
-            this.splitContainer1.Panel2.Controls.Add(this.MoveUpAll);
-            this.splitContainer1.Panel2.Controls.Add(this.MoveDownbtn);
-            this.splitContainer1.Panel2.Controls.Add(this.MoveUpbtn);
-            this.splitContainer1.Size = new System.Drawing.Size(548, 409);
-            this.splitContainer1.SplitterDistance = 515;
-            this.splitContainer1.TabIndex = 5;
+            this.splitContainer.Panel2.Controls.Add(this.MoveDownAll);
+            this.splitContainer.Panel2.Controls.Add(this.MoveUpAll);
+            this.splitContainer.Panel2.Controls.Add(this.MoveDownbtn);
+            this.splitContainer.Panel2.Controls.Add(this.MoveUpbtn);
+            this.splitContainer.Size = new System.Drawing.Size(548, 409);
+            this.splitContainer.SplitterDistance = 515;
+            this.splitContainer.TabIndex = 5;
             // 
             // MoveDownAll
             // 
@@ -187,14 +190,14 @@
             this.modsdirbtn.UseVisualStyleBackColor = true;
             this.modsdirbtn.Click += new System.EventHandler(this.modsdirbtn_Click);
             // 
-            // label1
+            // label
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(112, 20);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "SLW directory:";
+            this.label.AutoSize = true;
+            this.label.Location = new System.Drawing.Point(9, 12);
+            this.label.Name = "label";
+            this.label.Size = new System.Drawing.Size(112, 20);
+            this.label.TabIndex = 2;
+            this.label.Text = "SLW directory:";
             // 
             // modsdir
             // 
@@ -217,18 +220,18 @@
             this.nomodsfound.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.nomodsfound.Visible = false;
             // 
-            // linkLabel1
+            // refreshlbl
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.linkLabel1.Location = new System.Drawing.Point(211, 271);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(127, 21);
-            this.linkLabel1.TabIndex = 4;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Refresh Mod List";
-            this.linkLabel1.Visible = false;
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.refreshlbl.AutoSize = true;
+            this.refreshlbl.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.refreshlbl.Location = new System.Drawing.Point(211, 271);
+            this.refreshlbl.Name = "refreshlbl";
+            this.refreshlbl.Size = new System.Drawing.Size(127, 21);
+            this.refreshlbl.TabIndex = 4;
+            this.refreshlbl.TabStop = true;
+            this.refreshlbl.Text = "Refresh Mod List";
+            this.refreshlbl.Visible = false;
+            this.refreshlbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.refreshlbl_Click);
             // 
             // playbtn
             // 
@@ -241,40 +244,62 @@
             this.playbtn.UseVisualStyleBackColor = true;
             this.playbtn.Click += new System.EventHandler(this.playbtn_Click);
             // 
-            // button1
+            // refreshbtn
             // 
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(124, 525);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(300, 33);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Refresh Mod List";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.refreshbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.refreshbtn.Location = new System.Drawing.Point(124, 525);
+            this.refreshbtn.Name = "refreshbtn";
+            this.refreshbtn.Size = new System.Drawing.Size(300, 33);
+            this.refreshbtn.TabIndex = 4;
+            this.refreshbtn.Text = "Refresh Mod List";
+            this.refreshbtn.UseVisualStyleBackColor = true;
+            this.refreshbtn.Click += new System.EventHandler(this.refreshbtn_Click);
             // 
-            // Form1
+            // statusStrip
+            // 
+            this.statusStrip.BackColor = System.Drawing.Color.White;
+            this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statuslbl});
+            this.statusStrip.Location = new System.Drawing.Point(0, 565);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(548, 22);
+            this.statusStrip.SizingGrip = false;
+            this.statusStrip.TabIndex = 5;
+            this.statusStrip.Text = "statusStrip1";
+            // 
+            // statuslbl
+            // 
+            this.statuslbl.Name = "statuslbl";
+            this.statuslbl.Size = new System.Drawing.Size(0, 17);
+            // 
+            // Mainfrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(548, 563);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(548, 587);
+            this.Controls.Add(this.statusStrip);
+            this.Controls.Add(this.refreshbtn);
             this.Controls.Add(this.nomodsfound);
-            this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.refreshlbl);
+            this.Controls.Add(this.panel);
             this.Controls.Add(this.playbtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form1";
+            this.Name = "Mainfrm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SLW Mod Loader";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_Closing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Mainfrm_Closing);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.panel.ResumeLayout(false);
+            this.panel.PerformLayout();
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -288,19 +313,21 @@
         private System.Windows.Forms.ColumnHeader authorcolumn;
         private System.Windows.Forms.ColumnHeader savecolumn;
         private System.Windows.Forms.ColumnHeader updatedcolumn;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel;
+        private System.Windows.Forms.Label label;
         private System.Windows.Forms.TextBox modsdir;
         private System.Windows.Forms.Button modsdirbtn;
         private System.Windows.Forms.Button playbtn;
         private System.Windows.Forms.Label nomodsfound;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.LinkLabel refreshlbl;
+        private System.Windows.Forms.Button refreshbtn;
+        private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Button MoveDownbtn;
         private System.Windows.Forms.Button MoveUpbtn;
         private System.Windows.Forms.Button MoveDownAll;
         private System.Windows.Forms.Button MoveUpAll;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel statuslbl;
     }
 }
 

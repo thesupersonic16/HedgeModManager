@@ -14,9 +14,16 @@ namespace SLWModLoader
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Mainfrm());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERROR: "+ex.Message,"SLW Mod Loader",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
     }
 }
