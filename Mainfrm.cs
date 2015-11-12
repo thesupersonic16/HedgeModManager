@@ -5,14 +5,16 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using System.Net;
+using System.Collections.Generic;
 
 namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "2.1";
-        public static Thread cpkpackthread, loadmodthread, updatethread;
+        public static string versionstring = "3.2";
+        public static Thread generatemodsdbthread, loadmodthread, updatethread;
         public static WebClient client = new WebClient();
+        public static string[] configfile; public static List<string> oldmods = new List<string>();
 
         public Mainfrm()
         {
@@ -21,16 +23,38 @@ namespace SLWModLoader
 
             //Set the form's title
             Text = $"SLW Mod Loader (v {versionstring})";
+            modsdir.Text = @"C:\Program Files (x86)\Steam\SteamApps\common\Sonic Lost World";
+
+            //Load the config file
+            if (File.Exists(Application.StartupPath + "\\config.txt"))
+            {
+                configfile = File.ReadAllLines(Application.StartupPath + "\\config.txt");
+                modsdir.Text = configfile[1];
+            }
 
             //Set the mod directory textbox
-            modsdir.Text = @"C:\Program Files (x86)\Steam\SteamApps\common\Sonic Lost World";
-            if (File.Exists(Application.StartupPath + "\\config.txt")) { modsdir.Text = File.ReadAllLines(Application.StartupPath + "\\config.txt")[1]; }
-
             if (Directory.Exists(modsdir.Text))
             {
                 if (!Directory.Exists(modsdir.Text+"\\mods") && MessageBox.Show("A \"mods\" folder does not exist within your Sonic Lost World installation directory. Would you like to create one?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) Directory.CreateDirectory(modsdir.Text + "\\mods");
             }
             else { MessageBox.Show("SLW Mod Loader could not find your Sonic Lost World installation directory. You'll have to manually set it.","SLW Mod Loader",MessageBoxButtons.OK,MessageBoxIcon.Warning); modsdir.Text = ""; }
+
+            //3.1 Update
+            if (Convert.ToSingle(configfile[0]) <= 3.0f || configfile == null)
+            {
+                DialogResult dopatch = DialogResult.Yes;
+                while (dopatch == DialogResult.Yes) { dopatch = MessageBox.Show("We assume your slw.exe executable is unpatched given you just updated/installed the application. The following step is VERY IMPORTANT, so to prove that you've read it, click \"No.\" A window is about to open. In this window, you need to type Y and press enter. This will automatically patch your slw.exe executable, and will not need to be done again. If your executable is already patched, click \"Cancel\"", "SLW Mod Loader", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning); }
+
+                if (dopatch == DialogResult.No)
+                {
+                    Process updateprocess = new Process() { StartInfo = new ProcessStartInfo(Application.StartupPath + "\\cpkredirInst.exe", '"' + (File.Exists(modsdir.Text + "\\slw.exe") ? modsdir.Text + "\\slw.exe" : File.Exists(Application.StartupPath + "\\slw.exe") ? Application.StartupPath + "\\slw.exe" : @"C:\Program Files (x86)\Steam\SteamApps\common\Sonic Lost World\slw.exe") + '"') };
+                    updateprocess.Start();
+                }
+                else
+                {
+                    Environment.Exit(0);
+                }
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -38,7 +62,7 @@ namespace SLWModLoader
             //Define thread variables
             loadmodthread = new Thread(new ThreadStart(LoadMods));
             updatethread = new Thread(new ThreadStart(CheckForUpdates));
-            cpkpackthread = new Thread(new ThreadStart(PackCPK));
+            generatemodsdbthread = new Thread(new ThreadStart(GenerateModsDB));
 
             //Load the list of mods
             statuslbl.Text = "Loading mods...";
@@ -55,16 +79,58 @@ namespace SLWModLoader
 
         private void LoadMods()
         {
-            Invoke(new Action(() => modslist.Items.Clear()));
+            Invoke(new Action(() => { modslist.Items.Clear(); oldmods.Clear(); }));
             if (!string.IsNullOrEmpty(modsdir.Text) && Directory.Exists(modsdir.Text+"\\mods"))
             {
                 foreach (string mod in Directory.GetDirectories(modsdir.Text+"\\mods"))
                 {
-                    Invoke(new Action(() => { modslist.Items.Add(new DirectoryInfo(mod).Name); }));
+                    if (File.Exists(mod + "\\mod.ini")) { Invoke(new Action(() => { modslist.Items.Add(new ListViewItem(new DirectoryInfo(mod).Name) { Tag = new DirectoryInfo(mod).Name }); })); }
+                    else { oldmods.Add(mod); }
                 }
             }
 
-            Invoke(new Action(() => { nomodsfound.Visible = refreshlbl.Visible = (modslist.Items.Count < 1); modslist.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize); })); 
+            bool moveoldmods = false;
+            Invoke(new Action(() => { nomodsfound.Visible = refreshlbl.Visible = (modslist.Items.Count < 1); modslist.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize); }));
+            Invoke(new Action(() => { moveoldmods = (oldmods.Count > 0 && MessageBox.Show("Your mods folder seems to contain mods designed for the pre-3.0 version of the mod loader. Would you like to attempt to update them?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes); if (moveoldmods) { statuslbl.Text = "Updating old mods..."; } }));
+
+            if (moveoldmods)
+            {
+                foreach (string oldmod in oldmods)
+                {
+                    //Make a temporary directory
+                    if (Directory.Exists(Application.StartupPath + "\\temp")) { Directory.Delete(Application.StartupPath + "\\temp", true); }
+                    Directory.CreateDirectory(Application.StartupPath + "\\temp");
+
+                    //Move the old mod into the temporary directory
+                    Directory.Move(oldmod, Application.StartupPath + "\\temp\\"+new DirectoryInfo(oldmod).Name);
+
+                    //Re-format the old mod's directory
+                    Directory.CreateDirectory(oldmod + "\\disk");
+                    //Directory.CreateDirectory(oldmod + "\\disk\\sonic2013_patch_0");
+                    File.WriteAllLines(oldmod+"\\mod.ini",new string[]
+                    {
+                        "[Main]",
+                        "IncludeDir0=\".\"",
+                        "IncludeDirCount=1",
+                        "SaveFile=\"save\\sonic.sav\"",
+                        "",
+                        "[Desc]",
+                        $"Title=\"{new DirectoryInfo(oldmod).Name}\"",
+                        "Description=\"This mod was automatically updated from it's previous form, and as such, does not have a description.\"",
+                        "Version=\"1.0\"",
+                        "Date=\"11/11/15\"",
+                        "Author=\"Radfordhound\"",
+                        "URL=\"\""
+                    });
+
+                    //Move the old mod back into it's original directory
+                    Directory.Move(Application.StartupPath + "\\temp\\"+new DirectoryInfo(oldmod).Name, oldmod + "\\disk\\sonic2013_patch_0");
+                }
+
+                Invoke(new Action(() => statuslbl.Text = ""));
+                loadmodthread = new Thread(new ThreadStart(LoadMods));
+                loadmodthread.Start();
+            }
         }
 
         private void CheckForUpdates()
@@ -86,27 +152,53 @@ namespace SLWModLoader
             catch { Invoke(new Action(() => { statuslbl.Text = "Checking for updates failed."; })); }
         }
 
-        private void PackCPK()
+        private void GenerateModsDB()
         {
             //Make a backup for going back to vanilla Lost World if one doesn't already exist
-            if (!File.Exists(modsdir.Text + "\\disk\\sonic2013_patch_0_Backup.cpk") && File.Exists(modsdir.Text + "\\disk\\sonic2013_patch_0.cpk")) { File.Copy(modsdir.Text + "\\disk\\sonic2013_patch_0.cpk", modsdir.Text + "\\disk\\sonic2013_patch_0_Backup.cpk"); }
+            //if (!File.Exists(modsdir.Text + "\\disk\\sonic2013_patch_0_Backup.cpk") && File.Exists(modsdir.Text + "\\disk\\sonic2013_patch_0.cpk")) { File.Copy(modsdir.Text + "\\disk\\sonic2013_patch_0.cpk", modsdir.Text + "\\disk\\sonic2013_patch_0_Backup.cpk"); }
 
-            //Re-pack the cpk using cpkmackec.exe
-            using (Process proc = new Process())
+            ////Re-pack the cpk using cpkmackec.exe
+            //using (Process proc = new Process())
+            //{
+            //    proc.StartInfo = new ProcessStartInfo("cpkmakec.exe", $"\"{Application.StartupPath}\\temp\" \"{modsdir.Text}\\disk\\sonic2013_patch_0.cpk\" -align=2048 -code=UTF-8 -mode=FILENAME -mask");
+            //    proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            //    proc.Start();
+            //    proc.WaitForExit();
+            //}
+
+            ////Delete the temp folder
+            //Directory.Delete(Application.StartupPath+"\\temp", true);
+
+            if (File.Exists(modsdir.Text + "\\mods\\ModsDB.ini")) { File.Delete(modsdir.Text + "\\mods\\ModsDB.ini"); }
+
+            int checkeditemcount = 0;
+            List<string> checkedmods = new List<string>(), mods = new List<string>(), modsdb;
+
+            Invoke(new Action(() =>
             {
-                proc.StartInfo = new ProcessStartInfo("cpkmakec.exe", $"\"{Application.StartupPath}\\temp\" \"{modsdir.Text}\\disk\\sonic2013_patch_0.cpk\" -align=2048 -code=UTF-8 -mode=FILENAME -mask");
-                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.Start();
-                proc.WaitForExit();
+                checkeditemcount = modslist.CheckedItems.Count;
+                foreach (ListViewItem checkedmod in modslist.CheckedItems) { checkedmods.Add((string)checkedmod.Tag); }
+                foreach (ListViewItem mod in modslist.Items) { mods.Add((string)mod.Tag); }
+            }));
+
+            modsdb = new List<string>() { "[Main]", $"ActiveModCount={checkeditemcount.ToString()}" };
+
+            for (int i = 0; i < checkeditemcount; i++)
+            {
+                modsdb.Add($"ActiveMod{i.ToString()}={checkedmods[i]}");
+            }
+            modsdb.Add("[Mods]");
+            foreach (string mod in mods)
+            {
+                modsdb.Add($"{mod}={mod}\\mod.ini");
             }
 
-            //Delete the temp folder
-            Directory.Delete(Application.StartupPath+"\\temp", true);
+            File.WriteAllLines(modsdir.Text + "\\mods\\ModsDB.ini", modsdb);
 
             //Close the mod loader and start Sonic Lost World
             Invoke(new Action(() => { statuslbl.Text = "Starting SLW..."; }));
             Process slw = new Process();
-            slw.StartInfo = new ProcessStartInfo(Application.StartupPath+"\\Sonic Lost World.url");
+            slw.StartInfo = new ProcessStartInfo(Application.StartupPath + "\\Sonic Lost World.url");
 
             Invoke(new Action(() => { Close(); }));
             slw.Start();
@@ -158,38 +250,40 @@ namespace SLWModLoader
         private void playbtn_Click(object sender, EventArgs e)
         {
             playbtn.Enabled = false;
+            statuslbl.Text = "Generating ModsDB.ini...";
+            generatemodsdbthread.Start();
 
-            if (modslist.CheckedItems.Count > 0)
-            {
-                //Make a temporary directory
-                if (Directory.Exists(Application.StartupPath + "\\temp")) { Directory.Delete(Application.StartupPath + "\\temp", true); }
-                Directory.CreateDirectory(Application.StartupPath + "\\temp");
+            //if (modslist.CheckedItems.Count > 0)
+            //{
+            //    //Make a temporary directory
+            //    //if (Directory.Exists(Application.StartupPath + "\\temp")) { Directory.Delete(Application.StartupPath + "\\temp", true); }
+            //    //Directory.CreateDirectory(Application.StartupPath + "\\temp");
 
-                //Copy all the stuff there
-                statuslbl.Text = "Copying mod data...";
-                foreach (ListViewItem mod in modslist.CheckedItems)
-                {
-                    if (Directory.Exists(modsdir.Text + "\\mods\\" + mod.Text))
-                    {
-                        DirectoryCopy(modsdir.Text + "\\mods\\" + mod.Text, Application.StartupPath + "\\temp", true);
-                    }
-                }
+            //    //Copy all the stuff there
+            //    //statuslbl.Text = "Copying mod data...";
+            //    //foreach (ListViewItem mod in modslist.CheckedItems)
+            //    //{
+            //    //    if (Directory.Exists(modsdir.Text + "\\mods\\" + mod.Text))
+            //    //    {
+            //    //        DirectoryCopy(modsdir.Text + "\\mods\\" + mod.Text, Application.StartupPath + "\\temp", true);
+            //    //    }
+            //    //}
 
-                statuslbl.Text = "Packing patch CPK...";
-                cpkpackthread.Start();
-            }
-            else
-            {
-                if (File.Exists(modsdir.Text + "\\disk\\sonic2013_patch_0_Backup.cpk")) { File.Copy(modsdir.Text + "\\disk\\sonic2013_patch_0_Backup.cpk", modsdir.Text + "\\disk\\sonic2013_patch_0.cpk", true); }
+            //    statuslbl.Text = "Generating ModsDB.ini...";
+            //    generatemodsdbthread.Start();
+            //}
+            //else
+            //{
+            //    if (File.Exists(modsdir.Text + "\\disk\\sonic2013_patch_0_Backup.cpk")) { File.Copy(modsdir.Text + "\\disk\\sonic2013_patch_0_Backup.cpk", modsdir.Text + "\\disk\\sonic2013_patch_0.cpk", true); }
 
-                //Start Sonic Lost World
-                statuslbl.Text = "Starting SLW...";
-                Process slw = new Process();
-                slw.StartInfo = new ProcessStartInfo(Application.StartupPath + "\\Sonic Lost World.url");
+            //    //Start Sonic Lost World
+            //    statuslbl.Text = "Starting SLW...";
+            //    Process slw = new Process();
+            //    slw.StartInfo = new ProcessStartInfo(Application.StartupPath + "\\Sonic Lost World.url");
 
-                slw.Start();
-                Close();
-            }
+            //    slw.Start();
+            //    Close();
+            //}
         }
 
         private void modsdirbtn_Click(object sender, EventArgs e)
@@ -219,6 +313,11 @@ namespace SLWModLoader
                 modslist.Items.RemoveAt(modslist.SelectedItems[0].Index);
                 modslist.Items.Insert(0, lvi);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            new AboutFrm().ShowDialog();
         }
 
         private void Mainfrm_Closing(object sender, FormClosingEventArgs e)

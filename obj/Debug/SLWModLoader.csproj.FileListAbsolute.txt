@@ -9,8 +9,6 @@ C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\obj\Debug\SLWModLo
 C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\obj\Debug\SLWModLoader.pdb
 C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\bin\Debug\cpkmakec.exe
 C:\Users\Graha_000\Documents\GitHub\SLWModLoader\SLWModLoader\bin\Debug\CpkMaker.DLL
-C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\cpkmakec.exe
-C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\CpkMaker.DLL
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\SLWModLoader.exe.config
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\SLWModLoader.exe
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\SLWModLoader.pdb
@@ -21,3 +19,10 @@ C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.exe
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.pdb
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.Updatefrm.resources
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\Sonic Lost World.url
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.csprojResolveAssemblyReference.cache
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\obj\Debug\SLWModLoader.AboutFrm.resources
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\cpkredir.ini
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\cpkredir.dll
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\cpkredir.txt
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\cpkredirInst.exe
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\DllInjector32.exe
