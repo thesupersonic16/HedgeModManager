@@ -11,7 +11,7 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "3.5";
+        public static string versionstring = "3.6";
         public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>();
@@ -50,7 +50,7 @@ namespace SLWModLoader
                 if (File.Exists(Application.StartupPath + "\\CpkMaker.DLL")) { File.Delete(Application.StartupPath + "\\CpkMaker.DLL"); }
 
                 #if !DEBUG
-                    if (File.Exists(Application.StartupPath + "\\SLWModLoader.pdb")) { File.Delete(Application.StartupPath + "\\SLWModLoader.pdb.exe"); }
+                    if (File.Exists(Application.StartupPath + "\\SLWModLoader.pdb")) { File.Delete(Application.StartupPath + "\\SLWModLoader.pdb"); }
                     if (File.Exists(Application.StartupPath + "\\SLWModLoader.vshost.exe")) { File.Delete(Application.StartupPath + "\\SLWModLoader.vshost.exe"); }
                     if (File.Exists(Application.StartupPath + "\\SLWModLoader.vshost.exe.config")) { File.Delete(Application.StartupPath + "\\SLWModLoader.vshost.exe.config"); }
                     if (File.Exists(Application.StartupPath + "\\SLWModLoader.vshost.exe.manifest")) { File.Delete(Application.StartupPath + "\\SLWModLoader.vshost.exe.manifest"); }
