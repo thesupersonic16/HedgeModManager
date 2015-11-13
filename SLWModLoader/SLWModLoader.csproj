@@ -58,30 +58,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutFrm.cs">
+    <Compile Include="src\AboutFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AboutFrm.Designer.cs">
+    <Compile Include="src\AboutFrm.Designer.cs">
       <DependentUpon>AboutFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Mainfrm.cs">
+    <Compile Include="src\Mainfrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Mainfrm.Designer.cs">
+    <Compile Include="src\Mainfrm.Designer.cs">
       <DependentUpon>Mainfrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Updatefrm.cs">
+    <Compile Include="src\Updatefrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Updatefrm.Designer.cs">
+    <Compile Include="src\Updatefrm.Designer.cs">
       <DependentUpon>Updatefrm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AboutFrm.resx">
+    <EmbeddedResource Include="src\AboutFrm.resx">
       <DependentUpon>AboutFrm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Mainfrm.resx">
+    <EmbeddedResource Include="src\Mainfrm.resx">
       <DependentUpon>Mainfrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -94,7 +94,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Updatefrm.resx">
+    <EmbeddedResource Include="src\Updatefrm.resx">
       <DependentUpon>Updatefrm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="cpkredir.ini">
@@ -124,9 +124,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="cpkredir.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="cpkredirInst.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="DllInjector32.exe">

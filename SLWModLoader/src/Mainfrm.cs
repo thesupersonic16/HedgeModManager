@@ -11,8 +11,8 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "3.2";
-        public static Thread generatemodsdbthread, loadmodthread, updatethread;
+        public static string versionstring = "3.5";
+        public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>();
 
@@ -39,21 +39,22 @@ namespace SLWModLoader
             }
             else { MessageBox.Show("SLW Mod Loader could not find your Sonic Lost World installation directory. You'll have to manually set it.","SLW Mod Loader",MessageBoxButtons.OK,MessageBoxIcon.Warning); modsdir.Text = ""; }
 
-            //3.1 Update
-            if (Convert.ToSingle(configfile[0]) <= 3.0f || configfile == null)
+            //3.5 update
+            if (configfile != null && Convert.ToSingle(configfile[0]) < 3.5f)
             {
-                DialogResult dopatch = DialogResult.Yes;
-                while (dopatch == DialogResult.Yes) { dopatch = MessageBox.Show("We assume your slw.exe executable is unpatched given you just updated/installed the application. The following step is VERY IMPORTANT, so to prove that you've read it, click \"No.\" A window is about to open. In this window, you need to type Y and press enter. This will automatically patch your slw.exe executable, and will not need to be done again. If your executable is already patched, click \"Cancel\"", "SLW Mod Loader", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning); }
+                //Delete all the leftover files from previous versions of the mod loader if they exist
+                if (File.Exists(Application.StartupPath + "\\cpkredirInst.exe")) { File.Delete(Application.StartupPath + "\\cpkredirInst.exe"); }
 
-                if (dopatch == DialogResult.No)
-                {
-                    Process updateprocess = new Process() { StartInfo = new ProcessStartInfo(Application.StartupPath + "\\cpkredirInst.exe", '"' + (File.Exists(modsdir.Text + "\\slw.exe") ? modsdir.Text + "\\slw.exe" : File.Exists(Application.StartupPath + "\\slw.exe") ? Application.StartupPath + "\\slw.exe" : @"C:\Program Files (x86)\Steam\SteamApps\common\Sonic Lost World\slw.exe") + '"') };
-                    updateprocess.Start();
-                }
-                else
-                {
-                    Environment.Exit(0);
-                }
+                if (File.Exists(Application.StartupPath + "\\cpkmakec.exe")) { File.Delete(Application.StartupPath + "\\cpkmakec.exe"); }
+                if (File.Exists(Application.StartupPath + "\\cpkmaker.out.csv")) { File.Delete(Application.StartupPath + "\\cpkmaker.out.csv"); }
+                if (File.Exists(Application.StartupPath + "\\CpkMaker.DLL")) { File.Delete(Application.StartupPath + "\\CpkMaker.DLL"); }
+
+                #if !DEBUG
+                    if (File.Exists(Application.StartupPath + "\\SLWModLoader.pdb")) { File.Delete(Application.StartupPath + "\\SLWModLoader.pdb.exe"); }
+                    if (File.Exists(Application.StartupPath + "\\SLWModLoader.vshost.exe")) { File.Delete(Application.StartupPath + "\\SLWModLoader.vshost.exe"); }
+                    if (File.Exists(Application.StartupPath + "\\SLWModLoader.vshost.exe.config")) { File.Delete(Application.StartupPath + "\\SLWModLoader.vshost.exe.config"); }
+                    if (File.Exists(Application.StartupPath + "\\SLWModLoader.vshost.exe.manifest")) { File.Delete(Application.StartupPath + "\\SLWModLoader.vshost.exe.manifest"); }
+                #endif
             }
         }
 
@@ -63,6 +64,7 @@ namespace SLWModLoader
             loadmodthread = new Thread(new ThreadStart(LoadMods));
             updatethread = new Thread(new ThreadStart(CheckForUpdates));
             generatemodsdbthread = new Thread(new ThreadStart(GenerateModsDB));
+            patchthread = new Thread(new ThreadStart(PatchEXE));
 
             //Load the list of mods
             statuslbl.Text = "Loading mods...";
@@ -75,6 +77,46 @@ namespace SLWModLoader
             //Check for updates
             statuslbl.Text = "Checking for updates...";
             updatethread.Start();
+        }
+
+        private void PatchEXE()
+        {
+            if (File.Exists(modsdir.Text + "\\slw.exe"))
+            {
+                //Read the executable
+                byte[] slwexe = File.ReadAllBytes(modsdir.Text + "\\slw.exe");
+
+                //If it's unpatched, ask if the user would like to patch it.
+                //We do this via an invoke to freeze the GUI thread until the messagebox is answered.
+                DialogResult dopatch = DialogResult.No;
+                Invoke(new Action(() => { if (slwexe[11918776] != 99) { dopatch = MessageBox.Show("Your Sonic Lost World executable has not yet been patched for use with CPKREDIR, which is required to load mods. Would you like to patch it now?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Information); } }));
+
+                if (dopatch == DialogResult.Yes)
+                {
+                    Invoke(new Action(() => statuslbl.Text = "Patching executable..."));
+                    /*
+                      Here we're essentially hex editing the slw.exe executable to change
+                      decimal address 11,918,776 - 11,918,783 from "imagehlp" to "cpkredir".
+                    */
+
+                    //cpkredir                                      -cpkredir
+                    //c p k r e d i r                               -cpkredir spaced out
+                    //99 112 107 114 101 100 105 114                -cpkredir in binary
+
+                    slwexe[11918776] = 99; slwexe[11918777] = 112;  //99  = c, 112 = p
+                    slwexe[11918778] = 107; slwexe[11918779] = 114; //107 = k, 114 = r
+                    slwexe[11918780] = 101; slwexe[11918781] = 100; //101 = e, 100 = d
+                    slwexe[11918782] = 105; slwexe[11918783] = 114; //105 = i, 114 = r
+
+                    //Now that we've edited the executable, all that's left is to make a backup of the old one...
+                    if (!File.Exists(modsdir.Text + "\\slw_Backup.exe")) { File.Move(modsdir.Text + "\\slw.exe", modsdir.Text + "\\slw_Backup.exe"); }
+                    else { File.Delete(modsdir.Text + "\\slw.exe"); }
+
+                    //...and write the new one.
+                    File.WriteAllBytes(modsdir.Text + "\\slw.exe", slwexe);
+                    Invoke(new Action(() => statuslbl.Text=""));
+                }
+            }
         }
 
         private void LoadMods()
@@ -150,6 +192,7 @@ namespace SLWModLoader
                 else { Invoke(new Action(() => { statuslbl.Text = ""; })); }
             }
             catch { Invoke(new Action(() => { statuslbl.Text = "Checking for updates failed."; })); }
+            patchthread.Start();
         }
 
         private void GenerateModsDB()
@@ -240,12 +283,12 @@ namespace SLWModLoader
             }
         }
 
-        #region SHHHH... DON'T LOOK! IT'S A SECRET!!!
+#region SHHHH... DON'T LOOK! IT'S A SECRET!!!
         private void modsdir_TextChanged(object sender, EventArgs e)
         {
             if (modsdir.Text == "DO A BARREL ROLL") { label.Font = nomodsfound.Font = refreshlbl.Font = playbtn.Font = refreshbtn.Font = modsdirbtn.Font = modslist.Font = new Font("Comic Sans MS",8);  }
         }
-        #endregion
+#endregion
 
         private void playbtn_Click(object sender, EventArgs e)
         {

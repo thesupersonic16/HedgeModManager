@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLWModLoader", "SLWModLoader.csproj", "{D49C97D1-F23C-467A-8AB4-EEB7A6F1B4E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLWModLoader", "SLWModLoader\SLWModLoader.csproj", "{D49C97D1-F23C-467A-8AB4-EEB7A6F1B4E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
