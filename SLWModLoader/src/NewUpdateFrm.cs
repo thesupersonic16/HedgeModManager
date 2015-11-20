@@ -20,9 +20,9 @@ namespace SLWModLoader
             label1.Text = $"SLW Mod Loader v{Mainfrm.versionstring}";
 
             string updatechangelog = Updatefrm.latest.Substring(Updatefrm.latest.IndexOf("body") + 7, Updatefrm.latest.IndexOf("\"}", Updatefrm.latest.IndexOf("body") + 7) - (Updatefrm.latest.IndexOf("body") + 7));
-            updatechangelog = updatechangelog.Replace("\\\"","\"").Replace("*", "");
+            updatechangelog = updatechangelog.Replace("\\\"","\"").Replace("*", "").Replace("\\r\\n",Environment.NewLine);
 
-            if (updatechangelog.Contains("[//]: # (MOD LOADER)\\r\\n\\r\\n")) { updatechangelog = updatechangelog.Substring(updatechangelog.IndexOf("[//]: # (MOD LOADER)\\r\\n\\r\\n")+ "[//]: # (MOD LOADER)\\r\\n\\r\\n".Length); }
+            if (updatechangelog.Contains("[//]: # (MOD LOADER)"+Environment.NewLine+Environment.NewLine)) { updatechangelog = updatechangelog.Substring(updatechangelog.IndexOf("[//]: # (MOD LOADER)" + Environment.NewLine + Environment.NewLine) + ("[//]: # (MOD LOADER)" + Environment.NewLine + Environment.NewLine).Length); }
             label2.Text = updatechangelog;
         }
 
