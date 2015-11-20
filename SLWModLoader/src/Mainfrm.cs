@@ -11,7 +11,7 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "3.6";
+        public static string versionstring = "4.0";
         public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>();
@@ -75,8 +75,17 @@ namespace SLWModLoader
             if (File.Exists(Application.StartupPath + "\\update.bat")) { File.Delete(Application.StartupPath + "\\update.bat"); }
 
             //Check for updates
-            statuslbl.Text = "Checking for updates...";
+            statuslbl.Text = "Checking for updates to mod loader...";
             updatethread.Start();
+        }
+
+        private string GetModINIinfo(List<string> modini, string datatoget)
+        {
+            for (int i = 0; i < modini.Count; i++)
+            {
+                if (modini[i].Length > datatoget.Length+2 && modini[i].Substring(0,datatoget.Length+2) == datatoget + "=\"") { return modini[i].Substring(modini[i].IndexOf(datatoget + "=\"") + datatoget.Length + 2, modini[i].Length- (modini[i].IndexOf(datatoget + "=\"") + datatoget.Length + 3)); }
+            }
+            return null;
         }
 
         private void PatchEXE()
@@ -126,7 +135,16 @@ namespace SLWModLoader
             {
                 foreach (string mod in Directory.GetDirectories(modsdir.Text+"\\mods"))
                 {
-                    if (File.Exists(mod + "\\mod.ini")) { Invoke(new Action(() => { modslist.Items.Add(new ListViewItem(new DirectoryInfo(mod).Name) { Tag = new DirectoryInfo(mod).Name }); })); }
+                    if (File.Exists(mod + "\\mod.ini")) { Invoke(new Action(() =>
+                    {
+                        List<string> modini = new List<string>() { mod };
+                        modini.AddRange(File.ReadAllLines(mod + "\\mod.ini"));
+
+                        ListViewItem modlvi = new ListViewItem(GetModINIinfo(modini, "Title")) { Tag = modini };
+                        modlvi.SubItems.Add(GetModINIinfo(modini, "Version")); modlvi.SubItems.Add(GetModINIinfo(modini, "Author"));
+                        modlvi.SubItems.Add((GetModINIinfo(modini, "SaveFile") != null)?"Yes":"No");
+                        modslist.Items.Add(modlvi);
+                    })); }
                     else { oldmods.Add(mod); }
                 }
             }
@@ -154,15 +172,11 @@ namespace SLWModLoader
                         "[Main]",
                         "IncludeDir0=\".\"",
                         "IncludeDirCount=1",
-                        "SaveFile=\"save\\sonic.sav\"",
                         "",
                         "[Desc]",
                         $"Title=\"{new DirectoryInfo(oldmod).Name}\"",
                         "Description=\"This mod was automatically updated from it's previous form, and as such, does not have a description.\"",
                         "Version=\"1.0\"",
-                        "Date=\"11/11/15\"",
-                        "Author=\"Radfordhound\"",
-                        "URL=\"\""
                     });
 
                     //Move the old mod back into it's original directory
@@ -190,6 +204,11 @@ namespace SLWModLoader
                     new Updatefrm().ShowDialog();
                 }
                 else { Invoke(new Action(() => { statuslbl.Text = ""; })); }
+
+                if (configfile != null && configfile.Length > 0 && configfile[0] != null && Convert.ToSingle(versionstring) > Convert.ToSingle(configfile[0]))
+                {
+                    Invoke(new Action(() => new NewUpdateFrm().ShowDialog()));
+                }
             }
             catch { Invoke(new Action(() => { statuslbl.Text = "Checking for updates failed."; })); }
             patchthread.Start();
@@ -220,8 +239,8 @@ namespace SLWModLoader
             Invoke(new Action(() =>
             {
                 checkeditemcount = modslist.CheckedItems.Count;
-                foreach (ListViewItem checkedmod in modslist.CheckedItems) { checkedmods.Add((string)checkedmod.Tag); }
-                foreach (ListViewItem mod in modslist.Items) { mods.Add((string)mod.Tag); }
+                foreach (ListViewItem checkedmod in modslist.CheckedItems) { checkedmods.Add(((List<string>)checkedmod.Tag)[0]); }
+                foreach (ListViewItem mod in modslist.Items) { mods.Add(((List<string>)mod.Tag)[0]); }
             }));
 
             modsdb = new List<string>() { "[Main]", $"ActiveModCount={checkeditemcount.ToString()}" };
@@ -249,12 +268,18 @@ namespace SLWModLoader
 
         private void refreshlbl_Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            descriptionlbl.Text = "Click on a mod to see it's description!";
+            descriptionlbl.LinkBehavior = LinkBehavior.NeverUnderline;
+
             loadmodthread = new Thread(new ThreadStart(LoadMods));
             loadmodthread.Start();
         }
 
         private void refreshbtn_Click(object sender, EventArgs e)
         {
+            descriptionlbl.Text = "Click on a mod to see it's description!";
+            descriptionlbl.LinkBehavior = LinkBehavior.NeverUnderline;
+
             loadmodthread = new Thread(new ThreadStart(LoadMods));
             loadmodthread.Start();
         }
@@ -356,6 +381,37 @@ namespace SLWModLoader
                 modslist.Items.RemoveAt(modslist.SelectedItems[0].Index);
                 modslist.Items.Insert(0, lvi);
             }
+        }
+
+        private void modslist_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (modslist.SelectedItems.Count > 0 && modslist.SelectedItems[0].Tag != null && ((List<string>)modslist.SelectedItems[0].Tag).Count > 0)
+            {
+                string description = GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Description");
+                descriptionlbl.Tag = description;
+                descriptionlbl.LinkBehavior = LinkBehavior.NeverUnderline;
+
+                if (TextRenderer.MeasureText(description, new Font(descriptionlbl.Font.FontFamily, descriptionlbl.Font.Size, descriptionlbl.Font.Style)).Width > 532)
+                {
+                    while (TextRenderer.MeasureText(description, new Font(descriptionlbl.Font.FontFamily, descriptionlbl.Font.Size, descriptionlbl.Font.Style)).Width > 532)
+                    {
+                        description = description.Substring(0, description.Length - 1);
+                    }
+                    if (description.Substring(description.Length - 3, 3) != "...") { description += "..."; descriptionlbl.LinkBehavior = LinkBehavior.HoverUnderline; }
+                }
+
+                descriptionlbl.Text = (!string.IsNullOrEmpty(description))?description:"This mod doesn't contain a description. Click here to learn more about it.";
+            }
+            else if (modslist.SelectedItems.Count <= 0)
+            {
+                descriptionlbl.Text = "Click on a mod to see it's description. Then try clicking on me! :)";
+                descriptionlbl.LinkBehavior = LinkBehavior.NeverUnderline;
+            }
+        }
+
+        private void descriptionlbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (modslist.SelectedItems.Count > 0) { new descriptionFrm(GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Description"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Title"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Author"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Date"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "URL"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Version"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "AuthorURL"), (!string.IsNullOrEmpty(GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "BackgroundImage"))?((List<string>)modslist.SelectedItems[0].Tag)[0]+"\\"+GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "BackgroundImage"):""), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "TextColor"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "HeaderColor")).ShowDialog(); }
         }
 
         private void button1_Click(object sender, EventArgs e)

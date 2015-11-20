@@ -63,9 +63,9 @@ namespace SLWModLoader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon256 {
+        internal static System.Drawing.Bitmap icon96 {
             get {
-                object obj = ResourceManager.GetObject("icon256", resourceCulture);
+                object obj = ResourceManager.GetObject("icon96", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

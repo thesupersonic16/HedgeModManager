@@ -1,6 +1,6 @@
 ﻿namespace SLWModLoader
 {
-    partial class AboutFrm
+    partial class NewUpdateFrm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,12 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutFrm));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -41,27 +38,31 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 21F);
             this.label1.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label1.Location = new System.Drawing.Point(85, 15);
+            this.label1.Location = new System.Drawing.Point(2, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(344, 57);
+            this.label1.Size = new System.Drawing.Size(431, 57);
             this.label1.TabIndex = 0;
-            this.label1.Text = "SLW Mod Loader";
+            this.label1.Text = "SLW Mod Loader v1.0";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.label2.Location = new System.Drawing.Point(91, 85);
+            this.label2.Location = new System.Drawing.Point(13, 79);
+            this.label2.Margin = new System.Windows.Forms.Padding(3, 0, 3, 50);
+            this.label2.MaximumSize = new System.Drawing.Size(630, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(535, 126);
+            this.label2.Size = new System.Drawing.Size(114, 21);
             this.label2.TabIndex = 1;
-            this.label2.Text = resources.GetString("label2.Text");
+            this.label2.Text = "Update stuff. :P";
             // 
             // button1
             // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(591, 217);
+            this.button1.Location = new System.Drawing.Point(517, 109);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 50, 3, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(113, 33);
             this.button1.TabIndex = 3;
@@ -69,37 +70,27 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.closebtn_Click);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::SLWModLoader.Properties.Resources.icon96;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 9);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(67, 67);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
-            // 
-            // AboutFrm
+            // NewUpdateFrm
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.button1;
-            this.ClientSize = new System.Drawing.Size(716, 258);
+            this.ClientSize = new System.Drawing.Size(643, 153);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AboutFrm";
+            this.Name = "NewUpdateFrm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "About SLW Mod Loader";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.Text = "v1.0 Changelog";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -109,7 +100,6 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button1;
     }
 }

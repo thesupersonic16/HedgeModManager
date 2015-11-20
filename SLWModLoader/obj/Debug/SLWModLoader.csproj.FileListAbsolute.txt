@@ -25,18 +25,21 @@ C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\cpkredir.ini
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\cpkredir.dll
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\cpkredir.txt
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\bin\Debug\DllInjector32.exe
-C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\SLWModLoader.exe.config
-C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.exe
-C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.pdb
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\SLWModLoader.exe
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\cpkredir.ini
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\Sonic Lost World.url
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\cpkredir.dll
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\cpkredir.txt
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\DllInjector32.exe
-C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\SLWModLoader.exe
-C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\SLWModLoader.pdb
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\SLWModLoader.exe.config
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.AboutFrm.resources
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.Mainfrm.resources
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.Properties.Resources.resources
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.Updatefrm.resources
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.csproj.GenerateResource.Cache
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.exe
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.pdb
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\SLWModLoader.pdb
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.csprojResolveAssemblyReference.cache
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.descriptionFrm.resources
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.NewUpdateFrm.resources

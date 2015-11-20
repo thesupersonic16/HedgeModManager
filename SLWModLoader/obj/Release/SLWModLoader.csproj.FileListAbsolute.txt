@@ -39,3 +39,6 @@ C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Release\SLWM
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Release\SLWModLoader.Properties.Resources.resources
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Release\SLWModLoader.Updatefrm.resources
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Release\SLWModLoader.csproj.GenerateResource.Cache
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Release\SLWModLoader.csprojResolveAssemblyReference.cache
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Release\SLWModLoader.NewUpdateFrm.resources
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Release\SLWModLoader.descriptionFrm.resources

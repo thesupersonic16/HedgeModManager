@@ -34,7 +34,6 @@
             this.vcolumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.authorcolumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.savecolumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.updatedcolumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -50,11 +49,12 @@
             this.modsdirbtn = new System.Windows.Forms.Button();
             this.label = new System.Windows.Forms.Label();
             this.modsdir = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.playbtn = new System.Windows.Forms.Button();
             this.refreshbtn = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statuslbl = new System.Windows.Forms.ToolStripStatusLabel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.descriptionlbl = new System.Windows.Forms.LinkLabel();
             this.panel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -73,9 +73,9 @@
             this.nameColumn,
             this.vcolumn,
             this.authorcolumn,
-            this.savecolumn,
-            this.updatedcolumn});
+            this.savecolumn});
             this.modslist.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.modslist.FullRowSelect = true;
             this.modslist.Location = new System.Drawing.Point(0, 0);
             this.modslist.MultiSelect = false;
             this.modslist.Name = "modslist";
@@ -83,6 +83,7 @@
             this.modslist.TabIndex = 0;
             this.modslist.UseCompatibleStateImageBehavior = false;
             this.modslist.View = System.Windows.Forms.View.Details;
+            this.modslist.SelectedIndexChanged += new System.EventHandler(this.modslist_SelectedIndexChanged);
             // 
             // nameColumn
             // 
@@ -101,13 +102,8 @@
             // 
             // savecolumn
             // 
-            this.savecolumn.Text = "Save";
+            this.savecolumn.Text = "Supports Save File Redirection";
             this.savecolumn.Width = 66;
-            // 
-            // updatedcolumn
-            // 
-            this.updatedcolumn.Text = "Updated";
-            this.updatedcolumn.Width = 90;
             // 
             // panel
             // 
@@ -291,10 +287,21 @@
             this.modsdir.TabIndex = 1;
             this.modsdir.TextChanged += new System.EventHandler(this.modsdir_TextChanged);
             // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 19F);
+            this.label1.Location = new System.Drawing.Point(3, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(534, 405);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "More options coming soon! :)";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // playbtn
             // 
             this.playbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.playbtn.Location = new System.Drawing.Point(19, 450);
+            this.playbtn.Location = new System.Drawing.Point(19, 477);
             this.playbtn.Name = "playbtn";
             this.playbtn.Size = new System.Drawing.Size(515, 43);
             this.playbtn.TabIndex = 3;
@@ -305,7 +312,7 @@
             // refreshbtn
             // 
             this.refreshbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.refreshbtn.Location = new System.Drawing.Point(124, 499);
+            this.refreshbtn.Location = new System.Drawing.Point(124, 526);
             this.refreshbtn.Name = "refreshbtn";
             this.refreshbtn.Size = new System.Drawing.Size(300, 33);
             this.refreshbtn.TabIndex = 4;
@@ -319,9 +326,9 @@
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statuslbl});
-            this.statusStrip.Location = new System.Drawing.Point(0, 540);
+            this.statusStrip.Location = new System.Drawing.Point(0, 559);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(548, 22);
+            this.statusStrip.Size = new System.Drawing.Size(548, 28);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 5;
             this.statusStrip.Text = "statusStrip1";
@@ -329,28 +336,36 @@
             // statuslbl
             // 
             this.statuslbl.Name = "statuslbl";
-            this.statuslbl.Size = new System.Drawing.Size(0, 17);
+            this.statuslbl.Size = new System.Drawing.Size(0, 23);
             // 
-            // label1
+            // descriptionlbl
             // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 19F);
-            this.label1.Location = new System.Drawing.Point(3, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(534, 405);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "More options coming soon! :)";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.descriptionlbl.ActiveLinkColor = System.Drawing.Color.DodgerBlue;
+            this.descriptionlbl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.descriptionlbl.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.descriptionlbl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.descriptionlbl.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.descriptionlbl.LinkColor = System.Drawing.SystemColors.HotTrack;
+            this.descriptionlbl.Location = new System.Drawing.Point(0, 0);
+            this.descriptionlbl.Name = "descriptionlbl";
+            this.descriptionlbl.Padding = new System.Windows.Forms.Padding(0, 455, 0, 0);
+            this.descriptionlbl.Size = new System.Drawing.Size(548, 587);
+            this.descriptionlbl.TabIndex = 7;
+            this.descriptionlbl.TabStop = true;
+            this.descriptionlbl.Text = "Click on a mod to see it\'s description. Then try clicking on me! :)";
+            this.descriptionlbl.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.descriptionlbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.descriptionlbl_LinkClicked);
             // 
             // Mainfrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(548, 562);
+            this.ClientSize = new System.Drawing.Size(548, 587);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.refreshbtn);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.playbtn);
+            this.Controls.Add(this.descriptionlbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -383,7 +398,6 @@
         private System.Windows.Forms.ColumnHeader vcolumn;
         private System.Windows.Forms.ColumnHeader authorcolumn;
         private System.Windows.Forms.ColumnHeader savecolumn;
-        private System.Windows.Forms.ColumnHeader updatedcolumn;
         private System.Windows.Forms.Panel panel;
         private System.Windows.Forms.Label label;
         private System.Windows.Forms.TextBox modsdir;
@@ -404,6 +418,7 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.LinkLabel descriptionlbl;
     }
 }
 
