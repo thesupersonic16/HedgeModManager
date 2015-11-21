@@ -11,7 +11,7 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "4.0";
+        public static string versionstring = "4.1";
         public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>();
@@ -29,7 +29,7 @@ namespace SLWModLoader
             if (File.Exists(Application.StartupPath + "\\config.txt"))
             {
                 configfile = File.ReadAllLines(Application.StartupPath + "\\config.txt");
-                modsdir.Text = configfile[1];
+                if (configfile.Length > 1 && configfile[1] != null) { modsdir.Text = configfile[1]; }
             }
 
             //Set the mod directory textbox
@@ -239,8 +239,8 @@ namespace SLWModLoader
             Invoke(new Action(() =>
             {
                 checkeditemcount = modslist.CheckedItems.Count;
-                foreach (ListViewItem checkedmod in modslist.CheckedItems) { checkedmods.Add(((List<string>)checkedmod.Tag)[0]); }
-                foreach (ListViewItem mod in modslist.Items) { mods.Add(((List<string>)mod.Tag)[0]); }
+                foreach (ListViewItem checkedmod in modslist.CheckedItems) { checkedmods.Add(new DirectoryInfo(((List<string>)checkedmod.Tag)[0]).Name); }
+                foreach (ListViewItem mod in modslist.Items) { mods.Add(new DirectoryInfo(((List<string>)mod.Tag)[0]).Name); }
             }));
 
             modsdb = new List<string>() { "[Main]", $"ActiveModCount={checkeditemcount.ToString()}" };
