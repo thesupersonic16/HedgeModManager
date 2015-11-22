@@ -45,7 +45,7 @@
             this.MoveDownbtn = new System.Windows.Forms.Button();
             this.MoveUpbtn = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
+            this.aboutBtn = new System.Windows.Forms.Button();
             this.modsdirbtn = new System.Windows.Forms.Button();
             this.label = new System.Windows.Forms.Label();
             this.modsdir = new System.Windows.Forms.TextBox();
@@ -55,6 +55,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statuslbl = new System.Windows.Forms.ToolStripStatusLabel();
             this.descriptionlbl = new System.Windows.Forms.LinkLabel();
+            this.makelogfile = new System.Windows.Forms.CheckBox();
             this.panel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -234,7 +235,8 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.button1);
+            this.tabPage2.Controls.Add(this.makelogfile);
+            this.tabPage2.Controls.Add(this.aboutBtn);
             this.tabPage2.Controls.Add(this.modsdirbtn);
             this.tabPage2.Controls.Add(this.label);
             this.tabPage2.Controls.Add(this.modsdir);
@@ -247,16 +249,16 @@
             this.tabPage2.Text = "Options";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // aboutBtn
             // 
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(132, 369);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(276, 36);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "&About SLW Mod Loader";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.aboutBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.aboutBtn.Location = new System.Drawing.Point(132, 369);
+            this.aboutBtn.Name = "aboutBtn";
+            this.aboutBtn.Size = new System.Drawing.Size(276, 36);
+            this.aboutBtn.TabIndex = 8;
+            this.aboutBtn.Text = "&About SLW Mod Loader";
+            this.aboutBtn.UseVisualStyleBackColor = true;
+            this.aboutBtn.Click += new System.EventHandler(this.button1_Click);
             // 
             // modsdirbtn
             // 
@@ -326,9 +328,9 @@
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statuslbl});
-            this.statusStrip.Location = new System.Drawing.Point(0, 559);
+            this.statusStrip.Location = new System.Drawing.Point(0, 565);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(548, 28);
+            this.statusStrip.Size = new System.Drawing.Size(548, 22);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 5;
             this.statusStrip.Text = "statusStrip1";
@@ -336,7 +338,7 @@
             // statuslbl
             // 
             this.statuslbl.Name = "statuslbl";
-            this.statuslbl.Size = new System.Drawing.Size(0, 23);
+            this.statuslbl.Size = new System.Drawing.Size(0, 17);
             // 
             // descriptionlbl
             // 
@@ -355,6 +357,20 @@
             this.descriptionlbl.Text = "Click on a mod to see it\'s description. Then try clicking on me! :)";
             this.descriptionlbl.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.descriptionlbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.descriptionlbl_LinkClicked);
+            // 
+            // makelogfile
+            // 
+            this.makelogfile.AutoSize = true;
+            this.makelogfile.Checked = true;
+            this.makelogfile.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.makelogfile.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.makelogfile.Location = new System.Drawing.Point(15, 48);
+            this.makelogfile.Name = "makelogfile";
+            this.makelogfile.Size = new System.Drawing.Size(230, 25);
+            this.makelogfile.TabIndex = 10;
+            this.makelogfile.Text = "Make a log file when closing";
+            this.makelogfile.UseVisualStyleBackColor = true;
+            this.makelogfile.CheckedChanged += new System.EventHandler(this.makelogfile_CheckedChanged);
             // 
             // Mainfrm
             // 
@@ -416,9 +432,10 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button aboutBtn;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel descriptionlbl;
+        private System.Windows.Forms.CheckBox makelogfile;
     }
 }
 
