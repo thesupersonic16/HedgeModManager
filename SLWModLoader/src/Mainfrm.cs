@@ -11,7 +11,7 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "4.2";
+        public static string versionstring = "4.3";
         public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>(), logfile = new List<string>();
@@ -405,6 +405,11 @@ namespace SLWModLoader
             Program.writelog = makelogfile.Checked;
         }
 
+        private void reportlbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            new Process() { StartInfo = new ProcessStartInfo("https://github.com/Radfordhound/SLW-Mod-Loader/issues/new") }.Start();
+        }
+
         private void descriptionlbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (modslist.SelectedItems.Count > 0) { new descriptionFrm(GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Description"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Title"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Author"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Date"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "URL"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Version"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "AuthorURL"), (!string.IsNullOrEmpty(GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "BackgroundImage"))?((List<string>)modslist.SelectedItems[0].Tag)[0]+"\\"+GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "BackgroundImage"):""), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "TextColor"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "HeaderColor")).ShowDialog(); }
@@ -413,6 +418,12 @@ namespace SLWModLoader
         private void button1_Click(object sender, EventArgs e)
         {
             new AboutFrm().ShowDialog();
+        }
+
+        protected override bool ProcessDialogKey(Keys key)
+        {
+            if (ModifierKeys == Keys.None && key == Keys.Escape) { Close(); return true; }
+            return base.ProcessDialogKey(key);
         }
 
         private void Mainfrm_Closing(object sender, FormClosingEventArgs e)

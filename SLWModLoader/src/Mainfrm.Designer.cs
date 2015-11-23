@@ -56,6 +56,8 @@
             this.statuslbl = new System.Windows.Forms.ToolStripStatusLabel();
             this.descriptionlbl = new System.Windows.Forms.LinkLabel();
             this.makelogfile = new System.Windows.Forms.CheckBox();
+            this.reportlbl = new System.Windows.Forms.LinkLabel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.panel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -65,6 +67,7 @@
             this.splitContainer.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // modslist
@@ -235,8 +238,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.panel1);
             this.tabPage2.Controls.Add(this.makelogfile);
-            this.tabPage2.Controls.Add(this.aboutBtn);
             this.tabPage2.Controls.Add(this.modsdirbtn);
             this.tabPage2.Controls.Add(this.label);
             this.tabPage2.Controls.Add(this.modsdir);
@@ -252,7 +255,7 @@
             // aboutBtn
             // 
             this.aboutBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.aboutBtn.Location = new System.Drawing.Point(132, 369);
+            this.aboutBtn.Location = new System.Drawing.Point(129, 36);
             this.aboutBtn.Name = "aboutBtn";
             this.aboutBtn.Size = new System.Drawing.Size(276, 36);
             this.aboutBtn.TabIndex = 8;
@@ -372,6 +375,31 @@
             this.makelogfile.UseVisualStyleBackColor = true;
             this.makelogfile.CheckedChanged += new System.EventHandler(this.makelogfile_CheckedChanged);
             // 
+            // reportlbl
+            // 
+            this.reportlbl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.reportlbl.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.reportlbl.LinkColor = System.Drawing.SystemColors.HotTrack;
+            this.reportlbl.Location = new System.Drawing.Point(0, 0);
+            this.reportlbl.Name = "reportlbl";
+            this.reportlbl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.reportlbl.Size = new System.Drawing.Size(534, 100);
+            this.reportlbl.TabIndex = 11;
+            this.reportlbl.TabStop = true;
+            this.reportlbl.Text = "Report a problem/request a feature";
+            this.reportlbl.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.reportlbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.reportlbl_LinkClicked);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.aboutBtn);
+            this.panel1.Controls.Add(this.reportlbl);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(3, 308);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(534, 100);
+            this.panel1.TabIndex = 12;
+            // 
             // Mainfrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -402,6 +430,7 @@
             this.tabPage2.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -436,6 +465,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel descriptionlbl;
         private System.Windows.Forms.CheckBox makelogfile;
+        private System.Windows.Forms.LinkLabel reportlbl;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
