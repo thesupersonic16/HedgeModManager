@@ -418,7 +418,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SLW Mod Loader";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Mainfrm_Closing);
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.MainFrm_Load);
             this.panel.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

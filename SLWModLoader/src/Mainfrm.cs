@@ -11,7 +11,7 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "4.3";
+        public static string versionstring = "4.4";
         public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>(), logfile = new List<string>();
@@ -70,7 +70,7 @@ namespace SLWModLoader
             return float.TryParse(s, out result);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainFrm_Load(object sender, EventArgs e)
         {
             //Define thread variables
             loadmodthread = new Thread(new ThreadStart(LoadMods));
@@ -107,40 +107,60 @@ namespace SLWModLoader
             if (File.Exists(modsdir.Text + "\\slw.exe"))
             {
                 //Read the executable
-                byte[] slwexe = File.ReadAllBytes(modsdir.Text + "\\slw.exe");
-                int o = 306; //Offset
+                byte[] slwexe;
+                try { slwexe = File.ReadAllBytes(modsdir.Text + "\\slw.exe"); } catch (Exception ex) { logfile.Add("ERROR: "+ex.Message); return; }
 
-                //If it's unpatched, ask if the user would like to patch it.
-                //We do this via an invoke to freeze the GUI thread until the messagebox is answered.
-                DialogResult dopatch = DialogResult.No;
-                Invoke(new Action(() => { if ((slwexe[11918776] != 99 && slwexe[11918776] != 0) || (slwexe[11918776] == 0 && slwexe[11918776+o] != 99)) { dopatch = MessageBox.Show("Your Sonic Lost World executable has not yet been patched for use with CPKREDIR, which is required to load mods. Would you like to patch it now?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Information); } }));
-
-                if (dopatch == DialogResult.Yes)
+                //Check to see if the executable is patched or not
+                for (long i = 11918776; i < slwexe.Length; i++)
                 {
-                    Invoke(new Action(() => statuslbl.Text = "Patching executable..."));
-                    if (slwexe[11918776] != 0) { o = 0; } //We're patching the non-beta version, so there is no offset.
+                    //Break if "cpkredir" is found, meaning the executable has already been patched
+                    if (slwexe[i] == 99 && slwexe[i + 2] == 112 && slwexe[i + 3] == 107 &&
+                        slwexe[i + 4] == 114 && slwexe[i + 5] == 101 && slwexe[i + 6] == 100 &&
+                        slwexe[i + 7] == 105 && slwexe[i + 8] == 114)
+                    { break; }
 
-                    /*
-                      Here we're essentially hex editing the slw.exe executable to change
-                      decimal address 11,918,776 - 11,918,783 from "imagehlp" to "cpkredir".
-                    */
+                    //Ask if you should patch the executable if "imagehlp" is found, meaning the executable hasn't yet been patched
+                    if (slwexe[i] == 105 && slwexe[i+1] == 109 && slwexe[i+2] == 97 &&
+                        slwexe[i+3] == 103 && slwexe[i+4] == 101 && slwexe[i+5] == 104 &&
+                        slwexe[i+6] == 108 && slwexe[i+7] == 112)
+                    {
+                        //We do this via an invoke to freeze the GUI thread until the messagebox is answered.
+                        DialogResult dopatch = DialogResult.No;
+                        Invoke(new Action(() =>
+                        {
+                            dopatch = MessageBox.Show("Your Sonic Lost World executable has not yet been patched for use with CPKREDIR, which is required to load mods. Would you like to patch it now?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                        }));
 
-                    //cpkredir                                      -cpkredir
-                    //c p k r e d i r                               -cpkredir spaced out
-                    //99 112 107 114 101 100 105 114                -cpkredir in binary
+                        if (dopatch == DialogResult.Yes)
+                        {
+                            Invoke(new Action(() => statuslbl.Text = "Patching executable..."));
 
-                    slwexe[11918776+o] = 99; slwexe[11918777+o] = 112;  //99  = c, 112 = p
-                    slwexe[11918778+o] = 107; slwexe[11918779+o] = 114; //107 = k, 114 = r
-                    slwexe[11918780+o] = 101; slwexe[11918781+o] = 100; //101 = e, 100 = d
-                    slwexe[11918782+o] = 105; slwexe[11918783+o] = 114; //105 = i, 114 = r
+                            /*
+                              Here we're essentially hex editing the slw.exe executable to change
+                              the string "imagehlp" to "cpkredir", typically found at decimal address
+                              11,918,776 or beyond, depending on which version of the game the user is
+                              using.
+                            */
 
-                    //Now that we've edited the executable, all that's left is to make a backup of the old one...
-                    if (!File.Exists(modsdir.Text + "\\slw_Backup.exe")) { File.Move(modsdir.Text + "\\slw.exe", modsdir.Text + "\\slw_Backup.exe"); }
-                    else { File.Delete(modsdir.Text + "\\slw.exe"); }
+                            //cpkredir                                      -cpkredir
+                            //c p k r e d i r                               -cpkredir spaced out
+                            //99 112 107 114 101 100 105 114                -cpkredir in binary
 
-                    //...and write the new one.
-                    File.WriteAllBytes(modsdir.Text + "\\slw.exe", slwexe);
-                    Invoke(new Action(() => statuslbl.Text=""));
+                            slwexe[i] = 99; slwexe[i + 1] = 112; //99  = c, 112 = p
+                            slwexe[i + 2] = 107; slwexe[i + 3] = 114; //107 = k, 114 = r
+                            slwexe[i + 4] = 101; slwexe[i + 5] = 100; //101 = e, 100 = d
+                            slwexe[i + 6] = 105; slwexe[i + 7] = 114; //105 = i, 114 = r
+
+                            //Now that we've edited the executable, all that's left is to make a backup of the old one...
+                            if (!File.Exists(modsdir.Text + "\\slw_Backup.exe")) { File.Move(modsdir.Text + "\\slw.exe", modsdir.Text + "\\slw_Backup.exe"); }
+                            else { File.Delete(modsdir.Text + "\\slw.exe"); }
+
+                            //...and write the new one.
+                            File.WriteAllBytes(modsdir.Text + "\\slw.exe", slwexe);
+                            Invoke(new Action(() => statuslbl.Text = ""));
+                        }
+                        break;
+                    }
                 }
             }
         }
