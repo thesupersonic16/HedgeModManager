@@ -11,7 +11,7 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "4.4";
+        public static string versionstring = "4.7";
         public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>(), logfile = new List<string>();
@@ -168,6 +168,7 @@ namespace SLWModLoader
         private void LoadMods()
         {
             Invoke(new Action(() => { modslist.Items.Clear(); oldmods.Clear(); }));
+
             if (!string.IsNullOrEmpty(modsdir.Text) && Directory.Exists(modsdir.Text+"\\mods"))
             {
                 foreach (string mod in Directory.GetDirectories(modsdir.Text+"\\mods"))
@@ -183,6 +184,25 @@ namespace SLWModLoader
                         modslist.Items.Add(modlvi);
                     })); }
                     else { oldmods.Add(mod); }
+                }
+            }
+
+            string[] modsdb = new string[] { "[Mods]" }; if (File.Exists(modsdir.Text + "\\mods\\ModsDB.ini")) { modsdb = File.ReadAllLines(modsdir.Text + "\\mods\\ModsDB.ini"); }
+            foreach (string activemod in modsdb)
+            {
+                if (activemod == "[Mods]") break;
+                if (!activemod.Contains("ActiveModCount") && activemod.Contains("ActiveMod"))
+                {
+                    Invoke(new Action(() =>
+                    {
+                        foreach (ListViewItem modlvi in modslist.Items)
+                        {
+                            if (modlvi.Tag != null && modlvi.Tag.GetType() == typeof(List<string>) && ((List<string>)modlvi.Tag).Count > 0 && new DirectoryInfo(((List<string>)modlvi.Tag)[0]).Name == activemod.Substring(activemod.IndexOf('=')+1))
+                            {
+                                modlvi.Checked = true;
+                            }
+                        }
+                    }));
                 }
             }
 

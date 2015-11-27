@@ -10,5 +10,3 @@ Started checking for updates to mod loader...
 
 Finised loading mods.
 
-Got latest release information from GitHub.
-No new updates avaliable.
