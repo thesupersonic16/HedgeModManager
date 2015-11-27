@@ -11,7 +11,7 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "4.7";
+        public static string versionstring = "4.8", slwdirectory = Application.StartupPath;
         public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>(), logfile = new List<string>();
@@ -26,7 +26,6 @@ namespace SLWModLoader
 
             //Set the form's title
             Text = $"SLW Mod Loader (v {versionstring})";
-            modsdir.Text = @"C:\Program Files (x86)\Steam\SteamApps\common\Sonic Lost World";
 
             //Load the config file
             if (File.Exists(Application.StartupPath + "\\config.txt"))
@@ -34,21 +33,28 @@ namespace SLWModLoader
                 logfile.Add($"Reading config file from \"{Application.StartupPath+"\\config.txt"}\"...");
 
                 configfile = File.ReadAllLines(Application.StartupPath + "\\config.txt");
-                if (configfile.Length > 1 && configfile[1] != null) { modsdir.Text = configfile[1]; }
-                if (configfile.Length > 2 && configfile[2] != null && (configfile[2].ToUpper() == "TRUE" || configfile[2].ToUpper() == "FALSE")) { makelogfile.Checked = Convert.ToBoolean(configfile[2]); }
 
+                if (configfile.Length > 0 && configfile[0] != null && IsFloat(configfile[0]))
+                {
+                    if (Convert.ToSingle(configfile[0]) >= 4.8)
+                    {
+                        if ((configfile.Length > 1 && configfile[1] != null && (configfile[1].ToUpper() == "TRUE" || configfile[1].ToUpper() == "FALSE"))) { makelogfile.Checked = Convert.ToBoolean(configfile[1]); }
+                    }
+                    else if (configfile.Length > 2 && configfile[2] != null && (configfile[2].ToUpper() == "TRUE" || configfile[2].ToUpper() == "FALSE")) { makelogfile.Checked = Convert.ToBoolean(configfile[2]); }
+                }
                 logfile.Add("Config file read.");
             }
             else logfile.Add("No config file found. Proceeding with default settings...");
 
             logfile.Add("");
 
-            //Set the mod directory textbox
-            if (Directory.Exists(modsdir.Text))
+            //Make sure the program was installed in the correct place.
+            if (File.Exists(Application.StartupPath+"\\slw.exe"))
             {
-                if (!Directory.Exists(modsdir.Text + "\\mods") && MessageBox.Show("A \"mods\" folder does not exist within your Sonic Lost World installation directory. Would you like to create one?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) { Directory.CreateDirectory(modsdir.Text + "\\mods"); logfile.Add($"Mods directory made at {modsdir.Text+"\\mods"}"); logfile.Add(""); }
+                if (!Directory.Exists(Application.StartupPath + "\\mods") && MessageBox.Show("A \"mods\" folder must exist within your Sonic Lost World installation directory for the mod loader to correctly function. Would you like to create one?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) { Directory.CreateDirectory(Application.StartupPath + "\\mods"); logfile.Add($"Mods directory made at {Application.StartupPath + "\\mods"}"); logfile.Add(""); }
+                else if (Directory.Exists(Application.StartupPath + "\\mods\\mods")) { MessageBox.Show("You seem to have a mods folder within your mods folder. This is not the proper structure the mod loader requires in order to work correctly, and as such, will likely cause issues.","SLW Mod Loader", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
             }
-            else { MessageBox.Show("SLW Mod Loader could not find your Sonic Lost World installation directory. You'll have to manually set it.","SLW Mod Loader",MessageBoxButtons.OK,MessageBoxIcon.Warning); modsdir.Text = ""; }
+            else { MessageBox.Show("SLW Mod Loader could not find your Sonic Lost World executable (slw.exe). The mod loader must be installed within your Sonic Lost World installation directory in order to work correctly. Please ensure you've installed the program in the correct place, and try again.","SLW Mod Loader",MessageBoxButtons.OK,MessageBoxIcon.Error); Application.Exit(); }
 
             //3.5 update
             if ((configfile == null) || (IsFloat(configfile[0]) && Convert.ToSingle(configfile[0]) < 3.5f))
@@ -80,7 +86,7 @@ namespace SLWModLoader
 
             //Load the list of mods
             statuslbl.Text = "Loading mods...";
-            logfile.Add($"Started loading mods from \"{modsdir.Text+"\\mods"}\"..."); logfile.Add("");
+            logfile.Add($"Started loading mods from \"{Application.StartupPath + "\\mods"}\"..."); logfile.Add("");
             loadmodthread.Start();
 
             //Remove leftover temporary files if they exist
@@ -104,11 +110,11 @@ namespace SLWModLoader
 
         private void PatchEXE()
         {
-            if (File.Exists(modsdir.Text + "\\slw.exe"))
+            if (File.Exists(Application.StartupPath + "\\slw.exe"))
             {
                 //Read the executable
                 byte[] slwexe;
-                try { slwexe = File.ReadAllBytes(modsdir.Text + "\\slw.exe"); } catch (Exception ex) { logfile.Add("ERROR: "+ex.Message); return; }
+                try { slwexe = File.ReadAllBytes(Application.StartupPath + "\\slw.exe"); } catch (Exception ex) { logfile.Add("ERROR: "+ex.Message); return; }
 
                 //Check to see if the executable is patched or not
                 for (long i = 11918776; i < slwexe.Length; i++)
@@ -152,11 +158,11 @@ namespace SLWModLoader
                             slwexe[i + 6] = 105; slwexe[i + 7] = 114; //105 = i, 114 = r
 
                             //Now that we've edited the executable, all that's left is to make a backup of the old one...
-                            if (!File.Exists(modsdir.Text + "\\slw_Backup.exe")) { File.Move(modsdir.Text + "\\slw.exe", modsdir.Text + "\\slw_Backup.exe"); }
-                            else { File.Delete(modsdir.Text + "\\slw.exe"); }
+                            if (!File.Exists(Application.StartupPath + "\\slw_Backup.exe")) { File.Move(Application.StartupPath + "\\slw.exe", Application.StartupPath + "\\slw_Backup.exe"); }
+                            else { File.Delete(Application.StartupPath + "\\slw.exe"); }
 
                             //...and write the new one.
-                            File.WriteAllBytes(modsdir.Text + "\\slw.exe", slwexe);
+                            File.WriteAllBytes(Application.StartupPath + "\\slw.exe", slwexe);
                             Invoke(new Action(() => statuslbl.Text = ""));
                         }
                         break;
@@ -169,9 +175,9 @@ namespace SLWModLoader
         {
             Invoke(new Action(() => { modslist.Items.Clear(); oldmods.Clear(); }));
 
-            if (!string.IsNullOrEmpty(modsdir.Text) && Directory.Exists(modsdir.Text+"\\mods"))
+            if (Directory.Exists(Application.StartupPath + "\\mods"))
             {
-                foreach (string mod in Directory.GetDirectories(modsdir.Text+"\\mods"))
+                foreach (string mod in Directory.GetDirectories(Application.StartupPath + "\\mods"))
                 {
                     if (File.Exists(mod + "\\mod.ini")) { Invoke(new Action(() =>
                     {
@@ -187,7 +193,7 @@ namespace SLWModLoader
                 }
             }
 
-            string[] modsdb = new string[] { "[Mods]" }; if (File.Exists(modsdir.Text + "\\mods\\ModsDB.ini")) { modsdb = File.ReadAllLines(modsdir.Text + "\\mods\\ModsDB.ini"); }
+            string[] modsdb = new string[] { "[Mods]" }; if (File.Exists(Application.StartupPath + "\\mods\\ModsDB.ini")) { modsdb = File.ReadAllLines(Application.StartupPath + "\\mods\\ModsDB.ini"); }
             foreach (string activemod in modsdb)
             {
                 if (activemod == "[Mods]") break;
@@ -282,7 +288,7 @@ namespace SLWModLoader
             logfile.Add("Deleting old ModsDB.ini file...");
             
             //Delete old ModsDB.ini file if it exists
-            if (File.Exists(modsdir.Text + "\\mods\\ModsDB.ini")) { File.Delete(modsdir.Text + "\\mods\\ModsDB.ini"); }
+            if (File.Exists(Application.StartupPath + "\\mods\\ModsDB.ini")) { File.Delete(Application.StartupPath + "\\mods\\ModsDB.ini"); }
 
             logfile.Add("Forming a list of checked mods...");
 
@@ -315,7 +321,7 @@ namespace SLWModLoader
             logfile.Add("Saving newly-generated ModsDB.ini...");
 
             //Save the generated file
-            File.WriteAllLines(modsdir.Text + "\\mods\\ModsDB.ini", modsdb);
+            File.WriteAllLines(Application.StartupPath + "\\mods\\ModsDB.ini", modsdb);
 
             logfile.Add("Closing mod loader and starting Sonic Lost World...");
 
@@ -371,10 +377,10 @@ namespace SLWModLoader
         }
 
 #region SHHHH... DON'T LOOK! IT'S A SECRET!!!
-        private void modsdir_TextChanged(object sender, EventArgs e)
-        {
-            if (modsdir.Text == "DO A BARREL ROLL") { label.Font = nomodsfound.Font = refreshlbl.Font = playbtn.Font = refreshbtn.Font = modsdirbtn.Font = modslist.Font = new Font("Comic Sans MS",8);  }
-        }
+        //private void modsdir_TextChanged(object sender, EventArgs e)
+        //{
+        //    if (modsdir.Text == "DO A BARREL ROLL") { label.Font = nomodsfound.Font = refreshlbl.Font = playbtn.Font = refreshbtn.Font = modsdirbtn.Font = modslist.Font = new Font("Comic Sans MS",8);  }
+        //}
 #endregion
 
         private void playbtn_Click(object sender, EventArgs e)
@@ -386,11 +392,11 @@ namespace SLWModLoader
 
         private void modsdirbtn_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog() { ShowNewFolderButton = true, Description = "The folder which contains the Sonic Lost World executable (slw.exe), as well as a \"disk\" folder." };
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
-                modsdir.Text = fbd.SelectedPath;
-            }
+            //FolderBrowserDialog fbd = new FolderBrowserDialog() { ShowNewFolderButton = true, Description = "The folder which contains the Sonic Lost World executable (slw.exe), as well as a \"disk\" folder." };
+            //if (fbd.ShowDialog() == DialogResult.OK)
+            //{
+            //    modsdir.Text = fbd.SelectedPath;
+            //}
         }
 
         private void MoveUpAll_Click(object sender, EventArgs e)
@@ -470,7 +476,7 @@ namespace SLWModLoader
         {
             //Write config file
             if (File.Exists(Application.StartupPath + "\\config.txt")) { File.Delete(Application.StartupPath + "\\config.txt"); }
-            File.WriteAllLines(Application.StartupPath + "\\config.txt",new string[] { versionstring, modsdir.Text, Program.writelog.ToString() });
+            File.WriteAllLines(Application.StartupPath + "\\config.txt",new string[] { versionstring, Program.writelog.ToString() });
 
             //Delete leftover temporary junk
             if (Directory.Exists(Application.StartupPath + "\\temp")) { Directory.Delete(Application.StartupPath + "\\temp", true); }

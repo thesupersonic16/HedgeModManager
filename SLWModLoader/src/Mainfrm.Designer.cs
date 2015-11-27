@@ -45,19 +45,16 @@
             this.MoveDownbtn = new System.Windows.Forms.Button();
             this.MoveUpbtn = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.aboutBtn = new System.Windows.Forms.Button();
-            this.modsdirbtn = new System.Windows.Forms.Button();
-            this.label = new System.Windows.Forms.Label();
-            this.modsdir = new System.Windows.Forms.TextBox();
+            this.reportlbl = new System.Windows.Forms.LinkLabel();
+            this.makelogfile = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.playbtn = new System.Windows.Forms.Button();
             this.refreshbtn = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statuslbl = new System.Windows.Forms.ToolStripStatusLabel();
             this.descriptionlbl = new System.Windows.Forms.LinkLabel();
-            this.makelogfile = new System.Windows.Forms.CheckBox();
-            this.reportlbl = new System.Windows.Forms.LinkLabel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.panel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -66,8 +63,8 @@
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.statusStrip.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // modslist
@@ -240,9 +237,6 @@
             // 
             this.tabPage2.Controls.Add(this.panel1);
             this.tabPage2.Controls.Add(this.makelogfile);
-            this.tabPage2.Controls.Add(this.modsdirbtn);
-            this.tabPage2.Controls.Add(this.label);
-            this.tabPage2.Controls.Add(this.modsdir);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
@@ -251,6 +245,16 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Options";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.aboutBtn);
+            this.panel1.Controls.Add(this.reportlbl);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(3, 308);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(534, 100);
+            this.panel1.TabIndex = 12;
             // 
             // aboutBtn
             // 
@@ -263,34 +267,34 @@
             this.aboutBtn.UseVisualStyleBackColor = true;
             this.aboutBtn.Click += new System.EventHandler(this.button1_Click);
             // 
-            // modsdirbtn
+            // reportlbl
             // 
-            this.modsdirbtn.AutoSize = true;
-            this.modsdirbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.modsdirbtn.Location = new System.Drawing.Point(481, 7);
-            this.modsdirbtn.Name = "modsdirbtn";
-            this.modsdirbtn.Size = new System.Drawing.Size(49, 29);
-            this.modsdirbtn.TabIndex = 3;
-            this.modsdirbtn.Text = "...";
-            this.modsdirbtn.UseVisualStyleBackColor = true;
-            this.modsdirbtn.Click += new System.EventHandler(this.modsdirbtn_Click);
+            this.reportlbl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.reportlbl.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.reportlbl.LinkColor = System.Drawing.SystemColors.HotTrack;
+            this.reportlbl.Location = new System.Drawing.Point(0, 0);
+            this.reportlbl.Name = "reportlbl";
+            this.reportlbl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.reportlbl.Size = new System.Drawing.Size(534, 100);
+            this.reportlbl.TabIndex = 11;
+            this.reportlbl.TabStop = true;
+            this.reportlbl.Text = "Report a problem/request a feature";
+            this.reportlbl.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.reportlbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.reportlbl_LinkClicked);
             // 
-            // label
+            // makelogfile
             // 
-            this.label.AutoSize = true;
-            this.label.Location = new System.Drawing.Point(11, 13);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(112, 20);
-            this.label.TabIndex = 2;
-            this.label.Text = "SLW directory:";
-            // 
-            // modsdir
-            // 
-            this.modsdir.Location = new System.Drawing.Point(145, 10);
-            this.modsdir.Name = "modsdir";
-            this.modsdir.Size = new System.Drawing.Size(330, 26);
-            this.modsdir.TabIndex = 1;
-            this.modsdir.TextChanged += new System.EventHandler(this.modsdir_TextChanged);
+            this.makelogfile.AutoSize = true;
+            this.makelogfile.Checked = true;
+            this.makelogfile.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.makelogfile.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.makelogfile.Location = new System.Drawing.Point(15, 15);
+            this.makelogfile.Name = "makelogfile";
+            this.makelogfile.Size = new System.Drawing.Size(230, 25);
+            this.makelogfile.TabIndex = 10;
+            this.makelogfile.Text = "Make a log file when closing";
+            this.makelogfile.UseVisualStyleBackColor = true;
+            this.makelogfile.CheckedChanged += new System.EventHandler(this.makelogfile_CheckedChanged);
             // 
             // label1
             // 
@@ -361,45 +365,6 @@
             this.descriptionlbl.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.descriptionlbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.descriptionlbl_LinkClicked);
             // 
-            // makelogfile
-            // 
-            this.makelogfile.AutoSize = true;
-            this.makelogfile.Checked = true;
-            this.makelogfile.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.makelogfile.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.makelogfile.Location = new System.Drawing.Point(15, 48);
-            this.makelogfile.Name = "makelogfile";
-            this.makelogfile.Size = new System.Drawing.Size(230, 25);
-            this.makelogfile.TabIndex = 10;
-            this.makelogfile.Text = "Make a log file when closing";
-            this.makelogfile.UseVisualStyleBackColor = true;
-            this.makelogfile.CheckedChanged += new System.EventHandler(this.makelogfile_CheckedChanged);
-            // 
-            // reportlbl
-            // 
-            this.reportlbl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.reportlbl.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.reportlbl.LinkColor = System.Drawing.SystemColors.HotTrack;
-            this.reportlbl.Location = new System.Drawing.Point(0, 0);
-            this.reportlbl.Name = "reportlbl";
-            this.reportlbl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.reportlbl.Size = new System.Drawing.Size(534, 100);
-            this.reportlbl.TabIndex = 11;
-            this.reportlbl.TabStop = true;
-            this.reportlbl.Text = "Report a problem/request a feature";
-            this.reportlbl.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.reportlbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.reportlbl_LinkClicked);
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.aboutBtn);
-            this.panel1.Controls.Add(this.reportlbl);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(3, 308);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(534, 100);
-            this.panel1.TabIndex = 12;
-            // 
             // Mainfrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -428,9 +393,9 @@
             this.splitContainer.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
-            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -444,9 +409,6 @@
         private System.Windows.Forms.ColumnHeader authorcolumn;
         private System.Windows.Forms.ColumnHeader savecolumn;
         private System.Windows.Forms.Panel panel;
-        private System.Windows.Forms.Label label;
-        private System.Windows.Forms.TextBox modsdir;
-        private System.Windows.Forms.Button modsdirbtn;
         private System.Windows.Forms.Button playbtn;
         private System.Windows.Forms.Label nomodsfound;
         private System.Windows.Forms.LinkLabel refreshlbl;

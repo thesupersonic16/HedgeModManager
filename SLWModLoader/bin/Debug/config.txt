@@ -1,3 +1,2 @@
-4.7
-C:\Program Files (x86)\Steam\SteamApps\common\Sonic Lost World
-True
+4.8
+False
