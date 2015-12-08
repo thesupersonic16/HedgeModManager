@@ -91,8 +91,6 @@ namespace SLWModLoader
                         {
                             if (File.Exists(dir + "\\mod.ini"))
                             {
-                                Console.WriteLine("FOUND IT!");
-
                                 string dirname = Mainfrm.GetModINIinfo(File.ReadAllLines(dir + "\\mod.ini").ToList(), "Title");
                                 foreach (char c in new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars()))
                                 {

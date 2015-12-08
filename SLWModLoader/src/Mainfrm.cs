@@ -6,6 +6,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Net;
 using System.Collections.Generic;
+using System.IO.Compression;
+using System.Linq;
 
 namespace SLWModLoader
 {
@@ -466,6 +468,79 @@ namespace SLWModLoader
         private void addmodbtn_Click(object sender, EventArgs e)
         {
             new NewModFrm().ShowDialog();
+        }
+
+        private void modslist_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                bool doinstall = false;
+
+                if (!File.GetAttributes(file).HasFlag(FileAttributes.Directory) && new FileInfo(file).Extension == ".zip")
+                {
+                    if (Directory.Exists(Application.StartupPath + "\\temp_install")) { Directory.Delete(Application.StartupPath + "\\temp_install", true); }
+                    Directory.CreateDirectory(Application.StartupPath + "\\temp_install");
+
+                    ZipFile.ExtractToDirectory(file, Application.StartupPath + "\\temp_install");
+                    doinstall = true;
+                }
+                else if (File.GetAttributes(file).HasFlag(FileAttributes.Directory))
+                {
+                    if (Directory.Exists(Application.StartupPath + "\\temp_install")) { Directory.Delete(Application.StartupPath + "\\temp_install", true); }
+                    DirectoryCopy(file, Application.StartupPath + "\\temp_install", true);
+                    doinstall = true;
+                }
+
+                if (doinstall)
+                {
+                    if (File.Exists(Application.StartupPath + "\\temp_install\\mod.ini"))
+                    {
+                        string dirname = Mainfrm.GetModINIinfo(File.ReadAllLines(Application.StartupPath + "\\temp_install\\mod.ini").ToList(), "Title");
+                        foreach (char c in new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars()))
+                        {
+                            dirname = dirname.Replace(c.ToString(), "");
+                        }
+                        Directory.Move(Application.StartupPath + "\\temp_install", Mainfrm.slwdirectory + "\\mods\\" + dirname);
+                        RefreshModList();
+                        return;
+                    }
+                    else
+                    {
+                        foreach (string dir in Directory.GetDirectories(Application.StartupPath + "\\temp_install", "*", SearchOption.AllDirectories))
+                        {
+                            if (File.Exists(dir + "\\mod.ini"))
+                            {
+                                string dirname = GetModINIinfo(File.ReadAllLines(dir + "\\mod.ini").ToList(), "Title");
+                                foreach (char c in new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars()))
+                                {
+                                    dirname = dirname.Replace(c.ToString(), "");
+                                }
+                                Directory.Move(dir, slwdirectory + "\\mods\\" + dirname);
+                                if (Directory.Exists(Application.StartupPath + "\\temp_install")) { Directory.Delete(Application.StartupPath + "\\temp_install", true); }
+                                RefreshModList();
+                                return;
+                            }
+                        }
+
+                        if (MessageBox.Show("Whoops! Sorry, but this doesn't appear to be a load-able mod! Would you like to try and install it anyway?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                        {
+                            if (Directory.GetDirectories(Application.StartupPath + "\\temp_install").Length > 0)
+                            {
+                                Directory.Move(Directory.GetDirectories(Application.StartupPath + "\\temp_install")[0], Mainfrm.slwdirectory + "\\mods\\" + new DirectoryInfo(Directory.GetDirectories(Application.StartupPath + "\\temp_install")[0]).Name);
+                                if (Directory.Exists(Application.StartupPath + "\\temp_install")) { Directory.Delete(Application.StartupPath + "\\temp_install", true); }
+                                Mainfrm.RefreshModList();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void modslist_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
         }
 
         private void descriptionlbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

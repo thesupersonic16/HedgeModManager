@@ -71,6 +71,7 @@
             // 
             // modslist
             // 
+            this.modslist.AllowDrop = true;
             this.modslist.CheckBoxes = true;
             this.modslist.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.nameColumn,
@@ -87,6 +88,8 @@
             this.modslist.UseCompatibleStateImageBehavior = false;
             this.modslist.View = System.Windows.Forms.View.Details;
             this.modslist.SelectedIndexChanged += new System.EventHandler(this.modslist_SelectedIndexChanged);
+            this.modslist.DragDrop += new System.Windows.Forms.DragEventHandler(this.modslist_DragDrop);
+            this.modslist.DragEnter += new System.Windows.Forms.DragEventHandler(this.modslist_DragEnter);
             // 
             // nameColumn
             // 
