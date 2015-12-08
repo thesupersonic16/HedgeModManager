@@ -11,13 +11,19 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "4.8", slwdirectory = Application.StartupPath;
+        public static string versionstring = "5.0", slwdirectory = Application.StartupPath;
+        public static bool debugmode = false;
         public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>(), logfile = new List<string>();
 
         public Mainfrm()
         {
+            #if DEBUG
+                debugmode = true;
+                slwdirectory = @"C:\Program Files (x86)\Steam\SteamApps\common\Sonic Lost World"; //Comment-out this line if debugging on a PC where SLW is installed somewhere else!
+            #endif
+
             logfile.Add("Initializing main form...");
             logfile.Add("");
 
@@ -25,7 +31,7 @@ namespace SLWModLoader
             InitializeComponent();
 
             //Set the form's title
-            Text = $"SLW Mod Loader (v {versionstring})";
+            Text = $"SLW Mod Loader (v {versionstring}){((debugmode)?" - Debug Mode":"")}";
 
             //Load the config file
             if (File.Exists(Application.StartupPath + "\\config.txt"))
@@ -49,25 +55,12 @@ namespace SLWModLoader
             logfile.Add("");
 
             //Make sure the program was installed in the correct place.
-            if (File.Exists(Application.StartupPath+"\\slw.exe"))
+            if (File.Exists(slwdirectory+"\\slw.exe"))
             {
-                if (!Directory.Exists(Application.StartupPath + "\\mods") && MessageBox.Show("A \"mods\" folder must exist within your Sonic Lost World installation directory for the mod loader to correctly function. Would you like to create one?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) { Directory.CreateDirectory(Application.StartupPath + "\\mods"); logfile.Add($"Mods directory made at {Application.StartupPath + "\\mods"}"); logfile.Add(""); }
-                else if (Directory.Exists(Application.StartupPath + "\\mods\\mods")) { MessageBox.Show("You seem to have a mods folder within your mods folder. This is not the proper structure the mod loader requires in order to work correctly, and as such, will likely cause issues.","SLW Mod Loader", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+                if (!Directory.Exists(slwdirectory + "\\mods") && MessageBox.Show("A \"mods\" folder must exist within your Sonic Lost World installation directory for the mod loader to correctly function. Would you like to create one?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) { Directory.CreateDirectory(slwdirectory + "\\mods"); logfile.Add($"Mods directory made at {slwdirectory + "\\mods"}"); logfile.Add(""); }
+                else if (Directory.Exists(slwdirectory + "\\mods\\mods")) { MessageBox.Show("You seem to have a mods folder within your mods folder. This is not the proper structure the mod loader requires in order to work correctly, and as such, will likely cause issues.","SLW Mod Loader", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
             }
             else { MessageBox.Show("SLW Mod Loader could not find your Sonic Lost World executable (slw.exe). The mod loader must be installed within your Sonic Lost World installation directory in order to work correctly. Please ensure you've installed the program in the correct place, and try again.","SLW Mod Loader",MessageBoxButtons.OK,MessageBoxIcon.Error); Application.Exit(); }
-
-            //3.5 update
-            if ((configfile == null) || (IsFloat(configfile[0]) && Convert.ToSingle(configfile[0]) < 3.5f))
-            {
-                logfile.Add("Deleting un-needed files leftover from previous editions of the mod loader.");
-                //Delete all the leftover files from previous versions of the mod loader if they exist
-                if (File.Exists(Application.StartupPath + "\\cpkredirInst.exe")) { File.Delete(Application.StartupPath + "\\cpkredirInst.exe"); }
-
-                if (File.Exists(Application.StartupPath + "\\cpkmakec.exe")) { File.Delete(Application.StartupPath + "\\cpkmakec.exe"); }
-                if (File.Exists(Application.StartupPath + "\\cpkmaker.out.csv")) { File.Delete(Application.StartupPath + "\\cpkmaker.out.csv"); }
-                if (File.Exists(Application.StartupPath + "\\CpkMaker.DLL")) { File.Delete(Application.StartupPath + "\\CpkMaker.DLL"); }
-                logfile.Add("");
-            }
         }
 
         private bool IsFloat(string s)
@@ -86,7 +79,7 @@ namespace SLWModLoader
 
             //Load the list of mods
             statuslbl.Text = "Loading mods...";
-            logfile.Add($"Started loading mods from \"{Application.StartupPath + "\\mods"}\"..."); logfile.Add("");
+            logfile.Add($"Started loading mods from \"{slwdirectory + "\\mods"}\"..."); logfile.Add("");
             loadmodthread.Start();
 
             //Remove leftover temporary files if they exist
@@ -99,7 +92,7 @@ namespace SLWModLoader
             updatethread.Start();
         }
 
-        private string GetModINIinfo(List<string> modini, string datatoget)
+        public static string GetModINIinfo(List<string> modini, string datatoget)
         {
             for (int i = 0; i < modini.Count; i++)
             {
@@ -110,11 +103,11 @@ namespace SLWModLoader
 
         private void PatchEXE()
         {
-            if (File.Exists(Application.StartupPath + "\\slw.exe"))
+            if (File.Exists(slwdirectory + "\\slw.exe"))
             {
                 //Read the executable
                 byte[] slwexe;
-                try { slwexe = File.ReadAllBytes(Application.StartupPath + "\\slw.exe"); } catch (Exception ex) { logfile.Add("ERROR: "+ex.Message); return; }
+                try { slwexe = File.ReadAllBytes(slwdirectory + "\\slw.exe"); } catch (Exception ex) { logfile.Add("ERROR: "+ex.Message); return; }
 
                 //Check to see if the executable is patched or not
                 for (long i = 11918776; i < slwexe.Length; i++)
@@ -158,11 +151,11 @@ namespace SLWModLoader
                             slwexe[i + 6] = 105; slwexe[i + 7] = 114; //105 = i, 114 = r
 
                             //Now that we've edited the executable, all that's left is to make a backup of the old one...
-                            if (!File.Exists(Application.StartupPath + "\\slw_Backup.exe")) { File.Move(Application.StartupPath + "\\slw.exe", Application.StartupPath + "\\slw_Backup.exe"); }
-                            else { File.Delete(Application.StartupPath + "\\slw.exe"); }
+                            if (!File.Exists(slwdirectory + "\\slw_Backup.exe")) { File.Move(slwdirectory + "\\slw.exe", slwdirectory + "\\slw_Backup.exe"); }
+                            else { File.Delete(slwdirectory + "\\slw.exe"); }
 
                             //...and write the new one.
-                            File.WriteAllBytes(Application.StartupPath + "\\slw.exe", slwexe);
+                            File.WriteAllBytes(slwdirectory + "\\slw.exe", slwexe);
                             Invoke(new Action(() => statuslbl.Text = ""));
                         }
                         break;
@@ -171,13 +164,22 @@ namespace SLWModLoader
             }
         }
 
+        public static void RefreshModList()
+        {
+            Program.mainfrm.descriptionlbl.Text = "Click on a mod to see it's description. Then try clicking on me! :)";
+            Program.mainfrm.descriptionlbl.LinkBehavior = LinkBehavior.NeverUnderline;
+
+            loadmodthread = new Thread(new ThreadStart(Program.mainfrm.LoadMods));
+            loadmodthread.Start();
+        }
+
         private void LoadMods()
         {
             Invoke(new Action(() => { modslist.Items.Clear(); oldmods.Clear(); }));
 
-            if (Directory.Exists(Application.StartupPath + "\\mods"))
+            if (Directory.Exists(slwdirectory + "\\mods"))
             {
-                foreach (string mod in Directory.GetDirectories(Application.StartupPath + "\\mods"))
+                foreach (string mod in Directory.GetDirectories(slwdirectory + "\\mods"))
                 {
                     if (File.Exists(mod + "\\mod.ini")) { Invoke(new Action(() =>
                     {
@@ -193,7 +195,7 @@ namespace SLWModLoader
                 }
             }
 
-            string[] modsdb = new string[] { "[Mods]" }; if (File.Exists(Application.StartupPath + "\\mods\\ModsDB.ini")) { modsdb = File.ReadAllLines(Application.StartupPath + "\\mods\\ModsDB.ini"); }
+            string[] modsdb = new string[] { "[Mods]" }; if (File.Exists(slwdirectory + "\\mods\\ModsDB.ini")) { modsdb = File.ReadAllLines(slwdirectory + "\\mods\\ModsDB.ini"); }
             foreach (string activemod in modsdb)
             {
                 if (activemod == "[Mods]") break;
@@ -288,7 +290,7 @@ namespace SLWModLoader
             logfile.Add("Deleting old ModsDB.ini file...");
             
             //Delete old ModsDB.ini file if it exists
-            if (File.Exists(Application.StartupPath + "\\mods\\ModsDB.ini")) { File.Delete(Application.StartupPath + "\\mods\\ModsDB.ini"); }
+            if (File.Exists(slwdirectory + "\\mods\\ModsDB.ini")) { File.Delete(slwdirectory + "\\mods\\ModsDB.ini"); }
 
             logfile.Add("Forming a list of checked mods...");
 
@@ -321,14 +323,14 @@ namespace SLWModLoader
             logfile.Add("Saving newly-generated ModsDB.ini...");
 
             //Save the generated file
-            File.WriteAllLines(Application.StartupPath + "\\mods\\ModsDB.ini", modsdb);
+            File.WriteAllLines(slwdirectory + "\\mods\\ModsDB.ini", modsdb);
 
             logfile.Add("Closing mod loader and starting Sonic Lost World...");
 
             //Close the mod loader and start Sonic Lost World
             Invoke(new Action(() => { statuslbl.Text = "Starting SLW..."; }));
             Process slw = new Process();
-            slw.StartInfo = new ProcessStartInfo(Application.StartupPath + "\\Sonic Lost World.url");
+            slw.StartInfo = new ProcessStartInfo(slwdirectory + "\\Sonic Lost World.url");
 
             Invoke(new Action(() => { Close(); }));
             slw.Start();
@@ -336,20 +338,12 @@ namespace SLWModLoader
 
         private void refreshlbl_Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            descriptionlbl.Text = "Click on a mod to see it's description!";
-            descriptionlbl.LinkBehavior = LinkBehavior.NeverUnderline;
-
-            loadmodthread = new Thread(new ThreadStart(LoadMods));
-            loadmodthread.Start();
+            RefreshModList();
         }
 
         private void refreshbtn_Click(object sender, EventArgs e)
         {
-            descriptionlbl.Text = "Click on a mod to see it's description!";
-            descriptionlbl.LinkBehavior = LinkBehavior.NeverUnderline;
-
-            loadmodthread = new Thread(new ThreadStart(LoadMods));
-            loadmodthread.Start();
+            RefreshModList();
         }
 
         //Up...
@@ -423,6 +417,8 @@ namespace SLWModLoader
         {
             if (modslist.SelectedItems.Count > 0 && modslist.SelectedItems[0].Tag != null && ((List<string>)modslist.SelectedItems[0].Tag).Count > 0)
             {
+                rmmodbtn.Enabled = true;
+
                 string description = GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Description");
                 descriptionlbl.Tag = description;
                 descriptionlbl.LinkBehavior = LinkBehavior.NeverUnderline;
@@ -440,6 +436,7 @@ namespace SLWModLoader
             }
             else if (modslist.SelectedItems.Count <= 0)
             {
+                rmmodbtn.Enabled = false;
                 descriptionlbl.Text = "Click on a mod to see it's description. Then try clicking on me! :)";
                 descriptionlbl.LinkBehavior = LinkBehavior.NeverUnderline;
             }
@@ -456,6 +453,21 @@ namespace SLWModLoader
             new Process() { StartInfo = new ProcessStartInfo("https://github.com/Radfordhound/SLW-Mod-Loader/issues/new") }.Start();
         }
 
+        private void rmmodbtn_Click(object sender, EventArgs e)
+        {
+            if (modslist.SelectedItems.Count > 0 && MessageBox.Show($"Are you sure you want to delete \"{modslist.SelectedItems[0].Text}\"","SLW Mod Loader",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            {
+                logfile.Add($"Deleting \"{modslist.SelectedItems[0].Text}\"");
+                Directory.Delete(((List<string>)modslist.SelectedItems[0].Tag)[0],true);
+                refreshbtn.PerformClick();
+            }
+        }
+
+        private void addmodbtn_Click(object sender, EventArgs e)
+        {
+            new NewModFrm().ShowDialog();
+        }
+
         private void descriptionlbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (modslist.SelectedItems.Count > 0) { new descriptionFrm(GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Description"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Title"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Author"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Date"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "URL"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "Version"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "AuthorURL"), (!string.IsNullOrEmpty(GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "BackgroundImage"))?((List<string>)modslist.SelectedItems[0].Tag)[0]+"\\"+GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "BackgroundImage"):""), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "TextColor"), GetModINIinfo((List<string>)modslist.SelectedItems[0].Tag, "HeaderColor")).ShowDialog(); }
@@ -468,7 +480,11 @@ namespace SLWModLoader
 
         protected override bool ProcessDialogKey(Keys key)
         {
-            if (ModifierKeys == Keys.None && key == Keys.Escape) { Close(); return true; }
+            if (ModifierKeys == Keys.None)
+            {
+                if (key == Keys.Escape) { Close(); return true; }
+                else if (key == Keys.Delete) { rmmodbtn.PerformClick(); return true; }
+            }
             return base.ProcessDialogKey(key);
         }
 
@@ -482,7 +498,7 @@ namespace SLWModLoader
             if (Directory.Exists(Application.StartupPath + "\\temp")) { Directory.Delete(Application.StartupPath + "\\temp", true); }
         }
 
-        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);

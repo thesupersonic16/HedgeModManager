@@ -61,6 +61,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\DevNewModFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\DevNewModFrm.Designer.cs">
+      <DependentUpon>DevNewModFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\DevNewModFrmTxt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\DevNewModFrmTxt.Designer.cs">
+      <DependentUpon>DevNewModFrmTxt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\EditPropertyFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\EditPropertyFrm.Designer.cs">
+      <DependentUpon>EditPropertyFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\NewModFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\NewModFrm.Designer.cs">
+      <DependentUpon>NewModFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\NewUpdateFrm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +117,18 @@
     <Compile Include="src\UpdateFrm.Designer.cs">
       <DependentUpon>UpdateFrm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="src\DevNewModFrm.resx">
+      <DependentUpon>DevNewModFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\DevNewModFrmTxt.resx">
+      <DependentUpon>DevNewModFrmTxt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\EditPropertyFrm.resx">
+      <DependentUpon>EditPropertyFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\NewModFrm.resx">
+      <DependentUpon>NewModFrm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\NewUpdateFrm.resx">
       <DependentUpon>NewUpdateFrm.cs</DependentUpon>
     </EmbeddedResource>

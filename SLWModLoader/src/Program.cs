@@ -10,6 +10,7 @@ namespace SLWModLoader
     static class Program
     {
         public static bool writelog = true;
+        public static Mainfrm mainfrm;
 
         /// <summary>
         /// The main entry point for the application.
@@ -22,7 +23,9 @@ namespace SLWModLoader
                 Mainfrm.logfile.Add("Starting mod loader...");
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Mainfrm());
+
+                mainfrm = new Mainfrm();
+                Application.Run(mainfrm);
             }
             catch (Exception ex)
             {

@@ -43,3 +43,7 @@ C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\SLWMod
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.descriptionFrm.resources
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.NewUpdateFrm.resources
 C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.csprojResolveAssemblyReference.cache
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.NewModFrm.resources
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.DevNewModFrm.resources
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.DevNewModFrmTxt.resources
+C:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.EditPropertyFrm.resources

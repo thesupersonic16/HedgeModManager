@@ -55,6 +55,8 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statuslbl = new System.Windows.Forms.ToolStripStatusLabel();
             this.descriptionlbl = new System.Windows.Forms.LinkLabel();
+            this.addmodbtn = new System.Windows.Forms.Button();
+            this.rmmodbtn = new System.Windows.Forms.Button();
             this.panel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -310,7 +312,7 @@
             // playbtn
             // 
             this.playbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.playbtn.Location = new System.Drawing.Point(19, 477);
+            this.playbtn.Location = new System.Drawing.Point(17, 519);
             this.playbtn.Name = "playbtn";
             this.playbtn.Size = new System.Drawing.Size(515, 43);
             this.playbtn.TabIndex = 3;
@@ -321,7 +323,7 @@
             // refreshbtn
             // 
             this.refreshbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.refreshbtn.Location = new System.Drawing.Point(124, 526);
+            this.refreshbtn.Location = new System.Drawing.Point(122, 480);
             this.refreshbtn.Name = "refreshbtn";
             this.refreshbtn.Size = new System.Drawing.Size(300, 33);
             this.refreshbtn.TabIndex = 4;
@@ -365,11 +367,37 @@
             this.descriptionlbl.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.descriptionlbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.descriptionlbl_LinkClicked);
             // 
+            // addmodbtn
+            // 
+            this.addmodbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.addmodbtn.Location = new System.Drawing.Point(428, 480);
+            this.addmodbtn.Name = "addmodbtn";
+            this.addmodbtn.Size = new System.Drawing.Size(104, 33);
+            this.addmodbtn.TabIndex = 8;
+            this.addmodbtn.Text = "+";
+            this.addmodbtn.UseVisualStyleBackColor = true;
+            this.addmodbtn.Click += new System.EventHandler(this.addmodbtn_Click);
+            // 
+            // rmmodbtn
+            // 
+            this.rmmodbtn.Enabled = false;
+            this.rmmodbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.rmmodbtn.Location = new System.Drawing.Point(17, 480);
+            this.rmmodbtn.Name = "rmmodbtn";
+            this.rmmodbtn.Size = new System.Drawing.Size(99, 33);
+            this.rmmodbtn.TabIndex = 9;
+            this.rmmodbtn.Text = "-";
+            this.rmmodbtn.UseVisualStyleBackColor = true;
+            this.rmmodbtn.Click += new System.EventHandler(this.rmmodbtn_Click);
+            // 
             // Mainfrm
             // 
+            this.AcceptButton = this.playbtn;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(548, 587);
+            this.Controls.Add(this.rmmodbtn);
+            this.Controls.Add(this.addmodbtn);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.refreshbtn);
             this.Controls.Add(this.panel);
@@ -429,6 +457,8 @@
         private System.Windows.Forms.CheckBox makelogfile;
         private System.Windows.Forms.LinkLabel reportlbl;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button addmodbtn;
+        private System.Windows.Forms.Button rmmodbtn;
     }
 }
 

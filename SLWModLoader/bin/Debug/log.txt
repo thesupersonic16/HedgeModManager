@@ -12,3 +12,6 @@ Finised loading mods.
 
 Got latest release information from GitHub.
 No new updates avaliable.
+Deleting "MOD"
+Finised loading mods.
+
