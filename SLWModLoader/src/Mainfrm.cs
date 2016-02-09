@@ -15,7 +15,7 @@ namespace SLWModLoader
     {
         public static string versionstring = "5.0", slwdirectory = Application.StartupPath;
         public static bool debugmode = false;
-        public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
+        public static Thread generatemodsdbthread, playmodsdbthread, bootlostworldthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>(), logfile = new List<string>();
 
@@ -77,6 +77,8 @@ namespace SLWModLoader
             loadmodthread = new Thread(new ThreadStart(LoadMods));
             updatethread = new Thread(new ThreadStart(CheckForUpdates));
             generatemodsdbthread = new Thread(new ThreadStart(GenerateModsDB));
+            playmodsdbthread = new Thread(new ThreadStart(PlayModsDB));
+            bootlostworldthread = new Thread(new ThreadStart(BootLostWorld));
             patchthread = new Thread(new ThreadStart(PatchEXE));
 
             //Load the list of mods
@@ -327,7 +329,65 @@ namespace SLWModLoader
             //Save the generated file
             File.WriteAllLines(slwdirectory + "\\mods\\ModsDB.ini", modsdb);
 
+            logfile.Add("ModsDB successfully saved.");
+        }
+
+        private void PlayModsDB()
+        {
+            logfile.Add("");
+            logfile.Add("Deleting old ModsDB.ini file...");
+
+            //Delete old ModsDB.ini file if it exists
+            if (File.Exists(slwdirectory + "\\mods\\ModsDB.ini")) { File.Delete(slwdirectory + "\\mods\\ModsDB.ini"); }
+
+            logfile.Add("Forming a list of checked mods...");
+
+            //Form a list of "checked" mods
+            int checkeditemcount = 0;
+            List<string> checkedmods = new List<string>(), mods = new List<string>(), modsdb;
+
+            Invoke(new Action(() =>
+            {
+                checkeditemcount = modslist.CheckedItems.Count;
+                foreach (ListViewItem checkedmod in modslist.CheckedItems) { checkedmods.Add(new DirectoryInfo(((List<string>)checkedmod.Tag)[0]).Name); }
+                foreach (ListViewItem mod in modslist.Items) { mods.Add(new DirectoryInfo(((List<string>)mod.Tag)[0]).Name); }
+            }));
+
+            logfile.Add("Generating ModsDB.ini...");
+
+            //Generate the ModsDB.ini file using this data
+            modsdb = new List<string>() { "[Main]", $"ActiveModCount={checkeditemcount.ToString()}" };
+
+            for (int i = 0; i < checkeditemcount; i++)
+            {
+                modsdb.Add($"ActiveMod{i.ToString()}={checkedmods[i]}");
+            }
+            modsdb.Add("[Mods]");
+            foreach (string mod in mods)
+            {
+                modsdb.Add($"{mod}={mod}\\mod.ini");
+            }
+
+            logfile.Add("Saving newly-generated ModsDB.ini...");
+
+            //Save the generated file
+            File.WriteAllLines(slwdirectory + "\\mods\\ModsDB.ini", modsdb);
+
             logfile.Add("Closing mod loader and starting Sonic Lost World...");
+
+            //Close the mod loader and start Sonic Lost World
+            Invoke(new Action(() => { statuslbl.Text = "Starting SLW..."; }));
+            Process slw = new Process();
+            slw.StartInfo = new ProcessStartInfo(slwdirectory + "\\Sonic Lost World.url");
+
+            Invoke(new Action(() => { Close(); }));
+            slw.Start();
+        }
+
+        private void BootLostWorld()
+        {
+            logfile.Add("");
+            logfile.Add("Booting Lost World...");
 
             //Close the mod loader and start Sonic Lost World
             Invoke(new Action(() => { statuslbl.Text = "Starting SLW..."; }));
@@ -373,6 +433,7 @@ namespace SLWModLoader
         }
 
 #region SHHHH... DON'T LOOK! IT'S A SECRET!!!
+        //comic sans? looks like somebody's gonna have a bad time.
         //private void modsdir_TextChanged(object sender, EventArgs e)
         //{
         //    if (modsdir.Text == "DO A BARREL ROLL") { label.Font = nomodsfound.Font = refreshlbl.Font = playbtn.Font = refreshbtn.Font = modsdirbtn.Font = modslist.Font = new Font("Comic Sans MS",8);  }
@@ -381,9 +442,9 @@ namespace SLWModLoader
 
         private void playbtn_Click(object sender, EventArgs e)
         {
+            playmodsdbthread = new Thread(new ThreadStart(PlayModsDB));
             playbtn.Enabled = false;
             statuslbl.Text = "Generating ModsDB.ini...";
-            generatemodsdbthread.Start();
         }
 
         private void modsdirbtn_Click(object sender, EventArgs e)
@@ -541,6 +602,22 @@ namespace SLWModLoader
         private void modslist_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            playbtn.Enabled = false;
+            statuslbl.Text = "SLW starting...";
+            bootlostworldthread.Start();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            generatemodsdbthread = new Thread(new ThreadStart(GenerateModsDB));
+            playbtn.Enabled = false;
+            statuslbl.Text = "Generating ModsDB.ini...";
+            playbtn.Enabled = true;
+			statuslbl.Text = "";
         }
 
         private void descriptionlbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

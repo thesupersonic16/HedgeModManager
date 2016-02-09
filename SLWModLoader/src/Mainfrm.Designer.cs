@@ -57,6 +57,8 @@
             this.descriptionlbl = new System.Windows.Forms.LinkLabel();
             this.addmodbtn = new System.Windows.Forms.Button();
             this.rmmodbtn = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.panel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -83,7 +85,7 @@
             this.modslist.Location = new System.Drawing.Point(0, 0);
             this.modslist.MultiSelect = false;
             this.modslist.Name = "modslist";
-            this.modslist.Size = new System.Drawing.Size(501, 405);
+            this.modslist.Size = new System.Drawing.Size(501, 412);
             this.modslist.TabIndex = 0;
             this.modslist.UseCompatibleStateImageBehavior = false;
             this.modslist.View = System.Windows.Forms.View.Details;
@@ -136,10 +138,10 @@
             // 
             this.tabPage1.BackColor = System.Drawing.Color.White;
             this.tabPage1.Controls.Add(this.splitContainer);
-            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(540, 411);
+            this.tabPage1.Size = new System.Drawing.Size(540, 418);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Mods";
             // 
@@ -162,7 +164,7 @@
             this.splitContainer.Panel2.Controls.Add(this.MoveUpAll);
             this.splitContainer.Panel2.Controls.Add(this.MoveDownbtn);
             this.splitContainer.Panel2.Controls.Add(this.MoveUpbtn);
-            this.splitContainer.Size = new System.Drawing.Size(534, 405);
+            this.splitContainer.Size = new System.Drawing.Size(534, 412);
             this.splitContainer.SplitterDistance = 501;
             this.splitContainer.TabIndex = 5;
             // 
@@ -188,7 +190,7 @@
             this.nomodsfound.ForeColor = System.Drawing.Color.Red;
             this.nomodsfound.Location = new System.Drawing.Point(0, 0);
             this.nomodsfound.Name = "nomodsfound";
-            this.nomodsfound.Size = new System.Drawing.Size(501, 405);
+            this.nomodsfound.Size = new System.Drawing.Size(501, 412);
             this.nomodsfound.TabIndex = 4;
             this.nomodsfound.Text = "No mods found!\r\nPlease check your mod folder.";
             this.nomodsfound.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -243,10 +245,10 @@
             this.tabPage2.Controls.Add(this.panel1);
             this.tabPage2.Controls.Add(this.makelogfile);
             this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 29);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(540, 411);
+            this.tabPage2.Size = new System.Drawing.Size(540, 418);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Options";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -256,7 +258,7 @@
             this.panel1.Controls.Add(this.aboutBtn);
             this.panel1.Controls.Add(this.reportlbl);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(3, 308);
+            this.panel1.Location = new System.Drawing.Point(3, 315);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(534, 100);
             this.panel1.TabIndex = 12;
@@ -295,7 +297,7 @@
             this.makelogfile.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.makelogfile.Location = new System.Drawing.Point(15, 15);
             this.makelogfile.Name = "makelogfile";
-            this.makelogfile.Size = new System.Drawing.Size(230, 25);
+            this.makelogfile.Size = new System.Drawing.Size(166, 18);
             this.makelogfile.TabIndex = 10;
             this.makelogfile.Text = "Make a log file when closing";
             this.makelogfile.UseVisualStyleBackColor = true;
@@ -307,7 +309,7 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 19F);
             this.label1.Location = new System.Drawing.Point(3, 3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(534, 405);
+            this.label1.Size = new System.Drawing.Size(534, 412);
             this.label1.TabIndex = 9;
             this.label1.Text = "More options coming soon! :)";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -315,11 +317,11 @@
             // playbtn
             // 
             this.playbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.playbtn.Location = new System.Drawing.Point(17, 519);
+            this.playbtn.Location = new System.Drawing.Point(122, 519);
             this.playbtn.Name = "playbtn";
-            this.playbtn.Size = new System.Drawing.Size(515, 43);
+            this.playbtn.Size = new System.Drawing.Size(305, 43);
             this.playbtn.TabIndex = 3;
-            this.playbtn.Text = "Play";
+            this.playbtn.Text = "Save and Play";
             this.playbtn.UseVisualStyleBackColor = true;
             this.playbtn.Click += new System.EventHandler(this.playbtn_Click);
             // 
@@ -328,7 +330,7 @@
             this.refreshbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.refreshbtn.Location = new System.Drawing.Point(122, 480);
             this.refreshbtn.Name = "refreshbtn";
-            this.refreshbtn.Size = new System.Drawing.Size(300, 33);
+            this.refreshbtn.Size = new System.Drawing.Size(305, 33);
             this.refreshbtn.TabIndex = 4;
             this.refreshbtn.Text = "Refresh Mod List";
             this.refreshbtn.UseVisualStyleBackColor = true;
@@ -373,9 +375,9 @@
             // addmodbtn
             // 
             this.addmodbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.addmodbtn.Location = new System.Drawing.Point(428, 480);
+            this.addmodbtn.Location = new System.Drawing.Point(433, 480);
             this.addmodbtn.Name = "addmodbtn";
-            this.addmodbtn.Size = new System.Drawing.Size(104, 33);
+            this.addmodbtn.Size = new System.Drawing.Size(99, 33);
             this.addmodbtn.TabIndex = 8;
             this.addmodbtn.Text = "+";
             this.addmodbtn.UseVisualStyleBackColor = true;
@@ -393,12 +395,36 @@
             this.rmmodbtn.UseVisualStyleBackColor = true;
             this.rmmodbtn.Click += new System.EventHandler(this.rmmodbtn_Click);
             // 
+            // button1
+            // 
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.button1.Location = new System.Drawing.Point(433, 519);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(99, 43);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "Play";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // button2
+            // 
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.button2.Location = new System.Drawing.Point(17, 519);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(99, 43);
+            this.button2.TabIndex = 11;
+            this.button2.Text = "Save";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Mainfrm
             // 
             this.AcceptButton = this.playbtn;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(548, 587);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.rmmodbtn);
             this.Controls.Add(this.addmodbtn);
             this.Controls.Add(this.statusStrip);
@@ -462,6 +488,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button addmodbtn;
         private System.Windows.Forms.Button rmmodbtn;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 
