@@ -330,6 +330,8 @@ namespace SLWModLoader
             File.WriteAllLines(slwdirectory + "\\mods\\ModsDB.ini", modsdb);
 
             logfile.Add("ModsDB successfully saved.");
+
+            Invoke(new Action(() => { statuslbl.Text = ""; }));
         }
 
         private void PlayModsDB()
@@ -433,6 +435,7 @@ namespace SLWModLoader
         }
 
 #region SHHHH... DON'T LOOK! IT'S A SECRET!!!
+        //comic sans? looks like somebody's gonna have a bad time.
         //private void modsdir_TextChanged(object sender, EventArgs e)
         //{
         //    if (modsdir.Text == "DO A BARREL ROLL") { label.Font = nomodsfound.Font = refreshlbl.Font = playbtn.Font = refreshbtn.Font = modsdirbtn.Font = modslist.Font = new Font("Comic Sans MS",8);  }
@@ -441,9 +444,9 @@ namespace SLWModLoader
 
         private void playbtn_Click(object sender, EventArgs e)
         {
+            playmodsdbthread = new Thread(new ThreadStart(PlayModsDB));
             playbtn.Enabled = false;
             statuslbl.Text = "Generating ModsDB.ini...";
-            generatemodsdbthread.Start();
         }
 
         private void modsdirbtn_Click(object sender, EventArgs e)
@@ -612,10 +615,10 @@ namespace SLWModLoader
 
         private void button2_Click(object sender, EventArgs e)
         {
+            generatemodsdbthread = new Thread(new ThreadStart(GenerateModsDB));
             playbtn.Enabled = false;
             statuslbl.Text = "Generating ModsDB.ini...";
-            generatemodsdbthread.Start();
-			statuslbl.Text = "";
+            playbtn.Enabled = true;
         }
 
         private void descriptionlbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
