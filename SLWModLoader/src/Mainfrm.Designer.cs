@@ -408,6 +408,7 @@
             // 
             // button2
             // 
+            this.button2.Enabled = false;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.button2.Location = new System.Drawing.Point(17, 519);
             this.button2.Name = "button2";
