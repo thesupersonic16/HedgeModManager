@@ -330,8 +330,6 @@ namespace SLWModLoader
             File.WriteAllLines(slwdirectory + "\\mods\\ModsDB.ini", modsdb);
 
             logfile.Add("ModsDB successfully saved.");
-
-            Invoke(new Action(() => { statuslbl.Text = ""; }));
         }
 
         private void PlayModsDB()
@@ -619,6 +617,7 @@ namespace SLWModLoader
             playbtn.Enabled = false;
             statuslbl.Text = "Generating ModsDB.ini...";
             playbtn.Enabled = true;
+			statuslbl.Text = "";
         }
 
         private void descriptionlbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
