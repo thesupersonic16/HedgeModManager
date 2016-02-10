@@ -13,9 +13,9 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "5.0", slwdirectory = Application.StartupPath;
+        public static string versionstring = "5.1", slwdirectory = Application.StartupPath;
         public static bool debugmode = false;
-        public static Thread generatemodsdbthread, playmodsdbthread, bootlostworldthread, loadmodthread, updatethread, patchthread;
+        public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
         public static string[] configfile; public static List<string> oldmods = new List<string>(), logfile = new List<string>();
 
@@ -76,9 +76,6 @@ namespace SLWModLoader
             //Define thread variables
             loadmodthread = new Thread(new ThreadStart(LoadMods));
             updatethread = new Thread(new ThreadStart(CheckForUpdates));
-            generatemodsdbthread = new Thread(new ThreadStart(GenerateModsDB));
-            playmodsdbthread = new Thread(new ThreadStart(PlayModsDB));
-            bootlostworldthread = new Thread(new ThreadStart(BootLostWorld));
             patchthread = new Thread(new ThreadStart(PatchEXE));
 
             //Load the list of mods
@@ -288,7 +285,7 @@ namespace SLWModLoader
             patchthread.Start();
         }
 
-        private void GenerateModsDB()
+        private void GenerateModsDB(object obj)
         {
             logfile.Add("");
             logfile.Add("Deleting old ModsDB.ini file...");
@@ -330,71 +327,31 @@ namespace SLWModLoader
             File.WriteAllLines(slwdirectory + "\\mods\\ModsDB.ini", modsdb);
 
             logfile.Add("ModsDB successfully saved.");
+
+            //If "obj" is a boolean and is equal to "true"...
+            if (obj.GetType() == typeof(bool) && (bool)obj)
+            {
+                //Close the mod loader and start Sonic Lost World
+                StartLostWorld(true);
+            }
+            else
+            {
+                Invoke(new Action(() => { statuslbl.Text = ""; }));
+            }
         }
 
-        private void PlayModsDB()
+        /// <summary>
+        /// Does what it sounds like.. starts Lost World ;)
+        /// </summary>
+        /// <param name="closing">Whether or not to close the mod loader after starting the game.</param>
+        private void StartLostWorld(bool closing)
         {
-            logfile.Add("");
-            logfile.Add("Deleting old ModsDB.ini file...");
-
-            //Delete old ModsDB.ini file if it exists
-            if (File.Exists(slwdirectory + "\\mods\\ModsDB.ini")) { File.Delete(slwdirectory + "\\mods\\ModsDB.ini"); }
-
-            logfile.Add("Forming a list of checked mods...");
-
-            //Form a list of "checked" mods
-            int checkeditemcount = 0;
-            List<string> checkedmods = new List<string>(), mods = new List<string>(), modsdb;
-
-            Invoke(new Action(() =>
-            {
-                checkeditemcount = modslist.CheckedItems.Count;
-                foreach (ListViewItem checkedmod in modslist.CheckedItems) { checkedmods.Add(new DirectoryInfo(((List<string>)checkedmod.Tag)[0]).Name); }
-                foreach (ListViewItem mod in modslist.Items) { mods.Add(new DirectoryInfo(((List<string>)mod.Tag)[0]).Name); }
-            }));
-
-            logfile.Add("Generating ModsDB.ini...");
-
-            //Generate the ModsDB.ini file using this data
-            modsdb = new List<string>() { "[Main]", $"ActiveModCount={checkeditemcount.ToString()}" };
-
-            for (int i = 0; i < checkeditemcount; i++)
-            {
-                modsdb.Add($"ActiveMod{i.ToString()}={checkedmods[i]}");
-            }
-            modsdb.Add("[Mods]");
-            foreach (string mod in mods)
-            {
-                modsdb.Add($"{mod}={mod}\\mod.ini");
-            }
-
-            logfile.Add("Saving newly-generated ModsDB.ini...");
-
-            //Save the generated file
-            File.WriteAllLines(slwdirectory + "\\mods\\ModsDB.ini", modsdb);
-
-            logfile.Add("Closing mod loader and starting Sonic Lost World...");
-
-            //Close the mod loader and start Sonic Lost World
+            logfile.Add((closing)?"Closing mod loader and starting Sonic Lost World...":"Starting Sonic Lost World...");
             Invoke(new Action(() => { statuslbl.Text = "Starting SLW..."; }));
             Process slw = new Process();
             slw.StartInfo = new ProcessStartInfo(slwdirectory + "\\Sonic Lost World.url");
 
-            Invoke(new Action(() => { Close(); }));
-            slw.Start();
-        }
-
-        private void BootLostWorld()
-        {
-            logfile.Add("");
-            logfile.Add("Booting Lost World...");
-
-            //Close the mod loader and start Sonic Lost World
-            Invoke(new Action(() => { statuslbl.Text = "Starting SLW..."; }));
-            Process slw = new Process();
-            slw.StartInfo = new ProcessStartInfo(slwdirectory + "\\Sonic Lost World.url");
-
-            Invoke(new Action(() => { Close(); }));
+            Invoke((closing)?new Action(() => { Close(); }):new Action(() => { statuslbl.Text = ""; }));
             slw.Start();
         }
 
@@ -440,11 +397,11 @@ namespace SLWModLoader
         //}
 #endregion
 
-        private void playbtn_Click(object sender, EventArgs e)
+        private void saveandplaybtn_Click(object sender, EventArgs e)
         {
-            playmodsdbthread = new Thread(new ThreadStart(PlayModsDB));
-            playbtn.Enabled = false;
+            generatemodsdbthread = new Thread(new ParameterizedThreadStart(GenerateModsDB));
             statuslbl.Text = "Generating ModsDB.ini...";
+            generatemodsdbthread.Start(true);
         }
 
         private void modsdirbtn_Click(object sender, EventArgs e)
@@ -590,7 +547,7 @@ namespace SLWModLoader
                             {
                                 Directory.Move(Directory.GetDirectories(Application.StartupPath + "\\temp_install")[0], Mainfrm.slwdirectory + "\\mods\\" + new DirectoryInfo(Directory.GetDirectories(Application.StartupPath + "\\temp_install")[0]).Name);
                                 if (Directory.Exists(Application.StartupPath + "\\temp_install")) { Directory.Delete(Application.StartupPath + "\\temp_install", true); }
-                                Mainfrm.RefreshModList();
+                                RefreshModList();
                                 return;
                             }
                         }
@@ -604,20 +561,16 @@ namespace SLWModLoader
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void playbtn_Click(object sender, EventArgs e)
         {
-            playbtn.Enabled = false;
-            statuslbl.Text = "SLW starting...";
-            bootlostworldthread.Start();
+            StartLostWorld(false);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void savebtn_Click(object sender, EventArgs e)
         {
-            generatemodsdbthread = new Thread(new ThreadStart(GenerateModsDB));
-            playbtn.Enabled = false;
+            generatemodsdbthread = new Thread(new ParameterizedThreadStart(GenerateModsDB));
             statuslbl.Text = "Generating ModsDB.ini...";
-            playbtn.Enabled = true;
-			statuslbl.Text = "";
+            generatemodsdbthread.Start(false);
         }
 
         private void descriptionlbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
