@@ -19,3 +19,6 @@ E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\SLWMod
 E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\SLWModLoader.pdb
 E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.exe
 E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.pdb
+C:\Users\M&M\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\SLWModLoader.exe.config
+C:\Users\M&M\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.exe
+C:\Users\M&M\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.pdb
