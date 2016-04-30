@@ -349,10 +349,9 @@ namespace SLWModLoader
             logfile.Add((closing)?"Closing mod loader and starting Sonic Lost World...":"Starting Sonic Lost World...");
             Invoke(new Action(() => { statuslbl.Text = "Starting SLW..."; }));
             Process slw = new Process();
-            slw.StartInfo = new ProcessStartInfo(slwdirectory + "\\Sonic Lost World.url");
+            new Process() { StartInfo = new ProcessStartInfo("steam://rungameid/329440") }.Start();
 
             Invoke((closing)?new Action(() => { Close(); }):new Action(() => { statuslbl.Text = ""; }));
-            slw.Start();
         }
 
         private void refreshlbl_Click(object sender, LinkLabelLinkClickedEventArgs e)
