@@ -313,6 +313,7 @@
             this.label1.TabIndex = 9;
             this.label1.Text = "More options coming soon! :)";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.DoubleClick += new System.EventHandler(this.label1_DoubleClick);
             // 
             // saveandplaybtn
             // 

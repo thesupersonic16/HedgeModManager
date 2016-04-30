@@ -13,7 +13,7 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "5.1", slwdirectory = Application.StartupPath;
+        public static string versionstring = "5.2", slwdirectory = Application.StartupPath;
         public static bool debugmode = false;
         public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
@@ -146,7 +146,7 @@ namespace SLWModLoader
                             //c p k r e d i r                               -cpkredir spaced out
                             //99 112 107 114 101 100 105 114                -cpkredir in binary
 
-                            slwexe[i] = 99; slwexe[i + 1] = 112; //99  = c, 112 = p
+                            slwexe[i] = 99; slwexe[i + 1] = 112;      //99  = c, 112 = p
                             slwexe[i + 2] = 107; slwexe[i + 3] = 114; //107 = k, 114 = r
                             slwexe[i + 4] = 101; slwexe[i + 5] = 100; //101 = e, 100 = d
                             slwexe[i + 6] = 105; slwexe[i + 7] = 114; //105 = i, 114 = r
@@ -177,24 +177,29 @@ namespace SLWModLoader
         private void LoadMods()
         {
             Invoke(new Action(() => { modslist.Items.Clear(); oldmods.Clear(); }));
+            List<ListViewItem> modlistitems = new List<ListViewItem>();
 
+            //Load mod data
             if (Directory.Exists(slwdirectory + "\\mods"))
             {
                 foreach (string mod in Directory.GetDirectories(slwdirectory + "\\mods"))
                 {
-                    if (File.Exists(mod + "\\mod.ini")) { Invoke(new Action(() =>
+                    if (File.Exists(mod + "\\mod.ini"))
                     {
                         List<string> modini = new List<string>() { mod };
                         modini.AddRange(File.ReadAllLines(mod + "\\mod.ini"));
 
                         ListViewItem modlvi = new ListViewItem(GetModINIinfo(modini, "Title")) { Tag = modini };
                         modlvi.SubItems.Add(GetModINIinfo(modini, "Version")); modlvi.SubItems.Add(GetModINIinfo(modini, "Author"));
-                        modlvi.SubItems.Add((GetModINIinfo(modini, "SaveFile") != null)?"Yes":"No");
-                        modslist.Items.Add(modlvi);
-                    })); }
+                        modlvi.SubItems.Add((GetModINIinfo(modini, "SaveFile") != null) ? "Yes" : "No");
+                        modlistitems.Add(modlvi);
+                    }
                     else { oldmods.Add(mod); }
                 }
             }
+
+            //Add it to the list
+            Invoke(new Action(() => { modslist.Items.AddRange(modlistitems.ToArray()); }));
 
             string[] modsdb = new string[] { "[Mods]" }; if (File.Exists(slwdirectory + "\\mods\\ModsDB.ini")) { modsdb = File.ReadAllLines(slwdirectory + "\\mods\\ModsDB.ini"); }
             foreach (string activemod in modsdb)
@@ -388,13 +393,22 @@ namespace SLWModLoader
             }
         }
 
-#region SHHHH... DON'T LOOK! IT'S A SECRET!!!
+        #region SHHHH... DON'T LOOK! IT'S A SECRET!!!
         //comic sans? looks like somebody's gonna have a bad time.
-        //private void modsdir_TextChanged(object sender, EventArgs e)
-        //{
-        //    if (modsdir.Text == "DO A BARREL ROLL") { label.Font = nomodsfound.Font = refreshlbl.Font = playbtn.Font = refreshbtn.Font = modsdirbtn.Font = modslist.Font = new Font("Comic Sans MS",8);  }
-        //}
-#endregion
+        private void label1_DoubleClick(object sender, EventArgs e)
+        {
+            label1.Text = "Stop finding secrets. \nOne of these days \nyou're gonna have a bad time.";
+            Text += " - Professional Edition™";
+
+            foreach (Control control in Controls)
+            {
+                control.Font = new Font("Comic Sans MS", 8);
+            }
+
+            //also a few more because I'm really efficient like wow
+            nomodsfound.Font = refreshlbl.Font = label1.Font = new Font("Comic Sans MS", 8);
+        }
+        #endregion
 
         private void saveandplaybtn_Click(object sender, EventArgs e)
         {

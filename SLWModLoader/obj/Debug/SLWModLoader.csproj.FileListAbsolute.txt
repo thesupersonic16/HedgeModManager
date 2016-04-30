@@ -12,7 +12,6 @@ E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWMod
 E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.Updatefrm.resources
 E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\obj\Debug\SLWModLoader.csproj.GenerateResource.Cache
 E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\cpkredir.ini
-E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\Sonic Lost World.url
 E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\cpkredir.dll
 E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\cpkredir.txt
 E:\Users\Graha_000\Documents\GitHub\SLW-Mod-Loader\SLWModLoader\bin\Debug\DllInjector32.exe
