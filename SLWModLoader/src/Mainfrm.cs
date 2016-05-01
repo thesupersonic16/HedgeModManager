@@ -13,7 +13,7 @@ namespace SLWModLoader
 {
     public partial class Mainfrm : Form
     {
-        public static string versionstring = "5.2", slwdirectory = Application.StartupPath;
+        public static string versionstring = "5.3", slwdirectory = Application.StartupPath;
         public static bool debugmode = false;
         public static Thread generatemodsdbthread, loadmodthread, updatethread, patchthread;
         public static WebClient client = new WebClient();
@@ -63,6 +63,15 @@ namespace SLWModLoader
                 else if (Directory.Exists(slwdirectory + "\\mods\\mods")) { MessageBox.Show("You seem to have a mods folder within your mods folder. This is not the proper structure the mod loader requires in order to work correctly, and as such, will likely cause issues.","SLW Mod Loader", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
             }
             else { MessageBox.Show("SLW Mod Loader could not find your Sonic Lost World executable (slw.exe). The mod loader must be installed within your Sonic Lost World installation directory in order to work correctly. Please ensure you've installed the program in the correct place, and try again.","SLW Mod Loader",MessageBoxButtons.OK,MessageBoxIcon.Error); Application.Exit(); }
+
+            //Remove DllInjector32.exe
+            if ((configfile == null) || (IsFloat(configfile[0]) && Convert.ToSingle(configfile[0]) < 5.3f))
+            {
+                logfile.Add("Deleting DllInjector32.exe, it's completely unnecessary.");
+                //Delete DllInjector32.exe if it exists
+                if (File.Exists(Application.StartupPath + "\\DllInjector32.exe")) { File.Delete(Application.StartupPath + "\\DllInjector32.exe"); }
+                logfile.Add("");
+            }
         }
 
         private bool IsFloat(string s)
