@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace SLWModLoader
 {
-    public partial class AboutFrm : Form
+    public partial class aboutFrm : Form
     {
-        public AboutFrm()
+        public aboutFrm()
         {
             InitializeComponent();
         }

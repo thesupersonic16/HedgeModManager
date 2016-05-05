@@ -1,6 +1,6 @@
 ﻿namespace SLWModLoader
 {
-    partial class AboutFrm
+    partial class aboutFrm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutFrm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(aboutFrm));
             this.titleLbl = new System.Windows.Forms.Label();
             this.aboutLbl = new System.Windows.Forms.Label();
             this.okBtn = new System.Windows.Forms.Button();

@@ -46,11 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\AboutFrm.cs">
+    <Compile Include="src\aboutFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\AboutFrm.Designer.cs">
-      <DependentUpon>AboutFrm.cs</DependentUpon>
+    <Compile Include="src\aboutFrm.Designer.cs">
+      <DependentUpon>aboutFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\descriptionFrm.cs">
       <SubType>Form</SubType>
@@ -112,8 +112,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="src\AboutFrm.resx">
-      <DependentUpon>AboutFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\aboutFrm.resx">
+      <DependentUpon>aboutFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\descriptionFrm.resx">
       <DependentUpon>descriptionFrm.cs</DependentUpon>
