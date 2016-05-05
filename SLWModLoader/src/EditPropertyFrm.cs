@@ -18,12 +18,7 @@ namespace SLWModLoader
             Text = $"Edit \"{name}\" Property";
         }
 
-        private void okBtn_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void cancelBtn_Click(object sender, EventArgs e)
+        private void btn_Click(object sender, EventArgs e)
         {
             Close();
         }

@@ -55,7 +55,7 @@
             this.okBtn.TabIndex = 5;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
-            this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
+            this.okBtn.Click += new System.EventHandler(this.btn_Click);
             // 
             // modNameTxtBx
             // 
@@ -75,7 +75,7 @@
             this.cancelBtn.TabIndex = 7;
             this.cancelBtn.Text = "&Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
-            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+            this.cancelBtn.Click += new System.EventHandler(this.btn_Click);
             // 
             // DevNewModFrmTxt
             // 

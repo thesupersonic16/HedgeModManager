@@ -87,7 +87,7 @@
             this.okBtn.TabIndex = 2;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
-            this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
+            this.okBtn.Click += new System.EventHandler(this.btn_Click);
             // 
             // typeComboBx
             // 
@@ -151,7 +151,7 @@
             this.cancelBtn.TabIndex = 3;
             this.cancelBtn.Text = "&Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
-            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+            this.cancelBtn.Click += new System.EventHandler(this.btn_Click);
             // 
             // editPropertyFrm
             // 
