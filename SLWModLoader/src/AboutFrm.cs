@@ -17,7 +17,7 @@ namespace SLWModLoader
             InitializeComponent();
         }
 
-        private void closebtn_Click(object sender, EventArgs e)
+        private void okBtn_Click(object sender, EventArgs e)
         {
             Close();
         }

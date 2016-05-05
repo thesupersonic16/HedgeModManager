@@ -2,126 +2,160 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO.Compression;
-using System.IO;
 
 namespace SLWModLoader
 {
-    public partial class NewModFrm : Form
+    public partial class newModFrm : Form
     {
-        public NewModFrm()
+        public newModFrm(string name)
         {
             InitializeComponent();
         }
 
-        protected override bool ProcessDialogKey(Keys key)
-        {
-            if (ModifierKeys == Keys.None && key == Keys.Escape) { Close(); return true; }
-            return base.ProcessDialogKey(key);
-        }
+        //Some of this might be salvage-able?
+        //..Maybe?
 
-        private void radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (((RadioButton)sender).Checked)
-            {
-                foreach (Control control in Controls)
-                {
-                    if (control.GetType() == typeof(RadioButton) && (RadioButton)control != (RadioButton)sender)
-                    {
-                        ((RadioButton)control).Checked = false;
-                    }
-                }
-            }
-        }
+        //I doubt it..
 
-        private void okBtn_Click(object sender, EventArgs e)
-        {
-            radioButton1.Enabled = radioButton2.Enabled = radioButton3.Enabled = okBtn.Enabled = false;
+        #region Old code
+        //private string name = "";
 
-            if (!radioButton3.Checked)
-            {
-                bool doinstall = false;
+        //public DevNewModFrm(string name)
+        //{
+        //    InitializeComponent();
+        //    this.name = name;
+        //    listView1.Items[3].SubItems[1].Text = name;
+        //    listView1.Items[6].SubItems[1].Text = $"{DateTime.Now.Date.Month.ToString()}/{DateTime.Now.Date.Day}/{DateTime.Now.Date.Year}";
+        //    listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+        //}
 
-                if (radioButton1.Checked)
-                {
-                    OpenFileDialog ofd = new OpenFileDialog() { Title = "Choose a Mod's .Zip archive...", Filter = "Zip Archives Containing Mods (*.zip) | *.zip;" };
-                    if (ofd.ShowDialog() == DialogResult.OK)
-                    {
-                        if (Directory.Exists(Application.StartupPath + "\\temp_install")) { Directory.Delete(Application.StartupPath + "\\temp_install", true); }
-                        Directory.CreateDirectory(Application.StartupPath + "\\temp_install");
+        //protected override bool ProcessDialogKey(Keys key)
+        //{
+        //    if (ModifierKeys == Keys.None && key == Keys.Delete)
+        //    {
+        //        rmvBtn.PerformClick();
+        //    }
+        //    return base.ProcessDialogKey(key);
+        //}
 
-                        ZipFile.ExtractToDirectory(ofd.FileName, Application.StartupPath + "\\temp_install");
-                        doinstall = true;
-                    }
-                }
-                else if (radioButton2.Checked)
-                {
-                    FolderBrowserDialog fbd = new FolderBrowserDialog() { Description = "The folder which contains the mod-related files you'd like to load in-game, typically extracted from a .zip archive." };
-                    if (fbd.ShowDialog() == DialogResult.OK)
-                    {
-                        if (Directory.Exists(Application.StartupPath + "\\temp_install")) { Directory.Delete(Application.StartupPath + "\\temp_install", true); }
+        //private void listView1_DoubleClick(object sender, EventArgs e)
+        //{
+        //    if (listView1.SelectedItems.Count > 0)
+        //    {
+        //        EditPropertyFrm editpfrm = new EditPropertyFrm(listView1.SelectedItems[0].SubItems[0].Text, (listView1.SelectedItems[0].SubItems.Count > 1) ? listView1.SelectedItems[0].SubItems[1].Text : "", (string)listView1.SelectedItems[0].Tag,listView1.SelectedItems[0].Group.Header,listView1.Groups);
+        //        editpfrm.ShowDialog();
 
-                        Mainfrm.DirectoryCopy(fbd.SelectedPath, Application.StartupPath + "\\temp_install", true);
+        //        if (!editpfrm.cancelled)
+        //        {
+        //            listView1.SelectedItems[0].SubItems[0].Text = editpfrm.nameTxtBx.Text;
+        //            listView1.SelectedItems[0].Tag = editpfrm.typeComboBx.Text;
 
-                        doinstall = true;
-                    }
-                }
+        //            if (listView1.SelectedItems[0].SubItems.Count > 1) { listView1.SelectedItems[0].SubItems[1].Text = ((editpfrm.typeComboBx.Text != "Integer") ?editpfrm.valueComboBx.Text:editpfrm.valueNud.Value.ToString()); }
+        //            else { listView1.SelectedItems[0].SubItems.Add(editpfrm.valueComboBx.Text); }
 
-                if (doinstall)
-                {
-                    if (File.Exists(Application.StartupPath + "\\temp_install\\mod.ini"))
-                    {
-                        string dirname = Mainfrm.GetModINIinfo(File.ReadAllLines(Application.StartupPath + "\\temp_install\\mod.ini").ToList(), "Title");
-                        foreach (char c in new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars()))
-                        {
-                            dirname = dirname.Replace(c.ToString(), "");
-                        }
-                        Directory.Move(Application.StartupPath + "\\temp_install", Mainfrm.slwdirectory + "\\mods\\" + dirname);
-                        Mainfrm.RefreshModList();
-                        return;
-                    }
-                    else
-                    {
-                        foreach (string dir in Directory.GetDirectories(Application.StartupPath + "\\temp_install", "*", SearchOption.AllDirectories))
-                        {
-                            if (File.Exists(dir + "\\mod.ini"))
-                            {
-                                string dirname = Mainfrm.GetModINIinfo(File.ReadAllLines(dir + "\\mod.ini").ToList(), "Title");
-                                foreach (char c in new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars()))
-                                {
-                                    dirname = dirname.Replace(c.ToString(), "");
-                                }
-                                Directory.Move(dir, Mainfrm.slwdirectory + "\\mods\\" + dirname);
-                                if (Directory.Exists(Application.StartupPath + "\\temp_install")) { Directory.Delete(Application.StartupPath + "\\temp_install", true); }
-                                Mainfrm.RefreshModList();
-                                return;
-                            }
-                        }
+        //            listView1.SelectedItems[0].ForeColor = (string.IsNullOrEmpty(editpfrm.valueComboBx.Text)) ? (editpfrm.nameTxtBx.Text == "IncludeDir0" || editpfrm.nameTxtBx.Text == "IncludeDirCount" || editpfrm.nameTxtBx.Text == "Title" || editpfrm.nameTxtBx.Text == "Description" || editpfrm.nameTxtBx.Text == "Author") ? Color.Red : Color.Orange : Color.Black;
+        //            listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
-                        if (MessageBox.Show("Whoops! Sorry, but this doesn't appear to be a load-able mod! Would you like to try and install it anyway?", "SLW Mod Loader", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
-                        {
-                            if (Directory.GetDirectories(Application.StartupPath + "\\temp_install").Length > 0)
-                            {
-                                Directory.Move(Directory.GetDirectories(Application.StartupPath + "\\temp_install")[0], Mainfrm.slwdirectory + "\\mods\\" + new DirectoryInfo(Directory.GetDirectories(Application.StartupPath + "\\temp_install")[0]).Name);
-                                if (Directory.Exists(Application.StartupPath + "\\temp_install")) { Directory.Delete(Application.StartupPath + "\\temp_install", true); }
-                                Mainfrm.RefreshModList();
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                new DevNewModFrmTxt().ShowDialog();
-            }
+        //            foreach (ListViewGroup group in listView1.Groups)
+        //            {
+        //                if (group.Header == editpfrm.groupComboBx.Text)
+        //                {
+        //                    listView1.SelectedItems[0].Group = group;
+        //                    return;
+        //                }
+        //            }
 
-            Close();
-        }
+        //            listView1.Groups.Add(new ListViewGroup(editpfrm.groupComboBx.Text));
+        //            listView1.SelectedItems[0].Group = listView1.Groups[listView1.Groups.Count - 1];
+        //        }
+        //    }
+        //}
+
+        //private void rmvBtn_Click(object sender, EventArgs e)
+        //{
+        //    if (listView1.SelectedItems.Count > 0)
+        //    {
+        //        listView1.Items.RemoveAt(listView1.SelectedItems[0].Index);
+        //    }
+        //}
+
+        //private void addBtn_Click(object sender, EventArgs e)
+        //{
+        //    listView1.Items.Add(new ListViewItem("New Property", listView1.Groups[0]) { ForeColor = Color.Orange, Tag = "String" });
+        //    listView1.Items[listView1.Items.Count - 1].Selected = true;
+        //    editBtn.PerformClick();
+        //}
+
+        //private void okBtn_Click(object sender, EventArgs e)
+        //{
+        //    bool doclose = true; List<string> modini = new List<string>();
+        //    DialogResult dr = DialogResult.None;
+
+        //    foreach (ListViewGroup group in listView1.Groups)
+        //    {
+        //        if (!modini.Contains($"[{group.Header}]"))
+        //        {
+        //            modini.Add($"[{group.Header}]");
+        //        }
+
+        //        foreach (ListViewItem property in listView1.Items)
+        //        {
+        //            if (string.IsNullOrEmpty(property.Text) || property.SubItems.Count <= 1 || string.IsNullOrEmpty(property.SubItems[1].Text) || property.Name.Contains('=') || property.SubItems[1].Text.Contains('='))
+        //            {
+        //                if (dr == DialogResult.None)
+        //                {
+        //                    dr = MessageBox.Show("One or more of the given properties seem to be empty/invalid! Would you like to keep them anyway?", "SLW Mod Loader", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2);
+        //                    doclose = (dr != DialogResult.Cancel);
+        //                    if (!doclose) { return; }
+        //                }
+        //                if (dr == DialogResult.No)
+        //                {
+        //                    continue;
+        //                }
+        //            }
+
+        //            if (property.Group.Header == group.Header)
+        //            {
+        //                modini.Add($"{property.Text}={(((string)property.Tag != "Integer")?"\"":"")}{((property.SubItems.Count > 1)?property.SubItems[1].Text:"")}{(((string)property.Tag != "Integer")?"\"":"")}");
+        //            }
+        //        }
+        //        if (modini[modini.Count-1] == $"[{group.Header}]") { modini.RemoveAt(modini.Count-1); }
+        //    }
+
+        //    if (doclose)
+        //    {
+        //        Console.WriteLine(Mainfrm.slwdirectory + "\\mods\\" + name);
+        //        string dirname = name;
+        //        foreach (char c in new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars()))
+        //        {
+        //            dirname = dirname.Replace(c.ToString(), "");
+        //        }
+        //        dirname = Mainfrm.slwdirectory + "\\mods\\" + dirname;
+
+        //        if (Directory.Exists(dirname) && MessageBox.Show($"A mod already exists in the \"{name}\" folder. Would you like to delete it and replace it with this one?","SLW Mod Loader",MessageBoxButtons.YesNo,MessageBoxIcon.Warning) == DialogResult.Yes)
+        //        {
+        //            Directory.Delete(dirname,true);
+        //        }
+        //        else if (Directory.Exists(dirname)) { return; }
+        //        Directory.CreateDirectory(dirname);
+        //        File.WriteAllLines(dirname+"\\mod.ini", modini);
+
+        //        Directory.CreateDirectory(dirname + "\\disk\\");
+        //        Directory.CreateDirectory(dirname + "\\disk\\sonic2013_patch_0\\");
+        //        Process.Start(dirname + "\\disk\\sonic2013_patch_0\\");
+
+        //        Mainfrm.RefreshModList();
+
+        //        Close();
+        //    }
+        //}
+        #endregion
     }
 }

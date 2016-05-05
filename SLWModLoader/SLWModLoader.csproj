@@ -4,16 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D49C97D1-F23C-467A-8AB4-EEB7A6F1B4E0}</ProjectGuid>
+    <ProjectGuid>{9B08E4A9-F5BA-47EA-A6DC-4BEB4165BCF0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SLWModLoader</RootNamespace>
     <AssemblyName>SLWModLoader</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -24,7 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,113 +31,77 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>SLWModLoader.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression.FileSystem">
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http">
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\DevNewModFrm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\DevNewModFrm.Designer.cs">
-      <DependentUpon>DevNewModFrm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\DevNewModFrmTxt.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\DevNewModFrmTxt.Designer.cs">
-      <DependentUpon>DevNewModFrmTxt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\EditPropertyFrm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\EditPropertyFrm.Designer.cs">
-      <DependentUpon>EditPropertyFrm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\NewModFrm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\NewModFrm.Designer.cs">
-      <DependentUpon>NewModFrm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\NewUpdateFrm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\NewUpdateFrm.Designer.cs">
-      <DependentUpon>NewUpdateFrm.cs</DependentUpon>
-    </Compile>
     <Compile Include="src\AboutFrm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\AboutFrm.Designer.cs">
       <DependentUpon>AboutFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\DescriptionFrm.cs">
+    <Compile Include="src\descriptionFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\DescriptionFrm.Designer.cs">
-      <DependentUpon>DescriptionFrm.cs</DependentUpon>
+    <Compile Include="src\descriptionFrm.Designer.cs">
+      <DependentUpon>descriptionFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\MainFrm.cs">
+    <Compile Include="src\newModFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\MainFrm.Designer.cs">
-      <DependentUpon>MainFrm.cs</DependentUpon>
+    <Compile Include="src\newModFrm.Designer.cs">
+      <DependentUpon>newModFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\newModNameFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\newModNameFrm.Designer.cs">
+      <DependentUpon>newModNameFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\editPropertyFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\editPropertyFrm.Designer.cs">
+      <DependentUpon>editPropertyFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\mainFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\mainFrm.Designer.cs">
+      <DependentUpon>mainFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\addModFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\addModFrm.Designer.cs">
+      <DependentUpon>addModFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\changeLogFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\changeLogFrm.Designer.cs">
+      <DependentUpon>changeLogFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\UpdateFrm.cs">
+    <Compile Include="src\updatingFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\UpdateFrm.Designer.cs">
-      <DependentUpon>UpdateFrm.cs</DependentUpon>
+    <Compile Include="src\updatingFrm.Designer.cs">
+      <DependentUpon>updatingFrm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="src\DevNewModFrm.resx">
-      <DependentUpon>DevNewModFrm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\DevNewModFrmTxt.resx">
-      <DependentUpon>DevNewModFrmTxt.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\EditPropertyFrm.resx">
-      <DependentUpon>EditPropertyFrm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\NewModFrm.resx">
-      <DependentUpon>NewModFrm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\NewUpdateFrm.resx">
-      <DependentUpon>NewUpdateFrm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\AboutFrm.resx">
-      <DependentUpon>AboutFrm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\DescriptionFrm.resx">
-      <DependentUpon>DescriptionFrm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\MainFrm.resx">
-      <DependentUpon>MainFrm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -151,12 +112,33 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="src\UpdateFrm.resx">
-      <DependentUpon>UpdateFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\AboutFrm.resx">
+      <DependentUpon>AboutFrm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="cpkredir.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="src\descriptionFrm.resx">
+      <DependentUpon>descriptionFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\newModFrm.resx">
+      <DependentUpon>newModFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\newModNameFrm.resx">
+      <DependentUpon>newModNameFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\editPropertyFrm.resx">
+      <DependentUpon>editPropertyFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\mainFrm.resx">
+      <DependentUpon>mainFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\addModFrm.resx">
+      <DependentUpon>addModFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\changeLogFrm.resx">
+      <DependentUpon>changeLogFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\updatingFrm.resx">
+      <DependentUpon>updatingFrm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -171,20 +153,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="icon256.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cpkredir.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="cpkredir.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="icon.ico" />
-    <None Include="icon96.png" />
-    <None Include="icon32.png" />
+    <None Include="res\icon96.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

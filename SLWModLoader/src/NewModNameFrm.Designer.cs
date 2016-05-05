@@ -1,6 +1,6 @@
 ﻿namespace SLWModLoader
 {
-    partial class DevNewModFrmTxt
+    partial class newModNameFrm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,41 +28,54 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label = new System.Windows.Forms.Label();
+            this.titleLbl = new System.Windows.Forms.Label();
             this.okBtn = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.modNameTxtBx = new System.Windows.Forms.TextBox();
+            this.cancelBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label
+            // titleLbl
             // 
-            this.label.AutoSize = true;
-            this.label.Font = new System.Drawing.Font("Segoe UI", 17F);
-            this.label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label.Location = new System.Drawing.Point(28, 9);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(457, 46);
-            this.label.TabIndex = 3;
-            this.label.Text = "Please give your mod a name";
+            this.titleLbl.AutoSize = true;
+            this.titleLbl.Font = new System.Drawing.Font("Segoe UI", 17F);
+            this.titleLbl.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.titleLbl.Location = new System.Drawing.Point(28, 9);
+            this.titleLbl.Name = "titleLbl";
+            this.titleLbl.Size = new System.Drawing.Size(457, 46);
+            this.titleLbl.TabIndex = 3;
+            this.titleLbl.Text = "Please give your mod a name";
             // 
             // okBtn
             // 
             this.okBtn.Enabled = false;
             this.okBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.okBtn.Location = new System.Drawing.Point(51, 100);
+            this.okBtn.Location = new System.Drawing.Point(406, 100);
             this.okBtn.Name = "okBtn";
-            this.okBtn.Size = new System.Drawing.Size(411, 36);
+            this.okBtn.Size = new System.Drawing.Size(94, 36);
             this.okBtn.TabIndex = 5;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
             this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
             // 
-            // textBox1
+            // modNameTxtBx
             // 
-            this.textBox1.Location = new System.Drawing.Point(32, 68);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(449, 26);
-            this.textBox1.TabIndex = 6;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.modNameTxtBx.Location = new System.Drawing.Point(20, 68);
+            this.modNameTxtBx.Name = "modNameTxtBx";
+            this.modNameTxtBx.Size = new System.Drawing.Size(480, 26);
+            this.modNameTxtBx.TabIndex = 6;
+            // 
+            // cancelBtn
+            // 
+            this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelBtn.Enabled = false;
+            this.cancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.cancelBtn.Location = new System.Drawing.Point(306, 100);
+            this.cancelBtn.Name = "cancelBtn";
+            this.cancelBtn.Size = new System.Drawing.Size(94, 36);
+            this.cancelBtn.TabIndex = 7;
+            this.cancelBtn.Text = "&Cancel";
+            this.cancelBtn.UseVisualStyleBackColor = true;
+            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
             // 
             // DevNewModFrmTxt
             // 
@@ -70,10 +83,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.CancelButton = this.cancelBtn;
             this.ClientSize = new System.Drawing.Size(512, 147);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.modNameTxtBx);
+            this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.okBtn);
-            this.Controls.Add(this.label);
+            this.Controls.Add(this.titleLbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -89,8 +104,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label;
+        private System.Windows.Forms.Label titleLbl;
         private System.Windows.Forms.Button okBtn;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox modNameTxtBx;
+        private System.Windows.Forms.Button cancelBtn;
     }
 }
