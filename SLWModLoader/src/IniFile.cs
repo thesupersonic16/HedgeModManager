@@ -6,7 +6,15 @@ using System.IO;
 
 namespace SLWModLoader
 {
-    public class IniGroup : Dictionary<string, string> { }
+    public class IniGroup : Dictionary<string, string>
+    {
+        public string groupName { get; set; }
+
+        public IniGroup(string groupName)
+        {
+            this.groupName = groupName;
+        }
+    }
 
     public class IniFile
     {
@@ -33,44 +41,86 @@ namespace SLWModLoader
 
         public void read(TextReader textReader)
         {
-            // Pretty unsafe way reading a INI file, but if everything is set correctly (like no random spaces), then it will be OK
-            // but it needs to be done in a safer way
             while (textReader.Peek() != -1)
             {
                 string nextLine = textReader.ReadLine();
 
-                // If blank line, skip
-                if (string.IsNullOrWhiteSpace(nextLine))
-                    continue;
+                bool hasBracketAtStart = false;
 
-                // If there's no any group in the dictionary and the first line doesn't start with a group, then throw an exception
-                if (groups.Count < 1 && (nextLine[0] != '[' && nextLine[nextLine.Length] != ']'))
-                    throw new Exception("Could not find any group to add parameter, invalid INI file.");
+                int secondBracketPosition = -1;
+                int equalsPosition = -1;
 
-                // That means we found a comment and we're skipping it
-                if (nextLine[0] == ';' || nextLine[0] == '#')
-                    continue;
-
-                // So that means we have found a new group
-                if (nextLine[0] == '[' && nextLine[nextLine.Length - 1] == ']')
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < nextLine.Length; i++)
                 {
-                    string groupName = nextLine.Substring(1, nextLine.Length - 2);
-                    IniGroup iniGroup = new IniGroup();
+                    switch (nextLine[i])
+                    {
+                        case '[':
+                            if (i == 0)
+                                hasBracketAtStart = true;
 
-                    groups.Add(groupName, iniGroup);
+                            goto default;
 
-                    lastGroup = groupName;
+                        case ']':
+                            if (hasBracketAtStart)
+                                secondBracketPosition = stringBuilder.Length;
 
-                    continue;
+                            goto default;
+
+                        case '\\':
+                            if (i + 1 == nextLine.Length)
+                                goto default;
+
+                            i++;
+                            switch (nextLine[i])
+                            {
+                                case 'n':
+                                    stringBuilder.Append('\n');
+                                    break;
+
+                                case 'r':
+                                    stringBuilder.Append('\r');
+                                    break;
+
+                                default:
+                                    stringBuilder.Append(nextLine[i]);
+                                    break;
+                            }
+
+                            break;
+
+                        case '=':
+                            equalsPosition = stringBuilder.Length;
+                            goto default;
+
+                        case '#':
+                        case ';':
+                            i = nextLine.Length;
+                            break;
+
+                        default:
+                            stringBuilder.Append(nextLine[i]);
+                            break;
+                    }
                 }
 
-                // Or it's a parameter
-                string[] parameters = nextLine.Split('=');
+                string stringResult = stringBuilder.ToString();
 
-                if (parameters.Length > 2)
-                    throw new Exception("Invalid parameter in INI file.");
+                if (hasBracketAtStart && secondBracketPosition != -1)
+                {
+                    IniGroup iniGroup = new IniGroup(stringResult.Substring(1, secondBracketPosition - 1));
+                    lastGroup = iniGroup.groupName;
 
-                groups[lastGroup].Add(parameters[0], parameters[1]);
+                    groups.Add(iniGroup.groupName, iniGroup);
+                }
+
+                else if (equalsPosition != -1)
+                {
+                    string parameterName = stringResult.Substring(0, equalsPosition);
+                    string parameterValue = stringResult.Substring(equalsPosition + 1);
+
+                    groups[lastGroup].Add(parameterName, parameterValue);
+                }
             }
         }
 

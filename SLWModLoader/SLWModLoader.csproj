@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\IniFile.cs" />
     <Compile Include="src\aboutFrm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,7 +59,6 @@
     <Compile Include="src\descriptionFrm.Designer.cs">
       <DependentUpon>descriptionFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\IniFile.cs" />
     <Compile Include="src\newModFrm.cs">
       <SubType>Form</SubType>
     </Compile>
