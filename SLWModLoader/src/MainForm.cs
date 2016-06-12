@@ -15,7 +15,7 @@ namespace SLWModLoader
         public MainForm()
         {
             InitializeComponent();
-            Text += $" (v{Program.versionString})";
+            Text += $" (v{Program.VersionString})";
         }
     }
 }

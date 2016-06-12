@@ -8,7 +8,7 @@ namespace SLWModLoader
 {
     static class Program
     {
-        public static string versionString = "6.0", startDirectory = Application.StartupPath;
+        public static string VersionString = "6.0", StartDirectory = Application.StartupPath;
 
         /// <summary>
         /// The main entry point for the application.

@@ -2,21 +2,66 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Runtime;
 using System.ComponentModel;
 using System.IO;
 
 namespace SLWModLoader
 {
+    internal class IniParameter
+    {
+        private string key;
+        private string value;
+
+        public string Key
+        {
+            get { return key; }
+            set
+            {
+                if (value.StartsWith("\"") && value.EndsWith("\""))
+                {
+                    value = value.Substring(1, value.Length - 1);
+                }
+
+                key = value;
+            }
+        }
+
+        public string Value
+        {
+            get { return value; }
+            set
+            {
+                if (value.StartsWith("\"") && value.EndsWith("\""))
+                {
+                    value = value.Substring(1, value.Length - 2);
+                }
+
+                this.value = value;
+            }
+        }
+
+        public IniParameter()
+        {
+            Key = String.Empty;
+            Value = String.Empty;
+        }
+
+        public IniParameter(string key, string value)
+        {
+            Key = key;
+            Value = value;
+        }
+    }
+
     public class IniGroup
     {
-        private Dictionary<string, string> parameters;
+        private List<IniParameter> parameters;
         public string GroupName { get; set; }
         public int ParameterCount { get { return parameters.Count; } }
 
         public IniGroup()
         {
-            parameters = new Dictionary<string, string>();
+            parameters = new List<IniParameter>();
         }
 
         public IniGroup(string groupName) : this()
@@ -26,22 +71,84 @@ namespace SLWModLoader
 
         public void AddParameter(string key, string value)
         {
-            parameters.Add(key, value);
+            parameters.Add(new IniParameter(key, value));
         }
+
+        public void AddParameter(string key)
+        {
+            parameters.Add(new IniParameter(key, string.Empty));
+        }
+
+        public void AddParameter(string key, object value, Type type)
+        {
+            parameters.Add(new IniParameter(key, TypeDescriptor.GetConverter(type).ConvertToString(value)));
+        }
+
+        public void RemoveParameter(string key)
+        {
+            if (ContainsParameter(key))
+            {
+                parameters.RemoveAt(GetIndexOfParameter(key));
+            }
+        }
+        
+        public bool ContainsParameter(string key)
+        {
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                if (parameters[i].Key == key)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private int GetIndexOfParameter(string key)
+        {
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                if (parameters[i].Key == key)
+                    return i;
+            }
+
+            return -1;
+        }
+
 
         public string this[string key]
         {
-            get { return parameters[key]; }
-            set { parameters[key] = value; }
+            // Return empty string instead of throwing exception
+            get { return ContainsParameter(key) ? parameters[GetIndexOfParameter(key)].Value : String.Empty; }
+            set
+            {
+                if (ContainsParameter(key))
+                    parameters[GetIndexOfParameter(key)].Value = value;
+            }
         }
 
         public object this[string key, Type type]
         {
-            get { return TypeDescriptor.GetConverter(type).ConvertFrom(parameters[key]); }
-            set { parameters[key] = TypeDescriptor.GetConverter(type).ConvertToString(value); }
+            get
+            {
+                return ContainsParameter(key) ? TypeDescriptor.GetConverter(type).ConvertFrom(parameters[GetIndexOfParameter(key)].Value) : String.Empty;
+            }
+
+            set
+            {
+                if (ContainsParameter(key))
+                    parameters[GetIndexOfParameter(key)].Value = TypeDescriptor.GetConverter(type).ConvertToString(value);
+            }
         }
 
-        public KeyValuePair<string, string> this[int index] { get { return parameters.ElementAt(index); } }
+        internal IniParameter this[int index]
+        {
+            get { return index < parameters.Count ? parameters.ElementAt(index) : new IniParameter(); }
+        }
+
+        public void Clear()
+        {
+            parameters.Clear();
+        }
     }
 
     public class IniFile
@@ -53,6 +160,9 @@ namespace SLWModLoader
 
         public IniFile()
         {
+            IniPath = String.Empty;
+            IniName = String.Empty;
+
             groups = new List<IniGroup>();
         }
 
@@ -77,6 +187,12 @@ namespace SLWModLoader
             }
 
             groups.Add(iniGroup);
+        }
+
+        public void AddGroup(string name)
+        {
+            IniGroup iniGroup = new IniGroup(name);
+            AddGroup(iniGroup);
         }
 
         public IniGroup this[string groupName]
