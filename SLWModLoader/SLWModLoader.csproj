@@ -47,61 +47,61 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\IniFile.cs" />
-    <Compile Include="src\aboutFrm.cs">
+    <Compile Include="src\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\aboutFrm.Designer.cs">
-      <DependentUpon>aboutFrm.cs</DependentUpon>
+    <Compile Include="src\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\descriptionFrm.cs">
+    <Compile Include="src\DescriptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\descriptionFrm.Designer.cs">
-      <DependentUpon>descriptionFrm.cs</DependentUpon>
+    <Compile Include="src\DescriptionForm.Designer.cs">
+      <DependentUpon>DescriptionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\newModFrm.cs">
+    <Compile Include="src\NewModForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\newModFrm.Designer.cs">
-      <DependentUpon>newModFrm.cs</DependentUpon>
+    <Compile Include="src\NewModForm.Designer.cs">
+      <DependentUpon>NewModForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\newModNameFrm.cs">
+    <Compile Include="src\NewModNameForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\newModNameFrm.Designer.cs">
-      <DependentUpon>newModNameFrm.cs</DependentUpon>
+    <Compile Include="src\NewModNameForm.Designer.cs">
+      <DependentUpon>NewModNameForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\editPropertyFrm.cs">
+    <Compile Include="src\EditPropertyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\editPropertyFrm.Designer.cs">
-      <DependentUpon>editPropertyFrm.cs</DependentUpon>
+    <Compile Include="src\EditPropertyForm.Designer.cs">
+      <DependentUpon>EditPropertyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\mainFrm.cs">
+    <Compile Include="src\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\mainFrm.Designer.cs">
-      <DependentUpon>mainFrm.cs</DependentUpon>
+    <Compile Include="src\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\addModFrm.cs">
+    <Compile Include="src\AddModForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\addModFrm.Designer.cs">
-      <DependentUpon>addModFrm.cs</DependentUpon>
+    <Compile Include="src\AddModForm.Designer.cs">
+      <DependentUpon>AddModForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\changeLogFrm.cs">
+    <Compile Include="src\ChangeLogForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\changeLogFrm.Designer.cs">
-      <DependentUpon>changeLogFrm.cs</DependentUpon>
+    <Compile Include="src\ChangeLogForm.Designer.cs">
+      <DependentUpon>ChangeLogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\updatingFrm.cs">
+    <Compile Include="src\UpdateForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\updatingFrm.Designer.cs">
-      <DependentUpon>updatingFrm.cs</DependentUpon>
+    <Compile Include="src\UpdateForm.Designer.cs">
+      <DependentUpon>UpdateForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -113,32 +113,32 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="src\aboutFrm.resx">
-      <DependentUpon>aboutFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\descriptionFrm.resx">
-      <DependentUpon>descriptionFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\DescriptionForm.resx">
+      <DependentUpon>DescriptionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\newModFrm.resx">
-      <DependentUpon>newModFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\NewModForm.resx">
+      <DependentUpon>NewModForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\newModNameFrm.resx">
-      <DependentUpon>newModNameFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\NewModNameForm.resx">
+      <DependentUpon>NewModNameForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\editPropertyFrm.resx">
-      <DependentUpon>editPropertyFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\EditPropertyForm.resx">
+      <DependentUpon>EditPropertyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\mainFrm.resx">
-      <DependentUpon>mainFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\addModFrm.resx">
-      <DependentUpon>addModFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\AddModForm.resx">
+      <DependentUpon>AddModForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\changeLogFrm.resx">
-      <DependentUpon>changeLogFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\ChangeLogForm.resx">
+      <DependentUpon>ChangeLogForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\updatingFrm.resx">
-      <DependentUpon>updatingFrm.cs</DependentUpon>
+    <EmbeddedResource Include="src\UpdateForm.resx">
+      <DependentUpon>UpdateForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

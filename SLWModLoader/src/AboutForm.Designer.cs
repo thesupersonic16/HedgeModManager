@@ -1,6 +1,6 @@
 ﻿namespace SLWModLoader
 {
-    partial class changeLogFrm
+    partial class AboutForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.titleLbl = new System.Windows.Forms.Label();
-            this.changelogLbl = new System.Windows.Forms.Label();
+            this.aboutLbl = new System.Windows.Forms.Label();
             this.okBtn = new System.Windows.Forms.Button();
+            this.iconPBx = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.iconPBx)).BeginInit();
             this.SuspendLayout();
             // 
             // titleLbl
@@ -38,31 +41,27 @@
             this.titleLbl.AutoSize = true;
             this.titleLbl.Font = new System.Drawing.Font("Segoe UI", 21F);
             this.titleLbl.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.titleLbl.Location = new System.Drawing.Point(2, 9);
+            this.titleLbl.Location = new System.Drawing.Point(85, 15);
             this.titleLbl.Name = "titleLbl";
-            this.titleLbl.Size = new System.Drawing.Size(376, 57);
+            this.titleLbl.Size = new System.Drawing.Size(344, 57);
             this.titleLbl.TabIndex = 0;
-            this.titleLbl.Text = "SLW Mod Loader v";
+            this.titleLbl.Text = "SLW Mod Loader";
             // 
-            // changelogLbl
+            // aboutLbl
             // 
-            this.changelogLbl.AutoSize = true;
-            this.changelogLbl.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.changelogLbl.Location = new System.Drawing.Point(13, 79);
-            this.changelogLbl.Margin = new System.Windows.Forms.Padding(3, 0, 3, 50);
-            this.changelogLbl.MaximumSize = new System.Drawing.Size(630, 0);
-            this.changelogLbl.Name = "changelogLbl";
-            this.changelogLbl.Size = new System.Drawing.Size(157, 21);
-            this.changelogLbl.TabIndex = 1;
-            this.changelogLbl.Text = "Changelog goes here";
+            this.aboutLbl.AutoSize = true;
+            this.aboutLbl.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.aboutLbl.Location = new System.Drawing.Point(91, 85);
+            this.aboutLbl.Name = "aboutLbl";
+            this.aboutLbl.Size = new System.Drawing.Size(499, 126);
+            this.aboutLbl.TabIndex = 1;
+            this.aboutLbl.Text = resources.GetString("aboutLbl.Text");
             // 
             // okBtn
             // 
-            this.okBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.okBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.okBtn.Location = new System.Drawing.Point(517, 109);
-            this.okBtn.Margin = new System.Windows.Forms.Padding(3, 50, 3, 3);
+            this.okBtn.Location = new System.Drawing.Point(591, 217);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(113, 33);
             this.okBtn.TabIndex = 3;
@@ -70,27 +69,37 @@
             this.okBtn.UseVisualStyleBackColor = true;
             this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
             // 
-            // NewUpdateFrm
+            // iconPBx
+            // 
+            this.iconPBx.Image = global::SLWModLoader.Properties.Resources.icon96;
+            this.iconPBx.Location = new System.Drawing.Point(12, 9);
+            this.iconPBx.Name = "iconPBx";
+            this.iconPBx.Size = new System.Drawing.Size(67, 67);
+            this.iconPBx.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.iconPBx.TabIndex = 2;
+            this.iconPBx.TabStop = false;
+            // 
+            // AboutFrm
             // 
             this.AcceptButton = this.okBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.okBtn;
-            this.ClientSize = new System.Drawing.Size(643, 153);
+            this.ClientSize = new System.Drawing.Size(716, 258);
             this.Controls.Add(this.okBtn);
-            this.Controls.Add(this.changelogLbl);
+            this.Controls.Add(this.iconPBx);
+            this.Controls.Add(this.aboutLbl);
             this.Controls.Add(this.titleLbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "NewUpdateFrm";
+            this.Name = "AboutFrm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "v1.0 Changelog";
+            this.Text = "About SLW Mod Loader";
+            ((System.ComponentModel.ISupportInitialize)(this.iconPBx)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -99,7 +108,8 @@
         #endregion
 
         private System.Windows.Forms.Label titleLbl;
-        private System.Windows.Forms.Label changelogLbl;
+        private System.Windows.Forms.Label aboutLbl;
+        private System.Windows.Forms.PictureBox iconPBx;
         private System.Windows.Forms.Button okBtn;
     }
 }

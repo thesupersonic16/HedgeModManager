@@ -10,16 +10,12 @@ using System.Windows.Forms;
 
 namespace SLWModLoader
 {
-    public partial class newModNameFrm : Form
+    public partial class MainForm : Form
     {
-        public newModNameFrm()
+        public MainForm()
         {
             InitializeComponent();
-        }
-
-        private void btn_Click(object sender, EventArgs e)
-        {
-            Close();
+            Text += $" (v{Program.versionString})";
         }
     }
 }

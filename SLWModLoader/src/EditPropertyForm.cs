@@ -10,14 +10,15 @@ using System.Windows.Forms;
 
 namespace SLWModLoader
 {
-    public partial class changeLogFrm : Form
+    public partial class EditPropertyForm : Form
     {
-        public changeLogFrm()
+        public EditPropertyForm(string name, string value, string type, string group, ListViewGroupCollection groups)
         {
             InitializeComponent();
+            Text = $"Edit \"{name}\" Property";
         }
 
-        private void okBtn_Click(object sender, EventArgs e)
+        private void btn_Click(object sender, EventArgs e)
         {
             Close();
         }

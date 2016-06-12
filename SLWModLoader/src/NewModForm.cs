@@ -12,9 +12,9 @@ using System.Windows.Forms;
 
 namespace SLWModLoader
 {
-    public partial class newModFrm : Form
+    public partial class NewModForm : Form
     {
-        public newModFrm(string name)
+        public NewModForm(string name)
         {
             InitializeComponent();
         }
@@ -23,6 +23,7 @@ namespace SLWModLoader
         //..Maybe?
 
         //I doubt it..
+        // all of it will be destroyed
 
         #region Old code
         //private string name = "";

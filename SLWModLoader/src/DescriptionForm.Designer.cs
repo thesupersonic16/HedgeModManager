@@ -1,6 +1,6 @@
 ﻿namespace SLWModLoader
 {
-    partial class descriptionFrm
+    partial class DescriptionForm
     {
         /// <summary>
         /// Required designer variable.

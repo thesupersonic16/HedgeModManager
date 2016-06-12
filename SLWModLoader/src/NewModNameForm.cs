@@ -10,12 +10,11 @@ using System.Windows.Forms;
 
 namespace SLWModLoader
 {
-    public partial class editPropertyFrm : Form
+    public partial class NewModNameForm : Form
     {
-        public editPropertyFrm(string name, string value, string type, string group, ListViewGroupCollection groups)
+        public NewModNameForm()
         {
             InitializeComponent();
-            Text = $"Edit \"{name}\" Property";
         }
 
         private void btn_Click(object sender, EventArgs e)

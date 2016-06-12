@@ -1,6 +1,6 @@
 ﻿namespace SLWModLoader
 {
-    partial class newModFrm
+    partial class NewModForm
     {
         /// <summary>
         /// Required designer variable.

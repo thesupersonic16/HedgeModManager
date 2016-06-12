@@ -1,6 +1,6 @@
 ﻿namespace SLWModLoader
 {
-    partial class editPropertyFrm
+    partial class EditPropertyForm
     {
         /// <summary>
         /// Required designer variable.

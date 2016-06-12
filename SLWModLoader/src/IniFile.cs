@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime;
 using System.ComponentModel;
 using System.IO;
 
@@ -10,7 +11,8 @@ namespace SLWModLoader
     public class IniGroup
     {
         private Dictionary<string, string> parameters;
-        public string groupName { get; set; }
+        public string GroupName { get; set; }
+        public int ParameterCount { get { return parameters.Count; } }
 
         public IniGroup()
         {
@@ -19,84 +21,35 @@ namespace SLWModLoader
 
         public IniGroup(string groupName) : this()
         {
-            this.groupName = groupName;
+            GroupName = groupName;
         }
 
-        public void addParameter(string key, string value)
+        public void AddParameter(string key, string value)
         {
-            if (parameters.ContainsKey(key))
-                throw new Exception($"IniGroup {groupName} already contains a parameter named {key}");
-
             parameters.Add(key, value);
         }
 
         public string this[string key]
         {
-            get
-            {
-                if (!parameters.ContainsKey(key))
-                    throw new Exception($"IniGroup {groupName} does not contain a key named {key}");
-
-                return parameters[key];
-            }
-
-            set
-            {
-                if (!parameters.ContainsKey(key))
-                    throw new Exception($"IniGroup {groupName} does not contain a key named {key}");
-
-                parameters[key] = value;
-            }
+            get { return parameters[key]; }
+            set { parameters[key] = value; }
         }
 
         public object this[string key, Type type]
         {
-            get
-            {
-                if (!parameters.ContainsKey(key))
-                    throw new Exception($"IniGroup {groupName} does not contain a key named {key}");
-
-                var dataConverter = TypeDescriptor.GetConverter(type);
-                var result = dataConverter.ConvertFrom(parameters[key]);
-
-                return result;
-            }
-
-            set
-            {
-                if (!parameters.ContainsKey(key))
-                    throw new Exception($"IniGroup {groupName} does not contain a key named {key}");
-
-                var dataConverter = TypeDescriptor.GetConverter(type);
-                var result = dataConverter.ConvertToString(value);
-
-                parameters[key] = result;
-            }
+            get { return TypeDescriptor.GetConverter(type).ConvertFrom(parameters[key]); }
+            set { parameters[key] = TypeDescriptor.GetConverter(type).ConvertToString(value); }
         }
 
-        internal Dictionary<string, string> parametersDictionary
-        {
-            get
-            {
-                return parameters;
-            }
-        }
-
-        public int parameterCount
-        {
-            get
-            {
-                return parameters.Count;
-            }
-        }
+        public KeyValuePair<string, string> this[int index] { get { return parameters.ElementAt(index); } }
     }
 
     public class IniFile
     {
         private List<IniGroup> groups;
 
-        public string iniPath { get; set; }
-        public string iniName { get; set; }
+        public string IniPath { get; set; }
+        public string IniName { get; set; }
 
         public IniFile()
         {
@@ -105,19 +58,22 @@ namespace SLWModLoader
 
         public IniFile(string filename) : this()
         {
-            iniPath = filename;
-            iniName = Path.GetFileNameWithoutExtension(filename);
+            IniPath = filename;
+            IniName = Path.GetFileNameWithoutExtension(filename);
 
             using (TextReader textReader = File.OpenText(filename))
-                read(textReader);
+                Read(textReader);
         }
 
-        public void addGroup(IniGroup iniGroup)
+        public void AddGroup(IniGroup iniGroup)
         {
-            foreach (var group in groups)
+            for (int i = 0; i < groups.Count; i++)
             {
-                if (group == iniGroup || group.groupName == iniGroup.groupName)
-                    throw new Exception($"IniGroup {iniGroup.groupName} already exists in IniFile {iniName}");
+                if (groups[i].GroupName == iniGroup.GroupName)
+                {
+                    string message = String.Format("{0} already contains a group named {1}", IniName, iniGroup.GroupName);
+                    throw new Exception(message);
+                }
             }
 
             groups.Add(iniGroup);
@@ -128,15 +84,15 @@ namespace SLWModLoader
             get
             {
                 foreach (var group in groups)
-                {
-                    if (group.groupName == groupName) return group;
-                }
+                    if (group.GroupName == groupName)
+                        return group;
 
-                throw new Exception($"IniGroup {groupName} does not exist in IniFile {iniName}");
+                string message = String.Format("{0} does not have a group named {1}", IniName, groupName);
+                throw new Exception(message);
             }
         }
 
-        public void read(TextReader textReader)
+        public void Read(TextReader textReader)
         {
             while (textReader.Peek() != -1)
             {
@@ -214,35 +170,37 @@ namespace SLWModLoader
                     string parameterKey = stringResult.Substring(0, equalsPosition);
                     string parameterValue = stringResult.Substring(equalsPosition + 1);
 
-                    groups[groups.Count - 1].addParameter(parameterKey, parameterValue);
+                    groups[groups.Count - 1].AddParameter(parameterKey, parameterValue);
                 }
             }
         }
 
-        public void write(TextWriter textWriter)
+        public void Write(TextWriter textWriter)
         {
-            foreach (var group in groups)
+            for (int i = 0; i < groups.Count; i++)
             {
-                string line1 = String.Format("[{0}]", group.groupName);
+                string line1 = String.Format("[{0}]", groups[i].GroupName);
                 textWriter.WriteLine(line1);
 
-                foreach (var parameter in group.parametersDictionary)
+                for (int j = 0; j < groups[i].ParameterCount; j++)
                 {
-                    string line2 = String.Format("{0}={1}", parameter.Key, parameter.Value);
+                    string line2 = String.Format("{0}={1}", groups[i][j].Key, groups[i][j].Value);
                     textWriter.WriteLine(line2);
                 }
             }
         }
 
-        public void save(string filename)
+        public void Save(string filename)
         {
             using (TextWriter textWriter = File.CreateText(filename))
-                write(textWriter);
+            {
+                Write(textWriter);
+            }
         }
 
-        public void save()
+        public void Save()
         {
-            save(iniPath);
+            Save(IniPath);
         }
     }
 }

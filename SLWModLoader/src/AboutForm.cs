@@ -7,14 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO.Compression;
-using System.IO;
 
 namespace SLWModLoader
 {
-    public partial class addModFrm : Form
+    public partial class AboutForm : Form
     {
-        public addModFrm()
+        public AboutForm()
         {
             InitializeComponent();
         }

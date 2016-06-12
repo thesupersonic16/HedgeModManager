@@ -5,21 +5,23 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Net;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SLWModLoader
 {
-    public partial class updateFrm : Form
+    public partial class DescriptionForm : Form
     {
-        public updateFrm()
+        public DescriptionForm(string description, string title, string author, string date, string URL, string version, string authorURL, string textColor, string headerColor)
         {
             InitializeComponent();
+        }
+
+        private void okbtn_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

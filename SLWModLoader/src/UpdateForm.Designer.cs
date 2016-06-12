@@ -1,6 +1,6 @@
 ﻿namespace SLWModLoader
 {
-    partial class updateFrm
+    partial class UpdateForm
     {
         /// <summary>
         /// Required designer variable.
