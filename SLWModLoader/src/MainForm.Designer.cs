@@ -38,6 +38,7 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.modPage = new System.Windows.Forms.TabPage();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.noModsFoundLbl = new System.Windows.Forms.Label();
             this.moveDownAll = new System.Windows.Forms.Button();
             this.moveUpAll = new System.Windows.Forms.Button();
@@ -56,7 +57,6 @@
             this.rmModBtn = new System.Windows.Forms.Button();
             this.playBtn = new System.Windows.Forms.Button();
             this.saveBtn = new System.Windows.Forms.Button();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.mainPnl.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.modPage.SuspendLayout();
@@ -83,7 +83,7 @@
             this.modsList.Location = new System.Drawing.Point(0, 0);
             this.modsList.MultiSelect = false;
             this.modsList.Name = "modsList";
-            this.modsList.Size = new System.Drawing.Size(501, 405);
+            this.modsList.Size = new System.Drawing.Size(490, 412);
             this.modsList.TabIndex = 0;
             this.modsList.UseCompatibleStateImageBehavior = false;
             this.modsList.View = System.Windows.Forms.View.Details;
@@ -114,7 +114,7 @@
             this.mainPnl.Dock = System.Windows.Forms.DockStyle.Top;
             this.mainPnl.Location = new System.Drawing.Point(0, 0);
             this.mainPnl.Name = "mainPnl";
-            this.mainPnl.Size = new System.Drawing.Size(548, 444);
+            this.mainPnl.Size = new System.Drawing.Size(537, 444);
             this.mainPnl.TabIndex = 1;
             // 
             // tabControl
@@ -126,17 +126,17 @@
             this.tabControl.Multiline = true;
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(548, 444);
+            this.tabControl.Size = new System.Drawing.Size(537, 444);
             this.tabControl.TabIndex = 0;
             // 
             // modPage
             // 
             this.modPage.BackColor = System.Drawing.Color.White;
             this.modPage.Controls.Add(this.splitContainer);
-            this.modPage.Location = new System.Drawing.Point(4, 29);
+            this.modPage.Location = new System.Drawing.Point(4, 22);
             this.modPage.Name = "modPage";
             this.modPage.Padding = new System.Windows.Forms.Padding(3);
-            this.modPage.Size = new System.Drawing.Size(540, 411);
+            this.modPage.Size = new System.Drawing.Size(529, 418);
             this.modPage.TabIndex = 0;
             this.modPage.Text = "Mods";
             // 
@@ -159,9 +159,22 @@
             this.splitContainer.Panel2.Controls.Add(this.moveUpAll);
             this.splitContainer.Panel2.Controls.Add(this.moveDownbtn);
             this.splitContainer.Panel2.Controls.Add(this.moveUpbtn);
-            this.splitContainer.Size = new System.Drawing.Size(534, 405);
-            this.splitContainer.SplitterDistance = 501;
+            this.splitContainer.Size = new System.Drawing.Size(523, 412);
+            this.splitContainer.SplitterDistance = 490;
             this.splitContainer.TabIndex = 5;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.linkLabel1.LinkColor = System.Drawing.SystemColors.HotTrack;
+            this.linkLabel1.Location = new System.Drawing.Point(173, 246);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.linkLabel1.Size = new System.Drawing.Size(148, 19);
+            this.linkLabel1.TabIndex = 5;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Open Mod Folder";
             // 
             // noModsFoundLbl
             // 
@@ -172,7 +185,7 @@
             this.noModsFoundLbl.Location = new System.Drawing.Point(0, 0);
             this.noModsFoundLbl.Name = "noModsFoundLbl";
             this.noModsFoundLbl.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.noModsFoundLbl.Size = new System.Drawing.Size(501, 405);
+            this.noModsFoundLbl.Size = new System.Drawing.Size(490, 412);
             this.noModsFoundLbl.TabIndex = 4;
             this.noModsFoundLbl.Text = "No mods found!\r\nPlease check your mod folder.";
             this.noModsFoundLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -181,7 +194,7 @@
             // 
             this.moveDownAll.Enabled = false;
             this.moveDownAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.moveDownAll.Location = new System.Drawing.Point(3, 306);
+            this.moveDownAll.Location = new System.Drawing.Point(5, 306);
             this.moveDownAll.Name = "moveDownAll";
             this.moveDownAll.Size = new System.Drawing.Size(19, 100);
             this.moveDownAll.TabIndex = 3;
@@ -192,7 +205,7 @@
             // 
             this.moveUpAll.Enabled = false;
             this.moveUpAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.moveUpAll.Location = new System.Drawing.Point(3, 3);
+            this.moveUpAll.Location = new System.Drawing.Point(5, 3);
             this.moveUpAll.Name = "moveUpAll";
             this.moveUpAll.Size = new System.Drawing.Size(19, 100);
             this.moveUpAll.TabIndex = 2;
@@ -203,7 +216,7 @@
             // 
             this.moveDownbtn.Enabled = false;
             this.moveDownbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.moveDownbtn.Location = new System.Drawing.Point(3, 205);
+            this.moveDownbtn.Location = new System.Drawing.Point(5, 205);
             this.moveDownbtn.Name = "moveDownbtn";
             this.moveDownbtn.Size = new System.Drawing.Size(19, 100);
             this.moveDownbtn.TabIndex = 1;
@@ -214,7 +227,7 @@
             // 
             this.moveUpbtn.Enabled = false;
             this.moveUpbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.moveUpbtn.Location = new System.Drawing.Point(3, 104);
+            this.moveUpbtn.Location = new System.Drawing.Point(5, 104);
             this.moveUpbtn.Name = "moveUpbtn";
             this.moveUpbtn.Size = new System.Drawing.Size(19, 100);
             this.moveUpbtn.TabIndex = 0;
@@ -224,10 +237,10 @@
             // settingsPage
             // 
             this.settingsPage.Controls.Add(this.settingsBottomPnl);
-            this.settingsPage.Location = new System.Drawing.Point(4, 29);
+            this.settingsPage.Location = new System.Drawing.Point(4, 22);
             this.settingsPage.Name = "settingsPage";
             this.settingsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.settingsPage.Size = new System.Drawing.Size(540, 411);
+            this.settingsPage.Size = new System.Drawing.Size(529, 418);
             this.settingsPage.TabIndex = 1;
             this.settingsPage.Text = "Settings";
             this.settingsPage.UseVisualStyleBackColor = true;
@@ -237,15 +250,15 @@
             this.settingsBottomPnl.Controls.Add(this.aboutBtn);
             this.settingsBottomPnl.Controls.Add(this.reportLbl);
             this.settingsBottomPnl.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.settingsBottomPnl.Location = new System.Drawing.Point(3, 308);
+            this.settingsBottomPnl.Location = new System.Drawing.Point(3, 315);
             this.settingsBottomPnl.Name = "settingsBottomPnl";
-            this.settingsBottomPnl.Size = new System.Drawing.Size(534, 100);
+            this.settingsBottomPnl.Size = new System.Drawing.Size(523, 100);
             this.settingsBottomPnl.TabIndex = 12;
             // 
             // aboutBtn
             // 
             this.aboutBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.aboutBtn.Location = new System.Drawing.Point(129, 36);
+            this.aboutBtn.Location = new System.Drawing.Point(125, 42);
             this.aboutBtn.Name = "aboutBtn";
             this.aboutBtn.Size = new System.Drawing.Size(276, 36);
             this.aboutBtn.TabIndex = 8;
@@ -260,7 +273,7 @@
             this.reportLbl.Location = new System.Drawing.Point(0, 0);
             this.reportLbl.Name = "reportLbl";
             this.reportLbl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.reportLbl.Size = new System.Drawing.Size(534, 100);
+            this.reportLbl.Size = new System.Drawing.Size(523, 100);
             this.reportLbl.TabIndex = 11;
             this.reportLbl.TabStop = true;
             this.reportLbl.Text = "Report a problem/request a feature";
@@ -269,9 +282,9 @@
             // saveAndPlayBtn
             // 
             this.saveAndPlayBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.saveAndPlayBtn.Location = new System.Drawing.Point(122, 519);
+            this.saveAndPlayBtn.Location = new System.Drawing.Point(112, 489);
             this.saveAndPlayBtn.Name = "saveAndPlayBtn";
-            this.saveAndPlayBtn.Size = new System.Drawing.Size(305, 43);
+            this.saveAndPlayBtn.Size = new System.Drawing.Size(313, 43);
             this.saveAndPlayBtn.TabIndex = 2;
             this.saveAndPlayBtn.Text = "Save &and Play";
             this.saveAndPlayBtn.UseVisualStyleBackColor = true;
@@ -279,9 +292,9 @@
             // refreshBtn
             // 
             this.refreshBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.refreshBtn.Location = new System.Drawing.Point(122, 480);
+            this.refreshBtn.Location = new System.Drawing.Point(112, 450);
             this.refreshBtn.Name = "refreshBtn";
-            this.refreshBtn.Size = new System.Drawing.Size(305, 33);
+            this.refreshBtn.Size = new System.Drawing.Size(313, 33);
             this.refreshBtn.TabIndex = 6;
             this.refreshBtn.Text = "&Refresh Mod List";
             this.refreshBtn.UseVisualStyleBackColor = true;
@@ -292,9 +305,9 @@
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLbl});
-            this.statusStrip.Location = new System.Drawing.Point(0, 565);
+            this.statusStrip.Location = new System.Drawing.Point(0, 541);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(548, 22);
+            this.statusStrip.Size = new System.Drawing.Size(537, 22);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 5;
             this.statusStrip.Text = "statusStrip1";
@@ -315,14 +328,14 @@
             this.descriptionLbl.Location = new System.Drawing.Point(0, 0);
             this.descriptionLbl.Name = "descriptionLbl";
             this.descriptionLbl.Padding = new System.Windows.Forms.Padding(0, 455, 0, 0);
-            this.descriptionLbl.Size = new System.Drawing.Size(548, 587);
+            this.descriptionLbl.Size = new System.Drawing.Size(537, 563);
             this.descriptionLbl.TabIndex = 7;
             this.descriptionLbl.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // addModBtn
             // 
             this.addModBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.addModBtn.Location = new System.Drawing.Point(433, 480);
+            this.addModBtn.Location = new System.Drawing.Point(431, 450);
             this.addModBtn.Name = "addModBtn";
             this.addModBtn.Size = new System.Drawing.Size(99, 33);
             this.addModBtn.TabIndex = 7;
@@ -333,7 +346,7 @@
             // 
             this.rmModBtn.Enabled = false;
             this.rmModBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.rmModBtn.Location = new System.Drawing.Point(17, 480);
+            this.rmModBtn.Location = new System.Drawing.Point(7, 450);
             this.rmModBtn.Name = "rmModBtn";
             this.rmModBtn.Size = new System.Drawing.Size(99, 33);
             this.rmModBtn.TabIndex = 5;
@@ -343,7 +356,7 @@
             // playBtn
             // 
             this.playBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.playBtn.Location = new System.Drawing.Point(433, 519);
+            this.playBtn.Location = new System.Drawing.Point(431, 489);
             this.playBtn.Name = "playBtn";
             this.playBtn.Size = new System.Drawing.Size(99, 43);
             this.playBtn.TabIndex = 4;
@@ -353,32 +366,19 @@
             // saveBtn
             // 
             this.saveBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.saveBtn.Location = new System.Drawing.Point(17, 519);
+            this.saveBtn.Location = new System.Drawing.Point(7, 489);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(99, 43);
             this.saveBtn.TabIndex = 3;
             this.saveBtn.Text = "&Save";
             this.saveBtn.UseVisualStyleBackColor = true;
             // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.linkLabel1.LinkColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabel1.Location = new System.Drawing.Point(180, 246);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.linkLabel1.Size = new System.Drawing.Size(198, 28);
-            this.linkLabel1.TabIndex = 5;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Open Mod Folder";
-            // 
-            // mainFrm
+            // MainForm
             // 
             this.AcceptButton = this.saveAndPlayBtn;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(548, 587);
+            this.ClientSize = new System.Drawing.Size(537, 563);
             this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.playBtn);
             this.Controls.Add(this.rmModBtn);
@@ -392,7 +392,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "mainFrm";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SLW Mod Loader";
             this.mainPnl.ResumeLayout(false);

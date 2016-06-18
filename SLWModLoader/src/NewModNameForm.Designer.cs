@@ -39,9 +39,10 @@
             this.titleLbl.AutoSize = true;
             this.titleLbl.Font = new System.Drawing.Font("Segoe UI", 17F);
             this.titleLbl.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.titleLbl.Location = new System.Drawing.Point(28, 9);
+            this.titleLbl.Location = new System.Drawing.Point(19, 6);
+            this.titleLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.titleLbl.Name = "titleLbl";
-            this.titleLbl.Size = new System.Drawing.Size(457, 46);
+            this.titleLbl.Size = new System.Drawing.Size(313, 31);
             this.titleLbl.TabIndex = 3;
             this.titleLbl.Text = "Please give your mod a name";
             // 
@@ -49,9 +50,10 @@
             // 
             this.okBtn.Enabled = false;
             this.okBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.okBtn.Location = new System.Drawing.Point(406, 100);
+            this.okBtn.Location = new System.Drawing.Point(271, 68);
+            this.okBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.okBtn.Name = "okBtn";
-            this.okBtn.Size = new System.Drawing.Size(94, 36);
+            this.okBtn.Size = new System.Drawing.Size(63, 23);
             this.okBtn.TabIndex = 5;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
@@ -59,9 +61,10 @@
             // 
             // modNameTxtBx
             // 
-            this.modNameTxtBx.Location = new System.Drawing.Point(20, 68);
+            this.modNameTxtBx.Location = new System.Drawing.Point(13, 44);
+            this.modNameTxtBx.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.modNameTxtBx.Name = "modNameTxtBx";
-            this.modNameTxtBx.Size = new System.Drawing.Size(480, 26);
+            this.modNameTxtBx.Size = new System.Drawing.Size(321, 20);
             this.modNameTxtBx.TabIndex = 6;
             // 
             // cancelBtn
@@ -69,30 +72,32 @@
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelBtn.Enabled = false;
             this.cancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.cancelBtn.Location = new System.Drawing.Point(306, 100);
+            this.cancelBtn.Location = new System.Drawing.Point(204, 68);
+            this.cancelBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cancelBtn.Name = "cancelBtn";
-            this.cancelBtn.Size = new System.Drawing.Size(94, 36);
+            this.cancelBtn.Size = new System.Drawing.Size(63, 23);
             this.cancelBtn.TabIndex = 7;
             this.cancelBtn.Text = "&Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
             this.cancelBtn.Click += new System.EventHandler(this.btn_Click);
             // 
-            // DevNewModFrmTxt
+            // NewModNameForm
             // 
             this.AcceptButton = this.okBtn;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.cancelBtn;
-            this.ClientSize = new System.Drawing.Size(512, 147);
+            this.ClientSize = new System.Drawing.Size(341, 96);
             this.Controls.Add(this.modNameTxtBx);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.okBtn);
             this.Controls.Add(this.titleLbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "DevNewModFrmTxt";
+            this.Name = "NewModNameForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
