@@ -51,23 +51,24 @@ Here's an example of a mod.ini file:
 [Main]
 IncludeDir0="."
 IncludeDirCount=1
-UpdateServer="https://dl.dropboxusercontent.com/s/4389t7gn44x8u9h/MLGSpeedRunUpdateFile.txt"
+UpdateServer="https://dl.dropboxusercontent.com/s/xkapkbby1vu4snk/Sonic06UpdateFile.txt"
 
 [Desc]
-Title="MLG Speedrun Zone 1"
-Description="BEAT WINDY HILL 1 LIKE A PRO NOSCOPER!!1!!1!"
-Version="1.0"
-Date="11/06/15"
-Author="Radfordhound"
-AuthorURL="https://www.youtube.com/user/Radfordhound"
-URL="https://www.dropbox.com/sh/2zgsu1rwjt7ld42/AAA99UvcLlRWxpbLWCeiECt3a"
+Title="SLW '06 Project"
+Description="What if Sonic '06 stages were fully playable in an engine that not only perfectly fit it's level design/gameplay, but was actually GOOD? \n\nIntroducing the SLW '06 Project! A mega mod for Lost World that ports as much of Sonic '06 as humanly possible without the glitches and unattractive visuals!  \n\nCredits:\n UltimateDarkman for making the wonderful '06-esque animations.\n Death for his wonderful beta-testing work. \n Gotta Play Fast and Slash for porting the Sonic '06 player models to Lost World. \n Radfordhound for ripping the stages, rendering GIA/generating lightfields, drawing vertex colors, and porting the HUD/music. \n Radfordhound, Gotta Play Fast, Slash, and Beatz for porting the stages and doing object placement. "
+Version="Alpha 1.1"
+Date="4/20/16"
+Author="Radfordhound & Beatz & GPF & Death & UltimateDarkman & Slash"
+AuthorURL="https://www.youtube.com/user/Radfordhound & https://www.youtube.com/channel/UCEjwges-3BTaWsMwOGJDoGQ & https://www.youtube.com/channel/UCZfOGBkXRKICFozWU5bE0Xg & https://www.youtube.com/user/DeathwolvesProjects & https://www.youtube.com/user/UltimateDarkman2010 & https://www.youtube.com/channel/UCphAVIhu8STg0lxhAMDl1YA"
+URL="https://onedrive.live.com/redir?resid=A0D011638C5973B3!5011&authkey=!AJXTG3vsMq0OXFc&ithint=folder%2c"
+
 ```
 
 The following is a list of the most important values that can be used in a mod.INI file:
 
 ###Main
 
-**IncludeDir 0-??** Specifies which folders will be included with your mod, allowing you to modify the default file/folder structure mentioned above.
+**IncludeDir0-??** Specifies which folders will be included with your mod, allowing you to modify the default file/folder structure mentioned above.
 
 **IncludeDirCount** Specifies how many folders will be included with your mod.
 
@@ -89,4 +90,4 @@ Typing a "\n" in this value will indicate a new line within the mod loader, **wh
 **URL** The URL of the mod (aka mod homepages/threads/release videos).
 
 
-There are many other values that can be used in a mod.ini file, many of which are already being used in several mods. So keep an eye out for em' in other released mods! :)
+There are many other values that can be used in a mod.ini file, many of which are already being used in several mods. So keep an eye out for em' in other released mods!
