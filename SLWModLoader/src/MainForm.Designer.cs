@@ -168,7 +168,7 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.linkLabel1.LinkColor = System.Drawing.SystemColors.HotTrack;
-            this.linkLabel1.Location = new System.Drawing.Point(173, 246);
+            this.linkLabel1.Location = new System.Drawing.Point(169, 246);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
             this.linkLabel1.Size = new System.Drawing.Size(148, 19);
@@ -194,7 +194,7 @@
             // 
             this.moveDownAll.Enabled = false;
             this.moveDownAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.moveDownAll.Location = new System.Drawing.Point(5, 306);
+            this.moveDownAll.Location = new System.Drawing.Point(5, 307);
             this.moveDownAll.Name = "moveDownAll";
             this.moveDownAll.Size = new System.Drawing.Size(19, 100);
             this.moveDownAll.TabIndex = 3;
@@ -205,7 +205,7 @@
             // 
             this.moveUpAll.Enabled = false;
             this.moveUpAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.moveUpAll.Location = new System.Drawing.Point(5, 3);
+            this.moveUpAll.Location = new System.Drawing.Point(5, 4);
             this.moveUpAll.Name = "moveUpAll";
             this.moveUpAll.Size = new System.Drawing.Size(19, 100);
             this.moveUpAll.TabIndex = 2;
@@ -216,7 +216,7 @@
             // 
             this.moveDownbtn.Enabled = false;
             this.moveDownbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.moveDownbtn.Location = new System.Drawing.Point(5, 205);
+            this.moveDownbtn.Location = new System.Drawing.Point(5, 206);
             this.moveDownbtn.Name = "moveDownbtn";
             this.moveDownbtn.Size = new System.Drawing.Size(19, 100);
             this.moveDownbtn.TabIndex = 1;
@@ -227,7 +227,7 @@
             // 
             this.moveUpbtn.Enabled = false;
             this.moveUpbtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.moveUpbtn.Location = new System.Drawing.Point(5, 104);
+            this.moveUpbtn.Location = new System.Drawing.Point(5, 105);
             this.moveUpbtn.Name = "moveUpbtn";
             this.moveUpbtn.Size = new System.Drawing.Size(19, 100);
             this.moveUpbtn.TabIndex = 0;
@@ -260,7 +260,7 @@
             this.aboutBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.aboutBtn.Location = new System.Drawing.Point(125, 42);
             this.aboutBtn.Name = "aboutBtn";
-            this.aboutBtn.Size = new System.Drawing.Size(276, 36);
+            this.aboutBtn.Size = new System.Drawing.Size(276, 33);
             this.aboutBtn.TabIndex = 8;
             this.aboutBtn.Text = "&About SLW Mod Loader";
             this.aboutBtn.UseVisualStyleBackColor = true;
