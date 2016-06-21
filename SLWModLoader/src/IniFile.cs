@@ -57,7 +57,7 @@ namespace SLWModLoader
     {
         private List<IniParameter> parameters;
         public string GroupName { get; set; }
-        public int ParameterCount { get { return parameters.Count; } }
+        public int ParameterCount => parameters.Count;
 
         public IniGroup()
         {
@@ -94,13 +94,7 @@ namespace SLWModLoader
         
         public bool ContainsParameter(string key)
         {
-            for (int i = 0; i < parameters.Count; i++)
-            {
-                if (parameters[i].Key == key)
-                    return true;
-            }
-
-            return false;
+            return parameters.Any(t => t.Key == key);
         }
 
         private int GetIndexOfParameter(string key)
@@ -140,10 +134,7 @@ namespace SLWModLoader
             }
         }
 
-        internal IniParameter this[int index]
-        {
-            get { return index < parameters.Count ? parameters.ElementAt(index) : new IniParameter(); }
-        }
+        internal IniParameter this[int index] => index < parameters.Count ? parameters.ElementAt(index) : new IniParameter();
 
         public void Clear()
         {
@@ -177,13 +168,10 @@ namespace SLWModLoader
 
         public void AddGroup(IniGroup iniGroup)
         {
-            for (int i = 0; i < groups.Count; i++)
+            if (groups.Any(t => t.GroupName == iniGroup.GroupName))
             {
-                if (groups[i].GroupName == iniGroup.GroupName)
-                {
-                    string message = String.Format("{0} already contains a group named {1}", IniName, iniGroup.GroupName);
-                    throw new Exception(message);
-                }
+                string message = $"{IniName} already contains a group named {iniGroup.GroupName}";
+                throw new Exception(message);
             }
 
             groups.Add(iniGroup);
@@ -203,7 +191,7 @@ namespace SLWModLoader
                     if (group.GroupName == groupName)
                         return group;
 
-                string message = String.Format("{0} does not have a group named {1}", IniName, groupName);
+                string message = $"{IniName} does not have a group named {groupName}";
                 throw new Exception(message);
             }
         }
@@ -295,12 +283,12 @@ namespace SLWModLoader
         {
             for (int i = 0; i < groups.Count; i++)
             {
-                string line1 = String.Format("[{0}]", groups[i].GroupName);
+                string line1 = $"[{groups[i].GroupName}]";
                 textWriter.WriteLine(line1);
 
                 for (int j = 0; j < groups[i].ParameterCount; j++)
                 {
-                    string line2 = String.Format("{0}={1}", groups[i][j].Key, groups[i][j].Value);
+                    string line2 = $"{groups[i][j].Key}={groups[i][j].Value}";
                     textWriter.WriteLine(line2);
                 }
             }

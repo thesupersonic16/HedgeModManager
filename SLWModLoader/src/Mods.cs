@@ -11,7 +11,7 @@ namespace SLWModLoader
         private IniFile main;
 
         public string RootDirectory { get; set; }
-        public string FilePath { get { return Path.Combine(RootDirectory, "mod.ini"); } }
+        public string FilePath => Path.Combine(RootDirectory, "mod.ini");
 
         public Mod()
         {
@@ -27,6 +27,7 @@ namespace SLWModLoader
             descGroup.AddParameter("Version");
             descGroup.AddParameter("Date");
             descGroup.AddParameter("Author");
+            descGroup.AddParameter("AuthorURL");
             descGroup.AddParameter("URL");
 
             main.AddGroup(mainGroup);
@@ -40,7 +41,7 @@ namespace SLWModLoader
             Version = version;
             Date = date;
             Author = author;
-            URL = url;
+            Url = url;
         }
 
         public Mod(string directory)
@@ -54,7 +55,7 @@ namespace SLWModLoader
             if (directory.StartsWith(RootDirectory))
                 directory = directory.Replace(RootDirectory, ".");
 
-            string parameterKey = String.Format("IncludeDir{0}", main["Main"].ParameterCount - 1);
+            string parameterKey = $"IncludeDir{main["Main"].ParameterCount - 1}";
             main["Main"].AddParameter(parameterKey, directory);
 
             // Update the directory count
@@ -63,7 +64,7 @@ namespace SLWModLoader
 
         public string GetIncludedDirectory(int index)
         {
-            string parameterKey = String.Format("IncludeDir{0}", index);
+            string parameterKey = $"IncludeDir{index}";
             return main["Main"][parameterKey];
         }
 
@@ -97,7 +98,13 @@ namespace SLWModLoader
             set { main["Desc"]["Author"] = value; }
         }
 
-        public string URL
+        public string AuthorUrl
+        {
+            get { return main["Desc"]["AuthorURL"]; }
+            set { main["Desc"]["AuthorURL"] = value; }
+        }
+
+        public string Url
         {
             get { return main["Desc"]["URL"]; }
             set { main["Desc"]["URL"] = value; }
@@ -119,7 +126,7 @@ namespace SLWModLoader
         private IniFile modsDB;
 
         public string RootDirectory { get; set; }
-        public string FilePath { get { return modsDB.IniPath; } }
+        public string FilePath => modsDB.IniPath;
 
         private List<Mod> mods;
 
@@ -172,13 +179,7 @@ namespace SLWModLoader
 
         public Mod GetMod(string title)
         {
-            for (int i = 0; i < mods.Count; i++)
-            {
-                if (mods[i].Title == title)
-                    return mods[i];
-            }
-
-            return null;
+            return mods.FirstOrDefault(t => t.Title == title);
         }
 
         public void AddMod(Mod mod)
@@ -208,10 +209,7 @@ namespace SLWModLoader
             modsDB["Mods"].RemoveParameter(mod.Title);
         }
 
-        public int ActiveModCount
-        {
-            get { return (int)modsDB["Main"]["ActiveModCount", typeof(int)]; }
-        }
+        public int ActiveModCount => (int)modsDB["Main"]["ActiveModCount", typeof(int)];
 
         public void ActivateMod(Mod mod)
         {
@@ -221,7 +219,7 @@ namespace SLWModLoader
             if (IsModActive(mod))
                 return;
 
-            string parameterKey = String.Format("ActiveMod{0}", modsDB["Main"]["ActiveModCount", typeof(int)]);
+            string parameterKey = $"ActiveMod{modsDB["Main"]["ActiveModCount", typeof(int)]}";
             modsDB["Main"].AddParameter(parameterKey, mod.Title);
 
             modsDB["Main"]["ActiveModCount", typeof(int)] = modsDB["Main"].ParameterCount - 2;
@@ -234,7 +232,7 @@ namespace SLWModLoader
             
             for (int i = 0; i < ActiveModCount; i++)
             {
-                string parameterKey = String.Format("ActiveMod{0}", i);
+                string parameterKey = $"ActiveMod{i}";
 
                 Mod activeMod = GetMod(modsDB["Main"][parameterKey]);
 
@@ -246,7 +244,7 @@ namespace SLWModLoader
 
             for (int i = 0; i < activeMods.Count; i++)
             {
-                string parameterKey = String.Format("ActiveMod{0}", i);
+                string parameterKey = $"ActiveMod{i}";
                 modsDB["Main"].AddParameter(parameterKey, activeMods[i].Title);
             }
 
@@ -257,7 +255,7 @@ namespace SLWModLoader
         {
             for (int i = 0; i < ActiveModCount; i++)
             {
-                string parameterKey = String.Format("ActiveMod{0}", i);
+                string parameterKey = $"ActiveMod{i}";
 
                 if (modsDB["Main"].ContainsParameter(parameterKey) && modsDB["Main"][parameterKey] == mod.Title)
                 {
