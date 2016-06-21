@@ -61,10 +61,9 @@ Date="4/20/16"
 Author="Radfordhound & Beatz & GPF & Death & UltimateDarkman & Slash"
 AuthorURL="https://www.youtube.com/user/Radfordhound & https://www.youtube.com/channel/UCEjwges-3BTaWsMwOGJDoGQ & https://www.youtube.com/channel/UCZfOGBkXRKICFozWU5bE0Xg & https://www.youtube.com/user/DeathwolvesProjects & https://www.youtube.com/user/UltimateDarkman2010 & https://www.youtube.com/channel/UCphAVIhu8STg0lxhAMDl1YA"
 URL="https://onedrive.live.com/redir?resid=A0D011638C5973B3!5011&authkey=!AJXTG3vsMq0OXFc&ithint=folder%2c"
-
 ```
 
-The following is a list of the most important values that can be used in a mod.INI file:
+The following is a list of the most important values that can be used in a mod.ini file:
 
 ###Main
 
@@ -90,4 +89,4 @@ Typing a "\n" in this value will indicate a new line within the mod loader, **wh
 **URL** The URL of the mod (aka mod homepages/threads/release videos).
 
 
-There are many other values that can be used in a mod.ini file, many of which are already being used in several mods. So keep an eye out for em' in other released mods!
+There are many other values that can be used in a mod.ini file, many of which are already being used in several mods. So keep an eye out for them in other released mods!
