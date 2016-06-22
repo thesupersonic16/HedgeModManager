@@ -17,12 +17,7 @@ namespace SLWModLoader
             get { return key; }
             set
             {
-                if (value.StartsWith("\"") && value.EndsWith("\""))
-                {
-                    value = value.Substring(1, value.Length - 1);
-                }
-
-                key = value;
+                key = value.Replace("\"", "");
             }
         }
 
@@ -31,19 +26,14 @@ namespace SLWModLoader
             get { return value; }
             set
             {
-                if (value.StartsWith("\"") && value.EndsWith("\""))
-                {
-                    value = value.Substring(1, value.Length - 2);
-                }
-
-                this.value = value;
+                this.value = value.Replace("\"", "");
             }
         }
 
         public IniParameter()
         {
-            Key = String.Empty;
-            Value = String.Empty;
+            Key = string.Empty;
+            Value = string.Empty;
         }
 
         public IniParameter(string key, string value)
@@ -112,7 +102,7 @@ namespace SLWModLoader
         public string this[string key]
         {
             // Return empty string instead of throwing exception
-            get { return ContainsParameter(key) ? parameters[GetIndexOfParameter(key)].Value : String.Empty; }
+            get { return ContainsParameter(key) ? parameters[GetIndexOfParameter(key)].Value : string.Empty; }
             set
             {
                 if (ContainsParameter(key))
@@ -124,7 +114,7 @@ namespace SLWModLoader
         {
             get
             {
-                return ContainsParameter(key) ? TypeDescriptor.GetConverter(type).ConvertFrom(parameters[GetIndexOfParameter(key)].Value) : String.Empty;
+                return ContainsParameter(key) ? TypeDescriptor.GetConverter(type).ConvertFrom(parameters[GetIndexOfParameter(key)].Value) : string.Empty;
             }
 
             set
@@ -151,8 +141,8 @@ namespace SLWModLoader
 
         public IniFile()
         {
-            IniPath = String.Empty;
-            IniName = String.Empty;
+            IniPath = string.Empty;
+            IniName = string.Empty;
 
             groups = new List<IniGroup>();
         }
@@ -187,7 +177,7 @@ namespace SLWModLoader
         {
             get
             {
-                foreach (var group in groups)
+                foreach (IniGroup group in groups)
                     if (group.GroupName == groupName)
                         return group;
 

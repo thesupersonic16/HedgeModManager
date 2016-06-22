@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\LogFile.cs" />
     <Compile Include="src\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>

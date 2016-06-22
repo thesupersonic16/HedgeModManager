@@ -61,6 +61,42 @@ namespace SLWModLoader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SLW Mod Loader.
+        /// </summary>
+        internal static string ApplicationTitle {
+            get {
+                return ResourceManager.GetString("ApplicationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SLW Mod Loader could not find your Sonic Lost World executable (slw.exe). The mod loader must be installed within your Sonic Lost World installation directory in order to work correctly. Please ensure you&apos;ve installed the program in the correct place, and try again..
+        /// </summary>
+        internal static string CannotFindExecutableText {
+            get {
+                return ResourceManager.GetString("CannotFindExecutableText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A &quot;mods&quot; folder must exist within your Sonic Lost World installation directory for the mod loader to correctly function. Would you like to create one?.
+        /// </summary>
+        internal static string CannotFindModsDirectoryText {
+            get {
+                return ResourceManager.GetString("CannotFindModsDirectoryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occured! See &quot;SLWModLoader.log&quot; for more info and report the file if possible..
+        /// </summary>
+        internal static string ExceptionText {
+            get {
+                return ResourceManager.GetString("ExceptionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap icon96 {

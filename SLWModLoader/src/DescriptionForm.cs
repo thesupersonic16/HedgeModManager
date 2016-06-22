@@ -14,7 +14,7 @@ namespace SLWModLoader
 {
     public partial class DescriptionForm : Form
     {
-        public DescriptionForm(string description, string title, string author, string date, string URL, string version, string authorURL, string textColor, string headerColor)
+        public DescriptionForm(string description, string title, string author, string date, string url, string version, string authorUrl, string textColor, string headerColor)
         {
             InitializeComponent();
         }

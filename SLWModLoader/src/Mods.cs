@@ -123,19 +123,21 @@ namespace SLWModLoader
 
     public class ModsDatabase
     {
-        private IniFile modsDB;
+        private IniFile modsDb;
+        private List<Mod> mods;
 
         public string RootDirectory { get; set; }
-        public string FilePath => modsDB.IniPath;
+        public string FilePath => modsDb.IniPath;
 
-        private List<Mod> mods;
+        public int ActiveModCount => (int)modsDb["Main"]["ActiveModCount", typeof(int)];
+        public int ModCount => mods.Count;
 
         public ModsDatabase()
         {
-            RootDirectory = String.Empty;
+            RootDirectory = string.Empty;
             mods = new List<Mod>();
 
-            modsDB = new IniFile();
+            modsDb = new IniFile();
 
             IniGroup mainGroup = new IniGroup("Main");
             mainGroup.AddParameter("ReverseLoadOrder", 0, typeof(int));
@@ -143,18 +145,30 @@ namespace SLWModLoader
 
             IniGroup modsGroup = new IniGroup("Mods");
 
-            modsDB.AddGroup(mainGroup);
-            modsDB.AddGroup(modsGroup);
+            modsDb.AddGroup(mainGroup);
+            modsDb.AddGroup(modsGroup);
+        }
+
+        public ModsDatabase(string directory) : this()
+        {
+            RootDirectory = directory;
         }
 
         public ModsDatabase(string path, string directory)
         {
             RootDirectory = directory;
             mods = new List<Mod>();
-            modsDB = new IniFile(path);
+            modsDb = new IniFile(path);
 
-            modsDB["Mods"].Clear();
-            foreach (string folder in Directory.GetDirectories(directory))
+            GetModsInFolder();
+        }
+
+        public void GetModsInFolder()
+        {
+            mods.Clear();
+            modsDb["Mods"].Clear();
+
+            foreach (string folder in Directory.GetDirectories(RootDirectory))
             {
                 string iniPath = Path.Combine(folder, "mod.ini");
 
@@ -162,14 +176,16 @@ namespace SLWModLoader
                 {
                     Mod mod = new Mod(folder);
                     AddMod(mod);
+
+                    //LogFile.AddMessage($"Found mod: {mod.Title}");
                 }
             }
         }
 
         public bool ReverseLoadOrder
         {
-            get { return (bool)modsDB["Main"]["ReverseLoadOrder", typeof(bool)]; }
-            set { modsDB["Main"]["ReverseLoadOrder", typeof(int)] = value == true ? 1 : 0; }
+            get { return (bool)modsDb["Main"]["ReverseLoadOrder", typeof(bool)]; }
+            set { modsDb["Main"]["ReverseLoadOrder", typeof(int)] = value == true ? 1 : 0; }
         }
 
         public Mod GetMod(int index)
@@ -194,7 +210,7 @@ namespace SLWModLoader
             }
 
             mods.Add(mod);
-            modsDB["Mods"].AddParameter(mod.Title, mod.FilePath);
+            modsDb["Mods"].AddParameter(mod.Title, mod.FilePath);
         }
 
         public void RemoveMod(Mod mod)
@@ -206,23 +222,21 @@ namespace SLWModLoader
                 DeactivateMod(mod);
 
             mods.Remove(mod);
-            modsDB["Mods"].RemoveParameter(mod.Title);
+            modsDb["Mods"].RemoveParameter(mod.Title);
         }
-
-        public int ActiveModCount => (int)modsDB["Main"]["ActiveModCount", typeof(int)];
 
         public void ActivateMod(Mod mod)
         {
-            if (!modsDB["Mods"].ContainsParameter(mod.Title))
-                modsDB["Mods"].AddParameter(mod.Title, mod.FilePath);
+            if (!modsDb["Mods"].ContainsParameter(mod.Title))
+                modsDb["Mods"].AddParameter(mod.Title, mod.FilePath);
 
             if (IsModActive(mod))
                 return;
 
-            string parameterKey = $"ActiveMod{modsDB["Main"]["ActiveModCount", typeof(int)]}";
-            modsDB["Main"].AddParameter(parameterKey, mod.Title);
+            string parameterKey = $"ActiveMod{modsDb["Main"]["ActiveModCount", typeof(int)]}";
+            modsDb["Main"].AddParameter(parameterKey, mod.Title);
 
-            modsDB["Main"]["ActiveModCount", typeof(int)] = modsDB["Main"].ParameterCount - 2;
+            modsDb["Main"]["ActiveModCount", typeof(int)] = modsDb["Main"].ParameterCount - 2;
         }
 
         public void DeactivateMod(Mod mod)
@@ -234,21 +248,30 @@ namespace SLWModLoader
             {
                 string parameterKey = $"ActiveMod{i}";
 
-                Mod activeMod = GetMod(modsDB["Main"][parameterKey]);
+                Mod activeMod = GetMod(modsDb["Main"][parameterKey]);
 
                 if (activeMod != mod)
                     activeMods.Add(activeMod);
 
-                modsDB["Main"].RemoveParameter(parameterKey);
+                modsDb["Main"].RemoveParameter(parameterKey);
             }
 
             for (int i = 0; i < activeMods.Count; i++)
             {
                 string parameterKey = $"ActiveMod{i}";
-                modsDB["Main"].AddParameter(parameterKey, activeMods[i].Title);
+                modsDb["Main"].AddParameter(parameterKey, activeMods[i].Title);
             }
 
-            modsDB["Main"]["ActiveModCount", typeof(int)] = activeMods.Count;
+            modsDb["Main"]["ActiveModCount", typeof(int)] = activeMods.Count;
+        }
+
+        public void DeactivateAllMods()
+        {
+            for (int i = 0; i < ActiveModCount; i++)
+            {
+                string parameterKey = $"ActiveMod{i}";
+                modsDb["Main"].RemoveParameter(parameterKey);
+            }
         }
 
         public bool IsModActive(Mod mod)
@@ -257,7 +280,7 @@ namespace SLWModLoader
             {
                 string parameterKey = $"ActiveMod{i}";
 
-                if (modsDB["Main"].ContainsParameter(parameterKey) && modsDB["Main"][parameterKey] == mod.Title)
+                if (modsDb["Main"].ContainsParameter(parameterKey) && modsDb["Main"][parameterKey] == mod.Title)
                 {
                     return true;
                 }
@@ -266,14 +289,14 @@ namespace SLWModLoader
             return false;
         }
 
-        public void SaveModsDB(string path)
+        public void SaveModsDb(string path)
         {
-            modsDB.Save(path);
+            modsDb.Save(path);
         }
 
-        public void SaveModsDB()
+        public void SaveModsDb()
         {
-            modsDB.Save();
+            modsDb.Save();
         }
     }
 }
