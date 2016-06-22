@@ -1,6 +1,11 @@
 # Sonic Lost World Mod Loader
 A mod loader for Sonic Lost World on the PC! Currently a WIP.
 
+##For those pirating Sonic Lost World:
+Please purchase Sonic Lost World from [this Humble Bundle pack](https://www.humblebundle.com/sonic-25th-anniversary-bundle). You can get Sonic Lost World, and more, for the price of 10 dollars.
+
+SLW Mod Loader does not support pirated copies of SLW, nor will it ever support pirated copies.
+
 ##How do I use this?
 After [downloading the latest binary](https://github.com/Radfordhound/SLW-Mod-Loader/releases/latest), simply make a "mods" folder within your Sonic Lost World installation directory, then place a bunch of folders inside said mods directory (one for each mod) each containing all the modified files you'd like the game to load. Then, just fire up the mod loader (SLWModLoader.exe), check the checkbox(es) next to the mods you'd like to use in-game, and click "Play!"
 
