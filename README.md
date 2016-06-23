@@ -4,6 +4,8 @@ A mod loader for Sonic Lost World on the PC! Currently a WIP.
 ##For those pirating Sonic Lost World:
 Please purchase Sonic Lost World from [this Humble Bundle pack](https://www.humblebundle.com/sonic-25th-anniversary-bundle). You can get Sonic Lost World, and more, for the price of 10 dollars.
 
+If you don't want to get it off Humble Bundle, then you can get it for half price on the [steam page](http://store.steampowered.com/app/329440/) because of the summer sale..
+
 SLW Mod Loader does not support pirated copies of SLW, nor will it ever support pirated copies.
 
 ##How do I use this?
