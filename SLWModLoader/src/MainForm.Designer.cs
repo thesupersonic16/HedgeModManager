@@ -39,6 +39,7 @@
             this.ModPage = new System.Windows.Forms.TabPage();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.NoModsFoundLabel = new System.Windows.Forms.Label();
             this.MoveDownAll = new System.Windows.Forms.Button();
             this.MoveUpAll = new System.Windows.Forms.Button();
             this.MoveDownButton = new System.Windows.Forms.Button();
@@ -56,7 +57,6 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
-            this.NoModsFoundLabel = new System.Windows.Forms.Label();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.ModPage.SuspendLayout();
@@ -176,6 +176,20 @@
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Open Mod Folder";
             // 
+            // NoModsFoundLabel
+            // 
+            this.NoModsFoundLabel.BackColor = System.Drawing.Color.Transparent;
+            this.NoModsFoundLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NoModsFoundLabel.Font = new System.Drawing.Font("Segoe UI", 16F);
+            this.NoModsFoundLabel.ForeColor = System.Drawing.Color.Red;
+            this.NoModsFoundLabel.Location = new System.Drawing.Point(0, 0);
+            this.NoModsFoundLabel.Name = "NoModsFoundLabel";
+            this.NoModsFoundLabel.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.NoModsFoundLabel.Size = new System.Drawing.Size(490, 412);
+            this.NoModsFoundLabel.TabIndex = 4;
+            this.NoModsFoundLabel.Text = "No mods found!\r\nPlease check your mod folder.";
+            this.NoModsFoundLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // MoveDownAll
             // 
             this.MoveDownAll.Enabled = false;
@@ -274,6 +288,7 @@
             this.SaveAndPlayButton.TabIndex = 2;
             this.SaveAndPlayButton.Text = "Save &and Play";
             this.SaveAndPlayButton.UseVisualStyleBackColor = true;
+            this.SaveAndPlayButton.Click += new System.EventHandler(this.SaveAndPlayButton_Click);
             // 
             // RefreshButton
             // 
@@ -349,6 +364,7 @@
             this.PlayButton.TabIndex = 4;
             this.PlayButton.Text = "&Play";
             this.PlayButton.UseVisualStyleBackColor = true;
+            this.PlayButton.Click += new System.EventHandler(this.PlayButton_Click);
             // 
             // SaveButton
             // 
@@ -359,20 +375,6 @@
             this.SaveButton.TabIndex = 3;
             this.SaveButton.Text = "&Save";
             this.SaveButton.UseVisualStyleBackColor = true;
-            // 
-            // NoModsFoundLabel
-            // 
-            this.NoModsFoundLabel.BackColor = System.Drawing.Color.Transparent;
-            this.NoModsFoundLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NoModsFoundLabel.Font = new System.Drawing.Font("Segoe UI", 16F);
-            this.NoModsFoundLabel.ForeColor = System.Drawing.Color.Red;
-            this.NoModsFoundLabel.Location = new System.Drawing.Point(0, 0);
-            this.NoModsFoundLabel.Name = "NoModsFoundLabel";
-            this.NoModsFoundLabel.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.NoModsFoundLabel.Size = new System.Drawing.Size(490, 412);
-            this.NoModsFoundLabel.TabIndex = 4;
-            this.NoModsFoundLabel.Text = "No mods found!\r\nPlease check your mod folder.";
-            this.NoModsFoundLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 

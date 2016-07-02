@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using SLWModLoader.Properties;
+using System.Diagnostics;
 
 namespace SLWModLoader
 {
@@ -118,6 +119,18 @@ namespace SLWModLoader
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             RefreshModsList();
+        }
+
+        private void SaveAndPlayButton_Click(object sender, EventArgs e)
+        {
+            Process.Start("steam://rungameid/329440");
+            Close();
+        }
+
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+            Process.Start("steam://rungameid/329440");
+            Close();
         }
     }
 }
