@@ -57,6 +57,7 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
+            this.PiracyButtonTest = new System.Windows.Forms.Button();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.ModPage.SuspendLayout();
@@ -236,6 +237,7 @@
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.PiracyButtonTest);
             this.SettingsPage.Controls.Add(this.SettingsBottomPanel);
             this.SettingsPage.Location = new System.Drawing.Point(4, 22);
             this.SettingsPage.Name = "SettingsPage";
@@ -376,6 +378,16 @@
             this.SaveButton.Text = "&Save";
             this.SaveButton.UseVisualStyleBackColor = true;
             // 
+            // PiracyButtonTest
+            // 
+            this.PiracyButtonTest.Location = new System.Drawing.Point(9, 7);
+            this.PiracyButtonTest.Name = "PiracyButtonTest";
+            this.PiracyButtonTest.Size = new System.Drawing.Size(75, 23);
+            this.PiracyButtonTest.TabIndex = 13;
+            this.PiracyButtonTest.Text = "Piracy Form";
+            this.PiracyButtonTest.UseVisualStyleBackColor = true;
+            this.PiracyButtonTest.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.SaveAndPlayButton;
@@ -446,6 +458,7 @@
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label NoModsFoundLabel;
+        private System.Windows.Forms.Button PiracyButtonTest;
     }
 }
 

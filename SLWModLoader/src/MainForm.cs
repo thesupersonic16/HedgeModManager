@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using SLWModLoader.Properties;
 using System.Diagnostics;
+using SLWModLoader.src;
 
 namespace SLWModLoader
 {
@@ -131,6 +132,11 @@ namespace SLWModLoader
         {
             Process.Start("steam://rungameid/329440");
             Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            new PiracyForm().ShowDialog();
         }
     }
 }
