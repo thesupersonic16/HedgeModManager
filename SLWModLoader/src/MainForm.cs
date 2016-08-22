@@ -3,7 +3,6 @@ using System.IO;
 using System.Windows.Forms;
 using SLWModLoader.Properties;
 using System.Diagnostics;
-using SLWModLoader.src;
 
 namespace SLWModLoader
 {
