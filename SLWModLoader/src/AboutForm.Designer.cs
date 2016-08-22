@@ -65,7 +65,7 @@
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.okBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.okBtn.Location = new System.Drawing.Point(391, 169);
-            this.okBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.okBtn.Margin = new System.Windows.Forms.Padding(2);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(75, 21);
             this.okBtn.TabIndex = 3;
@@ -77,7 +77,7 @@
             // 
             this.iconPBx.Image = global::SLWModLoader.Properties.Resources.icon96;
             this.iconPBx.Location = new System.Drawing.Point(8, 6);
-            this.iconPBx.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.iconPBx.Margin = new System.Windows.Forms.Padding(2);
             this.iconPBx.Name = "iconPBx";
             this.iconPBx.Size = new System.Drawing.Size(45, 44);
             this.iconPBx.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -95,6 +95,7 @@
             this.gitLbl.TabStop = true;
             this.gitLbl.Text = "Github Page";
             this.gitLbl.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.gitLbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.gitLbl_LinkClicked);
             // 
             // AboutForm
             // 
@@ -110,7 +111,7 @@
             this.Controls.Add(this.aboutLbl);
             this.Controls.Add(this.titleLbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AboutForm";

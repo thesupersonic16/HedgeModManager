@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,11 @@ namespace SLWModLoader
         private void okBtn_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void gitLbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/Radfordhound/SLW-Mod-Loader");
         }
     }
 }
