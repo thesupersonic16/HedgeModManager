@@ -154,14 +154,14 @@ namespace SLWModLoader
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            new PiracyForm().ShowDialog();
-        }
-
         private void AboutButton_Click(object sender, EventArgs e)
         {
             new AboutForm().ShowDialog();
+        }
+
+        private void ReportLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/Radfordhound/SLW-Mod-Loader/issues");
         }
     }
 }

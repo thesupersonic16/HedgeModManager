@@ -45,7 +45,6 @@
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
-            this.PiracyButtonTest = new System.Windows.Forms.Button();
             this.SettingsBottomPanel = new System.Windows.Forms.Panel();
             this.AboutButton = new System.Windows.Forms.Button();
             this.ReportLabel = new System.Windows.Forms.LinkLabel();
@@ -237,7 +236,6 @@
             // 
             // SettingsPage
             // 
-            this.SettingsPage.Controls.Add(this.PiracyButtonTest);
             this.SettingsPage.Controls.Add(this.SettingsBottomPanel);
             this.SettingsPage.Location = new System.Drawing.Point(4, 22);
             this.SettingsPage.Name = "SettingsPage";
@@ -246,16 +244,6 @@
             this.SettingsPage.TabIndex = 1;
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
-            // 
-            // PiracyButtonTest
-            // 
-            this.PiracyButtonTest.Location = new System.Drawing.Point(9, 7);
-            this.PiracyButtonTest.Name = "PiracyButtonTest";
-            this.PiracyButtonTest.Size = new System.Drawing.Size(75, 23);
-            this.PiracyButtonTest.TabIndex = 13;
-            this.PiracyButtonTest.Text = "Piracy Form";
-            this.PiracyButtonTest.UseVisualStyleBackColor = true;
-            this.PiracyButtonTest.Click += new System.EventHandler(this.button1_Click);
             // 
             // SettingsBottomPanel
             // 
@@ -291,6 +279,7 @@
             this.ReportLabel.TabStop = true;
             this.ReportLabel.Text = "Report a problem/request a feature";
             this.ReportLabel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.ReportLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ReportLabel_LinkClicked);
             // 
             // SaveAndPlayButton
             // 
@@ -459,7 +448,6 @@
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label NoModsFoundLabel;
-        private System.Windows.Forms.Button PiracyButtonTest;
     }
 }
 

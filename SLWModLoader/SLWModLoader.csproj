@@ -66,12 +66,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\PiracyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\PiracyForm.Designer.cs">
-      <DependentUpon>PiracyForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="src\LogFile.cs" />
     <Compile Include="src\AboutForm.cs">
       <SubType>Form</SubType>
@@ -164,9 +158,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\ChangeLogForm.resx">
       <DependentUpon>ChangeLogForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\PiracyForm.resx">
-      <DependentUpon>PiracyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\UpdateForm.resx">
       <DependentUpon>UpdateForm.cs</DependentUpon>
