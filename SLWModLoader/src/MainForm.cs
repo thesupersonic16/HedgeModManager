@@ -9,7 +9,8 @@ namespace SLWModLoader
 {
     public partial class MainForm : Form
     {
-        public static string ExecutablePath = Path.Combine(Program.StartDirectory, "slw.exe");
+        public static string LWExecutablePath = Path.Combine(Program.StartDirectory, "slw.exe");
+        public static string GensExecutablePath = Path.Combine(Program.StartDirectory, "SonicGenerations.exe");
         public static string ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
         public static string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
         public static string TempPath = Path.Combine(Path.GetTempPath(), "slw-mod-loader-temp");
@@ -22,12 +23,15 @@ namespace SLWModLoader
 
             FormClosing += MainForm_FormClosing;
 
-            if (!File.Exists(ExecutablePath))
+            if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath))
             {
+            }
+
+            else {
                 MessageBox.Show(Resources.CannotFindExecutableText, Resources.ApplicationTitle,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                LogFile.AddMessage("Could not find slw.exe, closing form...");
+                LogFile.AddMessage("Could not find executable, closing form...");
 
                 Close();
                 return;
