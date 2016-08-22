@@ -121,7 +121,7 @@
     <value>SLW Mod Loader</value>
   </data>
   <data name="CannotFindExecutableText" xml:space="preserve">
-    <value>SLW Mod Loader could not find the game executable. The mod loader must be installed within either your Sonic Lost World installation directory, or your Sonic Generations installation directory, in order to work correctly. Please ensure you've installed the program in the correct place, and try again.</value>
+    <value>SLW Mod Loader could not find the game executable. The mod loader must be installed within your Sonic Lost World installation directory, or your Sonic Generations installation directory, in order to work correctly. Please ensure you've installed the program in the correct place, and try again.</value>
   </data>
   <data name="CannotFindModsDirectoryText" xml:space="preserve">
     <value>A "mods" folder must exist within your game installation directory for the mod loader to correctly function. Would you like to create one?</value>

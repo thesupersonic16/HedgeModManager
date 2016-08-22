@@ -70,7 +70,7 @@ namespace SLWModLoader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SLW Mod Loader could not find the game executable. The mod loader must be installed within either your Sonic Lost World installation directory, or your Sonic Generations installation directory, in order to work correctly. Please ensure you&apos;ve installed the program in the correct place, and try again..
+        ///   Looks up a localized string similar to SLW Mod Loader could not find the game executable. The mod loader must be installed within your Sonic Lost World installation directory, or your Sonic Generations installation directory, in order to work correctly. Please ensure you&apos;ve installed the program in the correct place, and try again..
         /// </summary>
         internal static string CannotFindExecutableText {
             get {
@@ -79,7 +79,7 @@ namespace SLWModLoader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A &quot;mods&quot; folder must exist within your Sonic Lost World installation directory for the mod loader to correctly function. Would you like to create one?.
+        ///   Looks up a localized string similar to A &quot;mods&quot; folder must exist within your game installation directory for the mod loader to correctly function. Would you like to create one?.
         /// </summary>
         internal static string CannotFindModsDirectoryText {
             get {
