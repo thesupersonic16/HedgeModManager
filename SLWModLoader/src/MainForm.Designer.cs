@@ -45,6 +45,7 @@
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.PiracyButtonTest = new System.Windows.Forms.Button();
             this.SettingsBottomPanel = new System.Windows.Forms.Panel();
             this.AboutButton = new System.Windows.Forms.Button();
             this.ReportLabel = new System.Windows.Forms.LinkLabel();
@@ -57,7 +58,6 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
-            this.PiracyButtonTest = new System.Windows.Forms.Button();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.ModPage.SuspendLayout();
@@ -172,7 +172,7 @@
             this.linkLabel1.Location = new System.Drawing.Point(169, 246);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.linkLabel1.Size = new System.Drawing.Size(148, 19);
+            this.linkLabel1.Size = new System.Drawing.Size(154, 19);
             this.linkLabel1.TabIndex = 5;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Open Mods Folder";
@@ -247,6 +247,16 @@
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
             // 
+            // PiracyButtonTest
+            // 
+            this.PiracyButtonTest.Location = new System.Drawing.Point(9, 7);
+            this.PiracyButtonTest.Name = "PiracyButtonTest";
+            this.PiracyButtonTest.Size = new System.Drawing.Size(75, 23);
+            this.PiracyButtonTest.TabIndex = 13;
+            this.PiracyButtonTest.Text = "Piracy Form";
+            this.PiracyButtonTest.UseVisualStyleBackColor = true;
+            this.PiracyButtonTest.Click += new System.EventHandler(this.button1_Click);
+            // 
             // SettingsBottomPanel
             // 
             this.SettingsBottomPanel.Controls.Add(this.AboutButton);
@@ -266,6 +276,7 @@
             this.AboutButton.TabIndex = 8;
             this.AboutButton.Text = "&About SLW Mod Loader";
             this.AboutButton.UseVisualStyleBackColor = true;
+            this.AboutButton.Click += new System.EventHandler(this.AboutButton_Click);
             // 
             // ReportLabel
             // 
@@ -377,16 +388,6 @@
             this.SaveButton.TabIndex = 3;
             this.SaveButton.Text = "&Save";
             this.SaveButton.UseVisualStyleBackColor = true;
-            // 
-            // PiracyButtonTest
-            // 
-            this.PiracyButtonTest.Location = new System.Drawing.Point(9, 7);
-            this.PiracyButtonTest.Name = "PiracyButtonTest";
-            this.PiracyButtonTest.Size = new System.Drawing.Size(75, 23);
-            this.PiracyButtonTest.TabIndex = 13;
-            this.PiracyButtonTest.Text = "Piracy Form";
-            this.PiracyButtonTest.UseVisualStyleBackColor = true;
-            this.PiracyButtonTest.Click += new System.EventHandler(this.button1_Click);
             // 
             // MainForm
             // 

@@ -158,5 +158,10 @@ namespace SLWModLoader
         {
             new PiracyForm().ShowDialog();
         }
+
+        private void AboutButton_Click(object sender, EventArgs e)
+        {
+            new AboutForm().ShowDialog();
+        }
     }
 }
