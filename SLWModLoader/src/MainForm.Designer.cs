@@ -175,7 +175,7 @@
             this.linkLabel1.Size = new System.Drawing.Size(148, 19);
             this.linkLabel1.TabIndex = 5;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Open Mod Folder";
+            this.linkLabel1.Text = "Open Mods Folder";
             // 
             // NoModsFoundLabel
             // 
@@ -188,7 +188,7 @@
             this.NoModsFoundLabel.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
             this.NoModsFoundLabel.Size = new System.Drawing.Size(490, 412);
             this.NoModsFoundLabel.TabIndex = 4;
-            this.NoModsFoundLabel.Text = "No mods found!\r\nPlease check your mod folder.";
+            this.NoModsFoundLabel.Text = "No mods were found!\r\nPlease check your mods folder.";
             this.NoModsFoundLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MoveDownAll

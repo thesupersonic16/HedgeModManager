@@ -19,11 +19,9 @@ namespace SLWModLoader
             InitializeComponent();
         }
 
-        //Some of this might be salvage-able?
-        //..Maybe?
+        //Some of this might be salvage-able? Maybe?
 
-        //I doubt it..
-        // all of it will be destroyed
+        //I doubt it, probably all of it will be destroyed.
 
         #region Old code
         //private string name = "";
