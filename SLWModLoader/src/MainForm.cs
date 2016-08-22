@@ -128,14 +128,30 @@ namespace SLWModLoader
 
         private void SaveAndPlayButton_Click(object sender, EventArgs e)
         {
-            Process.Start("steam://rungameid/329440");
-            Close();
+            if (File.Exists(LWExecutablePath))
+            {
+                Process.Start("steam://rungameid/329440");
+                Close();
+            }
+            else if (File.Exists(GensExecutablePath))
+            {
+                Process.Start("steam://rungameid/71340");
+                Close();
+            }
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
-            Process.Start("steam://rungameid/329440");
-            Close();
+            if (File.Exists(LWExecutablePath))
+            {
+                Process.Start("steam://rungameid/329440");
+                Close();
+            }
+            else if (File.Exists(GensExecutablePath))
+            {
+                Process.Start("steam://rungameid/71340");
+                Close();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
