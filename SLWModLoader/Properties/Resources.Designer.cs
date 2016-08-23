@@ -105,5 +105,14 @@ namespace SLWModLoader.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We have detected that you&apos;re using a pirated copy of {0}. Please purchase {0} off the Steam store..
+        /// </summary>
+        internal static string PiracyText {
+            get {
+                return ResourceManager.GetString("PiracyText", resourceCulture);
+            }
+        }
     }
 }
