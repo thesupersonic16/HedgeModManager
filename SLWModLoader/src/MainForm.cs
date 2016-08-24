@@ -130,11 +130,13 @@ namespace SLWModLoader
             if (File.Exists(LWExecutablePath))
             {
                 Process.Start("steam://rungameid/329440");
+                LogFile.AddMessage("Starting Sonic Lost World...");
                 Close();
             }
             else if (File.Exists(GensExecutablePath))
             {
                 Process.Start("steam://rungameid/71340");
+                LogFile.AddMessage("Starting Sonic Generations...");
                 Close();
             }
         }
@@ -144,11 +146,13 @@ namespace SLWModLoader
             if (File.Exists(LWExecutablePath))
             {
                 Process.Start("steam://rungameid/329440");
+                LogFile.AddMessage("Starting Sonic Lost World...");
                 Close();
             }
             else if (File.Exists(GensExecutablePath))
             {
                 Process.Start("steam://rungameid/71340");
+                LogFile.AddMessage("Starting Sonic Generations...");
                 Close();
             }
         }
