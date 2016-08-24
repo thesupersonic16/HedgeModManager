@@ -130,14 +130,14 @@ namespace SLWModLoader
             if (File.Exists(LWExecutablePath))
             {
                 LogFile.AddMessage("Starting Sonic Lost World...");
-                ModsDb.SaveModsDb();
+                ModsDb.SaveModsDb(ModsDbPath);
                 Process.Start("steam://rungameid/329440");
                 Close();
             }
             else if (File.Exists(GensExecutablePath))
             {
                 LogFile.AddMessage("Starting Sonic Generations...");
-                ModsDb.SaveModsDb();
+                ModsDb.SaveModsDb(ModsDbPath);
                 Process.Start("steam://rungameid/71340");
                 Close();
             }
@@ -145,7 +145,7 @@ namespace SLWModLoader
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            ModsDb.SaveModsDb();
+            ModsDb.SaveModsDb(ModsDbPath);
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
