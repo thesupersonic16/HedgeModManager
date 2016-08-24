@@ -2,7 +2,7 @@
 A mod loader for Sonic Lost World on the PC! This is currently a work in progress and is not in any way finished.
 
 ##For those pirating Sonic Lost World:
-Please purchase Sonic Lost World off the [Steam store](http://store.steampowered.com/app/329440/). As far as we know, this is the only legal and safe way of purchasing Sonic Lost World.
+Please purchase Sonic Lost World off the [Steam store](http://store.steampowered.com/app/329440/). This is the only legal way of purchasing Sonic Lost World.
 
 SLW Mod Loader does not support pirated copies of SLW, nor will it ever support pirated copies.
 
