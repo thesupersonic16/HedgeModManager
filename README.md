@@ -4,7 +4,9 @@ A mod loader for Sonic Lost World on the PC! This is currently a work in progres
 ##For those pirating Sonic Lost World:
 Please purchase Sonic Lost World off the [Steam store](http://store.steampowered.com/app/329440/). This is the only legal way of purchasing Sonic Lost World.
 
-SLW Mod Loader does not support pirated copies of SLW, nor will it ever support pirated copies.
+Version 6.0 will have support for Sonic Generations, and the same deal applies to Generations as well. Please purchase Sonic Generations off the [Steam store](http://store.steampowered.com/app/71340/).
+
+SLW Mod Loader does not support pirated copies of SLW/SG, nor will it ever support pirated copies.
 
 ##How do I use this?
 After [downloading the latest binary](https://github.com/Radfordhound/SLW-Mod-Loader/releases/latest), simply make a "mods" folder within your Sonic Lost World installation directory, then place a bunch of folders inside said mods directory (one for each mod) each containing all the modified files you'd like the game to load. Then, just fire up the mod loader (SLWModLoader.exe), check the checkbox(es) next to the mods you'd like to use in-game, and click "Play!"
