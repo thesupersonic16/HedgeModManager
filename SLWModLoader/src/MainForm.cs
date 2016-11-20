@@ -171,7 +171,7 @@ namespace SLWModLoader
 
         private void ReportLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/Radfordhound/SLW-Mod-Loader/issues");
+            Process.Start("https://github.com/Radfordhound/SLW-Mod-Loader/issues/new");
         }
     }
 }
