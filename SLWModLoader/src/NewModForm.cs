@@ -19,7 +19,7 @@ namespace SLWModLoader
             InitializeComponent();
         }
 
-        //Needs to be checked if it's worth keeping or needs a rewrite
+        //Definitely needs a rewrite, unsure if adding support for IniFile.cs would help out
 
         #region Old code
         //private string name = "";
