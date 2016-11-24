@@ -43,7 +43,7 @@
             this.fileInstallRBtn.Name = "fileInstallRBtn";
             this.fileInstallRBtn.Size = new System.Drawing.Size(181, 25);
             this.fileInstallRBtn.TabIndex = 0;
-            this.fileInstallRBtn.Text = "&Installing it from a file";
+            this.fileInstallRBtn.Text = "&Installing it from an archive";
             this.fileInstallRBtn.UseVisualStyleBackColor = true;
             // 
             // titleLbl
@@ -78,7 +78,7 @@
             this.makingItRBtn.Size = new System.Drawing.Size(210, 25);
             this.makingItRBtn.TabIndex = 3;
             this.makingItRBtn.TabStop = true;
-            this.makingItRBtn.Text = "&Making it (for developers)";
+            this.makingItRBtn.Text = "&Making one";
             this.makingItRBtn.UseVisualStyleBackColor = true;
             // 
             // okBtn
