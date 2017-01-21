@@ -8,11 +8,10 @@ namespace SLWModLoader
 {
     public partial class MainForm : Form
     {
-        public static string LWExecutablePath = Path.Combine(Program.StartDirectory, "slw.exe");
-        public static string GensExecutablePath = Path.Combine(Program.StartDirectory, "SonicGenerations.exe");
-        public static string ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
-        public static string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
-        public static string TempPath = Path.Combine(Path.GetTempPath(), "slw-mod-loader-temp");
+        public static readonly string LWExecutablePath = Path.Combine(Program.StartDirectory, "slw.exe");
+        public static readonly string GensExecutablePath = Path.Combine(Program.StartDirectory, "SonicGenerations.exe");
+        public static readonly string ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
+        public static readonly string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
         public ModsDatabase ModsDb;
 
         public MainForm()
@@ -20,12 +19,10 @@ namespace SLWModLoader
             InitializeComponent();
             Text += $" (v{Program.VersionString})";
 
-            FormClosing += MainForm_FormClosing;
-
             if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath))
             {
+                //TODO
             }
-
             else {
                 MessageBox.Show(Resources.CannotFindExecutableText, Resources.ApplicationTitle,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -67,19 +64,18 @@ namespace SLWModLoader
                 LogFile.AddMessage("Found ModsDB, loading mods...");
                 ModsDb = new ModsDatabase(ModsDbPath, ModsFolderPath);
             }
-
             else
             {
                 LogFile.AddMessage("Could not find ModsDB, creating one...");
                 ModsDb = new ModsDatabase(ModsFolderPath);
 
-                // Check if there's any existing mods there
+                //Check if there's any existing mods there
                 ModsDb.GetModsInFolder();
             }
 
             LogFile.AddMessage($"Loaded total {ModsDb.ModCount} mods from \"{ModsFolderPath}\".");
 
-            for (int i = 0; i < ModsDb.ModCount; i++)
+            for (int i = 0; i < ModsDb.ModCount; ++i)
             {
                 Mod modItem = ModsDb.GetMod(i);
 
@@ -97,20 +93,7 @@ namespace SLWModLoader
                 ModsList.Items.Add(modListViewItem);
             }
 
-            if (ModsDb.ModCount > 0)
-            {
-                NoModsFoundLabel.Visible = false;
-                linkLabel1.Visible = false;
-            }
-
-            else
-            {
-                NoModsFoundLabel.Visible = true;
-                linkLabel1.Visible = true;
-            }
-
-            Refresh();
-
+            NoModsFoundLabel.Visible = linkLabel1.Visible = (ModsDb.ModCount <= 0);
             LogFile.AddMessage("Succesfully updated list view!");
         }
 

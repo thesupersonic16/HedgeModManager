@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace SLWModLoader
 {
     public static class LogFile
     {
-        public static string LogPath = Path.Combine(Program.StartDirectory, "SLWModLoader.log");
+        //Variables/Constants
+        public static readonly string LogPath = Path.Combine(Program.StartDirectory, "SLWModLoader.log");
 
-        private static bool useTimeStamp = true;
         private static TextWriter logWriter;
+        private static bool useTimeStamp = true;
 
+        //Methods
         public static void Initialize(bool useTimeStampBool = true)
         {
             useTimeStamp = useTimeStampBool;
@@ -22,7 +21,6 @@ namespace SLWModLoader
         public static void AddMessage(string message)
         {
             if (logWriter == null) return;
-
             string logMessage = string.Empty;
 
             if (useTimeStamp) logMessage += DateTime.Now.ToString("yyyy:MM:dd HH:mm:ss: ");
