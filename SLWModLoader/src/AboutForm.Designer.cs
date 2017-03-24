@@ -47,7 +47,7 @@
             this.titleLbl.Name = "titleLbl";
             this.titleLbl.Size = new System.Drawing.Size(226, 38);
             this.titleLbl.TabIndex = 0;
-            this.titleLbl.Text = "SLW Mod Loader";
+            this.titleLbl.Text = Program.ProgramName;
             // 
             // aboutLbl
             // 

@@ -14,12 +14,19 @@ namespace SLWModLoader
 {
     public partial class NewModForm : Form
     {
+        public string modName = string.Empty;
+
         public NewModForm(string name)
         {
             InitializeComponent();
+            modName = name;
+            // Automatically fill in some info, I might remove this in the future
+            listView1.Groups[1].Items[0].SubItems[1].Text = name; // Title
+            listView1.Groups[1].Items[3].SubItems[1].Text = DateTime.Now.ToShortDateString(); // Date
+            listView1.Groups[1].Items[4].SubItems[1].Text = Environment.UserName; // Author
         }
 
-        //Definitely needs a rewrite, unsure if adding support for IniFile.cs would help out
+        //Definitely needs a rewrite, unsure if adding support for IniFile.cs would help 
 
         #region Old code
         //private string name = "";
@@ -154,5 +161,65 @@ namespace SLWModLoader
         //    }
         //}
         #endregion
+
+        public void AddProperty(string propName, string PropValue, int PropGroup)
+        {
+            ListViewItem lvi = new ListViewItem();
+            ListViewItem.ListViewSubItem lvsi = new ListViewItem.ListViewSubItem();
+            lvsi.Text = PropValue;
+            lvi.Text = propName;
+            lvi.Group = listView1.Groups[PropGroup];
+            lvi.SubItems.Add(lvsi);
+            lvi.ForeColor = Color.FromArgb(255, 128, 0); // TODO: Use a different colour for user created properties
+            lvi.Selected = true;
+            listView1.Items.Add(lvi);
+        }
+
+        private void editBtn_Click(object sender, EventArgs e)
+        {
+            new NewModPropEditForm(listView1.FocusedItem).Show();
+        }
+
+        private void listView1_DoubleClick(object sender, EventArgs e)
+        {
+            new NewModPropEditForm(listView1.FocusedItem).Show();
+        }
+
+        private void okBtn_Click(object sender, EventArgs e)
+        {
+            string filePath = Path.Combine(MainForm.ModsFolderPath, modName);
+            Directory.CreateDirectory(filePath);
+            IniFile iniFile = new IniFile();
+            iniFile.AddGroup("Main");
+            iniFile.AddGroup("Desc");
+            
+            // Adds all the properties into the ini file
+            foreach (ListViewGroup lvg in listView1.Groups)
+            {
+                foreach (ListViewItem lvi in lvg.Items)
+                {
+                    iniFile[lvg.Header].AddParameter(lvi.Text, lvi.SubItems[1].Text);
+                }
+            }
+
+            // Saves the ini file from memory
+            iniFile.Save(Path.Combine(filePath, "mod.ini"));
+            // Closes the Dialog
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+
+        private void addBtn_Click(object sender, EventArgs e)
+        {
+            new NewModPropNewForm(this).Show();
+        }
+
+        private void rmvBtn_Click(object sender, EventArgs e)
+        {
+            if(listView1.Items.Count > 0 && listView1.FocusedItem != null)
+            {
+                listView1.Items.Remove(listView1.FocusedItem);
+            }
+        }
     }
 }

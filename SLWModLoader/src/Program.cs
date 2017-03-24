@@ -7,6 +7,7 @@ namespace SLWModLoader
     {
         //Variables/Constants
         public static string StartDirectory = Application.StartupPath;
+        public const string ProgramName = "SLW Mod Loader";
         public const string VersionString = "6.0";
 
         //Methods
@@ -14,7 +15,7 @@ namespace SLWModLoader
         private static void Main()
         {
             LogFile.Initialize();
-            LogFile.AddMessage("Starting application...");
+            LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -20,6 +20,8 @@ namespace SLWModLoader
 
             IniGroup mainGroup = new IniGroup("Main");
             mainGroup.AddParameter("IncludeDirCount", 0, typeof(int));
+            mainGroup.AddParameter("UpdateServer");
+            mainGroup.AddParameter("SaveFile");
 
             IniGroup descGroup = new IniGroup("Desc");
             descGroup.AddParameter("Title");
@@ -68,6 +70,24 @@ namespace SLWModLoader
             return main["Main"][parameterKey];
         }
 
+        public int IncludeDirCount
+        {
+            get { return int.Parse(main["Main"]["IncludeDirCount"]); }
+            set { main["Main"]["IncludeDirCount"] = value.ToString(); }
+        }
+
+        public string UpdateServer
+        {
+            get { return main["Main"]["UpdateServer"]; }
+            set { main["Main"]["UpdateServer"] = value; }
+        }
+
+        public string SaveFile
+        {
+            get { return main["Main"]["SaveFile"]; }
+            set { main["Main"]["SaveFile"] = value; }
+        }
+        
         public string Title
         {
             get { return main["Desc"]["Title"]; }
@@ -108,6 +128,11 @@ namespace SLWModLoader
         {
             get { return main["Desc"]["URL"]; }
             set { main["Desc"]["URL"] = value; }
+        }
+
+        public IniFile GetIniFile()
+        {
+            return main;
         }
 
         public void Save(string path)
@@ -152,6 +177,9 @@ namespace SLWModLoader
         public ModsDatabase(string directory) : this()
         {
             RootDirectory = directory;
+            mods = new List<Mod>();
+
+            GetModsInFolder();
         }
 
         public ModsDatabase(string path, string directory)
@@ -272,6 +300,7 @@ namespace SLWModLoader
                 string parameterKey = $"ActiveMod{i}";
                 modsDb["Main"].RemoveParameter(parameterKey);
             }
+            modsDb["Main"]["ActiveModCount", typeof(int)] = modsDb["Main"].ParameterCount - 2;
         }
 
         public bool IsModActive(Mod mod)
@@ -287,6 +316,11 @@ namespace SLWModLoader
             }
 
             return false;
+        }
+
+        public IniFile getIniFile()
+        {
+            return modsDb;
         }
 
         public void SaveModsDb(string path)

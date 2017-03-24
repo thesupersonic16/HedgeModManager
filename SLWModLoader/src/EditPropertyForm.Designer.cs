@@ -179,7 +179,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SLW Mod Loader";
+            this.Text = Program.ProgramName;
             ((System.ComponentModel.ISupportInitialize)(this.valueNud)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

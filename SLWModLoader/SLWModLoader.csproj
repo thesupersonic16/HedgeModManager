@@ -117,6 +117,18 @@
     <Compile Include="src\ChangeLogForm.Designer.cs">
       <DependentUpon>ChangeLogForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\NewModPropNewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\NewModPropNewForm.Designer.cs">
+      <DependentUpon>NewModPropNewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\NewModPropEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\NewModPropEditForm.Designer.cs">
+      <DependentUpon>NewModPropEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\UpdateForm.cs">
@@ -124,6 +136,12 @@
     </Compile>
     <Compile Include="src\UpdateForm.Designer.cs">
       <DependentUpon>UpdateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\UpdateModForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\UpdateModForm.Designer.cs">
+      <DependentUpon>UpdateModForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -152,6 +170,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="src\AddModForm.resx">
       <DependentUpon>AddModForm.cs</DependentUpon>
@@ -159,8 +178,17 @@
     <EmbeddedResource Include="src\ChangeLogForm.resx">
       <DependentUpon>ChangeLogForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="src\NewModPropNewForm.resx">
+      <DependentUpon>NewModPropNewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\NewModPropEditForm.resx">
+      <DependentUpon>NewModPropEditForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\UpdateForm.resx">
       <DependentUpon>UpdateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\UpdateModForm.resx">
+      <DependentUpon>UpdateModForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

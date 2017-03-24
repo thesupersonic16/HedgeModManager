@@ -23,10 +23,11 @@ namespace SLWModLoader
             if (logWriter == null) return;
             string logMessage = string.Empty;
 
-            if (useTimeStamp) logMessage += DateTime.Now.ToString("yyyy:MM:dd HH:mm:ss: ");
+            if (useTimeStamp) logMessage += DateTime.Now.ToString("[yyyy/MM/dd HH:mm:ss]: ");
             logMessage += message;
 
             logWriter.WriteLine(logMessage);
+            logWriter.Flush();
         }
 
         public static void AddEmptyLine()

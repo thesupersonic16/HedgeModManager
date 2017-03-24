@@ -28,34 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Main", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Desc", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Main", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Desc", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "IncludeDir0",
             "."}, -1);
-            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
             "IncludeDirCount",
             "1"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem(new string[] {
-            "UpdateServer"}, -1, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0))))), System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
+            "UpdateServer",
+            ""}, -1, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0))))), System.Drawing.Color.Empty, null);
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "Title",
             ""}, -1, System.Drawing.Color.Black, System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem15 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
             "Description",
             ""}, -1, System.Drawing.Color.Red, System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem16 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem(new string[] {
             "Version",
             "1.0"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem17 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem(new string[] {
             "Date",
             ""}, -1);
-            System.Windows.Forms.ListViewItem listViewItem18 = new System.Windows.Forms.ListViewItem(new string[] {
-            "Author"}, -1, System.Drawing.Color.Red, System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem19 = new System.Windows.Forms.ListViewItem(new string[] {
-            "AuthorURL"}, -1, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0))))), System.Drawing.Color.Empty, null);
-            System.Windows.Forms.ListViewItem listViewItem20 = new System.Windows.Forms.ListViewItem(new string[] {
-            "URL"}, -1, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0))))), System.Drawing.Color.Empty, null);
+            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Author",
+            ""}, -1, System.Drawing.Color.Red, System.Drawing.Color.Empty, null);
+            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem(new string[] {
+            "AuthorURL",
+            ""}, -1, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0))))), System.Drawing.Color.Empty, null);
+            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem(new string[] {
+            "URL",
+            ""}, -1, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0))))), System.Drawing.Color.Empty, null);
             this.label = new System.Windows.Forms.Label();
             this.okBtn = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -71,21 +75,24 @@
             this.label.AutoSize = true;
             this.label.Font = new System.Drawing.Font("Segoe UI", 17F);
             this.label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label.Location = new System.Drawing.Point(15, 9);
+            this.label.Location = new System.Drawing.Point(10, 6);
+            this.label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(672, 46);
+            this.label.Size = new System.Drawing.Size(460, 31);
             this.label.TabIndex = 2;
             this.label.Text = "Please fill out some details about your mod.";
             // 
             // okBtn
             // 
             this.okBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.okBtn.Location = new System.Drawing.Point(23, 546);
+            this.okBtn.Location = new System.Drawing.Point(15, 355);
+            this.okBtn.Margin = new System.Windows.Forms.Padding(2);
             this.okBtn.Name = "okBtn";
-            this.okBtn.Size = new System.Drawing.Size(664, 36);
+            this.okBtn.Size = new System.Drawing.Size(443, 23);
             this.okBtn.TabIndex = 4;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
+            this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
             // 
             // listView1
             // 
@@ -93,56 +100,58 @@
             this.columnHeader1,
             this.columnHeader2});
             this.listView1.FullRowSelect = true;
-            listViewGroup3.Header = "Main";
-            listViewGroup3.Name = "listViewGroup1";
-            listViewGroup4.Header = "Desc";
-            listViewGroup4.Name = "listViewGroup2";
+            listViewGroup1.Header = "Main";
+            listViewGroup1.Name = "listViewGroup1";
+            listViewGroup2.Header = "Desc";
+            listViewGroup2.Name = "listViewGroup2";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup3,
-            listViewGroup4});
-            listViewItem11.Group = listViewGroup3;
-            listViewItem11.Tag = "String";
-            listViewItem12.Group = listViewGroup3;
-            listViewItem12.Tag = "Integer";
-            listViewItem13.Group = listViewGroup3;
-            listViewItem13.Tag = "String";
-            listViewItem14.Group = listViewGroup4;
-            listViewItem14.Tag = "String";
-            listViewItem15.Group = listViewGroup4;
-            listViewItem15.Tag = "String";
-            listViewItem16.Group = listViewGroup4;
-            listViewItem16.Tag = "String";
-            listViewItem17.Group = listViewGroup4;
-            listViewItem17.Tag = "String";
-            listViewItem18.Group = listViewGroup4;
-            listViewItem18.Tag = "String";
-            listViewItem19.Group = listViewGroup4;
-            listViewItem19.Tag = "String";
-            listViewItem20.Group = listViewGroup4;
-            listViewItem20.Tag = "String";
+            listViewGroup1,
+            listViewGroup2});
+            listViewItem1.Group = listViewGroup1;
+            listViewItem1.Tag = "String";
+            listViewItem2.Group = listViewGroup1;
+            listViewItem2.Tag = "Integer";
+            listViewItem3.Group = listViewGroup1;
+            listViewItem3.Tag = "String";
+            listViewItem4.Group = listViewGroup2;
+            listViewItem4.Tag = "String";
+            listViewItem5.Group = listViewGroup2;
+            listViewItem5.Tag = "String";
+            listViewItem6.Group = listViewGroup2;
+            listViewItem6.Tag = "String";
+            listViewItem7.Group = listViewGroup2;
+            listViewItem7.Tag = "String";
+            listViewItem8.Group = listViewGroup2;
+            listViewItem8.Tag = "String";
+            listViewItem9.Group = listViewGroup2;
+            listViewItem9.Tag = "String";
+            listViewItem10.Group = listViewGroup2;
+            listViewItem10.Tag = "String";
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem11,
-            listViewItem12,
-            listViewItem13,
-            listViewItem14,
-            listViewItem15,
-            listViewItem16,
-            listViewItem17,
-            listViewItem18,
-            listViewItem19,
-            listViewItem20});
-            this.listView1.Location = new System.Drawing.Point(23, 77);
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4,
+            listViewItem5,
+            listViewItem6,
+            listViewItem7,
+            listViewItem8,
+            listViewItem9,
+            listViewItem10});
+            this.listView1.Location = new System.Drawing.Point(15, 50);
+            this.listView1.Margin = new System.Windows.Forms.Padding(2);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(664, 422);
+            this.listView1.Size = new System.Drawing.Size(444, 276);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
             // 
             // columnHeader1
             // 
             this.columnHeader1.Text = "Property Name";
-            this.columnHeader1.Width = 545;
+            this.columnHeader1.Width = 128;
             // 
             // columnHeader2
             // 
@@ -152,40 +161,46 @@
             // rmvBtn
             // 
             this.rmvBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.rmvBtn.Location = new System.Drawing.Point(23, 505);
+            this.rmvBtn.Location = new System.Drawing.Point(15, 328);
+            this.rmvBtn.Margin = new System.Windows.Forms.Padding(2);
             this.rmvBtn.Name = "rmvBtn";
-            this.rmvBtn.Size = new System.Drawing.Size(165, 36);
+            this.rmvBtn.Size = new System.Drawing.Size(110, 23);
             this.rmvBtn.TabIndex = 6;
             this.rmvBtn.Text = "-";
             this.rmvBtn.UseVisualStyleBackColor = true;
+            this.rmvBtn.Click += new System.EventHandler(this.rmvBtn_Click);
             // 
             // addBtn
             // 
             this.addBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.addBtn.Location = new System.Drawing.Point(522, 504);
+            this.addBtn.Location = new System.Drawing.Point(348, 328);
+            this.addBtn.Margin = new System.Windows.Forms.Padding(2);
             this.addBtn.Name = "addBtn";
-            this.addBtn.Size = new System.Drawing.Size(165, 36);
+            this.addBtn.Size = new System.Drawing.Size(110, 23);
             this.addBtn.TabIndex = 7;
             this.addBtn.Text = "+";
             this.addBtn.UseVisualStyleBackColor = true;
+            this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
             // 
             // editBtn
             // 
             this.editBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.editBtn.Location = new System.Drawing.Point(194, 504);
+            this.editBtn.Location = new System.Drawing.Point(129, 328);
+            this.editBtn.Margin = new System.Windows.Forms.Padding(2);
             this.editBtn.Name = "editBtn";
-            this.editBtn.Size = new System.Drawing.Size(322, 36);
+            this.editBtn.Size = new System.Drawing.Size(215, 23);
             this.editBtn.TabIndex = 8;
             this.editBtn.Text = "&Edit Property";
             this.editBtn.UseVisualStyleBackColor = true;
+            this.editBtn.Click += new System.EventHandler(this.editBtn_Click);
             // 
-            // DevNewModFrm
+            // NewModForm
             // 
             this.AcceptButton = this.okBtn;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(702, 594);
+            this.ClientSize = new System.Drawing.Size(468, 386);
             this.Controls.Add(this.editBtn);
             this.Controls.Add(this.addBtn);
             this.Controls.Add(this.rmvBtn);
@@ -193,9 +208,10 @@
             this.Controls.Add(this.okBtn);
             this.Controls.Add(this.label);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "DevNewModFrm";
+            this.Name = "NewModForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -28,23 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.ModsList = new System.Windows.Forms.ListView();
-            this.NameColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.VersionColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.AuthorColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.SaveColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ModsListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openModFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.ModPage = new System.Windows.Forms.TabPage();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.NoModsFoundLabel = new System.Windows.Forms.Label();
+            this.ModsList = new System.Windows.Forms.ListView();
+            this.NameColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.VersionColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.AuthorColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.SaveColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.UpdateColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MoveDownAll = new System.Windows.Forms.Button();
             this.MoveUpAll = new System.Windows.Forms.Button();
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.InstallUninstallButton = new System.Windows.Forms.Button();
+            this.PatchLabel = new System.Windows.Forms.Label();
+            this.ScanExecuteableButton = new System.Windows.Forms.Button();
             this.SettingsBottomPanel = new System.Windows.Forms.Panel();
             this.AboutButton = new System.Windows.Forms.Button();
             this.ReportLabel = new System.Windows.Forms.LinkLabel();
@@ -57,6 +65,7 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
+            this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.ModPage.SuspendLayout();
@@ -69,44 +78,29 @@
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // ModsList
+            // ModsListContextMenu
             // 
-            this.ModsList.AllowDrop = true;
-            this.ModsList.CheckBoxes = true;
-            this.ModsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.NameColumn,
-            this.VersionColumn,
-            this.AuthorColumn,
-            this.SaveColumn});
-            this.ModsList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ModsList.FullRowSelect = true;
-            this.ModsList.Location = new System.Drawing.Point(0, 0);
-            this.ModsList.MultiSelect = false;
-            this.ModsList.Name = "ModsList";
-            this.ModsList.Size = new System.Drawing.Size(490, 412);
-            this.ModsList.TabIndex = 0;
-            this.ModsList.UseCompatibleStateImageBehavior = false;
-            this.ModsList.View = System.Windows.Forms.View.Details;
+            this.ModsListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.checkForUpdatesToolStripMenuItem,
+            this.openModFolderToolStripMenuItem});
+            this.ModsListContextMenu.Name = "ModsListContextMenu";
+            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 48);
             // 
-            // NameColumn
+            // checkForUpdatesToolStripMenuItem
             // 
-            this.NameColumn.Text = "Name";
-            this.NameColumn.Width = 175;
+            this.checkForUpdatesToolStripMenuItem.Enabled = false;
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
-            // VersionColumn
+            // openModFolderToolStripMenuItem
             // 
-            this.VersionColumn.Text = "V";
-            this.VersionColumn.Width = 31;
-            // 
-            // AuthorColumn
-            // 
-            this.AuthorColumn.Text = "Author";
-            this.AuthorColumn.Width = 119;
-            // 
-            // SaveColumn
-            // 
-            this.SaveColumn.Text = "Supports Save File Redirection";
-            this.SaveColumn.Width = 66;
+            this.openModFolderToolStripMenuItem.Enabled = false;
+            this.openModFolderToolStripMenuItem.Name = "openModFolderToolStripMenuItem";
+            this.openModFolderToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.openModFolderToolStripMenuItem.Text = "Open Containing Folder";
+            this.openModFolderToolStripMenuItem.Click += new System.EventHandler(this.openModFolderToolStripMenuItem_Click);
             // 
             // MainPanel
             // 
@@ -190,6 +184,53 @@
             this.NoModsFoundLabel.Text = "No mods were found!\r\nPlease check your mods folder.";
             this.NoModsFoundLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // ModsList
+            // 
+            this.ModsList.AllowDrop = true;
+            this.ModsList.CheckBoxes = true;
+            this.ModsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.NameColumn,
+            this.VersionColumn,
+            this.AuthorColumn,
+            this.SaveColumn,
+            this.UpdateColumn});
+            this.ModsList.ContextMenuStrip = this.ModsListContextMenu;
+            this.ModsList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ModsList.FullRowSelect = true;
+            this.ModsList.Location = new System.Drawing.Point(0, 0);
+            this.ModsList.MultiSelect = false;
+            this.ModsList.Name = "ModsList";
+            this.ModsList.Size = new System.Drawing.Size(490, 412);
+            this.ModsList.TabIndex = 0;
+            this.ModsList.UseCompatibleStateImageBehavior = false;
+            this.ModsList.View = System.Windows.Forms.View.Details;
+            this.ModsList.SelectedIndexChanged += new System.EventHandler(this.ModsList_SelectedIndexChanged);
+            // 
+            // NameColumn
+            // 
+            this.NameColumn.Text = "Name";
+            this.NameColumn.Width = 175;
+            // 
+            // VersionColumn
+            // 
+            this.VersionColumn.Text = "V";
+            this.VersionColumn.Width = 48;
+            // 
+            // AuthorColumn
+            // 
+            this.AuthorColumn.Text = "Author";
+            this.AuthorColumn.Width = 119;
+            // 
+            // SaveColumn
+            // 
+            this.SaveColumn.Text = "Supports Save File Redirection";
+            this.SaveColumn.Width = 72;
+            // 
+            // UpdateColumn
+            // 
+            this.UpdateColumn.Text = "Has Updates";
+            this.UpdateColumn.Width = 100;
+            // 
             // MoveDownAll
             // 
             this.MoveDownAll.Enabled = false;
@@ -222,6 +263,7 @@
             this.MoveDownButton.TabIndex = 1;
             this.MoveDownButton.Text = "▼";
             this.MoveDownButton.UseVisualStyleBackColor = true;
+            this.MoveDownButton.Click += new System.EventHandler(this.MoveDownButton_Click);
             // 
             // MoveUpButton
             // 
@@ -233,9 +275,13 @@
             this.MoveUpButton.TabIndex = 0;
             this.MoveUpButton.Text = "▲";
             this.MoveUpButton.UseVisualStyleBackColor = true;
+            this.MoveUpButton.Click += new System.EventHandler(this.MoveUpButton_Click);
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.InstallUninstallButton);
+            this.SettingsPage.Controls.Add(this.PatchLabel);
+            this.SettingsPage.Controls.Add(this.ScanExecuteableButton);
             this.SettingsPage.Controls.Add(this.SettingsBottomPanel);
             this.SettingsPage.Location = new System.Drawing.Point(4, 22);
             this.SettingsPage.Name = "SettingsPage";
@@ -244,6 +290,35 @@
             this.SettingsPage.TabIndex = 1;
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
+            // 
+            // InstallUninstallButton
+            // 
+            this.InstallUninstallButton.Location = new System.Drawing.Point(16, 43);
+            this.InstallUninstallButton.Name = "InstallUninstallButton";
+            this.InstallUninstallButton.Size = new System.Drawing.Size(120, 23);
+            this.InstallUninstallButton.TabIndex = 15;
+            this.InstallUninstallButton.Text = "Install / Uninstall";
+            this.InstallUninstallButton.UseVisualStyleBackColor = true;
+            this.InstallUninstallButton.Click += new System.EventHandler(this.InstallUninstallButton_Click);
+            // 
+            // PatchLabel
+            // 
+            this.PatchLabel.AutoSize = true;
+            this.PatchLabel.Location = new System.Drawing.Point(142, 33);
+            this.PatchLabel.Name = "PatchLabel";
+            this.PatchLabel.Size = new System.Drawing.Size(53, 13);
+            this.PatchLabel.TabIndex = 14;
+            this.PatchLabel.Text = "Unknown";
+            // 
+            // ScanExecuteableButton
+            // 
+            this.ScanExecuteableButton.Location = new System.Drawing.Point(16, 14);
+            this.ScanExecuteableButton.Name = "ScanExecuteableButton";
+            this.ScanExecuteableButton.Size = new System.Drawing.Size(120, 23);
+            this.ScanExecuteableButton.TabIndex = 13;
+            this.ScanExecuteableButton.Text = "Scan Executeable";
+            this.ScanExecuteableButton.UseVisualStyleBackColor = true;
+            this.ScanExecuteableButton.Click += new System.EventHandler(this.ScanExecuteableButton_Click);
             // 
             // SettingsBottomPanel
             // 
@@ -345,6 +420,7 @@
             this.AddModButton.TabIndex = 7;
             this.AddModButton.Text = "+";
             this.AddModButton.UseVisualStyleBackColor = true;
+            this.AddModButton.Click += new System.EventHandler(this.AddModButton_Click);
             // 
             // RemoveModButton
             // 
@@ -356,6 +432,7 @@
             this.RemoveModButton.TabIndex = 5;
             this.RemoveModButton.Text = "-";
             this.RemoveModButton.UseVisualStyleBackColor = true;
+            this.RemoveModButton.Click += new System.EventHandler(this.RemoveModButton_Click);
             // 
             // PlayButton
             // 
@@ -377,6 +454,7 @@
             this.SaveButton.TabIndex = 3;
             this.SaveButton.Text = "&Save";
             this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // MainForm
             // 
@@ -402,6 +480,7 @@
             this.Text = "SLW Mod Loader";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.ModsListContextMenu.ResumeLayout(false);
             this.MainPanel.ResumeLayout(false);
             this.TabControl.ResumeLayout(false);
             this.ModPage.ResumeLayout(false);
@@ -411,6 +490,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.SettingsPage.ResumeLayout(false);
+            this.SettingsPage.PerformLayout();
             this.SettingsBottomPanel.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
@@ -420,12 +500,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ListView ModsList;
-        private System.Windows.Forms.ColumnHeader NameColumn;
-        private System.Windows.Forms.ColumnHeader VersionColumn;
-        private System.Windows.Forms.ColumnHeader AuthorColumn;
-        private System.Windows.Forms.ColumnHeader SaveColumn;
         private System.Windows.Forms.Panel MainPanel;
         private System.Windows.Forms.Button SaveAndPlayButton;
         private System.Windows.Forms.Button RefreshButton;
@@ -449,6 +523,18 @@
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label NoModsFoundLabel;
+        private System.Windows.Forms.Button ScanExecuteableButton;
+        private System.Windows.Forms.Label PatchLabel;
+        private System.Windows.Forms.Button InstallUninstallButton;
+        private System.Windows.Forms.ContextMenuStrip ModsListContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private System.Windows.Forms.ListView ModsList;
+        private System.Windows.Forms.ColumnHeader NameColumn;
+        private System.Windows.Forms.ColumnHeader VersionColumn;
+        private System.Windows.Forms.ColumnHeader AuthorColumn;
+        private System.Windows.Forms.ColumnHeader SaveColumn;
+        private System.Windows.Forms.ColumnHeader UpdateColumn;
+        private System.Windows.Forms.ToolStripMenuItem openModFolderToolStripMenuItem;
     }
 }
 

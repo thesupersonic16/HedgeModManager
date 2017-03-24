@@ -51,35 +51,35 @@
             this.okBtn.Enabled = false;
             this.okBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.okBtn.Location = new System.Drawing.Point(271, 68);
-            this.okBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.okBtn.Margin = new System.Windows.Forms.Padding(2);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(63, 23);
             this.okBtn.TabIndex = 5;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
-            this.okBtn.Click += new System.EventHandler(this.btn_Click);
+            this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
             // 
             // modNameTxtBx
             // 
             this.modNameTxtBx.Location = new System.Drawing.Point(13, 44);
-            this.modNameTxtBx.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.modNameTxtBx.Margin = new System.Windows.Forms.Padding(2);
             this.modNameTxtBx.Name = "modNameTxtBx";
             this.modNameTxtBx.Size = new System.Drawing.Size(321, 20);
             this.modNameTxtBx.TabIndex = 6;
+            this.modNameTxtBx.TextChanged += new System.EventHandler(this.modNameTxtBx_TextChanged);
             // 
             // cancelBtn
             // 
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelBtn.Enabled = false;
             this.cancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cancelBtn.Location = new System.Drawing.Point(204, 68);
-            this.cancelBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cancelBtn.Margin = new System.Windows.Forms.Padding(2);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(63, 23);
             this.cancelBtn.TabIndex = 7;
             this.cancelBtn.Text = "&Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
-            this.cancelBtn.Click += new System.EventHandler(this.btn_Click);
+            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
             // 
             // NewModNameForm
             // 
@@ -94,14 +94,14 @@
             this.Controls.Add(this.okBtn);
             this.Controls.Add(this.titleLbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "NewModNameForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SLW Mod Loader";
+            this.Text = Program.ProgramName;
             this.ResumeLayout(false);
             this.PerformLayout();
 

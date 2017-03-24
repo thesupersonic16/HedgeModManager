@@ -22,6 +22,15 @@ namespace SLWModLoader
         private void okBtn_Click(object sender, EventArgs e)
         {
             Close();
+            if(makingItRBtn.Checked)
+            {
+                NewModNameForm nmnf = new NewModNameForm();
+                if (nmnf.ShowDialog() == DialogResult.OK)
+                {
+                    NewModForm nmf = new NewModForm(nmnf.getModName());
+                    nmf.ShowDialog();
+                }
+            }
         }
     }
 }

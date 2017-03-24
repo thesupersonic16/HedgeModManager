@@ -81,7 +81,20 @@ namespace SLWModLoader
                 parameters.RemoveAt(GetIndexOfParameter(key));
             }
         }
-        
+
+        public void RemoveParameterAt(int index)
+        {
+            if (index < parameters.Count)
+            {
+                parameters.RemoveAt(index);
+            }
+        }
+
+        public void RemoveAllParameters()
+        {
+            parameters.Clear();
+        }
+
         public bool ContainsParameter(string key)
         {
             return parameters.Any(t => t.Key == key);
@@ -97,7 +110,6 @@ namespace SLWModLoader
 
             return -1;
         }
-
 
         public string this[string key]
         {
