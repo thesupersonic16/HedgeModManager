@@ -38,10 +38,9 @@
             // fileInstallRBtn
             // 
             this.fileInstallRBtn.AutoSize = true;
-            this.fileInstallRBtn.Enabled = false;
             this.fileInstallRBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.fileInstallRBtn.Location = new System.Drawing.Point(15, 55);
-            this.fileInstallRBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.fileInstallRBtn.Margin = new System.Windows.Forms.Padding(2);
             this.fileInstallRBtn.Name = "fileInstallRBtn";
             this.fileInstallRBtn.Size = new System.Drawing.Size(156, 18);
             this.fileInstallRBtn.TabIndex = 0;
@@ -66,7 +65,7 @@
             this.folderInstallRBtn.Enabled = false;
             this.folderInstallRBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.folderInstallRBtn.Location = new System.Drawing.Point(15, 75);
-            this.folderInstallRBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.folderInstallRBtn.Margin = new System.Windows.Forms.Padding(2);
             this.folderInstallRBtn.Name = "folderInstallRBtn";
             this.folderInstallRBtn.Size = new System.Drawing.Size(141, 18);
             this.folderInstallRBtn.TabIndex = 2;
@@ -79,7 +78,7 @@
             this.makingItRBtn.Checked = true;
             this.makingItRBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.makingItRBtn.Location = new System.Drawing.Point(15, 94);
-            this.makingItRBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.makingItRBtn.Margin = new System.Windows.Forms.Padding(2);
             this.makingItRBtn.Name = "makingItRBtn";
             this.makingItRBtn.Size = new System.Drawing.Size(87, 18);
             this.makingItRBtn.TabIndex = 3;
@@ -91,7 +90,7 @@
             // 
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.okBtn.Location = new System.Drawing.Point(295, 106);
-            this.okBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.okBtn.Margin = new System.Windows.Forms.Padding(2);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(64, 22);
             this.okBtn.TabIndex = 4;
@@ -113,7 +112,7 @@
             this.Controls.Add(this.makingItRBtn);
             this.Controls.Add(this.okBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddModForm";
