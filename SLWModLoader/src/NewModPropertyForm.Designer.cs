@@ -85,7 +85,7 @@
             // 
             // AddButton
             // 
-            this.AddButton.Location = new System.Drawing.Point(285, 92);
+            this.AddButton.Location = new System.Drawing.Point(285, 88);
             this.AddButton.Name = "AddButton";
             this.AddButton.Size = new System.Drawing.Size(75, 23);
             this.AddButton.TabIndex = 5;
@@ -95,12 +95,13 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(204, 92);
+            this.CancelButton.Location = new System.Drawing.Point(204, 88);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(75, 23);
             this.CancelButton.TabIndex = 6;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
+            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // PropGroupLabel
             // 

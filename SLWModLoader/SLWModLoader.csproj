@@ -98,12 +98,6 @@
     <Compile Include="src\NewModNameForm.Designer.cs">
       <DependentUpon>NewModNameForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\EditPropertyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\EditPropertyForm.Designer.cs">
-      <DependentUpon>EditPropertyForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="src\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,17 +116,11 @@
     <Compile Include="src\ChangeLogForm.Designer.cs">
       <DependentUpon>ChangeLogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\NewModPropNewForm.cs">
+    <Compile Include="src\NewModPropertyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\NewModPropNewForm.Designer.cs">
-      <DependentUpon>NewModPropNewForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\NewModPropEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\NewModPropEditForm.Designer.cs">
-      <DependentUpon>NewModPropEditForm.cs</DependentUpon>
+    <Compile Include="src\NewModPropertyForm.Designer.cs">
+      <DependentUpon>NewModPropertyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -170,9 +158,6 @@
     <EmbeddedResource Include="src\NewModNameForm.resx">
       <DependentUpon>NewModNameForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\EditPropertyForm.resx">
-      <DependentUpon>EditPropertyForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -183,11 +168,8 @@
     <EmbeddedResource Include="src\ChangeLogForm.resx">
       <DependentUpon>ChangeLogForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\NewModPropNewForm.resx">
-      <DependentUpon>NewModPropNewForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\NewModPropEditForm.resx">
-      <DependentUpon>NewModPropEditForm.cs</DependentUpon>
+    <EmbeddedResource Include="src\NewModPropertyForm.resx">
+      <DependentUpon>NewModPropertyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\UpdateForm.resx">
       <DependentUpon>UpdateForm.cs</DependentUpon>

@@ -177,12 +177,12 @@ namespace SLWModLoader
 
         private void editBtn_Click(object sender, EventArgs e)
         {
-            new NewModPropEditForm(listView1.FocusedItem).Show();
+            new NewModPropNewForm(this, listView1.FocusedItem).Show();
         }
 
         private void listView1_DoubleClick(object sender, EventArgs e)
         {
-            new NewModPropEditForm(listView1.FocusedItem).Show();
+            new NewModPropNewForm(this, listView1.FocusedItem).Show();
         }
 
         private void okBtn_Click(object sender, EventArgs e)
@@ -211,7 +211,7 @@ namespace SLWModLoader
 
         private void addBtn_Click(object sender, EventArgs e)
         {
-            new NewModPropNewForm(this).Show();
+            new NewModPropNewForm(this, null).Show();
         }
 
         private void rmvBtn_Click(object sender, EventArgs e)
@@ -220,6 +220,11 @@ namespace SLWModLoader
             {
                 listView1.Items.Remove(listView1.FocusedItem);
             }
+        }
+
+        public ListView getListView()
+        {
+            return listView1;
         }
     }
 }
