@@ -136,4 +136,7 @@
   <data name="PiracyText" xml:space="preserve">
     <value>We have detected that you're using a pirated copy of {0}. Please purchase {0} off the Steam store.</value>
   </data>
+  <data name="update" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\src\update.bat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

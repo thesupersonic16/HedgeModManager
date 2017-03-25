@@ -5,6 +5,7 @@ using SLWModLoader.Properties;
 using System.Diagnostics;
 using System.Net;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace SLWModLoader
 {
@@ -73,6 +74,7 @@ namespace SLWModLoader
                     Directory.CreateDirectory(ModsFolderPath);
                 }
             }
+            new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
         }
 
         public void LoadMods()
@@ -218,6 +220,50 @@ namespace SLWModLoader
                 Process.Start("steam://rungameid/71340");
                 Close();
             }
+        }
+
+        public void CheckForModLoaderUpdates()
+        {
+            try
+            {
+                LogFile.AddMessage("Checking for Updates...");
+
+                var webClient = new WebClient();
+                var latestReleaseJson = string.Empty;
+                var url = "https://api.github.com/repos/Radfordhound/SLW-Mod-Loader/releases/latest";
+                var updateUrl = string.Empty;
+                float latestVersion = 0;
+                float currentVersion = Convert.ToSingle(Program.VersionString);
+
+                currentVersion--;
+
+                webClient.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+                latestReleaseJson = webClient.DownloadString(url);
+                latestVersion = Convert.ToSingle(latestReleaseJson.Substring(latestReleaseJson.IndexOf("tag_name") + 12, 3));
+                updateUrl = latestReleaseJson.Substring(latestReleaseJson.IndexOf("browser_download_url") + 24,
+                            latestReleaseJson.LastIndexOf(".zip") + 4 - (latestReleaseJson.IndexOf("browser_download_url") + 24));
+                // If true then a new update is available
+                if (latestVersion > currentVersion)
+                {
+                    LogFile.AddMessage("New Update Found v" + latestVersion);
+                    if (MessageBox.Show($"A new version of {Program.ProgramName} is available. (Version v{latestVersion})\n" +
+                                       $"Would you like to download it now?", Program.ProgramName,
+                                       MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    {
+                        LogFile.AddMessage("Starting Update...");
+                        new UpdateForm(updateUrl).ShowDialog();
+                    }
+                    else
+                        LogFile.AddMessage("Update Canceled. :(");
+                }
+                else
+                    LogFile.AddMessage("No updates are available.");
+            }
+            catch (Exception ex)
+            {
+                AddMessage("Exception thrown while checking for Mod Loader updates: " + ex);
+            }
+
         }
 
         public void AddMessage(string message)

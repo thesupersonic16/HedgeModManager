@@ -114,5 +114,15 @@ namespace SLWModLoader.Properties {
                 return ResourceManager.GetString("PiracyText", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] update {
+            get {
+                object obj = ResourceManager.GetObject("update", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }
