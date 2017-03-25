@@ -235,8 +235,6 @@ namespace SLWModLoader
                 float latestVersion = 0;
                 float currentVersion = Convert.ToSingle(Program.VersionString);
 
-                currentVersion--;
-
                 webClient.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
                 latestReleaseJson = webClient.DownloadString(url);
                 latestVersion = Convert.ToSingle(latestReleaseJson.Substring(latestReleaseJson.IndexOf("tag_name") + 12, 3));
