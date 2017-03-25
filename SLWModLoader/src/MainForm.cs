@@ -47,7 +47,7 @@ namespace SLWModLoader
                 {
                     if (MessageBox.Show("Your "+(File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations") +" executable has not yet been Installed for use with CPKREDIR, which is required to load mods.\nWould you like to patch it now?", Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                     {
-                        InstallCPKREDIR();
+                        InstallCPKREDIR(true);
                     }
                 }
                 PatchLabel.Text = (File.Exists(LWExecutablePath) ? Path.GetFileName(LWExecutablePath) : Path.GetFileName(GensExecutablePath)) +
@@ -260,14 +260,14 @@ namespace SLWModLoader
             return false;
         }
 
-        public bool InstallCPKREDIR()
+        public bool InstallCPKREDIR(bool? install)
         {
             string executablePath = LWExecutablePath;
             if (File.Exists(GensExecutablePath))
                 executablePath = GensExecutablePath;
             try
             {
-                AddMessage("Installing CPKREDIR");
+                AddMessage("Scaning Executable...");
                 byte[] bytes = File.ReadAllBytes(executablePath);
                 for (int i = 11918000; i < bytes.Length; ++i)
                 {
@@ -276,9 +276,24 @@ namespace SLWModLoader
 
                     if (bytes[  i  ] == 0x63 && bytes[i + 1] == 0x70 && bytes[i + 2] == 0x6B &&
                         bytes[i + 3] == 0x72 && bytes[i + 4] == 0x65 && bytes[i + 5] == 0x64 &&
-                        bytes[i + 6] == 0x69 && bytes[i + 7] == 0x72)
+                        bytes[i + 6] == 0x69 && bytes[i + 7] == 0x72 && (install == null || install == false))
                     {
-                        AddMessage("CPKREDIR is already installed");
+                        // Writing "imagehlp" to the executeable
+                        bytes[  i  ] = 0x69;
+                        bytes[i + 1] = 0x6D;
+                        bytes[i + 2] = 0x61;
+                        bytes[i + 3] = 0x67;
+                        bytes[i + 4] = 0x65;
+                        bytes[i + 5] = 0x68;
+                        bytes[i + 6] = 0x6C;
+                        bytes[i + 7] = 0x70;
+
+                        // Deleting the old executable
+                        File.Delete(executablePath);
+
+                        // Now we're writing the newly modified exe.
+                        File.WriteAllBytes(executablePath, bytes);
+                        AddMessage("Done. CPKREDIR is now Uninstalled.");
                         return false;
                     }
 
@@ -287,9 +302,9 @@ namespace SLWModLoader
 
                     if (bytes[  i  ] == 0x69 && bytes[i + 1] == 0x6D && bytes[i + 2] == 0x61 &&
                         bytes[i + 3] == 0x67 && bytes[i + 4] == 0x65 && bytes[i + 5] == 0x68 &&
-                        bytes[i + 6] == 0x6C && bytes[i + 7] == 0x70)
+                        bytes[i + 6] == 0x6C && bytes[i + 7] == 0x70 && (install == null || install == true))
                     {
-                        // writing "cpkredir" to the executeable
+                        // Writing "cpkredir" to the executeable
                         bytes[  i  ] = 0x63;
                         bytes[i + 1] = 0x70;
                         bytes[i + 2] = 0x6B;
@@ -310,70 +325,14 @@ namespace SLWModLoader
 
                         // Now we're writing the newly modified exe.
                         File.WriteAllBytes(executablePath, bytes);
-                        AddMessage("Done.");
+                        AddMessage("Done. CPKREDIR is now Installed.");
                         return true;
                     }
                 }
             }
             catch (Exception ex)
             {
-                AddMessage("Exception thrown while installing CPKREDIR: " + ex);
-            }
-            return false;
-        }
-
-        public bool UninstallCPKREDIR()
-        {
-            string executablePath = LWExecutablePath;
-            if (File.Exists(GensExecutablePath))
-                executablePath = GensExecutablePath;
-            try
-            {
-                AddMessage("Uninstalling CPKREDIR");
-                byte[] bytes = File.ReadAllBytes(executablePath);
-                for (int i = 11918000; i < bytes.Length; ++i)
-                {
-                    // 63 70 6B 72 65 64 69 72
-                    // c  p  k  r  e  d  i  r 
-
-                    if (bytes[  i  ] == 0x63 && bytes[i + 1] == 0x70 && bytes[i + 2] == 0x6B &&
-                        bytes[i + 3] == 0x72 && bytes[i + 4] == 0x65 && bytes[i + 5] == 0x64 &&
-                        bytes[i + 6] == 0x69 && bytes[i + 7] == 0x72)
-                    {
-                        // writing "imagehlp" to the executeable
-                        bytes[  i  ] = 0x69;
-                        bytes[i + 1] = 0x6D;
-                        bytes[i + 2] = 0x61;
-                        bytes[i + 3] = 0x67;
-                        bytes[i + 4] = 0x65;
-                        bytes[i + 5] = 0x68;
-                        bytes[i + 6] = 0x6C;
-                        bytes[i + 7] = 0x70;
-
-                        // Deleting the old executable
-                        File.Delete(executablePath);
-                        
-                        // Now we're writing the newly modified exe.
-                        File.WriteAllBytes(executablePath, bytes);
-                        AddMessage("Done.");
-                        return true;
-                    }
-
-                    // 69 6D 61 67 65 68 6C 70
-                    // i  m  a  g  e  h  l  p
-
-                    if (bytes[  i  ] == 0x69 && bytes[i + 1] == 0x6D && bytes[i + 2] == 0x61 &&
-                        bytes[i + 3] == 0x67 && bytes[i + 4] == 0x65 && bytes[i + 5] == 0x68 &&
-                        bytes[i + 6] == 0x6C && bytes[i + 7] == 0x70)
-                    {
-                        AddMessage("CPKREDIR is not installed");
-                        return false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                AddMessage("Exception thrown while uninstalling CPKREDIR: " + ex);
+                AddMessage("Exception thrown while installing/uninstalling CPKREDIR: " + ex);
             }
             return false;
         }
@@ -453,10 +412,8 @@ namespace SLWModLoader
         private void InstallUninstallButton_Click(object sender, EventArgs e)
         {
             StatusLabel.Text = "";
-            if (isCPKREDIRInstalled()) UninstallCPKREDIR();
-            else InstallCPKREDIR();
             PatchLabel.Text = (File.Exists(LWExecutablePath) ? Path.GetFileName(LWExecutablePath) : Path.GetFileName(GensExecutablePath)) +
-                ": " + (isCPKREDIRInstalled() ? "Installed" : "Not Installed");
+                ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
         }
 
         private void openModFolderToolStripMenuItem_Click(object sender, EventArgs e)
