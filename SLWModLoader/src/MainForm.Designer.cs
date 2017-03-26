@@ -65,6 +65,7 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
+            this.desciptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -81,10 +82,11 @@
             // ModsListContextMenu
             // 
             this.ModsListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.desciptionToolStripMenuItem,
             this.checkForUpdatesToolStripMenuItem,
             this.openModFolderToolStripMenuItem});
             this.ModsListContextMenu.Name = "ModsListContextMenu";
-            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 48);
+            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 92);
             // 
             // checkForUpdatesToolStripMenuItem
             // 
@@ -456,6 +458,14 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
+            // desciptionToolStripMenuItem
+            // 
+            this.desciptionToolStripMenuItem.Enabled = false;
+            this.desciptionToolStripMenuItem.Name = "desciptionToolStripMenuItem";
+            this.desciptionToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.desciptionToolStripMenuItem.Text = "Desciption";
+            this.desciptionToolStripMenuItem.Click += new System.EventHandler(this.desciptionToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.SaveAndPlayButton;
@@ -535,6 +545,7 @@
         private System.Windows.Forms.ColumnHeader SaveColumn;
         private System.Windows.Forms.ColumnHeader UpdateColumn;
         private System.Windows.Forms.ToolStripMenuItem openModFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem desciptionToolStripMenuItem;
     }
 }
 
