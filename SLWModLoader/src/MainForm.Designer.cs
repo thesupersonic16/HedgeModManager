@@ -86,7 +86,7 @@
             this.checkForUpdatesToolStripMenuItem,
             this.openModFolderToolStripMenuItem});
             this.ModsListContextMenu.Name = "ModsListContextMenu";
-            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 92);
+            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 70);
             // 
             // checkForUpdatesToolStripMenuItem
             // 
@@ -243,6 +243,7 @@
             this.MoveDownAll.TabIndex = 3;
             this.MoveDownAll.Text = "↓";
             this.MoveDownAll.UseVisualStyleBackColor = true;
+            this.MoveDownAll.Click += new System.EventHandler(this.MoveDownAll_Click);
             // 
             // MoveUpAll
             // 
@@ -254,6 +255,7 @@
             this.MoveUpAll.TabIndex = 2;
             this.MoveUpAll.Text = "↑";
             this.MoveUpAll.UseVisualStyleBackColor = true;
+            this.MoveUpAll.Click += new System.EventHandler(this.MoveUpAll_Click);
             // 
             // MoveDownButton
             // 

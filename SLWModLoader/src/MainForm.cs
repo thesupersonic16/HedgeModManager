@@ -443,7 +443,7 @@ namespace SLWModLoader
 
         private void ModsList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            MoveUpButton.Enabled = MoveDownButton.Enabled = RemoveModButton.Enabled =
+            MoveUpAll.Enabled = MoveDownAll.Enabled = MoveUpButton.Enabled = MoveDownButton.Enabled = RemoveModButton.Enabled =
                 checkForUpdatesToolStripMenuItem.Enabled = desciptionToolStripMenuItem.Enabled = 
                 openModFolderToolStripMenuItem.Enabled = ModsList.SelectedItems.Count == 1;
         }
@@ -484,83 +484,68 @@ namespace SLWModLoader
             RemoveModButton.Enabled = false;
         }
 
-        // TODO: Use ModDB methods
         private void MoveUpButton_Click(object sender, EventArgs e)
         {
-            // Checks if a item is selected and is not the first item
+            // Checks if a item is selected and is not the first item.
             if (ModsList.FocusedItem == null || ModsList.FocusedItem.Index == 0) return;
-            // Getting the ModDb.ini file
-            IniFile modsDBIni = ModsDb.getIniFile();
-            // Gets the amount of active mods
-            int count = int.Parse(modsDBIni["Main"]["ActiveModCount"]);
-            // Checks if the selected item index is not above or equals to "ActiveModCount"
-            if (ModsList.FocusedItem.Index >= count) return;
-            // Get the title of the selected mod
-            string modTitle = ModsList.FocusedItem.Text;
-            // A list storing a list of active mods
-            List<string> activeMods = new List<string>();
-            // Adding the mod titles from the ini into the activeMods array and also removes them from the ini
-            for (int i = 0; i < count; ++i)
-            {
-                activeMods.Add(modsDBIni["Main"]["ActiveMod" + i]);
-                modsDBIni["Main"].RemoveParameter("ActiveMod" + i);
-            }
-
-            // Getting the position of the selected mod so we can move it up
-            int pos = activeMods.IndexOf(modTitle);
-            // Removes the title and reinserts it back in before where it used to be
-            activeMods.Remove(modTitle);
-            activeMods.Insert(pos - 1, modTitle);
-
-            // Writing the activeMods array into the modDb.ini file
-            for (int i = 0; i < activeMods.Count; ++i)
-            {
-                modsDBIni["Main"].AddParameter("ActiveMod" + i, activeMods[i]);
-            }
-
-            // Saving and refreshing the mod list
-            ModsDb.SaveModsDb();
-            RefreshModsList();
+            // Gets the mod item so we can remove it from the list and add it back in.
+            var lvi = ModsList.FocusedItem;
+            // Gets the position of the selected mod so we can move it down.
+            int pos = ModsList.Items.IndexOf(lvi);
+            // Removes the mod and reinserts it back in after where it used to be.
+            ModsList.Items.Remove(lvi);
+            ModsList.Items.Insert(pos - 1, lvi);
+            // Selects the moved item.
+            ModsList.FocusedItem = lvi;
         }
 
-        // TODO: Use ModDB methods
         private void MoveDownButton_Click(object sender, EventArgs e)
         {
-            // Checks if a item is selected
-            if (ModsList.FocusedItem == null) return;
-            // Getting the ModDb.ini file
-            IniFile modsDBIni = ModsDb.getIniFile();
-            // Gets the amount of active mods
-            int count = int.Parse(modsDBIni["Main"]["ActiveModCount"]);
-            // Checks if the item seleced is not the last one
-            if (ModsList.FocusedItem.Index >= count-1) return;
-            // Get the title of the selected mod
-            string modTitle = ModsList.FocusedItem.Text;
-            // A list storing a list of active mods
-            List<string> activeMods = new List<string>();
-            // Adding the mod titles from the ini into the activeMods array and also removes them from the ini too
-            for (int i = 0; i < count; ++i)
-            {
-                activeMods.Add(modsDBIni["Main"]["ActiveMod" + i]);
-                modsDBIni["Main"].RemoveParameter("ActiveMod" + i);
-            }
-
-            // Getting the position of the selected mod so we can move it down
-            int pos = activeMods.IndexOf(modTitle);
-            // Removes the title and reinserts it back in after where it used to be
-            activeMods.Remove(modTitle);
-            activeMods.Insert(pos + 1, modTitle);
-
-            // Writing the activeMods array into the modDb.ini file
-            for (int i = 0; i < activeMods.Count; ++i)
-            {
-                modsDBIni["Main"].AddParameter("ActiveMod" + i, activeMods[i]);
-            }
-
-            // Saving and refreshing the mod list
-            ModsDb.SaveModsDb();
-            RefreshModsList();
+            // Checks if there is an item selected and that its not at the end of the list.
+            if (ModsList.FocusedItem == null && ModsList.Items.Count > ModsList.FocusedItem.Index) return;
+            // Checks if the item that is selected is not the last checked item.
+            if (ModsList.FocusedItem.Index >= ModsList.CheckedItems.Count-1) return;
+            // Gets the mod item so we can remove it from the list and add it back in.
+            var lvi = ModsList.FocusedItem;
+            // Gets the position of the selected mod so we can move it down.
+            int pos = ModsList.Items.IndexOf(lvi);
+            // Removes the mod and reinserts it back in after where it used to be.
+            ModsList.Items.Remove(lvi);
+            ModsList.Items.Insert(pos + 1, lvi);
+            // Selects the moved item.
+            ModsList.FocusedItem = lvi;
         }
 
+        private void MoveUpAll_Click(object sender, EventArgs e)
+        {
+            // Checks if a item is selected and is not the first item.
+            if (ModsList.FocusedItem == null || ModsList.FocusedItem.Index == 0) return;
+            // Gets the mod item so we can remove it from the list and add it back in.
+            var lvi = ModsList.FocusedItem;
+            // Removes the mod from the mod list
+            ModsList.Items.Remove(lvi);
+            // Adds the mod to the start of the mod list
+            ModsList.Items.Insert(0, lvi);
+
+            // Selects the moved item.
+            ModsList.FocusedItem = lvi;
+        }
+
+        private void MoveDownAll_Click(object sender, EventArgs e)
+        {
+            // Checks if there is an item selected and that its not at the end of the list.
+            if (ModsList.FocusedItem == null && ModsList.Items.Count > ModsList.FocusedItem.Index) return;
+            // Checks if the item that is selected is not the last checked item.
+            if (ModsList.FocusedItem.Index >= ModsList.CheckedItems.Count - 1) return;
+            // Gets the mod item so we can remove it from the list and add it back in.
+            var lvi = ModsList.FocusedItem;
+            // Removes the mod from the mod list
+            ModsList.Items.Remove(lvi);
+            // Adds the mod to the start of the mod list
+            ModsList.Items.Insert(ModsList.CheckedItems.Count, lvi);
+
+            // Selects the moved item.
+            ModsList.FocusedItem = lvi;
+        }
     }
 }
