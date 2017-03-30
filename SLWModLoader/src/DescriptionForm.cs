@@ -68,6 +68,24 @@ namespace SLWModLoader
                 catch { }
             }
 
+            if (Desc.ContainsParameter("TextFont"))
+            {
+                try
+                {
+                    descriptionLbl.Font = new Font(Desc["TextFont"], 8.25f);
+                }
+                catch { }
+            }
+
+            if (Desc.ContainsParameter("TextSize"))
+            {
+                try
+                {
+                    descriptionLbl.Font = new Font(descriptionLbl.Font.FontFamily, float.Parse(Desc["TextSize"]));
+                }
+                catch { }
+            }
+
             if (Desc.ContainsParameter("HeaderColor"))
             {
                 try
@@ -80,6 +98,59 @@ namespace SLWModLoader
                 }
                 catch { }
 
+            }
+
+            if (Desc.ContainsParameter("HeaderFont"))
+            {
+                try
+                {
+                    titleLbl.Font = new Font(Desc["HeaderFont"], titleLbl.Font.Size);
+                }
+                catch { }
+            }
+
+            if(Desc.ContainsParameter("HeaderSize"))
+            {
+                try
+                {
+                    titleLbl.Font = new Font(titleLbl.Font.FontFamily, float.Parse(Desc["HeaderSize"]));
+                    authorLbl.Location = new Point(authorLbl.Location.X, titleLbl.Location.Y + ((int)float.Parse(Desc["HeaderSize"])) + 23);
+                    descriptionLbl.Location = new Point(descriptionLbl.Location.X, descriptionLbl.Location.Y + 23);
+                }
+                catch { }
+            }
+
+            if (Desc.ContainsParameter("AuthorColor"))
+            {
+                try
+                {
+                    authorLbl.LinkColor = authorLbl.ForeColor =
+                        Color.FromArgb(Convert.ToInt32(Desc["HeaderColor"].Split(',')[0]),
+                                       Convert.ToInt32(Desc["HeaderColor"].Split(',')[1]),
+                                       Convert.ToInt32(Desc["HeaderColor"].Split(',')[2]));
+                }
+                catch { }
+
+            }
+
+            if (Desc.ContainsParameter("AuthorFont"))
+            {
+                try
+                {
+                    authorLbl.Font = new Font(Desc["AuthorFont"], authorLbl.Font.Size);
+                }
+                catch { }
+            }
+
+            if (Desc.ContainsParameter("AuthorSize"))
+            {
+                try
+                {
+                    authorLbl.Font = new Font(authorLbl.Font.FontFamily, float.Parse(Desc["AuthorSize"]));
+                    descriptionLbl.Location = new Point(descriptionLbl.Location.X, descriptionLbl.Location.Y +
+                        (int)float.Parse(Desc["AuthorSize"]));
+                }
+                catch { }
             }
             #endregion
         }

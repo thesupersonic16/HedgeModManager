@@ -425,8 +425,9 @@ namespace SLWModLoader
                         if (MessageBox.Show($"There's a newer version of {modItem.Title} available!\n\n"+
                                 $"Do you want to update from version {modItem.Version} to {mod_version["Main"]["VersionString"]}? (about {mod_version["Main"]["DownloadSizeString"]})", Program.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            UpdateModForm muf = new UpdateModForm(modItem.Title, wc.DownloadString(modItem.UpdateServer + "mod_files.txt"), modItem.RootDirectory);
+                            UpdateModForm muf = new UpdateModForm(modItem.Title, wc.DownloadString(modItem.UpdateServer + "mod_update_files.txt"), modItem.RootDirectory);
                             muf.ShowDialog();
+                            RefreshModsList();
                         }
                     }
                     else
@@ -522,9 +523,9 @@ namespace SLWModLoader
             if (ModsList.FocusedItem == null || ModsList.FocusedItem.Index == 0) return;
             // Gets the mod item so we can remove it from the list and add it back in.
             var lvi = ModsList.FocusedItem;
-            // Removes the mod from the mod list
+            // Removes the mod from the mod list.
             ModsList.Items.Remove(lvi);
-            // Adds the mod to the start of the mod list
+            // Adds the mod to the start of the mod list.
             ModsList.Items.Insert(0, lvi);
 
             // Selects the moved item.
@@ -539,9 +540,9 @@ namespace SLWModLoader
             if (ModsList.FocusedItem.Index >= ModsList.CheckedItems.Count - 1) return;
             // Gets the mod item so we can remove it from the list and add it back in.
             var lvi = ModsList.FocusedItem;
-            // Removes the mod from the mod list
+            // Removes the mod from the mod list.
             ModsList.Items.Remove(lvi);
-            // Adds the mod to the start of the mod list
+            // Adds the mod to the start of the mod list.
             ModsList.Items.Insert(ModsList.CheckedItems.Count, lvi);
 
             // Selects the moved item.

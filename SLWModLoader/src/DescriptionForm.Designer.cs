@@ -58,9 +58,9 @@
             this.titleLbl.LinkColor = System.Drawing.SystemColors.HotTrack;
             this.titleLbl.Location = new System.Drawing.Point(8, 6);
             this.titleLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.titleLbl.MaximumSize = new System.Drawing.Size(500, 30);
+            this.titleLbl.MaximumSize = new System.Drawing.Size(500, 90);
             this.titleLbl.Name = "titleLbl";
-            this.titleLbl.Size = new System.Drawing.Size(58, 30);
+            this.titleLbl.Size = new System.Drawing.Size(58, 31);
             this.titleLbl.TabIndex = 1;
             this.titleLbl.Text = "Title";
             this.titleLbl.UseMnemonic = false;
@@ -115,7 +115,7 @@
             this.Controls.Add(this.descriptionLbl);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DescriptionForm";

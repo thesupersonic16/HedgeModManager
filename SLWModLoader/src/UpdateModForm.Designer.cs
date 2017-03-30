@@ -31,7 +31,7 @@
             this.ProgressBarFile = new System.Windows.Forms.ProgressBar();
             this.CancelButton = new System.Windows.Forms.Button();
             this.ProgressBarAll = new System.Windows.Forms.ProgressBar();
-            this.label1 = new System.Windows.Forms.Label();
+            this.UpdateLabel = new System.Windows.Forms.Label();
             this.DownloadLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -61,14 +61,14 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 24F);
-            this.label1.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label1.Location = new System.Drawing.Point(161, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(152, 45);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Updating";
+            this.UpdateLabel.AutoSize = true;
+            this.UpdateLabel.Font = new System.Drawing.Font("Segoe UI", 24F);
+            this.UpdateLabel.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.UpdateLabel.Location = new System.Drawing.Point(161, 9);
+            this.UpdateLabel.Name = "label1";
+            this.UpdateLabel.Size = new System.Drawing.Size(152, 45);
+            this.UpdateLabel.TabIndex = 3;
+            this.UpdateLabel.Text = "Updating";
             // 
             // DownloadLabel
             // 
@@ -88,7 +88,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(496, 217);
             this.Controls.Add(this.DownloadLabel);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.UpdateLabel);
             this.Controls.Add(this.ProgressBarAll);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.ProgressBarFile);
@@ -106,7 +106,7 @@
         private System.Windows.Forms.ProgressBar ProgressBarFile;
         private System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.ProgressBar ProgressBarAll;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label UpdateLabel;
         private System.Windows.Forms.Label DownloadLabel;
     }
 }
