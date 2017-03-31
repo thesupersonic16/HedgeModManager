@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Collections.Generic;
 using System.Threading;
+using System.IO.Compression;
 
 namespace SLWModLoader
 {
@@ -267,6 +268,10 @@ namespace SLWModLoader
         public void AddMessage(string message)
         {
             LogFile.AddMessage(message);
+            // Adds a character limit if not compiled in debug. 
+            #if !DEBUG
+            if (message.Length < 128)
+            #endif
             Invoke(new Action(() => StatusLabel.Text = message));
         }
 
@@ -442,10 +447,22 @@ namespace SLWModLoader
             }
         }
 
+        private void deleteModToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to delete \"" + ModsList.FocusedItem.Text + "\"?", Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                Directory.Delete(ModsDb.GetMod(ModsList.FocusedItem.Text).RootDirectory, true);
+                RefreshModsList();
+
+            }
+            ModsList.FocusedItem = null;
+            ModsList_SelectedIndexChanged(null, null);
+        }
+
         private void ModsList_SelectedIndexChanged(object sender, EventArgs e)
         {
             MoveUpAll.Enabled = MoveDownAll.Enabled = MoveUpButton.Enabled = MoveDownButton.Enabled = RemoveModButton.Enabled =
-                checkForUpdatesToolStripMenuItem.Enabled = desciptionToolStripMenuItem.Enabled = 
+                deleteModToolStripMenuItem.Enabled = checkForUpdatesToolStripMenuItem.Enabled = desciptionToolStripMenuItem.Enabled = 
                 openModFolderToolStripMenuItem.Enabled = ModsList.SelectedItems.Count == 1;
         }
 
@@ -548,5 +565,36 @@ namespace SLWModLoader
             // Selects the moved item.
             ModsList.FocusedItem = lvi;
         }
+
+        private void ModsList_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop) &&
+                e.Data.GetData(DataFormats.FileDrop) is string[] files)
+            {
+                foreach (string file in files)
+                {
+                    // Checks if its a Directory
+                    if (File.GetAttributes(file).HasFlag(FileAttributes.Directory))
+                    {
+                        AddModForm.InstallFromFolder(file);
+                    }
+                    else if (new FileInfo(file).Extension == ".zip")
+                    { // Checks if it is a zip file.
+                        AddModForm.InstallFromZip(file);
+                    }
+                }
+                RefreshModsList();
+            }
+        }
+
+        private void ModsList_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop) &&
+                e.Data.GetData(DataFormats.FileDrop) is string[] files)
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+        }
+
     }
 }

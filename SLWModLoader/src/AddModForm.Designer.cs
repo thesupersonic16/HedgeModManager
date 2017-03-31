@@ -38,12 +38,14 @@
             // fileInstallRBtn
             // 
             this.fileInstallRBtn.AutoSize = true;
+            this.fileInstallRBtn.Checked = true;
             this.fileInstallRBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.fileInstallRBtn.Location = new System.Drawing.Point(15, 55);
             this.fileInstallRBtn.Margin = new System.Windows.Forms.Padding(2);
             this.fileInstallRBtn.Name = "fileInstallRBtn";
             this.fileInstallRBtn.Size = new System.Drawing.Size(156, 18);
             this.fileInstallRBtn.TabIndex = 0;
+            this.fileInstallRBtn.TabStop = true;
             this.fileInstallRBtn.Text = "&Installing it from an archive";
             this.fileInstallRBtn.UseVisualStyleBackColor = true;
             // 
@@ -62,7 +64,6 @@
             // folderInstallRBtn
             // 
             this.folderInstallRBtn.AutoSize = true;
-            this.folderInstallRBtn.Enabled = false;
             this.folderInstallRBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.folderInstallRBtn.Location = new System.Drawing.Point(15, 75);
             this.folderInstallRBtn.Margin = new System.Windows.Forms.Padding(2);
@@ -75,14 +76,12 @@
             // makingItRBtn
             // 
             this.makingItRBtn.AutoSize = true;
-            this.makingItRBtn.Checked = true;
             this.makingItRBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.makingItRBtn.Location = new System.Drawing.Point(15, 94);
             this.makingItRBtn.Margin = new System.Windows.Forms.Padding(2);
             this.makingItRBtn.Name = "makingItRBtn";
             this.makingItRBtn.Size = new System.Drawing.Size(87, 18);
             this.makingItRBtn.TabIndex = 3;
-            this.makingItRBtn.TabStop = true;
             this.makingItRBtn.Text = "&Making one";
             this.makingItRBtn.UseVisualStyleBackColor = true;
             // 

@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ModsListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.desciptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
@@ -65,7 +66,7 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
-            this.desciptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -84,9 +85,18 @@
             this.ModsListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.desciptionToolStripMenuItem,
             this.checkForUpdatesToolStripMenuItem,
-            this.openModFolderToolStripMenuItem});
+            this.openModFolderToolStripMenuItem,
+            this.deleteModToolStripMenuItem});
             this.ModsListContextMenu.Name = "ModsListContextMenu";
-            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 70);
+            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 114);
+            // 
+            // desciptionToolStripMenuItem
+            // 
+            this.desciptionToolStripMenuItem.Enabled = false;
+            this.desciptionToolStripMenuItem.Name = "desciptionToolStripMenuItem";
+            this.desciptionToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.desciptionToolStripMenuItem.Text = "Desciption";
+            this.desciptionToolStripMenuItem.Click += new System.EventHandler(this.desciptionToolStripMenuItem_Click);
             // 
             // checkForUpdatesToolStripMenuItem
             // 
@@ -207,6 +217,8 @@
             this.ModsList.UseCompatibleStateImageBehavior = false;
             this.ModsList.View = System.Windows.Forms.View.Details;
             this.ModsList.SelectedIndexChanged += new System.EventHandler(this.ModsList_SelectedIndexChanged);
+            this.ModsList.DragDrop += new System.Windows.Forms.DragEventHandler(this.ModsList_DragDrop);
+            this.ModsList.DragEnter += new System.Windows.Forms.DragEventHandler(this.ModsList_DragEnter);
             // 
             // NameColumn
             // 
@@ -221,17 +233,17 @@
             // AuthorColumn
             // 
             this.AuthorColumn.Text = "Author";
-            this.AuthorColumn.Width = 119;
+            this.AuthorColumn.Width = 113;
             // 
             // SaveColumn
             // 
             this.SaveColumn.Text = "Supports Save File Redirection";
-            this.SaveColumn.Width = 72;
+            this.SaveColumn.Width = 74;
             // 
             // UpdateColumn
             // 
             this.UpdateColumn.Text = "Has Updates";
-            this.UpdateColumn.Width = 100;
+            this.UpdateColumn.Width = 75;
             // 
             // MoveDownAll
             // 
@@ -460,13 +472,13 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
-            // desciptionToolStripMenuItem
+            // deleteModToolStripMenuItem
             // 
-            this.desciptionToolStripMenuItem.Enabled = false;
-            this.desciptionToolStripMenuItem.Name = "desciptionToolStripMenuItem";
-            this.desciptionToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.desciptionToolStripMenuItem.Text = "Desciption";
-            this.desciptionToolStripMenuItem.Click += new System.EventHandler(this.desciptionToolStripMenuItem_Click);
+            this.deleteModToolStripMenuItem.Enabled = false;
+            this.deleteModToolStripMenuItem.Name = "deleteModToolStripMenuItem";
+            this.deleteModToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.deleteModToolStripMenuItem.Text = "Delete Mod";
+            this.deleteModToolStripMenuItem.Click += new System.EventHandler(this.deleteModToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -548,6 +560,7 @@
         private System.Windows.Forms.ColumnHeader UpdateColumn;
         private System.Windows.Forms.ToolStripMenuItem openModFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem desciptionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteModToolStripMenuItem;
     }
 }
 
