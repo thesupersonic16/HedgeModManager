@@ -260,7 +260,7 @@ namespace SLWModLoader
             }
             catch (Exception ex)
             {
-                AddMessage("Exception thrown while checking for Mod Loader updates: " + ex);
+                try { AddMessage("Exception thrown while checking for Mod Loader updates: " + ex); } catch { }
             }
 
         }
