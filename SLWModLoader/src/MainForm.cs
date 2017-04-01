@@ -582,6 +582,10 @@ namespace SLWModLoader
                     { // Checks if it is a zip file.
                         AddModForm.InstallFromZip(file);
                     }
+                    else if (new FileInfo(file).Extension == ".7z" || new FileInfo(file).Extension == ".rar")
+                    { // Checks if it is a 7z or rar file.
+                        AddModForm.InstallFrom7zArchive(file);
+                    }
                 }
                 RefreshModsList();
             }
