@@ -139,4 +139,16 @@
   <data name="update" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\update.bat;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Disable_Blue_Trail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\patches\sonicgenerations\Disable Blue Trail.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Enable_Blue_Trail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\patches\sonicgenerations\Enable Blue Trail.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Disable_FxPipeline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\patches\sonicgenerations\Disable FxPipeline.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Enable_FxPipeline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\patches\sonicgenerations\Enable FxPipeline.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

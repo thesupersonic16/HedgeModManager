@@ -88,6 +88,46 @@ namespace SLWModLoader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Disable_Blue_Trail {
+            get {
+                object obj = ResourceManager.GetObject("Disable_Blue_Trail", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Disable_FxPipeline {
+            get {
+                object obj = ResourceManager.GetObject("Disable_FxPipeline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Enable_Blue_Trail {
+            get {
+                object obj = ResourceManager.GetObject("Enable_Blue_Trail", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Enable_FxPipeline {
+            get {
+                object obj = ResourceManager.GetObject("Enable_FxPipeline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occured! See &quot;SLWModLoader.log&quot; for more info and report the file if possible..
         /// </summary>
         internal static string ExceptionText {

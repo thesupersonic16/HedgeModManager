@@ -34,6 +34,7 @@
             this.desciptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.ModPage = new System.Windows.Forms.TabPage();
@@ -51,6 +52,7 @@
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.PatchGroupBox = new System.Windows.Forms.GroupBox();
             this.InstallUninstallButton = new System.Windows.Forms.Button();
             this.PatchLabel = new System.Windows.Forms.Label();
             this.ScanExecuteableButton = new System.Windows.Forms.Button();
@@ -66,7 +68,6 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
-            this.deleteModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -88,7 +89,7 @@
             this.openModFolderToolStripMenuItem,
             this.deleteModToolStripMenuItem});
             this.ModsListContextMenu.Name = "ModsListContextMenu";
-            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 114);
+            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 92);
             // 
             // desciptionToolStripMenuItem
             // 
@@ -113,6 +114,14 @@
             this.openModFolderToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.openModFolderToolStripMenuItem.Text = "Open Containing Folder";
             this.openModFolderToolStripMenuItem.Click += new System.EventHandler(this.openModFolderToolStripMenuItem_Click);
+            // 
+            // deleteModToolStripMenuItem
+            // 
+            this.deleteModToolStripMenuItem.Enabled = false;
+            this.deleteModToolStripMenuItem.Name = "deleteModToolStripMenuItem";
+            this.deleteModToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.deleteModToolStripMenuItem.Text = "Delete Mod";
+            this.deleteModToolStripMenuItem.Click += new System.EventHandler(this.deleteModToolStripMenuItem_Click);
             // 
             // MainPanel
             // 
@@ -295,6 +304,7 @@
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.PatchGroupBox);
             this.SettingsPage.Controls.Add(this.InstallUninstallButton);
             this.SettingsPage.Controls.Add(this.PatchLabel);
             this.SettingsPage.Controls.Add(this.ScanExecuteableButton);
@@ -306,6 +316,15 @@
             this.SettingsPage.TabIndex = 1;
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
+            // 
+            // PatchGroupBox
+            // 
+            this.PatchGroupBox.Location = new System.Drawing.Point(49, 92);
+            this.PatchGroupBox.Name = "PatchGroupBox";
+            this.PatchGroupBox.Size = new System.Drawing.Size(431, 146);
+            this.PatchGroupBox.TabIndex = 16;
+            this.PatchGroupBox.TabStop = false;
+            this.PatchGroupBox.Text = "Patches";
             // 
             // InstallUninstallButton
             // 
@@ -472,14 +491,6 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
-            // deleteModToolStripMenuItem
-            // 
-            this.deleteModToolStripMenuItem.Enabled = false;
-            this.deleteModToolStripMenuItem.Name = "deleteModToolStripMenuItem";
-            this.deleteModToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.deleteModToolStripMenuItem.Text = "Delete Mod";
-            this.deleteModToolStripMenuItem.Click += new System.EventHandler(this.deleteModToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AcceptButton = this.SaveAndPlayButton;
@@ -561,6 +572,7 @@
         private System.Windows.Forms.ToolStripMenuItem openModFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem desciptionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteModToolStripMenuItem;
+        private System.Windows.Forms.GroupBox PatchGroupBox;
     }
 }
 

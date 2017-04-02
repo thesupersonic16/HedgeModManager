@@ -7,6 +7,7 @@ using System.Net;
 using System.Collections.Generic;
 using System.Threading;
 using System.IO.Compression;
+using System.Linq;
 
 namespace SLWModLoader
 {
@@ -16,6 +17,7 @@ namespace SLWModLoader
         public static readonly string LWExecutablePath = Path.Combine(Program.StartDirectory, "slw.exe");
         public static readonly string ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
         public static readonly string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
+        public static Dictionary<string, byte[]> GenerationsPatches = new Dictionary<string, byte[]>();
         public ModsDatabase ModsDb;
 
         public MainForm()
@@ -35,11 +37,34 @@ namespace SLWModLoader
         {
             Text += $" (v{Program.VersionString})";
 
-            if(File.Exists(LWExecutablePath))
+            if (File.Exists(LWExecutablePath))
+            {
                 Text += " - Sonic Lost World";
-
+                PatchGroupBox.Visible = false;
+            }
             if (File.Exists(GensExecutablePath))
+            {
                 Text += " - Sonic Generations";
+                GenerationsPatches.Add("Enable Blue Trail", Resources.Enable_Blue_Trail);
+                GenerationsPatches.Add("Disable Blue Trail", Resources.Disable_Blue_Trail);
+                GenerationsPatches.Add("", null);
+                GenerationsPatches.Add("Enable FxPipeline", Resources.Enable_FxPipeline);
+                GenerationsPatches.Add("Disable FxPipeline", Resources.Disable_FxPipeline);
+
+                for (int i = 0; i < GenerationsPatches.Count; i++)
+                {
+                    if (GenerationsPatches.ToList()[i].Value == null)
+                        continue;
+                    Button btn = new Button()
+                    {
+                        Text = GenerationsPatches.ToList()[i].Key,
+                        Size = new System.Drawing.Size(128, 32),
+                        Location = new System.Drawing.Point(12 + 140 * (i / 3), 16 + (i % 3) * 42)
+                    };
+                    btn.Click += new EventHandler(PatchButton_Click);
+                    PatchGroupBox.Controls.Add(btn);
+                }
+            }
 
             if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath))
             {
@@ -47,7 +72,9 @@ namespace SLWModLoader
                 OrderModList();
                 if(!isCPKREDIRInstalled())
                 {
-                    if (MessageBox.Show("Your "+(File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations") +" executable has not yet been Installed for use with CPKREDIR, which is required to load mods.\nWould you like to patch it now?", Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    if (MessageBox.Show("Your "+(File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations") +
+                        " executable has not yet been Installed for use with CPKREDIR, which is required to load mods.\nWould you like to patch it now?",
+                        Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                     {
                         InstallCPKREDIR(true);
                     }
@@ -411,13 +438,16 @@ namespace SLWModLoader
             
             if(modItem.UpdateServer.Length == 0 && modItem.Url.Length != 0)
             { // No Update Server, But has Website
-                if (MessageBox.Show($"{Program.ProgramName} can not check for updates for {modItem.Title} because no update server has been set.\n\nThis Mod does have a website, do you want to open it to check for updates manually?\n\n URL: {modItem.Url}", Program.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show($"{Program.ProgramName} can not check for updates for {modItem.Title} because no update server has been set.\n\n" +
+                    $"This Mod does have a website, do you want to open it to check for updates manually?\n\n URL: {modItem.Url}", Program.ProgramName,
+                    MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Process.Start(modItem.Url);
                 }
             }else if (modItem.UpdateServer.Length == 0 && modItem.Url.Length == 0)
             { // No Update Server and Website
-                MessageBox.Show($"{Program.ProgramName} can not check for updates for {modItem.Title} because no update server has been set.", Program.ProgramName, MessageBoxButtons.OK);
+                MessageBox.Show($"{Program.ProgramName} can not check for updates for {modItem.Title} because no update server has been set.",
+                    Program.ProgramName, MessageBoxButtons.OK);
             }else if (modItem.UpdateServer.Length != 0)
             { // Has Update Server
                 try
@@ -428,9 +458,12 @@ namespace SLWModLoader
                     if (mod_version["Main"]["VersionString"] != modItem.Version)
                     {
                         if (MessageBox.Show($"There's a newer version of {modItem.Title} available!\n\n"+
-                                $"Do you want to update from version {modItem.Version} to {mod_version["Main"]["VersionString"]}? (about {mod_version["Main"]["DownloadSizeString"]})", Program.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                $"Do you want to update from version {modItem.Version} to " +
+                                $"{mod_version["Main"]["VersionString"]}? (about {mod_version["Main"]["DownloadSizeString"]})",
+                                Program.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            UpdateModForm muf = new UpdateModForm(modItem.Title, wc.DownloadString(modItem.UpdateServer + "mod_update_files.txt"), modItem.RootDirectory);
+                            UpdateModForm muf = new UpdateModForm(modItem.Title, wc.DownloadString(modItem.UpdateServer + "mod_update_files.txt"),
+                                modItem.RootDirectory);
                             muf.ShowDialog();
                             RefreshModsList();
                         }
@@ -449,7 +482,8 @@ namespace SLWModLoader
 
         private void deleteModToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to delete \"" + ModsList.FocusedItem.Text + "\"?", Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to delete \"" + ModsList.FocusedItem.Text + "\"?", Program.ProgramName, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 Directory.Delete(ModsDb.GetMod(ModsList.FocusedItem.Text).RootDirectory, true);
                 RefreshModsList();
@@ -492,7 +526,8 @@ namespace SLWModLoader
 
         private void RemoveModButton_Click(object sender, EventArgs e)
         {
-            if(MessageBox.Show("Are you sure you want to delete \""+ ModsList.FocusedItem.Text+"\"?", Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if(MessageBox.Show("Are you sure you want to delete \""+ ModsList.FocusedItem.Text+"\"?", Program.ProgramName, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 Directory.Delete(ModsDb.GetMod(ModsList.FocusedItem.Text).RootDirectory, true);
                 RefreshModsList();
@@ -600,5 +635,60 @@ namespace SLWModLoader
             }
         }
 
+        private void PatchButton_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(GensExecutablePath))
+            {
+                try
+                {
+                    // Creates a bckup if one hasn't been made.
+                    if (!File.Exists(GensExecutablePath.Substring(0, GensExecutablePath.Length - 4) + "_Backup2.exe"))
+                        File.Copy(GensExecutablePath, GensExecutablePath.Substring(0, GensExecutablePath.Length - 4) + "_Backup2.exe");
+                    
+                    var button = (Button)sender;
+                    LogFile.AddMessage("Installing " + button.Text);
+
+                    // A byte array holding the patch data. 
+                    var patchBytes = GenerationsPatches[button.Text];
+                    // Reads all the bytes from the Generations executeable.
+                    var executeableBytes = File.ReadAllBytes(GensExecutablePath);
+                    // Opens a FileStream to the Generations executeable.
+                    var executeableStream = File.OpenWrite(GensExecutablePath);
+                    // Current position of the patch file.
+                    var position = 0;
+                    // Amount of changes.
+                    var changes = BitConverter.ToInt32(patchBytes, position);
+                    // Adds 4 to position since we just read 4 bytes.
+                    position += 4;
+                    // Writes all bytes from executeableBytes back to the Generations executeable.
+                    executeableStream.Write(executeableBytes, 0, executeableBytes.Length);
+                    for (int i = 0; i < changes; ++i)
+                    {
+                        executeableStream.Position = BitConverter.ToInt32(patchBytes, position);
+                        // Adds 4 to position since we just read 4 bytes.
+                        position += 4;
+                        // Gets the size of the current edit.
+                        var size = BitConverter.ToInt32(patchBytes, position);
+                        // Adds 4 to position since we just read 4 bytes.
+                        position += 4;
+                        // Writes the data to the executeable.
+                        for (int i2 = 0; i2 < size; ++i2)
+                        {
+                            executeableStream.WriteByte(patchBytes[position + i2]);
+                        }
+                        position += size;
+                    }
+                    // Closes the FileStream.
+                    executeableStream.Close();
+                    MessageBox.Show("Done.", Program.ProgramName);
+                    LogFile.AddMessage("Finished Installing " + button.Text);
+                }
+                catch (Exception ex)
+                {
+                    LogFile.AddMessage("Exception thrown while applying a patch: " + ex);
+                    LogFile.AddMessage("Button Name: " + ((Button)sender).Text);
+                }
+            }
+        }
     }
 }
