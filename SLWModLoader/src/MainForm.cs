@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.IO.Compression;
 using System.Linq;
+using Microsoft.Win32;
+using System.Text;
 
 namespace SLWModLoader
 {
@@ -84,12 +86,63 @@ namespace SLWModLoader
             }
             else
             {
-                MessageBox.Show(Resources.CannotFindExecutableText, Resources.ApplicationTitle,
+                if (MessageBox.Show("SLW Mod Loader could not find a game executable in its startup directory.\n" +
+                    "The mod loader can attempt to look for your game and install itself automatically.\n",
+                    Resources.ApplicationTitle, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                {
+                    // Gets the 32 bit Registry Key.
+                    RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam");
+                    // If null then try to get the 64 bit Registry Key.
+                    if (key == null)
+                        key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey("SOFTWARE\\Valve\\Steam");
+                    // Checks if the Key and Value exists.
+                    if (key != null && key.GetValue("SteamPath") is string steamPath)
+                    {
+                        bool installed = false;
+                        // Looks for games in the default location. 
+                        if (Directory.Exists(Path.Combine(steamPath, "steamapps\\common")))
+                        {
+                            if (File.Exists(Path.Combine(steamPath, "steamapps\\common\\Sonic Lost World\\slw.exe")) && !installed)
+                                installed = InstallModLoader(Path.Combine(steamPath, "steamapps\\common\\Sonic Lost World"), "Sonic Lost World");
+
+                            if (File.Exists(Path.Combine(steamPath, "steamapps\\common\\Sonic Generations\\SonicGenerations.exe")) && !installed)
+                                installed = InstallModLoader(Path.Combine(steamPath, "steamapps\\common\\Sonic Generations"), "Sonic Generations");
+                        }
+                        // Looks for other locations. 
+                        var libraryfolders = File.ReadAllLines(Path.Combine(steamPath, "steamapps\\libraryfolders.vdf"));
+                        int i = 1;
+                        foreach (string s in libraryfolders)
+                        {
+                            if (s.IndexOf("\"" + i + "\"") != -1)
+                            {
+                                // Gets the location.
+                                var libraryLocation = s.Substring(s.IndexOf("\t\t\"") + 3, s.LastIndexOf('"') - (s.IndexOf("\t\t\"") + 3));
+                                // Looks for games in that location.
+                                if (Directory.Exists(Path.Combine(libraryLocation, "steamapps\\common")))
+                                {
+                                    if (File.Exists(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Lost World\\slw.exe")) && !installed)
+                                        installed = InstallModLoader(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Lost World"),
+                                            "Sonic Lost World");
+
+                                    if (File.Exists(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Generations\\SonicGenerations.exe"))
+                                        && !installed)
+                                        installed = InstallModLoader(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Generations"),
+                                            "Sonic Generations");
+                                }
+                                i++;
+                            }
+
+                        }
+                        Close();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(Resources.CannotFindExecutableText, Resources.ApplicationTitle,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                LogFile.AddMessage("Could not find executable, closing form...");
-
-                Close();
+                    LogFile.AddMessage("Could not find executable, closing form...");
+                    Close();
+                }
                 return;
             }
 
@@ -103,6 +156,45 @@ namespace SLWModLoader
                 }
             }
             new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
+        }
+
+        public bool InstallModLoader(string path, string gameName)
+        {
+            path = path.Replace('/', '\\');
+            if (MessageBox.Show("Install SLW Mod Loader in \n"+path+"?", Resources.ApplicationTitle,
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                string[] files = new string[] { "SLWModLoader.exe", "cpkredir.dll", "cpkredir.ini", "cpkredir.txt" };
+                foreach (string file in files)
+                {
+                    var filePath = Path.Combine(Program.StartDirectory, file);
+                    if(File.Exists(filePath))
+                    {
+                        File.Copy(filePath, Path.Combine(path, file), true);
+                        try { File.Delete(filePath); } catch { }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Could not find "+file+".");
+                    }
+                }
+
+                LogFile.AddMessage("Creating Shortcut for " + gameName);
+                // Creates a shortcut to the modloader.
+                string shortcutPath = Path.Combine(Program.StartDirectory, $"SLWModLoader - {gameName}.lnk");
+                IWshRuntimeLibrary.WshShell wsh = new IWshRuntimeLibrary.WshShell();
+                IWshRuntimeLibrary.IWshShortcut shortcut = wsh.CreateShortcut(shortcutPath) as IWshRuntimeLibrary.IWshShortcut;
+                shortcut.Description = "SLWModLoader - "+gameName;
+                shortcut.TargetPath = Path.Combine(path, "SLWModLoader.exe");
+                shortcut.WorkingDirectory = path;
+                shortcut.Save();
+                LogFile.AddMessage("    Done.");
+
+                MessageBox.Show("Done.");
+
+                return true;
+            }
+            return false;
         }
 
         public void LoadMods()
