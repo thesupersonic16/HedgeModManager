@@ -15,16 +15,53 @@ namespace SLWModLoader
     public partial class NewModForm : Form
     {
         public string modName = string.Empty;
+        public Mod mod;
 
+        // Create a new mod.
         public NewModForm(string name)
         {
             InitializeComponent();
             modName = name;
-            // Automatically fill in some info, I might remove this in the future
+            // Automatically fill in some info.
             listView1.Groups[1].Items[0].SubItems[1].Text = name; // Title
             listView1.Groups[1].Items[3].SubItems[1].Text = DateTime.Now.ToShortDateString(); // Date
             listView1.Groups[1].Items[4].SubItems[1].Text = Environment.UserName; // Author
         }
+
+        // Edit a mod.
+        public NewModForm(Mod mod)
+        {
+            InitializeComponent();
+            this.mod = mod;
+            modName = Path.GetFileName(mod.RootDirectory);
+            // Automatically fill in some info.
+            IniFile ini = mod.GetIniFile();
+            foreach (ListViewGroup group in listView1.Groups)
+            {
+                try
+                {
+                    IniGroup iniGroup = ini[group.Header];
+                    for(int i = 0; i < iniGroup.ParameterCount; ++i)
+                    {
+                        var key = iniGroup[i].Key.Replace("\n", "\\n");
+                        var value = iniGroup[i].Value.Replace("\n", "\\n");
+                        var done = false;
+                        foreach(ListViewItem lvi in group.Items)
+                        {
+                            if (lvi.SubItems[0].Text.ToLower().Equals(key.ToLower()))
+                            {
+                                lvi.SubItems[1].Text = value;
+                                done = true;
+                            }
+                        }
+                        if(!done)
+                            AddProperty(key, value, listView1.Groups.IndexOf(group), "String");
+                    }
+                }
+                catch {}
+            }
+        }
+
 
         //Definitely needs a rewrite, unsure if adding support for IniFile.cs would help 
 
@@ -162,17 +199,23 @@ namespace SLWModLoader
         //}
         #endregion
 
-        public void AddProperty(string propName, string PropValue, int PropGroup)
+        public void AddProperty(string propName, string propValue, int propGroup, string propTag)
         {
-            ListViewItem lvi = new ListViewItem();
-            ListViewItem.ListViewSubItem lvsi = new ListViewItem.ListViewSubItem();
-            lvsi.Text = PropValue;
+            var lvi = new ListViewItem();
+            var lvsi = new ListViewItem.ListViewSubItem();
+            lvsi.Text = propValue;
+            lvi.Tag = propTag;
             lvi.Text = propName;
-            lvi.Group = listView1.Groups[PropGroup];
+            lvi.Group = listView1.Groups[propGroup];
             lvi.SubItems.Add(lvsi);
             lvi.ForeColor = Color.FromArgb(255, 128, 0); // TODO: Use a different colour for user created properties
             lvi.Selected = true;
             listView1.Items.Add(lvi);
+        }
+
+        public ListView getListView()
+        {
+            return listView1;
         }
 
         private void editBtn_Click(object sender, EventArgs e)
@@ -193,12 +236,35 @@ namespace SLWModLoader
             iniFile.AddGroup("Main");
             iniFile.AddGroup("Desc");
             
-            // Adds all the properties into the ini file
+            // Adds all the properties and groups into the ini file
             foreach (ListViewGroup lvg in listView1.Groups)
             {
+                if (lvg.Items.Count == 0)
+                    continue;
                 foreach (ListViewItem lvi in lvg.Items)
                 {
-                    iniFile[lvg.Header].AddParameter(lvi.Text, lvi.SubItems[1].Text);
+                    if (lvi.SubItems[1].Text.Length > 0)
+                    {
+                        iniFile[lvg.Header].AddParameter(lvi.Text, lvi.SubItems[1].Text);
+
+                        if (lvi.Text.ToLower().Equals("savefile"))
+                        {
+                            if (!File.Exists(Path.Combine(filePath, lvi.SubItems[1].Text)) &&
+                                MessageBox.Show("Would you like to create a save file?", Program.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                            {
+                                try
+                                {
+                                    // Writes an empty file.
+                                    File.WriteAllBytes(Path.Combine(filePath, lvi.SubItems[1].Text), new byte[0]);
+                                }
+                                catch (Exception ex)
+                                {
+                                    LogFile.AddMessage("Exception thrown while creating a save file: " + ex);
+                                    MessageBox.Show("Failed. You'll have to create one manually", Program.ProgramName);
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -222,9 +288,15 @@ namespace SLWModLoader
             }
         }
 
-        public ListView getListView()
+        private void listView1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            return listView1;
+            // Checks if there is a selected Item.
+            if(listView1.FocusedItem != null)
+            // Deletes the Item if the user presses delete.
+            if (e.KeyChar == (char)46)
+            {
+                listView1.Items.Remove(listView1.FocusedItem);
+            }
         }
     }
 }

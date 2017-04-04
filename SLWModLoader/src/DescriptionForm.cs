@@ -22,7 +22,7 @@ namespace SLWModLoader
         {
             InitializeComponent();
             authorLbl.LinkArea = new LinkArea(0, 0);
-            descriptionLbl.Text = Regex.Replace(description, "\\n", "\n"); ;
+            descriptionLbl.Text = description.Replace("\\n", "\n");
             titleLbl.Text = title + " v"+ version;
             authorLbl.Text = $"Made by {author} on {date}";
             if(authorUrl.Length > 0)

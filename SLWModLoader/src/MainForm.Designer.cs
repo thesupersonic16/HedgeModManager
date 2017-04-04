@@ -35,6 +35,7 @@
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.ModPage = new System.Windows.Forms.TabPage();
@@ -87,9 +88,10 @@
             this.desciptionToolStripMenuItem,
             this.checkForUpdatesToolStripMenuItem,
             this.openModFolderToolStripMenuItem,
+            this.editModToolStripMenuItem,
             this.deleteModToolStripMenuItem});
             this.ModsListContextMenu.Name = "ModsListContextMenu";
-            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 92);
+            this.ModsListContextMenu.Size = new System.Drawing.Size(202, 114);
             // 
             // desciptionToolStripMenuItem
             // 
@@ -122,6 +124,14 @@
             this.deleteModToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.deleteModToolStripMenuItem.Text = "Delete Mod";
             this.deleteModToolStripMenuItem.Click += new System.EventHandler(this.deleteModToolStripMenuItem_Click);
+            // 
+            // editModToolStripMenuItem
+            // 
+            this.editModToolStripMenuItem.Enabled = false;
+            this.editModToolStripMenuItem.Name = "editModToolStripMenuItem";
+            this.editModToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.editModToolStripMenuItem.Text = "Edit Mod";
+            this.editModToolStripMenuItem.Click += new System.EventHandler(this.editModToolStripMenuItem_Click);
             // 
             // MainPanel
             // 
@@ -573,6 +583,7 @@
         private System.Windows.Forms.ToolStripMenuItem desciptionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteModToolStripMenuItem;
         private System.Windows.Forms.GroupBox PatchGroupBox;
+        private System.Windows.Forms.ToolStripMenuItem editModToolStripMenuItem;
     }
 }
 

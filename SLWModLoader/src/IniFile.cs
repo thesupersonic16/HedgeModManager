@@ -229,7 +229,6 @@ namespace SLWModLoader
                         case '\\':
                             if (i + 1 == nextLine.Length)
                                 goto default;
-
                             i++;
                             switch (nextLine[i])
                             {
@@ -242,6 +241,7 @@ namespace SLWModLoader
                                     break;
 
                                 default:
+                                    stringBuilder.Append(nextLine[i-1]);
                                     stringBuilder.Append(nextLine[i]);
                                     break;
                             }

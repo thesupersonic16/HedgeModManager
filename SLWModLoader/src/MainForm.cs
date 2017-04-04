@@ -588,7 +588,7 @@ namespace SLWModLoader
         private void ModsList_SelectedIndexChanged(object sender, EventArgs e)
         {
             MoveUpAll.Enabled = MoveDownAll.Enabled = MoveUpButton.Enabled = MoveDownButton.Enabled = RemoveModButton.Enabled =
-                deleteModToolStripMenuItem.Enabled = checkForUpdatesToolStripMenuItem.Enabled = desciptionToolStripMenuItem.Enabled = 
+                editModToolStripMenuItem.Enabled = deleteModToolStripMenuItem.Enabled = checkForUpdatesToolStripMenuItem.Enabled = desciptionToolStripMenuItem.Enabled = 
                 openModFolderToolStripMenuItem.Enabled = ModsList.SelectedItems.Count == 1;
         }
 
@@ -781,6 +781,13 @@ namespace SLWModLoader
                     LogFile.AddMessage("Button Name: " + ((Button)sender).Text);
                 }
             }
+        }
+
+        private void editModToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NewModForm nmf = new NewModForm(ModsDb.GetMod(ModsList.FocusedItem.Text));
+            nmf.ShowDialog();
+            RefreshModsList();
         }
     }
 }
