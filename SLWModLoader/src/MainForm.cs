@@ -164,7 +164,7 @@ namespace SLWModLoader
             if (MessageBox.Show("Install SLW Mod Loader in \n"+path+"?", Resources.ApplicationTitle,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                string[] files = new string[] { "SLWModLoader.exe", "cpkredir.dll", "cpkredir.ini", "cpkredir.txt" };
+                string[] files = new string[] { Program.ExecutableName, "cpkredir.dll", "cpkredir.ini", "cpkredir.txt" };
                 foreach (string file in files)
                 {
                     var filePath = Path.Combine(Program.StartDirectory, file);
@@ -185,7 +185,7 @@ namespace SLWModLoader
                 IWshRuntimeLibrary.WshShell wsh = new IWshRuntimeLibrary.WshShell();
                 IWshRuntimeLibrary.IWshShortcut shortcut = wsh.CreateShortcut(shortcutPath) as IWshRuntimeLibrary.IWshShortcut;
                 shortcut.Description = "SLWModLoader - "+gameName;
-                shortcut.TargetPath = Path.Combine(path, "SLWModLoader.exe");
+                shortcut.TargetPath = Path.Combine(path, Program.ExecutableName);
                 shortcut.WorkingDirectory = path;
                 shortcut.Save();
                 LogFile.AddMessage("    Done.");
@@ -545,29 +545,57 @@ namespace SLWModLoader
                 try
                 {
                     WebClient wc = new WebClient();
-                    wc.DownloadFile(modItem.UpdateServer + "mod_version.ini", Path.Combine(modItem.RootDirectory, "mod_version.ini.temp"));
-                    IniFile mod_version = new IniFile(Path.Combine(modItem.RootDirectory, "mod_version.ini.temp"));
-                    if (mod_version["Main"]["VersionString"] != modItem.Version)
-                    {
-                        if (MessageBox.Show($"There's a newer version of {modItem.Title} available!\n\n"+
-                                $"Do you want to update from version {modItem.Version} to " +
-                                $"{mod_version["Main"]["VersionString"]}? (about {mod_version["Main"]["DownloadSizeString"]})",
-                                Program.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        {
-                            UpdateModForm muf = new UpdateModForm(modItem.Title, wc.DownloadString(modItem.UpdateServer + "mod_update_files.txt"),
-                                modItem.RootDirectory);
-                            muf.ShowDialog();
-                            RefreshModsList();
+
+                    if(modItem.UpdateServer.EndsWith(".txt"))
+                    { // raw txt file.
+                        MessageBox.Show("Not Implemented Yet", Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }else if(modItem.UpdateServer.EndsWith("/") || modItem.UpdateServer.EndsWith("mod_version.ini"))
+                    { // mod_version.ini file.
+                        var mod_version_url = modItem.UpdateServer.EndsWith("/") ? modItem.UpdateServer + "mod_version.ini" : modItem.UpdateServer;
+                        wc.DownloadFile(mod_version_url, Path.Combine(modItem.RootDirectory, "mod_version.ini.temp"));
+                        IniFile mod_version = new IniFile(Path.Combine(modItem.RootDirectory, "mod_version.ini.temp"));
+                        if (mod_version["Main"]["VersionString"] != modItem.Version)
+                        { // New Version is Available.
+                            if (MessageBox.Show($"There's a newer version of {modItem.Title} available!\n\n"+
+                                    $"Do you want to update from version {modItem.Version} to " +
+                                    $"{mod_version["Main"]["VersionString"]}? (about {mod_version["Main"]["DownloadSizeString"]})",
+                                    Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            {
+                                // URL to mod_update_files.txt
+                                var mod_update_files_url = modItem.UpdateServer.EndsWith("/") ? modItem.UpdateServer + "mod_update_files.txt" :
+                                    modItem.UpdateServer.Substring(0, modItem.UpdateServer.Length - 15) + "mod_update_files.txt";
+                                Dictionary<string, string> files = new Dictionary<string, string>();
+                                // Downloads mod_update_files.txt
+                                var mod_update_files = wc.DownloadString(mod_update_files_url);
+                                // Splits all the lines in mod_update_files.txt into an array.
+                                string[] split = mod_update_files.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                                // Adds the file name and url to the files array.
+                                foreach (var line in split)
+                                {
+                                    // Checks if the line starts with ';' if does then continue to the next line.
+                                    if (line.StartsWith(";")) continue;
+                                    files.Add(line.Split(':')[0], line.Substring(line.IndexOf(":") + 1));
+                                }
+
+                                UpdateModForm muf = new UpdateModForm(modItem.Title, files, modItem.RootDirectory);
+                                muf.ShowDialog();
+                                RefreshModsList();
+                            }
+                        }
+                        else
+                        { // Mod is up to date.or is newer then the one on the update server.
+                            MessageBox.Show($"{modItem.Title} is already up to date.", Program.ProgramName);
                         }
                     }
                     else
                     {
-                        MessageBox.Show($"{modItem.Title} is already up to date.");
+                        MessageBox.Show("Unknown file type.", Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+
                 }catch(Exception ex)
                 {
                     AddMessage("Exception thrown while updating: " + ex);
-                    MessageBox.Show("Exception thrown while updating: \n\n" + ex);
+                    MessageBox.Show("Exception thrown while updating: \n\n" + ex, Program.ProgramName);
                 }
             }
         }
