@@ -42,11 +42,13 @@ namespace SLWModLoader
             if (File.Exists(LWExecutablePath))
             {
                 Text += " - Sonic Lost World";
+                LogFile.AddMessage("Found Sonic Lost World.");
                 PatchGroupBox.Visible = false;
             }
             if (File.Exists(GensExecutablePath))
             {
                 Text += " - Sonic Generations";
+                LogFile.AddMessage("Found Sonic Generations");
                 GenerationsPatches.Add("Enable Blue Trail", Resources.Enable_Blue_Trail);
                 GenerationsPatches.Add("Disable Blue Trail", Resources.Disable_Blue_Trail);
                 GenerationsPatches.Add("", null);
@@ -65,6 +67,16 @@ namespace SLWModLoader
                     };
                     btn.Click += new EventHandler(PatchButton_Click);
                     PatchGroupBox.Controls.Add(btn);
+                }
+            }
+
+            if (!Directory.Exists(ModsFolderPath))
+            {
+                if (MessageBox.Show(Resources.CannotFindModsDirectoryText, Resources.ApplicationTitle,
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    LogFile.AddMessage($"Creating mods folder at \"{ModsFolderPath}\"...");
+                    Directory.CreateDirectory(ModsFolderPath);
                 }
             }
 
@@ -146,15 +158,6 @@ namespace SLWModLoader
                 return;
             }
 
-            if (!Directory.Exists(ModsFolderPath))
-            {
-                if (MessageBox.Show(Resources.CannotFindModsDirectoryText, Resources.ApplicationTitle,
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    LogFile.AddMessage($"Creating mods folder at \"{ModsFolderPath}\"...");
-                    Directory.CreateDirectory(ModsFolderPath);
-                }
-            }
             new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
         }
 
@@ -297,7 +300,8 @@ namespace SLWModLoader
             }
             catch (Exception ex)
             {
-                AddMessage("Exception thrown while saving ModsDB and starting: "+ex);
+                AddMessage("Exception thrown while saving ModsDB and starting.", ex, new String[]
+                { $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}", $"Root Directory: {ModsDb.RootDirectory}" });
             }
         }
 
@@ -310,7 +314,8 @@ namespace SLWModLoader
             }
             catch (Exception ex)
             {
-                AddMessage("Exception thrown while saving ModsDB: "+ex);
+                AddMessage("Exception thrown while saving ModsDB.", ex, new String[]
+                { $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}", $"Root Directory: {ModsDb.RootDirectory}" });
             }
         }
 
@@ -322,7 +327,8 @@ namespace SLWModLoader
             }
             catch (Exception ex)
             {
-                AddMessage("Exception thrown while starting: " + ex);
+                AddMessage("Exception thrown while starting a game.", ex);
+                Close();
             }
         }
 
@@ -379,7 +385,7 @@ namespace SLWModLoader
             }
             catch (Exception ex)
             {
-                try { AddMessage("Exception thrown while checking for Mod Loader updates: " + ex); } catch { }
+                AddMessage("Exception thrown while checking for Mod Loader updates.", ex);
             }
 
         }
@@ -392,6 +398,21 @@ namespace SLWModLoader
             if (message.Length < 128)
             #endif
             Invoke(new Action(() => StatusLabel.Text = message));
+        }
+
+        public void AddMessage(string message, Exception exception, string[] extraData = null)
+        {
+            AddMessage(message);
+            LogFile.AddMessage("    Exception: "+exception);
+            if (extraData != null)
+            {
+                LogFile.AddMessage("    Extra Data: ");
+                foreach (var s in extraData)
+                {
+                    LogFile.AddMessage("        "+s);
+                }
+            }
+            MessageBox.Show(Resources.ResourceManager.GetString("ExceptionText"), Program.ProgramName);
         }
 
         public bool isCPKREDIRInstalled()
@@ -422,7 +443,7 @@ namespace SLWModLoader
             }
             catch(Exception ex)
             {
-                AddMessage("Exception thrown while checking executeable: " + ex);
+                AddMessage("Exception thrown while checking executeable.", ex, new String[] { $"Is Generations: {gens}" });
             }
             AddMessage("Failed to check executeable");
             return false;
@@ -500,7 +521,8 @@ namespace SLWModLoader
             }
             catch (Exception ex)
             {
-                AddMessage("Exception thrown while installing/uninstalling CPKREDIR: " + ex);
+                AddMessage("Exception thrown while installing/uninstalling CPKREDIR.", ex, new String[]{
+                    $"executablePath: {executablePath}", $"install: {install}" });
             }
             return false;
         }
@@ -594,8 +616,7 @@ namespace SLWModLoader
 
                 }catch(Exception ex)
                 {
-                    AddMessage("Exception thrown while updating: " + ex);
-                    MessageBox.Show("Exception thrown while updating: \n\n" + ex, Program.ProgramName);
+                    AddMessage("Exception thrown while updating.", ex, new String[]{ $"Update Server: {modItem.UpdateServer}" });
                 }
             }
         }
@@ -805,8 +826,7 @@ namespace SLWModLoader
                 }
                 catch (Exception ex)
                 {
-                    LogFile.AddMessage("Exception thrown while applying a patch: " + ex);
-                    LogFile.AddMessage("Button Name: " + ((Button)sender).Text);
+                    AddMessage("Exception thrown while applying a patch.", ex, new String[] { "Button Name: " + ((Button)sender).Text });
                 }
             }
         }
