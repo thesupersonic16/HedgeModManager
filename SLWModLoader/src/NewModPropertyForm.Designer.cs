@@ -67,7 +67,7 @@
             this.ValueTextBox.Location = new System.Drawing.Point(59, 64);
             this.ValueTextBox.Name = "ValueTextBox";
             this.ValueTextBox.Size = new System.Drawing.Size(220, 20);
-            this.ValueTextBox.TabIndex = 2;
+            this.ValueTextBox.TabIndex = 1;
             this.ValueTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ValueTextBox_KeyPress);
             // 
             // PropNameLabel
@@ -103,7 +103,7 @@
             this.CancelButton.Location = new System.Drawing.Point(204, 88);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 6;
+            this.CancelButton.TabIndex = 4;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
@@ -127,8 +127,9 @@
             this.GroupComboBox.Location = new System.Drawing.Point(59, 90);
             this.GroupComboBox.Name = "GroupComboBox";
             this.GroupComboBox.Size = new System.Drawing.Size(139, 21);
-            this.GroupComboBox.TabIndex = 8;
+            this.GroupComboBox.TabIndex = 3;
             this.GroupComboBox.Text = "Main";
+            this.GroupComboBox.SelectedIndexChanged += new System.EventHandler(this.GroupComboBox_SelectedIndexChanged);
             // 
             // TypeComboBox
             // 
@@ -140,7 +141,7 @@
             this.TypeComboBox.Location = new System.Drawing.Point(285, 64);
             this.TypeComboBox.Name = "TypeComboBox";
             this.TypeComboBox.Size = new System.Drawing.Size(75, 21);
-            this.TypeComboBox.TabIndex = 9;
+            this.TypeComboBox.TabIndex = 2;
             this.TypeComboBox.Text = "String";
             this.TypeComboBox.SelectedIndexChanged += new System.EventHandler(this.TypeComboBox_SelectedIndexChanged);
             // 

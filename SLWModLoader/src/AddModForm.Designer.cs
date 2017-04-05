@@ -69,7 +69,7 @@
             this.folderInstallRBtn.Margin = new System.Windows.Forms.Padding(2);
             this.folderInstallRBtn.Name = "folderInstallRBtn";
             this.folderInstallRBtn.Size = new System.Drawing.Size(141, 18);
-            this.folderInstallRBtn.TabIndex = 2;
+            this.folderInstallRBtn.TabIndex = 1;
             this.folderInstallRBtn.Text = "Installing it from a &folder";
             this.folderInstallRBtn.UseVisualStyleBackColor = true;
             // 
@@ -81,7 +81,7 @@
             this.makingItRBtn.Margin = new System.Windows.Forms.Padding(2);
             this.makingItRBtn.Name = "makingItRBtn";
             this.makingItRBtn.Size = new System.Drawing.Size(87, 18);
-            this.makingItRBtn.TabIndex = 3;
+            this.makingItRBtn.TabIndex = 2;
             this.makingItRBtn.Text = "&Making one";
             this.makingItRBtn.UseVisualStyleBackColor = true;
             // 
@@ -92,7 +92,7 @@
             this.okBtn.Margin = new System.Windows.Forms.Padding(2);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(64, 22);
-            this.okBtn.TabIndex = 4;
+            this.okBtn.TabIndex = 3;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
             this.okBtn.Click += new System.EventHandler(this.okBtn_Click);

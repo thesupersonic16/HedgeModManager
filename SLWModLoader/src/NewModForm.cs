@@ -36,29 +36,41 @@ namespace SLWModLoader
             modName = Path.GetFileName(mod.RootDirectory);
             // Automatically fill in some info.
             IniFile ini = mod.GetIniFile();
-            foreach (ListViewGroup group in listView1.Groups)
+
+            for (int i = 0; i < ini.GroupCount; ++i)
             {
-                try
+                IniGroup iniGroup = ini[i];
+
+                ListViewGroup group = null;
+                foreach (ListViewGroup group2 in listView1.Groups)
                 {
-                    IniGroup iniGroup = ini[group.Header];
-                    for(int i = 0; i < iniGroup.ParameterCount; ++i)
+                    if(group2.Header.ToLower().Equals(iniGroup.GroupName.ToLower()))
                     {
-                        var key = iniGroup[i].Key.Replace("\n", "\\n");
-                        var value = iniGroup[i].Value.Replace("\n", "\\n");
-                        var done = false;
-                        foreach(ListViewItem lvi in group.Items)
-                        {
-                            if (lvi.SubItems[0].Text.ToLower().Equals(key.ToLower()))
-                            {
-                                lvi.SubItems[1].Text = value;
-                                done = true;
-                            }
-                        }
-                        if(!done)
-                            AddProperty(key, value, listView1.Groups.IndexOf(group), "String");
+                        group = group2;
+                        break;
                     }
                 }
-                catch {}
+
+                if (group == null)
+                    group = AddGroup(iniGroup.GroupName);
+
+                for (int i2 = 0; i2 < iniGroup.ParameterCount; ++i2)
+                {
+                    var key = iniGroup[i2].Key.Replace("\n", "\\n");
+                    var value = iniGroup[i2].Value.Replace("\n", "\\n");
+                    var hasProperty = false;
+                    foreach (ListViewItem lvi in group.Items)
+                    {
+                        if (lvi.SubItems[0].Text.ToLower().Equals(key.ToLower()))
+                        {
+                            lvi.SubItems[1].Text = value;
+                            hasProperty = true;
+                        }
+                    }
+                    if (!hasProperty)
+                        AddProperty(key, value, listView1.Groups.IndexOf(group), "String");
+                }
+
             }
         }
 
@@ -213,6 +225,13 @@ namespace SLWModLoader
             listView1.Items.Add(lvi);
         }
 
+        public ListViewGroup AddGroup(string name)
+        {
+            ListViewGroup lvg = new ListViewGroup(name);
+            listView1.Groups.Add(lvg);
+            return lvg;
+        }
+
         public ListView getListView()
         {
             return listView1;
@@ -233,10 +252,13 @@ namespace SLWModLoader
             string filePath = Path.Combine(MainForm.ModsFolderPath, modName);
             Directory.CreateDirectory(filePath);
             IniFile iniFile = new IniFile();
-            iniFile.AddGroup("Main");
-            iniFile.AddGroup("Desc");
+
+            // Adds all the groups.
+            foreach (ListViewGroup group in listView1.Groups)
+                if(group.Items.Count > 0)
+                    iniFile.AddGroup(group.Header);
             
-            // Adds all the properties and groups into the ini file
+            // Adds all the properties into the ini file.
             foreach (ListViewGroup lvg in listView1.Groups)
             {
                 if (lvg.Items.Count == 0)

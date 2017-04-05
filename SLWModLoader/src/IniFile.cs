@@ -150,6 +150,7 @@ namespace SLWModLoader
 
         public string IniPath { get; set; }
         public string IniName { get; set; }
+        public int GroupCount => groups.Count;
 
         public IniFile()
         {
@@ -197,6 +198,8 @@ namespace SLWModLoader
                 throw new Exception(message);
             }
         }
+
+        internal IniGroup this[int index] => index < groups.Count ? groups.ElementAt(index) : null;
 
         public void Read(TextReader textReader)
         {

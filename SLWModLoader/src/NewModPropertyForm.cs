@@ -21,6 +21,17 @@ namespace SLWModLoader
             InitializeComponent();
             this.modform = modform;
             this.listViewItem = listViewItem;
+
+            // Clears all items in GroupComboBox.
+            GroupComboBox.Items.Clear();
+            // Adds all groups from the ListView into GroupComboBox.
+            foreach (ListViewGroup group in modform.getListView().Groups)
+            {
+                GroupComboBox.Items.Add(group.Header);
+            }
+            // Adds "Add Group" to GroupComboBox so the user can create groups.
+            GroupComboBox.Items.Add("Add Group");
+
             Text = "New Property";
             if(listViewItem != null)
             {
@@ -75,6 +86,17 @@ namespace SLWModLoader
 
         private void AddButton_Click(object sender, EventArgs e)
         {
+            if (GroupComboBox.SelectedItem as string == "Add Group")
+            {
+                if(textBox1.Text.Length > 0)
+                {
+                    GroupComboBox.Items.Add(modform.AddGroup(textBox1.Text).Header);
+                    GroupComboBox.SelectedIndex = GroupComboBox.Items.Count - 1;
+                    GroupComboBox.Items.Remove("Add Group");
+                    GroupComboBox.Items.Add("Add Group");
+                }
+                return;
+            }
             if(listViewItem != null)
             {
                 switch (TypeComboBox.Text)
@@ -128,6 +150,32 @@ namespace SLWModLoader
             if (e.KeyChar == (char)13)
             {
                 AddButton_Click(null, null);
+            }
+        }
+
+        private void GroupComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (GroupComboBox.SelectedItem as string == "Add Group")
+            { // If the user selects "Add Group".
+                ValueTextBox.Enabled = ValueNumericUpDown.Enabled =
+                    ValueCheckBox.Enabled = TypeComboBox.Enabled = false;
+                Text = "New Group";
+                label1.Text = "New Group: ";
+                textBox1.Text = "New Group";
+            }
+            else
+            { // If the user selects a group other then "Add Group".
+                ValueTextBox.Enabled = ValueNumericUpDown.Enabled =
+                    ValueCheckBox.Enabled = TypeComboBox.Enabled = true;
+                Text = "New Property";
+                label1.Text = "New Property: ";
+                textBox1.Text = "";
+                if (listViewItem != null)
+                {
+                    Text = "Edit Property";
+                    label1.Text = "Edit Property: " + listViewItem.Text;
+                    textBox1.Text = listViewItem.Text;
+                }
             }
         }
     }
