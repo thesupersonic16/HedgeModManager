@@ -300,8 +300,8 @@ namespace SLWModLoader
             }
             catch (Exception ex)
             {
-                AddMessage("Exception thrown while saving ModsDB and starting.", ex, new String[]
-                { $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}", $"Root Directory: {ModsDb.RootDirectory}" });
+                AddMessage("Exception thrown while saving ModsDB and starting.", ex, 
+                $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}", $"Root Directory: {ModsDb.RootDirectory}");
             }
         }
 
@@ -314,8 +314,8 @@ namespace SLWModLoader
             }
             catch (Exception ex)
             {
-                AddMessage("Exception thrown while saving ModsDB.", ex, new String[]
-                { $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}", $"Root Directory: {ModsDb.RootDirectory}" });
+                AddMessage("Exception thrown while saving ModsDB.", ex, 
+                $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}", $"Root Directory: {ModsDb.RootDirectory}");
             }
         }
 
@@ -400,9 +400,9 @@ namespace SLWModLoader
             Invoke(new Action(() => StatusLabel.Text = message));
         }
 
-        public void AddMessage(string message, Exception exception, string[] extraData = null)
+        public static void AddMessage(string message, Exception exception, params string[] extraData)
         {
-            AddMessage(message);
+            LogFile.AddMessage(message);
             LogFile.AddMessage("    Exception: "+exception);
             if (extraData != null)
             {
@@ -443,7 +443,7 @@ namespace SLWModLoader
             }
             catch(Exception ex)
             {
-                AddMessage("Exception thrown while checking executeable.", ex, new String[] { $"Is Generations: {gens}" });
+                AddMessage("Exception thrown while checking executeable.", ex, $"Is Generations: {gens}");
             }
             AddMessage("Failed to check executeable");
             return false;
@@ -521,8 +521,7 @@ namespace SLWModLoader
             }
             catch (Exception ex)
             {
-                AddMessage("Exception thrown while installing/uninstalling CPKREDIR.", ex, new String[]{
-                    $"executablePath: {executablePath}", $"install: {install}" });
+                AddMessage("Exception thrown while installing/uninstalling CPKREDIR.", ex, $"executablePath: {executablePath}", $"install: {install}");
             }
             return false;
         }
@@ -616,7 +615,7 @@ namespace SLWModLoader
 
                 }catch(Exception ex)
                 {
-                    AddMessage("Exception thrown while updating.", ex, new String[]{ $"Update Server: {modItem.UpdateServer}" });
+                    AddMessage("Exception thrown while updating.", ex, $"Update Server: {modItem.UpdateServer}");
                 }
             }
         }
@@ -826,7 +825,7 @@ namespace SLWModLoader
                 }
                 catch (Exception ex)
                 {
-                    AddMessage("Exception thrown while applying a patch.", ex, new String[] { "Button Name: " + ((Button)sender).Text });
+                    AddMessage("Exception thrown while applying a patch.", ex, "Button Name: " + ((Button)sender).Text);
                 }
             }
         }

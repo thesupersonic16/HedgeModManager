@@ -281,8 +281,8 @@ namespace SLWModLoader
                                 }
                                 catch (Exception ex)
                                 {
-                                    LogFile.AddMessage("Exception thrown while creating a save file: " + ex);
-                                    MessageBox.Show("Failed. You'll have to create one manually", Program.ProgramName);
+                                    MainForm.AddMessage("Exception thrown while creating a save file.", ex, $"Save File Location: {lvi.SubItems[1].Text}");
+                                    MessageBox.Show("Failed to create save file. You'll have to create one manually.", Program.ProgramName);
                                 }
                             }
                         }
