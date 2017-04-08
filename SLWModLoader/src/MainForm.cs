@@ -623,7 +623,14 @@ namespace SLWModLoader
                         MessageBox.Show("Unknown file type.", Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                }catch(Exception ex)
+                }
+                catch (WebException ex)
+                {
+                    MessageBox.Show("Failed to check for updates.\nMessage: " + ex.Message, Program.ProgramName);
+                    LogFile.AddMessage("Exception thrown while updating.");
+                    LogFile.AddMessage("    Exception: " + ex);
+                }
+                catch (Exception ex)
                 {
                     AddMessage("Exception thrown while updating.", ex, $"Update Server: {modItem.UpdateServer}");
                 }
