@@ -195,6 +195,16 @@ namespace SLWModLoader
 
                 MessageBox.Show("Done.");
 
+                try
+                {
+                    ProcessStartInfo info = new ProcessStartInfo();
+                    info.Arguments = $" /c sleep 3 & del \"{Application.ExecutablePath}\" & pause";
+                    info.WindowStyle = ProcessWindowStyle.Hidden;
+                    info.CreateNoWindow = true;
+                    info.FileName = "cmd.exe";
+                    Process.Start(info);
+                }
+                catch { }
                 return true;
             }
             return false;
