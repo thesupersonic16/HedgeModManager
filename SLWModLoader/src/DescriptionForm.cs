@@ -25,9 +25,19 @@ namespace SLWModLoader
             descriptionLbl.Text = description.Replace("\\n", "\n");
             titleLbl.Text = title + " v"+ version;
             authorLbl.Text = $"Made by {author} on {date}";
-            if(authorUrl.Length > 0)
-                authorLbl.LinkArea = new LinkArea(8, author.Length);
             this.authorUrl = authorUrl;
+
+            if (authorUrl.Length > 0)
+            {
+                int i = 0;
+                var autherSplit = author.Split(new string[] { " & " }, StringSplitOptions.None);
+                var authorUrlSplit = authorUrl.Split(new string[] { " & " }, StringSplitOptions.None);
+                foreach (string str in autherSplit)
+                {
+                    authorLbl.Links.Add(new LinkLabel.Link(8 + i, str.Length, authorUrlSplit[Array.IndexOf(autherSplit, str)]));
+                    i += str.Length + 3;
+                }
+            }
         }
 
         public DescriptionForm(Mod mod)
@@ -162,7 +172,15 @@ namespace SLWModLoader
 
         private void authorLbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(authorUrl);
+            try
+            {
+                if (e.Link.LinkData == null || (e.Link.LinkData as string).Length == 0) return;
+                if((e.Link.LinkData as string).StartsWith("http"))
+                {
+                    Process.Start(e.Link.LinkData as string);
+                }
+            }
+            catch { }
         }
     }
 }
