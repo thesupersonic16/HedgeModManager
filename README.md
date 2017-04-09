@@ -9,7 +9,7 @@ Version 6.0 will have support for Sonic Generations, and the same deal applies t
 SLW Mod Loader does not support pirated copies of SLW/SG, nor will it ever support pirated copies.
 
 ##How do I use this?
-After [downloading the latest binary](https://github.com/Radfordhound/SLW-Mod-Loader/releases/latest), simply make a "mods" folder within your Sonic Lost World installation directory, then place a bunch of folders inside said mods directory (one for each mod) each containing all the modified files you'd like the game to load. Then, just fire up the mod loader (SLWModLoader.exe), check the checkbox(es) next to the mods you'd like to use in-game, and click "Play!"
+After [downloading the latest binary](https://github.com/thesupersonic16/SLW-Mod-Loader/releases/latest), simply make a "mods" folder within your Sonic Lost World or within your Sonic Generations installation directory, then place a bunch of folders inside said mods directory (one for each mod) each containing a mod.ini file and all of the modified files you'd like the game to load. Then, just fire up the mod loader (SLWModLoader.exe), check the checkbox(es) next to the mods you'd like to use in-game, and click "Save and Play"
 
 ###Mod installation tutorial by "Mac" (made for 1.4 but still applies to later revisions):
 
@@ -22,18 +22,26 @@ Mods designed for the mod loader come in the form of folders that contain the fo
 
 - A "mod.ini" file (a file which describes your mod, as well as all it's various details).
 - A "disk" folder
-  - A "sonic2013_patch_0" folder
+  - A "sonic2013_patch_0" folder (for Sonic Lost World)
     - All your modified files/folders from the root of Sonic Lost World's .cpk files on in their raw form (typically .pac files).
+  - A "bb" folder (for Sonic Generations)
+    -  All your modified files/folders from the root of Sonic Generations' bb.cpk in their raw form.
+  - A "bb2" folder (for Sonic Generations)
+    -  All your modified files/folders from the root of Sonic Generations' bb2.cpk in their raw form.
+  - A "bb3" folder (for Sonic Generations)
+    -  All your modified files/folders from the root of Sonic Generations' bb3.cpk in their raw form.
 
 So long as the structure of your mod remains in this way, virtually any file in the game can be modified and released as part of your mod.
 
 As an example, the extremely basic "Tanic the Hedgehog" recolor mod has a file/folder structure that goes like so:
-
 - A "mod.ini" file
 - A "disk" folder
-  - A "sonic2013_patch_0" folder
+  - A "sonic2013_patch_0" folder (Sonic Lost World)
     - Sonic.pac
     - Sonic.pac.00
+  - A "bb3" folder (Sonic Generations)
+    - Sonic.ar.00
+    - Sonic.arl
 
 Wereas the "MLG Speedrun Zone 1" mod (which modifies certain files not on the root of the .cpk) has a file/folder structure that goes like so:
 
@@ -74,7 +82,7 @@ The following is a list of the most important values that can be used in a mod.i
 
 ###Main
 
-**IncludeDir0-??** Specifies which folders will be included with your mod, allowing you to modify the default file/folder structure mentioned above.
+**IncludeDir?** Specifies which folders will be included with your mod, allowing you to modify the default file/folder structure mentioned above.
 
 **IncludeDirCount** Specifies how many folders will be included with your mod.
 
@@ -84,7 +92,7 @@ The following is a list of the most important values that can be used in a mod.i
 
 **Title** The name of your mod as shown in the mod loader.
 
-**Description** A description of your mod that is shown when your mod is highlighted in the mod loader.
+**Description** A description of your mod that is shown in the description window in the mod loader.
 Typing a "\n" in this value will indicate a new line within the mod loader, **which should be done to keep your mods loadable!**
 
 **Date** The date the mod was originally created as shown in the mod loader.
