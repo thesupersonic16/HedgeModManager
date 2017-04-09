@@ -202,10 +202,19 @@ namespace SLWModLoader
 
                 if (File.Exists(iniPath))
                 {
-                    Mod mod = new Mod(folder);
-                    AddMod(mod);
+                    try
+                    {
 
-                    //LogFile.AddMessage($"Found mod: {mod.Title}");
+                        Mod mod = new Mod(folder);
+                        AddMod(mod);
+
+                        //LogFile.AddMessage($"Found mod: {mod.Title}");
+                    }
+                    catch(Exception ex)
+                    {
+                        MainForm.AddMessage("Exception thrown while loading mods.", ex,
+                        $"Active Mod Count: {ActiveModCount}", $"File Path: {FilePath}", $"Root Directory: {RootDirectory}");
+                    }
                 }
             }
         }
@@ -237,8 +246,8 @@ namespace SLWModLoader
                 mod.RootDirectory = Path.Combine(RootDirectory, Path.GetDirectoryName(mod.RootDirectory));
             }
 
-            mods.Add(mod);
             modsDb["Mods"].AddParameter(mod.Title, mod.FilePath);
+            mods.Add(mod);
         }
 
         public void RemoveMod(Mod mod)

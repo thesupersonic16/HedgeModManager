@@ -34,8 +34,8 @@
             this.desciptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openModFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.ModPage = new System.Windows.Forms.TabPage();
@@ -53,6 +53,7 @@
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.AutoCheckUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.PatchGroupBox = new System.Windows.Forms.GroupBox();
             this.InstallUninstallButton = new System.Windows.Forms.Button();
             this.PatchLabel = new System.Windows.Forms.Label();
@@ -117,14 +118,6 @@
             this.openModFolderToolStripMenuItem.Text = "Open Containing Folder";
             this.openModFolderToolStripMenuItem.Click += new System.EventHandler(this.openModFolderToolStripMenuItem_Click);
             // 
-            // deleteModToolStripMenuItem
-            // 
-            this.deleteModToolStripMenuItem.Enabled = false;
-            this.deleteModToolStripMenuItem.Name = "deleteModToolStripMenuItem";
-            this.deleteModToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.deleteModToolStripMenuItem.Text = "Delete Mod";
-            this.deleteModToolStripMenuItem.Click += new System.EventHandler(this.deleteModToolStripMenuItem_Click);
-            // 
             // editModToolStripMenuItem
             // 
             this.editModToolStripMenuItem.Enabled = false;
@@ -132,6 +125,14 @@
             this.editModToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.editModToolStripMenuItem.Text = "Edit Mod";
             this.editModToolStripMenuItem.Click += new System.EventHandler(this.editModToolStripMenuItem_Click);
+            // 
+            // deleteModToolStripMenuItem
+            // 
+            this.deleteModToolStripMenuItem.Enabled = false;
+            this.deleteModToolStripMenuItem.Name = "deleteModToolStripMenuItem";
+            this.deleteModToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.deleteModToolStripMenuItem.Text = "Delete Mod";
+            this.deleteModToolStripMenuItem.Click += new System.EventHandler(this.deleteModToolStripMenuItem_Click);
             // 
             // MainPanel
             // 
@@ -314,6 +315,7 @@
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.AutoCheckUpdateCheckBox);
             this.SettingsPage.Controls.Add(this.PatchGroupBox);
             this.SettingsPage.Controls.Add(this.InstallUninstallButton);
             this.SettingsPage.Controls.Add(this.PatchLabel);
@@ -327,9 +329,20 @@
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
             // 
+            // AutoCheckUpdateCheckBox
+            // 
+            this.AutoCheckUpdateCheckBox.AutoSize = true;
+            this.AutoCheckUpdateCheckBox.Location = new System.Drawing.Point(33, 72);
+            this.AutoCheckUpdateCheckBox.Name = "AutoCheckUpdateCheckBox";
+            this.AutoCheckUpdateCheckBox.Size = new System.Drawing.Size(138, 17);
+            this.AutoCheckUpdateCheckBox.TabIndex = 17;
+            this.AutoCheckUpdateCheckBox.Text = "Auto Check for updates";
+            this.AutoCheckUpdateCheckBox.UseVisualStyleBackColor = true;
+            this.AutoCheckUpdateCheckBox.CheckedChanged += new System.EventHandler(this.AutoCheckUpdateCheckBox_CheckedChanged);
+            // 
             // PatchGroupBox
             // 
-            this.PatchGroupBox.Location = new System.Drawing.Point(49, 92);
+            this.PatchGroupBox.Location = new System.Drawing.Point(49, 126);
             this.PatchGroupBox.Name = "PatchGroupBox";
             this.PatchGroupBox.Size = new System.Drawing.Size(431, 146);
             this.PatchGroupBox.TabIndex = 16;
@@ -584,6 +597,7 @@
         private System.Windows.Forms.ToolStripMenuItem deleteModToolStripMenuItem;
         private System.Windows.Forms.GroupBox PatchGroupBox;
         private System.Windows.Forms.ToolStripMenuItem editModToolStripMenuItem;
+        private System.Windows.Forms.CheckBox AutoCheckUpdateCheckBox;
     }
 }
 

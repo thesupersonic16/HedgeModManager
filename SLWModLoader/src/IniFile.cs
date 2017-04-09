@@ -186,6 +186,11 @@ namespace SLWModLoader
             AddGroup(iniGroup);
         }
 
+        public bool ContainsGroup(string key)
+        {
+            return groups.Any(t => t.GroupName == key);
+        }
+
         public IniGroup this[string groupName]
         {
             get

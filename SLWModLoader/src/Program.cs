@@ -10,6 +10,7 @@ namespace SLWModLoader
         public static string StartDirectory = Application.StartupPath;
         public static string ExecutableName = Path.GetFileName(Application.ExecutablePath);
         public const string ProgramName = "SLW Mod Loader";
+        public const string ProgramNameShort = "SLWModLoader";
         public const string VersionString = "6.0";
 
         //Methods

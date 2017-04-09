@@ -20,6 +20,9 @@ namespace SLWModLoader
         public static readonly string ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
         public static readonly string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
         public static Dictionary<string, byte[]> GenerationsPatches = new Dictionary<string, byte[]>();
+        public static IniFile cpkredirIni = null;
+        public static Thread modUpdatingThread;
+        public static bool exit = false;
         public ModsDatabase ModsDb;
 
         public MainForm()
@@ -29,10 +32,17 @@ namespace SLWModLoader
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if(modUpdatingThread != null && modUpdatingThread.IsAlive)
+            {
+                exit = true;
+                while (modUpdatingThread.IsAlive)
+                    Thread.Sleep(1000);
+            }
             LogFile.AddEmptyLine();
             LogFile.AddMessage("The form has been closed.");
 
             LogFile.Close();
+            cpkredirIni.Save();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -77,6 +87,29 @@ namespace SLWModLoader
                 {
                     LogFile.AddMessage($"Creating mods folder at \"{ModsFolderPath}\"...");
                     Directory.CreateDirectory(ModsFolderPath);
+                }
+            }
+
+            if(File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
+            {
+                try
+                {
+                    cpkredirIni = new IniFile(Path.Combine(Program.StartDirectory, "cpkredir.ini"));
+                    IniGroup group = null;
+                    if(cpkredirIni.ContainsGroup(Program.ProgramNameShort))
+                        group = cpkredirIni[Program.ProgramNameShort];
+                    else
+                    {
+                        group = new IniGroup(Program.ProgramNameShort);
+                        cpkredirIni.AddGroup(group);
+                    }
+                    if(!group.ContainsParameter("AutoCheckForUpdates"))
+                        group.AddParameter("AutoCheckForUpdates", false, typeof(bool));
+
+                    AutoCheckUpdateCheckBox.Checked = bool.Parse(group["AutoCheckForUpdates"]);
+                }catch(Exception ex)
+                {
+                    AddMessage("Exception thrown while loading configurations.", ex);
                 }
             }
 
@@ -159,6 +192,11 @@ namespace SLWModLoader
             }
 
             new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
+            if(AutoCheckUpdateCheckBox.Checked)
+            {
+                modUpdatingThread = new Thread(new ThreadStart(CheckAllModUpdates));
+                modUpdatingThread.Start();
+            }
         }
 
         public bool InstallModLoader(string path, string gameName)
@@ -230,19 +268,26 @@ namespace SLWModLoader
             {
                 Mod modItem = ModsDb.GetMod(i);
 
-                ListViewItem modListViewItem = new ListViewItem(modItem.Title);
-                modListViewItem.Tag = modItem;
-                modListViewItem.SubItems.Add(modItem.Version);
-                modListViewItem.SubItems.Add(modItem.Author);
-                modListViewItem.SubItems.Add(modItem.SaveFile.Length > 0 ? "Yes" : "No");
-                modListViewItem.SubItems.Add(modItem.UpdateServer.Length > 0 ? "Check" : "N/A");
-
-                if (ModsDb.IsModActive(modItem))
+                try
                 {
-                    modListViewItem.Checked = true;
-                }
+                    ListViewItem modListViewItem = new ListViewItem(modItem.Title);
+                    modListViewItem.Tag = modItem;
+                    modListViewItem.SubItems.Add(modItem.Version);
+                    modListViewItem.SubItems.Add(modItem.Author);
+                    modListViewItem.SubItems.Add(modItem.SaveFile.Length > 0 ? "Yes" : "No");
+                    modListViewItem.SubItems.Add(modItem.UpdateServer.Length > 0 ? "Check" : "N/A");
 
-                ModsList.Items.Add(modListViewItem);
+                    if (ModsDb.IsModActive(modItem))
+                    {
+                        modListViewItem.Checked = true;
+                    }
+
+                    ModsList.Items.Add(modListViewItem);
+                }catch(Exception ex)
+                {
+                    AddMessage("Exception thrown while adding mods to ModsList.", ex,
+                        $"Index: {i}", $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}", $"Root Directory: {ModsDb.RootDirectory}");
+                }
             }
 
             NoModsFoundLabel.Visible = linkLabel1.Visible = (ModsDb.ModCount <= 0);
@@ -536,58 +581,69 @@ namespace SLWModLoader
             return false;
         }
 
-        private void AboutButton_Click(object sender, EventArgs e)
+        public void CheckAllModUpdates()
         {
-            new AboutForm().ShowDialog();
+            var count = 0;
+            Invoke(new Action(() => count = ModsList.Items.Count));
+            for (int i = 0; i < count; ++i)
+            {
+                Mod modItem = null;
+                ListViewItem item = null;
+                Invoke(new Action(() => item = ModsList.Items[i]));
+                if (item == null)
+                    continue;
+                Invoke(new Action(() => modItem = ModsDb.GetMod(item.Text)));
+                if (modItem.UpdateServer.Length != 0)
+                {
+                    // TODO: Find a way to get the Update SubItem without hardcoding a number.
+                    Invoke(new Action(() => item.SubItems[4].Text = "Checking..."));
+                    string status = CheckForModUpdates(modItem.Title, true);
+                    if (exit)
+                        return;
+                    Invoke(new Action(() => item.SubItems[4].Text = status));
+                }
+            }
         }
 
-        private void ReportLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        public string CheckForModUpdates(string modName, bool silent = false)
         {
-            Process.Start("https://github.com/Radfordhound/SLW-Mod-Loader/issues/new");
-        }
+            string status = "";
+            var modItem = ModsDb.GetMod(modName == null ? ModsList.FocusedItem.Text : modName);
+            if (modItem == null) return status;
 
-
-        private void ScanExecuteableButton_Click(object sender, EventArgs e)
-        {
-            StatusLabel.Text = "";
-            PatchLabel.Text = (File.Exists(LWExecutablePath) ? Path.GetFileName(LWExecutablePath) : Path.GetFileName(GensExecutablePath)) +
-                ": " + (isCPKREDIRInstalled() ? "Installed" : "Not Installed");
-        }
-
-        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var modItem = ModsDb.GetMod(ModsList.FocusedItem.Text);
-            if (modItem == null) return;
-            
-            if(modItem.UpdateServer.Length == 0 && modItem.Url.Length != 0)
+            if (modItem.UpdateServer.Length == 0 && modItem.Url.Length != 0)
             { // No Update Server, But has Website
-                if (MessageBox.Show($"{Program.ProgramName} can not check for updates for {modItem.Title} because no update server has been set.\n\n" +
+                if (!silent && MessageBox.Show($"{Program.ProgramName} can not check for updates for {modItem.Title} because no update server has been set.\n\n" +
                     $"This Mod does have a website, do you want to open it to check for updates manually?\n\n URL: {modItem.Url}", Program.ProgramName,
                     MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Process.Start(modItem.Url);
                 }
-            }else if (modItem.UpdateServer.Length == 0 && modItem.Url.Length == 0)
+            }
+            else if (modItem.UpdateServer.Length == 0 && modItem.Url.Length == 0)
             { // No Update Server and Website
-                MessageBox.Show($"{Program.ProgramName} can not check for updates for {modItem.Title} because no update server has been set.",
+                if (!silent) MessageBox.Show($"{Program.ProgramName} can not check for updates for {modItem.Title} because no update server has been set.",
                     Program.ProgramName, MessageBoxButtons.OK);
-            }else if (modItem.UpdateServer.Length != 0)
+            }
+            else if (modItem.UpdateServer.Length != 0)
             { // Has Update Server
                 try
                 {
                     WebClient wc = new WebClient();
 
-                    if(modItem.UpdateServer.EndsWith(".txt"))
+                    if (modItem.UpdateServer.EndsWith(".txt"))
                     { // raw txt file.
-                        MessageBox.Show("Not Implemented Yet", Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }else if(modItem.UpdateServer.EndsWith("/") || modItem.UpdateServer.EndsWith("mod_version.ini"))
+                        if (!silent) MessageBox.Show("Not Implemented Yet", Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        status = "Not Implemented";
+                    }
+                    else if (modItem.UpdateServer.EndsWith("/") || modItem.UpdateServer.EndsWith("mod_version.ini"))
                     { // mod_version.ini file.
                         var mod_version_url = modItem.UpdateServer.EndsWith("/") ? modItem.UpdateServer + "mod_version.ini" : modItem.UpdateServer;
                         wc.DownloadFile(mod_version_url, Path.Combine(modItem.RootDirectory, "mod_version.ini.temp"));
                         IniFile mod_version = new IniFile(Path.Combine(modItem.RootDirectory, "mod_version.ini.temp"));
                         if (mod_version["Main"]["VersionString"] != modItem.Version)
                         { // New Version is Available.
-                            if (MessageBox.Show($"There's a newer version of {modItem.Title} available!\n\n"+
+                            if (MessageBox.Show($"There's a newer version of {modItem.Title} available!\n\n" +
                                     $"Do you want to update from version {modItem.Version} to " +
                                     $"{mod_version["Main"]["VersionString"]}? (about {mod_version["Main"]["DownloadSizeString"]})",
                                     Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -610,17 +666,23 @@ namespace SLWModLoader
 
                                 UpdateModForm muf = new UpdateModForm(modItem.Title, files, modItem.RootDirectory);
                                 muf.ShowDialog();
-                                RefreshModsList();
+                                Invoke(new Action(() => RefreshModsList()));
+                            }
+                            else
+                            {
+                                status = "Available";
                             }
                         }
                         else
                         { // Mod is up to date.or is newer then the one on the update server.
-                            MessageBox.Show($"{modItem.Title} is already up to date.", Program.ProgramName);
+                            status = "Up to date";
+                            if(!silent) MessageBox.Show($"{modItem.Title} is already up to date.", Program.ProgramName);
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Unknown file type.", Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (!silent) MessageBox.Show("Unknown file type.", Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        status = "Failed";
                     }
 
                 }
@@ -629,12 +691,38 @@ namespace SLWModLoader
                     MessageBox.Show("Failed to check for updates.\nMessage: " + ex.Message, Program.ProgramName);
                     LogFile.AddMessage("Exception thrown while updating.");
                     LogFile.AddMessage("    Exception: " + ex);
+                    status = "Failed";
                 }
                 catch (Exception ex)
                 {
                     AddMessage("Exception thrown while updating.", ex, $"Update Server: {modItem.UpdateServer}");
+                    status = "Failed";
                 }
             }
+            return status;
+        }
+
+        private void AboutButton_Click(object sender, EventArgs e)
+        {
+            new AboutForm().ShowDialog();
+        }
+
+        private void ReportLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/Radfordhound/SLW-Mod-Loader/issues/new");
+        }
+
+
+        private void ScanExecuteableButton_Click(object sender, EventArgs e)
+        {
+            StatusLabel.Text = "";
+            PatchLabel.Text = (File.Exists(LWExecutablePath) ? Path.GetFileName(LWExecutablePath) : Path.GetFileName(GensExecutablePath)) +
+                ": " + (isCPKREDIRInstalled() ? "Installed" : "Not Installed");
+        }
+
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckForModUpdates(ModsList.FocusedItem.Text);
         }
 
         private void deleteModToolStripMenuItem_Click(object sender, EventArgs e)
@@ -852,6 +940,12 @@ namespace SLWModLoader
             NewModForm nmf = new NewModForm(ModsDb.GetMod(ModsList.FocusedItem.Text));
             nmf.ShowDialog();
             RefreshModsList();
+        }
+
+        private void AutoCheckUpdateCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cpkredirIni != null)
+                cpkredirIni[Program.ProgramNameShort]["AutoCheckForUpdates"] = AutoCheckUpdateCheckBox.Checked.ToString();
         }
     }
 }
