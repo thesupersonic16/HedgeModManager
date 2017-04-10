@@ -42,7 +42,8 @@ namespace SLWModLoader
             LogFile.AddMessage("The form has been closed.");
 
             LogFile.Close();
-            cpkredirIni.Save();
+            if(cpkredirIni != null)
+                cpkredirIni.Save();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -87,29 +88,6 @@ namespace SLWModLoader
                 {
                     LogFile.AddMessage($"Creating mods folder at \"{ModsFolderPath}\"...");
                     Directory.CreateDirectory(ModsFolderPath);
-                }
-            }
-
-            if(File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
-            {
-                try
-                {
-                    cpkredirIni = new IniFile(Path.Combine(Program.StartDirectory, "cpkredir.ini"));
-                    IniGroup group = null;
-                    if(cpkredirIni.ContainsGroup(Program.ProgramNameShort))
-                        group = cpkredirIni[Program.ProgramNameShort];
-                    else
-                    {
-                        group = new IniGroup(Program.ProgramNameShort);
-                        cpkredirIni.AddGroup(group);
-                    }
-                    if(!group.ContainsParameter("AutoCheckForUpdates"))
-                        group.AddParameter("AutoCheckForUpdates", false, typeof(bool));
-
-                    AutoCheckUpdateCheckBox.Checked = bool.Parse(group["AutoCheckForUpdates"]);
-                }catch(Exception ex)
-                {
-                    AddMessage("Exception thrown while loading configurations.", ex);
                 }
             }
 
@@ -189,6 +167,30 @@ namespace SLWModLoader
                     Close();
                 }
                 return;
+            }
+
+            if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
+            {
+                try
+                {
+                    cpkredirIni = new IniFile(Path.Combine(Program.StartDirectory, "cpkredir.ini"));
+                    IniGroup group = null;
+                    if (cpkredirIni.ContainsGroup(Program.ProgramNameShort))
+                        group = cpkredirIni[Program.ProgramNameShort];
+                    else
+                    {
+                        group = new IniGroup(Program.ProgramNameShort);
+                        cpkredirIni.AddGroup(group);
+                    }
+                    if (!group.ContainsParameter("AutoCheckForUpdates"))
+                        group.AddParameter("AutoCheckForUpdates", false, typeof(bool));
+
+                    AutoCheckUpdateCheckBox.Checked = bool.Parse(group["AutoCheckForUpdates"]);
+                }
+                catch (Exception ex)
+                {
+                    AddMessage("Exception thrown while loading configurations.", ex);
+                }
             }
 
             new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
