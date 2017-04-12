@@ -257,7 +257,8 @@ namespace SLWModLoader
                             break;
 
                         case '=':
-                            equalsPosition = stringBuilder.Length;
+                            if(equalsPosition == -1)
+                                equalsPosition = stringBuilder.Length;
                             goto default;
 
                         case '#':

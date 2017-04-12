@@ -26,7 +26,8 @@ namespace SLWModLoader
             titleLbl.Text = title + " v"+ version;
             authorLbl.Text = $"Made by {author} on {date}";
             this.authorUrl = authorUrl;
-
+            if (url != null && url.Length > 0)
+                titleLbl.Links.Add(new LinkLabel.Link(0, title.Length, url));
             if (authorUrl.Length > 0)
             {
                 int i = 0;
@@ -170,15 +171,13 @@ namespace SLWModLoader
             Close();
         }
 
-        private void authorLbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
                 if (e.Link.LinkData == null || (e.Link.LinkData as string).Length == 0) return;
-                if((e.Link.LinkData as string).StartsWith("http"))
-                {
+                if (Program.isURL(e.Link.LinkData as string))
                     Process.Start(e.Link.LinkData as string);
-                }
             }
             catch { }
         }

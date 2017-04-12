@@ -64,6 +64,7 @@
             this.titleLbl.TabIndex = 1;
             this.titleLbl.Text = "Title";
             this.titleLbl.UseMnemonic = false;
+            this.titleLbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkClicked);
             // 
             // okBtn
             // 
@@ -97,7 +98,7 @@
             this.authorLbl.Text = "Made by Mod Guy on 99/99/9999";
             this.authorLbl.UseCompatibleTextRendering = true;
             this.authorLbl.UseMnemonic = false;
-            this.authorLbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.authorLbl_LinkClicked);
+            this.authorLbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkClicked);
             // 
             // DescriptionForm
             // 

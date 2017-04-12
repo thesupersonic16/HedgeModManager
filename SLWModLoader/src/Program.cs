@@ -24,5 +24,10 @@ namespace SLWModLoader
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
         }
+
+        public static bool isURL(string URL)
+        {
+            return Uri.IsWellFormedUriString(URL, UriKind.RelativeOrAbsolute);
+        }
     }
 }
