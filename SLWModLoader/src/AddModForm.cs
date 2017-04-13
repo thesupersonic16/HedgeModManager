@@ -21,7 +21,7 @@ namespace SLWModLoader
             InitializeComponent();
         }
 
-        private void okBtn_Click(object sender, EventArgs e)
+        private void OkBtn_Click(object sender, EventArgs e)
         {
             Close();
             if(makingItRBtn.Checked)
@@ -64,42 +64,14 @@ namespace SLWModLoader
 
         public static void InstallFromZip(string ZipPath)
         {
-            var zip = ZipFile.OpenRead(ZipPath);
-            var location = string.Empty;
-            foreach (var entry in zip.Entries)
-            {
-                if (entry.FullName.EndsWith("mod.ini"))
-                {
-                    location = "/" + entry.FullName;
-                    break;
-                }
-            }
-            if (location.Length != 0)
-            {
-                // TODO: Needs a lot of work
-                string folderName = location.LastIndexOf("/") != 0 ?
-                    location.Substring(location.Substring(0, location.LastIndexOf("/") - 1).LastIndexOf("/"),
-                    location.LastIndexOf("/") - location.Substring(0, location.LastIndexOf("/") - 1).LastIndexOf("/")).Substring(1) :
-                    Path.GetFileNameWithoutExtension(ZipPath);
-                string path = Path.Combine(MainForm.ModsFolderPath, folderName);
-                Directory.CreateDirectory(path);
-                foreach (var entry in zip.Entries)
-                {
-                    if (entry.FullName.StartsWith(location.Substring(1, location.LastIndexOf("/"))))
-                    {
-                        var filePath = Path.Combine(path, entry.FullName.Substring(location.Substring(1, location.LastIndexOf("/")).Length));
-                        if (filePath.IndexOf(".") != -1)
-                            entry.ExtractToFile(filePath);
-                        else
-                            Directory.CreateDirectory(filePath);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Could not find a mod inside the selected archive.", Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            zip.Dispose();
+            // Path to the install temp folder.
+            var tempFolder = Path.Combine(Program.StartDirectory, "temp_install");
+            // Extracts all contents inside of the zip file.
+            ZipFile.ExtractToDirectory(ZipPath, tempFolder);
+            // Search and install mods from the temp folder after extracting.
+            InstallFromFolder(tempFolder);
+            // Deletes the temp folder with all of its contents.
+            Directory.Delete(tempFolder, true);
         }
 
         // Requires 7-Zip to be installed.
@@ -111,16 +83,16 @@ namespace SLWModLoader
             if (key == null)
                 key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey("SOFTWARE\\7-Zip");
             // Checks if 7-Zip is installed by checking if the key and path value exists.
-            if (key != null && key.GetValue("Path") != null)
+            if (key.GetValue("Path") is string path)
             {
                 // Path to 7z.exe.
-                var exe = Path.Combine(key.GetValue("Path") as string, "7z.exe");
+                var exe = Path.Combine(path, "7z.exe");
                 // Path to the install temp folder.
                 var tempFolder = Path.Combine(Program.StartDirectory, "temp_install");
                 // Creates the temp folder.
                 Directory.CreateDirectory(tempFolder);
                 // Extracts the archive to the temp folder.
-                Process.Start(exe, $"x \"{ArchivePath}\" -o\"{tempFolder}\" -y").WaitForExit(12000);
+                Process.Start(exe, $"x \"{ArchivePath}\" -o\"{tempFolder}\" -y").WaitForExit(1000*60*5);
                 // Holds the location of the mod ini file.
                 var iniLocation = string.Empty;
                 // Searches for the ini file.
@@ -135,23 +107,11 @@ namespace SLWModLoader
                         }
                     }
                 }
-                
-                if(iniLocation.Length == 0)
-                {
-                    MessageBox.Show("Could not find mod.ini, Aborting!",
-                        Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }else
-                {
-                    var folder = Path.GetDirectoryName(iniLocation);
-                    // Creates all of the Directories.
-                    foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
-                        Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(MainForm.ModsFolderPath, Path.GetFileName(folder))));
 
-                    // Copies all the files from the Directories.
-                    foreach (string newPath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
-                        File.Copy(newPath, newPath.Replace(folder, Path.Combine(MainForm.ModsFolderPath, Path.GetFileName(folder))), true);
-                }
-                // Deletes the temp folder with its contents.
+                // Search and install mods from the temp folder after extracting.
+                InstallFromFolder(tempFolder);
+
+                // Deletes the temp folder with all of its contents.
                 Directory.Delete(tempFolder, true);
                 key.Close();
             }
@@ -163,26 +123,35 @@ namespace SLWModLoader
             
         }
 
-        public static void InstallFromFolder(string FolderPath)
+        public static void InstallFromFolder(string folderPath)
         {
-            var folder = FolderPath;
-            if (!File.Exists(Path.Combine(folder, "mod.ini")))
+            // A List of folders that have mod.ini in them.
+            List<string> folders = new List<string>();
+            foreach (string dirPath in Directory.GetDirectories(folderPath, "*", SearchOption.AllDirectories))
             {
-                // Asks to continue if no mods has been found.
-                if (MessageBox.Show("Could not find mod.ini in the selected folder\nDo you want to continue?", Program.ProgramName,
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                if (File.Exists(Path.Combine(dirPath, "mod.ini")))
+                    folders.Add(dirPath);
+            }
+
+            // Checks if theres a folder with a mod inside of it.
+            if(folders.Count > 0)
+            {
+                foreach(var folder in folders)
                 {
-                    // Aborts the installation.
-                    return;
+                    // Creates all of the Directories.
+                    foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
+                        Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(MainForm.ModsFolderPath, Path.GetFileName(folder))));
+
+                    // Copies all the files from the Directories.
+                    foreach (string newPath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
+                        File.Copy(newPath, newPath.Replace(folder, Path.Combine(MainForm.ModsFolderPath, Path.GetFileName(folder))), true);
                 }
             }
-            // Creates all of the Directories.
-            foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
-                Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(MainForm.ModsFolderPath, Path.GetFileName(folder))));
-
-            // Copies all the files from the Directories.
-            foreach (string newPath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
-                File.Copy(newPath, newPath.Replace(folder, Path.Combine(MainForm.ModsFolderPath, Path.GetFileName(folder))), true);
+            else
+            {
+                MessageBox.Show("Could not detect any mods in the selected folder.", Program.ProgramName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }            
         }
     }
 }

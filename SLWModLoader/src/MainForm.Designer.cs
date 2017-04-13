@@ -53,6 +53,7 @@
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.KeepModLoaderOpenCheckBox = new System.Windows.Forms.CheckBox();
             this.AutoCheckUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.PatchGroupBox = new System.Windows.Forms.GroupBox();
             this.InstallUninstallButton = new System.Windows.Forms.Button();
@@ -100,7 +101,7 @@
             this.desciptionToolStripMenuItem.Name = "desciptionToolStripMenuItem";
             this.desciptionToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.desciptionToolStripMenuItem.Text = "Desciption";
-            this.desciptionToolStripMenuItem.Click += new System.EventHandler(this.desciptionToolStripMenuItem_Click);
+            this.desciptionToolStripMenuItem.Click += new System.EventHandler(this.DesciptionToolStripMenuItem_Click);
             // 
             // checkForUpdatesToolStripMenuItem
             // 
@@ -108,7 +109,7 @@
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
             this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
-            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.CheckForUpdatesToolStripMenuItem_Click);
             // 
             // openModFolderToolStripMenuItem
             // 
@@ -116,7 +117,7 @@
             this.openModFolderToolStripMenuItem.Name = "openModFolderToolStripMenuItem";
             this.openModFolderToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.openModFolderToolStripMenuItem.Text = "Open Containing Folder";
-            this.openModFolderToolStripMenuItem.Click += new System.EventHandler(this.openModFolderToolStripMenuItem_Click);
+            this.openModFolderToolStripMenuItem.Click += new System.EventHandler(this.OpenModFolderToolStripMenuItem_Click);
             // 
             // editModToolStripMenuItem
             // 
@@ -124,7 +125,7 @@
             this.editModToolStripMenuItem.Name = "editModToolStripMenuItem";
             this.editModToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.editModToolStripMenuItem.Text = "Edit Mod";
-            this.editModToolStripMenuItem.Click += new System.EventHandler(this.editModToolStripMenuItem_Click);
+            this.editModToolStripMenuItem.Click += new System.EventHandler(this.EditModToolStripMenuItem_Click);
             // 
             // deleteModToolStripMenuItem
             // 
@@ -132,7 +133,7 @@
             this.deleteModToolStripMenuItem.Name = "deleteModToolStripMenuItem";
             this.deleteModToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.deleteModToolStripMenuItem.Text = "Delete Mod";
-            this.deleteModToolStripMenuItem.Click += new System.EventHandler(this.deleteModToolStripMenuItem_Click);
+            this.deleteModToolStripMenuItem.Click += new System.EventHandler(this.DeleteModToolStripMenuItem_Click);
             // 
             // MainPanel
             // 
@@ -204,6 +205,7 @@
             // 
             // NoModsFoundLabel
             // 
+            this.NoModsFoundLabel.AllowDrop = true;
             this.NoModsFoundLabel.BackColor = System.Drawing.Color.Transparent;
             this.NoModsFoundLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.NoModsFoundLabel.Font = new System.Drawing.Font("Segoe UI", 16F);
@@ -215,6 +217,8 @@
             this.NoModsFoundLabel.TabIndex = 4;
             this.NoModsFoundLabel.Text = "No mods were found!\r\nPlease check your mods folder.";
             this.NoModsFoundLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.NoModsFoundLabel.DragDrop += new System.Windows.Forms.DragEventHandler(this.ModsList_DragDrop);
+            this.NoModsFoundLabel.DragEnter += new System.Windows.Forms.DragEventHandler(this.ModsList_DragEnter);
             // 
             // ModsList
             // 
@@ -315,6 +319,7 @@
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.KeepModLoaderOpenCheckBox);
             this.SettingsPage.Controls.Add(this.AutoCheckUpdateCheckBox);
             this.SettingsPage.Controls.Add(this.PatchGroupBox);
             this.SettingsPage.Controls.Add(this.InstallUninstallButton);
@@ -329,6 +334,17 @@
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
             // 
+            // KeepModLoaderOpenCheckBox
+            // 
+            this.KeepModLoaderOpenCheckBox.AutoSize = true;
+            this.KeepModLoaderOpenCheckBox.Location = new System.Drawing.Point(33, 95);
+            this.KeepModLoaderOpenCheckBox.Name = "KeepModLoaderOpenCheckBox";
+            this.KeepModLoaderOpenCheckBox.Size = new System.Drawing.Size(243, 17);
+            this.KeepModLoaderOpenCheckBox.TabIndex = 18;
+            this.KeepModLoaderOpenCheckBox.Text = "Keep Mod Loader Open after Starting a Game";
+            this.KeepModLoaderOpenCheckBox.UseVisualStyleBackColor = true;
+            this.KeepModLoaderOpenCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
+            // 
             // AutoCheckUpdateCheckBox
             // 
             this.AutoCheckUpdateCheckBox.AutoSize = true;
@@ -338,13 +354,13 @@
             this.AutoCheckUpdateCheckBox.TabIndex = 17;
             this.AutoCheckUpdateCheckBox.Text = "Auto Check for updates";
             this.AutoCheckUpdateCheckBox.UseVisualStyleBackColor = true;
-            this.AutoCheckUpdateCheckBox.CheckedChanged += new System.EventHandler(this.AutoCheckUpdateCheckBox_CheckedChanged);
+            this.AutoCheckUpdateCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
             // PatchGroupBox
             // 
-            this.PatchGroupBox.Location = new System.Drawing.Point(49, 126);
+            this.PatchGroupBox.Location = new System.Drawing.Point(49, 204);
             this.PatchGroupBox.Name = "PatchGroupBox";
-            this.PatchGroupBox.Size = new System.Drawing.Size(431, 146);
+            this.PatchGroupBox.Size = new System.Drawing.Size(431, 105);
             this.PatchGroupBox.TabIndex = 16;
             this.PatchGroupBox.TabStop = false;
             this.PatchGroupBox.Text = "Patches";
@@ -598,6 +614,7 @@
         private System.Windows.Forms.GroupBox PatchGroupBox;
         private System.Windows.Forms.ToolStripMenuItem editModToolStripMenuItem;
         private System.Windows.Forms.CheckBox AutoCheckUpdateCheckBox;
+        private System.Windows.Forms.CheckBox KeepModLoaderOpenCheckBox;
     }
 }
 

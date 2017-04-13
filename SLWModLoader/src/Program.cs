@@ -25,7 +25,7 @@ namespace SLWModLoader
             Application.Run(new MainForm());
         }
 
-        public static bool isURL(string URL)
+        public static bool IsURL(string URL)
         {
             return Uri.IsWellFormedUriString(URL, UriKind.RelativeOrAbsolute);
         }

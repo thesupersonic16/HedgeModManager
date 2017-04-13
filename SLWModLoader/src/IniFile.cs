@@ -299,7 +299,10 @@ namespace SLWModLoader
 
                 for (int j = 0; j < groups[i].ParameterCount; j++)
                 {
-                    string line2 = $"{groups[i][j].Key}={groups[i][j].Value}";
+                    string line2;
+                    if (int.TryParse(groups[i][j].Value, out int num))
+                             line2 = $"{groups[i][j].Key}={num}";
+                        else line2 = $"{groups[i][j].Key}=\"{groups[i][j].Value}\"";
                     textWriter.WriteLine(line2);
                 }
             }
