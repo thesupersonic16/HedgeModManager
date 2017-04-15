@@ -695,7 +695,7 @@ namespace SLWModLoader
                                 // URL to mod_update_files.txt
                                 var mod_update_files_url = mod.UpdateServer.EndsWith("/") ? mod.UpdateServer + "mod_update_files.txt" :
                                     mod.UpdateServer.Substring(0, mod.UpdateServer.Length - 15) + "mod_update_files.txt";
-                                Dictionary<string, string> files = new Dictionary<string, string>();
+                                Dictionary<string, Tuple<string, string>> files = new Dictionary<string, Tuple<string, string>>();
                                 // Downloads mod_update_files.txt
                                 var mod_update_files = wc.DownloadString(mod_update_files_url);
                                 // Splits all the lines in mod_update_files.txt into an array.
@@ -705,7 +705,8 @@ namespace SLWModLoader
                                 {
                                     // Checks if the line starts with ';' if does then continue to the next line.
                                     if (line.StartsWith(";")) continue;
-                                    files.Add(line.Split(':')[0], line.Substring(line.IndexOf(":") + 1));
+                                    files.Add(line.Split(':')[1],
+                                        new Tuple<string, string>(line.Split(':')[0], line.Substring(line.IndexOf(":", line.IndexOf(":") + 1) + 1)));
                                 }
 
                                 UpdateModForm muf = new UpdateModForm(mod.Title, files, mod.RootDirectory);
