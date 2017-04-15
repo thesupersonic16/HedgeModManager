@@ -196,6 +196,7 @@
             this.MinimizeBox = false;
             this.Name = "NewModPropNewForm";
             this.Text = "SLW Mod Loader";
+            this.Load += new System.EventHandler(this.NewModPropNewForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ValueNumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

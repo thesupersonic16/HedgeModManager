@@ -79,7 +79,7 @@
             this.label.AutoSize = true;
             this.label.Font = new System.Drawing.Font("Segoe UI", 17F);
             this.label.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label.Location = new System.Drawing.Point(10, 6);
+            this.label.Location = new System.Drawing.Point(138, 9);
             this.label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label.Name = "label";
             this.label.Size = new System.Drawing.Size(460, 31);
@@ -89,14 +89,14 @@
             // okBtn
             // 
             this.okBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.okBtn.Location = new System.Drawing.Point(15, 355);
+            this.okBtn.Location = new System.Drawing.Point(16, 464);
             this.okBtn.Margin = new System.Windows.Forms.Padding(2);
             this.okBtn.Name = "okBtn";
-            this.okBtn.Size = new System.Drawing.Size(443, 23);
+            this.okBtn.Size = new System.Drawing.Size(716, 23);
             this.okBtn.TabIndex = 4;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
-            this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
+            this.okBtn.Click += new System.EventHandler(this.OkBtn_Click);
             // 
             // listView1
             // 
@@ -152,58 +152,60 @@
             this.listView1.Margin = new System.Windows.Forms.Padding(2);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(444, 276);
+            this.listView1.Size = new System.Drawing.Size(717, 366);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
-            this.listView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listView1_KeyPress);
+            this.listView1.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.ListView1_DrawColumnHeader);
+            this.listView1.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.ListView1_DrawItem);
+            this.listView1.DoubleClick += new System.EventHandler(this.ListView1_DoubleClick);
+            this.listView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListView1_KeyPress);
             // 
             // columnHeader1
             // 
             this.columnHeader1.Text = "Property Name";
-            this.columnHeader1.Width = 128;
+            this.columnHeader1.Width = 200;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Value";
-            this.columnHeader2.Width = 270;
+            this.columnHeader2.Width = 513;
             // 
             // rmvBtn
             // 
             this.rmvBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.rmvBtn.Location = new System.Drawing.Point(15, 328);
+            this.rmvBtn.Location = new System.Drawing.Point(16, 431);
             this.rmvBtn.Margin = new System.Windows.Forms.Padding(2);
             this.rmvBtn.Name = "rmvBtn";
-            this.rmvBtn.Size = new System.Drawing.Size(110, 23);
+            this.rmvBtn.Size = new System.Drawing.Size(224, 23);
             this.rmvBtn.TabIndex = 6;
             this.rmvBtn.Text = "-";
             this.rmvBtn.UseVisualStyleBackColor = true;
-            this.rmvBtn.Click += new System.EventHandler(this.rmvBtn_Click);
+            this.rmvBtn.Click += new System.EventHandler(this.RmvBtn_Click);
             // 
             // addBtn
             // 
             this.addBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.addBtn.Location = new System.Drawing.Point(348, 328);
+            this.addBtn.Location = new System.Drawing.Point(508, 431);
             this.addBtn.Margin = new System.Windows.Forms.Padding(2);
             this.addBtn.Name = "addBtn";
-            this.addBtn.Size = new System.Drawing.Size(110, 23);
+            this.addBtn.Size = new System.Drawing.Size(224, 23);
             this.addBtn.TabIndex = 7;
             this.addBtn.Text = "+";
             this.addBtn.UseVisualStyleBackColor = true;
-            this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
+            this.addBtn.Click += new System.EventHandler(this.AddBtn_Click);
             // 
             // editBtn
             // 
             this.editBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.editBtn.Location = new System.Drawing.Point(129, 328);
+            this.editBtn.Location = new System.Drawing.Point(255, 431);
             this.editBtn.Margin = new System.Windows.Forms.Padding(2);
             this.editBtn.Name = "editBtn";
-            this.editBtn.Size = new System.Drawing.Size(215, 23);
+            this.editBtn.Size = new System.Drawing.Size(249, 23);
             this.editBtn.TabIndex = 8;
             this.editBtn.Text = "&Edit Property";
             this.editBtn.UseVisualStyleBackColor = true;
-            this.editBtn.Click += new System.EventHandler(this.editBtn_Click);
+            this.editBtn.Click += new System.EventHandler(this.EditBtn_Click);
             // 
             // NewModForm
             // 
@@ -211,7 +213,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(468, 386);
+            this.ClientSize = new System.Drawing.Size(743, 498);
             this.Controls.Add(this.editBtn);
             this.Controls.Add(this.addBtn);
             this.Controls.Add(this.rmvBtn);
@@ -227,6 +229,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SLW Mod Loader";
+            this.Load += new System.EventHandler(this.NewModForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

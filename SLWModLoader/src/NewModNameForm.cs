@@ -17,26 +17,31 @@ namespace SLWModLoader
             InitializeComponent();
         }
 
-        private void okBtn_Click(object sender, EventArgs e)
+        private void OkBtn_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             Close();
         }
 
-        private void cancelBtn_Click(object sender, EventArgs e)
+        private void CancelBtn_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
         }
 
-        public String getModName()
+        public String GetModName()
         {
             return modNameTxtBx.Text;
         }
 
-        private void modNameTxtBx_TextChanged(object sender, EventArgs e)
+        private void ModNameTxtBx_TextChanged(object sender, EventArgs e)
         {
             okBtn.Enabled = modNameTxtBx.Text.Length > 0;
+        }
+
+        private void NewModNameForm_Load(object sender, EventArgs e)
+        {
+            MainForm.ApplyDarkTheme(this);
         }
     }
 }

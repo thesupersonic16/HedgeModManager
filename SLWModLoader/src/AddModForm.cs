@@ -29,7 +29,7 @@ namespace SLWModLoader
                 NewModNameForm nmnf = new NewModNameForm();
                 if (nmnf.ShowDialog() == DialogResult.OK)
                 {
-                    NewModForm nmf = new NewModForm(nmnf.getModName());
+                    NewModForm nmf = new NewModForm(nmnf.GetModName());
                     nmf.ShowDialog();
                 }
             }
@@ -152,6 +152,11 @@ namespace SLWModLoader
                 MessageBox.Show("Could not detect any mods in the selected folder.", Program.ProgramName,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }            
+        }
+
+        private void AddModForm_Load(object sender, EventArgs e)
+        {
+            MainForm.ApplyDarkTheme(this);
         }
     }
 }

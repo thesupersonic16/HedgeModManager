@@ -240,6 +240,8 @@
             this.ModsList.TabIndex = 0;
             this.ModsList.UseCompatibleStateImageBehavior = false;
             this.ModsList.View = System.Windows.Forms.View.Details;
+            this.ModsList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.ModsList_DrawColumnHeader);
+            this.ModsList.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.ModsList_DrawItem);
             this.ModsList.SelectedIndexChanged += new System.EventHandler(this.ModsList_SelectedIndexChanged);
             this.ModsList.DragDrop += new System.Windows.Forms.DragEventHandler(this.ModsList_DragDrop);
             this.ModsList.DragEnter += new System.Windows.Forms.DragEventHandler(this.ModsList_DragEnter);
@@ -261,13 +263,13 @@
             // 
             // SaveColumn
             // 
-            this.SaveColumn.Text = "Supports Save File Redirection";
+            this.SaveColumn.Text = "Supports Save";
             this.SaveColumn.Width = 74;
             // 
             // UpdateColumn
             // 
-            this.UpdateColumn.Text = "Has Updates";
-            this.UpdateColumn.Width = 75;
+            this.UpdateColumn.Text = "Updates";
+            this.UpdateColumn.Width = 59;
             // 
             // MoveDownAll
             // 
@@ -367,6 +369,7 @@
             // 
             // InstallUninstallButton
             // 
+            this.InstallUninstallButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.InstallUninstallButton.Location = new System.Drawing.Point(16, 43);
             this.InstallUninstallButton.Name = "InstallUninstallButton";
             this.InstallUninstallButton.Size = new System.Drawing.Size(120, 23);
@@ -386,6 +389,7 @@
             // 
             // ScanExecuteableButton
             // 
+            this.ScanExecuteableButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.ScanExecuteableButton.Location = new System.Drawing.Point(16, 14);
             this.ScanExecuteableButton.Name = "ScanExecuteableButton";
             this.ScanExecuteableButton.Size = new System.Drawing.Size(120, 23);
@@ -449,7 +453,7 @@
             this.RefreshButton.Size = new System.Drawing.Size(313, 33);
             this.RefreshButton.TabIndex = 6;
             this.RefreshButton.Text = "&Refresh Mod List";
-            this.RefreshButton.UseVisualStyleBackColor = true;
+            this.RefreshButton.UseVisualStyleBackColor = false;
             this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
             // statusStrip

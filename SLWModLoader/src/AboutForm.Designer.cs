@@ -47,7 +47,7 @@
             this.titleLbl.Name = "titleLbl";
             this.titleLbl.Size = new System.Drawing.Size(226, 38);
             this.titleLbl.TabIndex = 0;
-            this.titleLbl.Text = Program.ProgramName;
+            this.titleLbl.Text = "SLW Mod Loader";
             // 
             // aboutLbl
             // 
@@ -71,7 +71,7 @@
             this.okBtn.TabIndex = 3;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
-            this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
+            this.okBtn.Click += new System.EventHandler(this.OkBtn_Click);
             // 
             // iconPBx
             // 
@@ -95,7 +95,7 @@
             this.gitLbl.TabStop = true;
             this.gitLbl.Text = "Github Page";
             this.gitLbl.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.gitLbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.gitLbl_LinkClicked);
+            this.gitLbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GitLbl_LinkClicked);
             // 
             // AboutForm
             // 
@@ -119,6 +119,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "About SLW Mod Loader";
+            this.Load += new System.EventHandler(this.AboutForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.iconPBx)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

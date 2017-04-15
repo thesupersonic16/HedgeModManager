@@ -119,6 +119,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SLW Mod Loader";
+            this.Load += new System.EventHandler(this.AddModForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -57,7 +57,7 @@
             this.okBtn.TabIndex = 5;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
-            this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
+            this.okBtn.Click += new System.EventHandler(this.OkBtn_Click);
             // 
             // modNameTxtBx
             // 
@@ -66,7 +66,7 @@
             this.modNameTxtBx.Name = "modNameTxtBx";
             this.modNameTxtBx.Size = new System.Drawing.Size(321, 20);
             this.modNameTxtBx.TabIndex = 6;
-            this.modNameTxtBx.TextChanged += new System.EventHandler(this.modNameTxtBx_TextChanged);
+            this.modNameTxtBx.TextChanged += new System.EventHandler(this.ModNameTxtBx_TextChanged);
             // 
             // cancelBtn
             // 
@@ -79,7 +79,7 @@
             this.cancelBtn.TabIndex = 7;
             this.cancelBtn.Text = "&Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
-            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+            this.cancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 
             // NewModNameForm
             // 
@@ -101,7 +101,8 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = Program.ProgramName;
+            this.Text = "SLW Mod Loader";
+            this.Load += new System.EventHandler(this.NewModNameForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

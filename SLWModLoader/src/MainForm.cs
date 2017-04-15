@@ -10,6 +10,7 @@ using System.IO.Compression;
 using System.Linq;
 using Microsoft.Win32;
 using System.Text;
+using System.Drawing;
 
 namespace SLWModLoader
 {
@@ -32,9 +33,9 @@ namespace SLWModLoader
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            exit = true;
             if(modUpdatingThread != null && modUpdatingThread.IsAlive)
             {
-                exit = true;
                 while (modUpdatingThread.IsAlive)
                     Thread.Sleep(1000);
             }
@@ -73,8 +74,8 @@ namespace SLWModLoader
                     Button btn = new Button()
                     {
                         Text = GenerationsPatches.ToList()[i].Key,
-                        Size = new System.Drawing.Size(128, 32),
-                        Location = new System.Drawing.Point(12 + 140 * (i / 3), 16 + (i % 3) * 42)
+                        Size = new Size(128, 32),
+                        Location = new Point(12 + 140 * (i / 3), 16 + (i % 3) * 42)
                     };
                     btn.Click += new EventHandler(PatchButton_Click);
                     PatchGroupBox.Controls.Add(btn);
@@ -195,6 +196,15 @@ namespace SLWModLoader
                         cpkredirIni.AddGroup(group);
                     }
 
+                    if(group.ContainsParameter("DO A BARREL ROLL"))
+                        foreach(Control control in Controls)
+                            control.Font = new System.Drawing.Font("Comic Sans MS", control.Font.Size, System.Drawing.FontStyle.Bold);
+
+                    if (group.ContainsParameter("DarkTheme") && group["DarkTheme"] == "1")
+                    {
+                        ModsList.OwnerDraw = true;
+                        ApplyDarkTheme(this, splitContainer.Panel1, splitContainer.Panel2, splitContainer);
+                    }
                     if (!group.ContainsParameter("AutoCheckForUpdates"))
                         group.AddParameter("AutoCheckForUpdates", 0, typeof(int));
                     if (!group.ContainsParameter("KeepModLoaderOpen"))
@@ -275,7 +285,7 @@ namespace SLWModLoader
             {
                 LogFile.AddMessage("Found ModsDB, loading mods...");
                 ModsDb = new ModsDatabase(ModsDbPath, ModsFolderPath);
-                LogFile.AddMessage($"\t{ModsDb.ActiveModCount} / {ModsDb.ModCount} mods are active.");
+                LogFile.AddMessage($"    {ModsDb.ActiveModCount} / {ModsDb.ModCount} mods are active.");
             }
             else
             {
@@ -337,6 +347,12 @@ namespace SLWModLoader
             LoadMods();
             OrderModList();
             ModsList.Select();
+
+            int i = 0;
+            if (cpkredirIni[Program.ProgramNameShort].ContainsParameter("DarkTheme") && cpkredirIni[Program.ProgramNameShort]["DarkTheme"] == "1")
+                foreach (ListViewItem lvi in ModsList.Items)
+                    if (++i % 2 == 0) lvi.BackColor = Color.FromArgb(46, 46, 46);
+                    else lvi.BackColor = Color.FromArgb(54, 54, 54);
         }
 
         private void SaveModDB()
@@ -448,7 +464,7 @@ namespace SLWModLoader
                         AddMessage("Update Canceled. :(");
                 }
                 else
-                    AddMessage("No updates are available.");
+                    LogFile.AddMessage("No updates are available.");
             }
             catch (Exception ex)
             {
@@ -469,6 +485,7 @@ namespace SLWModLoader
 
         public static void AddMessage(string message, Exception exception, params string[] extraData)
         {
+            if (exit) return;
             LogFile.AddMessage(message);
             LogFile.AddMessage("    Exception: " + exception);
             if (extraData != null)
@@ -969,5 +986,95 @@ namespace SLWModLoader
             }
         }
 
+        private void ModsList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            // Colours
+            Color dark1 = Color.FromArgb(34, 34, 34);
+            Color dark2 = Color.FromArgb(70, 70, 70);
+            
+            // Draws the Header.
+            if(e.Bounds.Contains(ModsList.PointToClient(Control.MousePosition)))
+                 e.Graphics.FillRectangle(new SolidBrush(dark1), e.Bounds);
+            else e.Graphics.FillRectangle(new SolidBrush(dark2), e.Bounds);
+            Point point = new Point(0, 6);
+            point.X = e.Bounds.X;
+            ColumnHeader col = ModsList.Columns[e.ColumnIndex];
+            e.Graphics.FillRectangle(new SolidBrush(dark1), point.X, 0, 2, e.Bounds.Height);
+            point.X += col.Width / 2 - TextRenderer.MeasureText(col.Text, ModsList.Font).Width/2;
+            TextRenderer.DrawText(e.Graphics, col.Text, ModsList.Font, point, ModsList.ForeColor);
+        }
+
+        private void ModsList_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        #region Don't Look!
+
+        public static void AddAllChildControls(Control control, List<Control> controls)
+        {
+            controls.Add(control);
+            foreach (Control control2 in control.Controls)
+                AddAllChildControls(control2, controls);
+        }
+
+        public static bool ApplyDarkTheme(Control control, params Control[] controls)
+        {
+            if (cpkredirIni[Program.ProgramNameShort].ContainsParameter("DarkTheme") && cpkredirIni[Program.ProgramNameShort]["DarkTheme"] == "1")
+            {
+                LogFile.WriteMessage($"Applying Dark Theme to {control.GetType().Name}...", true);
+
+                List<Control> allControls = new List<Control>();
+
+                AddAllChildControls(control, allControls);
+
+                foreach (Control control0 in controls)
+                {
+                    if (!allControls.Contains(control0)) allControls.Add(control0);
+                    foreach (Control control1 in control0.Controls)
+                        if (!allControls.Contains(control1))
+                            allControls.Add(control1);
+                }
+
+                foreach (Control control0 in allControls)
+                {
+                    control0.BackColor = Color.FromArgb(46, 46, 46);
+                    if (control0.ForeColor == Color.Black || control0.ForeColor == SystemColors.WindowText ||
+                        control0.ForeColor == SystemColors.ControlText)
+                        control0.ForeColor = Color.FromArgb(200, 200, 180);
+
+                    if (control0.GetType() == typeof(Button))
+                    {
+                        ((Button)control0).FlatStyle = FlatStyle.Flat;
+                        control0.BackColor = Color.FromArgb(54, 54, 54);
+                    }
+
+                    if (control0.GetType() == typeof(RadioButton))
+                        ((RadioButton)control0).FlatStyle = FlatStyle.Flat;
+
+                    if (control0.GetType() == typeof(StatusStrip))
+                        control0.BackColor = Color.FromArgb(54, 54, 54);
+
+                    if (control0.GetType() == typeof(TabPage) || control0.GetType() == typeof(LinkLabel) ||
+                        control0.GetType() == typeof(CheckBox) || control0.GetType() == typeof(GroupBox) ||
+                        control0.GetType() == typeof(Label))
+                        control0.BackColor = Color.FromArgb(46, 46, 46);
+
+                    if (control0.GetType() == typeof(ListView))
+                    {
+                        ((ListView)control0).OwnerDraw = true;
+                        int i = 0;
+                        foreach (ListViewItem lvi in ((ListView)control0).Items)
+                            if (++i % 2 == 0) lvi.BackColor = Color.FromArgb(46, 46, 46);
+                            else lvi.BackColor = Color.FromArgb(54, 54, 54);
+                    }
+
+                }
+                LogFile.WriteMessage(" Done.\r\n", false);
+                return true;
+            }
+            return false;
+        }
+        #endregion
     }
 }

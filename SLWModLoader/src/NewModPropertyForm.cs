@@ -25,7 +25,7 @@ namespace SLWModLoader
             // Clears all items in GroupComboBox.
             GroupComboBox.Items.Clear();
             // Adds all groups from the ListView into GroupComboBox.
-            foreach (ListViewGroup group in modform.getListView().Groups)
+            foreach (ListViewGroup group in modform.GetListView().Groups)
             {
                 GroupComboBox.Items.Add(group.Header);
             }
@@ -39,7 +39,7 @@ namespace SLWModLoader
                 label1.Text = "Edit Property: " + listViewItem.Text;
                 TypeComboBox.Text = listViewItem.Tag as string;
                 textBox1.Text = listViewItem.Text;
-                GroupComboBox.SelectedIndex = modform.getListView().Groups.IndexOf(listViewItem.Group);
+                GroupComboBox.SelectedIndex = modform.GetListView().Groups.IndexOf(listViewItem.Group);
                 AddButton.Text = "Update";
                 switch (listViewItem.Tag)
                 {
@@ -113,7 +113,7 @@ namespace SLWModLoader
                 }
                 listViewItem.Text = textBox1.Text;
                 listViewItem.Tag = TypeComboBox.Text;
-                listViewItem.Group = modform.getListView().Groups[GroupComboBox.SelectedIndex];
+                listViewItem.Group = modform.GetListView().Groups[GroupComboBox.SelectedIndex];
             }
             else
             {
@@ -177,6 +177,11 @@ namespace SLWModLoader
                     textBox1.Text = listViewItem.Text;
                 }
             }
+        }
+
+        private void NewModPropNewForm_Load(object sender, EventArgs e)
+        {
+            MainForm.ApplyDarkTheme(this);
         }
     }
 }

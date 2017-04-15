@@ -18,14 +18,19 @@ namespace SLWModLoader
             InitializeComponent();
         }
 
-        private void okBtn_Click(object sender, EventArgs e)
+        private void OkBtn_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void gitLbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void GitLbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/Radfordhound/SLW-Mod-Loader");
+            Process.Start("https://github.com/thesupersonic16/SLW-Mod-Loader");
+        }
+
+        private void AboutForm_Load(object sender, EventArgs e)
+        {
+            MainForm.ApplyDarkTheme(this);
         }
     }
 }

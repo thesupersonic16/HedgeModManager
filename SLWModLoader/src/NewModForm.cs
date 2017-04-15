@@ -232,22 +232,22 @@ namespace SLWModLoader
             return lvg;
         }
 
-        public ListView getListView()
+        public ListView GetListView()
         {
             return listView1;
         }
 
-        private void editBtn_Click(object sender, EventArgs e)
+        private void EditBtn_Click(object sender, EventArgs e)
         {
             new NewModPropNewForm(this, listView1.FocusedItem).Show();
         }
 
-        private void listView1_DoubleClick(object sender, EventArgs e)
+        private void ListView1_DoubleClick(object sender, EventArgs e)
         {
             new NewModPropNewForm(this, listView1.FocusedItem).Show();
         }
 
-        private void okBtn_Click(object sender, EventArgs e)
+        private void OkBtn_Click(object sender, EventArgs e)
         {
             string filePath = Path.Combine(MainForm.ModsFolderPath, modName);
             Directory.CreateDirectory(filePath);
@@ -297,12 +297,12 @@ namespace SLWModLoader
             Close();
         }
 
-        private void addBtn_Click(object sender, EventArgs e)
+        private void AddBtn_Click(object sender, EventArgs e)
         {
             new NewModPropNewForm(this, null).Show();
         }
 
-        private void rmvBtn_Click(object sender, EventArgs e)
+        private void RmvBtn_Click(object sender, EventArgs e)
         {
             if(listView1.Items.Count > 0 && listView1.FocusedItem != null)
             {
@@ -310,7 +310,7 @@ namespace SLWModLoader
             }
         }
 
-        private void listView1_KeyPress(object sender, KeyPressEventArgs e)
+        private void ListView1_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Checks if there is a selected Item.
             if(listView1.FocusedItem != null)
@@ -319,6 +319,44 @@ namespace SLWModLoader
             {
                 listView1.Items.Remove(listView1.FocusedItem);
             }
+        }
+
+        private void NewModForm_Load(object sender, EventArgs e)
+        {
+            if(MainForm.ApplyDarkTheme(this))
+            {
+                foreach(ListViewItem lvi in listView1.Items)
+                {
+                    if(lvi.ForeColor == Color.Black)
+                    {
+                        lvi.ForeColor = Color.FromArgb(200, 200, 180);
+                        lvi.SubItems[0].ForeColor = Color.FromArgb(200, 200, 180);
+                    }
+                }
+            }
+        }
+
+        private void ListView1_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            // Colours
+            Color dark1 = Color.FromArgb(34, 34, 34);
+            Color dark2 = Color.FromArgb(70, 70, 70);
+
+            // Draws the Header.
+            if (e.Bounds.Contains(listView1.PointToClient(Control.MousePosition)))
+                e.Graphics.FillRectangle(new SolidBrush(dark1), e.Bounds);
+            else e.Graphics.FillRectangle(new SolidBrush(dark2), e.Bounds);
+            Point point = new Point(0, 6);
+            point.X = e.Bounds.X;
+            ColumnHeader col = listView1.Columns[e.ColumnIndex];
+            e.Graphics.FillRectangle(new SolidBrush(dark1), point.X, 0, 2, e.Bounds.Height);
+            point.X += col.Width / 2 - TextRenderer.MeasureText(col.Text, listView1.Font).Width / 2;
+            TextRenderer.DrawText(e.Graphics, col.Text, listView1.Font, point, listView1.ForeColor);
+        }
+
+        private void ListView1_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
         }
     }
 }
