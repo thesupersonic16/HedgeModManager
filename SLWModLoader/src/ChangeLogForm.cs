@@ -12,14 +12,25 @@ namespace SLWModLoader
 {
     public partial class ChangeLogForm : Form
     {
-        public ChangeLogForm()
+        public string downloadUrl;
+
+        public ChangeLogForm(string version, string changeLog, string downloadUrl)
         {
             InitializeComponent();
+            Text = $"A new version of { Program.ProgramName} is available.";
+            titleLbl.Text = "SLW Mod Loader v" + version;
+            changelogLbl.Text = changeLog;
+            this.downloadUrl = downloadUrl;
         }
 
         private void okBtn_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void ChangeLogForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

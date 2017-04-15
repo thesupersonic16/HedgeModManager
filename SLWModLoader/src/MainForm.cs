@@ -233,7 +233,8 @@ namespace SLWModLoader
             if (MessageBox.Show("Install SLW Mod Loader in \n"+path+"?", Resources.ApplicationTitle,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                string[] files = new string[] { Program.ExecutableName, "cpkredir.dll", "cpkredir.ini", "cpkredir.txt" };
+                string[] files = new string[] { Program.ExecutableName, Path.ChangeExtension(Program.ExecutableName, "pdb"),
+                    "cpkredir.dll", "cpkredir.ini", "cpkredir.txt" };
                 foreach (string file in files)
                 {
                     var filePath = Path.Combine(Program.StartDirectory, file);
@@ -267,7 +268,7 @@ namespace SLWModLoader
                 try
                 {
                     ProcessStartInfo info = new ProcessStartInfo();
-                    info.Arguments = $" /c sleep 3 & del \"{Application.ExecutablePath}\" & pause";
+                    info.Arguments = $" /c sleep 3 & del \"{Application.ExecutablePath}\"";
                     info.WindowStyle = ProcessWindowStyle.Hidden;
                     info.CreateNoWindow = true;
                     info.FileName = "cmd.exe";
@@ -439,24 +440,27 @@ namespace SLWModLoader
 
                 var webClient = new WebClient();
                 var latestReleaseJson = string.Empty;
-                var url = "https://api.github.com/repos/Radfordhound/SLW-Mod-Loader/releases/latest";
+                var url = "https://api.github.com/repos/thesupersonic16/SLW-Mod-Loader/releases";
                 var updateUrl = string.Empty;
+                var releaseBody = string.Empty;
                 float latestVersion = 0;
-                float currentVersion = Convert.ToSingle("5.3"/*Program.VersionString.Substring(0, 3)*/); // NOTE: I've set this to 5.3 so it can update if Radfordhound makes a new release.
+                float currentVersion = Convert.ToSingle(Program.VersionString.Substring(0, 3));
 
                 webClient.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
                 latestReleaseJson = webClient.DownloadString(url);
                 latestVersion = Convert.ToSingle(latestReleaseJson.Substring(latestReleaseJson.IndexOf("tag_name") + 12, 3));
-                updateUrl = latestReleaseJson.Substring(latestReleaseJson.IndexOf("browser_download_url") + 24,
-                            latestReleaseJson.LastIndexOf(".zip") + 4 - (latestReleaseJson.IndexOf("browser_download_url") + 24));
+                updateUrl = GetString(latestReleaseJson.IndexOf("\"browser_download_url\": ") + 23, latestReleaseJson);
+                releaseBody = GetString(latestReleaseJson.IndexOf("\"body\": \"") + 8, latestReleaseJson)
+                    .Replace("\\\"", "\"").Replace("\\n", "\n").Replace("\\r", "\n");
+
+
                 // If true, then a new update is available.
                 if (latestVersion > currentVersion)
                 {
-                    AddMessage("New Update Found v" + latestVersion);
-                    if (MessageBox.Show($"A new version of {Program.ProgramName} is available. (Version v{latestVersion})\n" +
-                                       $"Would you like to download it now?", Program.ProgramName,
-                                       MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    AddMessage("New Update Found v" + latestVersion.ToString("0.0"));
+                    if (new ChangeLogForm(latestVersion.ToString("0.0"), releaseBody, updateUrl).ShowDialog() == DialogResult.Yes)
                     {
+                        Invoke(new Action(() => Visible = false));
                         AddMessage("Starting Update...");
                         new UpdateForm(updateUrl).ShowDialog();
                     }
@@ -471,6 +475,16 @@ namespace SLWModLoader
                 AddMessage("Exception thrown while checking for Mod Loader updates.", ex);
             }
 
+        }
+
+        public static string GetString(int location, string mainString)
+        {
+            string s = mainString;
+            s = s.Substring(s.IndexOf('\"', location) + 1);
+            s = s.Replace("\\\"", "%22");
+            s = s.Substring(0, s.IndexOf('\"'));
+            s = s.Replace("%22", "\\\"");
+            return s;
         }
 
         public void AddMessage(string message)
@@ -497,6 +511,9 @@ namespace SLWModLoader
                 }
             }
             MessageBox.Show(Resources.ExceptionText, Program.ProgramName);
+            #if DEBUG
+            throw exception;
+            #endif
         }
 
         public bool IsCPKREDIRInstalled()
