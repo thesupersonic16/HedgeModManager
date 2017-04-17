@@ -82,18 +82,18 @@ namespace SLWModLoader
                 }
             }
 
-            if (!Directory.Exists(ModsFolderPath))
-            {
-                if (MessageBox.Show(Resources.CannotFindModsDirectoryText, Resources.ApplicationTitle,
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    LogFile.AddMessage($"Creating mods folder at \"{ModsFolderPath}\"...");
-                    Directory.CreateDirectory(ModsFolderPath);
-                }
-            }
-
             if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath))
             {
+                if (!Directory.Exists(ModsFolderPath))
+                {
+                    if (MessageBox.Show(Resources.CannotFindModsDirectoryText, Resources.ApplicationTitle,
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        LogFile.AddMessage($"Creating mods folder at \"{ModsFolderPath}\"...");
+                        Directory.CreateDirectory(ModsFolderPath);
+                    }
+                }
+
                 LoadMods();
                 OrderModList();
                 if(!IsCPKREDIRInstalled())
