@@ -11,6 +11,7 @@ using System.Linq;
 using Microsoft.Win32;
 using System.Text;
 using System.Drawing;
+using System.Security.Cryptography;
 
 namespace SLWModLoader
 {
@@ -705,6 +706,10 @@ namespace SLWModLoader
                                 {
                                     // Checks if the line starts with ';' if does then continue to the next line.
                                     if (line.StartsWith(";")) continue;
+
+                                    if (line.StartsWith("#"))
+                                        continue;
+
                                     files.Add(line.Split(':')[1],
                                         new Tuple<string, string>(line.Split(':')[0], line.Substring(line.IndexOf(":", line.IndexOf(":") + 1) + 1)));
                                 }
@@ -785,7 +790,7 @@ namespace SLWModLoader
         private void ModsList_SelectedIndexChanged(object sender, EventArgs e)
         {
             MoveUpAll.Enabled = MoveDownAll.Enabled = MoveUpButton.Enabled = MoveDownButton.Enabled = RemoveModButton.Enabled =
-                editModToolStripMenuItem.Enabled = deleteModToolStripMenuItem.Enabled = checkForUpdatesToolStripMenuItem.Enabled = desciptionToolStripMenuItem.Enabled = 
+                createModUpdateToolStripMenuItem.Enabled = editModToolStripMenuItem.Enabled = deleteModToolStripMenuItem.Enabled = checkForUpdatesToolStripMenuItem.Enabled = desciptionToolStripMenuItem.Enabled = 
                 openModFolderToolStripMenuItem.Enabled = ModsList.SelectedItems.Count == 1;
         }
 
@@ -993,6 +998,116 @@ namespace SLWModLoader
             NewModForm nmf = new NewModForm(ModsDb.GetMod(ModsList.FocusedItem.Text));
             nmf.ShowDialog();
             RefreshModsList();
+        }
+
+        private void CreateModUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Mod modified = ModsDb.GetMod(ModsList.FocusedItem.Text);
+            Mod unModified = null;
+            string outLocation = Path.Combine(Program.StartDirectory, "temp_update");
+
+            var saveFileDialog = new SaveFileDialog()
+            {
+                Title = Program.ProgramName,
+                FileName = "Enter into a directory where you want all the update files to be saved, then press Save" +
+                " (All files in the selected directory will be deleted)"
+            };
+            var openFileDialog = new OpenFileDialog()
+            {
+                Title = "Open Unmodified mod.",
+                Filter = "Mod Ini (mod.ini)|mod.ini;"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    outLocation = Path.GetDirectoryName(saveFileDialog.FileName);
+
+                if(MessageBox.Show("Save all file into " + outLocation +
+                    ", NOTE: All files in the selected directory will be deleted", Program.ProgramName,
+                    MessageBoxButtons.OKCancel) != DialogResult.OK)
+                {
+                    return;
+                }
+                // Deletes everything inside of the output location.
+                if (Directory.Exists(outLocation))
+                    Directory.Delete(outLocation, true);
+                Directory.CreateDirectory(outLocation);
+                try
+                {
+                    unModified = new Mod(Path.GetDirectoryName(openFileDialog.FileName));
+                    
+                    // Creates all of the directories.
+                    foreach (string dirPath in Directory.GetDirectories(modified.RootDirectory, "*", SearchOption.AllDirectories))
+                        Directory.CreateDirectory(dirPath.Replace(modified.RootDirectory, outLocation));
+
+                    // List of paths to files that are modified.
+                    List<string> files = new List<string>();
+
+                    SHA256Managed sha = new SHA256Managed();
+                    
+                    foreach (string filePath in Directory.GetFiles(modified.RootDirectory, "*.*", SearchOption.AllDirectories))
+                    {
+                        // Checks if the file exists in the unmodified folder.
+                        if (!File.Exists(filePath.Replace(modified.RootDirectory, unModified.RootDirectory)))
+                        {
+                            files.Add(filePath);
+                            continue;
+                        }
+                        byte[] modifiedBytes = File.ReadAllBytes(filePath);
+                        byte[] unModifiedBytes = File.ReadAllBytes(filePath.Replace(modified.RootDirectory,
+                            unModified.RootDirectory));
+                        if (modifiedBytes.Length == unModifiedBytes.Length)
+                        {
+                            for (int i = 0; i < modifiedBytes.Length; ++i)
+                                if (modifiedBytes[i] != unModifiedBytes[i])
+                                {
+                                    files.Add(filePath);
+                                    continue;
+                                }
+                        }
+                        else
+                            files.Add(filePath);
+                    }
+
+                    List<string> lines = new List<string>();
+                    lines.Add("#Version:0");
+                    lines.Add(";SHA256 HASH:File Name (Including Subdirectories starting from the mod root):URL");
+                    lines.Add(";" + 0.ToString("X64")+":mod.ini:http://localhost/ModName/mod.ini");
+                    lines.Add(";" + 0.ToString("X64") + ":bb3\\Sonic.ar.00:http://localhost/ModName/bb3/Sonic.ar.00");
+                    lines.Add(";" + 0.ToString("X64") + ":sonic2013_patch_0\\Sonic.pac:http://localhost/ModName/sonic2013_patch_0/Sonic.pac");
+                    lines.Add("");
+
+                    foreach (string filePath in files)
+                    {
+                        string hash = "";
+                        using (FileStream stream = File.OpenRead(filePath))
+                           hash = UpdateModForm.ByteArrayToString(sha.ComputeHash(stream));
+
+                        lines.Add($"{hash}:{filePath.Replace(modified.RootDirectory+"\\", "")}:{{URL}}{Path.GetFileName(filePath)}");
+                    }
+
+
+                    // Copies all the modified files into the output directory.
+                    foreach (string filePath in files)
+                        File.Copy(filePath, filePath.Replace(modified.RootDirectory, outLocation), true);
+
+                    // Writes everything from the lines array to mod_update_files.txt.
+                    File.WriteAllLines(Path.Combine(outLocation, "mod_update_files.txt"), lines.ToArray());
+
+                    MessageBox.Show("Done.\n" +
+                        "Make sure to replace all {URL} in mod_update_files.txt before uploading all the files " +
+                        "to your web server.",
+                        Program.ProgramName);
+
+                    // Opens the output folder in explorer.
+                    Process.Start("explorer", outLocation);
+                }catch(Exception ex)
+                {
+                    AddMessage("Exception thrown while creating update files", ex);
+                }
+            }
         }
 
         private void CheckBox_CheckedChanged(object sender, EventArgs e)

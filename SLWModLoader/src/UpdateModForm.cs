@@ -70,15 +70,18 @@ namespace SLWModLoader
                     }
                     using (FileStream stream = File.OpenRead(Path.Combine(modRoot, fileName)))
                     {
-                        hash = sha.ComputeHash(stream);
-                        if(Encoding.ASCII.GetString(hash) != Encoding.ASCII.GetString(StringToByteArray(fileHash)))
+                        if (fileHash != 0.ToString("X64"))
                         {
-                            LogFile.AddMessage($"Hash Mismatch on file: {fileName}");
-                            if (MessageBox.Show($"File Hash Mismatch.\n" +
-                                $"{ByteArrayToString(StringToByteArray(fileHash))} != {ByteArrayToString(hash)}\n" +
-                                $"Try Redownloading?", "File Hash Mismatch.",
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                                i--;
+                            hash = sha.ComputeHash(stream);
+                            if (Encoding.ASCII.GetString(hash) != Encoding.ASCII.GetString(StringToByteArray(fileHash)))
+                            {
+                                LogFile.AddMessage($"Hash Mismatch on file: {fileName}");
+                                if (MessageBox.Show($"File Hash Mismatch.\n" +
+                                    $"{ByteArrayToString(StringToByteArray(fileHash))} != {ByteArrayToString(hash)}\n" +
+                                    $"Try Redownloading?", "File Hash Mismatch.",
+                                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                                    i--;
+                            }
                         }
                     }
                     Thread.Sleep(250);
