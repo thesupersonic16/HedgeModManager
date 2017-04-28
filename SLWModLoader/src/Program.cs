@@ -29,5 +29,16 @@ namespace SLWModLoader
         {
             return Uri.IsWellFormedUriString(URL, UriKind.RelativeOrAbsolute);
         }
+
+        public static string GetString(int location, string mainString)
+        {
+            string s = mainString;
+            s = s.Substring(s.IndexOf('\"', location) + 1);
+            s = s.Replace("\\\"", "%22");
+            s = s.Substring(0, s.IndexOf('\"'));
+            s = s.Replace("%22", "\\\"");
+            return s;
+        }
+
     }
 }

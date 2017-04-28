@@ -36,10 +36,9 @@ namespace SLWModLoader
         {
             exit = true;
             if(modUpdatingThread != null && modUpdatingThread.IsAlive)
-            {
                 while (modUpdatingThread.IsAlive)
                     Thread.Sleep(1000);
-            }
+
             LogFile.AddEmptyLine();
             LogFile.AddMessage("The form has been closed.");
 
@@ -183,6 +182,7 @@ namespace SLWModLoader
                 return;
             }
 
+            // Checks if "cpkredit.ini" exists as SLWModLoader uses it to store its config.
             if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
             {
                 try
@@ -199,7 +199,7 @@ namespace SLWModLoader
 
                     if(group.ContainsParameter("DO A BARREL ROLL"))
                         foreach(Control control in Controls)
-                            control.Font = new System.Drawing.Font("Comic Sans MS", control.Font.Size, System.Drawing.FontStyle.Bold);
+                            control.Font = new Font("Comic Sans MS", control.Font.Size, FontStyle.Bold);
 
                     if (group.ContainsParameter("DarkTheme") && group["DarkTheme"] == "1")
                     {
@@ -231,11 +231,12 @@ namespace SLWModLoader
         public bool InstallModLoader(string path, string gameName)
         {
             path = path.Replace('/', '\\');
-            if (MessageBox.Show("Install SLW Mod Loader in \n"+path+"?", Resources.ApplicationTitle,
+            if (MessageBox.Show("Install SLW Mod Loader in \n" + path + "?", Resources.ApplicationTitle,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 string[] files = new string[] { Program.ExecutableName, Path.ChangeExtension(Program.ExecutableName, "pdb"),
                     "cpkredir.dll", "cpkredir.ini", "cpkredir.txt" };
+
                 foreach (string file in files)
                 {
                     var filePath = Path.Combine(Program.StartDirectory, file);
@@ -246,7 +247,7 @@ namespace SLWModLoader
                     }
                     else
                     {
-                        MessageBox.Show("Could not find "+file+".");
+                        MessageBox.Show("Could not find " + file, Program.ProgramName);
                     }
                 }
 
@@ -262,17 +263,19 @@ namespace SLWModLoader
                 shortcut.Save();
                 LogFile.AddMessage("    Done.");
 
-                MessageBox.Show("Done.");
+                MessageBox.Show("Done.", Program.ProgramName);
 
                 Process.Start(shortcutPath);
 
                 try
                 {
-                    ProcessStartInfo info = new ProcessStartInfo();
-                    info.Arguments = $" /c sleep 3 & del \"{Application.ExecutablePath}\"";
-                    info.WindowStyle = ProcessWindowStyle.Hidden;
-                    info.CreateNoWindow = true;
-                    info.FileName = "cmd.exe";
+                    ProcessStartInfo info = new ProcessStartInfo()
+                    {
+                        Arguments = $" /c sleep 3 & del \"{Application.ExecutablePath}\"",
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true,
+                        FileName = "cmd.exe"
+                    };
                     Process.Start(info);
                 }
                 catch { }
@@ -350,8 +353,10 @@ namespace SLWModLoader
             OrderModList();
             ModsList.Select();
 
+            // Updates the background colour on the ListView if DarkTheme is enabled.
             int i = 0;
-            if (cpkredirIni[Program.ProgramNameShort].ContainsParameter("DarkTheme") && cpkredirIni[Program.ProgramNameShort]["DarkTheme"] == "1")
+            if (cpkredirIni[Program.ProgramNameShort].ContainsParameter("DarkTheme") &&
+                cpkredirIni[Program.ProgramNameShort]["DarkTheme"] == "1")
                 foreach (ListViewItem lvi in ModsList.Items)
                     if (++i % 2 == 0) lvi.BackColor = Color.FromArgb(46, 46, 46);
                     else lvi.BackColor = Color.FromArgb(54, 54, 54);
@@ -440,20 +445,19 @@ namespace SLWModLoader
                 LogFile.AddMessage("Checking for Updates...");
 
                 var webClient = new WebClient();
-                var latestReleaseJson = string.Empty;
-                var url = "https://api.github.com/repos/thesupersonic16/SLW-Mod-Loader/releases";
-                var updateUrl = string.Empty;
-                var releaseBody = string.Empty;
+                string url = "https://api.github.com/repos/thesupersonic16/SLW-Mod-Loader/releases";
+                string latestReleaseJson = "";
+                string updateUrl = "";
+                string releaseBody = "";
                 float latestVersion = 0;
                 float currentVersion = Convert.ToSingle(Program.VersionString.Substring(0, 3));
 
                 webClient.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
                 latestReleaseJson = webClient.DownloadString(url);
                 latestVersion = Convert.ToSingle(latestReleaseJson.Substring(latestReleaseJson.IndexOf("tag_name") + 12, 3));
-                updateUrl = GetString(latestReleaseJson.IndexOf("\"browser_download_url\": ") + 23, latestReleaseJson);
-                releaseBody = GetString(latestReleaseJson.IndexOf("\"body\": \"") + 8, latestReleaseJson)
+                updateUrl = Program.GetString(latestReleaseJson.IndexOf("\"browser_download_url\": ") + 23, latestReleaseJson);
+                releaseBody = Program.GetString(latestReleaseJson.IndexOf("\"body\": \"") + 8, latestReleaseJson)
                     .Replace("\\\"", "\"").Replace("\\n", "\n").Replace("\\r", "\n");
-
 
                 // If true, then a new update is available.
                 if (latestVersion > currentVersion)
@@ -477,17 +481,7 @@ namespace SLWModLoader
             }
 
         }
-
-        public static string GetString(int location, string mainString)
-        {
-            string s = mainString;
-            s = s.Substring(s.IndexOf('\"', location) + 1);
-            s = s.Replace("\\\"", "%22");
-            s = s.Substring(0, s.IndexOf('\"'));
-            s = s.Replace("%22", "\\\"");
-            return s;
-        }
-
+        
         public void AddMessage(string message)
         {
             LogFile.AddMessage(message);
@@ -507,9 +501,7 @@ namespace SLWModLoader
             {
                 LogFile.AddMessage("    Extra Data: ");
                 foreach (var s in extraData)
-                {
                     LogFile.AddMessage("        " + s);
-                }
             }
             MessageBox.Show(Resources.ExceptionText, Program.ProgramName);
             #if DEBUG
@@ -519,12 +511,10 @@ namespace SLWModLoader
 
         public bool IsCPKREDIRInstalled()
         {
-            bool gens = false;
-            if (File.Exists(GensExecutablePath))
-                gens = true;
             try
             {
-                byte[] bytes = File.ReadAllBytes(gens ? GensExecutablePath : LWExecutablePath);
+                byte[] bytes = File.ReadAllBytes(File.Exists(GensExecutablePath)
+                    ? GensExecutablePath : LWExecutablePath);
                 for (int i = 11918000; i < bytes.Length; ++i)
                 {
                     // 63 70 6B 72 65 64 69 72
@@ -546,7 +536,7 @@ namespace SLWModLoader
             }
             catch(Exception ex)
             {
-                AddMessage("Exception thrown while checking executeable.", ex, $"Is Generations: {gens}");
+                AddMessage("Exception thrown while checking executeable.", ex);
             }
             AddMessage("Failed to check executeable");
             return false;
@@ -554,9 +544,9 @@ namespace SLWModLoader
 
         public bool InstallCPKREDIR(bool? install)
         {
-            string executablePath = LWExecutablePath;
-            if (File.Exists(GensExecutablePath))
-                executablePath = GensExecutablePath;
+            string executablePath = GensExecutablePath;
+            if (File.Exists(LWExecutablePath))
+                executablePath = LWExecutablePath;
             try
             {
                 AddMessage("Scaning Executable...");
@@ -629,8 +619,10 @@ namespace SLWModLoader
 
         public void CheckAllModUpdates()
         {
+            // Amount of loaded mods.
             var count = 0;
             Invoke(new Action(() => count = ModsList.Items.Count));
+
             for (int i = 0; i < count; ++i)
             {
                 Mod mod = null;
@@ -659,8 +651,9 @@ namespace SLWModLoader
 
             if (mod.UpdateServer.Length == 0 && mod.Url.Length != 0)
             { // No Update Server, But has Website
-                if (!silent && MessageBox.Show($"{Program.ProgramName} can not check for updates for {mod.Title} because no update server has been set.\n\n" +
-                    $"This Mod does have a website, do you want to open it and check for updates manually?\n\n URL: {mod.Url}", Program.ProgramName,
+                if (!silent && MessageBox.Show($"{Program.ProgramName} can not check for updates for {mod.Title}" +
+                    $"because no update server has been set.\n\nThis Mod does have a website, " +
+                    $"do you want to open it and check for updates manually?\n\n URL: {mod.Url}", Program.ProgramName,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         if(Program.IsURL(mod.Url))
                             Process.Start(mod.Url);
@@ -707,6 +700,7 @@ namespace SLWModLoader
                                     // Checks if the line starts with ';' if does then continue to the next line.
                                     if (line.StartsWith(";")) continue;
 
+                                    // Checks if the line starts with '#' if does then continue to the next line.
                                     if (line.StartsWith("#"))
                                         continue;
 
@@ -724,7 +718,7 @@ namespace SLWModLoader
                             }
                         }
                         else
-                        { // Mod is up to date.or is newer then the one on the update server.
+                        { // Mod is up to date or is newer then the one on the update server.
                             status = "Up to date";
                             if(!silent) MessageBox.Show($"{mod.Title} is already up to date.", Program.ProgramName);
                         }
@@ -776,22 +770,25 @@ namespace SLWModLoader
 
         private void DeleteModToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to delete \"" + ModsList.FocusedItem.Text + "\"?", Program.ProgramName, MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to delete \"" + ModsList.FocusedItem.Text + "\"?",
+                Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 Directory.Delete(ModsDb.GetMod(ModsList.FocusedItem.Text).RootDirectory, true);
                 RefreshModsList();
                 SaveModDB();
             }
+            // Deselect all items.
             ModsList.FocusedItem = null;
             ModsList_SelectedIndexChanged(null, null);
         }
 
         private void ModsList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            MoveUpAll.Enabled = MoveDownAll.Enabled = MoveUpButton.Enabled = MoveDownButton.Enabled = RemoveModButton.Enabled =
-                createModUpdateToolStripMenuItem.Enabled = editModToolStripMenuItem.Enabled = deleteModToolStripMenuItem.Enabled = checkForUpdatesToolStripMenuItem.Enabled = desciptionToolStripMenuItem.Enabled = 
-                openModFolderToolStripMenuItem.Enabled = ModsList.SelectedItems.Count == 1;
+            MoveUpAll.Enabled = MoveDownAll.Enabled = MoveUpButton.Enabled = MoveDownButton.Enabled
+                = RemoveModButton.Enabled = createModUpdateToolStripMenuItem.Enabled = editModToolStripMenuItem.Enabled
+                = deleteModToolStripMenuItem.Enabled = checkForUpdatesToolStripMenuItem.Enabled
+                = desciptionToolStripMenuItem.Enabled = openModFolderToolStripMenuItem.Enabled
+                = ModsList.SelectedItems.Count == 1;
         }
 
         private void AddModButton_Click(object sender, EventArgs e)
@@ -820,8 +817,8 @@ namespace SLWModLoader
 
         private void RemoveModButton_Click(object sender, EventArgs e)
         {
-            if(MessageBox.Show("Are you sure you want to delete \""+ ModsList.FocusedItem.Text+"\"?", Program.ProgramName, MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning) == DialogResult.Yes)
+            if(MessageBox.Show($"Are you sure you want to delete \"{ModsList.FocusedItem.Text}\"?",
+                Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 Directory.Delete(ModsDb.GetMod(ModsList.FocusedItem.Text).RootDirectory, true);
                 RefreshModsList();
@@ -897,36 +894,44 @@ namespace SLWModLoader
 
         private void ModsList_DragDrop(object sender, DragEventArgs e)
         {
-            try
+            new Thread(() =>
             {
-                if (e.Data.GetDataPresent(DataFormats.FileDrop) &&
-                    e.Data.GetData(DataFormats.FileDrop) is string[] files)
+                try
                 {
-                    foreach (string file in files)
+                    if (e.Data.GetDataPresent(DataFormats.FileDrop) &&
+                        e.Data.GetData(DataFormats.FileDrop) is string[] files)
                     {
-                        // Checks if its a Directory
-                        if (File.GetAttributes(file).HasFlag(FileAttributes.Directory))
+                        int prevModCount = ModsDb.ModCount;
+                        Invoke(new Action(() => AddMessage("Installing mods...")));
+                        foreach (string file in files)
                         {
-                            AddModForm.InstallFromFolder(file);
+                            // Checks if its a Directory
+                            if (File.GetAttributes(file).HasFlag(FileAttributes.Directory))
+                            {
+                                AddModForm.InstallFromFolder(file);
+                            }
+                            else if (new FileInfo(file).Extension == ".zip")
+                            { // Checks if it is a zip file.
+                                AddModForm.InstallFromZip(file);
+                            }
+                            else if (new FileInfo(file).Extension == ".7z" || new FileInfo(file).Extension == ".rar")
+                            { // Checks if it is a 7z or rar file.
+                                AddModForm.InstallFrom7zArchive(file);
+                            }
+                            Invoke(new Action(() => RefreshModsList()));
                         }
-                        else if (new FileInfo(file).Extension == ".zip")
-                        { // Checks if it is a zip file.
-                            AddModForm.InstallFromZip(file);
-                        }
-                        else if (new FileInfo(file).Extension == ".7z" || new FileInfo(file).Extension == ".rar")
-                        { // Checks if it is a 7z or rar file.
-                            AddModForm.InstallFrom7zArchive(file);
-                        }
+                        Invoke(new Action(() => AddMessage("Finished Mod Installation. Installed " +
+                            (ModsDb.ModCount - prevModCount) + " mod(s).")));
                     }
-                    RefreshModsList();
                 }
-            }catch(Exception ex)
-            {
-                var data = e.Data.GetData(DataFormats.FileDrop);
-                var dataType = data == null ? "NULL" : data.GetType().ToString();
-                AddMessage("Exception thrown while handling drag and drop.", ex, $"Data Present: {e.Data.GetDataPresent(DataFormats.FileDrop)}",
-                    $"Data Type: {dataType}");
-            }
+                catch (Exception ex)
+                {
+                    var data = e.Data.GetData(DataFormats.FileDrop);
+                    var dataType = data == null ? "NULL" : data.GetType().ToString();
+                    AddMessage("Exception thrown while handling drag and drop.", ex, $"Data Present: {e.Data.GetDataPresent(DataFormats.FileDrop)}",
+                        $"Data Type: {dataType}");
+                }
+            }).Start();
         }
 
         private void ModsList_DragEnter(object sender, DragEventArgs e)
@@ -976,9 +981,8 @@ namespace SLWModLoader
                         position += 4;
                         // Writes the data to the executeable.
                         for (int i2 = 0; i2 < size; ++i2)
-                        {
                             executeableStream.WriteByte(patchBytes[position + i2]);
-                        }
+
                         position += size;
                     }
                     // Closes the FileStream.
@@ -1071,14 +1075,15 @@ namespace SLWModLoader
                             files.Add(filePath);
                     }
 
-                    List<string> lines = new List<string>();
-                    lines.Add("#Version:0");
-                    lines.Add(";SHA256 HASH:File Name (Including Subdirectories starting from the mod root):URL");
-                    lines.Add(";" + 0.ToString("X64")+":mod.ini:http://localhost/ModName/mod.ini");
-                    lines.Add(";" + 0.ToString("X64") + ":bb3\\Sonic.ar.00:http://localhost/ModName/bb3/Sonic.ar.00");
-                    lines.Add(";" + 0.ToString("X64") + ":sonic2013_patch_0\\Sonic.pac:http://localhost/ModName/sonic2013_patch_0/Sonic.pac");
-                    lines.Add("");
-
+                    List<string> lines = new List<string>
+                    {
+                        "#Version:0",
+                        ";SHA256 HASH:File Name (Including Subdirectories starting from the mod root):URL",
+                        ";" + 0.ToString("X64") + ":mod.ini:http://localhost/ModName/mod.ini",
+                        ";" + 0.ToString("X64") + ":bb3\\Sonic.ar.00:http://localhost/ModName/bb3/Sonic.ar.00",
+                        ";" + 0.ToString("X64") + ":sonic2013_patch_0\\Sonic.pac:http://localhost/ModName/sonic2013_patch_0/Sonic.pac",
+                        ""
+                    };
                     foreach (string filePath in files)
                     {
                         string hash = "";
@@ -1098,7 +1103,7 @@ namespace SLWModLoader
 
                     MessageBox.Show("Done.\n" +
                         "Make sure to replace all {URL} in mod_update_files.txt before uploading all the files " +
-                        "to your web server.",
+                        "on to your web server.",
                         Program.ProgramName);
 
                     // Opens the output folder in explorer.
@@ -1114,10 +1119,12 @@ namespace SLWModLoader
         {
             if (cpkredirIni != null)
             {
-                cpkredirIni[Program.ProgramNameShort]["AutoCheckForUpdates"] = AutoCheckUpdateCheckBox.Checked ? "1" : "0" ;
+                cpkredirIni[Program.ProgramNameShort]["AutoCheckForUpdates"] = AutoCheckUpdateCheckBox.Checked ? "1" : "0";
                 cpkredirIni[Program.ProgramNameShort]["KeepModLoaderOpen"] = KeepModLoaderOpenCheckBox.Checked ? "1" : "0";
             }
         }
+
+        #region Don't Look!
 
         private void ModsList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
@@ -1141,8 +1148,6 @@ namespace SLWModLoader
         {
             e.DrawDefault = true;
         }
-
-        #region Don't Look!
 
         public static void AddAllChildControls(Control control, List<Control> controls)
         {
