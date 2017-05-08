@@ -38,15 +38,15 @@ namespace SLWModLoader
                 // Sets the ProgressBarAll's maximum to the amount of files/lines.
                 Invoke(new Action(() => ProgressBarAll.Maximum = files.Count));
 
-                SHA256Managed sha = new SHA256Managed();
+                var sha = new SHA256Managed();
                 byte[] hash;
                 var fileList = files.ToList();
                 for (int i = 0; i < files.Count; ++i)
                 {
                     // Gets and stores the current line.
-                    var fileName = fileList[i].Key;
-                    var fileUrl = fileList[i].Value.Item2;
-                    var fileHash = fileList[i].Value.Item1;
+                    string fileName = fileList[i].Key;
+					string fileUrl = fileList[i].Value.Item2;
+					string fileHash = fileList[i].Value.Item1;
 
                     LogFile.AddMessage($"Downloading: {fileName} at {fileUrl}");
                     // Closes and returns if the user clicked cancel.
@@ -68,7 +68,7 @@ namespace SLWModLoader
                     {
                         Thread.Sleep(25);
                     }
-                    using (FileStream stream = File.OpenRead(Path.Combine(modRoot, fileName)))
+                    using (var stream = File.OpenRead(Path.Combine(modRoot, fileName)))
                     {
                         if (fileHash != 0.ToString("X64"))
                         {

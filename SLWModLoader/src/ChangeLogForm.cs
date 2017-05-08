@@ -23,7 +23,7 @@ namespace SLWModLoader
             this.downloadUrl = downloadUrl;
         }
 
-        private void okBtn_Click(object sender, EventArgs e)
+        private void OkBtn_Click(object sender, EventArgs e)
         {
             Close();
         }

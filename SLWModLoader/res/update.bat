@@ -7,6 +7,7 @@ sleep 3
 echo Copying update files over the old version of the application...
 xcopy /s /y ".\updateTemp" ".\"
 echo done!
+ren SLWModLoader.log SLWModLoader_prev.log
 sleep 1
 echo Starting application...
 start SLWModLoader.exe

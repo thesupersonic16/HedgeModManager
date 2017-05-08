@@ -29,7 +29,7 @@ namespace SLWModLoader
 
         private void UpdateForm_Load(object sender, EventArgs e)
         {
-            WebClient wc = new WebClient();
+            var wc = new WebClient();
 
             thread = new Thread(() =>
             {
@@ -59,7 +59,7 @@ namespace SLWModLoader
                 // Writes the batch file so we can continue the update process.
                 File.WriteAllBytes(Path.Combine(Program.StartDirectory, "update.bat"), Properties.Resources.update);
                 
-                // Runs the batch file and closes the mod loader
+                // Runs the batch file and closes the mod loader.
                 LogFile.AddMessage($"Closing {Program.ProgramName} to continue the update...");
                 new Process(){ StartInfo = new ProcessStartInfo(Path.Combine(Program.StartDirectory, "update.bat")) }.Start();
                 Application.Exit();

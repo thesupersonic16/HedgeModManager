@@ -29,7 +29,7 @@ namespace SLWModLoader
             Close();
         }
 
-        public String GetModName()
+        public string GetModName()
         {
             return modNameTxtBx.Text;
         }

@@ -35,11 +35,11 @@ namespace SLWModLoader
             this.mod = mod;
             modName = Path.GetFileName(mod.RootDirectory);
             // Automatically fill in some info.
-            IniFile ini = mod.GetIniFile();
+            var ini = mod.GetIniFile();
 
             for (int i = 0; i < ini.GroupCount; ++i)
             {
-                IniGroup iniGroup = ini[i];
+                var iniGroup = ini[i];
 
                 ListViewGroup group = null;
                 foreach (ListViewGroup group2 in listView1.Groups)
@@ -56,9 +56,9 @@ namespace SLWModLoader
 
                 for (int i2 = 0; i2 < iniGroup.ParameterCount; ++i2)
                 {
-                    var key = iniGroup[i2].Key.Replace("\n", "\\n");
-                    var value = iniGroup[i2].Value.Replace("\n", "\\n");
-                    var hasProperty = false;
+					string key = iniGroup[i2].Key.Replace("\n", "\\n");
+					string value = iniGroup[i2].Value.Replace("\n", "\\n");
+                    bool hasProperty = false;
                     foreach (ListViewItem lvi in group.Items)
                     {
                         if (lvi.SubItems[0].Text.ToLower().Equals(key.ToLower()))
@@ -227,7 +227,7 @@ namespace SLWModLoader
 
         public ListViewGroup AddGroup(string name)
         {
-            ListViewGroup lvg = new ListViewGroup(name);
+            var lvg = new ListViewGroup(name);
             listView1.Groups.Add(lvg);
             return lvg;
         }
@@ -251,7 +251,7 @@ namespace SLWModLoader
         {
             string filePath = Path.Combine(MainForm.ModsFolderPath, modName);
             Directory.CreateDirectory(filePath);
-            IniFile iniFile = new IniFile();
+            var iniFile = new IniFile();
 
             // Adds all the groups.
             foreach (ListViewGroup group in listView1.Groups)
@@ -272,7 +272,8 @@ namespace SLWModLoader
                         if (lvi.Text.ToLower().Equals("savefile"))
                         {
                             if (!File.Exists(Path.Combine(filePath, lvi.SubItems[1].Text)) &&
-                                MessageBox.Show("Would you like to create a save file?", Program.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                MessageBox.Show("Would you like to create a save file?", Program.ProgramName,
+								MessageBoxButtons.YesNo) == DialogResult.Yes)
                             {
                                 try
                                 {
@@ -281,8 +282,10 @@ namespace SLWModLoader
                                 }
                                 catch (Exception ex)
                                 {
-                                    MainForm.AddMessage("Exception thrown while creating a save file.", ex, $"Save File Location: {lvi.SubItems[1].Text}");
-                                    MessageBox.Show("Failed to create save file. You'll have to create one manually.", Program.ProgramName);
+                                    MainForm.AddMessage("Exception thrown while creating a save file.", ex,
+										$"Save File Location: {lvi.SubItems[1].Text}");
+                                    MessageBox.Show("Failed to create save file. You'll have to create one manually.",
+										Program.ProgramName);
                                 }
                             }
                         }
@@ -290,7 +293,7 @@ namespace SLWModLoader
                 }
             }
 
-            // Saves the ini file from memory
+            // Saves the ini file from memory.
             iniFile.Save(Path.Combine(filePath, "mod.ini"));
             // Closes the Dialog
             DialogResult = DialogResult.OK;
@@ -305,16 +308,14 @@ namespace SLWModLoader
         private void RmvBtn_Click(object sender, EventArgs e)
         {
             if(listView1.Items.Count > 0 && listView1.FocusedItem != null)
-            {
                 listView1.Items.Remove(listView1.FocusedItem);
-            }
         }
 
         private void ListView1_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Checks if there is a selected Item.
             if(listView1.FocusedItem != null)
-            // Deletes the Item if the user presses delete.
+            // Deletes the focused item if the user presses the Delete key.
             if (e.KeyChar == (char)46)
             {
                 listView1.Items.Remove(listView1.FocusedItem);
@@ -339,16 +340,16 @@ namespace SLWModLoader
         private void ListView1_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             // Colours
-            Color dark1 = Color.FromArgb(34, 34, 34);
-            Color dark2 = Color.FromArgb(70, 70, 70);
+            var dark1 = Color.FromArgb(34, 34, 34);
+			var dark2 = Color.FromArgb(70, 70, 70);
 
             // Draws the Header.
-            if (e.Bounds.Contains(listView1.PointToClient(Control.MousePosition)))
+            if (e.Bounds.Contains(listView1.PointToClient(MousePosition)))
                 e.Graphics.FillRectangle(new SolidBrush(dark1), e.Bounds);
             else e.Graphics.FillRectangle(new SolidBrush(dark2), e.Bounds);
-            Point point = new Point(0, 6);
+			var point = new Point(0, 6);
             point.X = e.Bounds.X;
-            ColumnHeader col = listView1.Columns[e.ColumnIndex];
+			var col = listView1.Columns[e.ColumnIndex];
             e.Graphics.FillRectangle(new SolidBrush(dark1), point.X, 0, 2, e.Bounds.Height);
             point.X += col.Width / 2 - TextRenderer.MeasureText(col.Text, listView1.Font).Width / 2;
             TextRenderer.DrawText(e.Graphics, col.Text, listView1.Font, point, listView1.ForeColor);

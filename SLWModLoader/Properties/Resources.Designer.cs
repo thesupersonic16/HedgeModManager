@@ -70,7 +70,9 @@ namespace SLWModLoader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SLW Mod Loader could not find the game executable. The mod loader must be installed within your Sonic Lost World installation directory, or your Sonic Generations installation directory, in order to work correctly. Please ensure you&apos;ve installed the program in the correct place, and try again..
+        ///   Looks up a localized string similar to SLW Mod Loader could not find a game executable in its startup directory. 
+        ///The mod loader can attempt to look for your game and install itself automatically.
+        ///.
         /// </summary>
         internal static string CannotFindExecutableText {
             get {
@@ -133,6 +135,16 @@ namespace SLWModLoader.Properties {
         internal static string ExceptionText {
             get {
                 return ResourceManager.GetString("ExceptionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} executable has not yet been patched for use with CPKREDIR, which is required to load mods.
+        ///Would you like to patch the executable now?.
+        /// </summary>
+        internal static string ExecutableNotPatchedText {
+            get {
+                return ResourceManager.GetString("ExecutableNotPatchedText", resourceCulture);
             }
         }
         

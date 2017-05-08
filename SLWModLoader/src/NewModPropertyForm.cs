@@ -22,17 +22,17 @@ namespace SLWModLoader
             this.modform = modform;
             this.listViewItem = listViewItem;
 
-            // Clears all items in GroupComboBox.
+            // Clears all items inside of GroupComboBox.
             GroupComboBox.Items.Clear();
             // Adds all groups from the ListView into GroupComboBox.
             foreach (ListViewGroup group in modform.GetListView().Groups)
-            {
                 GroupComboBox.Items.Add(group.Header);
-            }
-            // Adds "Add Group" to GroupComboBox so the user can create groups.
+            
+			// Adds "Add Group" to GroupComboBox so the user can create groups.
             GroupComboBox.Items.Add("Add Group");
 
             Text = "New Property";
+
             if(listViewItem != null)
             {
                 Text = "Edit Property";
@@ -41,18 +41,16 @@ namespace SLWModLoader
                 textBox1.Text = listViewItem.Text;
                 GroupComboBox.SelectedIndex = modform.GetListView().Groups.IndexOf(listViewItem.Group);
                 AddButton.Text = "Update";
-                switch (listViewItem.Tag)
+
+				UpdateType();
+
+				// Parses the text.
+				switch (listViewItem.Tag)
                 {
                     case "Integer":
-                        ValueTextBox.Visible = false;
-                        ValueNumericUpDown.Visible = true;
-                        ValueCheckBox.Visible = false;
                         if (listViewItem.SubItems[1].Text.Length > 0) ValueNumericUpDown.Value = int.Parse(listViewItem.SubItems[1].Text);
                         break;
                     case "Boolean":
-                        ValueTextBox.Visible = false;
-                        ValueNumericUpDown.Visible = false;
-                        ValueCheckBox.Visible = true;
                         if (listViewItem.SubItems[1].Text.Length > 0) ValueCheckBox.Checked = bool.Parse(listViewItem.SubItems[1].Text);
                         break;
                     default:

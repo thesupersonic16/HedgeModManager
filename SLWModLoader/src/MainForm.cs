@@ -1,252 +1,68 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using SLWModLoader.Properties;
 using System.Diagnostics;
 using System.Net;
 using System.Collections.Generic;
 using System.Threading;
-using System.IO.Compression;
 using System.Linq;
-using Microsoft.Win32;
-using System.Text;
 using System.Drawing;
 using System.Security.Cryptography;
+using Microsoft.Win32;
+using SLWModLoader.Properties;
 
 namespace SLWModLoader
 {
     public partial class MainForm : Form
     {
-        public static readonly string GensExecutablePath = Path.Combine(Program.StartDirectory, "SonicGenerations.exe");
-        public static readonly string LWExecutablePath = Path.Combine(Program.StartDirectory, "slw.exe");
-        public static readonly string ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
-        public static readonly string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
-        public static Dictionary<string, byte[]> GenerationsPatches = new Dictionary<string, byte[]>();
-        public static IniFile cpkredirIni = null;
-        public static Thread modUpdatingThread;
-        public static bool exit = false;
-        public ModsDatabase ModsDb;
+        // Variables/Constants
+        public static string GensExecutablePath = Path.Combine(Program.StartDirectory, "SonicGenerations.exe");
+        public static string LWExecutablePath = Path.Combine(Program.StartDirectory, "slw.exe");
+        public static string ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
+        public static string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
 
-        public MainForm()
+        public static ModsDatabase ModsDb;
+        public static Dictionary<string, byte[]> GenerationsPatches = new Dictionary<string, byte[]>();
+        public static IniFile CPKREDIRIni = null;
+        public static Thread ModUpdatingThread;
+        public static bool Exit = false;
+
+		// Constructors
+		public MainForm()
         {
             InitializeComponent();
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            exit = true;
-            if(modUpdatingThread != null && modUpdatingThread.IsAlive)
-                while (modUpdatingThread.IsAlive)
-                    Thread.Sleep(1000);
-
-            LogFile.AddEmptyLine();
-            LogFile.AddMessage("The form has been closed.");
-
-            LogFile.Close();
-            if(cpkredirIni != null)
-                cpkredirIni.Save();
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            Text += $" (v{Program.VersionString})";
-
-            if (File.Exists(LWExecutablePath))
-            {
-                Text += " - Sonic Lost World";
-                LogFile.AddMessage("Found Sonic Lost World.");
-                PatchGroupBox.Visible = false;
-            }
-            if (File.Exists(GensExecutablePath))
-            {
-                Text += " - Sonic Generations";
-                LogFile.AddMessage("Found Sonic Generations");
-                GenerationsPatches.Add("Enable Blue Trail", Resources.Enable_Blue_Trail);
-                GenerationsPatches.Add("Disable Blue Trail", Resources.Disable_Blue_Trail);
-                GenerationsPatches.Add("", null);
-                GenerationsPatches.Add("Enable FxPipeline", Resources.Enable_FxPipeline);
-                GenerationsPatches.Add("Disable FxPipeline", Resources.Disable_FxPipeline);
-
-                for (int i = 0; i < GenerationsPatches.Count; ++i)
-                {
-                    if (GenerationsPatches.ToList()[i].Value == null)
-                        continue;
-                    Button btn = new Button()
-                    {
-                        Text = GenerationsPatches.ToList()[i].Key,
-                        Size = new Size(128, 32),
-                        Location = new Point(12 + 140 * (i / 3), 16 + (i % 3) * 42)
-                    };
-                    btn.Click += new EventHandler(PatchButton_Click);
-                    PatchGroupBox.Controls.Add(btn);
-                }
-            }
-
-            if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath))
-            {
-                if (!Directory.Exists(ModsFolderPath))
-                {
-                    if (MessageBox.Show(Resources.CannotFindModsDirectoryText, Resources.ApplicationTitle,
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        LogFile.AddMessage($"Creating mods folder at \"{ModsFolderPath}\"...");
-                        Directory.CreateDirectory(ModsFolderPath);
-                    }
-                }
-
-                LoadMods();
-                OrderModList();
-                if(!IsCPKREDIRInstalled())
-                {
-                    if (MessageBox.Show("Your "+(File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations") +
-                        " executable has not yet been Installed for use with CPKREDIR, which is required to load mods.\nWould you like to patch it now?",
-                        Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                    {
-                        InstallCPKREDIR(true);
-                    }
-                }
-                PatchLabel.Text = (File.Exists(LWExecutablePath) ? Path.GetFileName(LWExecutablePath) : Path.GetFileName(GensExecutablePath)) +
-                ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
-            }
-            else
-            {
-                if (MessageBox.Show("SLW Mod Loader could not find a game executable in its startup directory.\n" +
-                    "The mod loader can attempt to look for your game and install itself automatically.\n",
-                    Resources.ApplicationTitle, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
-                {
-                    // Gets the 32 bit Registry Key.
-                    RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam");
-                    // If null then try to get the 64 bit Registry Key.
-                    if (key == null)
-                        key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey("SOFTWARE\\Valve\\Steam");
-                    // Checks if the Key and Value exists.
-                    if (key.GetValue("SteamPath") is string steamPath)
-                    {
-                        bool installed = false;
-                        // Looks for games in the default location. 
-                        if (Directory.Exists(Path.Combine(steamPath, "steamapps\\common")))
-                        {
-                            if (File.Exists(Path.Combine(steamPath, "steamapps\\common\\Sonic Lost World\\slw.exe")) && !installed)
-                                installed = InstallModLoader(Path.Combine(steamPath, "steamapps\\common\\Sonic Lost World"), "Sonic Lost World");
-
-                            if (File.Exists(Path.Combine(steamPath, "steamapps\\common\\Sonic Generations\\SonicGenerations.exe")) && !installed)
-                                installed = InstallModLoader(Path.Combine(steamPath, "steamapps\\common\\Sonic Generations"), "Sonic Generations");
-                        }
-                        // Looks for other locations. 
-                        var libraryfolders = File.ReadAllLines(Path.Combine(steamPath, "steamapps\\libraryfolders.vdf"));
-                        int i = 1;
-                        foreach (string libraryPath in libraryfolders)
-                        {
-                            if (libraryPath.IndexOf("\"" + i + "\"") != -1)
-                            {
-                                // Gets the location.
-                                var libraryLocation = libraryPath.Substring(libraryPath.IndexOf("\t\t\"") + 3,
-                                    libraryPath.LastIndexOf('"') - (libraryPath.IndexOf("\t\t\"") + 3));
-                                // Looks for games in that location.
-                                if (Directory.Exists(Path.Combine(libraryLocation, "steamapps\\common")))
-                                {
-                                    if (File.Exists(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Lost World\\slw.exe")) && !installed)
-                                        installed = InstallModLoader(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Lost World"),
-                                            "Sonic Lost World");
-
-                                    if (File.Exists(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Generations\\SonicGenerations.exe"))
-                                        && !installed)
-                                        installed = InstallModLoader(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Generations"),
-                                            "Sonic Generations");
-                                }
-                                ++i;
-                            }
-
-                        }
-                        if(!installed)
-                        {
-                            MessageBox.Show("Failed to Install SLWModLoader,\n" +
-                                "Either Declined or Could not find a directory.", Resources.ApplicationTitle, MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Could not find Steam, Closing...", Resources.ApplicationTitle,
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    Close();
-                }
-                else
-                {
-                    MessageBox.Show(Resources.CannotFindExecutableText, Resources.ApplicationTitle,
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LogFile.AddMessage("Could not find executable, closing form...");
-                    Close();
-                }
-                return;
-            }
-
-            // Checks if "cpkredit.ini" exists as SLWModLoader uses it to store its config.
-            if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
-            {
-                try
-                {
-                    cpkredirIni = new IniFile(Path.Combine(Program.StartDirectory, "cpkredir.ini"));
-                    IniGroup group = null;
-                    if (cpkredirIni.ContainsGroup(Program.ProgramNameShort))
-                        group = cpkredirIni[Program.ProgramNameShort];
-                    else
-                    {
-                        group = new IniGroup(Program.ProgramNameShort);
-                        cpkredirIni.AddGroup(group);
-                    }
-
-                    if(group.ContainsParameter("DO A BARREL ROLL"))
-                        foreach(Control control in Controls)
-                            control.Font = new Font("Comic Sans MS", control.Font.Size, FontStyle.Bold);
-
-                    if (group.ContainsParameter("DarkTheme") && group["DarkTheme"] == "1")
-                    {
-                        ModsList.OwnerDraw = true;
-                        ApplyDarkTheme(this, splitContainer.Panel1, splitContainer.Panel2, splitContainer);
-                    }
-                    if (!group.ContainsParameter("AutoCheckForUpdates"))
-                        group.AddParameter("AutoCheckForUpdates", 0, typeof(int));
-                    if (!group.ContainsParameter("KeepModLoaderOpen"))
-                        group.AddParameter("KeepModLoaderOpen", 0, typeof(int));
-
-                    AutoCheckUpdateCheckBox.Checked = int.Parse(group["AutoCheckForUpdates"]) == 1;
-                    KeepModLoaderOpenCheckBox.Checked = int.Parse(group["KeepModLoaderOpen"]) == 1;
-                }
-                catch (Exception ex)
-                {
-                    AddMessage("Exception thrown while loading configurations.", ex);
-                }
-            }
-
-            new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
-            if(AutoCheckUpdateCheckBox.Checked)
-            {
-                modUpdatingThread = new Thread(new ThreadStart(CheckAllModUpdates));
-                modUpdatingThread.Start();
-            }
-        }
-
-        public bool InstallModLoader(string path, string gameName)
+		// Methods
+		/// <summary>
+		/// Copy all the ModLoader files into a custom directory
+		/// and creates a shortcut after that it restarts the ModLoader in the custom directory.
+		/// </summary>
+		/// <param name="path">Path to either Sonic Generations or Sonic Lost World</param>
+		/// <param name="gameName">The Name of the game</param>
+		/// <returns></returns>
+		public bool InstallModLoader(string path, string gameName)
         {
             path = path.Replace('/', '\\');
             if (MessageBox.Show("Install SLW Mod Loader in \n" + path + "?", Resources.ApplicationTitle,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                string[] files = new string[] { Program.ExecutableName, Path.ChangeExtension(Program.ExecutableName, "pdb"),
+				// SLWModLoader.exe, SLWModLoader.pdb, cpkredir.dll, cpkredir.ini, cpkredir.txt
+				var files = new string[] { Program.ExecutableName, Path.ChangeExtension(Program.ExecutableName, "pdb"),
                     "cpkredir.dll", "cpkredir.ini", "cpkredir.txt" };
 
                 foreach (string file in files)
                 {
-                    var filePath = Path.Combine(Program.StartDirectory, file);
+                    string filePath = Path.Combine(Program.StartDirectory, file);
                     if(File.Exists(filePath))
                     {
+						// Copies the current file into the custom filepath.
                         File.Copy(filePath, Path.Combine(path, file), true);
-                        try { File.Delete(filePath); } catch { }
+						// Trys To delete the old file, Its almost always SLWModLoader.exe that fails.
+						try { File.Delete(filePath); } catch { }
                     }
                     else
-                    {
+                    { // Missing file has been detected.
                         MessageBox.Show("Could not find " + file, Program.ProgramName);
                     }
                 }
@@ -255,8 +71,8 @@ namespace SLWModLoader
                 
                 // Creates a shortcut to the modloader.
                 string shortcutPath = Path.Combine(Program.StartDirectory, $"SLWModLoader - {gameName}.lnk");
-                IWshRuntimeLibrary.WshShell wsh = new IWshRuntimeLibrary.WshShell();
-                IWshRuntimeLibrary.IWshShortcut shortcut = wsh.CreateShortcut(shortcutPath) as IWshRuntimeLibrary.IWshShortcut;
+                var wsh = new IWshRuntimeLibrary.WshShell();
+                var shortcut = wsh.CreateShortcut(shortcutPath) as IWshRuntimeLibrary.IWshShortcut;
                 shortcut.Description = "SLWModLoader - "+gameName;
                 shortcut.TargetPath = Path.Combine(path, Program.ExecutableName);
                 shortcut.WorkingDirectory = path;
@@ -265,11 +81,13 @@ namespace SLWModLoader
 
                 MessageBox.Show("Done.", Program.ProgramName);
 
+				// Starts the modloader.
                 Process.Start(shortcutPath);
 
                 try
                 {
-                    ProcessStartInfo info = new ProcessStartInfo()
+					// Trys to delete SLWModLoader.exe again.
+                    var info = new ProcessStartInfo()
                     {
                         Arguments = $" /c sleep 3 & del \"{Application.ExecutablePath}\"",
                         WindowStyle = ProcessWindowStyle.Hidden,
@@ -284,6 +102,9 @@ namespace SLWModLoader
             return false;
         }
 
+		/// <summary>
+		/// Loads all the mods into ModsDb and fills in the Mods List.
+		/// </summary>
         public void LoadMods()
         {
             if (File.Exists(ModsDbPath))
@@ -302,11 +123,11 @@ namespace SLWModLoader
 
             for (int i = 0; i < ModsDb.ModCount; ++i)
             {
-                Mod modItem = ModsDb.GetMod(i);
+                var modItem = ModsDb.GetMod(i);
 
                 try
                 {
-                    ListViewItem modListViewItem = new ListViewItem(modItem.Title);
+					var modListViewItem = new ListViewItem(modItem.Title);
                     modListViewItem.Tag = modItem;
                     modListViewItem.SubItems.Add(modItem.Version);
                     modListViewItem.SubItems.Add(modItem.Author);
@@ -319,18 +140,22 @@ namespace SLWModLoader
                 }catch(Exception ex)
                 {
                     AddMessage("Exception thrown while adding mods to ModsList.", ex,
-                        $"Index: {i}", $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}", $"Root Directory: {ModsDb.RootDirectory}");
+                        $"Index: {i}", $"Active Mod Count: {ModsDb.ActiveModCount}",
+						$"File Path: {ModsDb.FilePath}", $"Root Directory: {ModsDb.RootDirectory}");
                 }
             }
 
+			// Shows the no mods controls if not mods has been detected.
             NoModsFoundLabel.Visible = linkLabel1.Visible = (ModsDb.ModCount <= 0);
             LogFile.AddMessage("Succesfully updated list view!");
         }
 
-        // Move Active mods to the top of the list
-        public void OrderModList()
+		/// <summary>
+		/// Moves the sctive mods to the top of the list.
+		/// </summary>
+		public void OrderModList()
         {
-            IniFile modsDBIni = ModsDb.getIniFile();
+            var modsDBIni = ModsDb.getIniFile();
             int count = int.Parse(modsDBIni["Main"]["ActiveModCount"]);
             int index = 0;
             for (int i = 0; i < count; ++i)
@@ -355,8 +180,8 @@ namespace SLWModLoader
 
             // Updates the background colour on the ListView if DarkTheme is enabled.
             int i = 0;
-            if (cpkredirIni[Program.ProgramNameShort].ContainsParameter("DarkTheme") &&
-                cpkredirIni[Program.ProgramNameShort]["DarkTheme"] == "1")
+            if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("DarkTheme") &&
+                CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] == "1")
                 foreach (ListViewItem lvi in ModsList.Items)
                     if (++i % 2 == 0) lvi.BackColor = Color.FromArgb(46, 46, 46);
                     else lvi.BackColor = Color.FromArgb(54, 54, 54);
@@ -375,7 +200,223 @@ namespace SLWModLoader
             RefreshModsList();
         }
 
-        private void RefreshButton_Click(object sender, EventArgs e)
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			Exit = true;
+			if (ModUpdatingThread != null && ModUpdatingThread.IsAlive)
+				while (ModUpdatingThread.IsAlive)
+					Thread.Sleep(1000);
+
+			LogFile.AddEmptyLine();
+			LogFile.AddMessage("The form has been closed.");
+
+			LogFile.Close();
+			if (CPKREDIRIni != null)
+				CPKREDIRIni.Save();
+		}
+
+		// Events
+		private void MainForm_Load(object sender, EventArgs e)
+		{
+			Text += $" (v{Program.VersionString})";
+			if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath))
+			{
+
+				if (File.Exists(LWExecutablePath))
+				{
+					Text += " - Sonic Lost World";
+					LogFile.AddMessage("Found Sonic Lost World.");
+					PatchGroupBox.Visible = false;
+				}
+				else if (File.Exists(GensExecutablePath))
+				{
+					Text += " - Sonic Generations";
+					LogFile.AddMessage("Found Sonic Generations");
+
+					// Adds SG Patches.
+					GenerationsPatches.Add("Enable Blue Trail", Resources.Enable_Blue_Trail);
+					GenerationsPatches.Add("Disable Blue Trail", Resources.Disable_Blue_Trail);
+					GenerationsPatches.Add("", null);
+					GenerationsPatches.Add("Enable FxPipeline", Resources.Enable_FxPipeline);
+					GenerationsPatches.Add("Disable FxPipeline", Resources.Disable_FxPipeline);
+
+					// Adds a Button for each patch.
+					for (int i = 0; i < GenerationsPatches.Count; ++i)
+					{
+						// Ignores entries with no data.
+						if (GenerationsPatches.ToList()[i].Value == null)
+							continue;
+
+						var btn = new Button()
+						{
+							Text = GenerationsPatches.ToList()[i].Key,
+							Size = new Size(128, 32),
+							Location = new Point(12 + 140 * (i / 3), 16 + (i % 3) * 42)
+						};
+						btn.Click += new EventHandler(PatchButton_Click);
+						PatchGroupBox.Controls.Add(btn);
+					}
+				}
+
+				// Checks if the mods directory exits, If not, then ask to create one.
+				if (!Directory.Exists(ModsFolderPath))
+				{
+					if (MessageBox.Show(Resources.CannotFindModsDirectoryText, Resources.ApplicationTitle,
+						MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+					{
+						LogFile.AddMessage($"Creating mods folder at \"{ModsFolderPath}\"...");
+						Directory.CreateDirectory(ModsFolderPath);
+					}
+					else return;
+				}
+
+				// Loads all the mods into ModDb and fills the listView.
+				LoadMods();
+				// Reorders the mod list so active mods are on the top.
+				OrderModList();
+
+				string gameName = (File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations");
+				if (!IsCPKREDIRInstalled())
+				{
+					if (MessageBox.Show(string.Format(Resources.ExecutableNotPatchedText, gameName),
+						Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+						InstallCPKREDIR(true);
+				}
+				// Sets the PatchLabel's Text to show the user if CPKREDIR is installed in either game.
+				PatchLabel.Text = gameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
+			}
+			else
+			{ // No supported game were found.
+				if (MessageBox.Show(Resources.CannotFindExecutableText, Resources.ApplicationTitle,
+					MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+				{
+					// Gets Steam's Registry Key.
+					var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam");
+					// If null then try get it from the 64-bit Registry.
+					if (key == null)
+						key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey("SOFTWARE\\Valve\\Steam");
+					// Checks if the Key and Value exists.
+					#region AutoInstaller its really messy.
+					if (key != null && key.GetValue("SteamPath") is string steamPath)
+					{
+						// This is set to true if it installs successfully.
+						bool installed = false;
+						// Looks for supported games in the default library location. 
+						if (Directory.Exists(Path.Combine(steamPath, "steamapps\\common")))
+						{
+							if (File.Exists(Path.Combine(steamPath, "steamapps\\common\\Sonic Lost World\\slw.exe")) && !installed)
+								installed = InstallModLoader(Path.Combine(steamPath, "steamapps\\common\\Sonic Lost World"), "Sonic Lost World");
+
+							if (File.Exists(Path.Combine(steamPath, "steamapps\\common\\Sonic Generations\\SonicGenerations.exe")) && !installed)
+								installed = InstallModLoader(Path.Combine(steamPath, "steamapps\\common\\Sonic Generations"), "Sonic Generations");
+						}
+						// Looks at other libraries for a supported game. 
+						var libraryfolders = File.ReadAllLines(Path.Combine(steamPath, "steamapps\\libraryfolders.vdf"));
+						int i = 1;
+						foreach (string libraryPath in libraryfolders)
+						{
+							if (libraryPath.IndexOf("\"" + i + "\"") != -1)
+							{
+								// Gets the location the library.
+								string libraryLocation = libraryPath.Substring(libraryPath.IndexOf("\t\t\"") + 3,
+									libraryPath.LastIndexOf('"') - (libraryPath.IndexOf("\t\t\"") + 3));
+								// Looks for supported games in that library.
+								if (Directory.Exists(Path.Combine(libraryLocation, "steamapps\\common")))
+								{
+									if (File.Exists(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Lost World\\slw.exe")) && !installed)
+										installed = InstallModLoader(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Lost World"),
+											"Sonic Lost World");
+
+									if (File.Exists(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Generations\\SonicGenerations.exe"))
+										&& !installed)
+										installed = InstallModLoader(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Generations"),
+											"Sonic Generations");
+								}
+								++i;
+							}
+
+						}
+						if (!installed)
+						{
+							MessageBox.Show("Failed to Install SLWModLoader,\n" +
+								"It has either been declined or It could not find a supported game.",
+								Resources.ApplicationTitle, MessageBoxButtons.OK,
+								MessageBoxIcon.Error);
+						}
+					}
+					else
+					{
+						MessageBox.Show("Could not find Steam's Registry Key, Closing...", Resources.ApplicationTitle,
+							MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+					#endregion
+					Close();
+				}
+				else
+				{ // Still Couldn't find a supported game.
+					MessageBox.Show(Resources.CannotFindExecutableText, Resources.ApplicationTitle,
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+					LogFile.AddMessage("Could not find executable, closing form...");
+					Close();
+				}
+				return;
+			}
+
+			// Checks if "cpkredit.ini" exists as SLWModLoader uses it to store its config.
+			if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
+			{
+				try
+				{
+					CPKREDIRIni = new IniFile(Path.Combine(Program.StartDirectory, "cpkredir.ini"));
+					IniGroup group = null;
+					if (CPKREDIRIni.ContainsGroup(Program.ProgramNameShort))
+						group = CPKREDIRIni[Program.ProgramNameShort];
+					else
+					{
+						group = new IniGroup(Program.ProgramNameShort);
+						CPKREDIRIni.AddGroup(group);
+					}
+
+					if (group.ContainsParameter("DO A BARREL ROLL"))
+						foreach (Control control in Controls)
+							control.Font = new Font("Comic Sans MS", control.Font.Size, FontStyle.Bold);
+
+					if (!group.ContainsParameter("AutoCheckForUpdates"))
+						group.AddParameter("AutoCheckForUpdates", "0");
+					if (!group.ContainsParameter("KeepModLoaderOpen"))
+						group.AddParameter("KeepModLoaderOpen", "1");
+					if (!group.ContainsParameter("DarkTheme"))
+						group.AddParameter("DarkTheme", "0");
+
+					if (group["DarkTheme"] != "0")
+					{
+						ModsList.OwnerDraw = true;
+						ApplyDarkTheme(this, splitContainer.Panel1, splitContainer.Panel2, splitContainer);
+					}
+
+					AutoCheckUpdateCheckBox.Checked = group["AutoCheckForUpdates"] != "0";
+					KeepModLoaderOpenCheckBox.Checked = group["KeepModLoaderOpen"] != "0";
+				}
+				catch (Exception ex)
+				{
+					AddMessage("Exception thrown while loading configurations.", ex);
+				}
+			}else
+			{
+				MessageBox.Show("Could not find cpkredir.ini\nSG," +
+					"LW and the ModLoader may not run correctly without this file.",
+					Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
+
+			new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
+			if (AutoCheckUpdateCheckBox.Checked)
+			{
+				ModUpdatingThread = new Thread(new ThreadStart(CheckAllModUpdates));
+				ModUpdatingThread.Start();
+			}
+		}
+
+		private void RefreshButton_Click(object sender, EventArgs e)
         {
             RefreshModsList();
         }
@@ -422,7 +463,11 @@ namespace SLWModLoader
             }
         }
 
-        public void StartGame()
+		/// <summary>
+		/// Does what its saids, It starts the game.
+		/// NOTE: Both games uses Steams protocol to start as its required for Lost World.
+		/// </summary>
+		public void StartGame()
         {
             if (File.Exists(LWExecutablePath))
             {
@@ -438,7 +483,11 @@ namespace SLWModLoader
             }
         }
 
-        public void CheckForModLoaderUpdates()
+		/// <summary>
+		/// Searches for any new ModLoader updates.
+		/// NOTE: The method is messy and can easily fail.
+		/// </summary>
+		public void CheckForModLoaderUpdates()
         {
             try
             {
@@ -494,13 +543,13 @@ namespace SLWModLoader
 
         public static void AddMessage(string message, Exception exception, params string[] extraData)
         {
-            if (exit) return;
+            if (Exit) return;
             LogFile.AddMessage(message);
             LogFile.AddMessage("    Exception: " + exception);
             if (extraData != null)
             {
                 LogFile.AddMessage("    Extra Data: ");
-                foreach (var s in extraData)
+                foreach (string s in extraData)
                     LogFile.AddMessage("        " + s);
             }
             MessageBox.Show(Resources.ExceptionText, Program.ProgramName);
@@ -513,8 +562,8 @@ namespace SLWModLoader
         {
             try
             {
-                byte[] bytes = File.ReadAllBytes(File.Exists(GensExecutablePath)
-                    ? GensExecutablePath : LWExecutablePath);
+                var bytes = File.ReadAllBytes(File.Exists(LWExecutablePath)
+                    ? LWExecutablePath : GensExecutablePath);
                 for (int i = 11918000; i < bytes.Length; ++i)
                 {
                     // 63 70 6B 72 65 64 69 72
@@ -534,7 +583,7 @@ namespace SLWModLoader
                         return false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AddMessage("Exception thrown while checking executeable.", ex);
             }
@@ -542,7 +591,16 @@ namespace SLWModLoader
             return false;
         }
 
-        public bool InstallCPKREDIR(bool? install)
+		/// <summary>
+		/// Installs or Uninstalls CPKREDIR.
+		/// </summary>
+		/// <param name="install">
+		/// TRUE: Only check and Install CPKREDIR.
+		/// FALSE: Only check and Uninstall CPKREDIR.
+		/// NULL: Only check and Uninstall CPKREDIR if already installed, And can go the other way around
+		/// </param>
+		/// <returns>True if it Installs at the end.</returns>
+		public bool InstallCPKREDIR(bool? install)
         {
             string executablePath = GensExecutablePath;
             if (File.Exists(LWExecutablePath))
@@ -550,7 +608,7 @@ namespace SLWModLoader
             try
             {
                 AddMessage("Scaning Executable...");
-                byte[] bytes = File.ReadAllBytes(executablePath);
+                var bytes = File.ReadAllBytes(executablePath);
                 for (int i = 11918000; i < bytes.Length; ++i)
                 {
                     // 63 70 6B 72 65 64 69 72
@@ -617,10 +675,13 @@ namespace SLWModLoader
             return false;
         }
 
+		/// <summary>
+		/// Checks for updates for all mods.
+		/// </summary>
         public void CheckAllModUpdates()
         {
             // Amount of loaded mods.
-            var count = 0;
+            int count = 0;
             Invoke(new Action(() => count = ModsList.Items.Count));
 
             for (int i = 0; i < count; ++i)
@@ -636,16 +697,22 @@ namespace SLWModLoader
                     // TODO: Find a way to get the Update SubItem without hardcoding a number.
                     Invoke(new Action(() => item.SubItems[4].Text = "Checking..."));
                     string status = CheckForModUpdates(mod.Title, true);
-                    if (exit)
+                    if (Exit)
                         return;
                     Invoke(new Action(() => item.SubItems[4].Text = status));
                 }
             }
         }
 
-        public string CheckForModUpdates(string modName, bool silent = false)
+		/// <summary>
+		/// Checks for individual mod updates.
+		/// </summary>
+		/// <param name="modName">The Name of the mod (Frendly Name)</param>
+		/// <param name="silent">True If you don't want dialog constently comming up</param>
+		/// <returns>The Status</returns>
+		public string CheckForModUpdates(string modName, bool silent = false)
         {
-            var status = "";
+            string status = "";
             var mod = ModsDb.GetMod(modName ?? ModsList.FocusedItem.Text);
             if (mod == null) return status;
 
@@ -667,7 +734,7 @@ namespace SLWModLoader
             { // Has Update Server
                 try
                 {
-                    WebClient wc = new WebClient();
+                    var wc = new WebClient();
 
                     if (mod.UpdateServer.EndsWith(".txt"))
                     { // raw txt file.
@@ -676,9 +743,9 @@ namespace SLWModLoader
                     }
                     else if (mod.UpdateServer.EndsWith("/") || mod.UpdateServer.EndsWith("mod_version.ini"))
                     { // mod_version.ini file.
-                        var mod_version_url = mod.UpdateServer.EndsWith("/") ? mod.UpdateServer + "mod_version.ini" : mod.UpdateServer;
+                        string mod_version_url = mod.UpdateServer.EndsWith("/") ? mod.UpdateServer + "mod_version.ini" : mod.UpdateServer;
                         wc.DownloadFile(mod_version_url, Path.Combine(mod.RootDirectory, "mod_version.ini.temp"));
-                        IniFile mod_version = new IniFile(Path.Combine(mod.RootDirectory, "mod_version.ini.temp"));
+                        var mod_version = new IniFile(Path.Combine(mod.RootDirectory, "mod_version.ini.temp"));
                         if (mod_version["Main"]["VersionString"] != mod.Version)
                         { // New Version is Available.
                             if (MessageBox.Show($"There's a newer version of {mod.Title} available!\n\n" +
@@ -687,15 +754,15 @@ namespace SLWModLoader
                                     Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                             {
                                 // URL to mod_update_files.txt
-                                var mod_update_files_url = mod.UpdateServer.EndsWith("/") ? mod.UpdateServer + "mod_update_files.txt" :
+                                string mod_update_files_url = mod.UpdateServer.EndsWith("/") ? mod.UpdateServer + "mod_update_files.txt" :
                                     mod.UpdateServer.Substring(0, mod.UpdateServer.Length - 15) + "mod_update_files.txt";
-                                Dictionary<string, Tuple<string, string>> files = new Dictionary<string, Tuple<string, string>>();
+                                var files = new Dictionary<string, Tuple<string, string>>();
                                 // Downloads mod_update_files.txt
-                                var mod_update_files = wc.DownloadString(mod_update_files_url);
+                                string mod_update_files = wc.DownloadString(mod_update_files_url);
                                 // Splits all the lines in mod_update_files.txt into an array.
-                                string[] split = mod_update_files.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                                var split = mod_update_files.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                                 // Adds the file name and url to the files array.
-                                foreach (var line in split)
+                                foreach (string line in split)
                                 {
                                     // Checks if the line starts with ';' if does then continue to the next line.
                                     if (line.StartsWith(";")) continue;
@@ -708,7 +775,7 @@ namespace SLWModLoader
                                         new Tuple<string, string>(line.Split(':')[0], line.Substring(line.IndexOf(":", line.IndexOf(":") + 1) + 1)));
                                 }
 
-                                UpdateModForm muf = new UpdateModForm(mod.Title, files, mod.RootDirectory);
+                                var muf = new UpdateModForm(mod.Title, files, mod.RootDirectory);
                                 muf.ShowDialog();
                                 Invoke(new Action(() => RefreshModsList()));
                             }
@@ -720,7 +787,7 @@ namespace SLWModLoader
                         else
                         { // Mod is up to date or is newer then the one on the update server.
                             status = "Up to date";
-                            if(!silent) MessageBox.Show($"{mod.Title} is already up to date.", Program.ProgramName);
+                            if (!silent) MessageBox.Show($"{mod.Title} is already up to date.", Program.ProgramName);
                         }
                     }
                     else
@@ -759,9 +826,9 @@ namespace SLWModLoader
         private void ScanExecuteableButton_Click(object sender, EventArgs e)
         {
             StatusLabel.Text = "";
-            PatchLabel.Text = (File.Exists(LWExecutablePath) ? Path.GetFileName(LWExecutablePath) : Path.GetFileName(GensExecutablePath)) +
-                ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
-        }
+			string gameName = (File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations");
+			PatchLabel.Text = gameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
+		}
 
         private void CheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -800,8 +867,8 @@ namespace SLWModLoader
         private void InstallUninstallButton_Click(object sender, EventArgs e)
         {
             StatusLabel.Text = "";
-            PatchLabel.Text = (File.Exists(LWExecutablePath) ? Path.GetFileName(LWExecutablePath) : Path.GetFileName(GensExecutablePath)) +
-                ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
+			string gameName = (File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations");
+			PatchLabel.Text = gameName + ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
         }
 
         private void OpenModFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -811,7 +878,7 @@ namespace SLWModLoader
 
         private void DesciptionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Mod mod = ModsDb.GetMod(ModsList.FocusedItem.Text);
+            var mod = ModsDb.GetMod(ModsList.FocusedItem.Text);
             new DescriptionForm(mod).ShowDialog();
         }
 
@@ -926,10 +993,10 @@ namespace SLWModLoader
                 }
                 catch (Exception ex)
                 {
-                    var data = e.Data.GetData(DataFormats.FileDrop);
-                    var dataType = data == null ? "NULL" : data.GetType().ToString();
-                    AddMessage("Exception thrown while handling drag and drop.", ex, $"Data Present: {e.Data.GetDataPresent(DataFormats.FileDrop)}",
-                        $"Data Type: {dataType}");
+					object data = e.Data.GetData(DataFormats.FileDrop);
+					string dataType = data == null ? "NULL" : data.GetType().ToString();
+                    AddMessage("Exception thrown while handling drag and drop.", ex,
+						$"Data Present: {e.Data.GetDataPresent(DataFormats.FileDrop)}", $"Data Type: {dataType}");
                 }
             }).Start();
         }
@@ -963,20 +1030,20 @@ namespace SLWModLoader
                     // Opens a FileStream to the Generations executeable.
                     var executeableStream = File.OpenWrite(GensExecutablePath);
                     // Current position of the patch file.
-                    var position = 0;
+                    int position = 0;
                     // Amount of changes.
-                    var changes = BitConverter.ToInt32(patchBytes, position);
+                    int changesCount = BitConverter.ToInt32(patchBytes, position);
                     // Adds 4 to position since we just read 4 bytes.
                     position += 4;
                     // Writes all bytes from executeableBytes back to the Generations executeable.
                     executeableStream.Write(executeableBytes, 0, executeableBytes.Length);
-                    for (int i = 0; i < changes; ++i)
+                    for (int i = 0; i < changesCount; ++i)
                     {
                         executeableStream.Position = BitConverter.ToInt32(patchBytes, position);
                         // Adds 4 to position since we just read 4 bytes.
                         position += 4;
                         // Gets the size of the current edit.
-                        var size = BitConverter.ToInt32(patchBytes, position);
+                        int size = BitConverter.ToInt32(patchBytes, position);
                         // Adds 4 to position since we just read 4 bytes.
                         position += 4;
                         // Writes the data to the executeable.
@@ -999,14 +1066,14 @@ namespace SLWModLoader
 
         private void EditModToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NewModForm nmf = new NewModForm(ModsDb.GetMod(ModsList.FocusedItem.Text));
+            var nmf = new NewModForm(ModsDb.GetMod(ModsList.FocusedItem.Text));
             nmf.ShowDialog();
             RefreshModsList();
         }
 
         private void CreateModUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Mod modified = ModsDb.GetMod(ModsList.FocusedItem.Text);
+            var modified = ModsDb.GetMod(ModsList.FocusedItem.Text);
             Mod unModified = null;
             string outLocation = Path.Combine(Program.StartDirectory, "temp_update");
 
@@ -1047,9 +1114,9 @@ namespace SLWModLoader
                         Directory.CreateDirectory(dirPath.Replace(modified.RootDirectory, outLocation));
 
                     // List of paths to files that are modified.
-                    List<string> files = new List<string>();
+                    var files = new List<string>();
 
-                    SHA256Managed sha = new SHA256Managed();
+                    var sha = new SHA256Managed();
                     
                     foreach (string filePath in Directory.GetFiles(modified.RootDirectory, "*.*", SearchOption.AllDirectories))
                     {
@@ -1059,8 +1126,8 @@ namespace SLWModLoader
                             files.Add(filePath);
                             continue;
                         }
-                        byte[] modifiedBytes = File.ReadAllBytes(filePath);
-                        byte[] unModifiedBytes = File.ReadAllBytes(filePath.Replace(modified.RootDirectory,
+                        var modifiedBytes = File.ReadAllBytes(filePath);
+                        var unModifiedBytes = File.ReadAllBytes(filePath.Replace(modified.RootDirectory,
                             unModified.RootDirectory));
                         if (modifiedBytes.Length == unModifiedBytes.Length)
                         {
@@ -1075,7 +1142,7 @@ namespace SLWModLoader
                             files.Add(filePath);
                     }
 
-                    List<string> lines = new List<string>
+                    var lines = new List<string>
                     {
                         "#Version:0",
                         ";SHA256 HASH:File Name (Including Subdirectories starting from the mod root):URL",
@@ -1117,10 +1184,10 @@ namespace SLWModLoader
 
         private void CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (cpkredirIni != null)
+            if (CPKREDIRIni != null)
             {
-                cpkredirIni[Program.ProgramNameShort]["AutoCheckForUpdates"] = AutoCheckUpdateCheckBox.Checked ? "1" : "0";
-                cpkredirIni[Program.ProgramNameShort]["KeepModLoaderOpen"] = KeepModLoaderOpenCheckBox.Checked ? "1" : "0";
+                CPKREDIRIni[Program.ProgramNameShort]["AutoCheckForUpdates"] = AutoCheckUpdateCheckBox.Checked ? "1" : "0";
+                CPKREDIRIni[Program.ProgramNameShort]["KeepModLoaderOpen"] = KeepModLoaderOpenCheckBox.Checked ? "1" : "0";
             }
         }
 
@@ -1129,16 +1196,16 @@ namespace SLWModLoader
         private void ModsList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             // Colours
-            Color dark1 = Color.FromArgb(34, 34, 34);
-            Color dark2 = Color.FromArgb(70, 70, 70);
+            var dark1 = Color.FromArgb(34, 34, 34);
+            var dark2 = Color.FromArgb(70, 70, 70);
             
             // Draws the Header.
-            if(e.Bounds.Contains(ModsList.PointToClient(Control.MousePosition)))
+            if(e.Bounds.Contains(ModsList.PointToClient(MousePosition)))
                  e.Graphics.FillRectangle(new SolidBrush(dark1), e.Bounds);
             else e.Graphics.FillRectangle(new SolidBrush(dark2), e.Bounds);
-            Point point = new Point(0, 6);
+            var point = new Point(0, 6);
             point.X = e.Bounds.X;
-            ColumnHeader col = ModsList.Columns[e.ColumnIndex];
+            var col = ModsList.Columns[e.ColumnIndex];
             e.Graphics.FillRectangle(new SolidBrush(dark1), point.X, 0, 2, e.Bounds.Height);
             point.X += col.Width / 2 - TextRenderer.MeasureText(col.Text, ModsList.Font).Width/2;
             TextRenderer.DrawText(e.Graphics, col.Text, ModsList.Font, point, ModsList.ForeColor);
@@ -1158,11 +1225,11 @@ namespace SLWModLoader
 
         public static bool ApplyDarkTheme(Control control, params Control[] controls)
         {
-            if (cpkredirIni[Program.ProgramNameShort].ContainsParameter("DarkTheme") && cpkredirIni[Program.ProgramNameShort]["DarkTheme"] == "1")
+            if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("DarkTheme") && CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] == "1")
             {
                 LogFile.WriteMessage($"Applying Dark Theme to {control.GetType().Name}...", true);
 
-                List<Control> allControls = new List<Control>();
+                var allControls = new List<Control>();
 
                 AddAllChildControls(control, allControls);
 

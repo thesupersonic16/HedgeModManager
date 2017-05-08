@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SLWModLoader
@@ -21,23 +14,30 @@ namespace SLWModLoader
         public DescriptionForm(string description, string title, string author, string date, string url, string version, string authorUrl)
         {
             InitializeComponent();
-            authorLbl.LinkArea = new LinkArea(0, 0);
-            descriptionLbl.Text = description.Replace("\\n", "\n");
+			// Clears the authorLbl's Link Area.
+			authorLbl.LinkArea = new LinkArea(0, 0);
+			// Sets the description label while also replacing \\n to \n.
+			descriptionLbl.Text = description.Replace("\\n", "\n");
+			// Sets the title label to the mod name with its version.
             titleLbl.Text = title + " v"+ version;
-            authorLbl.Text = $"Made by {author} on {date}";
+			// Sets the author label.
+			authorLbl.Text = $"Made by {author} on {date}";
             this.authorUrl = authorUrl;
 
+			// Add a link to the title label if the mod has a url.
             if (url != null && url.Length > 0)
                 titleLbl.Links.Add(new LinkLabel.Link(0, title.Length, url));
 
-            if (authorUrl.Length > 0)
+			// Adds individual auther links.
+			if (authorUrl.Length > 0)
             {
-                int i = 0;
+				int i = 0;
                 var autherSplit = author.Split(new string[] { " & " }, StringSplitOptions.None);
                 var authorUrlSplit = authorUrl.Split(new string[] { " & " }, StringSplitOptions.None);
                 foreach (string str in autherSplit)
                 {
-                    authorLbl.Links.Add(new LinkLabel.Link(8 + i, str.Length, authorUrlSplit[Array.IndexOf(autherSplit, str)]));
+                    authorLbl.Links.Add(new LinkLabel.Link(8 + i, str.Length,
+						authorUrlSplit[Array.IndexOf(autherSplit, str)]));
                     i += str.Length + 3;
                 }
             }
@@ -47,12 +47,12 @@ namespace SLWModLoader
         : this(mod.Description, mod.Title, mod.Author, mod.Date, mod.Url, mod.Version, mod.AuthorUrl)
         {
             #region Nothing to see here
-            IniGroup Desc = mod.GetIniFile()["Desc"];
+            var Desc = mod.GetIniFile()["Desc"];
             if (Desc.ContainsParameter("BackgroundImage"))
             {
                 try
                 {
-                    BackgroundImage = Bitmap.FromFile(Path.Combine(mod.RootDirectory, Desc["BackgroundImage"]));
+                    BackgroundImage = Image.FromFile(Path.Combine(mod.RootDirectory, Desc["BackgroundImage"]));
                     BackgroundImageLayout = ImageLayout.Stretch;
                 }
                 catch { }
@@ -63,7 +63,7 @@ namespace SLWModLoader
                 try
                 {
                     var rand = new Random();
-                    BackgroundImage = Bitmap.FromFile(Path.Combine(mod.RootDirectory, Desc["BackgroundImage" + rand.Next((int)Desc["BackgroundImageCount", typeof(int)])]));
+                    BackgroundImage = Image.FromFile(Path.Combine(mod.RootDirectory, Desc["BackgroundImage" + rand.Next((int)Desc["BackgroundImageCount", typeof(int)])]));
                     BackgroundImageLayout = ImageLayout.Stretch;
                 }
                 catch { }

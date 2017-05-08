@@ -70,7 +70,7 @@
             this.okBtn.TabIndex = 3;
             this.okBtn.Text = "Cancel Update";
             this.okBtn.UseVisualStyleBackColor = true;
-            this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
+            this.okBtn.Click += new System.EventHandler(this.OkBtn_Click);
             // 
             // updateBtn
             // 
@@ -84,7 +84,7 @@
             this.updateBtn.TabIndex = 0;
             this.updateBtn.Text = "Start Update Now";
             this.updateBtn.UseVisualStyleBackColor = true;
-            this.updateBtn.Click += new System.EventHandler(this.okBtn_Click);
+            this.updateBtn.Click += new System.EventHandler(this.OkBtn_Click);
             // 
             // ChangeLogForm
             // 
