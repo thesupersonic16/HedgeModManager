@@ -1,21 +1,21 @@
 # Sonic Lost World Mod Loader
-A mod loader for Sonic Lost World on the PC! This is currently a work in progress and is not in any way finished.
+A mod loader for Sonic Lost World and for Sonic Generations on the PC! This is currently a work in progress.
 
-##For those pirating Sonic Lost World:
+## For those pirating Sonic Lost World/Sonic Generations:
 Please purchase Sonic Lost World off the [Steam store](http://store.steampowered.com/app/329440/). This is the only legal way of purchasing Sonic Lost World.
 
-Version 6.0 will have support for Sonic Generations, and the same deal applies to Generations as well. Please purchase Sonic Generations off the [Steam store](http://store.steampowered.com/app/71340/).
+Version 6.0 now has support for Sonic Generations, and the same deal applies to Generations as well. Please purchase Sonic Generations off the [Steam store](http://store.steampowered.com/app/71340/).
 
 SLW Mod Loader does not support pirated copies of SLW/SG, nor will it ever support pirated copies.
 
-##How do I use this?
-After [downloading the latest binary](https://github.com/thesupersonic16/SLW-Mod-Loader/releases/latest), simply make a "mods" folder within your Sonic Lost World or within your Sonic Generations installation directory, then place a bunch of folders inside said mods directory (one for each mod) each containing a mod.ini file and all of the modified files you'd like the game to load. Then, just fire up the mod loader (SLWModLoader.exe), check the checkbox(es) next to the mods you'd like to use in-game, and click "Save and Play"
-
-###Mod installation tutorial by "Mac" (made for 1.4 but still applies to later revisions):
+## How do I use this?
+After [downloading the latest binary](https://github.com/thesupersonic16/SLW-Mod-Loader/releases/latest), Simply extract all the contents and run "SLWModLoader.exe" and click "OK" after that it should go through all of your Steam libraries on your computer searching for Sonic Lost World or Sonic Generations, Click "Yes" once its finds the game directory you want to install it into, By clicking "No" It will continue searching for other locations. After that it should ask to create a "mods" folder if you don't have one yet, Now you might get another dialog asking you if you want to patch your executable, If you get this then just click "Yes" as its required if you want to play with mods. Now If nothing goes wrong you be greeted with the main ModLoader Window, From here you can drag your mods (Folder, .zip, .7z, .rar) into the ModLoader and it should automatically figure out how to install it, Once you have atleast one mod a list should show up alowing you to choose what mods to load, check the checkbox(es) next to the mods you'd like to use in-game, and click "Save and Play"
+<!---
+### Mod installation tutorial by "Mac" (made for 1.4 but still applies to later revisions):
 
 [![Mod installation tutorial](http://img.youtube.com/vi/u-5uCVJ8Ci0/0.jpg)](https://www.youtube.com/watch?v=u-5uCVJ8Ci0 "Mod installation tutorial")
-
-##How do I release mods for this?
+-->
+## How do I release mods for this?
 **The following section is for mod developers only. If all you want to do is play with some mods made by others, simply follow the above steps.**
 
 Mods designed for the mod loader come in the form of folders that contain the following:
@@ -56,7 +56,7 @@ Wereas the "MLG Speedrun Zone 1" mod (which modifies certain files not on the ro
     - actstgmission.lua
 
 
-###The mod.ini file
+### The mod.ini file
 The mod.ini file is a mod configuration file that details all the user-friendly information about your mod, as well as how CPKREDIR should load the mod.
 
 The version of the format used in the SLW Mod Loader is a variation on the format used in SonicGMI, with some minor changes/additions here and there.
@@ -80,15 +80,15 @@ URL="https://onedrive.live.com/redir?resid=A0D011638C5973B3!5011&authkey=!AJXTG3
 
 The following is a list of the most important values that can be used in a mod.ini file:
 
-###Main
+### Main
 
-**IncludeDir?** Specifies which folders will be included with your mod, allowing you to modify the default file/folder structure mentioned above.
+**IncludeDir?** Specifies which folders will be included with your mod, allowing you to modify the default file/folder structure mentioned above. You can also set this to `../{Another Mod Name}` which should load files from another mod, But this is **NOT RECOMMEND**. (`?` is a Zero-based Number)
 
 **IncludeDirCount** Specifies how many folders will be included with your mod.
 
-**UpdateServer** A modification of the existing SonicGMI value that specifies the link to a raw .txt file containing URLs in a particular format. This feature has **not yet been added**, and will be further detailed once it is. However, I recommend linking a .txt file just in case anyway, as it will allow you to release auto-downloading updates to your mods once the mod loader has been updated to support this feature.
+**UpdateServer** A modification of the existing SonicGMI value that specifies the link to a raw .txt file containing URLs in a particular format. This feature has **not yet been fully added**, and will be further detailed once it is. However, I recommend linking a .txt file or a link to a folder on a http server just in case anyway, as it will allow you to release auto-downloading updates to your mods once the mod loader has been updated to support this feature.
 
-###Desc
+### Desc
 
 **Title** The name of your mod as shown in the mod loader.
 
