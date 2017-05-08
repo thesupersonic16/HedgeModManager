@@ -7,9 +7,22 @@ Please purchase Sonic Lost World off the [Steam store](http://store.steampowered
 Version 6.0 now has support for Sonic Generations, and the same deal applies to Generations as well. Please purchase Sonic Generations off the [Steam store](http://store.steampowered.com/app/71340/).
 
 SLW Mod Loader does not support pirated copies of SLW/SG, nor will it ever support pirated copies.
-
+<!---
 ## How do I use this?
 After [downloading the latest binary](https://github.com/thesupersonic16/SLW-Mod-Loader/releases/latest), Simply extract all the contents and run "SLWModLoader.exe" and click "OK" after that it should go through all of your Steam libraries on your computer searching for Sonic Lost World or Sonic Generations, Click "Yes" once its finds the game directory you want to install it into, By clicking "No" It will continue searching for other locations. After that it should ask to create a "mods" folder if you don't have one yet, Now you might get another dialog asking you if you want to patch your executable, If you get this then just click "Yes" as its required if you want to play with mods. Now If nothing goes wrong you be greeted with the main ModLoader Window, From here you can drag your mods (Folder, .zip, .7z, .rar) into the ModLoader and it should automatically figure out how to install it, Once you have atleast one mod a list should show up alowing you to choose what mods to load, check the checkbox(es) next to the mods you'd like to use in-game, and click "Save and Play"
+-->
+
+## How do I use this?
+Its simple, Just get the [latest binary from here](https://github.com/thesupersonic16/SLW-Mod-Loader/releases/latest) (or compile the sourcecode yourself) and extract all the files anywhere and run SLWModLoader.exe and click "Yes"/"OK" on the dialogs.
+
+If you haven't modded SG or SLW before, You might get alot of dialogs, which is not a problem as you can just click "Yes"/"OK" on pretty much all of them.
+
+SLWModLoader can also attempt to find your game directory and copy its files there if you didn't extract the files into your game directory, which can make installation much easier if you end up forgetting where you installed SG or SLW or don't know how find it. This works by searching for SG or SLW in your Steam's libraries in the background. **Note**: This will not work if the game is not in a Steam library.
+
+You should be at the main Modloader window If nothing went wrong. From here you can start adding mods by dragging its zip/7z/rar/folder into the modloader's Window and the ModLoader should automatically figure out how to install that mod (You can also drag and drop multiable files/folders).
+
+Once your done, you can start checking the checkbox(es) and click "Save and Play".
+
 <!---
 ### Mod installation tutorial by "Mac" (made for 1.4 but still applies to later revisions):
 
