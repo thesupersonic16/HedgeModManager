@@ -26,6 +26,7 @@ namespace SLWModLoader
         public static IniFile CPKREDIRIni = null;
         public static Thread ModUpdatingThread;
         public static bool Exit = false;
+		public static bool Ready = false;
 
 		// Constructors
 		public MainForm()
@@ -387,6 +388,12 @@ namespace SLWModLoader
 						group.AddParameter("KeepModLoaderOpen", "1");
 					if (!group.ContainsParameter("DarkTheme"))
 						group.AddParameter("DarkTheme", "0");
+					
+					AutoCheckUpdateCheckBox.Checked = group["AutoCheckForUpdates"] != "0";
+					KeepModLoaderOpenCheckBox.Checked = group["KeepModLoaderOpen"] != "0";
+					
+					EnableSaveFileRedirectionCheckBox.Checked = CPKREDIRIni["CPKREDIR"]["EnableSaveFileRedirection"] != "0";
+					EnableCPKREDIRConsoleCheckBox.Checked = CPKREDIRIni["CPKREDIR"].ContainsParameter("LogType");
 
 					if (group["DarkTheme"] != "0")
 					{
@@ -394,8 +401,6 @@ namespace SLWModLoader
 						ApplyDarkTheme(this, splitContainer.Panel1, splitContainer.Panel2, splitContainer);
 					}
 
-					AutoCheckUpdateCheckBox.Checked = group["AutoCheckForUpdates"] != "0";
-					KeepModLoaderOpenCheckBox.Checked = group["KeepModLoaderOpen"] != "0";
 				}
 				catch (Exception ex)
 				{
@@ -414,6 +419,7 @@ namespace SLWModLoader
 				ModUpdatingThread = new Thread(new ThreadStart(CheckAllModUpdates));
 				ModUpdatingThread.Start();
 			}
+			Ready = true;
 		}
 
 		private void RefreshButton_Click(object sender, EventArgs e)
@@ -1184,11 +1190,17 @@ namespace SLWModLoader
 
         private void CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (CPKREDIRIni != null)
+            if (CPKREDIRIni != null && Ready)
             {
                 CPKREDIRIni[Program.ProgramNameShort]["AutoCheckForUpdates"] = AutoCheckUpdateCheckBox.Checked ? "1" : "0";
                 CPKREDIRIni[Program.ProgramNameShort]["KeepModLoaderOpen"] = KeepModLoaderOpenCheckBox.Checked ? "1" : "0";
-            }
+				CPKREDIRIni["CPKREDIR"]["EnableSaveFileRedirection"] = EnableSaveFileRedirectionCheckBox.Checked ? "1" : "0";
+
+				if (EnableCPKREDIRConsoleCheckBox.Checked && !CPKREDIRIni["CPKREDIR"].ContainsParameter("LogType"))
+					CPKREDIRIni["CPKREDIR"].AddParameter("LogType", "console");
+				else
+					CPKREDIRIni["CPKREDIR"].RemoveParameter("LogType");
+			}
         }
 
         #region Don't Look!

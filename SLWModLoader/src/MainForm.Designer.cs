@@ -72,6 +72,8 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
+            this.EnableCPKREDIRConsoleCheckBox = new System.Windows.Forms.CheckBox();
+            this.EnableSaveFileRedirectionCheckBox = new System.Windows.Forms.CheckBox();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -95,7 +97,7 @@
             this.deleteModToolStripMenuItem,
             this.createModUpdateToolStripMenuItem});
             this.ModsListContextMenu.Name = "ModsListContextMenu";
-            this.ModsListContextMenu.Size = new System.Drawing.Size(204, 158);
+            this.ModsListContextMenu.Size = new System.Drawing.Size(204, 136);
             // 
             // desciptionToolStripMenuItem
             // 
@@ -331,6 +333,8 @@
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.EnableSaveFileRedirectionCheckBox);
+            this.SettingsPage.Controls.Add(this.EnableCPKREDIRConsoleCheckBox);
             this.SettingsPage.Controls.Add(this.KeepModLoaderOpenCheckBox);
             this.SettingsPage.Controls.Add(this.AutoCheckUpdateCheckBox);
             this.SettingsPage.Controls.Add(this.PatchGroupBox);
@@ -544,6 +548,28 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
+            // EnableCPKREDIRConsoleCheckBox
+            // 
+            this.EnableCPKREDIRConsoleCheckBox.AutoSize = true;
+            this.EnableCPKREDIRConsoleCheckBox.Location = new System.Drawing.Point(33, 141);
+            this.EnableCPKREDIRConsoleCheckBox.Name = "EnableCPKREDIRConsoleCheckBox";
+            this.EnableCPKREDIRConsoleCheckBox.Size = new System.Drawing.Size(158, 17);
+            this.EnableCPKREDIRConsoleCheckBox.TabIndex = 19;
+            this.EnableCPKREDIRConsoleCheckBox.Text = "Enable CPKREDIR Console";
+            this.EnableCPKREDIRConsoleCheckBox.UseVisualStyleBackColor = true;
+            this.EnableCPKREDIRConsoleCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
+            // 
+            // EnableSaveFileRedirectionCheckBox
+            // 
+            this.EnableSaveFileRedirectionCheckBox.AutoSize = true;
+            this.EnableSaveFileRedirectionCheckBox.Location = new System.Drawing.Point(33, 118);
+            this.EnableSaveFileRedirectionCheckBox.Name = "EnableSaveFileRedirectionCheckBox";
+            this.EnableSaveFileRedirectionCheckBox.Size = new System.Drawing.Size(163, 17);
+            this.EnableSaveFileRedirectionCheckBox.TabIndex = 20;
+            this.EnableSaveFileRedirectionCheckBox.Text = "Enable Save File Redirection";
+            this.EnableSaveFileRedirectionCheckBox.UseVisualStyleBackColor = true;
+            this.EnableSaveFileRedirectionCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.SaveAndPlayButton;
@@ -630,6 +656,8 @@
         private System.Windows.Forms.CheckBox AutoCheckUpdateCheckBox;
         private System.Windows.Forms.CheckBox KeepModLoaderOpenCheckBox;
         private System.Windows.Forms.ToolStripMenuItem createModUpdateToolStripMenuItem;
-    }
+		private System.Windows.Forms.CheckBox EnableCPKREDIRConsoleCheckBox;
+		private System.Windows.Forms.CheckBox EnableSaveFileRedirectionCheckBox;
+	}
 }
 
