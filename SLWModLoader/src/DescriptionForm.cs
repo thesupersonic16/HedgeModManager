@@ -14,30 +14,30 @@ namespace SLWModLoader
         public DescriptionForm(string description, string title, string author, string date, string url, string version, string authorUrl)
         {
             InitializeComponent();
-			// Clears the authorLbl's Link Area.
-			authorLbl.LinkArea = new LinkArea(0, 0);
-			// Sets the description label while also replacing \\n to \n.
-			descriptionLbl.Text = description.Replace("\\n", "\n");
-			// Sets the title label to the mod name with its version.
+            // Clears the authorLbl's Link Area.
+            authorLbl.LinkArea = new LinkArea(0, 0);
+            // Sets the description label while also replacing \\n to \n.
+            descriptionLbl.Text = description.Replace("\\n", "\n");
+            // Sets the title label to the mod name with its version.
             titleLbl.Text = title + " v"+ version;
-			// Sets the author label.
-			authorLbl.Text = $"Made by {author} on {date}";
+            // Sets the author label.
+            authorLbl.Text = $"Made by {author} on {date}";
             this.authorUrl = authorUrl;
 
-			// Add a link to the title label if the mod has a url.
+            // Add a link to the title label if the mod has a url.
             if (url != null && url.Length > 0)
                 titleLbl.Links.Add(new LinkLabel.Link(0, title.Length, url));
 
-			// Adds individual auther links.
-			if (authorUrl.Length > 0)
+            // Adds individual auther links.
+            if (authorUrl.Length > 0)
             {
-				int i = 0;
+                int i = 0;
                 var autherSplit = author.Split(new string[] { " & " }, StringSplitOptions.None);
                 var authorUrlSplit = authorUrl.Split(new string[] { " & " }, StringSplitOptions.None);
                 foreach (string str in autherSplit)
                 {
                     authorLbl.Links.Add(new LinkLabel.Link(8 + i, str.Length,
-						authorUrlSplit[Array.IndexOf(autherSplit, str)]));
+                        authorUrlSplit[Array.IndexOf(autherSplit, str)]));
                     i += str.Length + 3;
                 }
             }

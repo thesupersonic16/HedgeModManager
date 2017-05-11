@@ -28,7 +28,7 @@ namespace SLWModLoader
             foreach (ListViewGroup group in modform.GetListView().Groups)
                 GroupComboBox.Items.Add(group.Header);
             
-			// Adds "Add Group" to GroupComboBox so the user can create groups.
+            // Adds "Add Group" to GroupComboBox so the user can create groups.
             GroupComboBox.Items.Add("Add Group");
 
             Text = "New Property";
@@ -42,10 +42,10 @@ namespace SLWModLoader
                 GroupComboBox.SelectedIndex = modform.GetListView().Groups.IndexOf(listViewItem.Group);
                 AddButton.Text = "Update";
 
-				UpdateType();
+                UpdateType();
 
-				// Parses the text.
-				switch (listViewItem.Tag)
+                // Parses the text.
+                switch (listViewItem.Tag)
                 {
                     case "Integer":
                         if (listViewItem.SubItems[1].Text.Length > 0) ValueNumericUpDown.Value = int.Parse(listViewItem.SubItems[1].Text);

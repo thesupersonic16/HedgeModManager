@@ -45,8 +45,8 @@ namespace SLWModLoader
                 {
                     // Gets and stores the current line.
                     string fileName = fileList[i].Key;
-					string fileUrl = fileList[i].Value.Item2;
-					string fileHash = fileList[i].Value.Item1;
+                    string fileUrl = fileList[i].Value.Item2;
+                    string fileHash = fileList[i].Value.Item1;
 
                     LogFile.AddMessage($"Downloading: {fileName} at {fileUrl}");
                     // Closes and returns if the user clicked cancel.
