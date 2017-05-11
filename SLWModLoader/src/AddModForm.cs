@@ -107,14 +107,20 @@ namespace SLWModLoader
         {
             // A List of folders that have mod.ini in them.
             var folders = new List<string>();
+
+            // Looks though all the folders for mods.
             foreach (string dirPath in Directory.GetDirectories(folderPath, "*", SearchOption.AllDirectories))
             {
                 if (File.Exists(Path.Combine(dirPath, "mod.ini")))
                     folders.Add(dirPath);
             }
 
+            // Checks if there is a file called "mod.ini" inside the selected folder.
+            if (File.Exists(Path.Combine(folderPath, "mod.ini")))
+                folders.Add(folderPath);
+
             // Checks if theres a folder with a mod inside of it.
-            if(folders.Count > 0)
+            if (folders.Count > 0)
             {
                 foreach(string folder in folders)
                 {
