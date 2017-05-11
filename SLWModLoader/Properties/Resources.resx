@@ -157,4 +157,8 @@ The mod loader can attempt to look for your game and install itself automaticall
     <value>{0} executable has not yet been patched for use with CPKREDIR, which is required to load mods.
 Would you like to patch the executable now?</value>
   </data>
+  <data name="InvalidIncludeDirText" xml:space="preserve">
+    <value>The mod "{0}" has an invalid includeDir ({1})
+Do you want SLWModLoader to attempt to fix this?</value>
+  </data>
 </root>

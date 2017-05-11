@@ -159,6 +159,16 @@ namespace SLWModLoader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The mod &quot;{0}&quot; has an invalid includeDir ({1})
+        ///Do you want SLWModLoader to attempt to fix this?.
+        /// </summary>
+        internal static string InvalidIncludeDirText {
+            get {
+                return ResourceManager.GetString("InvalidIncludeDirText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We have detected that you&apos;re using a pirated copy of {0}. Please purchase {0} off the Steam store..
         /// </summary>
         internal static string PiracyText {

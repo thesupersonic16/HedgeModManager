@@ -128,6 +128,20 @@ namespace SLWModLoader
 
                 try
                 {
+                    // Checks if IncludeDirs are valid.
+                    for (int i2 = 0; i2 < modItem.IncludeDirCount; ++i2)
+                    {
+                        string includeDir = modItem.GetIniFile()["Main"]["IncludeDir" + i2];
+                        if (!Directory.Exists(Path.Combine(modItem.RootDirectory, includeDir)) && includeDir != ".")
+                        {
+                            if (MessageBox.Show(string.Format(Resources.InvalidIncludeDirText, modItem.Title, i2),
+                                Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                                == DialogResult.Yes)
+                                AddModForm.FixIncludeDir(i2, modItem);
+                        }
+                    }
+
+
                     var modListViewItem = new ListViewItem(modItem.Title);
                     modListViewItem.Tag = modItem;
                     modListViewItem.SubItems.Add(modItem.Version);
@@ -1092,7 +1106,7 @@ namespace SLWModLoader
             var openFileDialog = new OpenFileDialog()
             {
                 Title = "Open Unmodified mod.",
-                Filter = "Mod Ini (mod.ini)|mod.ini;"
+                Filter = "Mod|mod.ini"
             };
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)

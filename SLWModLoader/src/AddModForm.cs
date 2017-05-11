@@ -140,6 +140,26 @@ namespace SLWModLoader
             }            
         }
 
+        public static void FixIncludeDir(int index, Mod mod)
+        {
+            try
+            {
+                string includeDir = mod.GetIniFile()["Main"]["IncludeDir" + index];
+                mod.GetIniFile().Save(Path.Combine(mod.RootDirectory, "mod_backup.ini"));
+                
+                // Old Generations IncludeDir?
+                if (includeDir.StartsWith($"./mods/{Path.GetFileName(mod.RootDirectory)}"))
+                {
+                    // It pretty much just trims "/mods/{ModName}" out.
+                    // As these should be relative to the mod root.
+                    mod.GetIniFile()["Main"]["IncludeDir" + index] =
+                        "." + includeDir.Substring(7 + Path.GetFileName(mod.RootDirectory).Length);
+                    mod.Save();
+                }
+            }catch
+            { }
+        }
+
         private void AddModForm_Load(object sender, EventArgs e)
         {
             MainForm.ApplyDarkTheme(this);
