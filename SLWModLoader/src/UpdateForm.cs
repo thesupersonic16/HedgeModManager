@@ -18,53 +18,54 @@ namespace SLWModLoader
     public partial class UpdateForm : Form
     {
 
-        public Thread thread;
-        public string url;
+        public Thread Thread;
+        public string Url;
 
         public UpdateForm(string url)
         {
             InitializeComponent();
-            this.url = url;
+            Url = url;
         }
 
         private void UpdateForm_Load(object sender, EventArgs e)
         {
-            var wc = new WebClient();
+            var webClient = new WebClient();
 
-            thread = new Thread(() =>
+            Thread = new Thread(() =>
             {
-                // Update batch file if you are changing this.
+                // Path to where all the update file are stored
                 string tempPath = Path.Combine(Program.StartDirectory, "updateTemp");
-                // Creates a temp directory to store all the update files.
+                // Creates the temp directory
                 Directory.CreateDirectory(tempPath);
-                
-                wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(WebClient_DownloadProgressChanged);
-                // Starts downloading the update zip file.
-                Invoke(new Action(() => wc.DownloadFileAsync(new Uri(url), Path.Combine(tempPath, "SLWModLoaderUpdate.zip"))));
-                // Waits for the update to finish.
-                while (wc.IsBusy)
+                // Adds an event to the "DownloadProgressChanged" EventHandler
+                webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(WebClient_DownloadProgressChanged);
+                // Starts downloading the update zip asynchronously
+                Invoke(new Action(() => webClient.DownloadFileAsync(new Uri(Url), Path.Combine(tempPath, "SLWModLoaderUpdate.zip"))));
+                // Waits for the update to finish
+                while (webClient.IsBusy)
                 {
                     Thread.Sleep(50);
                 }
 
                 LogFile.AddMessage("Finished Downloading update. Installing");
-
                 LogFile.AddMessage("Extracting Update...");
-                // Extract the update files.
+                
+                // Extracts the update files
                 ZipFile.ExtractToDirectory(Path.Combine(tempPath, "SLWModLoaderUpdate.zip"), tempPath);
-                // Deletes the zip file as we don't need it anymore.
+                // Deletes the zip file, since we nolonger need it
                 File.Delete(Path.Combine(tempPath, "SLWModLoaderUpdate.zip"));
+
                 LogFile.AddMessage("Finished extracting update.");
 
-                // Writes the batch file so we can continue the update process.
+                // Writes the batch file so we can continue the update process
                 File.WriteAllBytes(Path.Combine(Program.StartDirectory, "update.bat"), Properties.Resources.update);
                 
-                // Runs the batch file and closes the mod loader.
+                // Runs the batch file and closes the Modloader
                 LogFile.AddMessage($"Closing {Program.ProgramName} to continue the update...");
                 new Process(){ StartInfo = new ProcessStartInfo(Path.Combine(Program.StartDirectory, "update.bat")) }.Start();
                 Application.Exit();
             });
-            thread.Start();
+            Thread.Start();
         }
 
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

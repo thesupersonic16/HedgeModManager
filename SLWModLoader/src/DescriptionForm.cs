@@ -122,7 +122,7 @@ namespace SLWModLoader
                 catch { }
             }
 
-            if(Desc.ContainsParameter("HeaderSize"))
+            if (Desc.ContainsParameter("HeaderSize"))
             {
                 try
                 {

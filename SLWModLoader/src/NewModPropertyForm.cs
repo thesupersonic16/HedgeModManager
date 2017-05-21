@@ -13,14 +13,14 @@ namespace SLWModLoader
     public partial class NewModPropNewForm : Form
     {
 
-        public NewModForm modform;
-        public ListViewItem listViewItem;
+        public NewModForm Modform;
+        public ListViewItem WorkingListViewItem;
 
         public NewModPropNewForm(NewModForm modform, ListViewItem listViewItem)
         {
             InitializeComponent();
-            this.modform = modform;
-            this.listViewItem = listViewItem;
+            Modform = modform;
+            WorkingListViewItem = listViewItem;
 
             // Clears all items inside of GroupComboBox.
             GroupComboBox.Items.Clear();
@@ -33,7 +33,7 @@ namespace SLWModLoader
 
             Text = "New Property";
 
-            if(listViewItem != null)
+            if (listViewItem != null)
             {
                 Text = "Edit Property";
                 label1.Text = "Edit Property: " + listViewItem.Text;
@@ -48,10 +48,12 @@ namespace SLWModLoader
                 switch (listViewItem.Tag)
                 {
                     case "Integer":
-                        if (listViewItem.SubItems[1].Text.Length > 0) ValueNumericUpDown.Value = int.Parse(listViewItem.SubItems[1].Text);
+                        if (listViewItem.SubItems[1].Text.Length > 0)
+                            ValueNumericUpDown.Value =int.Parse(listViewItem.SubItems[1].Text);
                         break;
                     case "Boolean":
-                        if (listViewItem.SubItems[1].Text.Length > 0) ValueCheckBox.Checked = bool.Parse(listViewItem.SubItems[1].Text);
+                        if (listViewItem.SubItems[1].Text.Length > 0)
+                            ValueCheckBox.Checked = bool.Parse(listViewItem.SubItems[1].Text);
                         break;
                     default:
                         ValueTextBox.Text = listViewItem.SubItems[1].Text;
@@ -86,45 +88,48 @@ namespace SLWModLoader
         {
             if (GroupComboBox.SelectedItem as string == "Add Group")
             {
-                if(textBox1.Text.Length > 0)
+                if (textBox1.Text.Length > 0)
                 {
-                    GroupComboBox.Items.Add(modform.AddGroup(textBox1.Text).Header);
+                    GroupComboBox.Items.Add(Modform.AddGroup(textBox1.Text).Header);
                     GroupComboBox.SelectedIndex = GroupComboBox.Items.Count - 1;
                     GroupComboBox.Items.Remove("Add Group");
                     GroupComboBox.Items.Add("Add Group");
                 }
                 return;
             }
-            if(listViewItem != null)
+            if (WorkingListViewItem != null)
             {
                 switch (TypeComboBox.Text)
                 {
                     case "Integer":
-                        listViewItem.SubItems[1].Text = ValueNumericUpDown.Value.ToString();
+                        WorkingListViewItem.SubItems[1].Text = ValueNumericUpDown.Value.ToString();
                         break;
                     case "Boolean":
-                        listViewItem.SubItems[1].Text = ValueCheckBox.Checked.ToString();
+                        WorkingListViewItem.SubItems[1].Text = ValueCheckBox.Checked.ToString();
                         break;
                     default:
-                        listViewItem.SubItems[1].Text = ValueTextBox.Text;
+                        WorkingListViewItem.SubItems[1].Text = ValueTextBox.Text;
                         break;
                 }
-                listViewItem.Text = textBox1.Text;
-                listViewItem.Tag = TypeComboBox.Text;
-                listViewItem.Group = modform.GetListView().Groups[GroupComboBox.SelectedIndex];
+                WorkingListViewItem.Text = textBox1.Text;
+                WorkingListViewItem.Tag = TypeComboBox.Text;
+                WorkingListViewItem.Group = Modform.GetListView().Groups[GroupComboBox.SelectedIndex];
             }
             else
             {
                 switch (TypeComboBox.Text)
                 {
                     case "Integer":
-                        modform.AddProperty(textBox1.Text, ValueNumericUpDown.Value.ToString(), GroupComboBox.SelectedIndex, TypeComboBox.Text);
+                        Modform.AddProperty(textBox1.Text, ValueNumericUpDown.Value.ToString(),
+                            GroupComboBox.SelectedIndex, TypeComboBox.Text);
                         break;
                     case "Boolean":
-                        modform.AddProperty(textBox1.Text, ValueCheckBox.Checked.ToString(), GroupComboBox.SelectedIndex, TypeComboBox.Text);
+                        Modform.AddProperty(textBox1.Text, ValueCheckBox.Checked.ToString(),
+                            GroupComboBox.SelectedIndex, TypeComboBox.Text);
                         break;
                     default:
-                        modform.AddProperty(textBox1.Text, ValueTextBox.Text, GroupComboBox.SelectedIndex, TypeComboBox.Text);
+                        Modform.AddProperty(textBox1.Text, ValueTextBox.Text, GroupComboBox.SelectedIndex,
+                            TypeComboBox.Text);
                         break;
                 }
             }
@@ -168,11 +173,11 @@ namespace SLWModLoader
                 Text = "New Property";
                 label1.Text = "New Property: ";
                 textBox1.Text = "";
-                if (listViewItem != null)
+                if (WorkingListViewItem != null)
                 {
                     Text = "Edit Property";
-                    label1.Text = "Edit Property: " + listViewItem.Text;
-                    textBox1.Text = listViewItem.Text;
+                    label1.Text = "Edit Property: " + WorkingListViewItem.Text;
+                    textBox1.Text = WorkingListViewItem.Text;
                 }
             }
         }

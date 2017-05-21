@@ -14,14 +14,14 @@ namespace SLWModLoader
 {
     public partial class NewModForm : Form
     {
-        public string modName = string.Empty;
-        public Mod mod;
+        public string ModName = string.Empty;
+        public Mod _Mod;
 
         // Create a new mod.
         public NewModForm(string name)
         {
             InitializeComponent();
-            modName = name;
+            ModName = name;
             // Automatically fill in some info.
             listView1.Groups[1].Items[0].SubItems[1].Text = name; // Title
             listView1.Groups[1].Items[3].SubItems[1].Text = DateTime.Now.ToShortDateString(); // Date
@@ -32,8 +32,8 @@ namespace SLWModLoader
         public NewModForm(Mod mod)
         {
             InitializeComponent();
-            this.mod = mod;
-            modName = Path.GetFileName(mod.RootDirectory);
+            _Mod = mod;
+            ModName = Path.GetFileName(mod.RootDirectory);
             // Automatically fill in some info.
             var ini = mod.GetIniFile();
 
@@ -44,7 +44,7 @@ namespace SLWModLoader
                 ListViewGroup group = null;
                 foreach (ListViewGroup group2 in listView1.Groups)
                 {
-                    if(group2.Header.ToLower().Equals(iniGroup.GroupName.ToLower()))
+                    if (group2.Header.ToLower().Equals(iniGroup.GroupName.ToLower()))
                     {
                         group = group2;
                         break;
@@ -249,13 +249,13 @@ namespace SLWModLoader
 
         private void OkBtn_Click(object sender, EventArgs e)
         {
-            string filePath = Path.Combine(MainForm.ModsFolderPath, modName);
+            string filePath = Path.Combine(MainForm.ModsFolderPath, ModName);
             Directory.CreateDirectory(filePath);
             var iniFile = new IniFile();
 
             // Adds all the groups.
             foreach (ListViewGroup group in listView1.Groups)
-                if(group.Items.Count > 0)
+                if (group.Items.Count > 0)
                     iniFile.AddGroup(group.Header);
             
             // Adds all the properties into the ini file.
@@ -272,8 +272,8 @@ namespace SLWModLoader
                         if (lvi.Text.ToLower().Equals("savefile"))
                         {
                             if (!File.Exists(Path.Combine(filePath, lvi.SubItems[1].Text)) &&
-                                MessageBox.Show("Would you like to create a save file?", Program.ProgramName,
-                                MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                MessageBox.Show($"Would you like {Program.ProgramName} to create a save file?",
+                                Program.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
                             {
                                 try
                                 {
@@ -307,14 +307,14 @@ namespace SLWModLoader
 
         private void RmvBtn_Click(object sender, EventArgs e)
         {
-            if(listView1.Items.Count > 0 && listView1.FocusedItem != null)
+            if (listView1.Items.Count > 0 && listView1.FocusedItem != null)
                 listView1.Items.Remove(listView1.FocusedItem);
         }
 
         private void ListView1_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Checks if there is a selected Item.
-            if(listView1.FocusedItem != null)
+            if (listView1.FocusedItem != null)
             // Deletes the focused item if the user presses the Delete key.
             if (e.KeyChar == (char)46)
             {
@@ -324,11 +324,11 @@ namespace SLWModLoader
 
         private void NewModForm_Load(object sender, EventArgs e)
         {
-            if(MainForm.ApplyDarkTheme(this))
+            if (MainForm.ApplyDarkTheme(this))
             {
-                foreach(ListViewItem lvi in listView1.Items)
+                foreach (ListViewItem lvi in listView1.Items)
                 {
-                    if(lvi.ForeColor == Color.Black)
+                    if (lvi.ForeColor == Color.Black)
                     {
                         lvi.ForeColor = Color.FromArgb(200, 200, 180);
                         lvi.SubItems[0].ForeColor = Color.FromArgb(200, 200, 180);
@@ -349,10 +349,10 @@ namespace SLWModLoader
             else e.Graphics.FillRectangle(new SolidBrush(dark2), e.Bounds);
             var point = new Point(0, 6);
             point.X = e.Bounds.X;
-            var col = listView1.Columns[e.ColumnIndex];
+            var column = listView1.Columns[e.ColumnIndex];
             e.Graphics.FillRectangle(new SolidBrush(dark1), point.X, 0, 2, e.Bounds.Height);
-            point.X += col.Width / 2 - TextRenderer.MeasureText(col.Text, listView1.Font).Width / 2;
-            TextRenderer.DrawText(e.Graphics, col.Text, listView1.Font, point, listView1.ForeColor);
+            point.X += column.Width / 2 - TextRenderer.MeasureText(column.Text, listView1.Font).Width / 2;
+            TextRenderer.DrawText(e.Graphics, column.Text, listView1.Font, point, listView1.ForeColor);
         }
 
         private void ListView1_DrawItem(object sender, DrawListViewItemEventArgs e)

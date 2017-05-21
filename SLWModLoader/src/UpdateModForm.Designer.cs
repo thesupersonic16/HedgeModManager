@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.ProgressBarFile = new System.Windows.Forms.ProgressBar();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.CancelUpdateButton = new System.Windows.Forms.Button();
             this.ProgressBarAll = new System.Windows.Forms.ProgressBar();
             this.UpdateLabel = new System.Windows.Forms.Label();
             this.DownloadLabel = new System.Windows.Forms.Label();
@@ -44,13 +44,13 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(190, 182);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(123, 23);
-            this.CancelButton.TabIndex = 1;
-            this.CancelButton.Text = "Cancel Update";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CancelUpdateButton.Location = new System.Drawing.Point(190, 182);
+            this.CancelUpdateButton.Name = "CancelButton";
+            this.CancelUpdateButton.Size = new System.Drawing.Size(123, 23);
+            this.CancelUpdateButton.TabIndex = 1;
+            this.CancelUpdateButton.Text = "Cancel Update";
+            this.CancelUpdateButton.UseVisualStyleBackColor = true;
+            this.CancelUpdateButton.Click += new System.EventHandler(this.CancelUpdateButton_Click);
             // 
             // ProgressBarAll
             // 
@@ -59,23 +59,23 @@
             this.ProgressBarAll.Size = new System.Drawing.Size(472, 32);
             this.ProgressBarAll.TabIndex = 2;
             // 
-            // label1
+            // UpdateLabel
             // 
             this.UpdateLabel.AutoSize = true;
             this.UpdateLabel.Font = new System.Drawing.Font("Segoe UI", 24F);
             this.UpdateLabel.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.UpdateLabel.Location = new System.Drawing.Point(161, 9);
-            this.UpdateLabel.Name = "label1";
-            this.UpdateLabel.Size = new System.Drawing.Size(152, 45);
+            this.UpdateLabel.Location = new System.Drawing.Point(128, 9);
+            this.UpdateLabel.Name = "UpdateLabel";
+            this.UpdateLabel.Size = new System.Drawing.Size(256, 45);
             this.UpdateLabel.TabIndex = 3;
-            this.UpdateLabel.Text = "Updating";
+            this.UpdateLabel.Text = "Updating {MOD}";
             // 
             // DownloadLabel
             // 
             this.DownloadLabel.AutoSize = true;
             this.DownloadLabel.Font = new System.Drawing.Font("Segoe UI", 16F);
             this.DownloadLabel.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.DownloadLabel.Location = new System.Drawing.Point(132, 54);
+            this.DownloadLabel.Location = new System.Drawing.Point(153, 54);
             this.DownloadLabel.Name = "DownloadLabel";
             this.DownloadLabel.Size = new System.Drawing.Size(206, 30);
             this.DownloadLabel.TabIndex = 4;
@@ -90,7 +90,7 @@
             this.Controls.Add(this.DownloadLabel);
             this.Controls.Add(this.UpdateLabel);
             this.Controls.Add(this.ProgressBarAll);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.CancelUpdateButton);
             this.Controls.Add(this.ProgressBarFile);
             this.Name = "UpdateModForm";
             this.ShowIcon = false;
@@ -104,7 +104,7 @@
         #endregion
 
         private System.Windows.Forms.ProgressBar ProgressBarFile;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button CancelUpdateButton;
         private System.Windows.Forms.ProgressBar ProgressBarAll;
         private System.Windows.Forms.Label UpdateLabel;
         private System.Windows.Forms.Label DownloadLabel;

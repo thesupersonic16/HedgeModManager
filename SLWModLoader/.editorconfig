@@ -2,7 +2,7 @@ root = true
 
 # CSharp code style settings:
 [*.cs]
-indent_style = tab
+indent_style = space
 insert_final_newline = false:none
 indent_brace_style = Allman
 dotnet_style_qualification_for_field = false:suggestion

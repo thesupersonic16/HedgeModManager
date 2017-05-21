@@ -18,7 +18,7 @@ namespace SLWModLoader
         private void OkBtn_Click(object sender, EventArgs e)
         {
             Close();
-            if(makingItRBtn.Checked)
+            if (makingItRBtn.Checked)
             {
                 var nmnf = new NewModNameForm();
                 if (nmnf.ShowDialog() == DialogResult.OK)
@@ -122,7 +122,7 @@ namespace SLWModLoader
             // Checks if theres a folder with a mod inside of it.
             if (folders.Count > 0)
             {
-                foreach(string folder in folders)
+                foreach (string folder in folders)
                 {
                     // Creates all of the Directories.
                     foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
