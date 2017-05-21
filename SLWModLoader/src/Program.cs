@@ -20,6 +20,16 @@ namespace SLWModLoader
             LogFile.Initialize();
             LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
 
+            #if DEBUG
+            if (!(File.Exists(Path.Combine(StartDirectory, "slw.exe")) ||
+                File.Exists(Path.Combine(StartDirectory, "SonicGenerations.exe"))))
+            {
+                StartDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sonic Lost World";
+                if (!File.Exists(StartDirectory))
+                    StartDirectory = "D:\\SteamLibrary\\steamapps\\common\\Sonic Lost World";
+            }
+            #endif
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
