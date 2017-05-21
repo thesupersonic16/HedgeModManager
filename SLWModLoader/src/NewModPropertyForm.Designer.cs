@@ -28,9 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ValueTextBox = new System.Windows.Forms.TextBox();
+            this.ValueContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ToolStripMenuItem_SelectDirectory = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileToolStripMenuItem_SelectFile = new System.Windows.Forms.ToolStripMenuItem();
             this.PropNameLabel = new System.Windows.Forms.Label();
             this.PropValueLabel = new System.Windows.Forms.Label();
             this.AddButton = new System.Windows.Forms.Button();
@@ -40,6 +44,7 @@
             this.TypeComboBox = new System.Windows.Forms.ComboBox();
             this.ValueNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.ValueCheckBox = new System.Windows.Forms.CheckBox();
+            this.ValueContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ValueNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,7 +52,7 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(59, 38);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(301, 20);
+            this.textBox1.Size = new System.Drawing.Size(332, 20);
             this.textBox1.TabIndex = 0;
             this.textBox1.Text = "New Property";
             // 
@@ -64,11 +69,34 @@
             // 
             // ValueTextBox
             // 
+            this.ValueTextBox.ContextMenuStrip = this.ValueContextMenu;
             this.ValueTextBox.Location = new System.Drawing.Point(59, 64);
             this.ValueTextBox.Name = "ValueTextBox";
-            this.ValueTextBox.Size = new System.Drawing.Size(220, 20);
+            this.ValueTextBox.Size = new System.Drawing.Size(431, 20);
             this.ValueTextBox.TabIndex = 1;
             this.ValueTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ValueTextBox_KeyPress);
+            // 
+            // ValueContextMenu
+            // 
+            this.ValueContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem_SelectDirectory,
+            this.FileToolStripMenuItem_SelectFile});
+            this.ValueContextMenu.Name = "ValueContextMenu";
+            this.ValueContextMenu.Size = new System.Drawing.Size(157, 48);
+            // 
+            // ToolStripMenuItem_SelectDirectory
+            // 
+            this.ToolStripMenuItem_SelectDirectory.Name = "ToolStripMenuItem_SelectDirectory";
+            this.ToolStripMenuItem_SelectDirectory.Size = new System.Drawing.Size(156, 22);
+            this.ToolStripMenuItem_SelectDirectory.Text = "Select Directory";
+            this.ToolStripMenuItem_SelectDirectory.Click += new System.EventHandler(this.ToolStripMenuItem_SelectDirectory_Click);
+            // 
+            // FileToolStripMenuItem_SelectFile
+            // 
+            this.FileToolStripMenuItem_SelectFile.Name = "FileToolStripMenuItem_SelectFile";
+            this.FileToolStripMenuItem_SelectFile.Size = new System.Drawing.Size(156, 22);
+            this.FileToolStripMenuItem_SelectFile.Text = "Select File";
+            this.FileToolStripMenuItem_SelectFile.Click += new System.EventHandler(this.ToolStripMenuItem_SelectFile_Click);
             // 
             // PropNameLabel
             // 
@@ -90,7 +118,7 @@
             // 
             // AddButton
             // 
-            this.AddButton.Location = new System.Drawing.Point(285, 88);
+            this.AddButton.Location = new System.Drawing.Point(415, 88);
             this.AddButton.Name = "AddButton";
             this.AddButton.Size = new System.Drawing.Size(75, 23);
             this.AddButton.TabIndex = 5;
@@ -100,7 +128,7 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(204, 88);
+            this.CancelButton.Location = new System.Drawing.Point(334, 88);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(75, 23);
             this.CancelButton.TabIndex = 4;
@@ -138,9 +166,9 @@
             "String",
             "Integer",
             "Boolean"});
-            this.TypeComboBox.Location = new System.Drawing.Point(285, 64);
+            this.TypeComboBox.Location = new System.Drawing.Point(397, 38);
             this.TypeComboBox.Name = "TypeComboBox";
-            this.TypeComboBox.Size = new System.Drawing.Size(75, 21);
+            this.TypeComboBox.Size = new System.Drawing.Size(93, 21);
             this.TypeComboBox.TabIndex = 2;
             this.TypeComboBox.Text = "String";
             this.TypeComboBox.SelectedIndexChanged += new System.EventHandler(this.TypeComboBox_SelectedIndexChanged);
@@ -159,7 +187,7 @@
             0,
             -2147483648});
             this.ValueNumericUpDown.Name = "ValueNumericUpDown";
-            this.ValueNumericUpDown.Size = new System.Drawing.Size(220, 20);
+            this.ValueNumericUpDown.Size = new System.Drawing.Size(431, 20);
             this.ValueNumericUpDown.TabIndex = 10;
             this.ValueNumericUpDown.Visible = false;
             // 
@@ -178,7 +206,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(384, 127);
+            this.ClientSize = new System.Drawing.Size(502, 127);
             this.Controls.Add(this.TypeComboBox);
             this.Controls.Add(this.GroupComboBox);
             this.Controls.Add(this.PropGroupLabel);
@@ -197,6 +225,7 @@
             this.Name = "NewModPropNewForm";
             this.Text = "SLW Mod Loader";
             this.Load += new System.EventHandler(this.NewModPropNewForm_Load);
+            this.ValueContextMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ValueNumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -217,5 +246,8 @@
         private System.Windows.Forms.ComboBox TypeComboBox;
         private System.Windows.Forms.NumericUpDown ValueNumericUpDown;
         private System.Windows.Forms.CheckBox ValueCheckBox;
+        private System.Windows.Forms.ContextMenuStrip ValueContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_SelectDirectory;
+        private System.Windows.Forms.ToolStripMenuItem FileToolStripMenuItem_SelectFile;
     }
 }

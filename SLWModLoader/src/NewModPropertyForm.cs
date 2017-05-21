@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -185,6 +186,30 @@ namespace SLWModLoader
         private void NewModPropNewForm_Load(object sender, EventArgs e)
         {
             MainForm.ApplyDarkTheme(this);
+        }
+
+        private void ToolStripMenuItem_SelectDirectory_Click(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog()
+            {
+                Title = "Select Directory",
+                FileName = "Enter into a directory and press Save"
+            };
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+                ValueTextBox.Text += Path.GetDirectoryName(sfd.FileName);
+        }
+
+        private void ToolStripMenuItem_SelectFile_Click(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog()
+            {
+                Title = "Select File",
+                FileName = ""
+            };
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+                ValueTextBox.Text += sfd.FileName;
         }
     }
 }
