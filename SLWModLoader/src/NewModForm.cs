@@ -215,7 +215,7 @@ namespace SLWModLoader
         {
             var lvi = new ListViewItem();
             var lvsi = new ListViewItem.ListViewSubItem();
-            lvsi.Text = propValue;
+            lvsi.Text = propValue.Replace("\n", "\\n").Replace("\r", "");
             lvi.Tag = propTag;
             lvi.Text = propName;
             lvi.Group = listView1.Groups[propGroup];

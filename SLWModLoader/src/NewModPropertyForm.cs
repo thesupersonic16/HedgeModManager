@@ -57,7 +57,7 @@ namespace SLWModLoader
                             ValueCheckBox.Checked = bool.Parse(listViewItem.SubItems[1].Text);
                         break;
                     default:
-                        ValueTextBox.Text = listViewItem.SubItems[1].Text;
+                        ValueTextBox.Text = listViewItem.SubItems[1].Text.Replace("\\n", "\r\n");
                         break;
                 }
             }
@@ -83,6 +83,7 @@ namespace SLWModLoader
                     ValueCheckBox.Visible = false;
                     break;
             }
+            ValueTextBox_TextChanged(ValueTextBox, null);
         }
 
         private void AddButton_Click(object sender, EventArgs e)
@@ -151,7 +152,7 @@ namespace SLWModLoader
         private void ValueTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Set property if the user presses Enter.
-            if (e.KeyChar == (char)13)
+            if (e.KeyChar == (char)13 && !ModifierKeys.HasFlag(Keys.Shift))
             {
                 AddButton_Click(null, null);
             }
@@ -210,6 +211,23 @@ namespace SLWModLoader
 
             if (sfd.ShowDialog() == DialogResult.OK)
                 ValueTextBox.Text += sfd.FileName;
+        }
+
+        private void ToolStripMenuItem_Multiline_Click(object sender, EventArgs e)
+        {
+            ValueTextBox.Multiline = !ValueTextBox.Multiline;
+            ToolStripMenuItem_Multiline.Checked = ValueTextBox.Multiline;
+            ValueTextBox_TextChanged(ValueTextBox, e);
+        }
+
+        private void ValueTextBox_TextChanged(object sender, EventArgs e)
+        {
+            int lines = ValueTextBox.Text.Length -
+                ValueTextBox.Text.Replace("\n", string.Empty).Length;
+            ValueTextBox.Height = 13 * (lines) + 20;
+            if (!ValueTextBox.Visible)
+                ValueTextBox.Height = 20;
+            Height = ValueTextBox.Height + 146;
         }
     }
 }

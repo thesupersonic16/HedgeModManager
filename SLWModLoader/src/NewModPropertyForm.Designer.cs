@@ -44,12 +44,15 @@
             this.TypeComboBox = new System.Windows.Forms.ComboBox();
             this.ValueNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.ValueCheckBox = new System.Windows.Forms.CheckBox();
+            this.ToolStripMenuItem_Multiline = new System.Windows.Forms.ToolStripMenuItem();
             this.ValueContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ValueNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
             // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(59, 38);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(332, 20);
@@ -69,20 +72,24 @@
             // 
             // ValueTextBox
             // 
+            this.ValueTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ValueTextBox.ContextMenuStrip = this.ValueContextMenu;
             this.ValueTextBox.Location = new System.Drawing.Point(59, 64);
             this.ValueTextBox.Name = "ValueTextBox";
             this.ValueTextBox.Size = new System.Drawing.Size(431, 20);
             this.ValueTextBox.TabIndex = 1;
+            this.ValueTextBox.TextChanged += new System.EventHandler(this.ValueTextBox_TextChanged);
             this.ValueTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ValueTextBox_KeyPress);
             // 
             // ValueContextMenu
             // 
             this.ValueContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripMenuItem_SelectDirectory,
-            this.FileToolStripMenuItem_SelectFile});
+            this.FileToolStripMenuItem_SelectFile,
+            this.ToolStripMenuItem_Multiline});
             this.ValueContextMenu.Name = "ValueContextMenu";
-            this.ValueContextMenu.Size = new System.Drawing.Size(157, 48);
+            this.ValueContextMenu.Size = new System.Drawing.Size(157, 70);
             // 
             // ToolStripMenuItem_SelectDirectory
             // 
@@ -118,6 +125,7 @@
             // 
             // AddButton
             // 
+            this.AddButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.AddButton.Location = new System.Drawing.Point(415, 88);
             this.AddButton.Name = "AddButton";
             this.AddButton.Size = new System.Drawing.Size(75, 23);
@@ -128,6 +136,7 @@
             // 
             // CancelButton
             // 
+            this.CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CancelButton.Location = new System.Drawing.Point(334, 88);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(75, 23);
@@ -138,6 +147,7 @@
             // 
             // PropGroupLabel
             // 
+            this.PropGroupLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.PropGroupLabel.AutoSize = true;
             this.PropGroupLabel.Location = new System.Drawing.Point(13, 93);
             this.PropGroupLabel.Name = "PropGroupLabel";
@@ -147,6 +157,7 @@
             // 
             // GroupComboBox
             // 
+            this.GroupComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.GroupComboBox.FormattingEnabled = true;
             this.GroupComboBox.Items.AddRange(new object[] {
             "Main",
@@ -161,6 +172,7 @@
             // 
             // TypeComboBox
             // 
+            this.TypeComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.TypeComboBox.FormattingEnabled = true;
             this.TypeComboBox.Items.AddRange(new object[] {
             "String",
@@ -200,6 +212,13 @@
             this.ValueCheckBox.TabIndex = 11;
             this.ValueCheckBox.UseVisualStyleBackColor = true;
             this.ValueCheckBox.Visible = false;
+            // 
+            // ToolStripMenuItem_Multiline
+            // 
+            this.ToolStripMenuItem_Multiline.Name = "ToolStripMenuItem_Multiline";
+            this.ToolStripMenuItem_Multiline.Size = new System.Drawing.Size(156, 22);
+            this.ToolStripMenuItem_Multiline.Text = "Multiline";
+            this.ToolStripMenuItem_Multiline.Click += new System.EventHandler(this.ToolStripMenuItem_Multiline_Click);
             // 
             // NewModPropNewForm
             // 
@@ -249,5 +268,6 @@
         private System.Windows.Forms.ContextMenuStrip ValueContextMenu;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_SelectDirectory;
         private System.Windows.Forms.ToolStripMenuItem FileToolStripMenuItem_SelectFile;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Multiline;
     }
 }
