@@ -129,17 +129,18 @@ namespace SLWModLoader
                 try
                 {
                     // Checks if IncludeDirs are valid
-                    for (int i2 = 0; i2 < modItem.IncludeDirCount; ++i2)
-                    {
-                        string includeDir = modItem.GetIniFile()["Main"]["IncludeDir" + i2];
-                        if (!Directory.Exists(Path.Combine(modItem.RootDirectory, includeDir)) && includeDir != ".")
+                    if (modItem.GetIniFile()["Main"].ContainsParameter("IncludeDirCount"))
+                        for (int i2 = 0; i2 < modItem.IncludeDirCount; ++i2)
                         {
-                            if (MessageBox.Show(string.Format(Resources.InvalidIncludeDirText, modItem.Title, i2),
-                                Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-                                == DialogResult.Yes)
-                                AddModForm.FixIncludeDir(i2, modItem);
+                            string includeDir = modItem.GetIniFile()["Main"]["IncludeDir" + i2];
+                            if (!Directory.Exists(Path.Combine(modItem.RootDirectory, includeDir)) && includeDir != ".")
+                            {
+                                if (MessageBox.Show(string.Format(Resources.InvalidIncludeDirText, modItem.Title, i2),
+                                    Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                                    == DialogResult.Yes)
+                                    AddModForm.FixIncludeDir(i2, modItem);
+                            }
                         }
-                    }
 
 
                     var modListViewItem = new ListViewItem(modItem.Title);
