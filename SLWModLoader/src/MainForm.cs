@@ -992,6 +992,14 @@ namespace SLWModLoader
                     if (e.Data.GetDataPresent(DataFormats.FileDrop) &&
                         e.Data.GetData(DataFormats.FileDrop) is string[] files)
                     {
+
+                        if (files.Length == 1 && new FileInfo(files[0]).Extension == ".sdat")
+                        {
+                            var SLWSaveForm = new SLWSaveForm(files[0]);
+                            SLWSaveForm.ShowDialog();
+                            return;
+                        }
+
                         int prevModCount = ModsDb.ModCount;
                         Invoke(new Action(() => AddMessage("Installing mods...")));
                         foreach (string file in files)
