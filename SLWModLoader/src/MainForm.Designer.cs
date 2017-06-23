@@ -54,12 +54,14 @@
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.EnableSaveFileRedirectionCheckBox = new System.Windows.Forms.CheckBox();
+            this.EnableCPKREDIRConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.KeepModLoaderOpenCheckBox = new System.Windows.Forms.CheckBox();
             this.AutoCheckUpdateCheckBox = new System.Windows.Forms.CheckBox();
             this.PatchGroupBox = new System.Windows.Forms.GroupBox();
             this.InstallUninstallButton = new System.Windows.Forms.Button();
             this.PatchLabel = new System.Windows.Forms.Label();
-            this.ScanExecuteableButton = new System.Windows.Forms.Button();
+            this.ScanExecutableButton = new System.Windows.Forms.Button();
             this.SettingsBottomPanel = new System.Windows.Forms.Panel();
             this.AboutButton = new System.Windows.Forms.Button();
             this.ReportLabel = new System.Windows.Forms.LinkLabel();
@@ -72,8 +74,6 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
-            this.EnableCPKREDIRConsoleCheckBox = new System.Windows.Forms.CheckBox();
-            this.EnableSaveFileRedirectionCheckBox = new System.Windows.Forms.CheckBox();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -340,7 +340,7 @@
             this.SettingsPage.Controls.Add(this.PatchGroupBox);
             this.SettingsPage.Controls.Add(this.InstallUninstallButton);
             this.SettingsPage.Controls.Add(this.PatchLabel);
-            this.SettingsPage.Controls.Add(this.ScanExecuteableButton);
+            this.SettingsPage.Controls.Add(this.ScanExecutableButton);
             this.SettingsPage.Controls.Add(this.SettingsBottomPanel);
             this.SettingsPage.Location = new System.Drawing.Point(4, 22);
             this.SettingsPage.Name = "SettingsPage";
@@ -349,6 +349,28 @@
             this.SettingsPage.TabIndex = 1;
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
+            // 
+            // EnableSaveFileRedirectionCheckBox
+            // 
+            this.EnableSaveFileRedirectionCheckBox.AutoSize = true;
+            this.EnableSaveFileRedirectionCheckBox.Location = new System.Drawing.Point(33, 118);
+            this.EnableSaveFileRedirectionCheckBox.Name = "EnableSaveFileRedirectionCheckBox";
+            this.EnableSaveFileRedirectionCheckBox.Size = new System.Drawing.Size(163, 17);
+            this.EnableSaveFileRedirectionCheckBox.TabIndex = 20;
+            this.EnableSaveFileRedirectionCheckBox.Text = "Enable Save File Redirection";
+            this.EnableSaveFileRedirectionCheckBox.UseVisualStyleBackColor = true;
+            this.EnableSaveFileRedirectionCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
+            // 
+            // EnableCPKREDIRConsoleCheckBox
+            // 
+            this.EnableCPKREDIRConsoleCheckBox.AutoSize = true;
+            this.EnableCPKREDIRConsoleCheckBox.Location = new System.Drawing.Point(33, 141);
+            this.EnableCPKREDIRConsoleCheckBox.Name = "EnableCPKREDIRConsoleCheckBox";
+            this.EnableCPKREDIRConsoleCheckBox.Size = new System.Drawing.Size(158, 17);
+            this.EnableCPKREDIRConsoleCheckBox.TabIndex = 19;
+            this.EnableCPKREDIRConsoleCheckBox.Text = "Enable CPKREDIR Console";
+            this.EnableCPKREDIRConsoleCheckBox.UseVisualStyleBackColor = true;
+            this.EnableCPKREDIRConsoleCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
             // KeepModLoaderOpenCheckBox
             // 
@@ -401,16 +423,16 @@
             this.PatchLabel.TabIndex = 14;
             this.PatchLabel.Text = "Unknown";
             // 
-            // ScanExecuteableButton
+            // ScanExecutableButton
             // 
-            this.ScanExecuteableButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ScanExecuteableButton.Location = new System.Drawing.Point(16, 14);
-            this.ScanExecuteableButton.Name = "ScanExecuteableButton";
-            this.ScanExecuteableButton.Size = new System.Drawing.Size(120, 23);
-            this.ScanExecuteableButton.TabIndex = 13;
-            this.ScanExecuteableButton.Text = "Scan Executeable";
-            this.ScanExecuteableButton.UseVisualStyleBackColor = true;
-            this.ScanExecuteableButton.Click += new System.EventHandler(this.ScanExecuteableButton_Click);
+            this.ScanExecutableButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.ScanExecutableButton.Location = new System.Drawing.Point(16, 14);
+            this.ScanExecutableButton.Name = "ScanExecutableButton";
+            this.ScanExecutableButton.Size = new System.Drawing.Size(120, 23);
+            this.ScanExecutableButton.TabIndex = 13;
+            this.ScanExecutableButton.Text = "Scan Executeable";
+            this.ScanExecutableButton.UseVisualStyleBackColor = true;
+            this.ScanExecutableButton.Click += new System.EventHandler(this.ScanExecutableButton_Click);
             // 
             // SettingsBottomPanel
             // 
@@ -548,28 +570,6 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
-            // EnableCPKREDIRConsoleCheckBox
-            // 
-            this.EnableCPKREDIRConsoleCheckBox.AutoSize = true;
-            this.EnableCPKREDIRConsoleCheckBox.Location = new System.Drawing.Point(33, 141);
-            this.EnableCPKREDIRConsoleCheckBox.Name = "EnableCPKREDIRConsoleCheckBox";
-            this.EnableCPKREDIRConsoleCheckBox.Size = new System.Drawing.Size(158, 17);
-            this.EnableCPKREDIRConsoleCheckBox.TabIndex = 19;
-            this.EnableCPKREDIRConsoleCheckBox.Text = "Enable CPKREDIR Console";
-            this.EnableCPKREDIRConsoleCheckBox.UseVisualStyleBackColor = true;
-            this.EnableCPKREDIRConsoleCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
-            // 
-            // EnableSaveFileRedirectionCheckBox
-            // 
-            this.EnableSaveFileRedirectionCheckBox.AutoSize = true;
-            this.EnableSaveFileRedirectionCheckBox.Location = new System.Drawing.Point(33, 118);
-            this.EnableSaveFileRedirectionCheckBox.Name = "EnableSaveFileRedirectionCheckBox";
-            this.EnableSaveFileRedirectionCheckBox.Size = new System.Drawing.Size(163, 17);
-            this.EnableSaveFileRedirectionCheckBox.TabIndex = 20;
-            this.EnableSaveFileRedirectionCheckBox.Text = "Enable Save File Redirection";
-            this.EnableSaveFileRedirectionCheckBox.UseVisualStyleBackColor = true;
-            this.EnableSaveFileRedirectionCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
-            // 
             // MainForm
             // 
             this.AcceptButton = this.SaveAndPlayButton;
@@ -637,7 +637,7 @@
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label NoModsFoundLabel;
-        private System.Windows.Forms.Button ScanExecuteableButton;
+        private System.Windows.Forms.Button ScanExecutableButton;
         private System.Windows.Forms.Label PatchLabel;
         private System.Windows.Forms.Button InstallUninstallButton;
         private System.Windows.Forms.ContextMenuStrip ModsListContextMenu;

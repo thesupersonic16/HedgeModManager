@@ -72,13 +72,11 @@ namespace SLWModLoader
                         // Downloads the icons
                         #region Messy
                         string url = "http://steamcommunity.com/profiles/" + array.Name;
-                        string split1 = "<div class=\"playerAvatarAutoSizeInner\"><img src=\"";
+                        string PIURL = "http://cdn.edgecast.steamstatic.com/steamcommunity/public/images";
                         url = webClient.DownloadString(url);
-                        url = url.Split(new [] { split1 }, StringSplitOptions.RemoveEmptyEntries)[1];
-                        url = url.Split('\'')[0];
-                        var data = webClient.DownloadData(url);
-                        var icon = new Bitmap(new MemoryStream(data));
-                        listView1.LargeImageList.Images.Add(array.Name, icon);
+                        url = Program.GetString(url.IndexOf(PIURL) - 1, url);
+                        var profileImage = new Bitmap(new MemoryStream(webClient.DownloadData(url)));
+                        listView1.LargeImageList.Images.Add(array.Name, profileImage);
                         #endregion
                     }
                 }
@@ -92,9 +90,7 @@ namespace SLWModLoader
                 string sid = listView1.SelectedItems[0].ImageKey;
                 string path = Path.Combine(Program.StartDirectory, sid + ".sdat");
                 if (File.Exists(path))
-                {
                     File.Move(path, path + ".backup");
-                }
                 File.Copy(FilePath, path);
                 Close();
             }

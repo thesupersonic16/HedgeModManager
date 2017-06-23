@@ -26,7 +26,7 @@ namespace SLWModLoader
             {
                 StartDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sonic Lost World";
                 if (!File.Exists(StartDirectory))
-                    StartDirectory = "D:\\SteamLibrary\\steamapps\\common\\Sonic Lost World";
+                    StartDirectory = "D:\\SteamLibrary\\steamapps\\common\\Sonic Generations";
             }
             #endif
 
