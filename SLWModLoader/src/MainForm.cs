@@ -392,51 +392,54 @@ namespace SLWModLoader
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                 {
                     #region AutoInstaller (really messy)
+                    
                     // Gets Steam's Registry Key
                     var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam");
                     // If null then try get it from the 64-bit Registry
                     if (key == null)
                         key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
                             .OpenSubKey("SOFTWARE\\Valve\\Steam");
+
+
                     // Checks if the Key and Value exists.
                     if (key != null && key.GetValue("SteamPath") is string steamPath)
                     {
                         // This is set to true if it installs successfully
                         bool installed = false;
+                        string commonPath = Path.Combine(steamPath, "steamapps\\common");
                         // Looks for supported games in the default library location
-                        if (Directory.Exists(Path.Combine(steamPath, "steamapps\\common")))
+                        if (Directory.Exists(commonPath))
                         {
-                            if (File.Exists(Path.Combine(steamPath, "steamapps\\common\\Sonic Lost World\\slw.exe")) && !installed)
-                                installed = InstallModLoader(Path.Combine(steamPath, "steamapps\\common\\Sonic Lost World"), "Sonic Lost World");
+                            if (File.Exists(Path.Combine(commonPath, "Sonic Lost World\\slw.exe")) && !installed)
+                                installed = InstallModLoader(Path.Combine(commonPath, "Sonic Lost World"),
+                                    "Sonic Lost World");
 
-                            if (File.Exists(Path.Combine(steamPath, "steamapps\\common\\Sonic Generations\\SonicGenerations.exe")) && !installed)
-                                installed = InstallModLoader(Path.Combine(steamPath, "steamapps\\common\\Sonic Generations"), "Sonic Generations");
+                            if (File.Exists(Path.Combine(commonPath, "Sonic Generations\\SonicGenerations.exe")) && !installed)
+                                installed = InstallModLoader(Path.Combine(commonPath, "Sonic Generations"),
+                                    "Sonic Generations");
                         }
                         // Looks at other libraries for a supported game
-                        var libraryfolders = File.ReadAllLines(Path.Combine(steamPath, "steamapps\\libraryfolders.vdf"));
-                        int i = 1;
-                        foreach (string libraryPath in libraryfolders)
+
+                        var vdf = SLWSaveForm.VDFFile.ReadVDF(Path.Combine(steamPath, "steamapps\\libraryfolders.vdf"));
+
+                        foreach (var library in vdf.Array.Elements)
                         {
-                            if (libraryPath.IndexOf("\"" + i + "\"") != -1)
+                            if (int.TryParse(library.Key, out int index))
                             {
-                                // Gets the location the library
-                                string libraryLocation = libraryPath.Substring(libraryPath.IndexOf("\t\t\"") + 3,
-                                    libraryPath.LastIndexOf('"') - (libraryPath.IndexOf("\t\t\"") + 3));
-                                // Looks for supported games in that library
-                                if (Directory.Exists(Path.Combine(libraryLocation, "steamapps\\common")))
+                                string path = library.Value.Value as string;
+                                if (Directory.Exists(Path.Combine(path, "steamapps\\common")))
                                 {
-                                    if (File.Exists(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Lost World\\slw.exe")) && !installed)
-                                        installed = InstallModLoader(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Lost World"),
+                                    commonPath = Path.Combine(path, "steamapps\\common");
+                                    if (File.Exists(Path.Combine(commonPath, "Sonic Lost World\\slw.exe")) && !installed)
+                                        installed = InstallModLoader(Path.Combine(commonPath, "Sonic Lost World"),
                                             "Sonic Lost World");
 
-                                    if (File.Exists(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Generations\\SonicGenerations.exe"))
+                                    if (File.Exists(Path.Combine(commonPath, "Sonic Generations\\SonicGenerations.exe"))
                                         && !installed)
-                                        installed = InstallModLoader(Path.Combine(libraryLocation, "steamapps\\common\\Sonic Generations"),
+                                        installed = InstallModLoader(Path.Combine(commonPath, "Sonic Generations"),
                                             "Sonic Generations");
                                 }
-                                ++i;
                             }
-
                         }
                         if (!installed)
                         {
