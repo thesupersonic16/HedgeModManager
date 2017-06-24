@@ -37,6 +37,7 @@ namespace SLWModLoader
         {
             InitializeComponent();
             GenerationsPatches.Clear();
+            Ready = false;
         }
 
         // Methods
@@ -1038,9 +1039,8 @@ namespace SLWModLoader
             if (CPKREDIRIni != null)
                 CPKREDIRIni.Save();
 
-            // TODO: Fix this
-            //Program.Restart = true;
-            //Close();
+            Program.Restart = true;
+            Close();
         }
 
         #endregion ButtonEvents
