@@ -718,8 +718,8 @@ namespace SLWModLoader
                         bytes[i + 7] = 0x72;
 
                         // Creates a backup of the executable if one hasn't been made
-                        if (!File.Exists(Path.ChangeExtension(GensExecutablePath, ".Backup2.exe")))
-                            File.Move(GensExecutablePath, Path.ChangeExtension(GensExecutablePath, ".Backup2.exe"));
+                        if (!File.Exists(Path.ChangeExtension(executablePath, ".Backup2.exe")))
+                            File.Move(executablePath, Path.ChangeExtension(executablePath, ".Backup2.exe"));
                         else
                             File.Delete(executablePath);
 
