@@ -29,10 +29,14 @@ namespace SLWModLoader
         public static bool Ready = false;
         public static bool CheckIncludes = false;
 
+        public static string DefaultModsPath = "";
+        public static string CustomModsPath = "";
+
         // Constructors
         public MainForm()
         {
             InitializeComponent();
+            GenerationsPatches.Clear();
         }
 
         // Methods
@@ -275,19 +279,8 @@ namespace SLWModLoader
                     }
                 }
 
-                // Checks if the mods directory exits, If not, then ask to create one
-                if (!Directory.Exists(ModsFolderPath))
-                {
-                    if (MessageBox.Show(Resources.CannotFindModsDirectoryText, Resources.ApplicationTitle,
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        LogFile.AddMessage($"Creating mods folder at \"{ModsFolderPath}\"...");
-                        Directory.CreateDirectory(ModsFolderPath);
-                    }
-                    else return;
-                }
-
-                // Checks if "cpkredit.ini" exists as SLWModLoader uses it to store its config
+                #region Config
+                // Checks if "cpkredir.ini" exists as SLWModLoader uses it to store its config
                 if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
                 {
                     try
@@ -314,12 +307,36 @@ namespace SLWModLoader
                             group.AddParameter("DarkTheme", "1");
                         if (!group.ContainsParameter("CheckIncludes"))
                             group.AddParameter("CheckIncludes", "0");
+                        if (!group.ContainsParameter("CustomModsDirectory"))
+                            group.AddParameter("CustomModsDirectory", "0");
+                        if (!group.ContainsParameter("DefaultModsPath"))
+                            group.AddParameter("DefaultModsPath", "mods");
+                        if (!group.ContainsParameter("CustomModsPath"))
+                            group.AddParameter("CustomModsPath", "C:\\SLWMods");
 
                         AutoCheckUpdateCheckBox.Checked = group["AutoCheckForUpdates"] != "0";
                         KeepModLoaderOpenCheckBox.Checked = group["KeepModLoaderOpen"] != "0";
+                        CheckBox_CustomModsDirectory.Checked = group["CustomModsDirectory"] != "0";
                         CheckIncludes = group["CheckIncludes"] != "0";
 
-                        EnableSaveFileRedirectionCheckBox.Checked = CPKREDIRIni["CPKREDIR"]["EnableSaveFileRedirection"] != "0";
+                        DefaultModsPath = group["DefaultModsPath"];
+                        CustomModsPath = group["CustomModsPath"];
+
+                        TextBox_CustomModsDirectory.Text = CustomModsPath;
+
+                        if (CheckBox_CustomModsDirectory.Checked)
+                        {
+                            ModsFolderPath = CustomModsPath;
+                            ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
+                        }
+                        else
+                        {
+                            ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
+                            ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
+                        }
+
+                        EnableSaveFileRedirectionCheckBox.Checked = 
+                            CPKREDIRIni["CPKREDIR"]["EnableSaveFileRedirection"] != "0";
                         EnableCPKREDIRConsoleCheckBox.Checked = CPKREDIRIni["CPKREDIR"].ContainsParameter("LogType");
 
                         if (group["DarkTheme"] != "0")
@@ -339,6 +356,19 @@ namespace SLWModLoader
                     MessageBox.Show("Could not find cpkredir.ini\n" +
                         "SG, LW and the ModLoader may not run correctly without this file.",
                         Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                #endregion Config
+
+                // Checks if the mods directory exits, If not, then ask to create one
+                if (!Directory.Exists(ModsFolderPath))
+                {
+                    if (MessageBox.Show(Resources.CannotFindModsDirectoryText, Resources.ApplicationTitle,
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        LogFile.AddMessage($"Creating mods folder at \"{ModsFolderPath}\"...");
+                        Directory.CreateDirectory(ModsFolderPath);
+                    }
+                    else return;
                 }
 
                 // Loads all the mods into ModDb and fills the listView
@@ -361,13 +391,14 @@ namespace SLWModLoader
                 if (MessageBox.Show(Resources.CannotFindExecutableText, Resources.ApplicationTitle,
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                 {
+                    #region AutoInstaller (really messy)
                     // Gets Steam's Registry Key
                     var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam");
                     // If null then try get it from the 64-bit Registry
                     if (key == null)
-                        key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey("SOFTWARE\\Valve\\Steam");
+                        key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
+                            .OpenSubKey("SOFTWARE\\Valve\\Steam");
                     // Checks if the Key and Value exists.
-                    #region AutoInstaller (really messy)
                     if (key != null && key.GetValue("SteamPath") is string steamPath)
                     {
                         // This is set to true if it installs successfully
@@ -993,10 +1024,26 @@ namespace SLWModLoader
             }
         }
 
+        private void Button_SaveAndReload_Click(object sender, EventArgs e)
+        {
+            CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"] = TextBox_CustomModsDirectory.Text;
+            CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"] = TextBox_CustomModsDirectory.Text;
+            CPKREDIRIni[Program.ProgramNameShort]["CustomModsDirectory"] = CheckBox_CustomModsDirectory.Checked ? "1" : "0";
+            CPKREDIRIni["CPKREDIR"]["ModsDbIni"] = CheckBox_CustomModsDirectory.Checked ?
+                Path.Combine(CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"], "ModsDB.ini") :
+                Path.Combine(CPKREDIRIni[Program.ProgramNameShort]["DefaultModsPath"], "ModsDB.ini");
+            if (CPKREDIRIni != null)
+                CPKREDIRIni.Save();
+
+            // TODO: Fix this
+            //Program.Restart = true;
+            //Close();
+        }
+
         #endregion ButtonEvents
 
         #region ToolStripMenuItemEvents
-        
+
         private void CheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CheckForModUpdates(ModsList.FocusedItem.Text);
@@ -1232,8 +1279,11 @@ namespace SLWModLoader
             {
                 CPKREDIRIni[Program.ProgramNameShort]["AutoCheckForUpdates"] = AutoCheckUpdateCheckBox.Checked ? "1" : "0";
                 CPKREDIRIni[Program.ProgramNameShort]["KeepModLoaderOpen"] = KeepModLoaderOpenCheckBox.Checked ? "1" : "0";
+                CPKREDIRIni[Program.ProgramNameShort]["CustomModsDirectory"] = CheckBox_CustomModsDirectory.Checked ? "1" : "0";
                 CPKREDIRIni["CPKREDIR"]["EnableSaveFileRedirection"] = EnableSaveFileRedirectionCheckBox.Checked ? "1" : "0";
 
+                TextBox_CustomModsDirectory.Enabled = CheckBox_CustomModsDirectory.Checked;
+                
                 if (EnableCPKREDIRConsoleCheckBox.Checked && !CPKREDIRIni["CPKREDIR"].ContainsParameter("LogType"))
                     CPKREDIRIni["CPKREDIR"].AddParameter("LogType", "console");
                 else
@@ -1340,5 +1390,6 @@ namespace SLWModLoader
             return false;
         }
         #endregion
+
     }
 }

@@ -9,6 +9,7 @@ namespace SLWModLoader
         //Variables/Constants
         public static string StartDirectory = Application.StartupPath;
         public static string ExecutableName = Path.GetFileName(Application.ExecutablePath);
+        public static bool Restart = false;
         public const string ProgramName = "SLW Mod Loader";
         public const string ProgramNameShort = "SLWModLoader";
         public const string VersionString = "6.0";
@@ -33,6 +34,13 @@ namespace SLWModLoader
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+            while (Restart)
+            {
+                Restart = false;
+                LogFile.Initialize();
+                LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
+                Application.Run(new MainForm());
+            }
         }
 
         public static bool IsURL(string URL)

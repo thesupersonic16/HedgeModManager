@@ -54,6 +54,9 @@
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.Label_CustomModsDirectory = new System.Windows.Forms.Label();
+            this.TextBox_CustomModsDirectory = new System.Windows.Forms.TextBox();
+            this.CheckBox_CustomModsDirectory = new System.Windows.Forms.CheckBox();
             this.EnableSaveFileRedirectionCheckBox = new System.Windows.Forms.CheckBox();
             this.EnableCPKREDIRConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.KeepModLoaderOpenCheckBox = new System.Windows.Forms.CheckBox();
@@ -74,6 +77,7 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
+            this.Button_SaveAndReload = new System.Windows.Forms.Button();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -333,6 +337,10 @@
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.Button_SaveAndReload);
+            this.SettingsPage.Controls.Add(this.Label_CustomModsDirectory);
+            this.SettingsPage.Controls.Add(this.TextBox_CustomModsDirectory);
+            this.SettingsPage.Controls.Add(this.CheckBox_CustomModsDirectory);
             this.SettingsPage.Controls.Add(this.EnableSaveFileRedirectionCheckBox);
             this.SettingsPage.Controls.Add(this.EnableCPKREDIRConsoleCheckBox);
             this.SettingsPage.Controls.Add(this.KeepModLoaderOpenCheckBox);
@@ -349,6 +357,34 @@
             this.SettingsPage.TabIndex = 1;
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
+            // 
+            // Label_CustomModsDirectory
+            // 
+            this.Label_CustomModsDirectory.AutoSize = true;
+            this.Label_CustomModsDirectory.Location = new System.Drawing.Point(61, 190);
+            this.Label_CustomModsDirectory.Name = "Label_CustomModsDirectory";
+            this.Label_CustomModsDirectory.Size = new System.Drawing.Size(106, 13);
+            this.Label_CustomModsDirectory.TabIndex = 23;
+            this.Label_CustomModsDirectory.Text = "Custom Mods Folder:";
+            // 
+            // TextBox_CustomModsDirectory
+            // 
+            this.TextBox_CustomModsDirectory.Enabled = false;
+            this.TextBox_CustomModsDirectory.Location = new System.Drawing.Point(170, 187);
+            this.TextBox_CustomModsDirectory.Name = "TextBox_CustomModsDirectory";
+            this.TextBox_CustomModsDirectory.Size = new System.Drawing.Size(310, 20);
+            this.TextBox_CustomModsDirectory.TabIndex = 22;
+            // 
+            // CheckBox_CustomModsDirectory
+            // 
+            this.CheckBox_CustomModsDirectory.AutoSize = true;
+            this.CheckBox_CustomModsDirectory.Location = new System.Drawing.Point(33, 164);
+            this.CheckBox_CustomModsDirectory.Name = "CheckBox_CustomModsDirectory";
+            this.CheckBox_CustomModsDirectory.Size = new System.Drawing.Size(157, 17);
+            this.CheckBox_CustomModsDirectory.TabIndex = 21;
+            this.CheckBox_CustomModsDirectory.Text = "Use Custom Mods Directory";
+            this.CheckBox_CustomModsDirectory.UseVisualStyleBackColor = true;
+            this.CheckBox_CustomModsDirectory.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
             // EnableSaveFileRedirectionCheckBox
             // 
@@ -396,7 +432,7 @@
             // 
             // PatchGroupBox
             // 
-            this.PatchGroupBox.Location = new System.Drawing.Point(49, 204);
+            this.PatchGroupBox.Location = new System.Drawing.Point(49, 233);
             this.PatchGroupBox.Name = "PatchGroupBox";
             this.PatchGroupBox.Size = new System.Drawing.Size(431, 105);
             this.PatchGroupBox.TabIndex = 16;
@@ -570,6 +606,16 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
+            // Button_SaveAndReload
+            // 
+            this.Button_SaveAndReload.Location = new System.Drawing.Point(369, 158);
+            this.Button_SaveAndReload.Name = "Button_SaveAndReload";
+            this.Button_SaveAndReload.Size = new System.Drawing.Size(111, 23);
+            this.Button_SaveAndReload.TabIndex = 24;
+            this.Button_SaveAndReload.Text = "Save";
+            this.Button_SaveAndReload.UseVisualStyleBackColor = true;
+            this.Button_SaveAndReload.Click += new System.EventHandler(this.Button_SaveAndReload_Click);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.SaveAndPlayButton;
@@ -658,6 +704,10 @@
         private System.Windows.Forms.ToolStripMenuItem createModUpdateToolStripMenuItem;
 		private System.Windows.Forms.CheckBox EnableCPKREDIRConsoleCheckBox;
 		private System.Windows.Forms.CheckBox EnableSaveFileRedirectionCheckBox;
-	}
+        private System.Windows.Forms.Label Label_CustomModsDirectory;
+        private System.Windows.Forms.TextBox TextBox_CustomModsDirectory;
+        private System.Windows.Forms.CheckBox CheckBox_CustomModsDirectory;
+        private System.Windows.Forms.Button Button_SaveAndReload;
+    }
 }
 
