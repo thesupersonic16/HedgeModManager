@@ -267,6 +267,7 @@ namespace SLWModLoader
         {
             ModsList.Items.Clear();
             LoadMods();
+            FillModList();
             OrderModList();
             ModsList.Select();
 
@@ -1291,6 +1292,18 @@ namespace SLWModLoader
                 e.Effect = DragDropEffects.Copy;
         }
 
+        private void TextBox_CustomModsDirectory_DoubleClick(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog()
+            {
+                Title = "Select Directory",
+                FileName = "Enter into a directory and press Save"
+            };
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+                TextBox_CustomModsDirectory.Text = Path.GetDirectoryName(sfd.FileName);
+        }
+
         // Configuration Checkbox Event
         private void CheckBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -1309,6 +1322,8 @@ namespace SLWModLoader
                     CPKREDIRIni["CPKREDIR"].RemoveParameter("LogType");
             }
         }
+
+
         #endregion OtherGUIEvents
 
         #region Don't Look!

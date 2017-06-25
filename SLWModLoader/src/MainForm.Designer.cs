@@ -384,6 +384,7 @@
             this.TextBox_CustomModsDirectory.Name = "TextBox_CustomModsDirectory";
             this.TextBox_CustomModsDirectory.Size = new System.Drawing.Size(310, 20);
             this.TextBox_CustomModsDirectory.TabIndex = 22;
+            this.TextBox_CustomModsDirectory.DoubleClick += new System.EventHandler(this.TextBox_CustomModsDirectory_DoubleClick);
             // 
             // CheckBox_CustomModsDirectory
             // 
