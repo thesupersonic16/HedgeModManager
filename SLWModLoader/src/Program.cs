@@ -45,7 +45,8 @@ namespace SLWModLoader
 
         public static bool IsURL(string URL)
         {
-            return Uri.IsWellFormedUriString(URL, UriKind.RelativeOrAbsolute);
+            return Uri.TryCreate(URL, UriKind.Absolute, out Uri uri)
+                && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
         }
 
         public static string GetString(int location, string mainString)
