@@ -54,6 +54,7 @@
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.Button_SaveAndReload = new System.Windows.Forms.Button();
             this.Label_CustomModsDirectory = new System.Windows.Forms.Label();
             this.TextBox_CustomModsDirectory = new System.Windows.Forms.TextBox();
             this.CheckBox_CustomModsDirectory = new System.Windows.Forms.CheckBox();
@@ -77,7 +78,6 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
-            this.Button_SaveAndReload = new System.Windows.Forms.Button();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -358,6 +358,16 @@
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
             // 
+            // Button_SaveAndReload
+            // 
+            this.Button_SaveAndReload.Location = new System.Drawing.Point(369, 158);
+            this.Button_SaveAndReload.Name = "Button_SaveAndReload";
+            this.Button_SaveAndReload.Size = new System.Drawing.Size(111, 23);
+            this.Button_SaveAndReload.TabIndex = 24;
+            this.Button_SaveAndReload.Text = "Save and Reload";
+            this.Button_SaveAndReload.UseVisualStyleBackColor = true;
+            this.Button_SaveAndReload.Click += new System.EventHandler(this.Button_SaveAndReload_Click);
+            // 
             // Label_CustomModsDirectory
             // 
             this.Label_CustomModsDirectory.AutoSize = true;
@@ -605,16 +615,6 @@
             this.SaveButton.Text = "&Save";
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
-            // 
-            // Button_SaveAndReload
-            // 
-            this.Button_SaveAndReload.Location = new System.Drawing.Point(369, 158);
-            this.Button_SaveAndReload.Name = "Button_SaveAndReload";
-            this.Button_SaveAndReload.Size = new System.Drawing.Size(111, 23);
-            this.Button_SaveAndReload.TabIndex = 24;
-            this.Button_SaveAndReload.Text = "Save";
-            this.Button_SaveAndReload.UseVisualStyleBackColor = true;
-            this.Button_SaveAndReload.Click += new System.EventHandler(this.Button_SaveAndReload_Click);
             // 
             // MainForm
             // 

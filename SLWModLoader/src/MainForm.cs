@@ -109,8 +109,76 @@ namespace SLWModLoader
             return false;
         }
 
+        public bool RunInstaller()
+        {
+            // Gets Steam's Registry Key
+            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam");
+            // If null then try get it from the 64-bit Registry
+            if (key == null)
+                key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
+                    .OpenSubKey("SOFTWARE\\Valve\\Steam");
+
+
+            // Checks if the Key and Value exists.
+            if (key != null && key.GetValue("SteamPath") is string steamPath)
+            {
+                // This is set to true if it installs successfully
+                bool installed = false;
+                string commonPath = Path.Combine(steamPath, "steamapps\\common");
+                // Looks for supported games in the default library location
+                if (Directory.Exists(commonPath))
+                {
+                    if (File.Exists(Path.Combine(commonPath, "Sonic Lost World\\slw.exe")) && !installed)
+                        installed = InstallModLoader(Path.Combine(commonPath, "Sonic Lost World"),
+                            "Sonic Lost World");
+
+                    if (File.Exists(Path.Combine(commonPath, "Sonic Generations\\SonicGenerations.exe")) && !installed)
+                        installed = InstallModLoader(Path.Combine(commonPath, "Sonic Generations"),
+                            "Sonic Generations");
+                }
+
+                // Looks at other libraries for a supported game
+                var vdf = SLWSaveForm.VDFFile.ReadVDF(Path.Combine(steamPath, "steamapps\\libraryfolders.vdf"));
+
+                foreach (var library in vdf.Array.Elements)
+                {
+                    if (int.TryParse(library.Key, out int index))
+                    {
+                        string path = library.Value.Value as string;
+                        if (Directory.Exists(Path.Combine(path, "steamapps\\common")))
+                        {
+                            commonPath = Path.Combine(path, "steamapps\\common");
+                            if (File.Exists(Path.Combine(commonPath, "Sonic Lost World\\slw.exe")) && !installed)
+                                installed = InstallModLoader(Path.Combine(commonPath, "Sonic Lost World"),
+                                    "Sonic Lost World");
+
+                            if (File.Exists(Path.Combine(commonPath, "Sonic Generations\\SonicGenerations.exe"))
+                                && !installed)
+                                installed = InstallModLoader(Path.Combine(commonPath, "Sonic Generations"),
+                                    "Sonic Generations");
+                        }
+                    }
+                }
+                if (!installed)
+                {
+                    MessageBox.Show("Failed to Install SLWModLoader,\n" +
+                        "It has either been declined or It could not find a supported game.",
+                        Resources.ApplicationTitle, MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return false;
+                }
+                else
+                    return true;
+            }
+            else
+            {
+                MessageBox.Show("Could not find Steam's Registry Key, Closing...", Resources.ApplicationTitle,
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
         /// <summary>
-        /// Loads all the mods into ModsDb and fills in the Mods List
+        /// Loads all the mods from the mods folder into ModsDb
         /// </summary>
         public void LoadMods()
         {
@@ -127,14 +195,17 @@ namespace SLWModLoader
             }
 
             LogFile.AddMessage($"Loaded total {ModsDb.ModCount} mods from \"{ModsFolderPath}\".");
+        }
 
+        public void FillModList()
+        { 
             for (int i = 0; i < ModsDb.ModCount; ++i)
             {
                 var modItem = ModsDb.GetMod(i);
 
                 try
                 {
-                    // Checks if IncludeDirs are valid
+                    // Checks if all Include directories are valid
                     if (modItem.GetIniFile()["Main"].ContainsParameter("IncludeDirCount") && CheckIncludes)
                         for (int i2 = 0; i2 < modItem.IncludeDirCount; ++i2)
                         {
@@ -147,7 +218,6 @@ namespace SLWModLoader
                                     AddModForm.FixIncludeDir(i2, modItem);
                             }
                         }
-
 
                     var modListViewItem = new ListViewItem(modItem.Title);
                     modListViewItem.Tag = modItem;
@@ -209,7 +279,7 @@ namespace SLWModLoader
                     else lvi.BackColor = Color.FromArgb(54, 54, 54);
         }
 
-        private void SaveModDB()
+        public void SaveModDB()
         {
             // Deactivates All mods that are active
             ModsDb.DeactivateAllMods();
@@ -221,29 +291,12 @@ namespace SLWModLoader
             ModsDb.SaveModsDb(ModsDbPath);
             RefreshModsList();
         }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Exit = true;
-            if (ModUpdatingThread != null && ModUpdatingThread.IsAlive)
-                while (ModUpdatingThread.IsAlive)
-                    Thread.Sleep(1000);
-
-            LogFile.AddEmptyLine();
-            LogFile.AddMessage("The form has been closed.");
-
-            LogFile.Close();
-            if (CPKREDIRIni != null)
-                CPKREDIRIni.Save();
-        }
-
-        // Events
-        private void MainForm_Load(object sender, EventArgs e)
+        
+        public void Init()
         {
             Text += $" (v{Program.VersionString})";
             if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath))
             {
-
                 if (File.Exists(LWExecutablePath))
                 {
                     Text += " - Sonic Lost World";
@@ -360,7 +413,7 @@ namespace SLWModLoader
                 }
                 #endregion Config
 
-                // Checks if the mods directory exits, If not, then ask to create one
+                // Checks if the mods directory exists, If not, then ask to create one
                 if (!Directory.Exists(ModsFolderPath))
                 {
                     if (MessageBox.Show(Resources.CannotFindModsDirectoryText, Resources.ApplicationTitle,
@@ -372,8 +425,10 @@ namespace SLWModLoader
                     else return;
                 }
 
-                // Loads all the mods into ModDb and fills the listView
+                // Loads all the mods into ModDb
                 LoadMods();
+                // fills in the listView
+                FillModList();
                 // Reorders the mod list so active mods are on the top
                 OrderModList();
 
@@ -391,80 +446,14 @@ namespace SLWModLoader
             { // No supported game were found
                 if (MessageBox.Show(Resources.CannotFindExecutableText, Resources.ApplicationTitle,
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
-                {
-                    #region AutoInstaller (really messy)
-                    
-                    // Gets Steam's Registry Key
-                    var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam");
-                    // If null then try get it from the 64-bit Registry
-                    if (key == null)
-                        key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
-                            .OpenSubKey("SOFTWARE\\Valve\\Steam");
-
-
-                    // Checks if the Key and Value exists.
-                    if (key != null && key.GetValue("SteamPath") is string steamPath)
-                    {
-                        // This is set to true if it installs successfully
-                        bool installed = false;
-                        string commonPath = Path.Combine(steamPath, "steamapps\\common");
-                        // Looks for supported games in the default library location
-                        if (Directory.Exists(commonPath))
-                        {
-                            if (File.Exists(Path.Combine(commonPath, "Sonic Lost World\\slw.exe")) && !installed)
-                                installed = InstallModLoader(Path.Combine(commonPath, "Sonic Lost World"),
-                                    "Sonic Lost World");
-
-                            if (File.Exists(Path.Combine(commonPath, "Sonic Generations\\SonicGenerations.exe")) && !installed)
-                                installed = InstallModLoader(Path.Combine(commonPath, "Sonic Generations"),
-                                    "Sonic Generations");
-                        }
-                        // Looks at other libraries for a supported game
-
-                        var vdf = SLWSaveForm.VDFFile.ReadVDF(Path.Combine(steamPath, "steamapps\\libraryfolders.vdf"));
-
-                        foreach (var library in vdf.Array.Elements)
-                        {
-                            if (int.TryParse(library.Key, out int index))
-                            {
-                                string path = library.Value.Value as string;
-                                if (Directory.Exists(Path.Combine(path, "steamapps\\common")))
-                                {
-                                    commonPath = Path.Combine(path, "steamapps\\common");
-                                    if (File.Exists(Path.Combine(commonPath, "Sonic Lost World\\slw.exe")) && !installed)
-                                        installed = InstallModLoader(Path.Combine(commonPath, "Sonic Lost World"),
-                                            "Sonic Lost World");
-
-                                    if (File.Exists(Path.Combine(commonPath, "Sonic Generations\\SonicGenerations.exe"))
-                                        && !installed)
-                                        installed = InstallModLoader(Path.Combine(commonPath, "Sonic Generations"),
-                                            "Sonic Generations");
-                                }
-                            }
-                        }
-                        if (!installed)
-                        {
-                            MessageBox.Show("Failed to Install SLWModLoader,\n" +
-                                "It has either been declined or It could not find a supported game.",
-                                Resources.ApplicationTitle, MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Could not find Steam's Registry Key, Closing...", Resources.ApplicationTitle,
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    #endregion
-                    Close();
-                }
+                    RunInstaller();
                 else
                 { // Still Couldn't find a supported game
                     MessageBox.Show(Resources.CannotFindExecutableText, Resources.ApplicationTitle,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                     LogFile.AddMessage("Could not find executable, closing form...");
-                    Close();
                 }
+                Close();
                 return;
             }
 
@@ -476,55 +465,6 @@ namespace SLWModLoader
                 ModUpdatingThread.Start();
             }
             Ready = true;
-        }
-
-        private void RefreshButton_Click(object sender, EventArgs e)
-        {
-            RefreshModsList();
-        }
-
-        private void SaveAndPlayButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                SaveModDB();
-                AddMessage("ModsDB Saved");
-                StartGame();
-            }
-            catch (Exception ex)
-            {
-                AddMessage("Exception thrown while saving ModsDB and starting.", ex, 
-                $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}",
-                $"Root Directory: {ModsDb.RootDirectory}");
-            }
-        }
-
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                SaveModDB();
-                AddMessage("ModsDB Saved");
-            }
-            catch (Exception ex)
-            {
-                AddMessage("Exception thrown while saving ModsDB.", ex, 
-                $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}",
-                $"Root Directory: {ModsDb.RootDirectory}");
-            }
-        }
-
-        private void PlayButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                StartGame();
-            }
-            catch (Exception ex)
-            {
-                AddMessage("Exception thrown while starting the game.", ex);
-                Close();
-            }
         }
 
         /// <summary>
@@ -548,113 +488,7 @@ namespace SLWModLoader
             }
         }
 
-        /// <summary>
-        /// Searches for any new ModLoader updates
-        /// NOTE: The method is really messy and can also easily fail
-        /// </summary>
-        public void CheckForModLoaderUpdates()
-        {
-            try
-            {
-                LogFile.AddMessage("Checking for Updates...");
-
-                var webClient = new WebClient();
-                string url = "https://api.github.com/repos/thesupersonic16/SLW-Mod-Loader/releases";
-                string latestReleaseJson = "";
-                string updateUrl = "";
-                string releaseBody = "";
-                float latestVersion = 0;
-                float currentVersion = Convert.ToSingle(Program.VersionString.Substring(0, 3));
-
-                webClient.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
-                latestReleaseJson = webClient.DownloadString(url);
-                latestVersion = Convert.ToSingle(latestReleaseJson.Substring(latestReleaseJson.IndexOf("tag_name") + 12, 3));
-                updateUrl = Program.GetString(latestReleaseJson.IndexOf("\"browser_download_url\": ") + 23, latestReleaseJson);
-                releaseBody = Program.GetString(latestReleaseJson.IndexOf("\"body\": \"") + 8, latestReleaseJson)
-                    .Replace("\\\"", "\"").Replace("\\n", "\n").Replace("\\r", "\n");
-
-                // If true, then a new update is available
-                if (latestVersion > currentVersion)
-                {
-                    AddMessage("New Update Found v" + latestVersion.ToString("0.0"));
-                    if (new ChangeLogForm(latestVersion.ToString("0.0"), releaseBody, updateUrl).ShowDialog() == DialogResult.Yes)
-                    {
-                        Invoke(new Action(() => Visible = false));
-                        AddMessage("Starting Update...");
-                        new UpdateForm(updateUrl).ShowDialog();
-                    }
-                    else
-                        AddMessage("Update Canceled. :(");
-                }
-                else
-                    LogFile.AddMessage("No updates are available.");
-            }
-            catch (Exception ex)
-            {
-                AddMessage("Exception thrown while checking for Mod Loader updates.", ex);
-            }
-        }
         
-        public void AddMessage(string message)
-        {
-            LogFile.AddMessage(message);
-            // Adds a character limit if not compiled in debug
-            #if !DEBUG
-            if (message.Length < 128)
-            #endif
-            Invoke(new Action(() => StatusLabel.Text = message));
-        }
-
-        public static void AddMessage(string message, Exception exception, params string[] extraData)
-        {
-            if (Exit) return;
-            LogFile.AddMessage(message);
-            LogFile.AddMessage($"    Exception: {exception}");
-            if (extraData != null)
-            {
-                LogFile.AddMessage("    Extra Data: ");
-                foreach (string s in extraData)
-                    LogFile.AddMessage($"        {s}");
-            }
-            MessageBox.Show(Resources.ExceptionText, Program.ProgramName);
-            #if DEBUG
-            throw exception;
-            #endif
-        }
-
-        public bool IsCPKREDIRInstalled()
-        {
-            try
-            {
-                var bytes = File.ReadAllBytes(File.Exists(LWExecutablePath)
-                    ? LWExecutablePath : GensExecutablePath);
-                for (int i = 11918000; i < bytes.Length; ++i)
-                {
-                    // 63 70 6B 72 65 64 69 72
-                    // c  p  k  r  e  d  i  r 
-
-                    if (bytes[  i  ] == 0x63 && bytes[i + 1] == 0x70 && bytes[i + 2] == 0x6B &&
-                        bytes[i + 3] == 0x72 && bytes[i + 4] == 0x65 && bytes[i + 5] == 0x64 &&
-                        bytes[i + 6] == 0x69 && bytes[i + 7] == 0x72)
-                        return true;
-
-                    // 69 6D 61 67 65 68 6C 70
-                    // i  m  a  g  e  h  l  p
-
-                    if (bytes[  i  ] == 0x69 && bytes[i + 1] == 0x6D && bytes[i + 2] == 0x61 &&
-                        bytes[i + 3] == 0x67 && bytes[i + 4] == 0x65 && bytes[i + 5] == 0x68 &&
-                        bytes[i + 6] == 0x6C && bytes[i + 7] == 0x70)
-                        return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                AddMessage("Exception thrown while checking executable.", ex);
-            }
-            AddMessage("Failed to check executable");
-            return false;
-        }
-
         /// <summary>
         /// Installs or Uninstalls CPKREDIR
         /// </summary>
@@ -739,7 +573,140 @@ namespace SLWModLoader
             return false;
         }
 
+        public bool IsCPKREDIRInstalled()
+        {
+            try
+            {
+                var bytes = File.ReadAllBytes(File.Exists(LWExecutablePath)
+                    ? LWExecutablePath : GensExecutablePath);
+                for (int i = 11918000; i < bytes.Length; ++i)
+                {
+                    // 63 70 6B 72 65 64 69 72
+                    // c  p  k  r  e  d  i  r 
+
+                    if (bytes[i] == 0x63 && bytes[i + 1] == 0x70 && bytes[i + 2] == 0x6B &&
+                        bytes[i + 3] == 0x72 && bytes[i + 4] == 0x65 && bytes[i + 5] == 0x64 &&
+                        bytes[i + 6] == 0x69 && bytes[i + 7] == 0x72)
+                        return true;
+
+                    // 69 6D 61 67 65 68 6C 70
+                    // i  m  a  g  e  h  l  p
+
+                    if (bytes[i] == 0x69 && bytes[i + 1] == 0x6D && bytes[i + 2] == 0x61 &&
+                        bytes[i + 3] == 0x67 && bytes[i + 4] == 0x65 && bytes[i + 5] == 0x68 &&
+                        bytes[i + 6] == 0x6C && bytes[i + 7] == 0x70)
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                AddMessage("Exception thrown while checking executable.", ex);
+            }
+            AddMessage("Failed to check executable");
+            return false;
+        }
+
+        // GUI Events
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            Init();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Exit = true;
+            if (ModUpdatingThread != null && ModUpdatingThread.IsAlive)
+                while (ModUpdatingThread.IsAlive)
+                    Thread.Sleep(1000);
+
+            LogFile.AddEmptyLine();
+            LogFile.AddMessage("The form has been closed.");
+
+            LogFile.Close();
+            if (CPKREDIRIni != null)
+                CPKREDIRIni.Save();
+        }
+
+        #region Logging
+
+        public void AddMessage(string message)
+        {
+            LogFile.AddMessage(message);
+            // Adds a character limit if not compiled in debug
+            #if !DEBUG
+            if (message.Length < 128)
+            #endif
+            Invoke(new Action(() => StatusLabel.Text = message));
+        }
+
+        public static void AddMessage(string message, Exception exception, params string[] extraData)
+        {
+            if (Exit) return;
+            LogFile.AddMessage(message);
+            LogFile.AddMessage($"    Exception: {exception}");
+            if (extraData != null)
+            {
+                LogFile.AddMessage("    Extra Data: ");
+                foreach (string s in extraData)
+                    LogFile.AddMessage($"        {s}");
+            }
+            MessageBox.Show(Resources.ExceptionText, Program.ProgramName);
+            #if DEBUG
+            throw exception;
+            #endif
+        }
+
+        #endregion Logging
+
         #region Updating methods (A bit messy)
+
+        /// <summary>
+        /// Searches for any new ModLoader updates
+        /// NOTE: The method is really messy and can also easily fail
+        /// </summary>
+        public void CheckForModLoaderUpdates()
+        {
+            try
+            {
+                LogFile.AddMessage("Checking for Updates...");
+
+                var webClient = new WebClient();
+                string url = "https://api.github.com/repos/thesupersonic16/SLW-Mod-Loader/releases";
+                string latestReleaseJson = "";
+                string updateUrl = "";
+                string releaseBody = "";
+                float latestVersion = 0.0f;
+                float currentVersion = Convert.ToSingle(Program.VersionString.Substring(0, 3));
+
+                webClient.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+                latestReleaseJson = webClient.DownloadString(url);
+                latestVersion = Convert.ToSingle(latestReleaseJson.Substring(latestReleaseJson.IndexOf("tag_name") + 12, 3));
+                updateUrl = Program.GetString(latestReleaseJson.IndexOf("\"browser_download_url\": ") + 23, latestReleaseJson);
+                releaseBody = Program.GetString(latestReleaseJson.IndexOf("\"body\": \"") + 8, latestReleaseJson)
+                    .Replace("\\\"", "\"").Replace("\\n", "\n").Replace("\\r", "\n");
+
+                // If true, then a new update is available
+                if (latestVersion > currentVersion)
+                {
+                    AddMessage("New Update Found v" + latestVersion.ToString("0.0"));
+                    if (new ChangeLogForm(latestVersion.ToString("0.0"), releaseBody, updateUrl).ShowDialog() == DialogResult.Yes)
+                    {
+                        Invoke(new Action(() => Visible = false));
+                        AddMessage("Starting Update...");
+                        new UpdateForm(updateUrl).ShowDialog();
+                    }
+                    else
+                        AddMessage("Update Canceled. :(");
+                }
+                else
+                    LogFile.AddMessage("No updates are available.");
+            }
+            catch (Exception ex)
+            {
+                AddMessage("Exception thrown while checking for Mod Loader updates.", ex);
+            }
+        }
+
         /// <summary>
         /// Checks for updates for all mods
         /// </summary>
@@ -880,6 +847,55 @@ namespace SLWModLoader
         #endregion
 
         #region ButtonEvents
+
+        private void RefreshButton_Click(object sender, EventArgs e)
+        {
+            RefreshModsList();
+        }
+
+        private void SaveAndPlayButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveModDB();
+                AddMessage("ModsDB Saved");
+                StartGame();
+            }
+            catch (Exception ex)
+            {
+                AddMessage("Exception thrown while saving ModsDB and starting.", ex,
+                $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}",
+                $"Root Directory: {ModsDb.RootDirectory}");
+            }
+        }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveModDB();
+                AddMessage("ModsDB Saved");
+            }
+            catch (Exception ex)
+            {
+                AddMessage("Exception thrown while saving ModsDB.", ex,
+                $"Active Mod Count: {ModsDb.ActiveModCount}", $"File Path: {ModsDb.FilePath}",
+                $"Root Directory: {ModsDb.RootDirectory}");
+            }
+        }
+
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                StartGame();
+            }
+            catch (Exception ex)
+            {
+                AddMessage("Exception thrown while starting the game.", ex);
+                Close();
+            }
+        }
 
         private void AboutButton_Click(object sender, EventArgs e)
         {
