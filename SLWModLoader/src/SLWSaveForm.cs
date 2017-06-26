@@ -4,22 +4,24 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SLWModLoader
 {
-    // 
-    // NEEDS MORE WORK!
-    // 
     public partial class SLWSaveForm : Form
     {
 
         public string FilePath;
+        public string SteamPath;
+        public Thread imageThread;
+        public List<string> SIDs = new List<string>();
 
         public SLWSaveForm()
         {
@@ -29,6 +31,43 @@ namespace SLWModLoader
         public SLWSaveForm(string filePath) : this()
         {
             FilePath = filePath;
+        }
+
+        public void GetAndApplyImages()
+        {
+            // WebClient for downloading data from Steam's servers
+            var webClient = new WebClient();
+
+            foreach (string sid in SIDs)
+            {
+                // Gets the cached icon
+                var image = GetCachedSteamProfilePicture(sid);
+                if (image == null || ModifierKeys.HasFlag(Keys.Shift))
+                {
+                    // Downloads the icon
+                    image = DownloadSteamProfilePicture(webClient, sid);
+                }
+
+                if (image != null)
+                    Invoke(new Action(() => listView1.LargeImageList.Images.Add(sid, image)));
+            }
+        }
+
+        public Image GetCachedSteamProfilePicture(string SID)
+        {
+            string filePath = Path.Combine(SteamPath, "config/avatarcache/", SID + ".png");
+            if (File.Exists(filePath))
+                return Image.FromFile(filePath);
+            return null;
+        }
+
+        public Bitmap DownloadSteamProfilePicture(WebClient webClient, string SID)
+        {
+            string url = "http://steamcommunity.com/profiles/" + SID;
+            string PIURL = @"steamstatic.com/steamcommunity/public/images";
+            url = webClient.DownloadString(url);
+            url = Program.GetString(url.Substring(0, url.IndexOf(PIURL)).LastIndexOf('\"') - 1, url);
+            return new Bitmap(new MemoryStream(webClient.DownloadData(url)));
         }
 
         private void SLWSaveForm_Load(object sender, EventArgs e)
@@ -47,18 +86,17 @@ namespace SLWModLoader
             var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam");
             // If null then try get it from the 64-bit Registry
             if (key == null)
-                key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey("SOFTWARE\\Valve\\Steam");
+                key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
+                    .OpenSubKey("SOFTWARE\\Valve\\Steam");
             // Checks if the Key and Value exists.
             if (key != null && key.GetValue("SteamPath") is string steamPath)
             {
+                SteamPath = steamPath;
                 // Checks if "loginusers.vdf" exists.
                 if (File.Exists(Path.Combine(steamPath, "config\\loginusers.vdf")))
                 {
-                    // WebClient for downloading data from Steam's servers
-                    var webClient = new WebClient();
                     // loginusers.vdf
                     var file = VDFFile.ReadVDF(Path.Combine(steamPath, "config\\loginusers.vdf"));
-                    // 
                     foreach (var pair in file.Array.Elements.ToList())
                     {
                         // Adds ListViewItem
@@ -67,20 +105,24 @@ namespace SLWModLoader
                         {
                             ImageKey = array.Name
                         };
+                        // Adds the SID to the SID list
+                        SIDs.Add(array.Name);
                         listView1.Items.Add(lvi);
-
-                        // Downloads the icons
-                        #region Messy
-                        string url = "http://steamcommunity.com/profiles/" + array.Name;
-                        string PIURL = @"steamstatic.com/steamcommunity/public/images";
-                        url = webClient.DownloadString(url);
-                        url = Program.GetString(url.Substring(0, url.IndexOf(PIURL)).LastIndexOf('\"') - 1, url);
-                        var profileImage = new Bitmap(new MemoryStream(webClient.DownloadData(url)));
-                        listView1.LargeImageList.Images.Add(array.Name, profileImage);
-                        #endregion
                     }
                 }
+                // Gets the icons in another thread
+                imageThread = new Thread(new ThreadStart(GetAndApplyImages));
+                imageThread.Start();
+            }else
+            {
+                Close();
             }
+        }
+
+        private void SLWSaveForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (imageThread.IsAlive)
+                imageThread.Abort();
         }
 
         private void Button_Install_Click(object sender, EventArgs e)
@@ -100,7 +142,12 @@ namespace SLWModLoader
                 Close();
             }
         }
-        
+
+        private void ListView1_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
         #region Horrible code, Don't look
         public class VDFFile
         {
@@ -212,10 +259,5 @@ namespace SLWModLoader
 
         }
         #endregion
-
-        private void ListView1_DrawItem(object sender, DrawListViewItemEventArgs e)
-        {
-            e.DrawDefault = true;
-        }
     }
 }

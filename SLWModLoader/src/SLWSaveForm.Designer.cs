@@ -79,6 +79,7 @@
             this.MinimizeBox = false;
             this.Name = "SLWSaveForm";
             this.Text = "Install SLW Save File - SLW Mod Loader";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SLWSaveForm_FormClosing);
             this.Load += new System.EventHandler(this.SLWSaveForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
