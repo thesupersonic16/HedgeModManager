@@ -65,7 +65,12 @@ namespace SLWModLoader
                     {
                         // Copies the current file into the custom filepath
                         File.Copy(filePath, Path.Combine(path, file), true);
-                        // Trys To delete the old file, Its almost always SLWModLoader.exe that fails
+
+                        // Don't delete this file as its in use, same thing should be done for the pdb
+                        if (file == Program.ExecutableName)
+                            continue;
+
+                        // Trys to delete the old files
                         try { File.Delete(filePath); } catch { }
                     }
                     else
@@ -75,28 +80,33 @@ namespace SLWModLoader
                 }
 
                 LogFile.AddMessage("Creating Shortcut for " + gameName);
-                
-                // Creates a shortcut to the modloader
-                string shortcutPath = Path.Combine(Program.StartDirectory, $"SLWModLoader - {gameName}.lnk");
-                var wsh = new IWshRuntimeLibrary.WshShell();
-                var shortcut = wsh.CreateShortcut(shortcutPath) as IWshRuntimeLibrary.IWshShortcut;
-                shortcut.Description = "SLWModLoader - "+gameName;
-                shortcut.TargetPath = Path.Combine(path, Program.ExecutableName);
-                shortcut.WorkingDirectory = path;
-                shortcut.Save();
-                LogFile.AddMessage("    Done.");
-
-                MessageBox.Show("Done.", Program.ProgramName);
-
-                // Starts the modloader
-                Process.Start(shortcutPath);
 
                 try
                 {
-                    // Trys to delete SLWModLoader.exe again
+                    // Creates a shortcut to the ModLoader
+                    string shortcutPath = Path.Combine(Program.StartDirectory, $"SLWModLoader - {gameName}.lnk");
+                    var wsh = new IWshRuntimeLibrary.WshShell();
+                    var shortcut = wsh.CreateShortcut(shortcutPath) as IWshRuntimeLibrary.IWshShortcut;
+                    shortcut.Description = $"SLWModLoader - {gameName}";
+                    shortcut.TargetPath = Path.Combine(path, Program.ExecutableName);
+                    shortcut.WorkingDirectory = path;
+                    shortcut.Save();
+                    LogFile.AddMessage("    Done.");
+                }
+                catch (Exception ex)
+                {
+                    AddMessage("Exception thrown while creating a shortcut.", ex);
+                }
+
+                // Starts the ModLoader
+                Process.Start(Path.Combine(path, Program.ExecutableName));
+
+                try
+                {
+                    // Trys to delete SLWModLoader.exe
                     var startInfo = new ProcessStartInfo()
                     {
-                        Arguments = $" /c sleep 3 & del \"{Application.ExecutablePath}\"",
+                        Arguments = $"/c powershell start-sleep 2 & del \"{Application.ExecutablePath}\"",
                         WindowStyle = ProcessWindowStyle.Hidden,
                         CreateNoWindow = true,
                         FileName = "cmd.exe"
