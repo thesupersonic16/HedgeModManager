@@ -198,7 +198,7 @@
             // editBtn
             // 
             this.editBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.editBtn.Location = new System.Drawing.Point(255, 431);
+            this.editBtn.Location = new System.Drawing.Point(251, 431);
             this.editBtn.Margin = new System.Windows.Forms.Padding(2);
             this.editBtn.Name = "editBtn";
             this.editBtn.Size = new System.Drawing.Size(249, 23);

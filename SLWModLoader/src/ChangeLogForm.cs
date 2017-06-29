@@ -19,18 +19,26 @@ namespace SLWModLoader
             InitializeComponent();
             Text = $"A new version of { Program.ProgramName} is available.";
             titleLbl.Text = "SLW Mod Loader v" + version;
+            // Centring the title
+            titleLbl.Location = new Point(Size.Width / 2 - titleLbl.Size.Width / 2, titleLbl.Location.Y);
+
+            // Adds bullets
+            changeLog = changeLog.Replace("\n- ", "\n\u2022 ");
+            if (changeLog.StartsWith("- "))
+                changeLog = "\u2022" + changeLog.Substring(1);
+
             changelogLbl.Text = changeLog;
             this.downloadUrl = downloadUrl;
         }
 
-        private void OkBtn_Click(object sender, EventArgs e)
+        private void Button_Click(object sender, EventArgs e)
         {
             Close();
         }
 
         private void ChangeLogForm_Load(object sender, EventArgs e)
         {
-
+            MainForm.ApplyDarkTheme(this);
         }
     }
 }

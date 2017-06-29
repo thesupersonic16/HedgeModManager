@@ -35,6 +35,8 @@ namespace SLWModLoader
             {
                 // Path to where all the update file are stored
                 string tempPath = Path.Combine(Program.StartDirectory, "updateTemp");
+                // Deletes the temp diretory
+                Directory.Delete(tempPath, true);
                 // Creates the temp directory
                 Directory.CreateDirectory(tempPath);
                 // Adds an event to the "DownloadProgressChanged" EventHandler
@@ -43,10 +45,8 @@ namespace SLWModLoader
                 Invoke(new Action(() => webClient.DownloadFileAsync(new Uri(Url), Path.Combine(tempPath, "SLWModLoaderUpdate.zip"))));
                 // Waits for the update to finish
                 while (webClient.IsBusy)
-                {
-                    Thread.Sleep(50);
-                }
-
+                    Thread.Sleep(25);
+                
                 LogFile.AddMessage("Finished Downloading update. Installing");
                 LogFile.AddMessage("Extracting Update...");
                 

@@ -70,7 +70,7 @@ namespace SLWModLoader
                         if (file == Program.ExecutableName)
                             continue;
 
-                        // Trys to delete the old files
+                        // Trys o delete the old files
                         try { File.Delete(filePath); } catch { }
                     }
                     else
@@ -303,6 +303,89 @@ namespace SLWModLoader
             RefreshModsList();
         }
         
+        public void LoadConfig()
+        {
+            // Checks if "cpkredir.ini" exists as SLWModLoader uses it to store its config
+            if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
+            {
+                try
+                {
+                    CPKREDIRIni = new IniFile(Path.Combine(Program.StartDirectory, "cpkredir.ini"));
+                    IniGroup group = null;
+                    if (CPKREDIRIni.ContainsGroup(Program.ProgramNameShort))
+                        group = CPKREDIRIni[Program.ProgramNameShort];
+                    else
+                    {
+                        group = new IniGroup(Program.ProgramNameShort);
+                        CPKREDIRIni.AddGroup(group);
+                    }
+
+                    if (group.ContainsParameter("DO A BARREL ROLL"))
+                        foreach (Control control in Controls)
+                            control.Font = new Font("Comic Sans MS", control.Font.Size, FontStyle.Bold);
+
+                    if (!group.ContainsParameter("AutoCheckForUpdates"))
+                        group.AddParameter("AutoCheckForUpdates", "0");
+                    if (!group.ContainsParameter("KeepModLoaderOpen"))
+                        group.AddParameter("KeepModLoaderOpen", "1");
+                    if (!group.ContainsParameter("DarkTheme"))
+                        group.AddParameter("DarkTheme", "1");
+                    if (!group.ContainsParameter("CheckIncludes"))
+                        group.AddParameter("CheckIncludes", "0");
+                    if (!group.ContainsParameter("CustomModsDirectory"))
+                        group.AddParameter("CustomModsDirectory", "0");
+                    if (!group.ContainsParameter("DefaultModsPath"))
+                        group.AddParameter("DefaultModsPath", "mods");
+                    if (!group.ContainsParameter("CustomModsPath"))
+                        group.AddParameter("CustomModsPath", "C:\\SLWMods");
+
+                    AutoCheckUpdateCheckBox.Checked = group["AutoCheckForUpdates"] != "0";
+                    KeepModLoaderOpenCheckBox.Checked = group["KeepModLoaderOpen"] != "0";
+                    CheckBox_CustomModsDirectory.Checked = group["CustomModsDirectory"] != "0";
+                    CheckIncludes = group["CheckIncludes"] != "0";
+
+                    DefaultModsPath = group["DefaultModsPath"];
+                    CustomModsPath = group["CustomModsPath"];
+
+                    TextBox_CustomModsDirectory.Text = CustomModsPath;
+
+                    if (CheckBox_CustomModsDirectory.Checked)
+                    {
+                        ModsFolderPath = CustomModsPath;
+                        ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
+                    }
+                    else
+                    {
+                        ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
+                        ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
+                    }
+
+                    TextBox_CustomModsDirectory.Enabled = CheckBox_CustomModsDirectory.Enabled;
+
+                    EnableSaveFileRedirectionCheckBox.Checked =
+                        CPKREDIRIni["CPKREDIR"]["EnableSaveFileRedirection"] != "0";
+                    EnableCPKREDIRConsoleCheckBox.Checked = CPKREDIRIni["CPKREDIR"].ContainsParameter("LogType");
+
+                    if (group["DarkTheme"] != "0")
+                    {
+                        ModsList.OwnerDraw = true;
+                        ApplyDarkTheme(this, splitContainer.Panel1, splitContainer.Panel2, splitContainer);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    AddMessage("Exception thrown while loading configurations.", ex);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Could not find cpkredir.ini\n" +
+                    "SG, LW and the ModLoader may not run correctly without this file.",
+                    Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         public void Init()
         {
             Text += $" (v{Program.VersionString})";
@@ -344,85 +427,7 @@ namespace SLWModLoader
                     }
                 }
 
-                #region Config
-                // Checks if "cpkredir.ini" exists as SLWModLoader uses it to store its config
-                if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
-                {
-                    try
-                    {
-                        CPKREDIRIni = new IniFile(Path.Combine(Program.StartDirectory, "cpkredir.ini"));
-                        IniGroup group = null;
-                        if (CPKREDIRIni.ContainsGroup(Program.ProgramNameShort))
-                            group = CPKREDIRIni[Program.ProgramNameShort];
-                        else
-                        {
-                            group = new IniGroup(Program.ProgramNameShort);
-                            CPKREDIRIni.AddGroup(group);
-                        }
-
-                        if (group.ContainsParameter("DO A BARREL ROLL"))
-                            foreach (Control control in Controls)
-                                control.Font = new Font("Comic Sans MS", control.Font.Size, FontStyle.Bold);
-
-                        if (!group.ContainsParameter("AutoCheckForUpdates"))
-                            group.AddParameter("AutoCheckForUpdates", "0");
-                        if (!group.ContainsParameter("KeepModLoaderOpen"))
-                            group.AddParameter("KeepModLoaderOpen", "1");
-                        if (!group.ContainsParameter("DarkTheme"))
-                            group.AddParameter("DarkTheme", "1");
-                        if (!group.ContainsParameter("CheckIncludes"))
-                            group.AddParameter("CheckIncludes", "0");
-                        if (!group.ContainsParameter("CustomModsDirectory"))
-                            group.AddParameter("CustomModsDirectory", "0");
-                        if (!group.ContainsParameter("DefaultModsPath"))
-                            group.AddParameter("DefaultModsPath", "mods");
-                        if (!group.ContainsParameter("CustomModsPath"))
-                            group.AddParameter("CustomModsPath", "C:\\SLWMods");
-
-                        AutoCheckUpdateCheckBox.Checked = group["AutoCheckForUpdates"] != "0";
-                        KeepModLoaderOpenCheckBox.Checked = group["KeepModLoaderOpen"] != "0";
-                        CheckBox_CustomModsDirectory.Checked = group["CustomModsDirectory"] != "0";
-                        CheckIncludes = group["CheckIncludes"] != "0";
-
-                        DefaultModsPath = group["DefaultModsPath"];
-                        CustomModsPath = group["CustomModsPath"];
-
-                        TextBox_CustomModsDirectory.Text = CustomModsPath;
-
-                        if (CheckBox_CustomModsDirectory.Checked)
-                        {
-                            ModsFolderPath = CustomModsPath;
-                            ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
-                        }
-                        else
-                        {
-                            ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
-                            ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
-                        }
-
-                        EnableSaveFileRedirectionCheckBox.Checked = 
-                            CPKREDIRIni["CPKREDIR"]["EnableSaveFileRedirection"] != "0";
-                        EnableCPKREDIRConsoleCheckBox.Checked = CPKREDIRIni["CPKREDIR"].ContainsParameter("LogType");
-
-                        if (group["DarkTheme"] != "0")
-                        {
-                            ModsList.OwnerDraw = true;
-                            ApplyDarkTheme(this, splitContainer.Panel1, splitContainer.Panel2, splitContainer);
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        AddMessage("Exception thrown while loading configurations.", ex);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Could not find cpkredir.ini\n" +
-                        "SG, LW and the ModLoader may not run correctly without this file.",
-                        Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                #endregion Config
+                LoadConfig();
 
                 // Checks if the mods directory exists, If not, then ask to create one
                 if (!Directory.Exists(ModsFolderPath))
@@ -683,24 +688,23 @@ namespace SLWModLoader
 
                 var webClient = new WebClient();
                 string url = "https://api.github.com/repos/thesupersonic16/SLW-Mod-Loader/releases";
-                string latestReleaseJson = "";
+                string data = "";
                 string updateUrl = "";
                 string releaseBody = "";
-                float latestVersion = 0.0f;
-                float currentVersion = Convert.ToSingle(Program.VersionString.Substring(0, 3));
+                string currentVersion = Program.VersionString;
+                string latestVersion = "0.0";
 
-                webClient.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
-                latestReleaseJson = webClient.DownloadString(url);
-                latestVersion = Convert.ToSingle(latestReleaseJson.Substring(latestReleaseJson.IndexOf("tag_name") + 12, 3));
-                updateUrl = Program.GetString(latestReleaseJson.IndexOf("\"browser_download_url\": ") + 23, latestReleaseJson);
-                releaseBody = Program.GetString(latestReleaseJson.IndexOf("\"body\": \"") + 8, latestReleaseJson)
-                    .Replace("\\\"", "\"").Replace("\\n", "\n").Replace("\\r", "\n");
-
+                webClient.Headers.Add("user-agent", Program.UserAgent);
+                data = webClient.DownloadString(url);
+                latestVersion = Program.GetStringAfter("tag_name", data);
+                updateUrl =     Program.GetStringAfter("browser_download_url", data);
+                releaseBody =   Program.EscapeString(Program.GetStringAfter("body", data));
+                
                 // If true, then a new update is available
-                if (latestVersion > currentVersion)
+                if (latestVersion != currentVersion)
                 {
-                    AddMessage("New Update Found v" + latestVersion.ToString("0.0"));
-                    if (new ChangeLogForm(latestVersion.ToString("0.0"), releaseBody, updateUrl).ShowDialog() == DialogResult.Yes)
+                    AddMessage($"New Update Found v{latestVersion}");
+                    if (new ChangeLogForm(latestVersion, releaseBody, updateUrl).ShowDialog() == DialogResult.Yes)
                     {
                         Invoke(new Action(() => Visible = false));
                         AddMessage("Starting Update...");
@@ -1409,6 +1413,10 @@ namespace SLWModLoader
 
                     if (control0.GetType() == typeof(RadioButton))
                         ((RadioButton)control0).FlatStyle = FlatStyle.Flat;
+
+                    if (control0.GetType() == typeof(GroupBox))
+                        ((GroupBox)control0).ForeColor = Color.FromArgb(200, 200, 180);
+
 
                     if (control0.GetType() == typeof(StatusStrip))
                         control0.BackColor = Color.FromArgb(54, 54, 54);
