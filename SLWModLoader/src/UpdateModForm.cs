@@ -15,17 +15,17 @@ namespace SLWModLoader
     {
         // Variables/Constants
         public Thread DownloadThread;
-        public Dictionary<string, Tuple<string, string>> Files;
-        public string ModRoot;
         public bool CancelUpdate = false;
+        public Mod _Mod;
+        public ModUpdater.ModUpdate ModUpdate;
 
         // Constructors
-        public UpdateModForm(string modName, Dictionary<string, Tuple<string, string>> files, string modRoot)
+        public UpdateModForm(Mod mod, ModUpdater.ModUpdate update)
         {
             InitializeComponent();
-            Files = files;
-            ModRoot = modRoot;
-            UpdateLabel.Text = "Updating " + modName;
+            _Mod = mod;
+            ModUpdate = update;
+            UpdateLabel.Text = "Updating " + update.Name;
             UpdateLabel.Location = new Point(Size.Width/2-UpdateLabel.Size.Width/2, UpdateLabel.Location.Y);
             DownloadLabel.Text = "Starting Download...";
             DownloadLabel.Location = new Point(Size.Width / 2 - DownloadLabel.Size.Width / 2, DownloadLabel.Location.Y);
@@ -35,23 +35,28 @@ namespace SLWModLoader
         private void UpdateModsForm_Load(object sender, EventArgs e)
         {
             var webClient = new WebClient();
+            // Adds the WebClient_DownloadProgressChanged event to the web client.
+            webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(WebClient_DownloadProgressChanged);
 
             DownloadThread = new Thread(() =>
             {
                 // Sets the ProgressBarAll's maximum to the amount of files/lines.
-                Invoke(new Action(() => ProgressBarAll.Maximum = Files.Count));
+                Invoke(new Action(() => ProgressBarAll.Maximum = ModUpdate.Files.Count));
 
                 var sha = new SHA256Managed();
                 byte[] hash;
-                var fileList = Files.ToList();
-                for (int i = 0; i < Files.Count; ++i)
+                for (int i = 0; i < ModUpdate.Files.Count; ++i)
                 {
-                    // Gets and stores the current line.
-                    string fileName = fileList[i].Key;
-                    string fileHash = fileList[i].Value.Item1;
-                    string fileUrl = fileList[i].Value.Item2;
+                    string fileName = ModUpdate.Files[i].FileName;
+                    string fileUrl = ModUpdate.Files[i].URL;
+                    string fileSha = ModUpdate.Files[i].SHA256;
+                    var fileInfo = new FileInfo(Path.Combine(_Mod.RootDirectory, fileName));
 
-                    LogFile.AddMessage($"Downloading: {fileName} at {fileUrl}");
+                    // Creates the directorys
+                    if (!fileInfo.Directory.Exists)
+                        Directory.CreateDirectory(fileInfo.Directory.FullName);
+
+                    LogFile.AddMessage($"Downloading: {fileName} from {fileUrl}");
                     // Closes and returns if the user clicked cancel.
                     if (CancelUpdate) { Invoke(new Action(() => Close())); return; }
                     // Sets DownloadLabel's Text to show what file is being downloaded.
@@ -59,29 +64,28 @@ namespace SLWModLoader
                     // Centres DownloadLabel's position.
                     Invoke(new Action(() => DownloadLabel.Location =
                         new Point(Size.Width / 2 - DownloadLabel.Size.Width / 2, DownloadLabel.Location.Y)));
-                    // Adds the WebClient_DownloadProgressChanged event to the web client.
-                    webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(WebClient_DownloadProgressChanged);
                     // Sets ProgressBarAll's Value to the current file.
                     Invoke(new Action(() => ProgressBarAll.Value = i));
                     // Downloads the current file to the mod root.
                     Invoke(new Action(() => webClient.DownloadFileAsync(new Uri(fileUrl),
-                        Path.Combine(ModRoot, fileName))));
+                        Path.Combine(_Mod.RootDirectory, fileName))));
                     // Waits for the download to finish.
                     while (webClient.IsBusy)
                     {
-                        Thread.Sleep(25);
+                        Thread.Sleep(100);
                     }
-                    using (var stream = File.OpenRead(Path.Combine(ModRoot, fileName)))
+                    
+                    using (var stream = File.OpenRead(Path.Combine(_Mod.RootDirectory, fileName)))
                     {
-                        if (fileHash != 0.ToString("X64"))
+                        if (fileSha != 0.ToString("X64"))
                         {
                             hash = sha.ComputeHash(stream);
                             if (Encoding.ASCII.GetString(hash) !=
-                                Encoding.ASCII.GetString(StringToByteArray(fileHash)))
+                                Encoding.ASCII.GetString(StringToByteArray(fileSha)))
                             {
                                 LogFile.AddMessage($"Hash Mismatch on file: {fileName}");
                                 if (MessageBox.Show($"File Hash Mismatch.\n" +
-                                    $"{ByteArrayToString(StringToByteArray(fileHash))}" +
+                                    $"{ByteArrayToString(StringToByteArray(fileSha))}" +
                                     $" != {ByteArrayToString(hash)}\n" +
                                     $"Try Redownloading?", "File Hash Mismatch.",
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
@@ -107,8 +111,13 @@ namespace SLWModLoader
 
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            ProgressBarFile.Maximum = (int) e.TotalBytesToReceive;
-            ProgressBarFile.Value = (int) e.BytesReceived;
+            if (e.TotalBytesToReceive != -1)
+            {
+                ProgressBarFile.Style = ProgressBarStyle.Blocks;
+                ProgressBarFile.Maximum = (int) e.TotalBytesToReceive;
+                ProgressBarFile.Value = (int) e.BytesReceived;
+            }else
+                ProgressBarFile.Style = ProgressBarStyle.Marquee;
         }
 
         public static byte[] StringToByteArray(string hex)

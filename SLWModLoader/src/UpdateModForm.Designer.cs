@@ -42,10 +42,10 @@
             this.ProgressBarFile.Size = new System.Drawing.Size(472, 32);
             this.ProgressBarFile.TabIndex = 0;
             // 
-            // CancelButton
+            // CancelUpdateButton
             // 
             this.CancelUpdateButton.Location = new System.Drawing.Point(190, 182);
-            this.CancelUpdateButton.Name = "CancelButton";
+            this.CancelUpdateButton.Name = "CancelUpdateButton";
             this.CancelUpdateButton.Size = new System.Drawing.Size(123, 23);
             this.CancelUpdateButton.TabIndex = 1;
             this.CancelUpdateButton.Text = "Cancel Update";
@@ -92,8 +92,11 @@
             this.Controls.Add(this.ProgressBarAll);
             this.Controls.Add(this.CancelUpdateButton);
             this.Controls.Add(this.ProgressBarFile);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "UpdateModForm";
             this.ShowIcon = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "UpdateModsForm";
             this.Load += new System.EventHandler(this.UpdateModsForm_Load);
             this.ResumeLayout(false);

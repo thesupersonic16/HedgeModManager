@@ -169,6 +169,39 @@ namespace SLWModLoader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There&apos;s a newer version of {0} available!
+        ///
+        ///Do you want to update from version {1} to {2}? ({3}).
+        /// </summary>
+        internal static string ModUpdateText {
+            get {
+                return ResourceManager.GetString("ModUpdateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SLW Mod Loader can not check for updates for {0} because it no update server..
+        /// </summary>
+        internal static string NoUpdateServerAndURLText {
+            get {
+                return ResourceManager.GetString("NoUpdateServerAndURLText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SLW Mod Loader can not check for updates for {0} because no update server.
+        ///
+        ///This Mod does have a website.
+        ///    Do you want to open it and check for updates manually?
+        ///        URL: {1}.
+        /// </summary>
+        internal static string NoUpdateServerText {
+            get {
+                return ResourceManager.GetString("NoUpdateServerText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We have detected that you&apos;re using a pirated copy of {0}. Please purchase {0} off the Steam store..
         /// </summary>
         internal static string PiracyText {

@@ -261,7 +261,6 @@ namespace SLWModLoader
                                 equalsPosition = stringBuilder.Length;
                             goto default;
 
-                        case '#':
                         case ';':
                             i = nextLine.Length;
                             break;

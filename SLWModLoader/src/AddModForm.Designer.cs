@@ -28,26 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.fileInstallRBtn = new System.Windows.Forms.RadioButton();
+            this.RadioButton_Archive = new System.Windows.Forms.RadioButton();
             this.titleLbl = new System.Windows.Forms.Label();
-            this.folderInstallRBtn = new System.Windows.Forms.RadioButton();
-            this.makingItRBtn = new System.Windows.Forms.RadioButton();
+            this.RadioButton_Folder = new System.Windows.Forms.RadioButton();
+            this.RadioButton_Make = new System.Windows.Forms.RadioButton();
             this.okBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // fileInstallRBtn
+            // RadioButton_Archive
             // 
-            this.fileInstallRBtn.AutoSize = true;
-            this.fileInstallRBtn.Checked = true;
-            this.fileInstallRBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.fileInstallRBtn.Location = new System.Drawing.Point(15, 55);
-            this.fileInstallRBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.fileInstallRBtn.Name = "fileInstallRBtn";
-            this.fileInstallRBtn.Size = new System.Drawing.Size(156, 18);
-            this.fileInstallRBtn.TabIndex = 0;
-            this.fileInstallRBtn.TabStop = true;
-            this.fileInstallRBtn.Text = "&Installing it from an archive";
-            this.fileInstallRBtn.UseVisualStyleBackColor = true;
+            this.RadioButton_Archive.AutoSize = true;
+            this.RadioButton_Archive.Checked = true;
+            this.RadioButton_Archive.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.RadioButton_Archive.Location = new System.Drawing.Point(15, 51);
+            this.RadioButton_Archive.Margin = new System.Windows.Forms.Padding(2);
+            this.RadioButton_Archive.Name = "RadioButton_Archive";
+            this.RadioButton_Archive.Size = new System.Drawing.Size(156, 18);
+            this.RadioButton_Archive.TabIndex = 0;
+            this.RadioButton_Archive.TabStop = true;
+            this.RadioButton_Archive.Text = "&Installing it from an archive";
+            this.RadioButton_Archive.UseVisualStyleBackColor = true;
             // 
             // titleLbl
             // 
@@ -61,38 +61,39 @@
             this.titleLbl.TabIndex = 1;
             this.titleLbl.Text = "Add a new mod by...";
             // 
-            // folderInstallRBtn
+            // RadioButton_Folder
             // 
-            this.folderInstallRBtn.AutoSize = true;
-            this.folderInstallRBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.folderInstallRBtn.Location = new System.Drawing.Point(15, 75);
-            this.folderInstallRBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.folderInstallRBtn.Name = "folderInstallRBtn";
-            this.folderInstallRBtn.Size = new System.Drawing.Size(141, 18);
-            this.folderInstallRBtn.TabIndex = 1;
-            this.folderInstallRBtn.Text = "Installing it from a &folder";
-            this.folderInstallRBtn.UseVisualStyleBackColor = true;
+            this.RadioButton_Folder.AutoSize = true;
+            this.RadioButton_Folder.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.RadioButton_Folder.Location = new System.Drawing.Point(15, 73);
+            this.RadioButton_Folder.Margin = new System.Windows.Forms.Padding(2);
+            this.RadioButton_Folder.Name = "RadioButton_Folder";
+            this.RadioButton_Folder.Size = new System.Drawing.Size(141, 18);
+            this.RadioButton_Folder.TabIndex = 1;
+            this.RadioButton_Folder.Text = "Installing it from a &folder";
+            this.RadioButton_Folder.UseVisualStyleBackColor = true;
             // 
-            // makingItRBtn
+            // RadioButton_Make
             // 
-            this.makingItRBtn.AutoSize = true;
-            this.makingItRBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.makingItRBtn.Location = new System.Drawing.Point(15, 94);
-            this.makingItRBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.makingItRBtn.Name = "makingItRBtn";
-            this.makingItRBtn.Size = new System.Drawing.Size(87, 18);
-            this.makingItRBtn.TabIndex = 2;
-            this.makingItRBtn.Text = "&Making one";
-            this.makingItRBtn.UseVisualStyleBackColor = true;
+            this.RadioButton_Make.AutoSize = true;
+            this.RadioButton_Make.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.RadioButton_Make.Location = new System.Drawing.Point(15, 95);
+            this.RadioButton_Make.Margin = new System.Windows.Forms.Padding(2);
+            this.RadioButton_Make.Name = "RadioButton_Make";
+            this.RadioButton_Make.Size = new System.Drawing.Size(87, 18);
+            this.RadioButton_Make.TabIndex = 3;
+            this.RadioButton_Make.Text = "&Making one";
+            this.RadioButton_Make.UseVisualStyleBackColor = true;
             // 
             // okBtn
             // 
+            this.okBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.okBtn.Location = new System.Drawing.Point(295, 106);
+            this.okBtn.Location = new System.Drawing.Point(295, 122);
             this.okBtn.Margin = new System.Windows.Forms.Padding(2);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(64, 22);
-            this.okBtn.TabIndex = 3;
+            this.okBtn.TabIndex = 4;
             this.okBtn.Text = "&OK";
             this.okBtn.UseVisualStyleBackColor = true;
             this.okBtn.Click += new System.EventHandler(this.OkBtn_Click);
@@ -104,11 +105,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.okBtn;
-            this.ClientSize = new System.Drawing.Size(367, 136);
+            this.ClientSize = new System.Drawing.Size(367, 152);
             this.Controls.Add(this.titleLbl);
-            this.Controls.Add(this.fileInstallRBtn);
-            this.Controls.Add(this.folderInstallRBtn);
-            this.Controls.Add(this.makingItRBtn);
+            this.Controls.Add(this.RadioButton_Archive);
+            this.Controls.Add(this.RadioButton_Folder);
+            this.Controls.Add(this.RadioButton_Make);
             this.Controls.Add(this.okBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -127,10 +128,10 @@
 
         #endregion
 
-        private System.Windows.Forms.RadioButton fileInstallRBtn;
+        private System.Windows.Forms.RadioButton RadioButton_Archive;
         private System.Windows.Forms.Label titleLbl;
-        private System.Windows.Forms.RadioButton folderInstallRBtn;
-        private System.Windows.Forms.RadioButton makingItRBtn;
+        private System.Windows.Forms.RadioButton RadioButton_Folder;
+        private System.Windows.Forms.RadioButton RadioButton_Make;
         private System.Windows.Forms.Button okBtn;
     }
 }

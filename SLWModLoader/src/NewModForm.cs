@@ -334,6 +334,8 @@ namespace SLWModLoader
                         lvi.SubItems[0].ForeColor = Color.FromArgb(200, 200, 180);
                     }
                 }
+                // This is here to make it easier to see the groups
+                listView1.BackColor = Color.FromArgb(64, 64, 64);
             }
         }
 

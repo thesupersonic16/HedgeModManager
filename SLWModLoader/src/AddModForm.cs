@@ -5,6 +5,8 @@ using System.IO.Compression;
 using System.IO;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace SLWModLoader
 {
@@ -18,7 +20,7 @@ namespace SLWModLoader
         private void OkBtn_Click(object sender, EventArgs e)
         {
             Close();
-            if (makingItRBtn.Checked)
+            if (RadioButton_Make.Checked)
             {
                 var nmnf = new NewModNameForm();
                 if (nmnf.ShowDialog() == DialogResult.OK)
@@ -28,7 +30,7 @@ namespace SLWModLoader
                 }
             }
 
-            if (folderInstallRBtn.Checked)
+            if (RadioButton_Folder.Checked)
             {
                 var sfd = new SaveFileDialog()
                 {
@@ -42,7 +44,7 @@ namespace SLWModLoader
 
             }
 
-            if (fileInstallRBtn.Checked)
+            if (RadioButton_Archive.Checked)
             {
                 var ofd = new OpenFileDialog()
                 {
@@ -58,13 +60,16 @@ namespace SLWModLoader
 
         public static void InstallFromZip(string ZipPath)
         {
-            // Path to the install temp folder.
+            // Path to the install temp folder
             string tempFolder = Path.Combine(Program.StartDirectory, "temp_install");
-            // Extracts all contents inside of the zip file.
+            // Deletes the temp Directory if it exists
+            if (Directory.Exists(tempFolder))
+                Directory.Delete(tempFolder, true);
+            // Extracts all contents inside of the zip file
             ZipFile.ExtractToDirectory(ZipPath, tempFolder);
-            // Search and install mods from the temp folder after extracting.
+            // Search and install mods from the temp folder after extracting
             InstallFromFolder(tempFolder);
-            // Deletes the temp folder with all of its contents.
+            // Deletes the temp folder with all of its contents
             Directory.Delete(tempFolder, true);
         }
 
@@ -124,13 +129,25 @@ namespace SLWModLoader
             {
                 foreach (string folder in folders)
                 {
+                    string folderName = Path.GetFileName(folder);
+
+                    // If it doesn't know the name of the mod its installing
+                    if (folderName == "temp_install")
+                    {
+                        // mod.ini
+                        var ini = new IniFile(Path.Combine(folder, "mod.ini"));
+                        folderName = ini["Desc"]["Title"].Replace(":", "").Replace("*", "");
+                        folderName = new string(folderName.Where(x => !Path.GetInvalidFileNameChars()
+                            .Contains(x)).ToArray());
+                    }
+
                     // Creates all of the Directories.
                     foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
-                        Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(MainForm.ModsFolderPath, Path.GetFileName(folder))));
+                        Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(MainForm.ModsFolderPath, folderName)));
 
                     // Copies all the files from the Directories.
                     foreach (string newPath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
-                        File.Copy(newPath, newPath.Replace(folder, Path.Combine(MainForm.ModsFolderPath, Path.GetFileName(folder))), true);
+                        File.Copy(newPath, newPath.Replace(folder, Path.Combine(MainForm.ModsFolderPath, folderName)), true);
                 }
             }
             else

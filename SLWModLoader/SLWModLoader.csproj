@@ -72,6 +72,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\CreateUpdateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\CreateUpdateForm.Designer.cs">
+      <DependentUpon>CreateUpdateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\CreateUpdateURLForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\CreateUpdateURLForm.Designer.cs">
+      <DependentUpon>CreateUpdateURLForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\DownloadTools.cs" />
     <Compile Include="src\LogFile.cs" />
     <Compile Include="src\AboutForm.cs">
       <SubType>Form</SubType>
@@ -87,6 +100,7 @@
     </Compile>
     <Compile Include="src\IniFile.cs" />
     <Compile Include="src\Mods.cs" />
+    <Compile Include="src\ModUpdater.cs" />
     <Compile Include="src\NewModForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,6 +169,12 @@
     </Compile>
     <EmbeddedResource Include="src\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\CreateUpdateForm.resx">
+      <DependentUpon>CreateUpdateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\CreateUpdateURLForm.resx">
+      <DependentUpon>CreateUpdateURLForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\DescriptionForm.resx">
       <DependentUpon>DescriptionForm.cs</DependentUpon>
