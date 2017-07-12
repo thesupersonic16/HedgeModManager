@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Net;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace SLWModLoader
@@ -9,6 +11,7 @@ namespace SLWModLoader
         //Variables/Constants
         public static string StartDirectory = Application.StartupPath;
         public static string ExecutableName = Path.GetFileName(Application.ExecutablePath);
+        public static string SLWModLoaderPath = Application.ExecutablePath;
         public const string ProgramName = "SLW Mod Loader";
         public const string ProgramNameShort = "SLWModLoader";
         public const string VersionString = "6.0";
@@ -17,10 +20,62 @@ namespace SLWModLoader
 
         //Methods
         [STAThread]
-        private static void Main()
+        private static void Main(string[] args)
         {
             LogFile.Initialize();
             LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
+            
+
+            if (args.Length > 0)
+            {
+                // Tested with slwmodloader://installmod/https://drive.google.com/uc?export=download&confirm=no_antivirus&id=0BzGMWzGVT2c7NFFmbnhRYnFMbE0
+                if (args[0].ToLower().StartsWith(@"slwmodloader://"))
+                {
+                    string url = SplitAfter(args[0], @"installmod/");
+                    if (!IsURL(url))
+                    {
+                        MessageBox.Show("Link Given is not a URL!");
+                        LogFile.Close();
+                        return;
+                    }
+                    if (MessageBox.Show($"Install mod from:\n \"{url}\" ?", ProgramName,
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    {
+                        LogFile.Close();
+                        return;
+                    }
+                    // Creates Console Window
+                    AllocConsole();
+
+                    // Downloads the mod
+                    var client = new WebClient();
+                    Console.Write("Downloading Mod... ");
+                    byte[] bytes = client.DownloadData(url);
+                    Console.Write("Done.\n");
+
+                    // Creates the directories and writes the file
+                    Console.Write("Preparing Mod for installation... ");
+                    string tempFolder = Path.Combine(StartDirectory, "downloads");
+                    if (!Directory.Exists(tempFolder))
+                        Directory.CreateDirectory(tempFolder);
+                    string filePath = Path.Combine(tempFolder, "download.bin");
+                    File.WriteAllBytes(filePath, bytes);
+                    Console.Write("Done.\n");
+
+                    // Installs the mod
+                    Console.Write("Installing Mod... ");
+                    if (bytes[0] == 'P')
+                        AddModForm.InstallFromZip(filePath); // Install from a zip
+                    else
+                        AddModForm.InstallFrom7zArchive(filePath); // Use 7Zip if its not a Zip
+                    Console.Write("Done.\n");
+
+                    // End
+                    FreeConsole();
+                    LogFile.Close();
+                    return;
+                }
+            }
 
             #if DEBUG
             if (!(File.Exists(Path.Combine(StartDirectory, "slw.exe")) ||
@@ -81,6 +136,17 @@ namespace SLWModLoader
                 buffer += charBuffer;
             return buffer;
         }
+
+        public static string SplitAfter(string s, string s2)
+        {
+            return s.Substring(s.IndexOf(s2) + s2.Length);
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool AllocConsole();
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool FreeConsole();
 
     }
 }

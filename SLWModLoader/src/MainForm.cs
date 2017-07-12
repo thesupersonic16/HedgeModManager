@@ -100,12 +100,17 @@ namespace SLWModLoader
                 }
 
                 // Starts the ModLoader
-                Process.Start(Path.Combine(path, Program.ExecutableName));
-
+                var startInfo = new ProcessStartInfo()
+                {
+                    FileName = Path.Combine(path, Program.ExecutableName),
+                    Verb = "runas" // Run as Admin
+                };
+                Process.Start(startInfo);
+                
                 try
                 {
                     // Trys to delete SLWModLoader.exe
-                    var startInfo = new ProcessStartInfo()
+                    startInfo = new ProcessStartInfo()
                     {
                         Arguments = $"/c powershell start-sleep 2 & del \"{Application.ExecutablePath}\"",
                         WindowStyle = ProcessWindowStyle.Hidden,
@@ -477,6 +482,22 @@ namespace SLWModLoader
                 ModUpdatingThread = new Thread(new ThreadStart(CheckAllModUpdates));
                 ModUpdatingThread.Start();
             }
+
+            try
+            {
+                // Add URI Scheme (Requires Admin)
+                var key = Registry.ClassesRoot.OpenSubKey("SLWModLoader", true);
+                if (key == null)
+                {
+                    key = Registry.ClassesRoot.CreateSubKey(Program.ProgramNameShort);
+                    key.SetValue("URL Protocol", "slwmodloader");
+                    key = key.CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command");
+                    key.SetValue("", $"\"{Program.SLWModLoaderPath}\" \"%1\"");
+                }
+                key.Close();
+            }
+            catch { }
+
             Ready = true;
         }
 
