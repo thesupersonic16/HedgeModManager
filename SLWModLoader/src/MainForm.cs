@@ -402,6 +402,7 @@ namespace SLWModLoader
                     Text += " - Sonic Lost World";
                     LogFile.AddMessage("Found Sonic Lost World.");
                     PatchGroupBox.Visible = false;
+                    EnableSaveFileRedirectionCheckBox.Text += " (.sdat > .msdat)";
                 }
                 else if (File.Exists(GensExecutablePath))
                 {
