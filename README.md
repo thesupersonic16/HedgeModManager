@@ -1,5 +1,5 @@
 # Sonic Lost World Mod Loader
-A mod loader for Sonic Lost World and for Sonic Generations on the PC! This is currently a work in progress.
+A mod loader for Sonic Lost World and Sonic Generations on the PC! This is currently a work in progress.
 
 ## For those pirating Sonic Lost World/Sonic Generations:
 Please purchase Sonic Lost World off the [Steam store](http://store.steampowered.com/app/329440/). This is the only legal way of purchasing Sonic Lost World.
@@ -13,15 +13,12 @@ After [downloading the latest binary](https://github.com/thesupersonic16/SLW-Mod
 -->
 
 ## How do I use this?
-Its simple, Just get the [latest binary from here](https://github.com/thesupersonic16/SLW-Mod-Loader/releases/latest) (or compile the sourcecode yourself) and extract all the files anywhere and run SLWModLoader.exe and click "Yes"/"OK" on the dialogs.
+Its simple, Just grab the [latest binary from here](https://github.com/thesupersonic16/SLW-Mod-Loader/releases/latest) (or compile the source code yourself) then extract all the files anywhere and run SLWModLoader.exe.
 
-If you haven't modded SG or SLW before, You might get alot of dialogs, which is not a problem as you can just click "Yes"/"OK" on pretty much all of them.
+## How do I install mods?
+There is multiple ways of installing mods, one of the easy ways of installing mods is by dragging its zip/7z/rar/folder into the ModLoader's Window (You can also drag and drop multiple files/folders).
 
-SLWModLoader can also attempt to find your game directory and copy its files there if you didn't extract the files into your game directory, which can make installation much easier if you end up forgetting where you installed SG or SLW or don't know how find it. This works by searching for SG or SLW in your Steam's libraries in the background. **Note**: This will not work if the game is not in a Steam library.
-
-You should be at the main Modloader window If nothing went wrong. From here you can start adding mods by dragging its zip/7z/rar/folder into the modloader's Window and the ModLoader should automatically figure out how to install that mod (You can also drag and drop multiable files/folders).
-
-Once your done, you can start checking the checkbox(es) and click "Save and Play".
+Once your done, you can start checking the checkbox(es) of the mods you want to play and click "Save and Play".
 
 <!---
 ### Mod installation tutorial by "Mac" (made for 1.4 but still applies to later revisions):
