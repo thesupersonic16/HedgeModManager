@@ -24,6 +24,7 @@ namespace SLWModLoader
         public static string ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
         public static string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
 
+        public static List<CodeLoader.Code> LoadedCodes = new List<CodeLoader.Code>();
         public static ModsDatabase ModsDb;
         public static Dictionary<string, byte[]> GenerationsPatches = new Dictionary<string, byte[]>();
         public static IniFile CPKREDIRIni = null;
@@ -121,7 +122,7 @@ namespace SLWModLoader
         /// </summary>
         public void OrderModList()
         {
-            var modsDBIni = ModsDb.getIniFile();
+            var modsDBIni = ModsDb.GetIniFile();
             int count = int.Parse(modsDBIni["Main"]["ActiveModCount"]);
             int index = 0;
             for (int i = 0; i < count; ++i)
@@ -137,11 +138,19 @@ namespace SLWModLoader
             }
         }
 
+        public void FillCodeList()
+        {
+            LoadedCodes = CodeLoader.LoadAllCodes(CodeLoader.CodesXMLPath);
+            ModsDb.ReadCodesList();
+            Codes_CheckedListBox.Items.AddRange(LoadedCodes.ToArray());
+        }
+
         public void RefreshModsList()
         {
             ModsList.Items.Clear();
             LoadMods();
             FillModList();
+            FillCodeList();
             OrderModList();
             ModsList.Select();
 
@@ -162,6 +171,14 @@ namespace SLWModLoader
             foreach (ListViewItem lvi in ModsList.CheckedItems)
                 ModsDb.ActivateMod(ModsDb.GetMod(lvi.Text));
 
+            // Saves the Codes and Patches dat files
+            ModsDb.RemoveAllCodes();
+            foreach (object item in Codes_CheckedListBox.CheckedItems)
+            {
+                var code = item as CodeLoader.Code;
+                ModsDb.AddCode(code.Name);
+            }
+            CodeLoader.SaveCodesAndPatches(ModsDb, LoadedCodes);
             // Saves and refreshes the mod list
             ModsDb.SaveModsDb(ModsDbPath);
             RefreshModsList();

@@ -53,6 +53,7 @@
             this.MoveUpAll = new System.Windows.Forms.Button();
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.SettingsPage = new System.Windows.Forms.TabPage();
             this.Button_SaveAndReload = new System.Windows.Forms.Button();
             this.Label_CustomModsDirectory = new System.Windows.Forms.Label();
@@ -78,6 +79,7 @@
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
+            this.Codes_CheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -86,6 +88,7 @@
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SettingsPage.SuspendLayout();
             this.SettingsBottomPanel.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -163,6 +166,7 @@
             // TabControl
             // 
             this.TabControl.Controls.Add(this.ModPage);
+            this.TabControl.Controls.Add(this.tabPage1);
             this.TabControl.Controls.Add(this.SettingsPage);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
@@ -334,6 +338,17 @@
             this.MoveUpButton.Text = "▲";
             this.MoveUpButton.UseVisualStyleBackColor = true;
             this.MoveUpButton.Click += new System.EventHandler(this.MoveUpButton_Click);
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.Codes_CheckedListBox);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(529, 418);
+            this.tabPage1.TabIndex = 2;
+            this.tabPage1.Text = "Codes";
+            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // SettingsPage
             // 
@@ -617,6 +632,15 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
+            // Codes_CheckedListBox
+            // 
+            this.Codes_CheckedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Codes_CheckedListBox.FormattingEnabled = true;
+            this.Codes_CheckedListBox.Location = new System.Drawing.Point(3, 3);
+            this.Codes_CheckedListBox.Name = "Codes_CheckedListBox";
+            this.Codes_CheckedListBox.Size = new System.Drawing.Size(523, 412);
+            this.Codes_CheckedListBox.TabIndex = 0;
+            // 
             // MainForm
             // 
             this.AcceptButton = this.SaveAndPlayButton;
@@ -650,6 +674,7 @@
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.SettingsPage.ResumeLayout(false);
             this.SettingsPage.PerformLayout();
             this.SettingsBottomPanel.ResumeLayout(false);
@@ -709,6 +734,8 @@
         private System.Windows.Forms.TextBox TextBox_CustomModsDirectory;
         private System.Windows.Forms.CheckBox CheckBox_CustomModsDirectory;
         private System.Windows.Forms.Button Button_SaveAndReload;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.CheckedListBox Codes_CheckedListBox;
     }
 }
 

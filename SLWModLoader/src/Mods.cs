@@ -150,6 +150,7 @@ namespace SLWModLoader
     {
         private IniFile modsDb;
         private List<Mod> mods;
+        private List<string> codes = new List<string>();
 
         public string RootDirectory { get; set; }
         public string FilePath => modsDb.IniPath;
@@ -250,6 +251,54 @@ namespace SLWModLoader
             mods.Add(mod);
         }
 
+        public void AddCode(string codeName)
+        {
+            if (codes.Contains(codeName))
+                return;
+
+            codes.Add(codeName);
+            BuildCodesList();
+        }
+
+        public void BuildCodesList()
+        {
+            if (!modsDb.ContainsGroup("Codes"))
+                modsDb.AddGroup(new IniGroup("Codes"));
+            modsDb["Codes"].RemoveAllParameters();
+            for (int i = 0; i < codes.Count; ++i)
+                modsDb["Codes"].AddParameter($"Code{i}");
+        }
+
+        public void ReadCodesList()
+        {
+            codes.Clear();
+            if (!modsDb.ContainsGroup("Codes"))
+                modsDb.AddGroup(new IniGroup("Codes"));
+            int i = 0;
+            while (modsDb["Codes"].ContainsParameter($"Code{i}"))
+                codes.Add(modsDb["Codes"][$"Code{i++}"]);
+        }
+
+        public void RemoveCode(string codeName)
+        {
+            if (!codes.Contains(codeName))
+                return;
+            
+            codes.Remove(codeName);
+            BuildCodesList();
+        }
+
+        public void RemoveAllCodes()
+        {
+            codes.Clear();
+            modsDb["Codes"].RemoveAllParameters();
+        }
+
+        public List<string> GetCodeList()
+        {
+            return codes;
+        }
+
         public void RemoveMod(Mod mod)
         {
             if (!mods.Contains(mod))
@@ -327,7 +376,7 @@ namespace SLWModLoader
             return false;
         }
 
-        public IniFile getIniFile()
+        public IniFile GetIniFile()
         {
             return modsDb;
         }
