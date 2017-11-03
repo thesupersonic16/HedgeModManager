@@ -19,6 +19,7 @@ namespace SLWModLoader
         // Variables/Constants
         public static string GensExecutablePath = Path.Combine(Program.StartDirectory, "SonicGenerations.exe");
         public static string LWExecutablePath = Path.Combine(Program.StartDirectory, "slw.exe");
+        public static string ForcesExecutablePath = Path.Combine(Program.StartDirectory, "SonicForces.exe");
         public static string ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
         public static string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
 
@@ -172,6 +173,11 @@ namespace SLWModLoader
                                 && !installed)
                                 installed = InstallModLoader(Path.Combine(commonPath, "Sonic Generations"),
                                     "Sonic Generations");
+
+									if (File.Exists(Path.Combine(commonPath, "Sonic Forces\\SonicForces.exe"))
+                                && !installed)
+                                installed = InstallModLoader(Path.Combine(commonPath, "Sonic Forces"),
+                                    "Sonic Forces");
                         }
                     }
                 }
@@ -395,7 +401,7 @@ namespace SLWModLoader
         public void Init()
         {
             Text += $" (v{Program.VersionString})";
-            if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath))
+            if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath) || File.Exists(ForcesExecutablePath))
             {
                 if (File.Exists(LWExecutablePath))
                 {
@@ -433,6 +439,13 @@ namespace SLWModLoader
                         PatchGroupBox.Controls.Add(btn);
                     }
                 }
+                else if (File.Exists(ForcesExecutablePath))
+                {
+                    Text += " - Sonic Forces";
+                    LogFile.AddMessage("Found Sonic Forces.");
+                    PatchGroupBox.Visible = false;
+                    /* EnableSaveFileRedirectionCheckBox.Text += " (.sdat > .msdat)"; */
+                }
 
                 LoadConfig();
 
@@ -450,8 +463,14 @@ namespace SLWModLoader
 
                 // Loads all the mods, fills the list then reorders them
                 RefreshModsList();
-                
-                string gameName = (File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations");
+
+				string gameName = "Unknown";
+					if (File.Exists(LWExecutablePath))
+						gameName = "Sonic Lost World";
+					else if (File.Exists(GensExecutablePath))
+						gameName = "Sonic Generations";
+					else if (File.Exists(ForcesExecutablePath))
+						gameName = "Sonic Forces";
                 if (!IsCPKREDIRInstalled())
                 {
                     if (MessageBox.Show(string.Format(Resources.ExecutableNotPatchedText, gameName),
@@ -521,6 +540,12 @@ namespace SLWModLoader
                 Process.Start("steam://rungameid/71340");
                 if (!KeepModLoaderOpenCheckBox.Checked) Close();
             }
+            else if (File.Exists(ForcesExecutablePath))
+            {
+                AddMessage("Starting Sonic Forces...");
+                Process.Start("steam://rungameid/637100");
+                if (!KeepModLoaderOpenCheckBox.Checked) Close();
+            }
         }
 
         
@@ -563,7 +588,7 @@ namespace SLWModLoader
 
                         // Writes the newly modified executable
                         File.WriteAllBytes(executablePath, bytes);
-                        AddMessage("Done. CPKREDIR is now Uninstalled.");
+                        AddMessage("Done. CPKREDIR is now uninstalled.");
                         return false;
                     }
 
@@ -585,7 +610,7 @@ namespace SLWModLoader
 
                         // Write the newly modified executable
                         File.WriteAllBytes(executablePath, bytes);
-                        AddMessage("Done. CPKREDIR is now Installed.");
+                        AddMessage("Done. CPKREDIR is now installed.");
                         return true;
                     }
                 }
@@ -640,7 +665,7 @@ namespace SLWModLoader
 
                         // Writes the newly modified executable
                         File.WriteAllBytes(executablePath, bytes);
-                        AddMessage("Done. CPKREDIR is now Uninstalled.");
+                        AddMessage("Done. CPKREDIR is now uninstalled.");
                         return false;
                     }
 
@@ -669,7 +694,7 @@ namespace SLWModLoader
 
                         // Write the newly modified executable
                         File.WriteAllBytes(executablePath, bytes);
-                        AddMessage("Done. CPKREDIR is now Installed.");
+                        AddMessage("Done. CPKREDIR is now installed.");
                         return true;
                     }
                 }
@@ -988,7 +1013,13 @@ namespace SLWModLoader
         private void ScanExecutableButton_Click(object sender, EventArgs e)
         {
             StatusLabel.Text = "";
-            string gameName = (File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations");
+			string gameName = "Unknown";
+				if (File.Exists(LWExecutablePath))
+					gameName = "Sonic Lost World";
+				else if (File.Exists(GensExecutablePath))
+					gameName = "Sonic Generations";
+				else if (File.Exists(ForcesExecutablePath))
+					gameName = "Sonic Forces";
             PatchLabel.Text = gameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
         }
 
@@ -1001,7 +1032,13 @@ namespace SLWModLoader
         private void InstallUninstallButton_Click(object sender, EventArgs e)
         {
             StatusLabel.Text = "";
-            string gameName = File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations";
+			string gameName = "Unknown";
+				if (File.Exists(LWExecutablePath))
+					gameName = "Sonic Lost World";
+				else if (File.Exists(GensExecutablePath))
+					gameName = "Sonic Generations";
+				else if (File.Exists(ForcesExecutablePath))
+					gameName = "Sonic Forces";
             PatchLabel.Text = gameName + ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
         }
 
