@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Linq;
+using SS16;
 
 namespace SLWModLoader
 {
@@ -179,7 +180,7 @@ namespace SLWModLoader
 
         private void AddModForm_Load(object sender, EventArgs e)
         {
-            MainForm.ApplyDarkTheme(this);
+            Theme.ApplyDarkThemeToAll(this);
         }
     }
 }

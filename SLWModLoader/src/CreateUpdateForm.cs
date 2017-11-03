@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SS16;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -187,7 +188,7 @@ namespace SLWModLoader
 
         private void CreateUpdateForm_Load(object sender, EventArgs e)
         {
-            MainForm.ApplyDarkTheme(this);
+            Theme.ApplyDarkThemeToAll(this);
         }
 
         private void Button_Generate_Click(object sender, EventArgs e)

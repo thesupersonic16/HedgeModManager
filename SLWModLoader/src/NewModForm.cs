@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SS16;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -324,7 +325,7 @@ namespace SLWModLoader
 
         private void NewModForm_Load(object sender, EventArgs e)
         {
-            if (MainForm.ApplyDarkTheme(this))
+            if (Theme.ApplyDarkThemeToAll(this))
             {
                 foreach (ListViewItem lvi in listView1.Items)
                 {

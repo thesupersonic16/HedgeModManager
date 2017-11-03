@@ -82,9 +82,9 @@ namespace SLWModLoader
                 File.Exists(Path.Combine(StartDirectory, "SonicGenerations.exe"))))
             {
                 // NOTE: The ModLoader Updating (UpdateForm.cs) doesn't use "StartDirectory"
-                StartDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sonic Lost World";
-                if (!File.Exists(StartDirectory))
-                    StartDirectory = "D:\\SteamLibrary\\steamapps\\common\\Sonic Generations";
+                //StartDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sonic Lost World";
+                //if (!File.Exists(StartDirectory))
+                    //StartDirectory = "D:\\SteamLibrary\\steamapps\\common\\Sonic Generations";
             }
             #endif
 

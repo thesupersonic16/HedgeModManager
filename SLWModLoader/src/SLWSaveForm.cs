@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using SS16;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +20,6 @@ namespace SLWModLoader
     {
 
         public string FilePath;
-        public string SteamPath;
         public Thread imageThread;
         public List<string> SIDs = new List<string>();
 
@@ -41,7 +41,7 @@ namespace SLWModLoader
             foreach (string sid in SIDs)
             {
                 // Gets the cached icon
-                var image = GetCachedSteamProfilePicture(sid);
+                var image = Steam.GetCachedProfileImage(sid);
                 if (image == null || ModifierKeys.HasFlag(Keys.Shift))
                 {
                     // Downloads the icon
@@ -53,14 +53,7 @@ namespace SLWModLoader
             }
         }
 
-        public Image GetCachedSteamProfilePicture(string SID)
-        {
-            string filePath = Path.Combine(SteamPath, "config/avatarcache/", SID + ".png");
-            if (File.Exists(filePath))
-                return Image.FromFile(filePath);
-            return null;
-        }
-
+        
         public Bitmap DownloadSteamProfilePicture(WebClient webClient, string SID)
         {
             string url = "http://steamcommunity.com/profiles/" + SID;
@@ -80,27 +73,20 @@ namespace SLWModLoader
             };
 
             // Applies the Dark Theme, Because why not?
-            MainForm.ApplyDarkTheme(this);
+            Theme.ApplyDarkThemeToAll(this);
 
-            // Gets Steam's Registry Key
-            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam");
-            // If null then try get it from the 64-bit Registry
-            if (key == null)
-                key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
-                    .OpenSubKey("SOFTWARE\\Valve\\Steam");
             // Checks if the Key and Value exists.
-            if (key != null && key.GetValue("SteamPath") is string steamPath)
+            if (Steam.SteamLocation != null)
             {
-                SteamPath = steamPath;
                 // Checks if "loginusers.vdf" exists.
-                if (File.Exists(Path.Combine(steamPath, "config\\loginusers.vdf")))
+                if (File.Exists(Path.Combine(Steam.SteamLocation, "config\\loginusers.vdf")))
                 {
                     // loginusers.vdf
-                    var file = VDFFile.ReadVDF(Path.Combine(steamPath, "config\\loginusers.vdf"));
+                    var file = Steam.VDFFile.ReadVDF(Path.Combine(Steam.SteamLocation, "config\\loginusers.vdf"));
                     foreach (var pair in file.Array.Elements.ToList())
                     {
                         // Adds ListViewItem
-                        var array = pair.Value as VDFFile.VDFArray;
+                        var array = pair.Value as Steam.VDFFile.VDFArray;
                         var lvi = new ListViewItem(array.Elements["PersonaName"].Value as string)
                         {
                             ImageKey = array.Name
@@ -148,116 +134,5 @@ namespace SLWModLoader
             e.DrawDefault = true;
         }
 
-        #region Horrible code, Don't look
-        public class VDFFile
-        {
-
-            public class VDFElement
-            {
-                public string Name;
-                public object Value;
-
-                
-            }
-
-            public class VDFArray : VDFElement
-            {
-                public Dictionary<string, VDFElement> Elements = new Dictionary<string, VDFElement>();
-
-                public VDFArray(string name)
-                {
-                    Name = name;
-                }
-            }
-
-            public VDFArray Array = null;
-
-            protected VDFFile()
-            {
-
-            }
-
-            // I know this is not how you read .vdf files. But it works for files that I need to read.
-            public static VDFFile ReadVDF(string filePath)
-            {
-                var file = new VDFFile();
-                string buffer = "";
-                VDFArray mainArray = null;
-                VDFArray lastArray = null;
-                VDFArray currentArray = null;
-
-                VDFElement element = null;
-                using (var textReader = File.OpenText(filePath))
-                {
-                    while (textReader.Peek() != -1)
-                    {
-                        string line = textReader.ReadLine();
-                        bool startReadingString = false;
-                        for (int i = 0; i < line.Length; ++i)
-                        {
-                            // Read String
-                            if (startReadingString)
-                            {
-                                if (line[i] == '\"')
-                                {
-                                    startReadingString = false;
-                                    if (element != null)
-                                    {
-                                        element.Value = buffer;
-                                        buffer = "";
-                                        currentArray.Elements.Add(element.Name, element);
-                                        element = null;
-                                    }
-                                    continue;
-                                }
-                                buffer += line[i];
-                                continue;
-                            }
-
-                            switch (line[i])
-                            {
-                                case '\"':
-                                    if (buffer.Length != 0)
-                                    {
-                                        if (element == null)
-                                        {
-                                            element = new VDFElement();
-                                            element.Name = buffer;
-                                            buffer = "";
-                                        }
-                                    }
-                                    startReadingString = true;
-                                    break;
-                                case '{':
-                                    if (mainArray == null)
-                                    {
-                                        mainArray = new VDFArray(buffer);
-                                        currentArray = mainArray;
-                                        buffer = "";
-                                        break;
-                                    }
-                                    var array = new VDFArray(buffer);
-                                    lastArray = currentArray;
-                                    currentArray.Elements.Add(array.Name, array);
-                                    currentArray = array;
-                                    buffer = "";
-                                    break;
-                                case '}':
-                                    currentArray = lastArray;
-                                    lastArray = mainArray;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                }
-                file.Array = mainArray;
-                return file;
-            }
-
-
-        }
-        #endregion
     }
 }

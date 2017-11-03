@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SS16;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -186,7 +187,7 @@ namespace SLWModLoader
 
         private void NewModPropNewForm_Load(object sender, EventArgs e)
         {
-            MainForm.ApplyDarkTheme(this);
+            Theme.ApplyDarkThemeToAll(this);
         }
 
         private void ToolStripMenuItem_SelectDirectory_Click(object sender, EventArgs e)
