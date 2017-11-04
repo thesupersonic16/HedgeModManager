@@ -266,7 +266,7 @@ namespace SLWModLoader
                 modsDb.AddGroup(new IniGroup("Codes"));
             modsDb["Codes"].RemoveAllParameters();
             for (int i = 0; i < codes.Count; ++i)
-                modsDb["Codes"].AddParameter($"Code{i}");
+                modsDb["Codes"].AddParameter($"Code{i}", codes[i]);
         }
 
         public void ReadCodesList()

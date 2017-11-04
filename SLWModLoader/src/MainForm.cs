@@ -140,9 +140,18 @@ namespace SLWModLoader
 
         public void FillCodeList()
         {
+            Codes_CheckedListBox.Items.Clear();
             LoadedCodes = CodeLoader.LoadAllCodes(CodeLoader.CodesXMLPath);
             ModsDb.ReadCodesList();
             Codes_CheckedListBox.Items.AddRange(LoadedCodes.ToArray());
+            foreach (string s in ModsDb.GetCodeList())
+            {
+                int index = LoadedCodes.FindIndex(t => t.Name == s);
+                if (index == -1)
+                    continue;
+                Codes_CheckedListBox.SetItemChecked(index, true);
+
+            }
         }
 
         public void RefreshModsList()
