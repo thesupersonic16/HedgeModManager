@@ -1,24 +1,13 @@
-# Sonic Lost World Mod Loader
-A mod loader for Sonic Lost World and Sonic Generations on the PC! This is currently a work in progress.
+# HedgeModManager
+A Program for managing Mods for Sonic Lost World, Sonic Generations and **Soon** Sonic Forces for the PC!
 
-## For those pirating Sonic Lost World/Sonic Generations:
-Please purchase Sonic Lost World off the [Steam store](http://store.steampowered.com/app/329440/). This is the only legal way of purchasing Sonic Lost World.
-
-Version 6.0 now has support for Sonic Generations, and the same deal applies to Generations as well. Please purchase Sonic Generations off the [Steam store](http://store.steampowered.com/app/71340/).
-
-SLW Mod Loader does not support pirated copies of SLW/SG, nor will it ever support pirated copies.
-<!---
-## How do I use this?
-After [downloading the latest binary](https://github.com/thesupersonic16/SLW-Mod-Loader/releases/latest), Simply extract all the contents and run "SLWModLoader.exe" and click "OK" after that it should go through all of your Steam libraries on your computer searching for Sonic Lost World or Sonic Generations, Click "Yes" once its finds the game directory you want to install it into, By clicking "No" It will continue searching for other locations. After that it should ask to create a "mods" folder if you don't have one yet, Now you might get another dialog asking you if you want to patch your executable, If you get this then just click "Yes" as its required if you want to play with mods. Now If nothing goes wrong you be greeted with the main ModLoader Window, From here you can drag your mods (Folder, .zip, .7z, .rar) into the ModLoader and it should automatically figure out how to install it, Once you have atleast one mod a list should show up alowing you to choose what mods to load, check the checkbox(es) next to the mods you'd like to use in-game, and click "Save and Play"
--->
-
-## How do I use this?
-Its simple, Just grab the [latest binary from here](https://github.com/thesupersonic16/SLW-Mod-Loader/releases/latest) (or compile the source code yourself) then extract all the files anywhere and run SLWModLoader.exe.
+## So how do I use this?
+Its simple, Just grab the [latest binary from here](https://github.com/thesupersonic16/HedgeModManager/releases/latest) (or compile the source code yourself) then extract all the files anywhere and run HedgeModManager.exe.
 
 ## How do I install mods?
-There is multiple ways of installing mods, one of the easy ways of installing mods is by dragging its zip/7z/rar/folder into the ModLoader's Window (You can also drag and drop multiple files/folders).
+There is multiple ways of installing mods, one of the easy ways of installing mods is by dragging its zip/7z/rar/folder into the Mod List , And you can also drag and drop multiple files/folders.
 
-Once your done, you can start checking the checkbox(es) of the mods you want to play and click "Save and Play".
+Once your done, you can start checking the checkbox(es) of the mods and codes you want to play and click "Save and Play".
 
 <!---
 ### Mod installation tutorial by "Mac" (made for 1.4 but still applies to later revisions):
@@ -28,7 +17,7 @@ Once your done, you can start checking the checkbox(es) of the mods you want to 
 ## How do I release mods for this?
 **The following section is for mod developers only. If all you want to do is play with some mods made by others, simply follow the above steps.**
 
-Mods designed for the mod loader come in the form of folders that contain the following:
+Mods designed for HedgeModManager needs to come in the form of folders that contain the following:
 
 - A "mod.ini" file (a file which describes your mod, as well as all it's various details).
 - A "disk" folder
@@ -43,7 +32,7 @@ Mods designed for the mod loader come in the form of folders that contain the fo
 
 So long as the structure of your mod remains in this way, virtually any file in the game can be modified and released as part of your mod.
 
-As an example, the extremely basic "Tanic the Hedgehog" recolor mod has a file/folder structure that goes like so:
+As an example, the extremely basic "Tanic the Hedgehog" recolor mod for Sonic Generations and Sonic Lost World, has a file/folder structure that goes like so:
 - A "mod.ini" file
 - A "disk" folder
   - A "sonic2013_patch_0" folder (Sonic Lost World)
@@ -67,12 +56,12 @@ Wereas the "MLG Speedrun Zone 1" mod (which modifies certain files not on the ro
 
 
 ### The mod.ini file
-The mod.ini file is a mod configuration file that details all the user-friendly information about your mod, as well as how CPKREDIR should load the mod.
+The mod.ini file is a mod configuration file that details all the information about your mod, as well as how CPKREDIR should load the mod.
 
-The version of the format used in the SLW Mod Loader is a variation on the format used in SonicGMI, with some minor changes/additions here and there.
+The version of the format used in the HedgeModManager is a variation on the format used in SLWModLoader and SonicGMI, with some minor changes/additions here and there.
 
-Here's an example of a mod.ini file:
-```
+Here's an example of a mod.ini file for Sonic Lost World:
+```ini
 [Main]
 IncludeDir0="."
 IncludeDirCount=1
@@ -96,20 +85,20 @@ The following is a list of the most important values that can be used in a mod.i
 
 **IncludeDirCount** Specifies how many folders will be included with your mod.
 
-**UpdateServer** A modification of the existing SonicGMI value that specifies the link to a raw .txt file containing URLs in a particular format. This feature has **not yet been fully added**, and will be further detailed once it is. However, I recommend linking a .txt file or a link to a folder on a http server just in case anyway, as it will allow you to release auto-downloading updates to your mods once the mod loader has been updated to support this feature.
+**UpdateServer** A modification of the existing SonicGMI value that specifies the link to an XML file containing file infomations like its URL and name, I recommend linking a empty XML file or a folder in a http server, as it will allow you to release auto-downloading updates to your mods.
 
 ### Desc
 
-**Title** The name of your mod as shown in the mod loader.
+**Title** The name of your mod as shown in the manager.
 
-**Description** A description of your mod that is shown in the description window in the mod loader.
-Typing a "\n" in this value will indicate a new line within the mod loader, **which should be done to keep your mods loadable!**
+**Description** A description of your mod that is shown in the description window in the manager.
+Typing a "\n" in this value will indicate a new line within the manager, **which should be done to keep your mods loadable!**
 
-**Date** The date the mod was originally created as shown in the mod loader.
+**Date** The date the mod was originally created as shown in the manager.
 
-**Author** The author(s) of the mod. **You can include multiple authors in this value!** Simply seperate the authors via a space, followed by an ampersand, and another space. (Like this: "Radfordhound & Gotta Play Fast") They will be loaded as seperate authors within the mod loader, allowing you to link to them seperately.
+**Author** The author(s) of the mod. **You can include multiple authors in this value!** Simply seperate the authors via a space, followed by an ampersand, and another space. (Like this: "Radfordhound & Gotta Play Fast") They will be loaded as seperate authors within the manager, allowing you to link to them seperately.
 
-**AuthorURL** The URL(s) to the author(s) of the mod. (Such as websites, YouTube channels, and social media accounts.) **You can include multiple authors in this value!** Simply seperate the authors' URLs via a space, followed by an ampersand, and another space. (Like this: "https://www.youtube.com/user/Radfordhound & https://www.youtube.com/channel/UCZfOGBkXRKICFozWU5bE0Xg") They will be loaded as seperate URLs within the mod loader and automatically linked with the data contained in the "Author" value, allowing you to link to them seperately.
+**AuthorURL** The URL(s) to the author(s) of the mod. (Such as websites, YouTube channels, and social media accounts.) **You can include multiple authors in this value!** Simply seperate the authors' URLs via a space, followed by an ampersand, and another space. (Like this: "https://www.youtube.com/user/Radfordhound & https://www.youtube.com/channel/UCZfOGBkXRKICFozWU5bE0Xg") They will be loaded as seperate URLs within the manager and automatically linked with the data contained in the "Author" value, allowing you to link to them seperately.
 
 **URL** The URL of the mod (aka mod homepages/threads/release videos).
 
