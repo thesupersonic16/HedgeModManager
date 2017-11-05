@@ -113,7 +113,7 @@ namespace HedgeModManager
             this.desciptionToolStripMenuItem.Enabled = false;
             this.desciptionToolStripMenuItem.Name = "desciptionToolStripMenuItem";
             this.desciptionToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.desciptionToolStripMenuItem.Text = "Desciption";
+            this.desciptionToolStripMenuItem.Text = "Description";
             this.desciptionToolStripMenuItem.Click += new System.EventHandler(this.DesciptionToolStripMenuItem_Click);
             // 
             // checkForUpdatesToolStripMenuItem
