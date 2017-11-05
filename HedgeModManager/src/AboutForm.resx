@@ -118,8 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="aboutLbl.Text" xml:space="preserve">
-    <value>A program designed to help people easily load Sonic Lost World mods.
-Requires a LEGALLY-PURCHASED version of the game.
+    <value>A program designed to help people easily load Hedgehog Engine mods.
+Requires a legally owned version of one of the supported games.
 
 CREDITS:
 Radfordhound - Developing the mod loader.
