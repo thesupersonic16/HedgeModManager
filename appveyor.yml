@@ -1,16 +1,23 @@
 version: '6.0-beta-5_r{build}'
 
-image: Visual Studio 2017
-# configuration: Release
-configuration: Debug
-platform: Any CPU
+environment:
+  matrix:
+    - appveyor_build_worker_image: Visual Studio 2017
+      configuration: Debug
+      platform: Any CPU
+    - appveyor_build_worker_image: Visual Studio 2017
+      configuration: Release
+      platform: Any CPU
 
 build:
   project: HedgeModManager.sln
   verbosity: minimal
   
 artifacts:
- # - path: 'HedgeModManager\bin\Release'
  - path: 'HedgeModManager\bin\Debug'
-   name: '$(appveyor_project_name) $(appveyor_build_version)'
+   name: '$(appveyor_project_name) $(appveyor_build_version) - Debug'
    type: zip
+ - path: 'HedgeModManager\bin\Release'
+   name: '$(appveyor_project_name) $(appveyor_build_version) - Release'
+   type: zip
+   
