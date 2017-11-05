@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SS16;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -25,6 +26,7 @@ namespace HedgeModManager
             InitializeComponent();
             _Mod = mod;
             ModUpdate = update;
+            Text = "Updating " + update.Name;
             UpdateLabel.Text = "Updating " + update.Name;
             UpdateLabel.Location = new Point(Size.Width/2-UpdateLabel.Size.Width/2, UpdateLabel.Location.Y);
             DownloadLabel.Text = "Starting Download...";
@@ -34,6 +36,7 @@ namespace HedgeModManager
         // GUI Events
         private void UpdateModsForm_Load(object sender, EventArgs e)
         {
+            Theme.ApplyDarkThemeToAll(this);
             var webClient = new WebClient();
             // Adds the WebClient_DownloadProgressChanged event to the web client.
             webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(WebClient_DownloadProgressChanged);
@@ -77,7 +80,7 @@ namespace HedgeModManager
                     
                     using (var stream = File.OpenRead(Path.Combine(_Mod.RootDirectory, fileName)))
                     {
-                        if (fileSha != 0.ToString("X64"))
+                        if (fileSha != 0.ToString("X64") && fileSha != null)
                         {
                             hash = sha.ComputeHash(stream);
                             if (Encoding.ASCII.GetString(hash) !=

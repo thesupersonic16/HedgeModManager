@@ -37,40 +37,30 @@ namespace HedgeModManager
             if (!ini["Main"].ContainsParameter("DownloadSizeString"))
                 return null;
 
-            if (!ini["Main"].ContainsParameter("ChangeLog"))
-                return null;
-
-            if (!ini["Main"].ContainsParameter("FileList"))
-                return null;
-
             // Variables
             string modVersion = ini["Main"]["VersionString"];
             string modDLSize = ini["Main"]["DownloadSizeString"];
-            string modChangeLog = ini["Main"]["ChangeLog"];
-            string modFileList = ini["Main"]["FileList"];
 
-            // Checks if the mod isn't the lastest
-            if (modVersion != mod.Version)
+            string modChangeLog = "";
+            int modChangeLogLineCount = int.Parse(ini["Changelog"]["StringCount"]);
+            for (int i = 0; i < modChangeLogLineCount; ++i)
             {
-                var update = new ModUpdate();
-                update.Name = mod.Title;
-                update.VersionString = modVersion;
-                update.ChangeLog = modChangeLog;
-                ReadV0UpdateFileList(update, WebClient.DownloadString(modFileList));
-                return update;
+                modChangeLog += ini["Changelog"][$"String{i}"] + "\n";
             }
-            else
-                return null;
             
-
+            var update = new ModUpdate();
+            update.Name = mod.Title;
+            update.VersionString = modVersion;
+            update.ChangeLog = modChangeLog;
+            ReadUpdateFileList(update, WebClient.DownloadString(Path.Combine(mod.UpdateServer, "mod_files.txt")));
+            return update;
+            
             // Sub-Methods
-            void ReadV0UpdateFileList(ModUpdate update, string data)
+            void ReadUpdateFileList(ModUpdate modUpdate, string data)
             {
-                var files = new Dictionary<string, Tuple<string, string>>();
-                // Splits all the lines in mod_update_files.txt into an array
-                var split = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                
                 // Adds the file name and url to the files array
-                foreach (string line in split)
+                foreach (string line in data.Split('\n'))
                 {
                     // Checks if the line starts with ';' or '#' if does then continue to the next line
                     if (line.StartsWith(";") || line.StartsWith("#"))
@@ -78,9 +68,10 @@ namespace HedgeModManager
 
                     var file = new ModUpdateFile()
                     {
-                        SHA256 = line.Split(':')[0],
-                        FileName = line.Split(':')[1],
-                        URL = line.Substring(line.IndexOf(":", line.IndexOf(":") + 1) + 1)
+                        SHA256 = null,
+                        FileName = line.Split(' ')[1],
+                        URL = Path.Combine(mod.UpdateServer, line.Split(' ')[1]),
+                        Command = line.Split(' ')[0]
                     };
                     update.Files.Add(file);
                 }
@@ -165,7 +156,7 @@ namespace HedgeModManager
 
         public class ModUpdateFile
         {
-            public string FileName, URL, SHA256;
+            public string FileName, URL, SHA256, Command;
         }
 
     }

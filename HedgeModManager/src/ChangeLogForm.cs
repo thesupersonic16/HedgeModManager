@@ -15,11 +15,11 @@ namespace HedgeModManager
     {
         public string downloadUrl;
 
-        public ChangeLogForm(string version, string changeLog, string downloadUrl)
+        public ChangeLogForm(string version, string changeLog, string downloadUrl, string product)
         {
             InitializeComponent();
-            Text = $"A new version of { Program.ProgramName} is available.";
-            titleLbl.Text = "Hedge Mod Manager v" + version;
+            Text = $"A new version of {product} is available.";
+            titleLbl.Text = $"{product} v" + version;
             // Centring the title
             titleLbl.Location = new Point(Size.Width / 2 - titleLbl.Size.Width / 2, titleLbl.Location.Y);
 

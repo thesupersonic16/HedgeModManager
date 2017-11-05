@@ -623,7 +623,8 @@ namespace HedgeModManager
                 {
                     AddMessage($"New Update Found v{latestVersion}");
 #if !DEBUG
-                    if (new ChangeLogForm(latestVersion, releaseBody, updateUrl).ShowDialog() == DialogResult.Yes)
+                    if (new ChangeLogForm(latestVersion, releaseBody, updateUrl, Resources.ApplicationTitle).ShowDialog()
+                        == DialogResult.Yes)
                     {
                         Invoke(new Action(() => Visible = false));
                         AddMessage("Starting Update...");
@@ -702,29 +703,61 @@ namespace HedgeModManager
                 try
                 {
                     var webClient = new WebClient();
-                    string data = webClient.DownloadString(mod.UpdateServer);
+                    if (Path.HasExtension(mod.UpdateServer))
+                    {
 
-                    if (mod.UpdateServer.EndsWith(".txt"))
-                    { // TXT file.
-                        if (!silent)
-                            MessageBox.Show("Not Implemented Yet", Program.ProgramName, MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-                        status = "Not Implemented";
-                    }
-                    else if (mod.UpdateServer.EndsWith(".xml"))
-                    { // XML file
-                        var xml = XDocument.Parse(data);
-                        var update = modUpdater.GetUpdateFromXML(mod, xml);
-                        string updateStatus = UpdateMod(mod, update);
-                        if (!silent && updateStatus == "Up to date")
-                            MessageBox.Show($"{mod.Title} is already up to date.", Program.ProgramName);
-                    }
-                    else if (mod.UpdateServer.EndsWith(".ini"))
-                    { // mod_version.ini file
-                        var update = modUpdater.GetUpdateFromINI(mod, data);
-                        string updateStatus = UpdateMod(mod, update);
-                        if (!silent && updateStatus == "Up to date")
-                            MessageBox.Show($"{mod.Title} is already up to date.", Program.ProgramName);
+                        string data = webClient.DownloadString(mod.UpdateServer);
+
+                        if (mod.UpdateServer.EndsWith(".txt"))
+                        { // TXT file.
+                            if (!silent)
+                                MessageBox.Show("Not Implemented Yet", Program.ProgramName, MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                            status = "Not Implemented";
+                        }
+                        else if (mod.UpdateServer.EndsWith(".xml"))
+                        { // XML file
+                            var xml = XDocument.Parse(data);
+                            var update = modUpdater.GetUpdateFromXML(mod, xml);
+                            string updateStatus = UpdateMod(mod, update);
+                            if (!silent && updateStatus == "Up to date")
+                                MessageBox.Show($"{mod.Title} is already up to date.", Program.ProgramName);
+                        }
+                        else if (mod.UpdateServer.EndsWith(".ini"))
+                        { // mod_version.ini file
+                            var update = modUpdater.GetUpdateFromINI(mod, data);
+                            string updateStatus = UpdateMod(mod, update);
+                            if (!silent && updateStatus == "Up to date")
+                                MessageBox.Show($"{mod.Title} is already up to date.", Program.ProgramName);
+                        }else
+                        {
+                        }
+                    }else
+                    {
+                        try
+                        {
+                            string data = webClient.DownloadString(mod.UpdateServer + "HedgeModManager.xml");
+                            var xml = XDocument.Parse(data);
+                            var update = modUpdater.GetUpdateFromXML(mod, xml);
+                            string updateStatus = UpdateMod(mod, update);
+                            if (!silent && updateStatus == "Up to date")
+                                MessageBox.Show($"{mod.Title} is already up to date.", Program.ProgramName);
+                        }catch
+                        {
+                            try
+                            {
+                                string data = webClient.DownloadString(mod.UpdateServer + "mod_version.ini");
+                                var update = modUpdater.GetUpdateFromINI(mod, data);
+                                string updateStatus = UpdateMod(mod, update);
+                                if (!silent && updateStatus == "Up to date")
+                                    MessageBox.Show($"{mod.Title} is already up to date.", Program.ProgramName);
+                            }
+                            catch
+                            {
+
+                            }
+
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -738,11 +771,9 @@ namespace HedgeModManager
 
         public string UpdateMod(Mod mod, ModUpdater.ModUpdate update)
         {
-            if (update.VersionString != mod.Version)
+            //if (update.VersionString != mod.Version)
             {
-                if (MessageBox.Show(string.Format(Resources.ModUpdateText, update.Name,
-                    mod.Version, update.VersionString, update.DownloadSizeString), Program.ProgramName,
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (new ChangeLogForm(update.VersionString, update.ChangeLog, "", update.Name).ShowDialog() == DialogResult.Yes)
                 {
                     new UpdateModForm(mod, update).ShowDialog();
                     return "Done";
@@ -750,8 +781,8 @@ namespace HedgeModManager
                 else
                     return "Available";
             }
-            else
-                return "Up to date";
+            //else
+               // return "Up to date";
         }
 
 #endregion
