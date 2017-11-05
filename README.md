@@ -9,11 +9,10 @@ There are multiple ways of installing mods, one of the easy ways of installing m
 
 Once your done, you can start checking the checkbox(es) of the mods and codes you want to play and click "Save and Play".
 
-<!---
-### Mod installation tutorial by "Mac" (made for SLWModLoader 1.4 but still applies to HedgeModManager):
+### Mod installation tutorial by "Mac" (made for SLWModLoader 1.4 but should still work with HedgeModManager to some degree):
 
 [![Mod installation tutorial](http://img.youtube.com/vi/u-5uCVJ8Ci0/0.jpg)](https://www.youtube.com/watch?v=u-5uCVJ8Ci0 "Mod installation tutorial")
--->
+
 ## How do I release mods for this?
 **The following section is for mod developers only. If all you want to do is play with some mods made by others, simply follow the above steps.**
 
@@ -30,7 +29,7 @@ Mods designed for HedgeModManager needs to come in the form of folders that cont
   - A "sonic2013_patch_0" folder (for Sonic Lost World)
     - All your modified files/folders from the root of Sonic Lost World's .cpk files on in their raw form (typically .pac files).
   - A "sonic2017_patch_0" folder (for Sonic Forces)
-    - All your modified files/folders from the root of Sonic Forces's .cpk files on in their raw form (typically .pac files).
+    - All your modified files/folders from the root of Sonic Forces' .cpk files on in their raw form (typically .pac files).
 
 So long as the structure of your mod remains in this way, virtually any file in the game can be modified and released as part of your mod.
 
