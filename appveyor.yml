@@ -1,0 +1,14 @@
+version: '6.0-beta-5_r{build}'
+
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+
+build:
+  project: HedgeModLoader.sln
+  verbosity: minimal
+  
+artifacts:
+ - path: 'HedgeModLoader\bin\Release'
+   name: 'HedgeModLoader-$(APPVEYOR_REPO_COMMIT)'
+   type: zip
