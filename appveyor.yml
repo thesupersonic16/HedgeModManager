@@ -5,10 +5,10 @@ configuration: Release
 platform: Any CPU
 
 build:
-  project: HedgeModLoader.sln
+  project: HedgeModManager.sln
   verbosity: minimal
   
 artifacts:
- - path: 'HedgeModLoader\bin\Release'
-   name: 'HedgeModLoader-$(APPVEYOR_REPO_COMMIT)'
+ - path: 'HedgeModManager\bin\Release'
+   name: 'HedgeModManager-$(APPVEYOR_REPO_COMMIT)'
    type: zip
