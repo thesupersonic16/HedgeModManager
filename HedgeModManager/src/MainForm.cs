@@ -626,7 +626,9 @@ namespace HedgeModManager
                     {
                         Invoke(new Action(() => Visible = false));
                         AddMessage("Starting Update...");
+#if !DEBUG
                         new UpdateForm(updateUrl).ShowDialog();
+#endif
                     }
                     else
                         AddMessage("Update Canceled. :(");
@@ -752,9 +754,9 @@ namespace HedgeModManager
                 return "Up to date";
         }
 
-        #endregion
+#endregion
 
-        #region ButtonEvents
+#region ButtonEvents
 
         private void RefreshButton_Click(object sender, EventArgs e)
         {
@@ -967,9 +969,9 @@ namespace HedgeModManager
             Close();
         }
 
-        #endregion ButtonEvents
+#endregion ButtonEvents
 
-        #region ToolStripMenuItemEvents
+#region ToolStripMenuItemEvents
 
         private void CheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1014,9 +1016,9 @@ namespace HedgeModManager
             new CreateUpdateForm(modified).ShowDialog();
         }
 
-        #endregion ToolStripMenuItemEvents
+#endregion ToolStripMenuItemEvents
 
-        #region OtherGUIEvents
+#region OtherGUIEvents
 
         private void ReportLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -1133,9 +1135,9 @@ namespace HedgeModManager
         }
 
 
-        #endregion OtherGUIEvents
+#endregion OtherGUIEvents
 
-        #region Don't Look!
+#region Don't Look!
 
         private void ModsList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
@@ -1159,7 +1161,7 @@ namespace HedgeModManager
         {
             e.DrawDefault = true;
         }
-        #endregion
+#endregion
 
     }
 }
