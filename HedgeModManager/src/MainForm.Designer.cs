@@ -1,4 +1,6 @@
-﻿namespace HedgeModManager
+﻿using HedgeModManager.Properties;
+
+namespace HedgeModManager
 {
     partial class MainForm
     {
@@ -657,7 +659,7 @@
             this.Controls.Add(this.SaveAndPlayButton);
             this.Controls.Add(this.DescriptionLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = Resources.icon;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";

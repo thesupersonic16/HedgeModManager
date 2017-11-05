@@ -1,4 +1,6 @@
-﻿namespace HedgeModManager
+﻿using HedgeModManager.Properties;
+
+namespace HedgeModManager
 {
     partial class InstallForm
     {
@@ -100,7 +102,7 @@
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.Title_Label);
             this.DoubleBuffered = true;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = Resources.icon;
             this.Name = "InstallForm";
             this.Text = "HedgeModManager Installer";
             this.Load += new System.EventHandler(this.InstallForm_Load);
