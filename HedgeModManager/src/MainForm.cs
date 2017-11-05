@@ -129,7 +129,7 @@ namespace HedgeModManager
             {
                 foreach (ListViewItem lvi in ModsList.Items)
                 {
-                    if (lvi.Text.Equals(modsDBIni["Main"]["ActiveMod" + i]))
+                    if (Path.GetFileName((lvi.Tag as Mod).RootDirectory) == modsDBIni["Main"]["ActiveMod" + i])
                     {
                         ModsList.Items.Remove(lvi);
                         ModsList.Items.Insert(index++, lvi);

@@ -14,7 +14,7 @@ namespace HedgeModManager
         public static string HedgeModManagerPath = Application.ExecutablePath;
         public const string ProgramName = "Hedge Mod Manager";
         public const string ProgramNameShort = "HedgeModManager";
-        public const string VersionString = "6.1-001";
+        public const string VersionString = "6.1-002";
         public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
         public static bool Restart = false;
 

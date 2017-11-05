@@ -320,7 +320,7 @@ namespace HedgeModManager
                 return;
 
             string parameterKey = $"ActiveMod{modsDb["Main"]["ActiveModCount", typeof(int)]}";
-            modsDb["Main"].AddParameter(parameterKey, mod.Title);
+            modsDb["Main"].AddParameter(parameterKey, Path.GetFileName(mod.RootDirectory));
 
             modsDb["Main"]["ActiveModCount", typeof(int)] = modsDb["Main"].ParameterCount - 2;
         }
@@ -363,11 +363,11 @@ namespace HedgeModManager
 
         public bool IsModActive(Mod mod)
         {
-            for (int i = 0; i < ActiveModCount; i++)
+            for (int i = 0; i < ActiveModCount; ++i)
             {
                 string parameterKey = $"ActiveMod{i}";
 
-                if (modsDb["Main"].ContainsParameter(parameterKey) && modsDb["Main"][parameterKey] == mod.Title)
+                if (modsDb["Main"].ContainsParameter(parameterKey) && modsDb["Main"][parameterKey] == Path.GetFileName(mod.RootDirectory))
                 {
                     return true;
                 }
