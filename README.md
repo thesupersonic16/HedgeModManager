@@ -9,11 +9,6 @@ There are multiple ways of installing mods, one of the easy ways of installing m
 
 Once your done, you can start checking the checkbox(es) of the mods and codes you want to play and click "Save and Play".
 
-## Mod installation tutorial by "Mac":
-##### (made for SLWModLoader 1.4 but should still work with HedgeModManager to some degree)
-
-[![Mod installation tutorial](http://img.youtube.com/vi/u-5uCVJ8Ci0/0.jpg)](https://www.youtube.com/watch?v=u-5uCVJ8Ci0 "Mod installation tutorial")
-
 ## How do I release mods for this?
 **The following section is for mod developers only. If all you want to do is play with some mods made by others, simply follow the above steps.**
 
@@ -64,21 +59,21 @@ The mod.ini file is a mod configuration file that details all the information ab
 
 The version of the format used in the HedgeModManager is a variation on the format used in SLWModLoader and SonicGMI, with some minor changes/additions here and there.
 
-Here's an example of a mod.ini file:
+Here's an example of a mod.ini file for Sonic Lost World:
 ```
 [Main]
 IncludeDir0="."
 IncludeDirCount=1
-UpdateServer="UpdateURL"
+UpdateServer="https://dl.dropboxusercontent.com/s/xkapkbby1vu4snk/Sonic06UpdateFile.txt"
 
 [Desc]
-Title="Lost World Sonic over Gens Sonic"
-Description="This is an animation and model swap!"
-Version="1"
-Date="11/14/17"
-Author="AuthorPerson"
-AuthorURL="AuthorPerson's YouTube channel URL"
-URL="AuthorPerson's release URL"
+Title="SLW '06 Project"
+Description="What if Sonic '06 stages were fully playable in an engine that not only perfectly fit it's level design/gameplay, but was actually GOOD? \n\nIntroducing the SLW '06 Project! A mega mod for Lost World that ports as much of Sonic '06 as humanly possible without the glitches and unattractive visuals!  \n\nCredits:\n UltimateDarkman for making the wonderful '06-esque animations.\n Death for his wonderful beta-testing work. \n Gotta Play Fast and Slash for porting the Sonic '06 player models to Lost World. \n Radfordhound for ripping the stages, rendering GIA/generating lightfields, drawing vertex colors, and porting the HUD/music. \n Radfordhound, Gotta Play Fast, Slash, and Beatz for porting the stages and doing object placement. "
+Version="Alpha 1.0"
+Date="4/20/16"
+Author="Radfordhound & Beatz & GPF & Death & UltimateDarkman"
+AuthorURL="https://www.youtube.com/user/Radfordhound & https://www.youtube.com/channel/UCEjwges-3BTaWsMwOGJDoGQ & https://www.youtube.com/channel/UCZfOGBkXRKICFozWU5bE0Xg & https://www.youtube.com/user/DeathwolvesProjects & https://www.youtube.com/user/UltimateDarkman2010"
+URL="https://onedrive.live.com/redir?resid=A0D011638C5973B3!5011&authkey=!AJXTG3vsMq0OXFc&ithint=folder%2c"
 ```
 
 The following is a list of the most important values that can be used in a mod.ini file:
