@@ -622,17 +622,17 @@ namespace HedgeModManager
                 if (latestVersion != currentVersion)
                 {
                     AddMessage($"New Update Found v{latestVersion}");
+#if !DEBUG
                     if (new ChangeLogForm(latestVersion, releaseBody, updateUrl).ShowDialog() == DialogResult.Yes)
                     {
                         Invoke(new Action(() => Visible = false));
                         AddMessage("Starting Update...");
-#if !DEBUG
                         new UpdateForm(updateUrl).ShowDialog();
-#endif
                     }
                     else
                         AddMessage("Update Canceled. :(");
-                }
+#endif
+            }
                 else
                     LogFile.AddMessage("No updates are available.");
             }
