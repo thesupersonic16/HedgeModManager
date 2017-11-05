@@ -271,14 +271,14 @@ namespace HedgeModManager
             else
             {
                 MessageBox.Show("Could not find cpkredir.ini\n" +
-                    "SG, LW and the ModLoader may not run correctly without this file.",
+                    "SG, LW, SF and the ModLoader may not run correctly without this file.",
                     Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         public void Init()
         {
-            Text += $" (v{Program.VersionString})";
+            Text += $" ({Program.VersionString})";
             if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath) || File.Exists(ForcesExecutablePath))
             {
                 if (File.Exists(LWExecutablePath))
