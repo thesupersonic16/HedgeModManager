@@ -1,4 +1,4 @@
-version: '6.0-beta-5_r{build}'
+version: 'v6.0-beta-5_r{build}'
 
 environment:
   matrix:
@@ -15,9 +15,9 @@ build:
   
 artifacts:
  - path: 'HedgeModManager\bin\Debug'
-   name: '$(appveyor_project_name) $(appveyor_build_version) - Debug'
+   name: '$(appveyor_project_name) $(appveyor_build_version) [Debug]'
    type: zip
  - path: 'HedgeModManager\bin\Release'
-   name: '$(appveyor_project_name) $(appveyor_build_version) - Release'
+   name: '$(appveyor_project_name) $(appveyor_build_version) [Release]'
    type: zip
    
