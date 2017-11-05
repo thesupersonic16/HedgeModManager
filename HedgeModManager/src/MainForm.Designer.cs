@@ -443,7 +443,7 @@ namespace HedgeModManager
             this.KeepModLoaderOpenCheckBox.Name = "KeepModLoaderOpenCheckBox";
             this.KeepModLoaderOpenCheckBox.Size = new System.Drawing.Size(243, 17);
             this.KeepModLoaderOpenCheckBox.TabIndex = 18;
-            this.KeepModLoaderOpenCheckBox.Text = "Keep Mod Manager Open after Starting a Game";
+            this.KeepModLoaderOpenCheckBox.Text = "Keep Mod Manager open after starting a game";
             this.KeepModLoaderOpenCheckBox.UseVisualStyleBackColor = true;
             this.KeepModLoaderOpenCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
@@ -454,7 +454,7 @@ namespace HedgeModManager
             this.AutoCheckUpdateCheckBox.Name = "AutoCheckUpdateCheckBox";
             this.AutoCheckUpdateCheckBox.Size = new System.Drawing.Size(138, 17);
             this.AutoCheckUpdateCheckBox.TabIndex = 17;
-            this.AutoCheckUpdateCheckBox.Text = "Auto Check for updates";
+            this.AutoCheckUpdateCheckBox.Text = "Auto check for updates";
             this.AutoCheckUpdateCheckBox.UseVisualStyleBackColor = true;
             this.AutoCheckUpdateCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
@@ -494,7 +494,7 @@ namespace HedgeModManager
             this.ScanExecutableButton.Name = "ScanExecutableButton";
             this.ScanExecutableButton.Size = new System.Drawing.Size(120, 23);
             this.ScanExecutableButton.TabIndex = 13;
-            this.ScanExecutableButton.Text = "Scan Executeable";
+            this.ScanExecutableButton.Text = "Scan Executable";
             this.ScanExecutableButton.UseVisualStyleBackColor = true;
             this.ScanExecutableButton.Click += new System.EventHandler(this.ScanExecutableButton_Click);
             // 
