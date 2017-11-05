@@ -97,9 +97,8 @@ namespace HedgeModManager
 
         public bool CompareByteArray(byte[] bytes1, byte[] bytes2)
         {
-            if (bytes1.Length != bytes2.Length)
-                return false;
-            return !bytes1.SequenceEqual(bytes2);
+            var sha256 = SHA256.Create();
+            return !sha256.ComputeHash(bytes1).SequenceEqual(sha256.ComputeHash(bytes2));
         }
 
         public void CreateXMLUpdate(Mod modifiedMod, Mod unmodifiedMod, string outPath)
