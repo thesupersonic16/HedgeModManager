@@ -9,7 +9,8 @@ There are multiple ways of installing mods, one of the easy ways of installing m
 
 Once your done, you can start checking the checkbox(es) of the mods and codes you want to play and click "Save and Play".
 
-### Mod installation tutorial by "Mac" (made for SLWModLoader 1.4 but should still work with HedgeModManager to some degree):
+## Mod installation tutorial by "Mac":
+### made for SLWModLoader 1.4 but should still work with HedgeModManager to some degree
 
 [![Mod installation tutorial](http://img.youtube.com/vi/u-5uCVJ8Ci0/0.jpg)](https://www.youtube.com/watch?v=u-5uCVJ8Ci0 "Mod installation tutorial")
 
