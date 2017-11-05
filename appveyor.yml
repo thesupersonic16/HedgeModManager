@@ -10,5 +10,5 @@ build:
   
 artifacts:
  - path: 'HedgeModManager\bin\Release'
-   name: 'HedgeModManager-$(APPVEYOR_REPO_COMMIT)'
+   name: '$(appveyor_project_name) $(appveyor_build_version)'
    type: zip
