@@ -55,6 +55,9 @@ namespace HedgeModManager
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.GetCodeList_Button = new System.Windows.Forms.Button();
+            this.InstallCodeLoader_Button = new System.Windows.Forms.Button();
             this.Codes_CheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.SettingsPage = new System.Windows.Forms.TabPage();
             this.Button_SaveAndReload = new System.Windows.Forms.Button();
@@ -91,6 +94,7 @@ namespace HedgeModManager
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SettingsPage.SuspendLayout();
             this.SettingsBottomPanel.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -344,6 +348,7 @@ namespace HedgeModManager
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Controls.Add(this.Codes_CheckedListBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -353,13 +358,44 @@ namespace HedgeModManager
             this.tabPage1.Text = "Codes";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.GetCodeList_Button);
+            this.panel1.Controls.Add(this.InstallCodeLoader_Button);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(3, 372);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(523, 43);
+            this.panel1.TabIndex = 1;
+            // 
+            // GetCodeList_Button
+            // 
+            this.GetCodeList_Button.Location = new System.Drawing.Point(5, 10);
+            this.GetCodeList_Button.Name = "GetCodeList_Button";
+            this.GetCodeList_Button.Size = new System.Drawing.Size(98, 23);
+            this.GetCodeList_Button.TabIndex = 27;
+            this.GetCodeList_Button.Text = "Update Code List";
+            this.GetCodeList_Button.UseVisualStyleBackColor = true;
+            this.GetCodeList_Button.Click += new System.EventHandler(this.GetCodeList_Button_Click);
+            // 
+            // InstallCodeLoader_Button
+            // 
+            this.InstallCodeLoader_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.InstallCodeLoader_Button.Location = new System.Drawing.Point(392, 10);
+            this.InstallCodeLoader_Button.Name = "InstallCodeLoader_Button";
+            this.InstallCodeLoader_Button.Size = new System.Drawing.Size(120, 23);
+            this.InstallCodeLoader_Button.TabIndex = 26;
+            this.InstallCodeLoader_Button.Text = "Install CodeLoader";
+            this.InstallCodeLoader_Button.UseVisualStyleBackColor = true;
+            this.InstallCodeLoader_Button.Click += new System.EventHandler(this.InstallCodeLoader_Button_Click);
+            // 
             // Codes_CheckedListBox
             // 
-            this.Codes_CheckedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Codes_CheckedListBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.Codes_CheckedListBox.FormattingEnabled = true;
             this.Codes_CheckedListBox.Location = new System.Drawing.Point(3, 3);
             this.Codes_CheckedListBox.Name = "Codes_CheckedListBox";
-            this.Codes_CheckedListBox.Size = new System.Drawing.Size(523, 412);
+            this.Codes_CheckedListBox.Size = new System.Drawing.Size(523, 409);
             this.Codes_CheckedListBox.TabIndex = 0;
             // 
             // SettingsPage
@@ -387,7 +423,7 @@ namespace HedgeModManager
             // 
             // Button_SaveAndReload
             // 
-            this.Button_SaveAndReload.Location = new System.Drawing.Point(369, 158);
+            this.Button_SaveAndReload.Location = new System.Drawing.Point(369, 166);
             this.Button_SaveAndReload.Name = "Button_SaveAndReload";
             this.Button_SaveAndReload.Size = new System.Drawing.Size(111, 23);
             this.Button_SaveAndReload.TabIndex = 24;
@@ -398,7 +434,7 @@ namespace HedgeModManager
             // Label_CustomModsDirectory
             // 
             this.Label_CustomModsDirectory.AutoSize = true;
-            this.Label_CustomModsDirectory.Location = new System.Drawing.Point(61, 190);
+            this.Label_CustomModsDirectory.Location = new System.Drawing.Point(61, 198);
             this.Label_CustomModsDirectory.Name = "Label_CustomModsDirectory";
             this.Label_CustomModsDirectory.Size = new System.Drawing.Size(106, 13);
             this.Label_CustomModsDirectory.TabIndex = 23;
@@ -407,7 +443,7 @@ namespace HedgeModManager
             // TextBox_CustomModsDirectory
             // 
             this.TextBox_CustomModsDirectory.Enabled = false;
-            this.TextBox_CustomModsDirectory.Location = new System.Drawing.Point(170, 187);
+            this.TextBox_CustomModsDirectory.Location = new System.Drawing.Point(170, 195);
             this.TextBox_CustomModsDirectory.Name = "TextBox_CustomModsDirectory";
             this.TextBox_CustomModsDirectory.Size = new System.Drawing.Size(310, 20);
             this.TextBox_CustomModsDirectory.TabIndex = 22;
@@ -416,7 +452,7 @@ namespace HedgeModManager
             // CheckBox_CustomModsDirectory
             // 
             this.CheckBox_CustomModsDirectory.AutoSize = true;
-            this.CheckBox_CustomModsDirectory.Location = new System.Drawing.Point(33, 164);
+            this.CheckBox_CustomModsDirectory.Location = new System.Drawing.Point(33, 172);
             this.CheckBox_CustomModsDirectory.Name = "CheckBox_CustomModsDirectory";
             this.CheckBox_CustomModsDirectory.Size = new System.Drawing.Size(157, 17);
             this.CheckBox_CustomModsDirectory.TabIndex = 21;
@@ -427,7 +463,7 @@ namespace HedgeModManager
             // EnableSaveFileRedirectionCheckBox
             // 
             this.EnableSaveFileRedirectionCheckBox.AutoSize = true;
-            this.EnableSaveFileRedirectionCheckBox.Location = new System.Drawing.Point(33, 118);
+            this.EnableSaveFileRedirectionCheckBox.Location = new System.Drawing.Point(33, 126);
             this.EnableSaveFileRedirectionCheckBox.Name = "EnableSaveFileRedirectionCheckBox";
             this.EnableSaveFileRedirectionCheckBox.Size = new System.Drawing.Size(163, 17);
             this.EnableSaveFileRedirectionCheckBox.TabIndex = 20;
@@ -438,7 +474,7 @@ namespace HedgeModManager
             // EnableCPKREDIRConsoleCheckBox
             // 
             this.EnableCPKREDIRConsoleCheckBox.AutoSize = true;
-            this.EnableCPKREDIRConsoleCheckBox.Location = new System.Drawing.Point(33, 141);
+            this.EnableCPKREDIRConsoleCheckBox.Location = new System.Drawing.Point(33, 149);
             this.EnableCPKREDIRConsoleCheckBox.Name = "EnableCPKREDIRConsoleCheckBox";
             this.EnableCPKREDIRConsoleCheckBox.Size = new System.Drawing.Size(158, 17);
             this.EnableCPKREDIRConsoleCheckBox.TabIndex = 19;
@@ -449,7 +485,7 @@ namespace HedgeModManager
             // KeepModLoaderOpenCheckBox
             // 
             this.KeepModLoaderOpenCheckBox.AutoSize = true;
-            this.KeepModLoaderOpenCheckBox.Location = new System.Drawing.Point(33, 95);
+            this.KeepModLoaderOpenCheckBox.Location = new System.Drawing.Point(33, 103);
             this.KeepModLoaderOpenCheckBox.Name = "KeepModLoaderOpenCheckBox";
             this.KeepModLoaderOpenCheckBox.Size = new System.Drawing.Size(246, 17);
             this.KeepModLoaderOpenCheckBox.TabIndex = 18;
@@ -460,7 +496,7 @@ namespace HedgeModManager
             // AutoCheckUpdateCheckBox
             // 
             this.AutoCheckUpdateCheckBox.AutoSize = true;
-            this.AutoCheckUpdateCheckBox.Location = new System.Drawing.Point(33, 72);
+            this.AutoCheckUpdateCheckBox.Location = new System.Drawing.Point(33, 80);
             this.AutoCheckUpdateCheckBox.Name = "AutoCheckUpdateCheckBox";
             this.AutoCheckUpdateCheckBox.Size = new System.Drawing.Size(137, 17);
             this.AutoCheckUpdateCheckBox.TabIndex = 17;
@@ -470,9 +506,9 @@ namespace HedgeModManager
             // 
             // PatchGroupBox
             // 
-            this.PatchGroupBox.Location = new System.Drawing.Point(49, 233);
+            this.PatchGroupBox.Location = new System.Drawing.Point(49, 221);
             this.PatchGroupBox.Name = "PatchGroupBox";
-            this.PatchGroupBox.Size = new System.Drawing.Size(431, 105);
+            this.PatchGroupBox.Size = new System.Drawing.Size(431, 102);
             this.PatchGroupBox.TabIndex = 16;
             this.PatchGroupBox.TabStop = false;
             this.PatchGroupBox.Text = "Patches";
@@ -672,6 +708,7 @@ namespace HedgeModManager
             this.Icon = global::HedgeModManager.Properties.Resources.icon;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(553, 602);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hedge Mod Manager";
@@ -687,6 +724,7 @@ namespace HedgeModManager
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.SettingsPage.ResumeLayout(false);
             this.SettingsPage.PerformLayout();
             this.SettingsBottomPanel.ResumeLayout(false);
@@ -749,6 +787,9 @@ namespace HedgeModManager
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.CheckedListBox Codes_CheckedListBox;
         private System.Windows.Forms.TextBox Search_TextBox;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button InstallCodeLoader_Button;
+        private System.Windows.Forms.Button GetCodeList_Button;
     }
 }
 

@@ -151,6 +151,7 @@
     <Compile Include="src\NewModPropertyForm.Designer.cs">
       <DependentUpon>NewModPropertyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\Patcher.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\SLWSaveForm.cs">
@@ -254,6 +255,7 @@
     <None Include="res\icon96.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="res\codes\SonicGenerationsCodeLoader.dll" />
     <Content Include="res\icon.ico" />
   </ItemGroup>
   <ItemGroup>

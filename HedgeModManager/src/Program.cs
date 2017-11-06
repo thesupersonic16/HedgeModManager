@@ -15,10 +15,10 @@ namespace HedgeModManager
         public static string StartDirectory = Application.StartupPath;
         public static string ExecutableName = Path.GetFileName(Application.ExecutablePath);
         public static string HedgeModManagerPath = Application.ExecutablePath;
-        //public static NamedPipeServerStream Server = new NamedPipeServerStream("hedgemodmanager", PipeDirection.InOut);
+        public static string GameName = "Unknown";
         public const string ProgramName = "Hedge Mod Manager";
         public const string ProgramNameShort = "HedgeModManager";
-        public const string VersionString = "6.1-003";
+        public const string VersionString = "6.1-004";
         public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
         public static bool Restart = false;
 
@@ -26,21 +26,9 @@ namespace HedgeModManager
         [STAThread]
         private static void Main(string[] args)
         {
-            /*string url_ = "https://drive.google.com/drive/folders/0B00I5RyzGDEGUWNsUWROZVg0VTQ";
-            string data = new WebClient().DownloadString(url_);
-            data = data.Substring(data.IndexOf("window['_DRIVE_ivd'] = '") + 24);
-            data = data.Substring(0, data.IndexOf("'") + 1);
-            data = data.Replace("\\n", "\n");
-            data = data.Replace("\\x22", "\"");
-            data = data.Replace("\\x5b", "[");
-            data = data.Replace("\\x5d", "]");
-            data = data.Replace("\\/", "/");
-            File.WriteAllText("data.json", data);
-
-            return;*/
             if (args.Length > 0)
             {
-                // Tested with hedgemmgens://installmod/https://drive.google.com/uc?export=download&confirm=no_antivirus&id=0BzGMWzGVT2c7NFFmbnhRYnFMbE0
+                // GameBanana Download Protocol
                 if (args[0].ToLower().StartsWith(@"hedgemmgens:")
                     || args[0].ToLower().StartsWith(@"hedgemmlw:")
                     || args[0].ToLower().StartsWith(@"hedgemmforces:"))
@@ -72,15 +60,18 @@ namespace HedgeModManager
 
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
+                    
                     //TODO
                     string thumb = $"https://gamebanana.com/skins/embeddables/{itemID}?type=large_minimal_square";
-                    WebClient client = new WebClient();
+
+                    var client = new WebClient();
                     var stream = client.OpenRead(thumb);
                     var bitmap = new Bitmap(stream);
                     stream.Close();
                     client.Dispose();
 
-                    var download = new DownloadModForm(submittion.Name, user.Name, submittion.Description, url, submittion.Credits, bitmap);
+                    var download = new DownloadModForm(submittion.Name, user.Name, submittion.Description, url,
+                        submittion.Credits, bitmap);
                     download.ShowDialog();
                     return;
                 }
@@ -152,12 +143,6 @@ namespace HedgeModManager
         {
             return s.Substring(s.IndexOf(s2) + s2.Length);
         }
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool AllocConsole();
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool FreeConsole();
 
     }
 }

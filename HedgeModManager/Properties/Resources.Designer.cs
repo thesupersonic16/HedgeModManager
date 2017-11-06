@@ -223,6 +223,16 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] SonicGenerationsCodeLoader {
+            get {
+                object obj = ResourceManager.GetObject("SonicGenerationsCodeLoader", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] update {
             get {
                 object obj = ResourceManager.GetObject("update", resourceCulture);

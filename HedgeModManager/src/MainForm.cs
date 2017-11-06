@@ -33,7 +33,6 @@ namespace HedgeModManager
         public static bool Ready = false;
         public static bool CheckIncludes = false;
 
-        public static string GameName = "Unkonwn";
         public static string DefaultModsPath = "";
         public static string CustomModsPath = "";
 
@@ -174,6 +173,9 @@ namespace HedgeModManager
 
         public void SaveModDB()
         {
+            // Saves the Config file
+            if (CPKREDIRIni != null)
+                CPKREDIRIni.Save();
             // Deactivates All mods that are active
             ModsDb.DeactivateAllMods();
             // Activates all mods that are currently checked
@@ -343,20 +345,20 @@ namespace HedgeModManager
                 RefreshModsList();
 
                 if (File.Exists(LWExecutablePath))
-                    GameName = "Sonic Lost World";
+                    Program.GameName = "Sonic Lost World";
                 else if (File.Exists(GensExecutablePath))
-                    GameName = "Sonic Generations";
+                    Program.GameName = "Sonic Generations";
                 else if (File.Exists(ForcesExecutablePath))
-                    GameName = "Sonic Forces";
+                    Program.GameName = "Sonic Forces";
 
                 if (!IsCPKREDIRInstalled())
                 {
-                    if (MessageBox.Show(string.Format(Resources.ExecutableNotPatchedText, GameName),
+                    if (MessageBox.Show(string.Format(Resources.ExecutableNotPatchedText, Program.GameName),
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         InstallCPKREDIR(true);
                 }
                 // Sets the PatchLabel's Text to show the user if CPKREDIR is installed in either game
-                PatchLabel.Text = GameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
+                PatchLabel.Text = Program.GameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
             }
             else
             { // No supported game were found
@@ -381,25 +383,27 @@ namespace HedgeModManager
                 ModUpdatingThread.Start();
             }
 
+            if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll")))
+                InstallCodeLoader_Button.Text = "Uninstall CodeLoader";
+            else
+                InstallCodeLoader_Button.Text = "Install CodeLoader";
+
             try
             {
-                //if (args[0].ToLower().StartsWith(@"hedgemmgens://")
-                //    || args[0].ToLower().StartsWith(@"hedgemmlw://")
-                //    || args[0].ToLower().StartsWith(@"hedgemmforces://"))
                 // Add URI Scheme (Requires Admin)
                 string protName = "";
                 string Protocol = "";
-                if (GameName == "Sonic Generations")
+                if (Program.GameName == "Sonic Generations")
                 {
                     protName = "HedgeModManager For Sonic Generations";
                     Protocol = "hedgemmgens";
                 }
-                if (GameName == "Sonic Lost World")
+                if (Program.GameName == "Sonic Lost World")
                 {
                     protName = "HedgeModManager For Sonic Lost World";
                     Protocol = "hedgemmlw";
                 }
-                if (GameName == "Sonic Forces")
+                if (Program.GameName == "Sonic Forces")
                 {
                     protName = "HedgeModManager For Sonic Forces";
                     Protocol = "hedgemmforces";
@@ -980,26 +984,7 @@ namespace HedgeModManager
                     
                     LogFile.AddMessage($"Installing {patchName}");
 
-                    // Opens a FileStream to the Generations executable
-                    using (var outStream = File.OpenWrite(GensExecutablePath))
-                    {
-                        var reader = new BinaryReader(new MemoryStream(patchData));
-                        var writer = new BinaryWriter(outStream);
-
-                        // Amount of blocks
-                        int blockCount = reader.ReadInt32();
-                        for (int i = 0; i < blockCount; ++i)
-                        {
-                            // Seek to the start of the block is going to written at (offset)
-                            writer.Seek(reader.ReadInt32(), SeekOrigin.Begin);
-                            // Gets the size of the current block
-                            int blockSize = reader.ReadInt32();
-                            // Writes the block to the stream
-                            writer.Write(reader.ReadBytes(blockSize));
-                        }
-                        // Closes the reader
-                        reader.Close();
-                    }
+                    Patcher.PatchFile(patchData, GensExecutablePath);
                     MessageBox.Show("Done.", Program.ProgramName);
                     LogFile.AddMessage($"Finished Installing {patchName}");
                 }
@@ -1180,7 +1165,7 @@ namespace HedgeModManager
                 
                 if (EnableCPKREDIRConsoleCheckBox.Checked && !CPKREDIRIni["CPKREDIR"].ContainsParameter("LogType"))
                     CPKREDIRIni["CPKREDIR"].AddParameter("LogType", "console");
-                else
+                else if (!EnableCPKREDIRConsoleCheckBox.Checked)
                     CPKREDIRIni["CPKREDIR"].RemoveParameter("LogType");
             }
 
@@ -1228,15 +1213,71 @@ namespace HedgeModManager
         private void Search_TextBox_TextChanged(object sender, EventArgs e)
         {
             int index = 0;
-            for (int i = 0; i < ModsList.Items.Count; ++i)
+            int wordIndex = 0;
+
+            foreach (string s in Search_TextBox.Text.ToLower().Split(' '))
             {
-                if ((ModsList.Items[i].Tag as Mod).Title.ToLower().Contains(Search_TextBox.Text.ToLower()))
+                for (int i = 0; i < ModsList.Items.Count; ++i)
                 {
-                    var lvi = ModsList.Items[i];
-                    // Removes the mod and reinserts it back into the list above where it was before
-                    ModsList.Items.Remove(lvi);
-                    ModsList.Items.Insert(index == 0? 0 : index--, lvi);
+                    if (wordIndex != 0 && s.Length == 0)
+                        continue;
+
+                    if ((ModsList.Items[i].Tag as Mod).Title.ToLower().Contains(s))
+                    {
+                        var lvi = ModsList.Items[i];
+                        // Removes the mod and reinserts it back into the list above where it was before
+                        ModsList.Items.Remove(lvi);
+                        ModsList.Items.Insert(index == 0 ? 0 : index--, lvi);
+                    }
                 }
+                ++wordIndex;
+            }
+        }
+
+        private void InstallCodeLoader_Button_Click(object sender, EventArgs e)
+        {
+            string text = "";
+            if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll")))
+            {
+                File.Delete(Path.Combine(Program.StartDirectory, "d3d9.dll"));
+                text = "Install CodeLoader";
+            }else
+            {
+                byte[] codeLoader = null;
+                if (Program.GameName == "Sonic Generations")
+                    codeLoader = Resources.SonicGenerationsCodeLoader;
+                if (codeLoader == null)
+                {
+                    MessageBox.Show("No CodeLoader Available for " + Program.GameName, "", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+                File.WriteAllBytes(Path.Combine(Program.StartDirectory, "d3d9.dll"), codeLoader);
+                text = "Uninstall CodeLoader";
+            }
+            InstallCodeLoader_Button.Text = text;
+        }
+
+        private void GetCodeList_Button_Click(object sender, EventArgs e)
+        {
+            string URL = $"https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/master/HedgeModManager/res/codes/{Program.GameName}.xml";
+            string filePath = Path.Combine(Program.StartDirectory, "mods\\Codes.xml");
+            if (Program.GameName == "Sonic Generations")
+            {
+                try
+                {
+                    File.WriteAllText(filePath, new WebClient().DownloadString(URL));
+
+                }catch
+                {
+                    MessageBox.Show("Failed to download codes for " + Program.GameName, "", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No CodeLoader Available for " + Program.GameName, "", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
     }

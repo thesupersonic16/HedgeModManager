@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<CodeList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Code name="Infinite Rings">
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>01E5E2F0</Address>
+      <Pointer>true</Pointer>
+      <Offsets>
+        <Offset>5B8</Offset>
+      </Offsets>
+      <Value>3E7</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+  <Code name="Always Run in the Background" patch="true">
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>00E7BF04</Address>
+      <Value>EB</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+</CodeList>
