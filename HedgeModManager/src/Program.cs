@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
@@ -25,49 +26,62 @@ namespace HedgeModManager
         [STAThread]
         private static void Main(string[] args)
         {
+            /*string url_ = "https://drive.google.com/drive/folders/0B00I5RyzGDEGUWNsUWROZVg0VTQ";
+            string data = new WebClient().DownloadString(url_);
+            data = data.Substring(data.IndexOf("window['_DRIVE_ivd'] = '") + 24);
+            data = data.Substring(0, data.IndexOf("'") + 1);
+            data = data.Replace("\\n", "\n");
+            data = data.Replace("\\x22", "\"");
+            data = data.Replace("\\x5b", "[");
+            data = data.Replace("\\x5d", "]");
+            data = data.Replace("\\/", "/");
+            File.WriteAllText("data.json", data);
 
+            return;*/
             if (args.Length > 0)
             {
                 // Tested with hedgemmgens://installmod/https://drive.google.com/uc?export=download&confirm=no_antivirus&id=0BzGMWzGVT2c7NFFmbnhRYnFMbE0
-                if (args[0].ToLower().StartsWith(@"hedgemmgens://")
-                    || args[0].ToLower().StartsWith(@"hedgemmlw://")
-                    || args[0].ToLower().StartsWith(@"hedgemmforces://"))
+                if (args[0].ToLower().StartsWith(@"hedgemmgens:")
+                    || args[0].ToLower().StartsWith(@"hedgemmlw:")
+                    || args[0].ToLower().StartsWith(@"hedgemmforces:"))
                 {
                     string url = args[0];
-                    if (args[0].ToLower().StartsWith(@"hedgemmgens://"))
-                        url = url.Substring(14);
-                    if (args[0].ToLower().StartsWith(@"hedgemmlw://"))
+                    if (args[0].ToLower().StartsWith(@"hedgemmgens:"))
                         url = url.Substring(12);
-                    if (args[0].ToLower().StartsWith(@"hedgemmforces://"))
-                        url = url.Substring(16);
+                    if (args[0].ToLower().StartsWith(@"hedgemmlw:"))
+                        url = url.Substring(10);
+                    if (args[0].ToLower().StartsWith(@"hedgemmforces:"))
+                        url = url.Substring(14);
 
                     // TODO:
+                    string itemType = url.Split(',')[1];
+                    string itemID = url.Split(',')[2];
                     url = url.Substring(0, url.IndexOf(","));
-
+                    
                     if (!IsURL(url))
                     {
                         MessageBox.Show("Link Given is not a URL!");
                         LogFile.Close();
                         return;
                     }
-                    if (MessageBox.Show($"Install mod from:\n \"{url}\" ?", ProgramName,
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-                    {
-                        LogFile.Close();
-                        return;
-                    }
-
-
-                    var modUpdate = new ModUpdater.ModUpdate()
-                    {
-                         Name = "Unknown Mod"
-                    };
-                    modUpdate.Files.Add(new ModUpdater.ModUpdateFile() { URL = url, FileName = "Unknown" });
+                    
+                    var submittion = GameBanana.GameBananaItemSubmittion.ReadResponse(
+                        GameBanana.GameBananaItemSubmittion.GetResponseFromGameBanana(itemType, itemID));
+                    var user = GameBanana.GameBananaItemMember.ReadResponse(
+                        GameBanana.GameBananaItemMember.GetResponseFromGameBanana(submittion.UserId));
 
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    new UpdateModForm(null, modUpdate).ShowDialog();
-                    LogFile.Close();
+                    //TODO
+                    string thumb = $"https://gamebanana.com/skins/embeddables/{itemID}?type=large_minimal_square";
+                    WebClient client = new WebClient();
+                    var stream = client.OpenRead(thumb);
+                    var bitmap = new Bitmap(stream);
+                    stream.Close();
+                    client.Dispose();
+
+                    var download = new DownloadModForm(submittion.Name, user.Name, submittion.Description, url, submittion.Credits, bitmap);
+                    download.ShowDialog();
                     return;
                 }
             }

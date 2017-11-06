@@ -25,13 +25,13 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -85,7 +85,14 @@
     <Compile Include="src\CreateUpdateURLForm.Designer.cs">
       <DependentUpon>CreateUpdateURLForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\DownloadModForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\DownloadModForm.Designer.cs">
+      <DependentUpon>DownloadModForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\DownloadTools.cs" />
+    <Compile Include="src\GameBanana.cs" />
     <Compile Include="src\InstallForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -188,6 +195,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\DescriptionForm.resx">
       <DependentUpon>DescriptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\DownloadModForm.resx">
+      <DependentUpon>DownloadModForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\InstallForm.resx">
       <DependentUpon>InstallForm.cs</DependentUpon>
