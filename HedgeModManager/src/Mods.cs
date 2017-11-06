@@ -313,8 +313,8 @@ namespace HedgeModManager
 
         public void ActivateMod(Mod mod)
         {
-            if (!modsDb["Mods"].ContainsParameter(mod.Title))
-                modsDb["Mods"].AddParameter(mod.Title, mod.FilePath);
+            if (!modsDb["Mods"].ContainsParameter(Path.GetFileName(mod.RootDirectory)))
+                modsDb["Mods"].AddParameter(Path.GetFileName(mod.RootDirectory), mod.FilePath);
 
             if (IsModActive(mod))
                 return;

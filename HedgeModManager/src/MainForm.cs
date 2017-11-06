@@ -383,12 +383,38 @@ namespace HedgeModManager
 
             try
             {
+                //if (args[0].ToLower().StartsWith(@"hedgemmgens://")
+                //    || args[0].ToLower().StartsWith(@"hedgemmlw://")
+                //    || args[0].ToLower().StartsWith(@"hedgemmforces://"))
                 // Add URI Scheme (Requires Admin)
-                var key = Registry.ClassesRoot.OpenSubKey("HedgeModManager", true);
-                if (key == null)
+                string protName = "";
+                string Protocol = "";
+                if (GameName == "Sonic Generations")
                 {
-                    key = Registry.ClassesRoot.CreateSubKey(Program.ProgramNameShort);
-                    key.SetValue("URL Protocol", "HedgeModManager");
+                    protName = "HedgeModManager For Sonic Generations";
+                    Protocol = "hedgemmgens";
+                }
+                if (GameName == "Sonic Lost World")
+                {
+                    protName = "HedgeModManager For Sonic Lost World";
+                    Protocol = "hedgemmlw";
+                }
+                if (GameName == "Sonic Forces")
+                {
+                    protName = "HedgeModManager For Sonic Forces";
+                    Protocol = "hedgemmforces";
+                }
+                if (protName == "")
+                {
+                    MessageBox.Show("WHat happened?");
+                    return;
+                }
+                var key = Registry.ClassesRoot.OpenSubKey(Protocol, true);
+                if (key == null)
+                {//URL:Mania Mod Manager Protocol
+                    key = Registry.ClassesRoot.CreateSubKey(Protocol);
+                    key.SetValue("", "URL:" + protName);
+                    key.SetValue("URL Protocol", "");
                     key = key.CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command");
                     key.SetValue("", $"\"{Program.HedgeModManagerPath}\" \"%1\"");
                 }
@@ -1047,9 +1073,14 @@ namespace HedgeModManager
             new CreateUpdateForm(modified).ShowDialog();
         }
 
-#endregion ToolStripMenuItemEvents
+        #endregion ToolStripMenuItemEvents
 
-#region OtherGUIEvents
+        #region OtherGUIEvents
+
+        private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Search_TextBox.Visible = TabControl.SelectedIndex == 0;
+        }
 
         private void ReportLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -1192,7 +1223,21 @@ namespace HedgeModManager
         {
             e.DrawDefault = true;
         }
-#endregion
+        #endregion
 
+        private void Search_TextBox_TextChanged(object sender, EventArgs e)
+        {
+            int index = 0;
+            for (int i = 0; i < ModsList.Items.Count; ++i)
+            {
+                if ((ModsList.Items[i].Tag as Mod).Title.ToLower().Contains(Search_TextBox.Text.ToLower()))
+                {
+                    var lvi = ModsList.Items[i];
+                    // Removes the mod and reinserts it back into the list above where it was before
+                    ModsList.Items.Remove(lvi);
+                    ModsList.Items.Insert(index == 0? 0 : index--, lvi);
+                }
+            }
+        }
     }
 }

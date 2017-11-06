@@ -26,11 +26,22 @@ namespace HedgeModManager
             InitializeComponent();
             _Mod = mod;
             ModUpdate = update;
-            Text = "Updating " + update.Name;
-            UpdateLabel.Text = "Updating " + update.Name;
-            UpdateLabel.Location = new Point(Size.Width/2-UpdateLabel.Size.Width/2, UpdateLabel.Location.Y);
-            DownloadLabel.Text = "Starting Download...";
-            DownloadLabel.Location = new Point(Size.Width / 2 - DownloadLabel.Size.Width / 2, DownloadLabel.Location.Y);
+            if (mod == null)
+            {
+                Text = "Downloading " + update.Name;
+                UpdateLabel.Text = "Downloading " + update.Name;
+                UpdateLabel.Location = new Point(Size.Width / 2 - UpdateLabel.Size.Width / 2, UpdateLabel.Location.Y);
+                DownloadLabel.Text = "Starting Download...";
+                DownloadLabel.Location = new Point(Size.Width / 2 - DownloadLabel.Size.Width / 2, DownloadLabel.Location.Y);
+
+            }else
+            {
+                Text = "Updating " + update.Name;
+                UpdateLabel.Text = "Updating " + update.Name;
+                UpdateLabel.Location = new Point(Size.Width/2-UpdateLabel.Size.Width/2, UpdateLabel.Location.Y);
+                DownloadLabel.Text = "Starting Download...";
+                DownloadLabel.Location = new Point(Size.Width / 2 - DownloadLabel.Size.Width / 2, DownloadLabel.Location.Y);
+            }
         }
 
         // GUI Events
@@ -53,11 +64,14 @@ namespace HedgeModManager
                     string fileName = ModUpdate.Files[i].FileName;
                     string fileUrl = ModUpdate.Files[i].URL;
                     string fileSha = ModUpdate.Files[i].SHA256;
-                    var fileInfo = new FileInfo(Path.Combine(_Mod.RootDirectory, fileName));
+                    if (_Mod != null)
+                    {
+                        var fileInfo = new FileInfo(Path.Combine(_Mod.RootDirectory, fileName));
 
-                    // Creates the directorys
-                    if (!fileInfo.Directory.Exists)
-                        Directory.CreateDirectory(fileInfo.Directory.FullName);
+                        // Creates the directorys
+                        if (!fileInfo.Directory.Exists)
+                            Directory.CreateDirectory(fileInfo.Directory.FullName);
+                    }
 
                     LogFile.AddMessage($"Downloading: {fileName} from {fileUrl}");
                     // Closes and returns if the user clicked cancel.
@@ -69,15 +83,28 @@ namespace HedgeModManager
                         new Point(Size.Width / 2 - DownloadLabel.Size.Width / 2, DownloadLabel.Location.Y)));
                     // Sets ProgressBarAll's Value to the current file.
                     Invoke(new Action(() => ProgressBarAll.Value = i));
-                    // Downloads the current file to the mod root.
-                    Invoke(new Action(() => webClient.DownloadFileAsync(new Uri(fileUrl),
-                        Path.Combine(_Mod.RootDirectory, fileName))));
+                    // Checks if the mod is installed
+                    if (_Mod == null)
+                    {
+                        webClient.DownloadDataCompleted += DownloadDataCompleted;
+                        Invoke(new Action(() => webClient.DownloadDataAsync(new Uri(fileUrl))));
+                    }
+                    else
+                    {
+                        // Downloads the current file to the mod root.
+                        Invoke(new Action(() => webClient.DownloadFileAsync(new Uri(fileUrl),
+                            Path.Combine(_Mod.RootDirectory, fileName))));
+                    }
                     // Waits for the download to finish.
                     while (webClient.IsBusy)
                     {
                         Thread.Sleep(100);
                     }
-                    
+                    if (_Mod == null)
+                    {
+                        continue;
+                    }
+
                     using (var stream = File.OpenRead(Path.Combine(_Mod.RootDirectory, fileName)))
                     {
                         if (fileSha != 0.ToString("X64") && fileSha != null)
@@ -121,6 +148,22 @@ namespace HedgeModManager
                 ProgressBarFile.Value = (int) e.BytesReceived;
             }else
                 ProgressBarFile.Style = ProgressBarStyle.Marquee;
+        }
+
+        private void DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
+        {
+            byte[] bytes = e.Result;
+            string tempFolder = Path.Combine(Program.StartDirectory, "downloads");
+            if (!Directory.Exists(tempFolder))
+                Directory.CreateDirectory(tempFolder);
+            string filePath = Path.Combine(tempFolder, "download.bin");
+            File.WriteAllBytes(filePath, bytes);
+            if (bytes[0] == 'P')
+                AddModForm.InstallFromZip(filePath); // Install from a zip
+            else
+                AddModForm.InstallFrom7zArchive(filePath); // Use 7Zip if its not a Zip
+            Invoke(new Action(() => Close()));
+            return;
         }
 
         public static byte[] StringToByteArray(string hex)

@@ -31,7 +31,6 @@ namespace HedgeModManager
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ModsListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.desciptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,6 +55,7 @@ namespace HedgeModManager
             this.MoveDownButton = new System.Windows.Forms.Button();
             this.MoveUpButton = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.Codes_CheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.SettingsPage = new System.Windows.Forms.TabPage();
             this.Button_SaveAndReload = new System.Windows.Forms.Button();
             this.Label_CustomModsDirectory = new System.Windows.Forms.Label();
@@ -81,7 +81,7 @@ namespace HedgeModManager
             this.RemoveModButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
-            this.Codes_CheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.Search_TextBox = new System.Windows.Forms.TextBox();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -177,6 +177,7 @@ namespace HedgeModManager
             this.TabControl.SelectedIndex = 0;
             this.TabControl.Size = new System.Drawing.Size(537, 444);
             this.TabControl.TabIndex = 0;
+            this.TabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl_SelectedIndexChanged);
             // 
             // ModPage
             // 
@@ -352,6 +353,15 @@ namespace HedgeModManager
             this.tabPage1.Text = "Codes";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // Codes_CheckedListBox
+            // 
+            this.Codes_CheckedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Codes_CheckedListBox.FormattingEnabled = true;
+            this.Codes_CheckedListBox.Location = new System.Drawing.Point(3, 3);
+            this.Codes_CheckedListBox.Name = "Codes_CheckedListBox";
+            this.Codes_CheckedListBox.Size = new System.Drawing.Size(523, 412);
+            this.Codes_CheckedListBox.TabIndex = 0;
+            // 
             // SettingsPage
             // 
             this.SettingsPage.Controls.Add(this.Button_SaveAndReload);
@@ -441,7 +451,7 @@ namespace HedgeModManager
             this.KeepModLoaderOpenCheckBox.AutoSize = true;
             this.KeepModLoaderOpenCheckBox.Location = new System.Drawing.Point(33, 95);
             this.KeepModLoaderOpenCheckBox.Name = "KeepModLoaderOpenCheckBox";
-            this.KeepModLoaderOpenCheckBox.Size = new System.Drawing.Size(243, 17);
+            this.KeepModLoaderOpenCheckBox.Size = new System.Drawing.Size(246, 17);
             this.KeepModLoaderOpenCheckBox.TabIndex = 18;
             this.KeepModLoaderOpenCheckBox.Text = "Keep Mod Manager open after starting a game";
             this.KeepModLoaderOpenCheckBox.UseVisualStyleBackColor = true;
@@ -452,7 +462,7 @@ namespace HedgeModManager
             this.AutoCheckUpdateCheckBox.AutoSize = true;
             this.AutoCheckUpdateCheckBox.Location = new System.Drawing.Point(33, 72);
             this.AutoCheckUpdateCheckBox.Name = "AutoCheckUpdateCheckBox";
-            this.AutoCheckUpdateCheckBox.Size = new System.Drawing.Size(138, 17);
+            this.AutoCheckUpdateCheckBox.Size = new System.Drawing.Size(137, 17);
             this.AutoCheckUpdateCheckBox.TabIndex = 17;
             this.AutoCheckUpdateCheckBox.Text = "Auto check for updates";
             this.AutoCheckUpdateCheckBox.UseVisualStyleBackColor = true;
@@ -634,14 +644,13 @@ namespace HedgeModManager
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
-            // Codes_CheckedListBox
+            // Search_TextBox
             // 
-            this.Codes_CheckedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Codes_CheckedListBox.FormattingEnabled = true;
-            this.Codes_CheckedListBox.Location = new System.Drawing.Point(3, 3);
-            this.Codes_CheckedListBox.Name = "Codes_CheckedListBox";
-            this.Codes_CheckedListBox.Size = new System.Drawing.Size(523, 412);
-            this.Codes_CheckedListBox.TabIndex = 0;
+            this.Search_TextBox.Location = new System.Drawing.Point(360, 0);
+            this.Search_TextBox.Name = "Search_TextBox";
+            this.Search_TextBox.Size = new System.Drawing.Size(177, 20);
+            this.Search_TextBox.TabIndex = 6;
+            this.Search_TextBox.TextChanged += new System.EventHandler(this.Search_TextBox_TextChanged);
             // 
             // MainForm
             // 
@@ -649,6 +658,7 @@ namespace HedgeModManager
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(537, 563);
+            this.Controls.Add(this.Search_TextBox);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.PlayButton);
             this.Controls.Add(this.RemoveModButton);
@@ -659,7 +669,7 @@ namespace HedgeModManager
             this.Controls.Add(this.SaveAndPlayButton);
             this.Controls.Add(this.DescriptionLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = Resources.icon;
+            this.Icon = global::HedgeModManager.Properties.Resources.icon;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
@@ -738,6 +748,7 @@ namespace HedgeModManager
         private System.Windows.Forms.Button Button_SaveAndReload;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.CheckedListBox Codes_CheckedListBox;
+        private System.Windows.Forms.TextBox Search_TextBox;
     }
 }
 

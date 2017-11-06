@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.IO.Pipes;
+using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -12,9 +14,10 @@ namespace HedgeModManager
         public static string StartDirectory = Application.StartupPath;
         public static string ExecutableName = Path.GetFileName(Application.ExecutablePath);
         public static string HedgeModManagerPath = Application.ExecutablePath;
+        //public static NamedPipeServerStream Server = new NamedPipeServerStream("hedgemodmanager", PipeDirection.InOut);
         public const string ProgramName = "Hedge Mod Manager";
         public const string ProgramNameShort = "HedgeModManager";
-        public const string VersionString = "6.1-002";
+        public const string VersionString = "6.1-003";
         public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
         public static bool Restart = false;
 
@@ -22,16 +25,25 @@ namespace HedgeModManager
         [STAThread]
         private static void Main(string[] args)
         {
-            LogFile.Initialize();
-            LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
-            
 
             if (args.Length > 0)
             {
-                // Tested with hedgemodmanager://installmod/https://drive.google.com/uc?export=download&confirm=no_antivirus&id=0BzGMWzGVT2c7NFFmbnhRYnFMbE0
-                if (args[0].ToLower().StartsWith(@"hedgemodmanager://"))
+                // Tested with hedgemmgens://installmod/https://drive.google.com/uc?export=download&confirm=no_antivirus&id=0BzGMWzGVT2c7NFFmbnhRYnFMbE0
+                if (args[0].ToLower().StartsWith(@"hedgemmgens://")
+                    || args[0].ToLower().StartsWith(@"hedgemmlw://")
+                    || args[0].ToLower().StartsWith(@"hedgemmforces://"))
                 {
-                    string url = SplitAfter(args[0], @"installmod/");
+                    string url = args[0];
+                    if (args[0].ToLower().StartsWith(@"hedgemmgens://"))
+                        url = url.Substring(14);
+                    if (args[0].ToLower().StartsWith(@"hedgemmlw://"))
+                        url = url.Substring(12);
+                    if (args[0].ToLower().StartsWith(@"hedgemmforces://"))
+                        url = url.Substring(16);
+
+                    // TODO:
+                    url = url.Substring(0, url.IndexOf(","));
+
                     if (!IsURL(url))
                     {
                         MessageBox.Show("Link Given is not a URL!");
@@ -44,49 +56,34 @@ namespace HedgeModManager
                         LogFile.Close();
                         return;
                     }
-                    // Creates Console Window
-                    AllocConsole();
 
-                    // Downloads the mod
-                    var client = new WebClient();
-                    Console.Write("Downloading Mod... ");
-                    byte[] bytes = client.DownloadData(url);
-                    Console.Write("Done.\n");
 
-                    // Creates the directories and writes the file
-                    Console.Write("Preparing Mod for installation... ");
-                    string tempFolder = Path.Combine(StartDirectory, "downloads");
-                    if (!Directory.Exists(tempFolder))
-                        Directory.CreateDirectory(tempFolder);
-                    string filePath = Path.Combine(tempFolder, "download.bin");
-                    File.WriteAllBytes(filePath, bytes);
-                    Console.Write("Done.\n");
+                    var modUpdate = new ModUpdater.ModUpdate()
+                    {
+                         Name = "Unknown Mod"
+                    };
+                    modUpdate.Files.Add(new ModUpdater.ModUpdateFile() { URL = url, FileName = "Unknown" });
 
-                    // Installs the mod
-                    Console.Write("Installing Mod... ");
-                    if (bytes[0] == 'P')
-                        AddModForm.InstallFromZip(filePath); // Install from a zip
-                    else
-                        AddModForm.InstallFrom7zArchive(filePath); // Use 7Zip if its not a Zip
-                    Console.Write("Done.\n");
-
-                    // End
-                    FreeConsole();
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    new UpdateModForm(null, modUpdate).ShowDialog();
                     LogFile.Close();
                     return;
                 }
             }
+            LogFile.Initialize();
+            LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
 
             #if DEBUG
             if (!(File.Exists(Path.Combine(StartDirectory, "slw.exe")) ||
                 File.Exists(Path.Combine(StartDirectory, "SonicGenerations.exe"))))
             {
                 // NOTE: The ModLoader Updating (UpdateForm.cs) doesn't use "StartDirectory"
-                //StartDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sonic Lost World";
-                //if (!File.Exists(StartDirectory))
-                    //StartDirectory = "D:\\SteamLibrary\\steamapps\\common\\Sonic Generations";
+                StartDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sonic Lost World";
+                if (!File.Exists(StartDirectory))
+                    StartDirectory = "D:\\SteamLibrary\\steamapps\\common\\Sonic Generations";
             }
-            #endif
+#endif
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
