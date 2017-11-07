@@ -45,7 +45,7 @@
             this.titleLbl.Location = new System.Drawing.Point(57, 10);
             this.titleLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.titleLbl.Name = "titleLbl";
-            this.titleLbl.Size = new System.Drawing.Size(226, 38);
+            this.titleLbl.Size = new System.Drawing.Size(282, 38);
             this.titleLbl.TabIndex = 0;
             this.titleLbl.Text = "Hedge Mod Manager";
             // 
@@ -56,7 +56,7 @@
             this.aboutLbl.Location = new System.Drawing.Point(61, 55);
             this.aboutLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.aboutLbl.Name = "aboutLbl";
-            this.aboutLbl.Size = new System.Drawing.Size(372, 104);
+            this.aboutLbl.Size = new System.Drawing.Size(379, 130);
             this.aboutLbl.TabIndex = 1;
             this.aboutLbl.Text = resources.GetString("aboutLbl.Text");
             // 
@@ -64,7 +64,7 @@
             // 
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.okBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.okBtn.Location = new System.Drawing.Point(391, 169);
+            this.okBtn.Location = new System.Drawing.Point(391, 181);
             this.okBtn.Margin = new System.Windows.Forms.Padding(2);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(75, 21);
@@ -88,7 +88,7 @@
             // 
             this.gitLbl.AutoSize = true;
             this.gitLbl.LinkColor = System.Drawing.SystemColors.HotTrack;
-            this.gitLbl.Location = new System.Drawing.Point(61, 173);
+            this.gitLbl.Location = new System.Drawing.Point(61, 185);
             this.gitLbl.Name = "gitLbl";
             this.gitLbl.Size = new System.Drawing.Size(66, 13);
             this.gitLbl.TabIndex = 4;
@@ -104,7 +104,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.okBtn;
-            this.ClientSize = new System.Drawing.Size(477, 201);
+            this.ClientSize = new System.Drawing.Size(477, 212);
             this.Controls.Add(this.gitLbl);
             this.Controls.Add(this.okBtn);
             this.Controls.Add(this.iconPBx);
