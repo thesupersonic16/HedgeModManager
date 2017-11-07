@@ -20,7 +20,7 @@ namespace HedgeModManager
         // Variables/Constants
         public static string GensExecutablePath = Path.Combine(Program.StartDirectory, "SonicGenerations.exe");
         public static string LWExecutablePath = Path.Combine(Program.StartDirectory, "slw.exe");
-        public static string ForcesExecutablePath = Path.Combine(Program.StartDirectory, "forces.exe");
+        public static string ForcesExecutablePath = Path.Combine(Program.StartDirectory, "Sonic Forces.exe");
         public static string ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
         public static string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
 
