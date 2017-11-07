@@ -43,7 +43,7 @@ namespace HedgeModManager
                 {
                     string lwPath = Path.Combine(path, "Sonic Lost World\\slw.exe");
                     string gensPath = Path.Combine(path, "Sonic Generations\\SonicGenerations.exe");
-                    string forcesPath = Path.Combine(path, "Sonic Forces\\SonicForces.exe");
+                    string forcesPath = Path.Combine(path, "Sonic Forces\\forces.exe");
                     if (File.Exists(lwPath))
                         entries.Add(new Entry() { GameName = "Sonic Lost World", Path = lwPath });
                     if (File.Exists(gensPath))
