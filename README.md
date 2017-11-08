@@ -24,8 +24,11 @@ Mods designed for HedgeModManager needs to come in the form of folders that cont
     -  All your modified files/folders from the root of Sonic Generations' bb3.cpk in their raw form.
   - A "sonic2013_patch_0" folder (for Sonic Lost World)
     - All your modified files/folders from the root of Sonic Lost World's .cpk files on in their raw form.
-  - A "wars_patch" folder (for Sonic Forces)
-    - All your modified files/folders from the root of Sonic Forces' .cpk files on in their raw form.
+- A "image" folder (for Sonic Forces)
+	- A "x64" folder
+		- A "disk" folder
+			- A "wars_patch" folder
+				- All your modified files/folders from the root of Sonic Forces' .cpk files on in their raw form.
 
 So long as the structure of your mod remains in this way, virtually any file in the game can be modified and released as part of your mod.
 
@@ -38,9 +41,15 @@ As an example, the extremely basic "Tanic the Hedgehog" recolor mod for Sonic Ge
   - A "sonic2013_patch_0" folder (Sonic Lost World)
     - Sonic.pac
     - Sonic.pac.00
-  - A "wars_patch" folder (Sonic Forces)
-    - Sonic.pac
-    - Sonic.pac.00
+- A "image" folder (Sonic Forces)
+	- A "x64" folder
+		- A "disk" folder
+			- A "wars_patch" folder
+				- A "character" folder
+					- Sonic.pac
+					- Sonic.pac.000
+					- SonicClassic.pac
+					- SonicClassic.pac.000
 
 Wereas the "MLG Speedrun Zone 1" mod (which modifies certain files not on the root of the .cpk) has a file/folder structure that goes like so:
 
