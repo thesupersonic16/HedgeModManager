@@ -17,18 +17,18 @@ Mods designed for HedgeModManager needs to come in the form of folders that cont
 - A "mod.ini" file (a file which describes your mod, as well as all it's various details).
 - A "disk" folder
   - A "bb" folder (for Sonic Generations)
-    -  All your modified files/folders from the root of Sonic Generations' bb.cpk in their raw form.
+    - All your modified files/folders from the root of Sonic Generations' bb.cpk in their raw form.
   - A "bb2" folder (for Sonic Generations)
-    -  All your modified files/folders from the root of Sonic Generations' bb2.cpk in their raw form.
+    - All your modified files/folders from the root of Sonic Generations' bb2.cpk in their raw form.
   - A "bb3" folder (for Sonic Generations)
-    -  All your modified files/folders from the root of Sonic Generations' bb3.cpk in their raw form.
+    - All your modified files/folders from the root of Sonic Generations' bb3.cpk in their raw form.
   - A "sonic2013_patch_0" folder (for Sonic Lost World)
-    - All your modified files/folders from the root of Sonic Lost World's sonic2013_0.cpk files on in their raw form.
+    - All your modified files/folders from the root of Sonic Lost World's sonic2013_0.cpk in their raw form.
 - An "image" folder (for Sonic Forces)
 	- A "x64" folder
 		- A "disk" folder
 			- A "wars_patch" folder
-				- All your modified files/folders from the root of Sonic Forces' wars_0.cpk and wars_1.cpk files on in their raw form.
+				- All your modified files/folders from the root of Sonic Forces' wars_0.cpk and wars_1.cpk in their raw form.
 
 So long as the structure of your mod remains in this way, virtually any file in the game can be modified and released as part of your mod.
 
