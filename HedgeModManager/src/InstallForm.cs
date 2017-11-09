@@ -31,7 +31,7 @@ namespace HedgeModManager
             var vdf = Steam.VDFFile.ReadVDF(vdfLocation);
 
             // Default Common Path
-            paths.Add(Steam.SteamLocation);
+            paths.Add(Path.Combine(Steam.SteamLocation, "steamapps\\common"));
 
             // Gets all the custom libraries
             foreach (var library in vdf.Array.Elements)
