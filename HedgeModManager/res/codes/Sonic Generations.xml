@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <CodeList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Code name="Infinite Rings">
+  <Code name="Infinite Rings" credit="SuperSonic16">
     <CodeLine>
       <Type>write32</Type>
       <Address>01E5E2F0</Address>
@@ -12,11 +12,157 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Always Run in the Background" patch="true">
+  <Code name="Always Run in the Background" patch="true" credit="SuperSonic16">
     <CodeLine>
       <Type>write8</Type>
       <Address>00E7BF04</Address>
       <Value>EB</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+  <Code name="Widescreen Support" patch="true" credit="Muzzarino Hezibeth">
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>006F23C8</Address>
+      <Value>E9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>006F23C9</Address>
+      <Value>00CCF870</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write16</Type>
+      <Address>006F23CD</Address>
+      <Value>9090</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C3D</Address>
+      <Value>E22805DB</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C41</Address>
+      <Value>35DA01DF</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C45</Address>
+      <Value>01DFE22C</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>013C1C49</Address>
+      <Value>50</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C4A</Address>
+      <Value>81241CD9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write16</Type>
+      <Address>013C1C4E</Address>
+      <Value>243C</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>writefloat</Type>
+      <Address>013C1C50</Address>
+      <Value>1.7777777777777778</Value>
+      <ValueType>decimal</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write16</Type>
+      <Address>013C1C54</Address>
+      <Value>1973</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C56</Address>
+      <Value>C72404D9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write16</Type>
+      <Address>013C1C5A</Address>
+      <Value>2404</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>writefloat</Type>
+      <Address>013C1C5C</Address>
+      <Value>1.7777777777777778</Value>
+      <ValueType>decimal</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C60</Address>
+      <Value>DC2434D8</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>013C1C64</Address>
+      <Value>CA</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C65</Address>
+      <Value>C7241CD9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write16</Type>
+      <Address>013C1C69</Address>
+      <Value>2404</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>writefloat</Type>
+      <Address>013C1C6B</Address>
+      <Value>1.7777777777777778</Value>
+      <ValueType>decimal</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C6F</Address>
+      <Value>832404D9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C73</Address>
+      <Value>F9DE04C4</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C77</Address>
+      <Value>14245CD9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>013C1C7B</Address>
+      <Value>33074FE9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>013C1C7F</Address>
+      <Value>FF</Value>
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
