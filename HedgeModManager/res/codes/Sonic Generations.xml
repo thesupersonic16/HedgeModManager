@@ -28,6 +28,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
+  <Code name="Never Lose Rings With Super Sonic" patch="true" credit="Muzzarino Hezibeth">
     <CodeLine>
       <Type>writenop</Type>
       <Address>00E64E80</Address>
