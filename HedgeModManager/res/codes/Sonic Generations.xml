@@ -12,12 +12,27 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
+  <Code name="Ignore Damange" patch="true" credit="SuperSonic16">
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>00E2836A</Address>
+      <Value>05</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
   <Code name="Always Run in the Background" patch="true" credit="SuperSonic16">
     <CodeLine>
       <Type>write8</Type>
       <Address>00E7BF04</Address>
       <Value>EB</Value>
       <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>00E64E80</Address>
+      <Value>6</Value>
+      <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
   <Code name="Widescreen Support" patch="true" credit="Muzzarino Hezibeth">
