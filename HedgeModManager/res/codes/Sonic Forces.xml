@@ -42,7 +42,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Ultrawide (2560x1080) Support" credit="slashiee">
+  <Code name="Ultrawide (2560x1080) Support" patch="true" credit="slashiee">
     <CodeLine>
       <Type>writefloat</Type>
       <Address>141DBDC34</Address>
