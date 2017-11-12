@@ -14,6 +14,20 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
+  <Code name="Disable Boost Drain" patch="true" credit="CodenameGamma">
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>1404CFF42</Address>
+      <Value>00000005</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>1403DFB5E</Address>
+      <Value>00000007</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
   <Code name="Max Score" credit="SuperSonic16">
     <CodeLine>
       <Type>write32</Type>
