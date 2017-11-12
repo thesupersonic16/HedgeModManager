@@ -8,6 +8,12 @@ environment:
     - appveyor_build_worker_image: Visual Studio 2017
       configuration: Release
       platform: Any CPU
+    - appveyor_build_worker_image: Visual Studio 2017
+      configuration: Debug
+      platform: x64
+    - appveyor_build_worker_image: Visual Studio 2017
+      configuration: Release
+      platform: x64
 
 build:
   project: HedgeModManager.sln
@@ -15,9 +21,15 @@ build:
   
 artifacts:
  - path: 'HedgeModManager\bin\Debug'
-   name: '$(appveyor_project_name) $(appveyor_build_version) [Debug]'
+   name: '$(appveyor_project_name) $(appveyor_build_version) [Debug x86]'
    type: zip
  - path: 'HedgeModManager\bin\Release'
-   name: '$(appveyor_project_name) $(appveyor_build_version) [Release]'
+   name: '$(appveyor_project_name) $(appveyor_build_version) [Release x86]'
+   type: zip
+ - path: 'HedgeModManager\bin\x64\Debug'
+   name: '$(appveyor_project_name) $(appveyor_build_version) [Debug x64]'
+   type: zip
+ - path: 'HedgeModManager\bin\x64\Release'
+   name: '$(appveyor_project_name) $(appveyor_build_version) [Release x64]'
    type: zip
    
