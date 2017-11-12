@@ -50,4 +50,12 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
+  <Code name="Disable Super Sonic Music" patch="true" credit="SonicHyuga">
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>141DB03C0</Address>
+      <Value>0</Value>
+      <ValueType>decimal</ValueType>
+    </CodeLine>
+  </Code>
 </CodeList>
