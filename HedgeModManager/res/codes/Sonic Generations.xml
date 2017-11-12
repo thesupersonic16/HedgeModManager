@@ -36,6 +36,70 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
+  <Code name="Can Always Activate Super Sonic" credit="Muzzarino Hezibeth">
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>011D33A4</Address>
+      <Value>EB</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>00E634C5</Address>
+      <Value>0</Value>
+      <ValueType>decimal</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>011D67DC</Address>
+      <Value>EB</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>0111773A</Address>
+      <Value>EB</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>00E55D6A</Address>
+      <Value>00</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>00E632F1</Address>
+      <Value>00</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>00E634C7</Address>
+      <Value>00</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>or8</Type>
+      <Address>01E5E2F0</Address>
+      <Pointer>true</Pointer>
+      <Offsets>
+        <Offset>1A5</Offset>
+      </Offsets>
+      <Value>10</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>or8</Type>
+      <Address>01E5E2F0</Address>
+      <Pointer>true</Pointer>
+      <Offsets>
+        <Offset>1228</Offset>
+      </Offsets>
+      <Value>10</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
   <Code name="Widescreen Support" patch="true" credit="Muzzarino Hezibeth">
     <CodeLine>
       <Type>write8</Type>
