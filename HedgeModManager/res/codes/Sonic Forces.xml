@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <CodeList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Code name="No HUD">
+  <Code name="No HUD" credit="slashiee">
     <CodeLine>
       <Type>write32</Type>
       <Address>1420B3688</Address>
@@ -11,6 +11,20 @@
       <Type>writenop</Type>
       <Address>14085B953</Address>
       <Value>7</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+  <Code name="Max Score" credit="SuperSonic16">
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>14206F698</Address>
+      <Pointer>true</Pointer>
+      <Offsets>
+        <Offset>148</Offset>
+        <Offset>188</Offset>
+        <Offset>60</Offset>
+      </Offsets>
+      <Value>3B9AC9FF</Value>
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
