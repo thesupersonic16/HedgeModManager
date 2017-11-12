@@ -189,7 +189,12 @@ namespace HedgeModManager
                 var code = item as CodeLoader.Code;
                 ModsDb.AddCode(code.Name);
             }
-            CodeLoader.SaveCodesAndPatches(ModsDb, LoadedCodes);
+            // 64 Bit
+            if (Program.GameName == "Sonic Forces")
+                CodeLoader.SaveCodesAndPatches64(ModsDb, LoadedCodes);
+            // 32 Bit
+            else
+                CodeLoader.SaveCodesAndPatches(ModsDb, LoadedCodes);
             // Saves and refreshes the mod list
             ModsDb.SaveModsDb(ModsDbPath);
             RefreshModsList();
