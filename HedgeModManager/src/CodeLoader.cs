@@ -29,8 +29,8 @@ namespace HedgeModManager
 
         public static void SaveCodesAndPatches(ModsDatabase modDB, List<Code> codes)
         {
-            List<Code> selectedCodes = new List<Code>();
-            List<Code> selectedPatches = new List<Code>();
+            var selectedCodes = new List<Code>();
+            var selectedPatches = new List<Code>();
 
             foreach (string item in modDB.GetCodeList())
             {
@@ -66,6 +66,50 @@ namespace HedgeModManager
                     if (item.IsReg)
                         writer.Write((byte)CodeType.newregs);
                     WriteCodes(item.Lines, writer);
+                }
+                writer.Write(byte.MaxValue);
+            }
+        }
+
+        public static void SaveCodesAndPatches64(ModsDatabase modDB, List<Code> codes)
+        {
+            var selectedCodes = new List<Code>();
+            var selectedPatches = new List<Code>();
+
+            foreach (string item in modDB.GetCodeList())
+            {
+                var code = codes.FirstOrDefault(t => t.Name == item);
+                if (code == null)
+                    continue;
+                if (code.Patch)
+                    selectedPatches.Add(code);
+                else
+                    selectedCodes.Add(code);
+            }
+
+            using (var fileStream = File.Create(PatchesPath))
+            using (var writer = new BinaryWriter(fileStream, Encoding.ASCII))
+            {
+                writer.Write(new[] { 'c', 'o', 'd', 'e', 'v', '5' });
+                writer.Write(selectedPatches.Count);
+                foreach (var item in selectedPatches)
+                {
+                    if (item.IsReg)
+                        writer.Write((byte)CodeType.newregs);
+                    WriteCodes64(item.Lines, writer);
+                }
+                writer.Write(byte.MaxValue);
+            }
+            using (var fileStream = File.Create(CodesPath))
+            using (var writer = new BinaryWriter(fileStream, Encoding.ASCII))
+            {
+                writer.Write(new[] { 'c', 'o', 'd', 'e', 'v', '5' });
+                writer.Write(selectedCodes.Count);
+                foreach (var item in selectedCodes)
+                {
+                    if (item.IsReg)
+                        writer.Write((byte)CodeType.newregs);
+                    WriteCodes64(item.Lines, writer);
                 }
                 writer.Write(byte.MaxValue);
             }
@@ -137,6 +181,72 @@ namespace HedgeModManager
             }
         }
 
+        public static void WriteCodes64(List<CodeLine> codeList, BinaryWriter writer)
+        {
+            foreach (CodeLine line in codeList)
+            {
+                writer.Write((byte)line.Type);
+                ulong address;
+                if (line.Address.StartsWith("r"))
+                    address = ulong.Parse(line.Address.Substring(1), NumberStyles.None, NumberFormatInfo.InvariantInfo);
+                else
+                    address = ulong.Parse(line.Address, NumberStyles.HexNumber);
+                if (line.Pointer)
+                    address |= 0x8000000000000000ul;
+                writer.Write(address);
+                if (line.Pointer)
+                    if (line.Offsets != null)
+                    {
+                        writer.Write((byte)line.Offsets.Count);
+                        foreach (int off in line.Offsets)
+                            writer.Write(off);
+                    }
+                    else
+                        writer.Write((byte)0);
+                if (line.Type == CodeType.ifkbkey)
+                    writer.Write((int)(Keys)Enum.Parse(typeof(Keys), line.Value));
+                else
+                    switch (line.ValueType)
+                    {
+                        case ValueType.@decimal:
+                            switch (line.Type)
+                            {
+                                case CodeType.writefloat:
+                                case CodeType.addfloat:
+                                case CodeType.subfloat:
+                                case CodeType.mulfloat:
+                                case CodeType.divfloat:
+                                case CodeType.ifeqfloat:
+                                case CodeType.ifnefloat:
+                                case CodeType.ifltfloat:
+                                case CodeType.iflteqfloat:
+                                case CodeType.ifgtfloat:
+                                case CodeType.ifgteqfloat:
+                                    writer.Write(float.Parse(line.Value, NumberStyles.Float, NumberFormatInfo.InvariantInfo));
+                                    break;
+                                default:
+                                    writer.Write(unchecked((int)long.Parse(line.Value, NumberStyles.Integer, NumberFormatInfo.InvariantInfo)));
+                                    break;
+                            }
+                            break;
+                        case ValueType.hex:
+                            writer.Write(uint.Parse(line.Value, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo));
+                            break;
+                    }
+                writer.Write(line.RepeatCount ?? 1);
+                if (line.IsIf)
+                {
+                    WriteCodes64(line.TrueLines, writer);
+                    if (line.FalseLines.Count > 0)
+                    {
+                        writer.Write((byte)CodeType.@else);
+                        WriteCodes64(line.FalseLines, writer);
+                    }
+                    writer.Write((byte)CodeType.endif);
+                }
+            }
+        }
+
         [XmlRoot]
         public class CodeList
         {
@@ -173,13 +283,13 @@ namespace HedgeModManager
             [XmlIgnore]
             public bool PointerSpecified { get { return Pointer; } set { } }
             [XmlIgnore]
-            public List<int> Offsets { get; set; }
+            public List<long> Offsets { get; set; }
             [XmlArray("Offsets")]
             [XmlArrayItem("Offset")]
             public string[] OffsetStrings
             {
                 get { return Offsets?.Select((a) => a.ToString("X")).ToArray(); }
-                set { Offsets = value.Select((a) => int.Parse(a, NumberStyles.HexNumber)).ToList(); }
+                set { Offsets = value.Select((a) => long.Parse(a, NumberStyles.HexNumber)).ToList(); }
             }
             [XmlIgnore]
             public bool OffsetStringsSpecified { get { return Offsets != null && Offsets.Count > 0; } set { } }

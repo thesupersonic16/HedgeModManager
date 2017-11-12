@@ -351,7 +351,7 @@ namespace HedgeModManager
                 else if (File.Exists(ForcesExecutablePath))
                     Program.GameName = "Sonic Forces";
 
-                if (!IsCPKREDIRInstalled())
+                if (!IsCPKREDIRInstalled() && Program.GameName != "Sonic Forces")
                 {
                     if (MessageBox.Show(string.Format(Resources.ExecutableNotPatchedText, Program.GameName),
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
@@ -383,7 +383,8 @@ namespace HedgeModManager
                 ModUpdatingThread.Start();
             }
 
-            if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll")))
+            if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll"))
+                || File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")))
                 InstallCodeLoader_Button.Text = "Uninstall CodeLoader";
             else
                 InstallCodeLoader_Button.Text = "Install CodeLoader";
@@ -1237,23 +1238,51 @@ namespace HedgeModManager
         private void InstallCodeLoader_Button_Click(object sender, EventArgs e)
         {
             string text = "";
-            if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll")))
+            // DirectX 11 Games
+            if (Program.GameName == "Sonic Forces")
             {
-                File.Delete(Path.Combine(Program.StartDirectory, "d3d9.dll"));
-                text = "Install CodeLoader";
-            }else
-            {
-                byte[] codeLoader = null;
-                if (Program.GameName == "Sonic Generations")
-                    codeLoader = Resources.SonicGenerationsCodeLoader;
-                if (codeLoader == null)
+                if (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")))
                 {
-                    MessageBox.Show("No CodeLoader Available for " + Program.GameName, "", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    return;
+                    File.Delete(Path.Combine(Program.StartDirectory, "d3d11.dll"));
+                    text = "Install CodeLoader";
                 }
-                File.WriteAllBytes(Path.Combine(Program.StartDirectory, "d3d9.dll"), codeLoader);
-                text = "Uninstall CodeLoader";
+                else
+                {
+                    byte[] codeLoader = null;
+                    if (Program.GameName == "Sonic Forces")
+                        codeLoader = Resources.ForcesCodeLoader;
+                    if (codeLoader == null)
+                    {
+                        MessageBox.Show("No CodeLoader Available for " + Program.GameName, "", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        return;
+                    }
+                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, "d3d11.dll"), codeLoader);
+                    text = "Uninstall CodeLoader";
+                }
+            }
+            // DirectX 9 Games
+            else
+            {
+                if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll")))
+                {
+                    File.Delete(Path.Combine(Program.StartDirectory, "d3d9.dll"));
+                    text = "Install CodeLoader";
+                }
+                else
+                {
+                    byte[] codeLoader = null;
+                    if (Program.GameName == "Sonic Generations")
+                        codeLoader = Resources.SonicGenerationsCodeLoader;
+                    if (codeLoader == null)
+                    {
+                        MessageBox.Show("No CodeLoader Available for " + Program.GameName, "", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        return;
+                    }
+                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, "d3d9.dll"), codeLoader);
+                    text = "Uninstall CodeLoader";
+                }
             }
             InstallCodeLoader_Button.Text = text;
         }
@@ -1262,13 +1291,17 @@ namespace HedgeModManager
         {
             string URL = $"https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/master/HedgeModManager/res/codes/{Program.GameName}.xml";
             string filePath = Path.Combine(Program.StartDirectory, "mods\\Codes.xml");
-            if (Program.GameName == "Sonic Generations")
+            if (Program.GameName == "Sonic Generations" || Program.GameName == "Sonic Forces")
             {
                 try
                 {
+                    LogFile.AddMessage($"Downloading Codes for {Program.GameName}...");
                     File.WriteAllText(filePath, new WebClient().DownloadString(URL));
-
-                }catch
+                    LogFile.AddMessage("Restarting...");
+                    Program.Restart = true;
+                    Close();
+                }
+                catch
                 {
                     MessageBox.Show("Failed to download codes for " + Program.GameName, "", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);

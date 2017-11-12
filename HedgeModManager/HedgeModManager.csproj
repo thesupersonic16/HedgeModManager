@@ -255,6 +255,7 @@
     <None Include="res\icon96.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="res\codes\ForcesCodeLoader.dll" />
     <Content Include="res\codes\SonicGenerationsCodeLoader.dll" />
     <Content Include="res\icon.ico" />
   </ItemGroup>
