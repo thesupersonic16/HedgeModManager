@@ -42,4 +42,12 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
+  <Code name="Ultrawide (2560x1080) Support" credit="slashiee">
+    <CodeLine>
+      <Type>writefloat</Type>
+      <Address>141DBDC34</Address>
+      <Value>2.37037037037037</Value>
+      <ValueType>decimal</ValueType>
+    </CodeLine>
+  </Code>
 </CodeList>
