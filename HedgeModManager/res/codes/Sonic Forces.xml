@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <CodeList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Code name="No HUD" patch="true" ccredit="slashiee">
+  <Code name="No HUD" patch="true" credit="slashiee">
     <CodeLine>
       <Type>writenop</Type>
       <Address>14085B953</Address>
