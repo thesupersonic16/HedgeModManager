@@ -90,6 +90,27 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [CPKREDIR]
+        ///; Lines starting with ; are comments and are ignored
+        ///Enabled=1
+        ///PlaceTocAtEnd=1
+        ///HandleCpksWithoutExtFiles=0
+        ///;LogType=console
+        ///LogFile=&quot;cpkredir.log&quot;
+        ///ReadBlockSizeKB=4096
+        ///ModsDbIni=&quot;mods\ModsDB.ini&quot;
+        ///EnableSaveFileRedirection=1
+        ///SaveFileFallback=&quot;cpkredir.sav&quot;
+        ///SaveFileOverride=
+        ///.
+        /// </summary>
+        internal static string cpkredirINI {
+            get {
+                return ResourceManager.GetString("cpkredirINI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] Disable_Blue_Trail {
@@ -196,6 +217,15 @@ namespace HedgeModManager.Properties {
         internal static string ModUpdateText {
             get {
                 return ResourceManager.GetString("ModUpdateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Codes were found. Would you like Hedge Mod Manager to Download Codes from Its database?.
+        /// </summary>
+        internal static string NoCodesText {
+            get {
+                return ResourceManager.GetString("NoCodesText", resourceCulture);
             }
         }
         

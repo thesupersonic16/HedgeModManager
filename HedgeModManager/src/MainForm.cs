@@ -202,6 +202,13 @@ namespace HedgeModManager
         
         public void LoadConfig()
         {
+            // Writes "cpkredir.ini" if it doesn't exists as HedgeModManager uses it to store its config
+            if (!File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
+            {
+                LogFile.AddMessage("Writing cpkredir.ini");
+                File.WriteAllText(Path.Combine(Program.StartDirectory, "cpkredir.ini"), Resources.cpkredirINI);
+            }
+           
             // Checks if "cpkredir.ini" exists as HedgeModManager uses it to store its config
             if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
             {
@@ -275,12 +282,6 @@ namespace HedgeModManager
                     AddMessage("Exception thrown while loading configurations.", ex);
                 }
             }
-            else
-            {
-                MessageBox.Show("Could not find cpkredir.ini\n" +
-                    "SG, LW, SF and the ModLoader may not run correctly without this file.",
-                    Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
         }
 
         public void Init()
@@ -346,15 +347,23 @@ namespace HedgeModManager
                     else return;
                 }
 
-                // Loads all the mods, fills the list then reorders them
-                RefreshModsList();
-
                 if (File.Exists(LWExecutablePath))
                     Program.GameName = "Sonic Lost World";
                 else if (File.Exists(GensExecutablePath))
                     Program.GameName = "Sonic Generations";
                 else if (File.Exists(ForcesExecutablePath))
                     Program.GameName = "Sonic Forces";
+
+                // Ask to Download Codes if none exists.
+                if (!File.Exists(Path.Combine(Program.StartDirectory, "mods\\Codes.xml")))
+                {
+                    if (MessageBox.Show(string.Format(Resources.NoCodesText, Program.GameName),
+                        Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                        DownloadCodes();
+                }
+
+                // Loads all the mods, fills the list then reorders them
+                RefreshModsList();
 
                 if (!IsCPKREDIRInstalled() && Program.GameName != "Sonic Forces")
                 {
@@ -573,6 +582,33 @@ namespace HedgeModManager
                 AddMessage("Exception thrown while checking executable.", ex);
             }
             AddMessage("Failed to check executable");
+            return false;
+        }
+
+        public bool DownloadCodes()
+        {
+            string URL = $"https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/master/HedgeModManager/res/codes/{Program.GameName}.xml";
+            string filePath = Path.Combine(Program.StartDirectory, "mods\\Codes.xml");
+            if (Program.GameName == "Sonic Generations" || Program.GameName == "Sonic Forces")
+            {
+                try
+                {
+                    LogFile.AddMessage($"Downloading Codes for {Program.GameName}...");
+                    File.WriteAllText(filePath, new WebClient().DownloadString(URL));
+                    LogFile.AddMessage("Restarting...");
+                    return true;
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to download codes for " + Program.GameName, "", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No CodeLoader Available for " + Program.GameName, "", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
             return false;
         }
 
@@ -1294,28 +1330,10 @@ namespace HedgeModManager
 
         private void GetCodeList_Button_Click(object sender, EventArgs e)
         {
-            string URL = $"https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/master/HedgeModManager/res/codes/{Program.GameName}.xml";
-            string filePath = Path.Combine(Program.StartDirectory, "mods\\Codes.xml");
-            if (Program.GameName == "Sonic Generations" || Program.GameName == "Sonic Forces")
+            if (DownloadCodes())
             {
-                try
-                {
-                    LogFile.AddMessage($"Downloading Codes for {Program.GameName}...");
-                    File.WriteAllText(filePath, new WebClient().DownloadString(URL));
-                    LogFile.AddMessage("Restarting...");
-                    Program.Restart = true;
-                    Close();
-                }
-                catch
-                {
-                    MessageBox.Show("Failed to download codes for " + Program.GameName, "", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                MessageBox.Show("No CodeLoader Available for " + Program.GameName, "", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                Program.Restart = true;
+                Close();
             }
         }
     }

@@ -100,8 +100,12 @@ namespace HedgeModManager
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 // HedgeModManager.exe, HedgeModManager.pdb, cpkredir.dll, cpkredir.ini, cpkredir.txt
-                var files = new string[] { Program.ExecutableName, Path.ChangeExtension(Program.ExecutableName, "pdb"),
-                    "cpkredir.dll", "cpkredir.ini", "cpkredir.txt" };
+                var files = new string[] { Program.ExecutableName,
+#if DEBUG
+                    Path.ChangeExtension(Program.ExecutableName, "pdb"),
+#endif
+                    "cpkredir.dll",
+                    "cpkredir.txt" };
 
                 foreach (string file in files)
                 {

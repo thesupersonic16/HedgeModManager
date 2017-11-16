@@ -185,4 +185,10 @@ This Mod does have a website.
   <data name="ForcesCodeLoader" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\codes\forcescodeloader.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="cpkredirINI" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\cpkredir\cpkredir.ini;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="NoCodesText" xml:space="preserve">
+    <value>No Codes were found. Would you like Hedge Mod Manager to Download Codes from Its database?</value>
+  </data>
 </root>

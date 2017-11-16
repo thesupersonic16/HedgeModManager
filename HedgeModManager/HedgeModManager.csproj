@@ -242,6 +242,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="res\cpkredir\cpkredir.ini" />
     <None Include="res\patches\sonicgenerations\Disable Blue Trail.bin" />
     <None Include="res\patches\sonicgenerations\Disable FxPipeline.bin" />
     <None Include="res\patches\sonicgenerations\Enable Blue Trail.bin" />

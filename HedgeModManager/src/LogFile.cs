@@ -12,10 +12,16 @@ namespace HedgeModManager
         private static bool useTimeStamp = true;
 
         //Methods
-        public static void Initialize(bool useTimeStampBool = true)
+        public static void Initialize(bool createNewFile = true, bool useTimeStampBool = true)
         {
             useTimeStamp = useTimeStampBool;
-            logWriter = File.CreateText(LogPath);
+            if (createNewFile)
+                logWriter = File.CreateText(LogPath);
+            else
+            {
+                logWriter = File.AppendText(LogPath);
+                logWriter.WriteLine($"\r\nNew Session: \r\n");
+            }
         }
 
         public static void AddMessage(string message)

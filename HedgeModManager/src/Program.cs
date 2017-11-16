@@ -49,7 +49,6 @@ namespace HedgeModManager
                     if (!IsURL(url))
                     {
                         MessageBox.Show("Link Given is not a URL!");
-                        LogFile.Close();
                         return;
                     }
                     
@@ -95,8 +94,8 @@ namespace HedgeModManager
             Application.Run(new MainForm());
             while (Restart)
             {
+                LogFile.Initialize(!Restart);
                 Restart = false;
-                LogFile.Initialize();
                 LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
                 Application.Run(new MainForm());
             }
