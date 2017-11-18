@@ -56,15 +56,16 @@
             this.aboutLbl.Location = new System.Drawing.Point(61, 55);
             this.aboutLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.aboutLbl.Name = "aboutLbl";
-            this.aboutLbl.Size = new System.Drawing.Size(379, 130);
+            this.aboutLbl.Size = new System.Drawing.Size(379, 143);
             this.aboutLbl.TabIndex = 1;
             this.aboutLbl.Text = resources.GetString("aboutLbl.Text");
             // 
             // okBtn
             // 
+            this.okBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.okBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.okBtn.Location = new System.Drawing.Point(391, 181);
+            this.okBtn.Location = new System.Drawing.Point(391, 242);
             this.okBtn.Margin = new System.Windows.Forms.Padding(2);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(75, 21);
@@ -86,9 +87,10 @@
             // 
             // gitLbl
             // 
+            this.gitLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.gitLbl.AutoSize = true;
             this.gitLbl.LinkColor = System.Drawing.SystemColors.HotTrack;
-            this.gitLbl.Location = new System.Drawing.Point(61, 185);
+            this.gitLbl.Location = new System.Drawing.Point(61, 246);
             this.gitLbl.Name = "gitLbl";
             this.gitLbl.Size = new System.Drawing.Size(66, 13);
             this.gitLbl.TabIndex = 4;
@@ -104,7 +106,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.okBtn;
-            this.ClientSize = new System.Drawing.Size(477, 212);
+            this.ClientSize = new System.Drawing.Size(477, 273);
             this.Controls.Add(this.gitLbl);
             this.Controls.Add(this.okBtn);
             this.Controls.Add(this.iconPBx);
