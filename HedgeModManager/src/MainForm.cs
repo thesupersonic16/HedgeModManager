@@ -197,9 +197,93 @@ namespace HedgeModManager
                 CodeLoader.SaveCodesAndPatches(ModsDb, LoadedCodes);
             // Saves and refreshes the mod list
             ModsDb.SaveModsDb(ModsDbPath);
+            // TODO
+            if (Program.GameName == "Sonic Forces")
+            {
+                var cpk = new CPK();
+                PrepareCPK(cpk);
+                cpk.Pack($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
+            }
             RefreshModsList();
         }
-        
+
+        // Sonic Forces Prepare CPK
+        public void PrepareCPK(CPK cpk)
+        {
+            // wars_0
+            for (int i = 0; i < ModsList.CheckedItems.Count; ++i)
+            {
+                var mod = ModsList.CheckedItems[i].Tag as Mod;
+                string dir = $@"{Program.StartDirectory}/mods/{Path.GetFileName(mod.RootDirectory)}/disk/wars_0";
+                if (!Directory.Exists(dir))
+                    break;
+                cpk.AddFilesFromDirectory(dir);
+            }
+            // wars_1
+            for (int i = 0; i < ModsList.CheckedItems.Count; ++i)
+            {
+                var mod = ModsList.CheckedItems[i].Tag as Mod;
+                string dir = $@"{Program.StartDirectory}/mods/{Path.GetFileName(mod.RootDirectory)}/disk/wars_1";
+                if (!Directory.Exists(dir))
+                    break;
+                cpk.AddFilesFromDirectory(dir);
+            }
+            // wars_patch
+            for (int i = 0; i < ModsList.CheckedItems.Count; ++i)
+            {
+                var mod = ModsList.CheckedItems[i].Tag as Mod;
+                string dir = $@"{Program.StartDirectory}/mods/{Path.GetFileName(mod.RootDirectory)}/disk/wars_patch";
+                if (!Directory.Exists(dir))
+                    break;
+                cpk.AddFilesFromDirectory(dir);
+            }
+
+            for (int i = 0; i < ModsList.CheckedItems.Count; ++i)
+            {
+                var mod = ModsList.CheckedItems[i].Tag as Mod;
+                var ini = mod.GetIniFile();
+                if (!ini.ContainsGroup("CPKs"))
+                    continue;
+                for (int ii = 0; ii < ini["CPKs"].ParameterCount; ++ii)
+                {
+                    // Don't really need this.
+                    string cpkPath = Path.Combine($@"{Program.StartDirectory}\..\..\..\..\",
+                        Path.ChangeExtension(ini["CPKs"][ii].Value, ".cpk"));
+                    string iniPath = Path.Combine($@"{Program.StartDirectory}\mods\{Path.GetFileName(mod.RootDirectory)}\", ini["CPKs"][ii].Value);
+                    var cpkIni = new IniFile(iniPath);
+
+                    // Commands stuff
+                    var commands = new Dictionary<string, string>();
+                    var main = cpkIni["Main"];
+                    int commandCount = int.Parse(main["CommandCount"]);
+                    for (int iii = 0; iii < commandCount; ++iii)
+                    {
+                        string value = main[$"Command{iii}"];
+                        commands.Add(value.Split(':')[1], value.Split(':')[0]);
+                    }
+
+                    // TODO
+                    foreach (var pair in commands)
+                    {
+                        var group = cpkIni[pair.Key];
+                        for (int iiii = 0; iiii < group.ParameterCount; ++iiii)
+                        {
+                            if (pair.Value == "Add")
+                            {
+                                string modRootPath = $@"{Program.StartDirectory}\mods\{Path.GetFileName(mod.RootDirectory)}\";
+                                string filePath = Path.Combine($@"{Program.StartDirectory}\mods\{Path.GetFileName(mod.RootDirectory)}\", group[iiii].Key);
+                                if (Path.HasExtension(filePath))
+                                    cpk.AddFile(modRootPath, filePath);
+                                else
+                                    cpk.AddFilesFromDirectory(new DirectoryInfo(filePath).Parent.FullName);
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
         public void LoadConfig()
         {
             // Writes "cpkredir.ini" if it doesn't exists as HedgeModManager uses it to store its config
