@@ -1,4 +1,4 @@
-﻿using CriCpkMaker;
+﻿using SonicAudioLib.Archives;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +12,7 @@ namespace HedgeModManager
     public class CPK
     {
 
-        private CpkMaker m_CpkMaker = new CpkMaker();
+        private CriCpkArchive m_CpkArchive = new CriCpkArchive();
         private uint m_CurrentFileID = 0;
 
         public void AddFilesFromDirectory(string directoryPath)
@@ -23,7 +23,12 @@ namespace HedgeModManager
             {
                 string fullFilePath = files[i - m_CurrentFileID];
                 string filePath = fullFilePath.Replace(directoryPath + Path.DirectorySeparatorChar.ToString(), "");
-                m_CpkMaker.AddFile(fullFilePath, filePath, i, false);
+                var entry = new CriCpkEntry();
+                entry.Id = i;
+                entry.Name = Path.GetFileName(filePath);
+                entry.DirectoryName = Path.GetDirectoryName(filePath);
+                entry.FilePath = new FileInfo(fullFilePath);
+                m_CpkArchive.Add(entry);
             }
             m_CurrentFileID = i;
         }
@@ -31,18 +36,18 @@ namespace HedgeModManager
         public void AddFile(string rootDirectoryPath, string filePath)
         {
             string CPKFilePath = filePath.Replace(rootDirectoryPath + Path.DirectorySeparatorChar.ToString(), "");
-            m_CpkMaker.AddFile(CPKFilePath, filePath, m_CurrentFileID++, false);
+            var entry = new CriCpkEntry();
+            entry.Id = m_CurrentFileID++;
+            entry.Name = Path.GetFileName(CPKFilePath);
+            entry.DirectoryName = Path.GetDirectoryName(CPKFilePath);
+            entry.FilePath = new FileInfo(filePath);
+            m_CpkArchive.Add(entry);
         }
 
         public void Pack(string CPKPath)
         {
-            m_CpkMaker.CpkFileMode = CpkMaker.EnumCpkFileMode.ModeFilename;
-            m_CpkMaker.DataAlign = 16u;
-            m_CpkMaker.StartToBuild(CPKPath);
-            while (m_CpkMaker.Execute() != Status.Complete)
-            {
-                Thread.Sleep(100);
-            }
+            m_CpkArchive.Mode = CriCpkMode.FileName;
+            m_CpkArchive.Save(CPKPath);
         }
     }
 }
