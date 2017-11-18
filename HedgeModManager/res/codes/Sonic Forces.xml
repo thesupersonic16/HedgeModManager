@@ -42,6 +42,50 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
+  <Code name="Moon Jump" credit="SuperSonic16, CodenameGamma">
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>1403F75C1</Address>
+      <Value>E9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1403F75C2</Address>
+      <Value>FFFFFF10</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1403F74D6</Address>
+      <Value>EF158948</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1403F74DA</Address>
+      <Value>0FFFFFFF</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1403F74DE</Address>
+      <Value>0000E08A28</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1403F74E3</Address>
+      <Value>00DFE900</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>1403F75E8</Address>
+      <Value>00</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
   <Code name="Ultrawide (2560x1080) Support" patch="true" credit="slashiee">
     <CodeLine>
       <Type>writefloat</Type>

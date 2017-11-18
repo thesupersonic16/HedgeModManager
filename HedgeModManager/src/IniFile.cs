@@ -278,14 +278,17 @@ namespace HedgeModManager
                     IniGroup iniGroup = new IniGroup(stringResult.Substring(1, secondBracketPosition - 1));
                     groups.Add(iniGroup);
                 }
-
                 else if (equalsPosition != -1)
                 {
                     string parameterKey = stringResult.Substring(0, equalsPosition);
                     string parameterValue = stringResult.Substring(equalsPosition + 1);
 
                     groups[groups.Count - 1].AddParameter(parameterKey, parameterValue);
+                }else if (equalsPosition == -1 && !hasBracketAtStart && groups.Count > 0)
+                {
+                    groups[groups.Count - 1].AddParameter(stringResult, "");
                 }
+
             }
         }
 
