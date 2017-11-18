@@ -89,6 +89,11 @@ namespace SS16
                         else lvi.BackColor = Color.FromArgb(54, 54, 54);
                 }
 
+                if (control0 is LinkLabel linkLabel)
+                {
+                    linkLabel.LinkColor = Color.FromArgb(255, 0, 192, 0);
+                }
+
             }
             return true;
         }

@@ -32,6 +32,27 @@ namespace HedgeModManager
         private void AboutForm_Load(object sender, EventArgs e)
         {
             Theme.ApplyDarkThemeToAll(this);
+            // Links
+            AddLink("Radfordhound", "https://github.com/Radfordhound");
+            AddLink("SuperSonic16", "https://github.com/thesupersonic16");
+            AddLink("Skyth", "https://github.com/blueskythlikesclouds");
+            AddLink("SonicAudioLib", "https://github.com/blueskythlikesclouds/SonicAudioTools");
+            AddLink("Korama", "https://forums.sonicretro.org/index.php?showuser=677");
+            AddLink("CPKREDIR", "https://forums.sonicretro.org/index.php?showtopic=28795");
+            AddLink("Slash", "https://github.com/slashiee");
+            AddLink("MainMemory", "https://github.com/MainMemory");
+            AddLink("mod-loader-common", "https://github.com/sonicretro/mania-mod-loader");
+        }
+
+        public void AddLink(string text, string link)
+        {
+            int index = linkLabel1.Text.IndexOf(text);
+            linkLabel1.Links.Add(new LinkLabel.Link(index, text.Length, link));
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(e.Link.LinkData as string);
         }
     }
 }

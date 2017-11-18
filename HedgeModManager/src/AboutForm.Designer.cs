@@ -30,10 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.titleLbl = new System.Windows.Forms.Label();
-            this.aboutLbl = new System.Windows.Forms.Label();
             this.okBtn = new System.Windows.Forms.Button();
             this.iconPBx = new System.Windows.Forms.PictureBox();
             this.gitLbl = new System.Windows.Forms.LinkLabel();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.iconPBx)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,17 +48,6 @@
             this.titleLbl.Size = new System.Drawing.Size(282, 38);
             this.titleLbl.TabIndex = 0;
             this.titleLbl.Text = "Hedge Mod Manager";
-            // 
-            // aboutLbl
-            // 
-            this.aboutLbl.AutoSize = true;
-            this.aboutLbl.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.aboutLbl.Location = new System.Drawing.Point(61, 55);
-            this.aboutLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.aboutLbl.Name = "aboutLbl";
-            this.aboutLbl.Size = new System.Drawing.Size(379, 143);
-            this.aboutLbl.TabIndex = 1;
-            this.aboutLbl.Text = resources.GetString("aboutLbl.Text");
             // 
             // okBtn
             // 
@@ -99,6 +88,19 @@
             this.gitLbl.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.gitLbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GitLbl_LinkClicked);
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+            this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.linkLabel1.Location = new System.Drawing.Point(61, 53);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(379, 143);
+            this.linkLabel1.TabIndex = 5;
+            this.linkLabel1.Text = resources.GetString("linkLabel1.Text");
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // AboutForm
             // 
             this.AcceptButton = this.okBtn;
@@ -107,10 +109,10 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.okBtn;
             this.ClientSize = new System.Drawing.Size(477, 273);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.gitLbl);
             this.Controls.Add(this.okBtn);
             this.Controls.Add(this.iconPBx);
-            this.Controls.Add(this.aboutLbl);
             this.Controls.Add(this.titleLbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -131,9 +133,9 @@
         #endregion
 
         private System.Windows.Forms.Label titleLbl;
-        private System.Windows.Forms.Label aboutLbl;
         private System.Windows.Forms.PictureBox iconPBx;
         private System.Windows.Forms.Button okBtn;
         private System.Windows.Forms.LinkLabel gitLbl;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }

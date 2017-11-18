@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="aboutLbl.Text" xml:space="preserve">
+  <data name="linkLabel1.Text" xml:space="preserve">
     <value>A program designed to help people easily load Hedgehog Engine mods.
 Requires a legally owned version of one of the supported games.
 
@@ -126,9 +126,9 @@ Radfordhound - Developing the mod loader
 SuperSonic16 - Continuing development
 Skyth - For SonicAudioLib and for Helping out
 Korama - CPKREDIR
-Skyth - Helping out
 Slash - Helping out
 MainMemory - mod-loader-common
+
 </value>
   </data>
 </root>
