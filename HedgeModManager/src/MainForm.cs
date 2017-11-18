@@ -386,6 +386,12 @@ namespace HedgeModManager
                     LogFile.AddMessage("Found Forces.");
                     PatchGroupBox.Visible = false;
                     EnableSaveFileRedirectionCheckBox.Enabled = false;
+                    InstallUninstallButton.Enabled = false;
+                    ScanExecutableButton.Enabled = false;
+                    CheckBox_CustomModsDirectory.Enabled = false;
+                    CheckBox_CustomModsDirectory.Checked = false;
+                    EnableCPKREDIRConsoleCheckBox.Enabled = false;
+                    Button_SaveAndReload.Text = "Reload";
                 }
                 else if (File.Exists(GensExecutablePath))
                 {
@@ -457,6 +463,11 @@ namespace HedgeModManager
                 }
                 // Sets the PatchLabel's Text to show the user if CPKREDIR is installed in either game
                 PatchLabel.Text = Program.GameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
+                if (Program.GameName == "Sonic Forces")
+                {
+                    PatchLabel.Text = "Sonic Forces Currectly doesn't have support for CPKREDIR";
+                }
+
             }
             else
             { // No supported game were found
@@ -641,6 +652,9 @@ namespace HedgeModManager
                     executablePath = LWExecutablePath;
                 if (File.Exists(ForcesExecutablePath))
                     executablePath = ForcesExecutablePath;
+                // NOTE: Remove this when CPKREDIR for Forces comes out
+                if (File.Exists(ForcesExecutablePath))
+                    return false;
                 var bytes = File.ReadAllBytes(executablePath);
                 for (int i = 11918000; i < bytes.Length - 16; i += 2)
                 {
@@ -1002,8 +1016,7 @@ namespace HedgeModManager
         private void ScanExecutableButton_Click(object sender, EventArgs e)
         {
             StatusLabel.Text = "";
-            string gameName = (File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations");
-            PatchLabel.Text = gameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
+            PatchLabel.Text = Program.GameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
         }
 
         private void AddModButton_Click(object sender, EventArgs e)
@@ -1015,8 +1028,7 @@ namespace HedgeModManager
         private void InstallUninstallButton_Click(object sender, EventArgs e)
         {
             StatusLabel.Text = "";
-            string gameName = File.Exists(LWExecutablePath) ? "Sonic Lost World" : "Sonic Generations";
-            PatchLabel.Text = gameName + ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
+            PatchLabel.Text = Program.GameName + ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
         }
 
         private void RemoveModButton_Click(object sender, EventArgs e)
@@ -1124,12 +1136,16 @@ namespace HedgeModManager
 
         private void Button_SaveAndReload_Click(object sender, EventArgs e)
         {
-            CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"] = TextBox_CustomModsDirectory.Text;
-            CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"] = TextBox_CustomModsDirectory.Text;
-            CPKREDIRIni[Program.ProgramNameShort]["CustomModsDirectory"] = CheckBox_CustomModsDirectory.Checked ? "1" : "0";
-            CPKREDIRIni["CPKREDIR"]["ModsDbIni"] = CheckBox_CustomModsDirectory.Checked ?
-                Path.Combine(CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"], "ModsDB.ini") :
-                Path.Combine(CPKREDIRIni[Program.ProgramNameShort]["DefaultModsPath"], "ModsDB.ini");
+            if (Program.GameName != "SonicForces")
+            {
+                CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"] = TextBox_CustomModsDirectory.Text;
+                CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"] = TextBox_CustomModsDirectory.Text;
+                CPKREDIRIni[Program.ProgramNameShort]["CustomModsDirectory"] = CheckBox_CustomModsDirectory.Checked ? "1" : "0";
+                CPKREDIRIni["CPKREDIR"]["ModsDbIni"] = CheckBox_CustomModsDirectory.Checked ?
+                    Path.Combine(CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"], "ModsDB.ini") :
+                    Path.Combine(CPKREDIRIni[Program.ProgramNameShort]["DefaultModsPath"], "ModsDB.ini");
+            }
+
             if (CPKREDIRIni != null)
                 CPKREDIRIni.Save();
 
