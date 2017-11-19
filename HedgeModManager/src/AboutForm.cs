@@ -36,6 +36,7 @@ namespace HedgeModManager
             AddLink("Radfordhound", "https://github.com/Radfordhound");
             AddLink("SuperSonic16", "https://github.com/thesupersonic16");
             AddLink("Skyth", "https://github.com/blueskythlikesclouds");
+            AddLink("SonicAudioLib", "https://github.com/blueskythlikesclouds/SonicAudioTools");
             AddLink("Korama", "https://forums.sonicretro.org/index.php?showuser=677");
             AddLink("CPKREDIR", "https://forums.sonicretro.org/index.php?showtopic=28795");
             AddLink("Slash", "https://github.com/slashiee");

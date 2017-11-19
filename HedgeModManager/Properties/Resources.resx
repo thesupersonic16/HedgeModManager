@@ -191,16 +191,4 @@ This Mod does have a website.
   <data name="NoCodesText" xml:space="preserve">
     <value>No Codes were found. Would you like Hedge Mod Manager to Download Codes from Its database?</value>
   </data>
-  <data name="CPKMakerDLLHash" xml:space="preserve">
-    <value>98EDD5714849F6EA1031F317BB236FB2D9F36DC3445D22B7FE8923822F9FCA3C</value>
-  </data>
-  <data name="CPKMakerDLLLoadError" xml:space="preserve">
-    <value>Failed to load CPKMaker
-Make sure the DLL has the SHA256 hash of {0} </value>
-  </data>
-  <data name="CPKMakerDLLNotFound" xml:space="preserve">
-    <value>Could not find CPKMaker.dll
-This file is illegal for us to distribute with the Mod Manager
-If you want to use File Replacements, you will have to find CPKMaker.dll yourself (3.11.5.0 should work fine), When you acquire this file place it in the same directory as HedgeModManager.exe.</value>
-  </data>
 </root>
