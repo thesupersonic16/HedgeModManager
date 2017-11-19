@@ -36,7 +36,8 @@ namespace HedgeModManager
                 // Path to where all the update file are stored
                 string tempPath = Path.Combine(Program.StartDirectory, "updateTemp");
                 // Deletes the temp diretory
-                Directory.Delete(tempPath, true);
+                if (Directory.Exists(tempPath))
+                    Directory.Delete(tempPath, true);
                 // Creates the temp directory
                 Directory.CreateDirectory(tempPath);
                 // Adds an event to the "DownloadProgressChanged" EventHandler

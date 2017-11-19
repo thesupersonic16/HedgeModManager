@@ -90,6 +90,36 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 98EDD5714849F6EA1031F317BB236FB2D9F36DC3445D22B7FE8923822F9FCA3C.
+        /// </summary>
+        internal static string CPKMakerDLLHash {
+            get {
+                return ResourceManager.GetString("CPKMakerDLLHash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load CPKMaker
+        ///Make sure the DLL has the SHA256 hash of {0} .
+        /// </summary>
+        internal static string CPKMakerDLLLoadError {
+            get {
+                return ResourceManager.GetString("CPKMakerDLLLoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find CPKMaker.dll
+        ///This file is illegal for us to distribute with the Mod Manager
+        ///If you want to use File Replacements, you will have to find CPKMaker.dll yourself (3.11.5.0 should work fine), When you acquire this file place it in the same directory as HedgeModManager.exe..
+        /// </summary>
+        internal static string CPKMakerDLLNotFound {
+            get {
+                return ResourceManager.GetString("CPKMakerDLLNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [CPKREDIR]
         ///; Lines starting with ; are comments and are ignored
         ///Enabled=1

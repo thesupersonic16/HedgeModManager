@@ -200,9 +200,15 @@ namespace HedgeModManager
             // TODO
             if (Program.GameName == "Sonic Forces")
             {
-                var cpk = new CPK();
-                PrepareCPK(cpk);
-                cpk.Pack($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
+                if (File.Exists(Path.Combine(Program.StartDirectory, "CPKMaker.dll")))
+                {
+                    var cpk = new CPK();
+                    PrepareCPK(cpk);
+                    cpk.Pack($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
+                }else
+                {
+                    AddMessageToUser(Resources.CPKMakerDLLNotFound);
+                }
             }
             RefreshModsList();
         }
@@ -536,6 +542,12 @@ namespace HedgeModManager
             }
             catch { }
 
+            if (!File.Exists(Path.Combine(Program.StartDirectory, "CPKMaker.dll")) && Program.GameName == "Sonic Forces")
+            {
+                AddMessageToUser(Resources.CPKMakerDLLNotFound);
+            }
+
+
             Ready = true;
         }
 
@@ -741,6 +753,12 @@ namespace HedgeModManager
             if (message.Length < 128)
             #endif
             Invoke(new Action(() => StatusLabel.Text = message));
+        }
+
+        public static void AddMessageToUser(string message)
+        {
+            LogFile.AddMessage("USERMSG: " + message);
+            MessageBox.Show(message, Program.ProgramName);
         }
 
         public static void AddMessage(string message, Exception exception, params string[] extraData)
