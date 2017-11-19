@@ -23,8 +23,8 @@ Mods designed for HedgeModManager needs to come in the form of folders that cont
   - A "bb3" folder (for Sonic Generations)
     - All your modified files/folders from the root of Sonic Generations' bb3.cpk in their raw form.
   - A "sonic2013_patch_0" folder (for Sonic Lost World)
-    - All your modified files/folders from the root of Sonic Lost World's sonic2013_0.cpk in their raw form. (for Sonic Forces)
-  - A "wars_patch" folder
+    - All your modified files/folders from the root of Sonic Lost World's sonic2013_0.cpk in their raw form.
+  - A "wars_patch" folder (for Sonic Forces)
     - All your modified files/folders from the root of Sonic Forces' wars_0.cpk and wars_1.cpk in their raw form.
 
 So long as the structure of your mod remains in this way, virtually any file in the game can be modified and released as part of your mod.
