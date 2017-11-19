@@ -72,32 +72,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SonicAudioLib\Archives\ArchiveBase.cs" />
-    <Compile Include="SonicAudioLib\Archives\CriAaxArchive.cs" />
-    <Compile Include="SonicAudioLib\Archives\CriAfs2Archive.cs" />
-    <Compile Include="SonicAudioLib\Archives\CriCpkArchive.cs" />
-    <Compile Include="SonicAudioLib\Archives\HeroesPacArchive.cs" />
-    <Compile Include="SonicAudioLib\CriMw\CriField.cs" />
-    <Compile Include="SonicAudioLib\CriMw\CriFieldCollection.cs" />
-    <Compile Include="SonicAudioLib\CriMw\CriRow.cs" />
-    <Compile Include="SonicAudioLib\CriMw\CriRowCollection.cs" />
-    <Compile Include="SonicAudioLib\CriMw\CriTable.cs" />
-    <Compile Include="SonicAudioLib\CriMw\CriTable.Internal.cs" />
-    <Compile Include="SonicAudioLib\CriMw\CriTableReader.cs" />
-    <Compile Include="SonicAudioLib\CriMw\CriTableWriter.cs" />
-    <Compile Include="SonicAudioLib\CriMw\Serialization\CriFieldAttribute.cs" />
-    <Compile Include="SonicAudioLib\CriMw\Serialization\CriIgnoreAttribute.cs" />
-    <Compile Include="SonicAudioLib\CriMw\Serialization\CriSerializableAttribute.cs" />
-    <Compile Include="SonicAudioLib\CriMw\Serialization\CriTableSerializer.cs" />
-    <Compile Include="SonicAudioLib\FileBases\FileBase.cs" />
-    <Compile Include="SonicAudioLib\FileBases\FileXmlBase.cs" />
-    <Compile Include="SonicAudioLib\Helpers.cs" />
-    <Compile Include="SonicAudioLib\IO\DataExtractor.cs" />
-    <Compile Include="SonicAudioLib\IO\DataPool.cs" />
-    <Compile Include="SonicAudioLib\IO\DataStream.cs" />
-    <Compile Include="SonicAudioLib\IO\StringPool.cs" />
-    <Compile Include="SonicAudioLib\IO\Substream.cs" />
-    <Compile Include="SonicAudioLib\ProgressChangedEvent.cs" />
     <Compile Include="src\CPK.cs" />
     <Compile Include="src\CodeLoader.cs" />
     <Compile Include="src\CreateUpdateForm.cs">
