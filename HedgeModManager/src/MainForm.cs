@@ -200,9 +200,19 @@ namespace HedgeModManager
             // TODO
             if (Program.GameName == "Sonic Forces")
             {
-                var cpk = new CPK();
-                PrepareCPK(cpk);
-                cpk.Pack($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
+                string CPKMakerDLLExecPath = Path.Combine(Program.StartDirectory, "CpkMaker.dll");
+                string CPKMakerDLLDiskPath = Path.Combine($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\", "CpkMaker.dll");
+                if (File.Exists(CPKMakerDLLExecPath) || File.Exists(CPKMakerDLLDiskPath))
+                {
+                    var cpk = new CPKMakerCRI(File.Exists(CPKMakerDLLExecPath) ? CPKMakerDLLExecPath : CPKMakerDLLDiskPath);
+                    PrepareCPK(cpk);
+                    cpk.Pack($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
+                }else
+                {
+                    var cpk = new CPKSAL();
+                    PrepareCPK(cpk);
+                    cpk.Pack($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
+                }
             }
             RefreshModsList();
         }
