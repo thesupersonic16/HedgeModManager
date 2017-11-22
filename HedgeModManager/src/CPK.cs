@@ -15,6 +15,7 @@ namespace HedgeModManager
     public class CPK
     {
         protected uint m_CurrentFileID = 0;
+        public int FileCount { get; protected set; }
 
         public virtual void AddFilesFromDirectory(string directoryPath) { }
 
@@ -42,6 +43,7 @@ namespace HedgeModManager
                 entry.DirectoryName = Path.GetDirectoryName(filePath);
                 entry.FilePath = new FileInfo(fullFilePath);
                 m_CpkArchive.Add(entry);
+                FileCount++;
             }
             m_CurrentFileID = i;
         }
@@ -55,6 +57,7 @@ namespace HedgeModManager
             entry.DirectoryName = Path.GetDirectoryName(CPKFilePath);
             entry.FilePath = new FileInfo(filePath);
             m_CpkArchive.Add(entry);
+            FileCount++;
         }
 
         public override void Pack(string CPKPath)
@@ -106,6 +109,7 @@ namespace HedgeModManager
                 string fullFilePath = files[i - m_CurrentFileID];
                 string filePath = fullFilePath.Replace(directoryPath + Path.DirectorySeparatorChar.ToString(), "");
                 m_CpkMaker.AddFile(fullFilePath, filePath, i, false);
+                FileCount++;
             }
             m_CurrentFileID = i;
         }
@@ -114,6 +118,7 @@ namespace HedgeModManager
         {
             string CPKFilePath = filePath.Replace(rootDirectoryPath + Path.DirectorySeparatorChar.ToString(), "");
             m_CpkMaker.AddFile(CPKFilePath, filePath, m_CurrentFileID++, false);
+            FileCount++;
         }
 
         public override void Pack(string CPKPath)

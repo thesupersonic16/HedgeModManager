@@ -90,6 +90,15 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Codeloader for {0} corrently isn&apos;t installed, You you like to install it now?.
+        /// </summary>
+        internal static string CodeLoaderNotInstalled {
+            get {
+                return ResourceManager.GetString("CodeLoaderNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [CPKREDIR]
         ///; Lines starting with ; are comments and are ignored
         ///Enabled=1

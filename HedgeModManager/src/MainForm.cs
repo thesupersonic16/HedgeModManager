@@ -202,16 +202,20 @@ namespace HedgeModManager
             {
                 string CPKMakerDLLExecPath = Path.Combine(Program.StartDirectory, "CpkMaker.dll");
                 string CPKMakerDLLDiskPath = Path.Combine($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\", "CpkMaker.dll");
+                CPK cpk = null;
                 if (File.Exists(CPKMakerDLLExecPath) || File.Exists(CPKMakerDLLDiskPath))
+                    cpk = new CPKMakerCRI(File.Exists(CPKMakerDLLExecPath) ? CPKMakerDLLExecPath : CPKMakerDLLDiskPath);
+                else
+                    cpk = new CPKSAL();
+
+                PrepareCPK(cpk);
+                if (cpk.FileCount > 0)
                 {
-                    var cpk = new CPKMakerCRI(File.Exists(CPKMakerDLLExecPath) ? CPKMakerDLLExecPath : CPKMakerDLLDiskPath);
-                    PrepareCPK(cpk);
                     cpk.Pack($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
                 }else
                 {
-                    var cpk = new CPKSAL();
-                    PrepareCPK(cpk);
-                    cpk.Pack($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
+                    if (File.Exists($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk"))
+                        File.Delete($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
                 }
             }
             RefreshModsList();
@@ -396,7 +400,6 @@ namespace HedgeModManager
                     LogFile.AddMessage("Found Forces.");
                     PatchGroupBox.Visible = false;
                     EnableSaveFileRedirectionCheckBox.Enabled = false;
-                    InstallUninstallButton.Enabled = false;
                     ScanExecutableButton.Enabled = false;
                     CheckBox_CustomModsDirectory.Enabled = false;
                     CheckBox_CustomModsDirectory.Checked = false;
@@ -475,7 +478,12 @@ namespace HedgeModManager
                 PatchLabel.Text = Program.GameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
                 if (Program.GameName == "Sonic Forces")
                 {
-                    PatchLabel.Text = "Sonic Forces Currectly doesn't have support for CPKREDIR";
+                    if (!File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")) && 
+                        MessageBox.Show(string.Format(Resources.CodeLoaderNotInstalled, Program.GameName),
+                        Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                        InstallCodeLoader_Button_Click(null, null);
+                    PatchLabel.Text = Program.GameName + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
+                        ? "Installed (CodeLoader)" : "Not Installed (CodeLoader)");
                 }
 
             }
@@ -1044,7 +1052,16 @@ namespace HedgeModManager
         private void InstallUninstallButton_Click(object sender, EventArgs e)
         {
             StatusLabel.Text = "";
-            PatchLabel.Text = Program.GameName + ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
+            // TODO
+            if (Program.GameName == "Sonic Forces")
+            {
+                InstallCodeLoader_Button_Click(null, null);
+                PatchLabel.Text = Program.GameName + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
+                    ? "Installed (CodeLoader)" : "Not Installed (CodeLoader)");
+
+            }
+            else
+                PatchLabel.Text = Program.GameName + ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
         }
 
         private void RemoveModButton_Click(object sender, EventArgs e)

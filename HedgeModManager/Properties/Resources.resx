@@ -191,4 +191,7 @@ This Mod does have a website.
   <data name="NoCodesText" xml:space="preserve">
     <value>No Codes were found. Would you like Hedge Mod Manager to Download Codes from Its database?</value>
   </data>
+  <data name="CodeLoaderNotInstalled" xml:space="preserve">
+    <value>The Codeloader for {0} corrently isn't installed, You you like to install it now?</value>
+  </data>
 </root>

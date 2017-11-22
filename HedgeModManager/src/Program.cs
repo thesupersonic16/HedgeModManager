@@ -18,7 +18,7 @@ namespace HedgeModManager
         public static string GameName = "Unknown";
         public const string ProgramName = "Hedge Mod Manager";
         public const string ProgramNameShort = "HedgeModManager";
-        public const string VersionString = "6.1-008";
+        public const string VersionString = "6.1-009";
         public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
         public static bool Restart = false;
 
@@ -79,15 +79,8 @@ namespace HedgeModManager
             LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
 
             #if DEBUG
-            if (!(File.Exists(Path.Combine(StartDirectory, "slw.exe")) ||
-                File.Exists(Path.Combine(StartDirectory, "SonicGenerations.exe"))))
-            {
-                // NOTE: The ModLoader Updating (UpdateForm.cs) doesn't use "StartDirectory"
-                StartDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Sonic Lost World";
-                if (!File.Exists(StartDirectory))
-                    StartDirectory = "D:\\SteamLibrary\\steamapps\\common\\Sonic Generations";
-            }
-#endif
+            StartDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\SonicForces\build\main\projects\exec";
+            #endif
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

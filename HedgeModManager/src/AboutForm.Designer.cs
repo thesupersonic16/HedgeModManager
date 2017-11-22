@@ -91,12 +91,12 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
             this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.linkLabel1.Location = new System.Drawing.Point(61, 53);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(379, 143);
+            this.linkLabel1.Size = new System.Drawing.Size(386, 165);
             this.linkLabel1.TabIndex = 5;
             this.linkLabel1.Text = resources.GetString("linkLabel1.Text");
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);

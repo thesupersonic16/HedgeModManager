@@ -498,9 +498,9 @@ namespace HedgeModManager
             this.AutoCheckUpdateCheckBox.AutoSize = true;
             this.AutoCheckUpdateCheckBox.Location = new System.Drawing.Point(33, 80);
             this.AutoCheckUpdateCheckBox.Name = "AutoCheckUpdateCheckBox";
-            this.AutoCheckUpdateCheckBox.Size = new System.Drawing.Size(137, 17);
+            this.AutoCheckUpdateCheckBox.Size = new System.Drawing.Size(160, 17);
             this.AutoCheckUpdateCheckBox.TabIndex = 17;
-            this.AutoCheckUpdateCheckBox.Text = "Auto check for updates";
+            this.AutoCheckUpdateCheckBox.Text = "Auto check for mod updates";
             this.AutoCheckUpdateCheckBox.UseVisualStyleBackColor = true;
             this.AutoCheckUpdateCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
