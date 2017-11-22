@@ -28,62 +28,49 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Max Score" credit="SuperSonic16">
+  <Code name="Max Rings" credit="SuperSonic16, CodenameGamma">
     <CodeLine>
-      <Type>write32</Type>
-      <Address>14206F698</Address>
-      <Pointer>true</Pointer>
-      <Offsets>
-        <Offset>148</Offset>
-        <Offset>188</Offset>
-        <Offset>60</Offset>
-      </Offsets>
-      <Value>3B9AC9FF</Value>
+      <Type>ifeq8</Type>
+      <Address>1423BF44C</Address>
+      <Value>01</Value>
       <ValueType>hex</ValueType>
+      <TrueLines>
+        <CodeLine>
+          <Type>write32</Type>
+          <Address>1423BF5A8</Address>
+          <Pointer>true</Pointer>
+          <Offsets>
+            <Offset>410</Offset>
+            <Offset>30</Offset>
+            <Offset>7C0</Offset>
+            <Offset>1C</Offset>
+          </Offsets>
+          <Value>999</Value>
+          <ValueType>decimal</ValueType>
+        </CodeLine>
+      </TrueLines>
     </CodeLine>
   </Code>
-  <Code name="Moon Jump" credit="SuperSonic16, CodenameGamma">
+  <Code name="Max Score" credit="SuperSonic16">
     <CodeLine>
-      <Type>write8</Type>
-      <Address>1403F75C1</Address>
-      <Value>E9</Value>
+      <Type>ifeq8</Type>
+      <Address>1423BF44C</Address>
+      <Value>01</Value>
       <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write32</Type>
-      <Address>1403F75C2</Address>
-      <Value>FFFFFF10</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write32</Type>
-      <Address>1403F74D6</Address>
-      <Value>EF158948</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write32</Type>
-      <Address>1403F74DA</Address>
-      <Value>0FFFFFFF</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write32</Type>
-      <Address>1403F74DE</Address>
-      <Value>0000E08A28</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write32</Type>
-      <Address>1403F74E3</Address>
-      <Value>00DFE900</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write8</Type>
-      <Address>1403F75E8</Address>
-      <Value>00</Value>
-      <ValueType>hex</ValueType>
+      <TrueLines>
+        <CodeLine>
+          <Type>write32</Type>
+          <Address>14206F698</Address>
+          <Pointer>true</Pointer>
+          <Offsets>
+            <Offset>148</Offset>
+            <Offset>188</Offset>
+            <Offset>60</Offset>
+          </Offsets>
+          <Value>999999999</Value>
+          <ValueType>decimal</ValueType>
+        </CodeLine>
+      </TrueLines>
     </CodeLine>
   </Code>
   <Code name="Ultrawide (2560x1080) Support" patch="true" credit="slashiee">
