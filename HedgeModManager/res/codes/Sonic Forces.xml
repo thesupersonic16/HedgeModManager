@@ -14,6 +14,20 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
+  <Code name="No HUD (ver.1.04.090b8e5169)" patch="true" credit="slashiee">
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>14085C313</Address>
+      <Value>7</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1420B36B8</Address>
+      <Value>0</Value>
+      <ValueType>decimal</ValueType>
+    </CodeLine>
+  </Code>
   <Code name="Disable Boost Drain" patch="true" credit="CodenameGamma">
     <CodeLine>
       <Type>writenop</Type>
@@ -73,7 +87,7 @@
       </TrueLines>
     </CodeLine>
   </Code>
-  <Code name="Ultrawide (2560x1080) Support" patch="true" credit="slashiee">
+  <Code name="Ultrawide Support" patch="true" credit="slashiee">
     <CodeLine>
       <Type>writefloat</Type>
       <Address>141DBDC34</Address>
@@ -81,18 +95,26 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
+  <Code name="Ultrawide Support (ver.1.04.090b8e5169)" patch="true" credit="slashiee">
+    <CodeLine>
+      <Type>writefloat</Type>
+      <Address>141DBDC5C</Address>
+      <Value>2.37037037037037</Value>
+      <ValueType>decimal</ValueType>
+    </CodeLine>
+  </Code>
   <Code name="Disable Super Sonic Music" patch="true" credit="SonicHyuga">
     <CodeLine>
       <Type>write8</Type>
-      <Address>0141DB03C0</Address>
+      <Address>141DB03A8</Address>
       <Value>0</Value>
-      <ValueType>decimal</ValueType>
+      <ValueType>hex</ValueType>
     </CodeLine>
     <CodeLine>
       <Type>write8</Type>
-      <Address>0141DB03A8</Address>
+      <Address>141DB03C0</Address>
       <Value>0</Value>
-      <ValueType>decimal</ValueType>
+      <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
 </CodeList>
