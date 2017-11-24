@@ -381,9 +381,9 @@ namespace HedgeModManager
             // InstallCodeLoader_Button
             // 
             this.InstallCodeLoader_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.InstallCodeLoader_Button.Location = new System.Drawing.Point(392, 10);
+            this.InstallCodeLoader_Button.Location = new System.Drawing.Point(382, 10);
             this.InstallCodeLoader_Button.Name = "InstallCodeLoader_Button";
-            this.InstallCodeLoader_Button.Size = new System.Drawing.Size(120, 23);
+            this.InstallCodeLoader_Button.Size = new System.Drawing.Size(130, 23);
             this.InstallCodeLoader_Button.TabIndex = 26;
             this.InstallCodeLoader_Button.Text = "Install Code Loader";
             this.InstallCodeLoader_Button.UseVisualStyleBackColor = true;
