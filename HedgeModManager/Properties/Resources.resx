@@ -167,12 +167,12 @@ Do you want HedgeModManager to attempt to fix this?</value>
 Do you want to update from version {1} to {2}? ({3})</value>
   </data>
   <data name="NoUpdateServerAndURLText" xml:space="preserve">
-    <value>HedgeModManager can not check for updates for {0} because it no update server.</value>
+    <value>HedgeModManager can not check for updates for {0} because it has no update server.</value>
   </data>
   <data name="NoUpdateServerText" xml:space="preserve">
-    <value>HedgeModManager can not check for updates for {0} because no update server.
+    <value>HedgeModManager can not check for updates for {0} because it has no update server.
 
-This mod does have a website.
+However, this mod does have a website.
     Do you want to open it and check for updates manually?
         URL: {1}</value>
   </data>
