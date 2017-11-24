@@ -119,7 +119,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Hedge Mod Manager";
+            this.Text = "HedgeModManager";
             this.Load += new System.EventHandler(this.AddModForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

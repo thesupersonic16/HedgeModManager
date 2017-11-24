@@ -47,7 +47,7 @@
             this.titleLbl.Name = "titleLbl";
             this.titleLbl.Size = new System.Drawing.Size(282, 38);
             this.titleLbl.TabIndex = 0;
-            this.titleLbl.Text = "Hedge Mod Manager";
+            this.titleLbl.Text = "HedgeModManager";
             // 
             // okBtn
             // 
@@ -122,7 +122,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "About Hedge Mod Manager";
+            this.Text = "About HedgeModManager";
             this.Load += new System.EventHandler(this.AboutForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.iconPBx)).EndInit();
             this.ResumeLayout(false);

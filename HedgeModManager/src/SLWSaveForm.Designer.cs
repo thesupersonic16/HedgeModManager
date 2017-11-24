@@ -78,7 +78,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SLWSaveForm";
-            this.Text = "Install SLW Save File - Hedge Mod Manager";
+            this.Text = "Install SLW Save File - HedgeModManager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SLWSaveForm_FormClosing);
             this.Load += new System.EventHandler(this.SLWSaveForm_Load);
             this.ResumeLayout(false);

@@ -97,7 +97,7 @@
             this.Name = "UpdateModForm";
             this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "UpdateModsForm";
+            this.Text = "HedgeModManager";
             this.Load += new System.EventHandler(this.UpdateModsForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

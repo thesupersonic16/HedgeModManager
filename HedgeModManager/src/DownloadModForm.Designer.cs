@@ -108,7 +108,7 @@ namespace HedgeModManager
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(85, 18);
             this.label1.TabIndex = 9;
-            this.label1.Text = "CREDITS:";
+            this.label1.Text = "Credits:";
             this.label1.Visible = false;
             // 
             // Credits_Label

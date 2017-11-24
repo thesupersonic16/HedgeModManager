@@ -82,7 +82,7 @@ namespace HedgeModManager
             }
             catch (Exception ex)
             {
-                MainForm.AddMessage("Exception thrown while Loading CPKMaker.", ex,
+                MainForm.AddMessage("Exception thrown while loading cpkmaker.", ex,
                     Path.Combine(Program.StartDirectory, "CPKMaker.dll"));
             }
         }
@@ -95,7 +95,7 @@ namespace HedgeModManager
             }
             catch (Exception ex)
             {
-                MainForm.AddMessage("Exception thrown while Loading CPKMaker.", ex,
+                MainForm.AddMessage("Exception thrown while loading cpkmaker.", ex,
                     Path.Combine(Program.StartDirectory, "CPKMaker.dll"));
             }
         }
@@ -133,8 +133,8 @@ namespace HedgeModManager
                 Thread.Sleep(0);
                 if (status == CPKMaker.Status.Error)
                 {
-                    MainForm.AddMessageToUser("Failed to Build CPK!");
-                    throw new Exception("Failed to Build CPK!");
+                    MainForm.AddMessageToUser("Failed to build CPK!");
+                    throw new Exception("Failed to build CPK!");
                 }
             }
         }

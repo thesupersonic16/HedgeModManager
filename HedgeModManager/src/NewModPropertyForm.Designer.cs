@@ -242,7 +242,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "NewModPropNewForm";
-            this.Text = "Hedge Mod Manager";
+            this.Text = "HedgeModManager";
             this.Load += new System.EventHandler(this.NewModPropNewForm_Load);
             this.ValueContextMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ValueNumericUpDown)).EndInit();

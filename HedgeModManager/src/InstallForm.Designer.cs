@@ -54,7 +54,7 @@ namespace HedgeModManager
             this.Title_Label.Name = "Title_Label";
             this.Title_Label.Size = new System.Drawing.Size(562, 32);
             this.Title_Label.TabIndex = 2;
-            this.Title_Label.Text = "Please Select a Game to Install HedgeModManager into";
+            this.Title_Label.Text = "Please select a game to install HedgeModManager into";
             this.Title_Label.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.Title_Label.UseMnemonic = false;
             // 

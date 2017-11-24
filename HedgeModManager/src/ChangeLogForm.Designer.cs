@@ -44,7 +44,7 @@
             this.titleLbl.Name = "titleLbl";
             this.titleLbl.Size = new System.Drawing.Size(247, 38);
             this.titleLbl.TabIndex = 0;
-            this.titleLbl.Text = "Hedge Mod Manager v";
+            this.titleLbl.Text = "HedgeModManager v";
             // 
             // changelogLbl
             // 

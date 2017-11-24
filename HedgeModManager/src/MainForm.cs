@@ -397,7 +397,7 @@ namespace HedgeModManager
                 else if (File.Exists(ForcesExecutablePath))
                 {
                     Text += " - Sonic Forces";
-                    LogFile.AddMessage("Found Forces.");
+                    LogFile.AddMessage("Found Sonic Forces.");
                     PatchGroupBox.Visible = false;
                     EnableSaveFileRedirectionCheckBox.Enabled = false;
                     ScanExecutableButton.Enabled = false;
@@ -409,7 +409,7 @@ namespace HedgeModManager
                 else if (File.Exists(GensExecutablePath))
                 {
                     Text += " - Sonic Generations";
-                    LogFile.AddMessage("Found Sonic Generations");
+                    LogFile.AddMessage("Found Sonic Generations.");
 
                     // Adds SG Patches
                     GenerationsPatches.Add("Enable Blue Trail", Resources.Enable_Blue_Trail);
@@ -483,7 +483,7 @@ namespace HedgeModManager
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         InstallCodeLoader_Button_Click(null, null);
                     PatchLabel.Text = Program.GameName + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
-                        ? "Installed (CodeLoader)" : "Not Installed (CodeLoader)");
+                        ? "Installed (Code Loader)" : "Not Installed (Code Loader)");
                 }
 
             }
@@ -512,9 +512,9 @@ namespace HedgeModManager
 
             if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll"))
                 || File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")))
-                InstallCodeLoader_Button.Text = "Uninstall CodeLoader";
+                InstallCodeLoader_Button.Text = "Uninstall Code Loader";
             else
-                InstallCodeLoader_Button.Text = "Install CodeLoader";
+                InstallCodeLoader_Button.Text = "Install Code Loader";
 
             try
             {
@@ -523,22 +523,22 @@ namespace HedgeModManager
                 string Protocol = "";
                 if (Program.GameName == "Sonic Generations")
                 {
-                    protName = "HedgeModManager For Sonic Generations";
+                    protName = "HedgeModManager for Sonic Generations";
                     Protocol = "hedgemmgens";
                 }
                 if (Program.GameName == "Sonic Lost World")
                 {
-                    protName = "HedgeModManager For Sonic Lost World";
+                    protName = "HedgeModManager for Sonic Lost World";
                     Protocol = "hedgemmlw";
                 }
                 if (Program.GameName == "Sonic Forces")
                 {
-                    protName = "HedgeModManager For Sonic Forces";
+                    protName = "HedgeModManager for Sonic Forces";
                     Protocol = "hedgemmforces";
                 }
                 if (protName == "")
                 {
-                    MessageBox.Show("WHat happened?");
+                    MessageBox.Show("What happened?");
                     return;
                 }
                 var key = Registry.ClassesRoot.OpenSubKey(Protocol, true);
@@ -626,7 +626,7 @@ namespace HedgeModManager
 
                         // Writes the newly modified executable
                         File.WriteAllBytes(executablePath, bytes);
-                        AddMessage("Done. CPKREDIR is now Uninstalled.");
+                        AddMessage("CPKREDIR has been uninstalled.");
                         return false;
                     }
 
@@ -648,7 +648,7 @@ namespace HedgeModManager
 
                         // Write the newly modified executable
                         File.WriteAllBytes(executablePath, bytes);
-                        AddMessage("Done. CPKREDIR is now Installed.");
+                        AddMessage("CPKREDIR has been installed.");
                         return true;
                     }
                 }
@@ -709,7 +709,7 @@ namespace HedgeModManager
             {
                 try
                 {
-                    LogFile.AddMessage($"Downloading Codes for {Program.GameName}...");
+                    LogFile.AddMessage($"Downloading codes for {Program.GameName}...");
                     File.WriteAllText(filePath, new WebClient().DownloadString(URL));
                     LogFile.AddMessage("Restarting...");
                     return true;
@@ -722,7 +722,7 @@ namespace HedgeModManager
             }
             else
             {
-                MessageBox.Show("No CodeLoader Available for " + Program.GameName, "", MessageBoxButtons.OK,
+                MessageBox.Show("No code loader available for " + Program.GameName, "", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
             return false;
@@ -825,7 +825,7 @@ namespace HedgeModManager
                         new UpdateForm(updateUrl).ShowDialog();
                     }
                     else
-                        AddMessage("Update Canceled. :(");
+                        AddMessage("Update cancelled.");
 #endif
             }
                 else
@@ -905,9 +905,9 @@ namespace HedgeModManager
                         if (mod.UpdateServer.EndsWith(".txt"))
                         { // TXT file.
                             if (!silent)
-                                MessageBox.Show("Not Implemented Yet", Program.ProgramName, MessageBoxButtons.OK,
+                                MessageBox.Show("Not implemented yet", Program.ProgramName, MessageBoxButtons.OK,
                                     MessageBoxIcon.Error);
-                            status = "Not Implemented";
+                            status = "Not implemented";
                         }
                         else if (mod.UpdateServer.EndsWith(".xml"))
                         { // XML file
@@ -1057,7 +1057,7 @@ namespace HedgeModManager
             {
                 InstallCodeLoader_Button_Click(null, null);
                 PatchLabel.Text = Program.GameName + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
-                    ? "Installed (CodeLoader)" : "Not Installed (CodeLoader)");
+                    ? "Installed (Code Loader)" : "Not Installed (Code Loader)");
 
             }
             else
@@ -1157,7 +1157,7 @@ namespace HedgeModManager
 
                     Patcher.PatchFile(patchData, GensExecutablePath);
                     MessageBox.Show("Done.", Program.ProgramName);
-                    LogFile.AddMessage($"Finished Installing {patchName}");
+                    LogFile.AddMessage($"Finished installing {patchName}");
                 }
                 catch (Exception ex)
                 {
@@ -1292,7 +1292,7 @@ namespace HedgeModManager
                             // Refreshes mod list
                             Invoke(new Action(() => RefreshModsList()));
                         }
-                        Invoke(new Action(() => AddMessage("Finished Mod Installation. Installed " +
+                        Invoke(new Action(() => AddMessage("Finished mod installation. Installed " +
                             (ModsDb.ModCount - prevModCount) + " mod(s).")));
                     }
                 }
@@ -1418,7 +1418,7 @@ namespace HedgeModManager
                 if (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")))
                 {
                     File.Delete(Path.Combine(Program.StartDirectory, "d3d11.dll"));
-                    text = "Install CodeLoader";
+                    text = "Install Code Loader";
                 }
                 else
                 {
@@ -1427,12 +1427,12 @@ namespace HedgeModManager
                         codeLoader = Resources.ForcesCodeLoader;
                     if (codeLoader == null)
                     {
-                        MessageBox.Show("No CodeLoader Available for " + Program.GameName, "", MessageBoxButtons.OK,
+                        MessageBox.Show("No code loader available for " + Program.GameName, "", MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
                         return;
                     }
                     File.WriteAllBytes(Path.Combine(Program.StartDirectory, "d3d11.dll"), codeLoader);
-                    text = "Uninstall CodeLoader";
+                    text = "Uninstall Code Loader";
                 }
             }
             // DirectX 9 Games
@@ -1441,7 +1441,7 @@ namespace HedgeModManager
                 if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll")))
                 {
                     File.Delete(Path.Combine(Program.StartDirectory, "d3d9.dll"));
-                    text = "Install CodeLoader";
+                    text = "Install Code Loader";
                 }
                 else
                 {
@@ -1450,12 +1450,12 @@ namespace HedgeModManager
                         codeLoader = Resources.SonicGenerationsCodeLoader;
                     if (codeLoader == null)
                     {
-                        MessageBox.Show("No CodeLoader Available for " + Program.GameName, "", MessageBoxButtons.OK,
+                        MessageBox.Show("No code loader available for " + Program.GameName, "", MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
                         return;
                     }
                     File.WriteAllBytes(Path.Combine(Program.StartDirectory, "d3d9.dll"), codeLoader);
-                    text = "Uninstall CodeLoader";
+                    text = "Uninstall Code Loader";
                 }
             }
             InstallCodeLoader_Button.Text = text;

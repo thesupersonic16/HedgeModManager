@@ -125,7 +125,7 @@ namespace HedgeModManager
             this.checkForUpdatesToolStripMenuItem.Enabled = false;
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
             this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
+            this.checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
             this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.CheckForUpdatesToolStripMenuItem_Click);
             // 
             // openModFolderToolStripMenuItem
@@ -385,7 +385,7 @@ namespace HedgeModManager
             this.InstallCodeLoader_Button.Name = "InstallCodeLoader_Button";
             this.InstallCodeLoader_Button.Size = new System.Drawing.Size(120, 23);
             this.InstallCodeLoader_Button.TabIndex = 26;
-            this.InstallCodeLoader_Button.Text = "Install CodeLoader";
+            this.InstallCodeLoader_Button.Text = "Install Code Loader";
             this.InstallCodeLoader_Button.UseVisualStyleBackColor = true;
             this.InstallCodeLoader_Button.Click += new System.EventHandler(this.InstallCodeLoader_Button_Click);
             // 
@@ -489,7 +489,7 @@ namespace HedgeModManager
             this.KeepModLoaderOpenCheckBox.Name = "KeepModLoaderOpenCheckBox";
             this.KeepModLoaderOpenCheckBox.Size = new System.Drawing.Size(246, 17);
             this.KeepModLoaderOpenCheckBox.TabIndex = 18;
-            this.KeepModLoaderOpenCheckBox.Text = "Keep Mod Manager open after starting a game";
+            this.KeepModLoaderOpenCheckBox.Text = "Keep HedgeModManager open after starting a game";
             this.KeepModLoaderOpenCheckBox.UseVisualStyleBackColor = true;
             this.KeepModLoaderOpenCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
@@ -561,7 +561,7 @@ namespace HedgeModManager
             this.AboutButton.Name = "AboutButton";
             this.AboutButton.Size = new System.Drawing.Size(276, 33);
             this.AboutButton.TabIndex = 8;
-            this.AboutButton.Text = "&About Hedge Mod Manager";
+            this.AboutButton.Text = "&About HedgeModManager";
             this.AboutButton.UseVisualStyleBackColor = true;
             this.AboutButton.Click += new System.EventHandler(this.AboutButton_Click);
             // 
@@ -711,7 +711,7 @@ namespace HedgeModManager
             this.MinimumSize = new System.Drawing.Size(553, 602);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Hedge Mod Manager";
+            this.Text = "HedgeModManager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ModsListContextMenu.ResumeLayout(false);
