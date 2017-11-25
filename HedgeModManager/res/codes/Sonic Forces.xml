@@ -1,31 +1,17 @@
 <?xml version="1.0"?>
 <CodeList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Code name="Disable HUD Completely (ver.1.04.090b8e5169)" patch="true" credit="slashiee">
+  <Code name="Disable HUD Completely" patch="true" credit="slashiee">
     <CodeLine>
       <Type>writenop</Type>
-      <Address>14085C313</Address>
+      <Address>14085CA53</Address>
       <Value>7</Value>
       <ValueType>hex</ValueType>
     </CodeLine>
     <CodeLine>
       <Type>write32</Type>
-      <Address>1420B36B8</Address>
+      <Address>1420B46E8</Address>
       <Value>0</Value>
       <ValueType>decimal</ValueType>
-    </CodeLine>
-  </Code>
-  <Code name="Disable Boost Drain (ver.1.04.090b8e5169)" patch="true" credit="CodenameGamma">
-    <CodeLine>
-      <Type>writenop</Type>
-      <Address>1404CFF92</Address>
-      <Value>00000005</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>writenop</Type>
-      <Address>1403DFB6E</Address>
-      <Value>00000007</Value>
-      <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
   <Code name="Disable Boost Drain" patch="true" credit="CodenameGamma">
@@ -87,10 +73,10 @@
       </TrueLines>
     </CodeLine>
   </Code>
-  <Code name="Ultrawide Support (ver.1.04.090b8e5169)" patch="true" credit="slashiee">
+  <Code name="Ultrawide Support" patch="true" credit="slashiee">
     <CodeLine>
       <Type>writefloat</Type>
-      <Address>141DBDC5C</Address>
+      <Address>141DBECDC</Address>
       <Value>2.37037037037037</Value>
       <ValueType>decimal</ValueType>
     </CodeLine>
