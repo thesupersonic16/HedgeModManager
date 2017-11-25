@@ -48,7 +48,7 @@ namespace HedgeModManager
                 while (webClient.IsBusy)
                     Thread.Sleep(25);
                 
-                LogFile.AddMessage("Finished Downloading update. Installing");
+                LogFile.AddMessage("Finished downloading update. Installing.");
                 LogFile.AddMessage("Extracting Update...");
                 
                 // Extracts the update files
