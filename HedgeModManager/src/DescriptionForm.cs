@@ -138,9 +138,22 @@ namespace HedgeModManager
                 try
                 {
                     authorLbl.LinkColor = authorLbl.ForeColor =
-                        Color.FromArgb(Convert.ToInt32(Desc["HeaderColor"].Split(',')[0]),
-                                       Convert.ToInt32(Desc["HeaderColor"].Split(',')[1]),
-                                       Convert.ToInt32(Desc["HeaderColor"].Split(',')[2]));
+                        Color.FromArgb(Convert.ToInt32(Desc["AuthorColor"].Split(',')[0]),
+                                       Convert.ToInt32(Desc["AuthorColor"].Split(',')[1]),
+                                       Convert.ToInt32(Desc["AuthorColor"].Split(',')[2]));
+                }
+                catch { }
+
+            }
+
+            if (Desc.ContainsParameter("AuthorLinkColor"))
+            {
+                try
+                {
+                    authorLbl.LinkColor =
+                        Color.FromArgb(Convert.ToInt32(Desc["AuthorLinkColor"].Split(',')[0]),
+                                       Convert.ToInt32(Desc["AuthorLinkColor"].Split(',')[1]),
+                                       Convert.ToInt32(Desc["AuthorLinkColor"].Split(',')[2]));
                 }
                 catch { }
 
