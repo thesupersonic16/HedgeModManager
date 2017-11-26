@@ -42,7 +42,7 @@
             this.titleLbl.Location = new System.Drawing.Point(112, 9);
             this.titleLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.titleLbl.Name = "titleLbl";
-            this.titleLbl.Size = new System.Drawing.Size(247, 38);
+            this.titleLbl.Size = new System.Drawing.Size(287, 38);
             this.titleLbl.TabIndex = 0;
             this.titleLbl.Text = "HedgeModManager v";
             // 
@@ -51,7 +51,7 @@
             this.changelogLbl.AutoSize = true;
             this.changelogLbl.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.changelogLbl.Location = new System.Drawing.Point(17, 63);
-            this.changelogLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 32);
+            this.changelogLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 50);
             this.changelogLbl.MaximumSize = new System.Drawing.Size(512, 0);
             this.changelogLbl.Name = "changelogLbl";
             this.changelogLbl.Size = new System.Drawing.Size(139, 19);

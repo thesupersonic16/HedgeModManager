@@ -27,6 +27,8 @@ namespace HedgeModManager
             changeLog = changeLog.Replace("\n- ", "\n\u2022 ");
             if (changeLog.StartsWith("- "))
                 changeLog = "\u2022" + changeLog.Substring(1);
+            if (changeLog.StartsWith(" + "))
+                changeLog = "\u2022" + changeLog.Substring(2);
 
             changelogLbl.Text = changeLog;
             this.downloadUrl = downloadUrl;
