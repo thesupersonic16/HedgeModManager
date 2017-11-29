@@ -19,7 +19,6 @@ namespace HedgeModManager
         public InstallForm()
         {
             InitializeComponent();
-            Steam.Init();
         }
 
         public List<Entry> FindGames()
@@ -28,7 +27,15 @@ namespace HedgeModManager
             var paths = new List<string>();
 
             string vdfLocation = Path.Combine(Steam.SteamLocation, "steamapps\\libraryfolders.vdf");
-            var vdf = Steam.VDFFile.ReadVDF(vdfLocation);
+            Steam.VDFFile vdf = null;
+            try
+            {
+                vdf = Steam.VDFFile.ReadVDF(vdfLocation);
+            }catch(Exception ex)
+            {
+                MainForm.AddMessage("Exception thrown while reading Steam's VDF file.", ex,
+                $"VDFPath: {vdfLocation}");
+            }
 
             // Default Common Path
             paths.Add(Path.Combine(Steam.SteamLocation, "steamapps\\common"));
@@ -56,6 +63,22 @@ namespace HedgeModManager
 
         private void InstallForm_Load(object sender, EventArgs e)
         {
+            try
+            {
+                Steam.Init();
+            }
+            catch (Exception ex)
+            {
+                MainForm.AddMessage("Exception thrown while Finding Steam", ex);
+            }
+
+            if (Steam.SteamLocation == null)
+            {
+                MainForm.AddMessageToUser($"Steam is not Setup correctly, Please report this issue to {Program.ProgramName} GitHub.\n" +
+                    $"Please copy all files that came with {Program.ProgramName} into your Game folder. Exiting...");
+
+            }
+
             var games = FindGames();
             foreach (var game in games)
             {

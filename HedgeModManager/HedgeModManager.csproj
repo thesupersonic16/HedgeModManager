@@ -94,6 +94,7 @@
     <Compile Include="SonicAudioLib\IO\StringPool.cs" />
     <Compile Include="SonicAudioLib\IO\Substream.cs" />
     <Compile Include="SonicAudioLib\ProgressChangedEvent.cs" />
+    <Compile Include="src\Game.cs" />
     <Compile Include="src\CPK.cs" />
     <Compile Include="src\CodeLoader.cs" />
     <Compile Include="src\CreateUpdateForm.cs">

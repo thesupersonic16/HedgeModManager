@@ -190,7 +190,7 @@ namespace HedgeModManager
                 ModsDb.AddCode(code.Name);
             }
             // 64 Bit
-            if (Program.GameName == "Sonic Forces")
+            if (Program.CurrentGame == Games.SonicForces)
                 CodeLoader.SaveCodesAndPatches64(ModsDb, LoadedCodes);
             // 32 Bit
             else
@@ -198,7 +198,7 @@ namespace HedgeModManager
             // Saves and refreshes the mod list
             ModsDb.SaveModsDb(ModsDbPath);
             // TODO
-            if (Program.GameName == "Sonic Forces")
+            if (Program.CurrentGame == Games.SonicForces)
             {
                 string CPKMakerDLLExecPath = Path.Combine(Program.StartDirectory, "CpkMaker.dll");
                 string CPKMakerDLLDiskPath = Path.Combine($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\", "CpkMaker.dll");
@@ -451,16 +451,16 @@ namespace HedgeModManager
                 }
 
                 if (File.Exists(LWExecutablePath))
-                    Program.GameName = "Sonic Lost World";
+                    Program.CurrentGame = Games.SonicLostWorld;
                 else if (File.Exists(GensExecutablePath))
-                    Program.GameName = "Sonic Generations";
+                    Program.CurrentGame = Games.SonicGenerations;
                 else if (File.Exists(ForcesExecutablePath))
-                    Program.GameName = "Sonic Forces";
+                    Program.CurrentGame = Games.SonicForces;
 
                 // Ask to Download Codes if none exists.
                 if (!File.Exists(Path.Combine(Program.StartDirectory, "mods\\Codes.xml")))
                 {
-                    if (MessageBox.Show(string.Format(Resources.NoCodesText, Program.GameName),
+                    if (MessageBox.Show(string.Format(Resources.NoCodesText, Program.CurrentGame),
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         DownloadCodes();
                 }
@@ -468,21 +468,21 @@ namespace HedgeModManager
                 // Loads all the mods, fills the list then reorders them
                 RefreshModsList();
 
-                if (!IsCPKREDIRInstalled() && Program.GameName != "Sonic Forces")
+                if (!IsCPKREDIRInstalled() && Program.CurrentGame != Games.SonicForces)
                 {
-                    if (MessageBox.Show(string.Format(Resources.ExecutableNotPatchedText, Program.GameName),
+                    if (MessageBox.Show(string.Format(Resources.ExecutableNotPatchedText, Program.CurrentGame),
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         InstallCPKREDIR(true);
                 }
                 // Sets the PatchLabel's Text to show the user if CPKREDIR is installed in either game
-                PatchLabel.Text = Program.GameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
-                if (Program.GameName == "Sonic Forces")
+                PatchLabel.Text = Program.CurrentGame + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
+                if (Program.CurrentGame == Games.SonicForces)
                 {
                     if (!File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")) && 
-                        MessageBox.Show(string.Format(Resources.CodeLoaderNotInstalled, Program.GameName),
+                        MessageBox.Show(string.Format(Resources.CodeLoaderNotInstalled, Program.CurrentGame),
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         InstallCodeLoader_Button_Click(null, null);
-                    PatchLabel.Text = Program.GameName + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
+                    PatchLabel.Text = Program.CurrentGame + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
                         ? "Installed (Code Loader)" : "Not Installed (Code Loader)");
                 }
 
@@ -521,17 +521,17 @@ namespace HedgeModManager
                 // Add URI Scheme (Requires Admin)
                 string protName = "";
                 string Protocol = "";
-                if (Program.GameName == "Sonic Generations")
+                if (Program.CurrentGame == Games.SonicGenerations)
                 {
                     protName = "HedgeModManager for Sonic Generations";
                     Protocol = "hedgemmgens";
                 }
-                if (Program.GameName == "Sonic Lost World")
+                if (Program.CurrentGame == Games.SonicLostWorld)
                 {
                     protName = "HedgeModManager for Sonic Lost World";
                     Protocol = "hedgemmlw";
                 }
-                if (Program.GameName == "Sonic Forces")
+                if (Program.CurrentGame == Games.SonicForces)
                 {
                     protName = "HedgeModManager for Sonic Forces";
                     Protocol = "hedgemmforces";
@@ -703,26 +703,26 @@ namespace HedgeModManager
 
         public bool DownloadCodes()
         {
-            string URL = $"https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/master/HedgeModManager/res/codes/{Program.GameName}.xml";
+            string URL = $"https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/master/HedgeModManager/res/codes/{Program.CurrentGame}.xml";
             string filePath = Path.Combine(Program.StartDirectory, "mods\\Codes.xml");
-            if (Program.GameName == "Sonic Generations" || Program.GameName == "Sonic Forces")
+            if (Program.CurrentGame.HasCodes)
             {
                 try
                 {
-                    LogFile.AddMessage($"Downloading codes for {Program.GameName}...");
+                    LogFile.AddMessage($"Downloading codes for {Program.CurrentGame}...");
                     File.WriteAllText(filePath, new WebClient().DownloadString(URL));
                     LogFile.AddMessage("Restarting...");
                     return true;
                 }
                 catch
                 {
-                    MessageBox.Show("Failed to download codes for " + Program.GameName, "", MessageBoxButtons.OK,
+                    MessageBox.Show("Failed to download codes for " + Program.CurrentGame, "", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("No code loader available for " + Program.GameName, "", MessageBoxButtons.OK,
+                MessageBox.Show("No code loader available for " + Program.CurrentGame, "", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
             return false;
@@ -880,7 +880,7 @@ namespace HedgeModManager
             if (mod == null) return status;
 
             if (mod.UpdateServer.Length == 0 && mod.Url.Length != 0)
-            { // No Update Server, But has Website
+            { // No Update Server, But has a Website
                 if (!silent && MessageBox.Show(string.Format(Resources.NoUpdateServerText,
                     mod.Title, mod.Url), Program.ProgramName, MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question) == DialogResult.Yes)
@@ -893,13 +893,12 @@ namespace HedgeModManager
                     Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else if (mod.UpdateServer.Length != 0)
-            { // Has Update Server
+            { // Has an Update Server
                 try
                 {
                     var webClient = new WebClient();
                     if (Path.HasExtension(mod.UpdateServer))
                     {
-
                         string data = webClient.DownloadString(mod.UpdateServer);
 
                         if (mod.UpdateServer.EndsWith(".txt"))
@@ -979,9 +978,9 @@ namespace HedgeModManager
                // return "Up to date";
         }
 
-#endregion
+    #endregion
 
-#region ButtonEvents
+    #region ButtonEvents
 
         private void RefreshButton_Click(object sender, EventArgs e)
         {
@@ -1040,7 +1039,7 @@ namespace HedgeModManager
         private void ScanExecutableButton_Click(object sender, EventArgs e)
         {
             StatusLabel.Text = "";
-            PatchLabel.Text = Program.GameName + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
+            PatchLabel.Text = Program.CurrentGame + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
         }
 
         private void AddModButton_Click(object sender, EventArgs e)
@@ -1053,15 +1052,15 @@ namespace HedgeModManager
         {
             StatusLabel.Text = "";
             // TODO
-            if (Program.GameName == "Sonic Forces")
+            if (Program.CurrentGame == Games.SonicForces)
             {
                 InstallCodeLoader_Button_Click(null, null);
-                PatchLabel.Text = Program.GameName + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
+                PatchLabel.Text = Program.CurrentGame + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
                     ? "Installed (Code Loader)" : "Not Installed (Code Loader)");
 
             }
             else
-                PatchLabel.Text = Program.GameName + ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
+                PatchLabel.Text = Program.CurrentGame + ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
         }
 
         private void RemoveModButton_Click(object sender, EventArgs e)
@@ -1169,7 +1168,7 @@ namespace HedgeModManager
 
         private void Button_SaveAndReload_Click(object sender, EventArgs e)
         {
-            if (Program.GameName != "SonicForces")
+            if (Program.CurrentGame != Games.SonicForces)
             {
                 CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"] = TextBox_CustomModsDirectory.Text;
                 CPKREDIRIni[Program.ProgramNameShort]["CustomModsPath"] = TextBox_CustomModsDirectory.Text;
@@ -1412,52 +1411,26 @@ namespace HedgeModManager
         private void InstallCodeLoader_Button_Click(object sender, EventArgs e)
         {
             string text = "";
-            // DirectX 11 Games
-            if (Program.GameName == "Sonic Forces")
+            string DLLFileName = $"d3d{Program.CurrentGame.DirectXVersion}.dll";
+
+            if (File.Exists(Path.Combine(Program.StartDirectory, DLLFileName)))
             {
-                if (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")))
-                {
-                    File.Delete(Path.Combine(Program.StartDirectory, "d3d11.dll"));
-                    text = "Install Code Loader";
-                }
-                else
-                {
-                    byte[] codeLoader = null;
-                    if (Program.GameName == "Sonic Forces")
-                        codeLoader = Resources.ForcesCodeLoader;
-                    if (codeLoader == null)
-                    {
-                        MessageBox.Show("No code loader available for " + Program.GameName, "", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                        return;
-                    }
-                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, "d3d11.dll"), codeLoader);
-                    text = "Uninstall Code Loader";
-                }
+                File.Delete(Path.Combine(Program.StartDirectory, DLLFileName));
+                text = "Install Code Loader";
             }
-            // DirectX 9 Games
             else
             {
-                if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll")))
+                var codeLoader = Program.CurrentGame.CodeLoaderFile;
+                if (codeLoader == null)
                 {
-                    File.Delete(Path.Combine(Program.StartDirectory, "d3d9.dll"));
-                    text = "Install Code Loader";
+                    MessageBox.Show("No code loader available for " + Program.CurrentGame, "", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
                 }
-                else
-                {
-                    byte[] codeLoader = null;
-                    if (Program.GameName == "Sonic Generations")
-                        codeLoader = Resources.SonicGenerationsCodeLoader;
-                    if (codeLoader == null)
-                    {
-                        MessageBox.Show("No code loader available for " + Program.GameName, "", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                        return;
-                    }
-                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, "d3d9.dll"), codeLoader);
-                    text = "Uninstall Code Loader";
-                }
+                File.WriteAllBytes(Path.Combine(Program.StartDirectory, DLLFileName), codeLoader);
+                text = "Uninstall Code Loader";
             }
+            
             InstallCodeLoader_Button.Text = text;
         }
 
