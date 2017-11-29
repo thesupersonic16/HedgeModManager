@@ -103,12 +103,42 @@ namespace HedgeModManager
             }
             else
             {
-                MessageBox.Show("Failed to install from archive because 7-Zip is not installed.",
-                    Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                InstallFromWinRAR(ArchivePath);
             }
             
         }
+        // Requires WinRAR to be installed.
+        public static void InstallFromWinRAR(string ArchivePath)
+        {
+            // Gets WinRAR's Registry Key.
+            var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WinRAR");
+            // If null then try to get it from the 64-bit registry.
+            if (key == null)
+                key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey("SOFTWARE\\WinRAR");
+            if (key != null && key.GetValue("exe64") is string path)
+            {
+                // Path to install temp folder.
+                string tempfolder = Path.Combine(Program.StartDirectory, "temp_install");
 
+                // Creates the temp folder.
+                Directory.CreateDirectory(tempfolder);
+
+                // Extracts the archive to the temp folder.
+                Process.Start(path, $"x \"{ArchivePath}\" \"{tempfolder}\"").WaitForExit(1000 * 60 * 5);
+
+                // Installs from the temp folder.
+                InstallFromFolder(tempfolder);
+
+                // Deletes the temp folder with all of its contents.
+                Directory.Delete(tempfolder, true);
+                key.Close();
+            }
+            else
+            {
+                MessageBox.Show("Failed to install from archive because 7-Zip or WinRAR is not installed.",
+                    Program.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         public static void InstallFromFolder(string folderPath)
         {
             // A List of folders that have mod.ini in them.
