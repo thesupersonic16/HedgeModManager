@@ -45,7 +45,7 @@
             this.titleLbl.Location = new System.Drawing.Point(57, 10);
             this.titleLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.titleLbl.Name = "titleLbl";
-            this.titleLbl.Size = new System.Drawing.Size(282, 38);
+            this.titleLbl.Size = new System.Drawing.Size(266, 38);
             this.titleLbl.TabIndex = 0;
             this.titleLbl.Text = "HedgeModManager";
             // 

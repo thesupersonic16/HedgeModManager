@@ -63,11 +63,18 @@ namespace HedgeModManager
                     //TODO
                     string thumb = $"https://gamebanana.com/skins/embeddables/{itemID}?type=large_minimal_square";
 
-                    var client = new WebClient();
-                    var stream = client.OpenRead(thumb);
-                    var bitmap = new Bitmap(stream);
-                    stream.Close();
-                    client.Dispose();
+                    Bitmap bitmap = null;
+                    try
+                    {
+                        var client = new WebClient();
+                        var stream = client.OpenRead(thumb);
+                        bitmap = new Bitmap(stream);
+                        stream.Close();
+                        client.Dispose();
+                    }catch
+                    {
+                        bitmap = null;
+                    }
 
                     var download = new DownloadModForm(submittion.Name, user.Name, submittion.Description, url,
                         submittion.Credits, bitmap);
@@ -81,6 +88,8 @@ namespace HedgeModManager
             #if DEBUG
             StartDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\SonicForces\build\main\projects\exec";
             #endif
+
+            LogFile.AddMessage($"Running {ProgramName} in {StartDirectory}");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -23,7 +23,8 @@ namespace HedgeModManager
             Author = author;
             Description = description;
             URL = url;
-            PictureBox_1.Image = image;
+            if (image != null)
+                PictureBox_1.Image = image;
             Text = "Download " + title + "?";
             Title_Label.Text = title + " Submitted by " + author;
             Title_Label.Location = new Point(Size.Width / 2 - Title_Label.Size.Width / 2, Title_Label.Location.Y);

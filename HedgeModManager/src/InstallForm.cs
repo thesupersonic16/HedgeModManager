@@ -74,7 +74,7 @@ namespace HedgeModManager
 
             if (Steam.SteamLocation == null)
             {
-                MainForm.AddMessageToUser($"Steam is not Setup correctly, Please report this issue to {Program.ProgramName} GitHub.\n" +
+                MainForm.AddMessageToUser($"Steam is not Setup correctly, Please report this issue to {Program.ProgramName}'s GitHub.\n" +
                     $"Please copy all files that came with {Program.ProgramName} into your Game folder. Exiting...");
 
             }

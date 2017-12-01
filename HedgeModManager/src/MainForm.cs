@@ -211,6 +211,7 @@ namespace HedgeModManager
                 PrepareCPK(cpk);
                 if (cpk.FileCount > 0)
                 {
+                    LogFile.AddMessage($@"Writing CPK to {Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
                     cpk.Pack($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
                 }else
                 {
@@ -230,7 +231,7 @@ namespace HedgeModManager
                 var mod = ModsList.CheckedItems[i].Tag as Mod;
                 string dir = $@"{Program.StartDirectory}/mods/{Path.GetFileName(mod.RootDirectory)}/disk/wars_0";
                 if (!Directory.Exists(dir))
-                    break;
+                    continue;
                 cpk.AddFilesFromDirectory(dir);
             }
             // wars_1
@@ -239,7 +240,7 @@ namespace HedgeModManager
                 var mod = ModsList.CheckedItems[i].Tag as Mod;
                 string dir = $@"{Program.StartDirectory}/mods/{Path.GetFileName(mod.RootDirectory)}/disk/wars_1";
                 if (!Directory.Exists(dir))
-                    break;
+                    continue;
                 cpk.AddFilesFromDirectory(dir);
             }
             // wars_patch
@@ -248,7 +249,7 @@ namespace HedgeModManager
                 var mod = ModsList.CheckedItems[i].Tag as Mod;
                 string dir = $@"{Program.StartDirectory}/mods/{Path.GetFileName(mod.RootDirectory)}/disk/wars_patch";
                 if (!Directory.Exists(dir))
-                    break;
+                    continue;
                 cpk.AddFilesFromDirectory(dir);
             }
 
