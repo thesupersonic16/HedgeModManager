@@ -372,7 +372,7 @@ namespace HedgeModManager
             // 
             this.GetCodeList_Button.Location = new System.Drawing.Point(5, 10);
             this.GetCodeList_Button.Name = "GetCodeList_Button";
-            this.GetCodeList_Button.Size = new System.Drawing.Size(98, 23);
+            this.GetCodeList_Button.Size = new System.Drawing.Size(112, 23);
             this.GetCodeList_Button.TabIndex = 27;
             this.GetCodeList_Button.Text = "Update Code List";
             this.GetCodeList_Button.UseVisualStyleBackColor = true;
@@ -395,7 +395,7 @@ namespace HedgeModManager
             this.Codes_CheckedListBox.FormattingEnabled = true;
             this.Codes_CheckedListBox.Location = new System.Drawing.Point(3, 3);
             this.Codes_CheckedListBox.Name = "Codes_CheckedListBox";
-            this.Codes_CheckedListBox.Size = new System.Drawing.Size(523, 409);
+            this.Codes_CheckedListBox.Size = new System.Drawing.Size(523, 364);
             this.Codes_CheckedListBox.TabIndex = 0;
             // 
             // SettingsPage
@@ -487,7 +487,7 @@ namespace HedgeModManager
             this.KeepModLoaderOpenCheckBox.AutoSize = true;
             this.KeepModLoaderOpenCheckBox.Location = new System.Drawing.Point(33, 103);
             this.KeepModLoaderOpenCheckBox.Name = "KeepModLoaderOpenCheckBox";
-            this.KeepModLoaderOpenCheckBox.Size = new System.Drawing.Size(246, 17);
+            this.KeepModLoaderOpenCheckBox.Size = new System.Drawing.Size(275, 17);
             this.KeepModLoaderOpenCheckBox.TabIndex = 18;
             this.KeepModLoaderOpenCheckBox.Text = "Keep HedgeModManager open after starting a game";
             this.KeepModLoaderOpenCheckBox.UseVisualStyleBackColor = true;
