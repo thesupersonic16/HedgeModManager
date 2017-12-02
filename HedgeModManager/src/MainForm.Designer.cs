@@ -363,16 +363,16 @@ namespace HedgeModManager
             this.panel1.Controls.Add(this.GetCodeList_Button);
             this.panel1.Controls.Add(this.InstallCodeLoader_Button);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(3, 372);
+            this.panel1.Location = new System.Drawing.Point(3, 365);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(523, 43);
+            this.panel1.Size = new System.Drawing.Size(523, 50);
             this.panel1.TabIndex = 1;
             // 
             // GetCodeList_Button
             // 
-            this.GetCodeList_Button.Location = new System.Drawing.Point(5, 10);
+            this.GetCodeList_Button.Location = new System.Drawing.Point(15, 12);
             this.GetCodeList_Button.Name = "GetCodeList_Button";
-            this.GetCodeList_Button.Size = new System.Drawing.Size(112, 23);
+            this.GetCodeList_Button.Size = new System.Drawing.Size(123, 23);
             this.GetCodeList_Button.TabIndex = 27;
             this.GetCodeList_Button.Text = "Update Code List";
             this.GetCodeList_Button.UseVisualStyleBackColor = true;
@@ -381,7 +381,7 @@ namespace HedgeModManager
             // InstallCodeLoader_Button
             // 
             this.InstallCodeLoader_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.InstallCodeLoader_Button.Location = new System.Drawing.Point(382, 10);
+            this.InstallCodeLoader_Button.Location = new System.Drawing.Point(374, 13);
             this.InstallCodeLoader_Button.Name = "InstallCodeLoader_Button";
             this.InstallCodeLoader_Button.Size = new System.Drawing.Size(130, 23);
             this.InstallCodeLoader_Button.TabIndex = 26;
@@ -391,11 +391,10 @@ namespace HedgeModManager
             // 
             // Codes_CheckedListBox
             // 
-            this.Codes_CheckedListBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.Codes_CheckedListBox.FormattingEnabled = true;
-            this.Codes_CheckedListBox.Location = new System.Drawing.Point(3, 3);
+            this.Codes_CheckedListBox.Location = new System.Drawing.Point(0, 0);
             this.Codes_CheckedListBox.Name = "Codes_CheckedListBox";
-            this.Codes_CheckedListBox.Size = new System.Drawing.Size(523, 364);
+            this.Codes_CheckedListBox.Size = new System.Drawing.Size(530, 364);
             this.Codes_CheckedListBox.TabIndex = 0;
             // 
             // SettingsPage
