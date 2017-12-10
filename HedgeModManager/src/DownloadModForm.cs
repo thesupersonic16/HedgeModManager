@@ -15,7 +15,7 @@ namespace HedgeModManager
     {
 
         public string Title, Author, Description, URL;
-        
+
         public DownloadModForm(string title, string author, string description, string url, string credits, Bitmap image)
         {
             InitializeComponent();
@@ -27,10 +27,15 @@ namespace HedgeModManager
                 PictureBox_1.Image = image;
             Text = "Download " + title + "?";
             Title_Label.Text = title + " Submitted by " + author;
-            Title_Label.Location = new Point(Size.Width / 2 - Title_Label.Size.Width / 2, Title_Label.Location.Y);
             Description_Label.Text = description;
-            Description_Label.Location = new Point(Size.Width / 2 - Description_Label.Size.Width / 2, Description_Label.Location.Y);
-            Credits_Label.Text = credits; 
+            Credits_Label.Text = credits;
+            UpdateForm();
+        }
+
+        public void UpdateForm()
+        {
+            Title_Label.Location = new Point(Size.Width / 2 - Title_Label.Size.Width / 2, Title_Label.Location.Y);
+            Description_Label.Location = new Point(Size.Width / 3 - Description_Label.Size.Width / 2, Description_Label.Location.Y);
         }
 
         private void DownloadModForm_Load(object sender, EventArgs e)
@@ -50,5 +55,12 @@ namespace HedgeModManager
             new UpdateModForm(null, modUpdate).ShowDialog();
             Close();
         }
+
+        private void DownloadModForm_Resize(object sender, EventArgs e)
+        {
+            UpdateForm();
+        }
+
+
     }
 }

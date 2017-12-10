@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace HedgeModManager
@@ -30,13 +31,12 @@ namespace HedgeModManager
                 item.Description += values[2].Value;
                 item.UserId = values[3].Value;
                 var credits = xml.Root.Elements("valueset").ToList()[0];
-                /*bool indent = false;
-                foreach (var values2 in credits.Elements("value"))
+                foreach (var values2 in credits.Elements("valueset"))
                 {
-                    item.Credits += values2.Value + "\n";
-                    if (indent = !indent)
-                        item.Credits += "    ";
-                }*/
+                    item.Credits += values2.Elements("value").ToList()[0].Value + "\n";
+                    item.Credits += "    " + values2.Elements("value").ToList()[1].Value + "\n";
+
+                }
                 return item;
             }
         }

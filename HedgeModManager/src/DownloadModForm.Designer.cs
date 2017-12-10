@@ -42,10 +42,10 @@ namespace HedgeModManager
             // 
             // Button_Update
             // 
-            this.Button_Update.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Update.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Button_Update.DialogResult = System.Windows.Forms.DialogResult.Yes;
             this.Button_Update.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.Button_Update.Location = new System.Drawing.Point(135, 297);
+            this.Button_Update.Location = new System.Drawing.Point(135, 419);
             this.Button_Update.Margin = new System.Windows.Forms.Padding(2, 32, 2, 2);
             this.Button_Update.Name = "Button_Update";
             this.Button_Update.Size = new System.Drawing.Size(120, 28);
@@ -56,10 +56,10 @@ namespace HedgeModManager
             // 
             // Button_Cancel
             // 
-            this.Button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.Button_Cancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.Button_Cancel.Location = new System.Drawing.Point(11, 297);
+            this.Button_Cancel.Location = new System.Drawing.Point(11, 419);
             this.Button_Cancel.Margin = new System.Windows.Forms.Padding(2, 32, 2, 2);
             this.Button_Cancel.Name = "Button_Cancel";
             this.Button_Cancel.Size = new System.Drawing.Size(120, 28);
@@ -70,6 +70,7 @@ namespace HedgeModManager
             // Description_Label
             // 
             this.Description_Label.AutoSize = true;
+            this.Description_Label.BackColor = System.Drawing.Color.Transparent;
             this.Description_Label.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.Description_Label.Location = new System.Drawing.Point(27, 47);
             this.Description_Label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 32);
@@ -93,7 +94,8 @@ namespace HedgeModManager
             // 
             // PictureBox_1
             // 
-            this.PictureBox_1.Location = new System.Drawing.Point(416, 180);
+            this.PictureBox_1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.PictureBox_1.Location = new System.Drawing.Point(637, 302);
             this.PictureBox_1.Name = "PictureBox_1";
             this.PictureBox_1.Size = new System.Drawing.Size(149, 145);
             this.PictureBox_1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -102,30 +104,32 @@ namespace HedgeModManager
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(404, 29);
+            this.label1.Location = new System.Drawing.Point(545, 50);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 18);
+            this.label1.Size = new System.Drawing.Size(67, 18);
             this.label1.TabIndex = 9;
             this.label1.Text = "Credits:";
-            this.label1.Visible = false;
             // 
             // Credits_Label
             // 
+            this.Credits_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Credits_Label.AutoSize = true;
-            this.Credits_Label.Location = new System.Drawing.Point(424, 47);
+            this.Credits_Label.BackColor = System.Drawing.Color.Transparent;
+            this.Credits_Label.Location = new System.Drawing.Point(565, 68);
             this.Credits_Label.Name = "Credits_Label";
             this.Credits_Label.Size = new System.Drawing.Size(35, 13);
             this.Credits_Label.TabIndex = 10;
             this.Credits_Label.Text = "label2";
-            this.Credits_Label.Visible = false;
             // 
             // DownloadModForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(568, 336);
+            this.ClientSize = new System.Drawing.Size(789, 458);
             this.Controls.Add(this.Credits_Label);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PictureBox_1);
@@ -137,6 +141,7 @@ namespace HedgeModManager
             this.Name = "DownloadModForm";
             this.Text = "DownloadModForm";
             this.Load += new System.EventHandler(this.DownloadModForm_Load);
+            this.Resize += new System.EventHandler(this.DownloadModForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox_1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
