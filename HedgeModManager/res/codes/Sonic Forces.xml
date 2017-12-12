@@ -44,6 +44,22 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
+  <Code name="Disable Damage" patch="true" credit="SuperSonic16">
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>14046E450</Address>
+      <Value>C3</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+  <Code name="Disable Dashpads" patch="true" credit="SuperSonic16">
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>14046FC10</Address>
+      <Value>C3</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
   <Code name="Max Rings" patch="true" credit="SuperSonic16">
     <CodeLine>
       <Type>write32</Type>
@@ -82,26 +98,48 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Max Score (ver.1.03.f910a748ab)" credit="SuperSonic16">
+  <Code name="Max Score" patch="true" credit="SuperSonic16">
     <CodeLine>
-      <Type>ifeq8</Type>
-      <Address>1423BF44C</Address>
-      <Value>01</Value>
+      <Type>write8</Type>
+      <Address>140179034</Address>
+      <Value>E9</Value>
       <ValueType>hex</ValueType>
-      <TrueLines>
-        <CodeLine>
-          <Type>write32</Type>
-          <Address>14206F698</Address>
-          <Pointer>true</Pointer>
-          <Offsets>
-            <Offset>148</Offset>
-            <Offset>188</Offset>
-            <Offset>60</Offset>
-          </Offsets>
-          <Value>999999999</Value>
-          <ValueType>decimal</ValueType>
-        </CodeLine>
-      </TrueLines>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>140179035</Address>
+      <Value>000014DC</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>14017A515</Address>
+      <Value>9AC9FFBB</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>14017A519</Address>
+      <Value>6058893B</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>14017A51D</Address>
+      <Value>5A270EE8</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>14017A521</Address>
+      <Value>EB15E900</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write16</Type>
+      <Address>14017A525</Address>
+      <Value>FFFF</Value>
+      <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
   <Code name="Ultrawide Support" patch="true" credit="slashiee">
@@ -112,17 +150,17 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Disable Super Sonic Music (ver.1.03.f910a748ab)" patch="true" credit="SonicHyuga">
+  <Code name="Disable Super Sonic Music" patch="true" credit="SonicHyuga">
     <CodeLine>
       <Type>write8</Type>
-      <Address>141DB03A8</Address>
-      <Value>0</Value>
+      <Address>141DB13A0</Address>
+      <Value>00</Value>
       <ValueType>hex</ValueType>
     </CodeLine>
     <CodeLine>
       <Type>write8</Type>
-      <Address>141DB03C0</Address>
-      <Value>0</Value>
+      <Address>141DB13B8</Address>
+      <Value>00</Value>
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
