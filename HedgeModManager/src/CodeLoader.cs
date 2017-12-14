@@ -258,6 +258,8 @@ namespace HedgeModManager
         {
             [XmlAttribute("name")]
             public string Name { get; set; }
+            [XmlAttribute("credit")]
+            public string Credit { get; set; }
             [XmlAttribute("required")]
             public bool Required { get; set; }
             [XmlAttribute("patch")]

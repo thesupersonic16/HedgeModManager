@@ -197,8 +197,6 @@ namespace HedgeModManager
                 CodeLoader.SaveCodesAndPatches(ModsDb, LoadedCodes);
             // Saves and refreshes the mod list
             ModsDb.SaveModsDb(ModsDbPath);
-            if (File.Exists($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk"))
-                File.Delete($@"{Program.StartDirectory}\..\..\..\..\image\x64\disk\wars_mods.cpk");
             RefreshModsList();
         }
 

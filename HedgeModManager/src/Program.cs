@@ -19,7 +19,7 @@ namespace HedgeModManager
         public static Game CurrentGame = Games.Unknown;
         public const string ProgramName = "Hedge Mod Manager";
         public const string ProgramNameShort = "HedgeModManager";
-        public const string VersionString = "6.1-014";
+        public const string VersionString = "6.1-015";
         public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
         public static bool Restart = false;
 
@@ -87,7 +87,7 @@ namespace HedgeModManager
             LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
 
 #if DEBUG
-            StartDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\SonicForces\build\main\projects\exec";
+            //StartDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\SonicForces\build\main\projects\exec";
 #endif
 
             LogFile.AddMessage($"Running {ProgramName} in {StartDirectory}");
