@@ -30,8 +30,64 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  
-  
+  <Code name="Disable Damage" patch="true" credit="SuperSonic16">
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>14046E1E0</Address>
+      <Value>C3</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+  <Code name="Disable Dashpads" patch="true" credit="SuperSonic16">
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>14046F9A0</Address>
+      <Value>C3</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+
+  <Code name="Max Rings" patch="true" credit="SuperSonic16">
+    <!--jmp 1403DB826 -->
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1403DA766</Address>
+      <Value>0010BBE9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write16</Type>
+      <Address>1403DA76A</Address>
+      <Value>9000</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1403DB826</Address>
+      <Value>0003E7B9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1403DB82A</Address>
+      <Value>1C488900</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1403DB82E</Address>
+      <Value>E9CF4D89</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1403DB832</Address>
+      <Value>FFFFEF36</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+
+
   <!-- Outdated Codes -->
   <!-- 
   <Code name="Disable HUD Completely" patch="true" credit="slashiee">
@@ -48,22 +104,7 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Disable Damage" patch="true" credit="SuperSonic16">
-    <CodeLine>
-      <Type>write8</Type>
-      <Address>14046E450</Address>
-      <Value>C3</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-  </Code>
-  <Code name="Disable Dashpads" patch="true" credit="SuperSonic16">
-    <CodeLine>
-      <Type>write8</Type>
-      <Address>14046FC10</Address>
-      <Value>C3</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-  </Code>
+  
   <Code name="Max Rings" patch="true" credit="SuperSonic16">
     <CodeLine>
       <Type>write32</Type>
