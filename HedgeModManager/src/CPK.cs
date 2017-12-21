@@ -1,5 +1,4 @@
 ﻿using HedgeModManager.Properties;
-using SonicAudioLib.Archives;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,51 +21,6 @@ namespace HedgeModManager
         public virtual void AddFile(string rootDirectoryPath, string filePath) { }
 
         public virtual void Pack(string CPKPath) { }
-    }
-
-    public class CPKSAL : CPK
-    {
-
-        private CriCpkArchive m_CpkArchive = new CriCpkArchive();
-        
-        public override void AddFilesFromDirectory(string directoryPath)
-        {
-            var files = Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories);
-            uint i = m_CurrentFileID;
-            for (; i < m_CurrentFileID + files.Length; ++i)
-            {
-                string fullFilePath = files[i - m_CurrentFileID].Replace('/', '\\');
-                string filePath = fullFilePath.Replace(directoryPath.Replace('/', '\\') + '\\', "");
-                var entry = new CriCpkEntry();
-                entry.Id = i;
-                entry.Name = Path.GetFileName(filePath);
-                entry.DirectoryName = Path.GetDirectoryName(filePath);
-                entry.FilePath = new FileInfo(fullFilePath);
-                m_CpkArchive.Add(entry);
-                FileCount++;
-            }
-            m_CurrentFileID = i;
-        }
-
-        public override void AddFile(string rootDirectoryPath, string filePath)
-        {
-            string CPKFilePath = filePath.Replace(rootDirectoryPath.Replace('\\', '/') + Path.DirectorySeparatorChar.ToString(), "");
-            var entry = new CriCpkEntry();
-            entry.Id = m_CurrentFileID++;
-            entry.Name = Path.GetFileName(CPKFilePath);
-            entry.DirectoryName = Path.GetDirectoryName(CPKFilePath);
-            entry.FilePath = new FileInfo(filePath);
-            m_CpkArchive.Add(entry);
-            FileCount++;
-        }
-
-        public override void Pack(string CPKPath)
-        {
-            m_CpkArchive.Mode = CriCpkMode.FileName;
-            m_CpkArchive.Align = 16;
-            m_CpkArchive.Save(CPKPath);
-        }
-
     }
 
     public class CPKMakerCRI : CPK
