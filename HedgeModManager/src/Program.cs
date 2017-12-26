@@ -1,10 +1,13 @@
-﻿using System;
+﻿using HedgeModManager.Properties;
+using SS16;
+using System;
 using System.Drawing;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -19,7 +22,7 @@ namespace HedgeModManager
         public static Game CurrentGame = Games.Unknown;
         public const string ProgramName = "Hedge Mod Manager";
         public const string ProgramNameShort = "HedgeModManager";
-        public const string VersionString = "6.1-015";
+        public const string VersionString = "6.1-016";
         public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
         public static bool Restart = false;
 
@@ -27,6 +30,7 @@ namespace HedgeModManager
         [STAThread]
         private static void Main(string[] args)
         {
+
             if (args.Length > 0)
             {
                 // GameBanana Download Protocol
@@ -144,6 +148,16 @@ namespace HedgeModManager
         public static string SplitAfter(string s, string s2)
         {
             return s.Substring(s.IndexOf(s2) + s2.Length);
+        }
+
+        /// <summary>
+        /// Computes a SHA256 Hash of bytes
+        /// </summary>
+        /// <param name="bytes">data to use to create the hash</param>
+        /// <returns>A SHA256 Hash</returns>
+        public static byte[] ComputeSHA256Hash(byte[] bytes)
+        {
+            return new SHA256Managed().ComputeHash(bytes);
         }
 
     }

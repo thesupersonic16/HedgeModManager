@@ -381,11 +381,12 @@ namespace HedgeModManager
                 if (Program.CurrentGame == Games.SonicForces)
                 {
                     if (!File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")) && 
-                        MessageBox.Show(string.Format(Resources.CodeLoaderNotInstalled, Program.CurrentGame),
+                        MessageBox.Show(string.Format(Resources.LoaderNotInstalled, Program.CurrentGame),
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                        InstallCodeLoader_Button_Click(null, null);
+                        InstallLoader_Button_Click(null, null);
+                    // NOTE: Do i need this?
                     PatchLabel.Text = Program.CurrentGame + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
-                        ? "Installed (Code Loader)" : "Not Installed (Code Loader)");
+                        ? "Installed" : "Not Installed");
                 }
 
             }
@@ -404,8 +405,19 @@ namespace HedgeModManager
                 return;
             }
 
+            // Checks the Loader
+            string loaderPath = Path.Combine(Program.StartDirectory, "d3d" + Program.CurrentGame.DirectXVersion + ".dll");
+            if (File.Exists(loaderPath) && !Program.CurrentGame.Hash.SequenceEqual(Program.ComputeSHA256Hash(File.ReadAllBytes(loaderPath))))
+            {
+                var msgBox = new SS16MessageBox("Warning", "Loader Mismatch Detected", Resources.LoaderMismatchText);
+                msgBox.AddButton("Reinstall Loader", 100, (obj, e) => { InstallLoader_Button_Click(null, null); InstallLoader_Button_Click(null, null); msgBox.Close(); });
+                msgBox.AddButton("Ignore", 100, (obj, e) => msgBox.Close());
+                msgBox.ShowDialog();
+
+            }
+
             // Runs CheckForModLoaderUpdates in another thread
-            new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
+            //new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
             if (AutoCheckUpdateCheckBox.Checked)
             {
                 ModUpdatingThread = new Thread(new ThreadStart(CheckAllModUpdates));
@@ -414,9 +426,9 @@ namespace HedgeModManager
 
             if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll"))
                 || File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")))
-                InstallCodeLoader_Button.Text = "Uninstall Code Loader";
+                InstallLoader_Button.Text = "Uninstall Loader";
             else
-                InstallCodeLoader_Button.Text = "Install Code Loader";
+                InstallLoader_Button.Text = "Install Loader";
 
             try
             {
@@ -624,7 +636,7 @@ namespace HedgeModManager
             }
             else
             {
-                MessageBox.Show("No code loader available for " + Program.CurrentGame, "", MessageBoxButtons.OK,
+                MessageBox.Show("No loader available for " + Program.CurrentGame, "", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
             return false;
@@ -956,9 +968,10 @@ namespace HedgeModManager
             // TODO
             if (Program.CurrentGame == Games.SonicForces)
             {
-                InstallCodeLoader_Button_Click(null, null);
+                InstallLoader_Button_Click(null, null);
+                // NOTE: Do I need thuis?
                 PatchLabel.Text = Program.CurrentGame + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
-                    ? "Installed (Code Loader)" : "Not Installed (Code Loader)");
+                    ? "Installed" : "Not Installed");
 
             }
             else
@@ -1310,7 +1323,7 @@ namespace HedgeModManager
             }
         }
 
-        private void InstallCodeLoader_Button_Click(object sender, EventArgs e)
+        private void InstallLoader_Button_Click(object sender, EventArgs e)
         {
             string text = "";
             string DLLFileName = $"d3d{Program.CurrentGame.DirectXVersion}.dll";
@@ -1318,22 +1331,22 @@ namespace HedgeModManager
             if (File.Exists(Path.Combine(Program.StartDirectory, DLLFileName)))
             {
                 File.Delete(Path.Combine(Program.StartDirectory, DLLFileName));
-                text = "Install Code Loader";
+                text = "Install Loader";
             }
             else
             {
-                var codeLoader = Program.CurrentGame.CodeLoaderFile;
-                if (codeLoader == null)
+                var loader = Program.CurrentGame.LoaderFile;
+                if (loader == null)
                 {
-                    MessageBox.Show("No code loader available for " + Program.CurrentGame, "", MessageBoxButtons.OK,
+                    MessageBox.Show("No loader available for " + Program.CurrentGame, "", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                     return;
                 }
-                File.WriteAllBytes(Path.Combine(Program.StartDirectory, DLLFileName), codeLoader);
-                text = "Uninstall Code Loader";
+                File.WriteAllBytes(Path.Combine(Program.StartDirectory, DLLFileName), loader);
+                text = "Uninstall Loader";
             }
             
-            InstallCodeLoader_Button.Text = text;
+            InstallLoader_Button.Text = text;
         }
 
         private void GetCodeList_Button_Click(object sender, EventArgs e)
@@ -1343,6 +1356,11 @@ namespace HedgeModManager
                 Program.Restart = true;
                 Close();
             }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(ModsFolderPath);
         }
     }
 }

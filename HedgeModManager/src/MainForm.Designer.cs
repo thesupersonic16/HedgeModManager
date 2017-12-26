@@ -57,7 +57,7 @@ namespace HedgeModManager
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.GetCodeList_Button = new System.Windows.Forms.Button();
-            this.InstallCodeLoader_Button = new System.Windows.Forms.Button();
+            this.InstallLoader_Button = new System.Windows.Forms.Button();
             this.Codes_CheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.SettingsPage = new System.Windows.Forms.TabPage();
             this.Button_SaveAndReload = new System.Windows.Forms.Button();
@@ -229,6 +229,7 @@ namespace HedgeModManager
             this.linkLabel1.TabIndex = 5;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Open Mods Folder";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // NoModsFoundLabel
             // 
@@ -361,7 +362,7 @@ namespace HedgeModManager
             // panel1
             // 
             this.panel1.Controls.Add(this.GetCodeList_Button);
-            this.panel1.Controls.Add(this.InstallCodeLoader_Button);
+            this.panel1.Controls.Add(this.InstallLoader_Button);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(3, 365);
             this.panel1.Name = "panel1";
@@ -378,16 +379,16 @@ namespace HedgeModManager
             this.GetCodeList_Button.UseVisualStyleBackColor = true;
             this.GetCodeList_Button.Click += new System.EventHandler(this.GetCodeList_Button_Click);
             // 
-            // InstallCodeLoader_Button
+            // InstallLoader_Button
             // 
-            this.InstallCodeLoader_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.InstallCodeLoader_Button.Location = new System.Drawing.Point(374, 13);
-            this.InstallCodeLoader_Button.Name = "InstallCodeLoader_Button";
-            this.InstallCodeLoader_Button.Size = new System.Drawing.Size(130, 23);
-            this.InstallCodeLoader_Button.TabIndex = 26;
-            this.InstallCodeLoader_Button.Text = "Install Code Loader";
-            this.InstallCodeLoader_Button.UseVisualStyleBackColor = true;
-            this.InstallCodeLoader_Button.Click += new System.EventHandler(this.InstallCodeLoader_Button_Click);
+            this.InstallLoader_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.InstallLoader_Button.Location = new System.Drawing.Point(374, 13);
+            this.InstallLoader_Button.Name = "InstallLoader_Button";
+            this.InstallLoader_Button.Size = new System.Drawing.Size(130, 23);
+            this.InstallLoader_Button.TabIndex = 26;
+            this.InstallLoader_Button.Text = "Install Code Loader";
+            this.InstallLoader_Button.UseVisualStyleBackColor = true;
+            this.InstallLoader_Button.Click += new System.EventHandler(this.InstallLoader_Button_Click);
             // 
             // Codes_CheckedListBox
             // 
@@ -787,7 +788,7 @@ namespace HedgeModManager
         private System.Windows.Forms.CheckedListBox Codes_CheckedListBox;
         private System.Windows.Forms.TextBox Search_TextBox;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button InstallCodeLoader_Button;
+        private System.Windows.Forms.Button InstallLoader_Button;
         private System.Windows.Forms.Button GetCodeList_Button;
     }
 }

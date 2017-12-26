@@ -10,16 +10,18 @@ namespace HedgeModManager
 
     public class Games
     {
-        public static Game Unknown = new Game();
-        public static Game SonicGenerations = new Game("Sonic Generations", true, 9, Resources.SonicGenerationsCodeLoader);
-        public static Game SonicLostWorld = new Game("Sonic Lost World", false, 9, null);
-        public static Game SonicForces = new Game("Sonic Forces", true, 11, Resources.ForcesCodeLoader);
+        public static Game Unknown          = new Game();
+        public static Game SonicGenerations = new Game("Sonic Generations"  , true  , 9 , null                                                              , "SonicGenerations CodeLoader" , Resources.SonicGenerationsCodeLoader);
+        public static Game SonicLostWorld   = new Game("Sonic Lost World"   , false , 9 , null                                                              , ""                            , null);
+        public static Game SonicForces      = new Game("Sonic Forces"       , true  , 11, "FC3159F44DBB6CE4B98F63C1A6C4DB5EA455A9A7A2CDF8275AC909260D657512", "ForcesModLoader"             , Resources.ForcesModLoader);
     }
 
     public class Game
     {
         public string GameName = "Unnamed Game";
-        public byte[] CodeLoaderFile = null;
+        public string LoaderName = "";
+        public byte[] LoaderFile = null;
+        public byte[] Hash = null;
         public byte DirectXVersion = 0;
         public bool HasCodes = false;
 
@@ -28,12 +30,15 @@ namespace HedgeModManager
 
         }
 
-        public Game(string gameName, bool hasCodes, byte directXVersion, byte[] codeLoaderFile)
+        public Game(string gameName, bool hasCodes, byte directXVersion, string hash, string loaderName, byte[] loaderFile)
         {
             GameName = gameName;
             HasCodes = hasCodes;
             DirectXVersion = directXVersion;
-            CodeLoaderFile = codeLoaderFile;
+            if (hash != null)
+                Hash = UpdateModForm.StringToByteArray(hash);
+            LoaderName = loaderName;
+            LoaderFile = loaderFile;
         }
 
         public override string ToString()

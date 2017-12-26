@@ -63,13 +63,17 @@ namespace HedgeModManager
         {
             // Path to the install temp folder
             string tempFolder = Path.Combine(Program.StartDirectory, "temp_install");
+
             // Deletes the temp Directory if it exists
             if (Directory.Exists(tempFolder))
                 Directory.Delete(tempFolder, true);
+
             // Extracts all contents inside of the zip file
             ZipFile.ExtractToDirectory(ZipPath, tempFolder);
+
             // Search and install mods from the temp folder after extracting
             InstallFromFolder(tempFolder);
+
             // Deletes the temp folder with all of its contents
             Directory.Delete(tempFolder, true);
         }
@@ -81,16 +85,20 @@ namespace HedgeModManager
             var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\7-Zip");
             // If null then try get it from the 64-bit Registry.
             if (key == null)
-                key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey("SOFTWARE\\7-Zip");
+                key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
+                    .OpenSubKey("SOFTWARE\\7-Zip");
             // Checks if 7-Zip is installed by checking if the key and path value exists.
             if (key != null && key.GetValue("Path") is string path)
             {
                 // Path to 7z.exe.
                 string exe = Path.Combine(path, "7z.exe");
+
                 // Path to the install temp folder.
                 string tempFolder = Path.Combine(Program.StartDirectory, "temp_install");
+
                 // Creates the temp folder.
                 Directory.CreateDirectory(tempFolder);
+
                 // Extracts the archive to the temp folder.
                 Process.Start(exe, $"x \"{ArchivePath}\" -o\"{tempFolder}\" -y").WaitForExit(1000*60*5);
                 
@@ -107,6 +115,7 @@ namespace HedgeModManager
             }
             
         }
+
         // Requires WinRAR to be installed.
         public static void InstallFromWinRAR(string ArchivePath)
         {

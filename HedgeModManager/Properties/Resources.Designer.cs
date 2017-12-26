@@ -61,7 +61,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hedge Mod Manager.
+        ///   Looks up a localized string similar to HedgeModManager.
         /// </summary>
         internal static string ApplicationTitle {
             get {
@@ -70,8 +70,8 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hedge Mod Manager could not find a game executable in its startup directory. 
-        ///The HedgeModManager can attempt to look for your game and install itself automatically.
+        ///   Looks up a localized string similar to HedgeModManager could not find a game executable in its startup directory. 
+        ///HedgeModManager can attempt to look for your game and install itself automatically.
         ///.
         /// </summary>
         internal static string CannotFindExecutableText {
@@ -86,15 +86,6 @@ namespace HedgeModManager.Properties {
         internal static string CannotFindModsDirectoryText {
             get {
                 return ResourceManager.GetString("CannotFindModsDirectoryText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Codeloader for {0} corrently isn&apos;t installed, You you like to install it now?.
-        /// </summary>
-        internal static string CodeLoaderNotInstalled {
-            get {
-                return ResourceManager.GetString("CodeLoaderNotInstalled", resourceCulture);
             }
         }
         
@@ -181,9 +172,9 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] ForcesCodeLoader {
+        internal static byte[] ForcesModLoader {
             get {
-                object obj = ResourceManager.GetObject("ForcesCodeLoader", resourceCulture);
+                object obj = ResourceManager.GetObject("ForcesModLoader", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -219,6 +210,24 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The currently installed loader doesn&apos;t match the version that comes with the current version of Hedge Mod Manager, Unless you know what you are doing, Click &quot;Reinstall Loader&quot;.
+        /// </summary>
+        internal static string LoaderMismatchText {
+            get {
+                return ResourceManager.GetString("LoaderMismatchText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The loader for {0} currently isn&apos;t installed, would you like to install it now?.
+        /// </summary>
+        internal static string LoaderNotInstalled {
+            get {
+                return ResourceManager.GetString("LoaderNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There&apos;s a newer version of {0} available!
         ///
         ///Do you want to update from version {1} to {2}? ({3}).
@@ -230,7 +239,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Codes were found. Would you like Hedge Mod Manager to Download Codes from Its database?.
+        ///   Looks up a localized string similar to No codes were found. Would you like HedgeModManager to download codes from it&apos;s database?.
         /// </summary>
         internal static string NoCodesText {
             get {
@@ -239,7 +248,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hedge Mod Manager can not check for updates for {0} because it no update server..
+        ///   Looks up a localized string similar to HedgeModManager can not check for updates for {0} because it has no update server..
         /// </summary>
         internal static string NoUpdateServerAndURLText {
             get {
@@ -248,9 +257,9 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hedge Mod Manager can not check for updates for {0} because no update server.
+        ///   Looks up a localized string similar to HedgeModManager can not check for updates for {0} because it has no update server.
         ///
-        ///This Mod does have a website.
+        ///However, this mod does have a website.
         ///    Do you want to open it and check for updates manually?
         ///        URL: {1}.
         /// </summary>
