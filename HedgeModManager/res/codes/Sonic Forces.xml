@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <CodeList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Code name="Disable Ring Loss From Damage" patch="true" credit="CodenameGamma">
-    <CodeLine>
-      <Type>writenop</Type>
-      <Address>1404F77AC</Address>
-      <Value>00000004</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-  </Code>
   <Code name="Stop Timer" patch="true" credit="CodenameGamma">
     <CodeLine>
       <Type>writenop</Type>
       <Address>14017EE5A</Address>
       <Value>00000005</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+  <Code name="Disable Ring Loss From Damage" patch="true" credit="CodenameGamma">
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>1404F77AC</Address>
+      <Value>00000004</Value>
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
@@ -46,7 +46,38 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-
+  <Code name="Disable Ring Loss From Super Sonic" patch="true" credit="SuperSonic16">
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>1404E1F54</Address>
+      <Value>03</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+  <Code name="Enable Super Sonic with 1 Ring" patch="true" credit="SuperSonic16">
+    <!--xor ecx, ecx -->
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>1404E1E8F</Address>
+      <Value>4890C931</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <!--jl -> jle -->
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>1404E1E9B</Address>
+      <Value>7E</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+  <Code name="Ignore Ring Count When Getting Hit" patch="true" credit="SuperSonic16">
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>14046E4EE</Address>
+      <Value>06</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
   <Code name="Max Rings" patch="true" credit="SuperSonic16">
     <!--jmp 1403DB826 -->
     <CodeLine>
@@ -105,44 +136,6 @@
     </CodeLine>
   </Code>
   
-  <Code name="Max Rings" patch="true" credit="SuperSonic16">
-    <CodeLine>
-      <Type>write32</Type>
-      <Address>1403DBA95</Address>
-      <Value>0003E7B9</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write32</Type>
-      <Address>1403DBA99</Address>
-      <Value>1C488900</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write32</Type>
-      <Address>1403DBA9D</Address>
-      <Value>E9CF4D89</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write32</Type>
-      <Address>1403DBAA1</Address>
-      <Value>FFFFEF36</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write32</Type>
-      <Address>1403DA9D6</Address>
-      <Value>0010BAE9</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-    <CodeLine>
-      <Type>write16</Type>
-      <Address>1403DA9DA</Address>
-      <Value>9000</Value>
-      <ValueType>hex</ValueType>
-    </CodeLine>
-  </Code>
   <Code name="Max Score" patch="true" credit="SuperSonic16">
     <CodeLine>
       <Type>write8</Type>
