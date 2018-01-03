@@ -91,7 +91,7 @@ namespace HedgeModManager
             LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
 
 #if DEBUG
-            //StartDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\SonicForces\build\main\projects\exec";
+            //StartDirectory = @"E:\SteamLibrary\steamapps\common\SonicForces\build\main\projects\exec";
 #endif
 
             LogFile.AddMessage($"Running {ProgramName} in {StartDirectory}");

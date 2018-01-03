@@ -1342,7 +1342,15 @@ namespace HedgeModManager
                         MessageBoxIcon.Error);
                     return;
                 }
-                File.WriteAllBytes(Path.Combine(Program.StartDirectory, DLLFileName), loader);
+                if (Program.CurrentGame == Games.SonicForces)
+                {
+                    Hide();
+                    new UpdateForm("https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll", Path.Combine(Program.StartDirectory, DLLFileName)).ShowDialog();
+                }
+                else if (Program.CurrentGame == Games.SonicGenerations) {
+                    Hide();
+                    new UpdateForm("https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/SonicGenerationsCodeLoader.dll", Path.Combine(Program.StartDirectory, DLLFileName)).ShowDialog();
+                }
                 text = "Uninstall Loader";
             }
             
