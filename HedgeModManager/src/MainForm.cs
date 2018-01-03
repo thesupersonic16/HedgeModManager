@@ -242,6 +242,8 @@ namespace HedgeModManager
                         group.AddParameter("DefaultModsPath", "mods");
                     if (!group.ContainsParameter("CustomModsPath"))
                         group.AddParameter("CustomModsPath", "C:\\CustomMods");
+                    if (!group.ContainsParameter("CheckLoader"))
+                        group.AddParameter("CheckLoader", "1");
 
                     AutoCheckUpdateCheckBox.Checked = group["AutoCheckForUpdates"] != "0";
                     KeepModLoaderOpenCheckBox.Checked = group["KeepModLoaderOpen"] != "0";
@@ -407,7 +409,8 @@ namespace HedgeModManager
 
             // Checks the Loader
             string loaderPath = Path.Combine(Program.StartDirectory, "d3d" + Program.CurrentGame.DirectXVersion + ".dll");
-            if (File.Exists(loaderPath) && !Program.CurrentGame.Hash.SequenceEqual(Program.ComputeSHA256Hash(File.ReadAllBytes(loaderPath))))
+            if (File.Exists(loaderPath) && CPKREDIRIni[Program.ProgramNameShort]["CheckLoader"] != "0"
+                && !Program.CurrentGame.Hash.SequenceEqual(Program.ComputeSHA256Hash(File.ReadAllBytes(loaderPath))))
             {
                 var msgBox = new SS16MessageBox("Warning", "Loader Mismatch Detected", Resources.LoaderMismatchText);
                 msgBox.AddButton("Reinstall Loader", 100, (obj, e) => { InstallLoader_Button_Click(null, null); InstallLoader_Button_Click(null, null); msgBox.Close(); });
