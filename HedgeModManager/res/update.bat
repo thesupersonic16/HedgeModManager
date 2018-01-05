@@ -15,11 +15,15 @@ REM Copies all new files from the temporary folder
 xcopy /s /y ".\updateTemp" ".\"
 REM 
 echo done!
-REM 
+REM Backs up the log file
 ren HedgeModManager.log HedgeModManager_prev.log
+REM Cleans the temp folder
+rmdir updateTemp
 REM Sleeps for 1 second
 powershell start-sleep 1
 REM 
 echo Starting application...
 REM Starts the Mod Manager without waiting
 start HedgeModManager.exe
+REM deletes teh current script
+del update.bat

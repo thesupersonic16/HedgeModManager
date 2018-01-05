@@ -50,7 +50,7 @@ namespace HedgeModManager
                 var ofd = new OpenFileDialog()
                 {
                     Title = "Install Mod From Archive...",
-                    Filter = "Zip (*.zip)|*.zip;"
+                    Filter = "All Supported Archives (*.zip, *.7z, *.rar)|*.zip;*.7z;*.rar"
                 };
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
