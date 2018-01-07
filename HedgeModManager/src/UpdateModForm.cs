@@ -111,12 +111,12 @@ namespace HedgeModManager
                         {
                             hash = sha.ComputeHash(stream);
                             if (Encoding.ASCII.GetString(hash) !=
-                                Encoding.ASCII.GetString(StringToByteArray(fileSha)))
+                                Encoding.ASCII.GetString(Program.StringToByteArray(fileSha)))
                             {
                                 LogFile.AddMessage($"Hash Mismatch on file: {fileName}");
                                 if (MessageBox.Show($"File Hash Mismatch.\n" +
-                                    $"{ByteArrayToString(StringToByteArray(fileSha))}" +
-                                    $" != {ByteArrayToString(hash)}\n" +
+                                    $"{Program.ByteArrayToString(Program.StringToByteArray(fileSha))}" +
+                                    $" != {Program.ByteArrayToString(hash)}\n" +
                                     $"Try Redownloading?", "File Hash Mismatch.",
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                                     i--;
@@ -164,20 +164,6 @@ namespace HedgeModManager
                 AddModForm.InstallFrom7zArchive(filePath); // Use 7Zip if its not a Zip
             Invoke(new Action(() => Close()));
             return;
-        }
-
-        public static byte[] StringToByteArray(string hex)
-        {
-            return Enumerable.Range(0, hex.Length)
-                             .Where(x => x % 2 == 0)
-                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                             .ToArray();
-        }
-
-        public static string ByteArrayToString(byte[] ba)
-        {
-            string hex = BitConverter.ToString(ba);
-            return hex.Replace("-", "");
         }
 
     }

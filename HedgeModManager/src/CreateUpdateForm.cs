@@ -154,7 +154,7 @@ namespace HedgeModManager
                 {
                     string sha256 = "";
                     using (var stream = File.OpenRead(item.FullPath))
-                        sha256 = UpdateModForm.ByteArrayToString(sha.ComputeHash(stream));
+                        sha256 = Program.ByteArrayToString(sha.ComputeHash(stream));
 
                     // UpdateFile
                     var updateFile = new XElement("UpdateFile");

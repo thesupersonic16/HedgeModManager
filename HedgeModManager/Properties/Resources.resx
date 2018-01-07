@@ -197,4 +197,16 @@ However, this mod does have a website.
   <data name="ForcesModLoader" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\codes\forcesmodloader.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="ForcesModLoaderURL" xml:space="preserve">
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll</value>
+  </data>
+  <data name="SonicGenerationsCodeLoaderURL" xml:space="preserve">
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/SonicGenerationsCodeLoader.dll</value>
+  </data>
+  <data name="ForcesModLoaderHashURL" xml:space="preserve">
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll.sha256</value>
+  </data>
+  <data name="SonicGenerationsCodeLoaderHashURL" xml:space="preserve">
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/SonicGenerationsCodeLoader.dll.sha256</value>
+  </data>
 </root>

@@ -41,48 +41,57 @@ namespace HedgeModManager
 
             Thread = new Thread(() =>
             {
-                if (string.IsNullOrEmpty(FileName))
+                try
                 {
-                    // Path to where all the update file are stored
-                    string tempPath = Path.Combine(Program.StartDirectory, "updateTemp");
-                    // Deletes the temp diretory
-                    if (Directory.Exists(tempPath))
-                        Directory.Delete(tempPath, true);
-                    // Creates the temp directory
-                    Directory.CreateDirectory(tempPath);
-                    // Adds an event to the "DownloadProgressChanged" EventHandler
-                    webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(WebClient_DownloadProgressChanged);
-                    // Starts downloading the update zip asynchronously
-                    Invoke(new Action(() => webClient.DownloadFileAsync(new Uri(Url), Path.Combine(tempPath, "HedgeModManagerUpdate.zip"))));
-                    // Waits for the update to finish
-                    while (webClient.IsBusy)
-                        Thread.Sleep(25);
+                    if (string.IsNullOrEmpty(FileName))
+                    {
+                        // Path to where all the update file are stored
+                        string tempPath = Path.Combine(Program.StartDirectory, "updateTemp");
+                        // Deletes the temp diretory
+                        if (Directory.Exists(tempPath))
+                            Directory.Delete(tempPath, true);
+                        // Creates the temp directory
+                        Directory.CreateDirectory(tempPath);
+                        // Adds an event to the "DownloadProgressChanged" EventHandler
+                        webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(WebClient_DownloadProgressChanged);
+                        // Starts downloading the update zip asynchronously
+                        Invoke(new Action(() => webClient.DownloadFileAsync(new Uri(Url), Path.Combine(tempPath, "HedgeModManagerUpdate.zip"))));
+                        // Waits for the update to finish
+                        while (webClient.IsBusy)
+                            Thread.Sleep(25);
 
-                    LogFile.AddMessage("Finished downloading update. Installing.");
-                    LogFile.AddMessage("Extracting Update...");
+                        LogFile.AddMessage("Finished downloading update. Installing.");
+                        LogFile.AddMessage("Extracting Update...");
 
-                    // Extracts the update files
-                    ZipFile.ExtractToDirectory(Path.Combine(tempPath, "HedgeModManagerUpdate.zip"), tempPath);
-                    // Deletes the zip file, since we nolonger need it
-                    File.Delete(Path.Combine(tempPath, "HedgeModManagerUpdate.zip"));
+                        // Extracts the update files
+                        ZipFile.ExtractToDirectory(Path.Combine(tempPath, "HedgeModManagerUpdate.zip"), tempPath);
+                        // Deletes the zip file, since we nolonger need it
+                        File.Delete(Path.Combine(tempPath, "HedgeModManagerUpdate.zip"));
 
-                    LogFile.AddMessage("Finished extracting update.");
+                        LogFile.AddMessage("Finished extracting update.");
 
-                    // Writes the batch file so we can continue the update process
-                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, "update.bat"), Properties.Resources.update);
+                        // Writes the batch file so we can continue the update process
+                        File.WriteAllBytes(Path.Combine(Program.StartDirectory, "update.bat"), Properties.Resources.update);
 
-                    // Runs the batch file and closes the Modloader
-                    LogFile.AddMessage($"Closing {Program.ProgramName} to continue the update...");
-                    new Process() { StartInfo = new ProcessStartInfo(Path.Combine(Program.StartDirectory, "update.bat")) }.Start();
-                    Application.Exit();
-                }
-                else {
-                    webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-                    Invoke(new Action(() => { webClient.DownloadFileAsync(new Uri(Url), FileName); }));
-                    while (webClient.IsBusy) {
-                        Thread.Sleep(25);
+                        // Runs the batch file and closes the Modloader
+                        LogFile.AddMessage($"Closing {Program.ProgramName} to continue the update...");
+                        new Process() { StartInfo = new ProcessStartInfo(Path.Combine(Program.StartDirectory, "update.bat")) }.Start();
+                        Application.Exit();
                     }
-                Invoke(new Action(() => { Close(); }));
+                    else
+                    {
+                        webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+                        Invoke(new Action(() => { webClient.DownloadFileAsync(new Uri(Url), FileName); }));
+                        while (webClient.IsBusy)
+                        {
+                            Thread.Sleep(25);
+                        }
+                        Invoke(new Action(() => { Close(); }));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MainForm.AddMessage("Exception thrown while downloading an update.", ex, Url, FileName);
                 }
             });
             Thread.Start();

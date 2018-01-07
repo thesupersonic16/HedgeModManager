@@ -180,6 +180,24 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll.sha256.
+        /// </summary>
+        internal static string ForcesModLoaderHashURL {
+            get {
+                return ResourceManager.GetString("ForcesModLoaderHashURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll.
+        /// </summary>
+        internal static string ForcesModLoaderURL {
+            get {
+                return ResourceManager.GetString("ForcesModLoaderURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon icon {
@@ -285,6 +303,24 @@ namespace HedgeModManager.Properties {
             get {
                 object obj = ResourceManager.GetObject("SonicGenerationsCodeLoader", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/SonicGenerationsCodeLoader.dll.sha256.
+        /// </summary>
+        internal static string SonicGenerationsCodeLoaderHashURL {
+            get {
+                return ResourceManager.GetString("SonicGenerationsCodeLoaderHashURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/SonicGenerationsCodeLoader.dll.
+        /// </summary>
+        internal static string SonicGenerationsCodeLoaderURL {
+            get {
+                return ResourceManager.GetString("SonicGenerationsCodeLoaderURL", resourceCulture);
             }
         }
         

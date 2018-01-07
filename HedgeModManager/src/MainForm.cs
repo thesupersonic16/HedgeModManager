@@ -407,10 +407,18 @@ namespace HedgeModManager
                 return;
             }
 
+            // Downloads Hash from Github
+            try
+            {
+                Program.CurrentGame.Hash = new WebClient().DownloadData(Program.CurrentGame.LoaderHashURL);
+            }catch
+            { // Failed to download hash 
+            }
             // Checks the Loader
             string loaderPath = Path.Combine(Program.StartDirectory, "d3d" + Program.CurrentGame.DirectXVersion + ".dll");
             if (File.Exists(loaderPath) && CPKREDIRIni[Program.ProgramNameShort]["CheckLoader"] != "0"
-                && !Program.CurrentGame.Hash.SequenceEqual(Program.ComputeSHA256Hash(File.ReadAllBytes(loaderPath))))
+                && Program.CurrentGame.Hash != null &&
+                !Program.CurrentGame.Hash.SequenceEqual(Program.ComputeSHA256Hash(File.ReadAllBytes(loaderPath))))
             {
                 var msgBox = new SS16MessageBox("Warning", "Loader Mismatch Detected", Resources.LoaderMismatchText);
                 msgBox.AddButton("Reinstall Loader", 100, (obj, e) => { InstallLoader_Button_Click(null, null); InstallLoader_Button_Click(null, null); msgBox.Close(); });
@@ -1345,15 +1353,17 @@ namespace HedgeModManager
                         MessageBoxIcon.Error);
                     return;
                 }
-                if (Program.CurrentGame == Games.SonicForces)
-                {
-                    Hide();
-                    new UpdateForm("https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll", Path.Combine(Program.StartDirectory, DLLFileName)).ShowDialog();
+                // Hides the form while it downloads the loader
+                Hide();
+                // Downloads the Loader
+                new UpdateForm(Program.CurrentGame.LoaderDownloadURL, Path.Combine(Program.StartDirectory, DLLFileName)).ShowDialog();
+                // Checks if the loader is downloaded and saved, If it doesn't then Write local copy
+                if (!File.Exists(DLLFileName))
+                { // Install local copy
+                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, DLLFileName), loader);
                 }
-                else if (Program.CurrentGame == Games.SonicGenerations) {
-                    Hide();
-                    new UpdateForm("https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/SonicGenerationsCodeLoader.dll", Path.Combine(Program.StartDirectory, DLLFileName)).ShowDialog();
-                }
+                // Makes the Form visible so the user can continue
+                Show();
                 text = "Uninstall Loader";
             }
             
