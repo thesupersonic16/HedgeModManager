@@ -183,7 +183,7 @@ namespace HedgeModManager
             }
             if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.dll")))
             {
-                Console.WriteLine("Calculating d3d9.dll");
+                Console.WriteLine("Calculating cpkredir.dll");
                 var hash = Program.ComputeSHA256Hash(File.ReadAllBytes(Path.Combine(Program.StartDirectory, "cpkredir.dll")));
                 hashes.Add("cpkredir.dll", hash);
             }
