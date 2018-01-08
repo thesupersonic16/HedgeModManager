@@ -428,7 +428,7 @@ namespace HedgeModManager
             }
 
             // Runs CheckForModLoaderUpdates in another thread
-            //new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
+            new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
             if (AutoCheckUpdateCheckBox.Checked)
             {
                 ModUpdatingThread = new Thread(new ThreadStart(CheckAllModUpdates));
