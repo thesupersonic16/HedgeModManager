@@ -60,6 +60,9 @@ namespace HedgeModManager
             this.InstallLoader_Button = new System.Windows.Forms.Button();
             this.Codes_CheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.Label_SaveFileBackupStatus = new System.Windows.Forms.Label();
+            this.Button_RestoreSaveFile = new System.Windows.Forms.Button();
+            this.Button_BackupSaveFile = new System.Windows.Forms.Button();
             this.Button_SaveAndReload = new System.Windows.Forms.Button();
             this.Label_CustomModsDirectory = new System.Windows.Forms.Label();
             this.TextBox_CustomModsDirectory = new System.Windows.Forms.TextBox();
@@ -400,6 +403,9 @@ namespace HedgeModManager
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.Label_SaveFileBackupStatus);
+            this.SettingsPage.Controls.Add(this.Button_RestoreSaveFile);
+            this.SettingsPage.Controls.Add(this.Button_BackupSaveFile);
             this.SettingsPage.Controls.Add(this.Button_SaveAndReload);
             this.SettingsPage.Controls.Add(this.Label_CustomModsDirectory);
             this.SettingsPage.Controls.Add(this.TextBox_CustomModsDirectory);
@@ -420,6 +426,38 @@ namespace HedgeModManager
             this.SettingsPage.TabIndex = 1;
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
+            // 
+            // Label_SaveFileBackupStatus
+            // 
+            this.Label_SaveFileBackupStatus.AutoSize = true;
+            this.Label_SaveFileBackupStatus.Location = new System.Drawing.Point(397, 19);
+            this.Label_SaveFileBackupStatus.Name = "Label_SaveFileBackupStatus";
+            this.Label_SaveFileBackupStatus.Size = new System.Drawing.Size(124, 26);
+            this.Label_SaveFileBackupStatus.TabIndex = 27;
+            this.Label_SaveFileBackupStatus.Text = "SaveFile Backup Status:\r\n    Unknown";
+            this.Label_SaveFileBackupStatus.Visible = false;
+            // 
+            // Button_RestoreSaveFile
+            // 
+            this.Button_RestoreSaveFile.Location = new System.Drawing.Point(276, 43);
+            this.Button_RestoreSaveFile.Name = "Button_RestoreSaveFile";
+            this.Button_RestoreSaveFile.Size = new System.Drawing.Size(115, 23);
+            this.Button_RestoreSaveFile.TabIndex = 26;
+            this.Button_RestoreSaveFile.Text = "Restore SaveFile";
+            this.Button_RestoreSaveFile.UseVisualStyleBackColor = true;
+            this.Button_RestoreSaveFile.Visible = false;
+            this.Button_RestoreSaveFile.Click += new System.EventHandler(this.Button_RestoreSaveFile_Click);
+            // 
+            // Button_BackupSaveFile
+            // 
+            this.Button_BackupSaveFile.Location = new System.Drawing.Point(276, 14);
+            this.Button_BackupSaveFile.Name = "Button_BackupSaveFile";
+            this.Button_BackupSaveFile.Size = new System.Drawing.Size(115, 23);
+            this.Button_BackupSaveFile.TabIndex = 25;
+            this.Button_BackupSaveFile.Text = "Backup SaveFile";
+            this.Button_BackupSaveFile.UseVisualStyleBackColor = true;
+            this.Button_BackupSaveFile.Visible = false;
+            this.Button_BackupSaveFile.Click += new System.EventHandler(this.Button_BackupSaveFile_Click);
             // 
             // Button_SaveAndReload
             // 
@@ -790,6 +828,9 @@ namespace HedgeModManager
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button InstallLoader_Button;
         private System.Windows.Forms.Button GetCodeList_Button;
+        private System.Windows.Forms.Label Label_SaveFileBackupStatus;
+        private System.Windows.Forms.Button Button_RestoreSaveFile;
+        private System.Windows.Forms.Button Button_BackupSaveFile;
     }
 }
 

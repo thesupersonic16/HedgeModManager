@@ -228,7 +228,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The currently installed loader doesn&apos;t match the version that comes with the current version of Hedge Mod Manager, Unless you know what you are doing, Click &quot;Reinstall Loader&quot;.
+        ///   Looks up a localized string similar to The currently installed loader doesn&apos;t match the version Hedge Mod Manager&apos;s Github, Unless you know what you are doing, Click &quot;Reinstall Loader&quot;.
         /// </summary>
         internal static string LoaderMismatchText {
             get {

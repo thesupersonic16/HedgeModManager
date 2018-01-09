@@ -21,12 +21,13 @@ namespace HedgeModManager
             InitializeComponent();
         }
 
-        public List<Entry> FindGames()
+        public static List<Entry> FindGames()
         {
             var entries = new List<Entry>();
             var paths = new List<string>();
 
             string vdfLocation = Path.Combine(Steam.SteamLocation, "steamapps\\libraryfolders.vdf");
+            LogFile.AddMessage($"Reading VDF: {vdfLocation}");
             Steam.VDFFile vdf = null;
             try
             {
@@ -74,9 +75,9 @@ namespace HedgeModManager
 
             if (Steam.SteamLocation == null)
             {
-                MainForm.AddMessageToUser($"Steam is not Setup correctly, Please report this issue to {Program.ProgramName}'s GitHub.\n" +
+                MainForm.AddMessageToUser($"Steam is not Setup correctly, " +
+                    $"Please report this issue to {Program.ProgramName}'s GitHub Page with {Program.ProgramName}.log\n" +
                     $"Please copy all files that came with {Program.ProgramName} into your Game folder. Exiting...");
-
             }
 
             var games = FindGames();

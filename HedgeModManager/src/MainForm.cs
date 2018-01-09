@@ -309,6 +309,12 @@ namespace HedgeModManager
                     CheckBox_CustomModsDirectory.Checked = false;
                     EnableCPKREDIRConsoleCheckBox.Enabled = false;
                     Button_SaveAndReload.Text = "Reload";
+
+                    // --- SaveBackup ---
+                    // Shows the button and labels
+                    Button_BackupSaveFile.Visible = Button_RestoreSaveFile.Visible = Label_SaveFileBackupStatus.Visible = true;
+                    bool BackupExists = Directory.Exists(Path.Combine(Program.StartDirectory, "SaveFileBackup"));
+                    Label_SaveFileBackupStatus.Text = string.Format("SaveFile Backup Status:\n    Backup Exists: {0}", BackupExists ? "YES" : "NO");
                 }
                 else if (File.Exists(GensExecutablePath))
                 {
@@ -468,12 +474,12 @@ namespace HedgeModManager
                 }
                 var key = Registry.ClassesRoot.OpenSubKey(Protocol, true);
                 if (key == null)
-                {//URL:Mania Mod Manager Protocol
+                { // e.g. URL:HedgeModManager for Sonic Forces
                     key = Registry.ClassesRoot.CreateSubKey(Protocol);
                     key.SetValue("", "URL:" + protName);
                     key.SetValue("URL Protocol", "");
                     key = key.CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command");
-                    key.SetValue("", $"\"{Program.HedgeModManagerPath}\" \"%1\"");
+                    key.SetValue("", $"\"{Program.HedgeModManagerPath}\" -gb \"%1\"");
                 }
                 key.Close();
             }
@@ -489,6 +495,10 @@ namespace HedgeModManager
         /// </summary>
         public void StartGame()
         {
+            // Create Backup if one is not made
+            if (!Directory.Exists(Path.Combine(Program.StartDirectory, "SaveFileBackup")))
+                Button_BackupSaveFile_Click(null, null);
+
             if (File.Exists(LWExecutablePath))
             {
                 AddMessage("Starting Sonic Lost World...");
@@ -905,7 +915,7 @@ namespace HedgeModManager
 
     #endregion
 
-    #region ButtonEvents
+        #region ButtonEvents
 
         private void RefreshButton_Click(object sender, EventArgs e)
         {
@@ -1111,9 +1121,102 @@ namespace HedgeModManager
             Close();
         }
 
-#endregion ButtonEvents
+        private void Button_BackupSaveFile_Click(object sender, EventArgs e)
+        {
+            if (Program.CurrentGame == Games.SonicForces)
+            {
+                string saveFilePath = Path.Combine(Program.StartDirectory, "..\\..\\..\\..\\savedata");
+                string backupPath = Path.Combine(Program.StartDirectory, "SaveFileBackup");
+                // Creates all of the directories
+                foreach (string dirPath in Directory.GetDirectories(saveFilePath, "*",
+                    SearchOption.AllDirectories))
+                    Directory.CreateDirectory(dirPath.Replace(saveFilePath, backupPath));
 
-#region ToolStripMenuItemEvents
+                // Copies all files
+                foreach (string filePath in Directory.GetFiles(saveFilePath, "*.*",
+                    SearchOption.AllDirectories))
+                    File.Copy(filePath, filePath.Replace(saveFilePath, backupPath), true);
+                AddMessage("Save Data Backup Succeeded");
+            }
+            bool BackupExists = Directory.Exists(Path.Combine(Program.StartDirectory, "SaveFileBackup"));
+            Label_SaveFileBackupStatus.Text = string.Format("SaveFile Backup Status:\n    Backup Exists: {0}", BackupExists ? "YES" : "NO");
+
+        }
+
+        private void Button_RestoreSaveFile_Click(object sender, EventArgs e)
+        {
+            if (Program.CurrentGame == Games.SonicForces)
+            {
+                string saveFilePath = Path.Combine(Program.StartDirectory, "..\\..\\..\\..\\savedata");
+                string backupPath = Path.Combine(Program.StartDirectory, "SaveFileBackup");
+                if (Directory.Exists(backupPath))
+                {
+                    // Creates all of the directories
+                    foreach (string dirPath in Directory.GetDirectories(backupPath, "*",
+                        SearchOption.AllDirectories))
+                        Directory.CreateDirectory(dirPath.Replace(backupPath, saveFilePath));
+
+                    // Copies all files
+                    foreach (string filePath in Directory.GetFiles(backupPath, "*.*",
+                        SearchOption.AllDirectories))
+                        File.Copy(filePath, filePath.Replace(backupPath, saveFilePath), true);
+                    AddMessage("Save Data has been Restored");
+                }
+                else
+                {
+                    var msgBox = new SS16MessageBox("Restore Save Data", "No Backup Detected", "No Backup is Detected!");
+                    msgBox.AddButton("Close", 100, (obj, e2) => msgBox.Close());
+                    msgBox.ShowDialog();
+
+                }
+            }
+        }
+
+        private void InstallLoader_Button_Click(object sender, EventArgs e)
+        {
+            string text = "";
+            string DLLFileName = $"d3d{Program.CurrentGame.DirectXVersion}.dll";
+
+            if (File.Exists(Path.Combine(Program.StartDirectory, DLLFileName)))
+            {
+                File.Delete(Path.Combine(Program.StartDirectory, DLLFileName));
+                text = "Install Loader";
+            }
+            else
+            {
+                var loader = Program.CurrentGame.LoaderFile;
+                if (loader == null)
+                {
+                    MessageBox.Show("No loader available for " + Program.CurrentGame, "", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+                // Downloads the Loader
+                new UpdateForm(Program.CurrentGame.LoaderDownloadURL, Path.Combine(Program.StartDirectory, DLLFileName)).ShowDialog();
+                // Checks if the loader is downloaded and saved, If it doesn't then Write local copy
+                if (!File.Exists(DLLFileName))
+                { // Install local copy
+                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, DLLFileName), loader);
+                }
+                text = "Uninstall Loader";
+            }
+
+            InstallLoader_Button.Text = text;
+        }
+
+        private void GetCodeList_Button_Click(object sender, EventArgs e)
+        {
+            if (DownloadCodes())
+            {
+                Program.Restart = true;
+                Close();
+            }
+        }
+
+
+        #endregion ButtonEvents
+
+        #region ToolStripMenuItemEvents
 
         private void CheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1161,6 +1264,35 @@ namespace HedgeModManager
         #endregion ToolStripMenuItemEvents
 
         #region OtherGUIEvents
+
+        private void Search_TextBox_TextChanged(object sender, EventArgs e)
+        {
+            int index = 0;
+            int wordIndex = 0;
+
+            foreach (string s in Search_TextBox.Text.ToLower().Split(' '))
+            {
+                for (int i = 0; i < ModsList.Items.Count; ++i)
+                {
+                    if (wordIndex != 0 && s.Length == 0)
+                        continue;
+
+                    if ((ModsList.Items[i].Tag as Mod).Title.ToLower().Contains(s))
+                    {
+                        var lvi = ModsList.Items[i];
+                        // Removes the mod and reinserts it back into the list above where it was before
+                        ModsList.Items.Remove(lvi);
+                        ModsList.Items.Insert(index == 0 ? 0 : index--, lvi);
+                    }
+                }
+                ++wordIndex;
+            }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(ModsFolderPath);
+        }
 
         private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1284,7 +1416,7 @@ namespace HedgeModManager
 
 #endregion OtherGUIEvents
 
-#region Don't Look!
+        #region Don't Look!
 
         private void ModsList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
@@ -1310,78 +1442,5 @@ namespace HedgeModManager
         }
         #endregion
 
-        private void Search_TextBox_TextChanged(object sender, EventArgs e)
-        {
-            int index = 0;
-            int wordIndex = 0;
-
-            foreach (string s in Search_TextBox.Text.ToLower().Split(' '))
-            {
-                for (int i = 0; i < ModsList.Items.Count; ++i)
-                {
-                    if (wordIndex != 0 && s.Length == 0)
-                        continue;
-
-                    if ((ModsList.Items[i].Tag as Mod).Title.ToLower().Contains(s))
-                    {
-                        var lvi = ModsList.Items[i];
-                        // Removes the mod and reinserts it back into the list above where it was before
-                        ModsList.Items.Remove(lvi);
-                        ModsList.Items.Insert(index == 0 ? 0 : index--, lvi);
-                    }
-                }
-                ++wordIndex;
-            }
-        }
-
-        private void InstallLoader_Button_Click(object sender, EventArgs e)
-        {
-            string text = "";
-            string DLLFileName = $"d3d{Program.CurrentGame.DirectXVersion}.dll";
-
-            if (File.Exists(Path.Combine(Program.StartDirectory, DLLFileName)))
-            {
-                File.Delete(Path.Combine(Program.StartDirectory, DLLFileName));
-                text = "Install Loader";
-            }
-            else
-            {
-                var loader = Program.CurrentGame.LoaderFile;
-                if (loader == null)
-                {
-                    MessageBox.Show("No loader available for " + Program.CurrentGame, "", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    return;
-                }
-                // Hides the form while it downloads the loader
-                Hide();
-                // Downloads the Loader
-                new UpdateForm(Program.CurrentGame.LoaderDownloadURL, Path.Combine(Program.StartDirectory, DLLFileName)).ShowDialog();
-                // Checks if the loader is downloaded and saved, If it doesn't then Write local copy
-                if (!File.Exists(DLLFileName))
-                { // Install local copy
-                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, DLLFileName), loader);
-                }
-                // Makes the Form visible so the user can continue
-                Show();
-                text = "Uninstall Loader";
-            }
-            
-            InstallLoader_Button.Text = text;
-        }
-
-        private void GetCodeList_Button_Click(object sender, EventArgs e)
-        {
-            if (DownloadCodes())
-            {
-                Program.Restart = true;
-                Close();
-            }
-        }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(ModsFolderPath);
-        }
     }
 }
