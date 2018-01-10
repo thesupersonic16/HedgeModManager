@@ -77,7 +77,7 @@ namespace HedgeModManager
                     // Closes and returns if the user clicked cancel.
                     if (CancelUpdate) { Invoke(new Action(() => Close())); return; }
                     // Sets DownloadLabel's Text to show what file is being downloaded.
-                    Invoke(new Action(() => DownloadLabel.Text = "Downloading... " + fileName));
+                    Invoke(new Action(() => DownloadLabel.Text = "Downloading... " + Path.GetFileName(fileUrl)));
                     // Centres DownloadLabel's position.
                     Invoke(new Action(() => DownloadLabel.Location =
                         new Point(Size.Width / 2 - DownloadLabel.Size.Width / 2, DownloadLabel.Location.Y)));
@@ -152,7 +152,7 @@ namespace HedgeModManager
 
         private void DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
         {
-            byte[] bytes = e.Result;
+            var bytes = e.Result;
             string tempFolder = Path.Combine(Program.StartDirectory, "downloads");
             if (!Directory.Exists(tempFolder))
                 Directory.CreateDirectory(tempFolder);
@@ -161,7 +161,7 @@ namespace HedgeModManager
             if (bytes[0] == 'P')
                 AddModForm.InstallFromZip(filePath); // Install from a zip
             else
-                AddModForm.InstallFrom7zArchive(filePath); // Use 7Zip if its not a Zip
+                AddModForm.InstallFrom7zArchive(filePath); // Use 7-Zip or WinRAR if its not a Zip
             Invoke(new Action(() => Close()));
             return;
         }

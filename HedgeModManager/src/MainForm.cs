@@ -479,7 +479,7 @@ namespace HedgeModManager
                     key.SetValue("", "URL:" + protName);
                     key.SetValue("URL Protocol", "");
                     key = key.CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command");
-                    key.SetValue("", $"\"{Program.HedgeModManagerPath}\" -gb \"%1\"");
+                    key.SetValue("", $"\"{Program.HedgeModManagerPath}\" \"-gb %1\"");
                 }
                 key.Close();
             }

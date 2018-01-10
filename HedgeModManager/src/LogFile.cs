@@ -20,7 +20,7 @@ namespace HedgeModManager
             else
             {
                 logWriter = File.AppendText(LogPath);
-                logWriter.WriteLine($"\r\nNew Session: \r\n");
+                logWriter.WriteLine($"\r\n======== New Session ========\r\n");
             }
         }
 

@@ -39,12 +39,12 @@
             // 
             this.ProgressBarFile.Location = new System.Drawing.Point(12, 106);
             this.ProgressBarFile.Name = "ProgressBarFile";
-            this.ProgressBarFile.Size = new System.Drawing.Size(472, 32);
+            this.ProgressBarFile.Size = new System.Drawing.Size(664, 32);
             this.ProgressBarFile.TabIndex = 0;
             // 
             // CancelUpdateButton
             // 
-            this.CancelUpdateButton.Location = new System.Drawing.Point(190, 182);
+            this.CancelUpdateButton.Location = new System.Drawing.Point(289, 182);
             this.CancelUpdateButton.Name = "CancelUpdateButton";
             this.CancelUpdateButton.Size = new System.Drawing.Size(123, 23);
             this.CancelUpdateButton.TabIndex = 1;
@@ -56,7 +56,7 @@
             // 
             this.ProgressBarAll.Location = new System.Drawing.Point(12, 144);
             this.ProgressBarAll.Name = "ProgressBarAll";
-            this.ProgressBarAll.Size = new System.Drawing.Size(472, 32);
+            this.ProgressBarAll.Size = new System.Drawing.Size(664, 32);
             this.ProgressBarAll.TabIndex = 2;
             // 
             // UpdateLabel
@@ -64,7 +64,7 @@
             this.UpdateLabel.AutoSize = true;
             this.UpdateLabel.Font = new System.Drawing.Font("Segoe UI", 24F);
             this.UpdateLabel.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.UpdateLabel.Location = new System.Drawing.Point(128, 9);
+            this.UpdateLabel.Location = new System.Drawing.Point(229, 9);
             this.UpdateLabel.Name = "UpdateLabel";
             this.UpdateLabel.Size = new System.Drawing.Size(256, 45);
             this.UpdateLabel.TabIndex = 3;
@@ -75,7 +75,7 @@
             this.DownloadLabel.AutoSize = true;
             this.DownloadLabel.Font = new System.Drawing.Font("Segoe UI", 16F);
             this.DownloadLabel.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.DownloadLabel.Location = new System.Drawing.Point(153, 54);
+            this.DownloadLabel.Location = new System.Drawing.Point(254, 54);
             this.DownloadLabel.Name = "DownloadLabel";
             this.DownloadLabel.Size = new System.Drawing.Size(206, 30);
             this.DownloadLabel.TabIndex = 4;
@@ -86,7 +86,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(496, 217);
+            this.ClientSize = new System.Drawing.Size(688, 217);
             this.Controls.Add(this.DownloadLabel);
             this.Controls.Add(this.UpdateLabel);
             this.Controls.Add(this.ProgressBarAll);

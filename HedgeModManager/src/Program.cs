@@ -44,16 +44,18 @@ namespace HedgeModManager
                     DownloadGameBananaItem(args[1]);
                     return;
                 }
+                // TODO: Remove this in the future
+                DownloadGameBananaItem(args[1]);
 
             }
-            LogFile.Initialize();
+            LogFile.Initialize(false);
             LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
 
 #if DEBUG
             Steam.Init();
             var games = InstallForm.FindGames();
-            if (games.FindIndex(t => t.GameName == "Sonic Forces") != -1)
-                StartDirectory = Path.GetDirectoryName(games.Find(t => t.GameName == "Sonic Forces").Path);
+            if (games.FindIndex(t => t.GameName == Games.SonicForces.GameName) != -1)
+                StartDirectory = Path.GetDirectoryName(games.Find(t => t.GameName == Games.SonicForces.GameName).Path);
 #endif
 
             LogFile.AddMessage($"Running {ProgramName} in {StartDirectory}");
@@ -72,57 +74,65 @@ namespace HedgeModManager
 
         public static void DownloadGameBananaItem(string arg)
         {
-            // GameBanana Download Protocol
-            if (arg.ToLower().StartsWith(@"hedgemmgens:")
-                || arg.ToLower().StartsWith(@"hedgemmlw:")
-                || arg.ToLower().StartsWith(@"hedgemmforces:"))
+            try
             {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                string url = arg;
-                if (url.ToLower().StartsWith(@"hedgemmgens:"))
-                    url = url.Substring(12);
-                if (url.ToLower().StartsWith(@"hedgemmlw:"))
-                    url = url.Substring(10);
-                if (url.ToLower().StartsWith(@"hedgemmforces:"))
-                    url = url.Substring(14);
 
-                // TODO:
-                string itemType = url.Split(',')[1];
-                string itemID = url.Split(',')[2];
-                url = url.Substring(0, url.IndexOf(","));
-
-                if (!IsURL(url))
+                // GameBanana Download Protocol
+                if (arg.ToLower().StartsWith(@"hedgemmgens:")
+                    || arg.ToLower().StartsWith(@"hedgemmlw:")
+                    || arg.ToLower().StartsWith(@"hedgemmforces:"))
                 {
-                    MessageBox.Show("Link Given is not a URL!");
-                    return;
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    string url = arg;
+                    if (url.ToLower().StartsWith(@"hedgemmgens:"))
+                        url = url.Substring(12);
+                    if (url.ToLower().StartsWith(@"hedgemmlw:"))
+                        url = url.Substring(10);
+                    if (url.ToLower().StartsWith(@"hedgemmforces:"))
+                        url = url.Substring(14);
+
+                    // TODO:
+                    string itemType = url.Split(',')[1];
+                    string itemID = url.Split(',')[2];
+                    url = url.Substring(0, url.IndexOf(","));
+
+                    if (!IsURL(url))
+                    {
+                        MessageBox.Show("Link Given is not a URL!");
+                        return;
+                    }
+
+                    var submittion = GameBanana.GameBananaItemSubmittion.ReadResponse(
+                        GameBanana.GameBananaItemSubmittion.GetResponseFromGameBanana(itemType, itemID));
+                    var user = GameBanana.GameBananaItemMember.ReadResponse(
+                        GameBanana.GameBananaItemMember.GetResponseFromGameBanana(submittion.UserId));
+
+                    //TODO
+                    string thumb = $"https://gamebanana.com/skins/embeddables/{itemID}?type=large_minimal_square";
+
+                    Bitmap bitmap = null;
+                    try
+                    {
+                        var client = new WebClient();
+                        var stream = client.OpenRead(thumb);
+                        bitmap = new Bitmap(stream);
+                        stream.Close();
+                        client.Dispose();
+                    }
+                    catch
+                    {
+                        bitmap = null;
+                    }
+
+                    var download = new DownloadModForm(submittion.Name, user.Name, submittion.Description, url,
+                        submittion.Credits, bitmap);
+                    download.ShowDialog();
                 }
-
-                var submittion = GameBanana.GameBananaItemSubmittion.ReadResponse(
-                    GameBanana.GameBananaItemSubmittion.GetResponseFromGameBanana(itemType, itemID));
-                var user = GameBanana.GameBananaItemMember.ReadResponse(
-                    GameBanana.GameBananaItemMember.GetResponseFromGameBanana(submittion.UserId));
-
-                //TODO
-                string thumb = $"https://gamebanana.com/skins/embeddables/{itemID}?type=large_minimal_square";
-
-                Bitmap bitmap = null;
-                try
-                {
-                    var client = new WebClient();
-                    var stream = client.OpenRead(thumb);
-                    bitmap = new Bitmap(stream);
-                    stream.Close();
-                    client.Dispose();
-                }
-                catch
-                {
-                    bitmap = null;
-                }
-
-                var download = new DownloadModForm(submittion.Name, user.Name, submittion.Description, url,
-                    submittion.Credits, bitmap);
-                download.ShowDialog();
+            }catch (Exception ex)
+            {
+                LogFile.Initialize(false);
+                MainForm.AddMessage("Exception thrown on GameBanana Item Installation", ex, arg);
             }
         }
 
