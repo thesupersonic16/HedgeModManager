@@ -1132,31 +1132,46 @@ namespace HedgeModManager
 
         private void Button_BackupSaveFile_Click(object sender, EventArgs e)
         {
-            if (Program.CurrentGame == Games.SonicForces)
+            try
             {
-                string saveFilePath = Path.Combine(Program.StartDirectory, "..\\..\\..\\..\\savedata");
-                string backupPath = Path.Combine(Program.StartDirectory, "SaveFileBackup");
-                // Creates all of the directories
-                foreach (string dirPath in Directory.GetDirectories(saveFilePath, "*",
-                    SearchOption.AllDirectories))
-                    Directory.CreateDirectory(dirPath.Replace(saveFilePath, backupPath));
 
-                // Copies all files
-                foreach (string filePath in Directory.GetFiles(saveFilePath, "*.*",
-                    SearchOption.AllDirectories))
-                    File.Copy(filePath, filePath.Replace(saveFilePath, backupPath), true);
-                AddMessage("Save Data Backup Succeeded");
+                if (Program.CurrentGame == Games.SonicForces)
+                {
+                    string saveFilePath = new DirectoryInfo(Path.Combine(Program.StartDirectory, "..\\..\\..\\..\\savedata")).FullName;
+                    string backupPath = Path.Combine(Program.StartDirectory, "SaveFileBackup");
+                    
+                    // Checks if a save file exists
+                    if (!Directory.Exists(saveFilePath))
+                    {
+                        LogFile.AddMessage("No SaveData Detected! No backup will be made!");
+                        return;
+                    }
+                    
+                    // Creates all of the directories
+                    foreach (string dirPath in Directory.GetDirectories(saveFilePath, "*",
+                        SearchOption.AllDirectories))
+                        Directory.CreateDirectory(dirPath.Replace(saveFilePath, backupPath));
+
+                    // Copies all files
+                    foreach (string filePath in Directory.GetFiles(saveFilePath, "*.*",
+                        SearchOption.AllDirectories))
+                        File.Copy(filePath, filePath.Replace(saveFilePath, backupPath), true);
+                    AddMessage("Save Data Backup Succeeded");
+                }
+                bool BackupExists = Directory.Exists(Path.Combine(Program.StartDirectory, "SaveFileBackup"));
+                Label_SaveFileBackupStatus.Text = string.Format("SaveFile Backup Status:\n    Backup Exists: {0}", BackupExists ? "YES" : "NO");
             }
-            bool BackupExists = Directory.Exists(Path.Combine(Program.StartDirectory, "SaveFileBackup"));
-            Label_SaveFileBackupStatus.Text = string.Format("SaveFile Backup Status:\n    Backup Exists: {0}", BackupExists ? "YES" : "NO");
-
+            catch (Exception ex)
+            {
+                AddMessage("Exception thrown While backing up the save file", ex);
+            }
         }
 
         private void Button_RestoreSaveFile_Click(object sender, EventArgs e)
         {
             if (Program.CurrentGame == Games.SonicForces)
             {
-                string saveFilePath = Path.Combine(Program.StartDirectory, "..\\..\\..\\..\\savedata");
+                string saveFilePath = new DirectoryInfo(Path.Combine(Program.StartDirectory, "..\\..\\..\\..\\savedata")).FullName;
                 string backupPath = Path.Combine(Program.StartDirectory, "SaveFileBackup");
                 if (Directory.Exists(backupPath))
                 {

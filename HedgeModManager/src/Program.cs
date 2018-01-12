@@ -51,7 +51,7 @@ namespace HedgeModManager
 #if DEBUG
             Steam.Init();
             var games = InstallForm.FindGames();
-            if (games.FindIndex(t => t.GameName == Games.SonicForces.GameName) != -1)
+            if (games.Any(t => t.GameName == Games.SonicForces.GameName))
                 StartDirectory = Path.GetDirectoryName(games.Find(t => t.GameName == Games.SonicForces.GameName).Path);
 #endif
 

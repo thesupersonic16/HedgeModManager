@@ -51,6 +51,12 @@ namespace HedgeModManager
                     stream.Close();
                     client.Dispose();
                     Invoke(new Action(() => PictureBox_1.Image = bitmap));
+                    Invoke(new Action(() =>
+                    {
+                        PictureBox_1.Width *= (bitmap.Width / bitmap.Height);
+                        PictureBox_1.Location = 
+                        new Point(Width - 30 - PictureBox_1.Width, PictureBox_1.Location.Y);
+                    }));
                 }).Start();
 
         }
