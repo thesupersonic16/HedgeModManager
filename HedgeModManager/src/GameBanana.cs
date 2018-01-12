@@ -14,11 +14,11 @@ namespace HedgeModManager
 
         public class GameBananaItemSubmittion
         {
-            public string Name, Description, UserId, Credits;
+            public string Name, Description, UserId, Credits, ThumbURL;
 
             public static string GetResponseFromGameBanana(string itemType, string ItemID)
             {
-                return new WebClient().DownloadString($"https://api.gamebanana.com/Core/Item/Data?itemtype={itemType}&itemid={ItemID}&fields=name,description,text,userid,Credits().aAuthors()&format=xml");
+                return new WebClient().DownloadString($"https://api.gamebanana.com/Core/Item/Data?itemtype={itemType}&itemid={ItemID}&fields=name,description,text,userid,Credits().aAuthors(),Preview().sStructuredDataFullsizeUrl()&format=xml");
             }
 
             public static GameBananaItemSubmittion ReadResponse(string s)
@@ -30,6 +30,7 @@ namespace HedgeModManager
                 item.Description = values[1].Value;
                 item.Description += values[2].Value;
                 item.UserId = values[3].Value;
+                item.ThumbURL = values[4].Value;
                 var credits = xml.Root.Elements("valueset").ToList()[0];
                 foreach (var values2 in credits.Elements("valueset"))
                 {

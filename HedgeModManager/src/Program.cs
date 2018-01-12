@@ -44,9 +44,6 @@ namespace HedgeModManager
                     DownloadGameBananaItem(args[1]);
                     return;
                 }
-                // TODO: Remove this in the future
-                DownloadGameBananaItem(args[1]);
-
             }
             LogFile.Initialize(false);
             LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
@@ -108,25 +105,8 @@ namespace HedgeModManager
                     var user = GameBanana.GameBananaItemMember.ReadResponse(
                         GameBanana.GameBananaItemMember.GetResponseFromGameBanana(submittion.UserId));
 
-                    //TODO
-                    string thumb = $"https://gamebanana.com/skins/embeddables/{itemID}?type=large_minimal_square";
-
-                    Bitmap bitmap = null;
-                    try
-                    {
-                        var client = new WebClient();
-                        var stream = client.OpenRead(thumb);
-                        bitmap = new Bitmap(stream);
-                        stream.Close();
-                        client.Dispose();
-                    }
-                    catch
-                    {
-                        bitmap = null;
-                    }
-
                     var download = new DownloadModForm(submittion.Name, user.Name, submittion.Description, url,
-                        submittion.Credits, bitmap);
+                        submittion.Credits, submittion.ThumbURL);
                     download.ShowDialog();
                 }
             }catch (Exception ex)

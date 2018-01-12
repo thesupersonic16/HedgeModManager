@@ -472,15 +472,24 @@ namespace HedgeModManager
                     MessageBox.Show("What happened?");
                     return;
                 }
+                
                 var key = Registry.ClassesRoot.OpenSubKey(Protocol, true);
                 if (key == null)
-                { // e.g. URL:HedgeModManager for Sonic Forces
                     key = Registry.ClassesRoot.CreateSubKey(Protocol);
-                    key.SetValue("", "URL:" + protName);
-                    key.SetValue("URL Protocol", "");
-                    key = key.CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command");
-                    key.SetValue("", $"\"{Program.HedgeModManagerPath}\" \"-gb %1\"");
-                }
+                key.SetValue("", "URL:" + protName);
+                key.SetValue("URL Protocol", "");
+
+                key = key.OpenSubKey("shell", true);
+                if (key == null)
+                    key = key.CreateSubKey("shell");
+                key = key.OpenSubKey("open", true);
+                if (key == null)
+                    key = key.CreateSubKey("open");
+                key = key.OpenSubKey("command", true);
+                if (key == null)
+                    key = key.CreateSubKey("command");
+
+                key.SetValue("", $"\"{Program.HedgeModManagerPath}\" \"-gb\" \"%1\"");
                 key.Close();
             }
             catch { }
