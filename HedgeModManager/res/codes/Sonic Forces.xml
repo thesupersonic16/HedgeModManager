@@ -713,6 +713,54 @@
       <Value>CFEB</Value>
       <ValueType>hex</ValueType>
     </CodeLine>
+    <CodeLine>
+      <Type>write16</Type>
+      <Address>14086BC05</Address>
+      <Value>05C6</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>14086BC07</Address>
+      <Value>01804D15</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write16</Type>
+      <Address>14086BC0B</Address>
+      <Value>E801</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>14086BC0D</Address>
+      <Value>FFE0CBAF</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>14086BC11</Address>
+      <Value>E9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>14086BC12</Address>
+      <Value>FFCF5C04</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>140561815</Address>
+      <Value>E9</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+    <CodeLine>
+      <Type>write32</Type>
+      <Address>140561816</Address>
+      <Value>0030A3EB</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
   </Code>
 
   <!-- Outdated Codes -->
