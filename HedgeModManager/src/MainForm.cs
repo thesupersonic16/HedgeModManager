@@ -346,6 +346,9 @@ namespace HedgeModManager
                     }
                 }
 
+                if (Program.RunningAsAdmin())
+                    Text += " (Admin)";
+
                 LoadConfig();
 
                 // Checks if the mods directory exists, If not, then ask to create one
@@ -447,33 +450,60 @@ namespace HedgeModManager
             else
                 InstallLoader_Button.Text = "Install Loader";
 
+            // Add URI Scheme (Requires Admin)
+            string protName = "";
+            string Protocol = "";
+            if (Program.CurrentGame == Games.SonicGenerations)
+            {
+                protName = "HedgeModManager for Sonic Generations";
+                Protocol = "hedgemmgens";
+            }
+            if (Program.CurrentGame == Games.SonicLostWorld)
+            {
+                protName = "HedgeModManager for Sonic Lost World";
+                Protocol = "hedgemmlw";
+            }
+            if (Program.CurrentGame == Games.SonicForces)
+            {
+                protName = "HedgeModManager for Sonic Forces";
+                Protocol = "hedgemmforces";
+            }
+            if (protName == "")
+            {
+                MessageBox.Show("What happened?");
+                return;
+            }
+
             try
             {
-                // Add URI Scheme (Requires Admin)
-                string protName = "";
-                string Protocol = "";
-                if (Program.CurrentGame == Games.SonicGenerations)
+
+                // GB Update Check
+                var key = Registry.ClassesRoot.OpenSubKey(Protocol + "\\shell\\open\\command");
+                if (key != null)
                 {
-                    protName = "HedgeModManager for Sonic Generations";
-                    Protocol = "hedgemmgens";
+                    string value = key.GetValue("") as string;
+                    if (!Program.RunningAsAdmin() && !string.IsNullOrEmpty(value) && !value.Contains("\"-gb\""))
+                    {
+                        var msgBox = new SS16MessageBox("Registry Update",
+                            "Outdated Registry for GameBanana 1-Click Install", Resources.GameBananaRegUpdateText);
+                        msgBox.AddButton("Close", 100, (obj, e2) => msgBox.Close());
+                        msgBox.AddButton("Restart HedgeModManager as Admin", 300, (obj, e2) =>
+                        {
+                            Close();
+                            msgBox.Close();
+                            var startInfo = new ProcessStartInfo(Application.ExecutablePath);
+                            // Run as Admin
+                            startInfo.Verb = "runas";
+                            // Starts the process
+                            Process.Start(startInfo);
+                        });
+                        msgBox.ShowDialog();
+                    }
+                    key.Close();
                 }
-                if (Program.CurrentGame == Games.SonicLostWorld)
-                {
-                    protName = "HedgeModManager for Sonic Lost World";
-                    Protocol = "hedgemmlw";
-                }
-                if (Program.CurrentGame == Games.SonicForces)
-                {
-                    protName = "HedgeModManager for Sonic Forces";
-                    Protocol = "hedgemmforces";
-                }
-                if (protName == "")
-                {
-                    MessageBox.Show("What happened?");
-                    return;
-                }
-                
-                var key = Registry.ClassesRoot.OpenSubKey(Protocol, true);
+
+
+                key = Registry.ClassesRoot.OpenSubKey(Protocol, true);
                 if (key == null)
                     key = Registry.ClassesRoot.CreateSubKey(Protocol);
                 key.SetValue("", "URL:" + protName);

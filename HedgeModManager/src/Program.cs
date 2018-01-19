@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -172,7 +173,6 @@ namespace HedgeModManager
             return hex.Replace("-", "");
         }
 
-
         /// <summary>
         /// Computes a SHA256 Hash of bytes
         /// </summary>
@@ -181,6 +181,12 @@ namespace HedgeModManager
         public static byte[] ComputeSHA256Hash(byte[] bytes)
         {
             return new SHA256Managed().ComputeHash(bytes);
+        }
+
+        // https://stackoverflow.com/questions/11660184/c-sharp-check-if-run-as-administrator
+        public static bool RunningAsAdmin()
+        {
+            return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
     }

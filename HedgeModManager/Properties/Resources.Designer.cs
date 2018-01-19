@@ -198,6 +198,16 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We have updated the command for GameBanana&apos;s 1-Click Install.
+        ///To complete the update we will need to restart HedgeModManager as Admin..
+        /// </summary>
+        internal static string GameBananaRegUpdateText {
+            get {
+                return ResourceManager.GetString("GameBananaRegUpdateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon icon {
