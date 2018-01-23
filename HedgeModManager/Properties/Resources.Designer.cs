@@ -151,6 +151,15 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occured! See &quot;HedgeModManager.log&quot; for more info..
+        /// </summary>
+        internal static string ExceptionPiracyText {
+            get {
+                return ResourceManager.GetString("ExceptionPiracyText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occured! See &quot;HedgeModManager.log&quot; for more info and report the file if possible..
         /// </summary>
         internal static string ExceptionText {

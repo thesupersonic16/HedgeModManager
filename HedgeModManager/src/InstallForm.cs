@@ -52,14 +52,21 @@ namespace HedgeModManager
                     string lwPath = Path.Combine(path, "Sonic Lost World\\slw.exe");
                     string gensPath = Path.Combine(path, "Sonic Generations\\SonicGenerations.exe");
                     string forcesPath = Path.Combine(path, "SonicForces\\build\\main\\projects\\exec\\Sonic Forces.exe");
-                    if (File.Exists(lwPath))
+                    if (CheckGameAndSupport(lwPath))
                         entries.Add(new Entry() { GameName = "Sonic Lost World", Path = lwPath });
-                    if (File.Exists(gensPath))
+                    if (CheckGameAndSupport(gensPath))
                         entries.Add(new Entry() { GameName = "Sonic Generations", Path = gensPath });
-                    if (File.Exists(forcesPath))
+                    if (CheckGameAndSupport(forcesPath))
                         entries.Add(new Entry() { GameName = "Sonic Forces", Path = forcesPath });
                 }
             return entries;
+        }
+
+        public static bool CheckGameAndSupport(string path)
+        {
+            return File.Exists(path) && !(
+                File.Exists(Path.Combine(Path.GetDirectoryName(path), "steamclient64.dll")) ||
+                File.Exists(Path.Combine(Path.GetDirectoryName(path), "steamclient.dll")));
         }
 
         private void InstallForm_Load(object sender, EventArgs e)

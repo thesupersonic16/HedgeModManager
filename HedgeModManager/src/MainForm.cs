@@ -45,6 +45,13 @@ namespace HedgeModManager
         }
 
         // Methods
+        public static bool CheckSupport()
+        {
+            if (Program.CurrentGame == Games.SonicForces)
+                return InstallForm.CheckGameAndSupport(ForcesExecutablePath);
+            return true;
+        }
+
         public bool RunInstaller()
         {
             new InstallForm().ShowDialog();
@@ -292,13 +299,21 @@ namespace HedgeModManager
             if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath) || File.Exists(ForcesExecutablePath))
             {
                 if (File.Exists(LWExecutablePath))
+                    Program.CurrentGame = Games.SonicLostWorld;
+                else if (File.Exists(GensExecutablePath))
+                    Program.CurrentGame = Games.SonicGenerations;
+                else if (File.Exists(ForcesExecutablePath))
+                    Program.CurrentGame = Games.SonicForces;
+
+
+                if (Program.CurrentGame == Games.SonicLostWorld)
                 {
                     Text += " - Sonic Lost World";
                     LogFile.AddMessage("Found Sonic Lost World.");
                     PatchGroupBox.Visible = false;
                     EnableSaveFileRedirectionCheckBox.Text += " (.sdat > .msdat)";
                 }
-                else if (File.Exists(ForcesExecutablePath))
+                else if (Program.CurrentGame == Games.SonicForces)
                 {
                     Text += " - Sonic Forces";
                     LogFile.AddMessage("Found Sonic Forces.");
@@ -310,13 +325,21 @@ namespace HedgeModManager
                     EnableCPKREDIRConsoleCheckBox.Enabled = false;
                     Button_SaveAndReload.Text = "Reload";
 
-                    // --- SaveBackup ---
-                    // Shows the button and labels
-                    Button_BackupSaveFile.Visible = Button_RestoreSaveFile.Visible = Label_SaveFileBackupStatus.Visible = true;
-                    bool BackupExists = Directory.Exists(Path.Combine(Program.StartDirectory, "SaveFileBackup"));
-                    Label_SaveFileBackupStatus.Text = string.Format("SaveFile Backup Status:\n    Backup Exists: {0}", BackupExists ? "YES" : "NO");
+                    if (CheckSupport())
+                    {
+                        // --- SaveBackup ---
+                        // Shows the button and labels
+                        Button_BackupSaveFile.Visible = Button_RestoreSaveFile.Visible = Label_SaveFileBackupStatus.Visible = true;
+                        bool BackupExists = Directory.Exists(Path.Combine(Program.StartDirectory, "SaveFileBackup"));
+                        Label_SaveFileBackupStatus.Text = string.Format("SaveFile Backup Status:\n    Backup Exists: {0}", BackupExists ? "YES" : "NO");
+                    }
+                    else
+                    {
+                        ReportLabel.Enabled = false;
+                        ReportLabel.Text += " (Crack Detected!)";
+                    }
                 }
-                else if (File.Exists(GensExecutablePath))
+                else if (Program.CurrentGame == Games.SonicGenerations)
                 {
                     Text += " - Sonic Generations";
                     LogFile.AddMessage("Found Sonic Generations.");
@@ -362,13 +385,6 @@ namespace HedgeModManager
                     }
                     else return;
                 }
-
-                if (File.Exists(LWExecutablePath))
-                    Program.CurrentGame = Games.SonicLostWorld;
-                else if (File.Exists(GensExecutablePath))
-                    Program.CurrentGame = Games.SonicGenerations;
-                else if (File.Exists(ForcesExecutablePath))
-                    Program.CurrentGame = Games.SonicForces;
 
                 // Ask to Download Codes if none exists.
                 if (!File.Exists(Path.Combine(Program.StartDirectory, "mods\\Codes.xml")))
@@ -752,10 +768,14 @@ namespace HedgeModManager
                 foreach (string s in extraData)
                     LogFile.AddMessage($"        {s}");
             }
-            MessageBox.Show(Resources.ExceptionText, Program.ProgramName);
-            #if DEBUG
+            if (CheckSupport())
+                MessageBox.Show(Resources.ExceptionText, Program.ProgramName);
+            else
+                MessageBox.Show(Resources.ExceptionPiracyText, Program.ProgramName);
+
+#if DEBUG
             throw exception;
-            #endif
+#endif
         }
 
         #endregion Logging
@@ -1164,9 +1184,10 @@ namespace HedgeModManager
         {
             try
             {
-
                 if (Program.CurrentGame == Games.SonicForces)
                 {
+                    if (!InstallForm.CheckGameAndSupport(ForcesExecutablePath))
+                        return;
                     string saveFilePath = new DirectoryInfo(Path.Combine(Program.StartDirectory, "..\\..\\..\\..\\savedata")).FullName;
                     string backupPath = Path.Combine(Program.StartDirectory, "SaveFileBackup");
                     

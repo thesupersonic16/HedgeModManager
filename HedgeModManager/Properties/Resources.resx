@@ -213,4 +213,7 @@ However, this mod does have a website.
     <value>We have updated the command for GameBanana's 1-Click Install.
 To complete the update we will need to restart HedgeModManager as Admin.</value>
   </data>
+  <data name="ExceptionPiracyText" xml:space="preserve">
+    <value>An error occured! See "HedgeModManager.log" for more info.</value>
+  </data>
 </root>
