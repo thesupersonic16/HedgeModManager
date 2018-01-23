@@ -72,7 +72,8 @@ namespace HedgeModManager
 
         private void DownloadModForm_Load(object sender, EventArgs e)
         {
-            Theme.ApplyDarkThemeToAll(this);
+            if (MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] != "0")
+                Theme.ApplyDarkThemeToAll(this);
         }
 
         private void Button_Update_Click(object sender, EventArgs e)

@@ -188,6 +188,8 @@ namespace HedgeModManager
 
         private void NewModForm_Load(object sender, EventArgs e)
         {
+            if (MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] != "0")
+
             if (Theme.ApplyDarkThemeToAll(this))
             {
                 foreach (ListViewItem lvi in listView1.Items)

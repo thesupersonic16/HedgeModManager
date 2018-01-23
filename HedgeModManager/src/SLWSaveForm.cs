@@ -73,7 +73,8 @@ namespace HedgeModManager
             };
 
             // Applies the Dark Theme, Because why not?
-            Theme.ApplyDarkThemeToAll(this);
+            if (MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] != "0")
+                Theme.ApplyDarkThemeToAll(this);
 
             // Checks if the Key and Value exists.
             if (Steam.SteamLocation != null)
