@@ -32,6 +32,16 @@ namespace HedgeModManager
         private static void Main(string[] args)
         {
 
+            if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
+                try
+                {
+                    MainForm.CPKREDIRIni = new IniFile(Path.Combine(Program.StartDirectory, "cpkredir.ini"));
+                }
+                catch
+                {
+                    MainForm.CPKREDIRIni = new IniFile();
+                }
+
             if (args.Length > 0)
             {
                 if (args[0] == "-dev")
