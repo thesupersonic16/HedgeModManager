@@ -296,6 +296,14 @@ namespace HedgeModManager
 
         public void Init()
         {
+            // Just to be safe
+            GensExecutablePath = Path.Combine(Program.StartDirectory, "SonicGenerations.exe");
+            LWExecutablePath = Path.Combine(Program.StartDirectory, "slw.exe");
+            ForcesExecutablePath = Path.Combine(Program.StartDirectory, "Sonic Forces.exe");
+            ModsFolderPath = Path.Combine(Program.StartDirectory, "mods");
+            ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
+
+
             Text += $" ({Program.VersionString})";
             if (File.Exists(LWExecutablePath) || File.Exists(GensExecutablePath) || File.Exists(ForcesExecutablePath))
             {

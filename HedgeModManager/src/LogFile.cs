@@ -14,14 +14,19 @@ namespace HedgeModManager
         //Methods
         public static void Initialize(bool createNewFile = true, bool useTimeStampBool = true)
         {
-            useTimeStamp = useTimeStampBool;
-            if (createNewFile)
-                logWriter = File.CreateText(LogPath);
-            else
+            try
             {
-                logWriter = File.AppendText(LogPath);
-                logWriter.WriteLine($"\r\n======== New Session ========\r\n");
+                useTimeStamp = useTimeStampBool;
+                if (createNewFile)
+                    logWriter = File.CreateText(LogPath);
+                else
+                {
+                    logWriter = File.AppendText(LogPath);
+                    logWriter.WriteLine($"\r\n======== New Session ========\r\n");
+                }
             }
+            catch { }
+
         }
 
         public static void AddMessage(string message)
@@ -50,11 +55,13 @@ namespace HedgeModManager
 
         public static void AddEmptyLine()
         {
+            if (logWriter == null) return;
             logWriter.WriteLine("");
         }
 
         public static void Close()
         {
+            if (logWriter == null) return;
             logWriter.Close();
         }
     }

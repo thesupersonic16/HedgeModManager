@@ -33,6 +33,18 @@ namespace HedgeModManager
         private static void Main(string[] args)
         {
 
+            LogFile.Initialize(false);
+            LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
+
+#if DEBUG
+            Steam.Init();
+            var games = InstallForm.FindGames();
+            if (games.Any(t => t.GameName == Games.SonicForces.GameName))
+                StartDirectory = Path.GetDirectoryName(games.Find(t => t.GameName == Games.SonicForces.GameName).Path);
+#endif
+
+            LogFile.AddMessage($"Running {ProgramName} in {StartDirectory}");
+
             // Writes "cpkredir.ini" if it doesn't exists as HedgeModManager uses it to store its config
             if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.ini")))
             {
@@ -48,27 +60,20 @@ namespace HedgeModManager
             {
                 if (args[0] == "-dev")
                 {
+                    LogFile.AddMessage("Starting Dev Tools");
                     DevTools.Init();
                     return;
                 }
 
                 if (args[0] == "-gb")
                 {
+                    LogFile.AddMessage("Running GB Installer");
                     DownloadGameBananaItem(args[1]);
+                    LogFile.Close();
                     return;
                 }
             }
-            LogFile.Initialize(false);
-            LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
 
-#if DEBUG
-            Steam.Init();
-            var games = InstallForm.FindGames();
-            if (games.Any(t => t.GameName == Games.SonicForces.GameName))
-                StartDirectory = Path.GetDirectoryName(games.Find(t => t.GameName == Games.SonicForces.GameName).Path);
-#endif
-
-            LogFile.AddMessage($"Running {ProgramName} in {StartDirectory}");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
