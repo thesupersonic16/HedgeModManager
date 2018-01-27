@@ -73,7 +73,7 @@ namespace HedgeModManager
             };
 
             // Applies the Dark Theme, Because why not?
-            if (MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] != "0")
+            if (Program.UseDarkTheme)
                 Theme.ApplyDarkThemeToAll(this);
 
             // Checks if the Key and Value exists.

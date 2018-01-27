@@ -188,7 +188,7 @@ namespace HedgeModManager
 
         private void NewModForm_Load(object sender, EventArgs e)
         {
-            if (MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] != "0")
+            if (Program.UseDarkTheme)
 
             if (Theme.ApplyDarkThemeToAll(this))
             {

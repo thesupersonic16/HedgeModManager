@@ -31,7 +31,7 @@ namespace HedgeModManager
 
         private void AboutForm_Load(object sender, EventArgs e)
         {
-            if (MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] != "0")
+            if (Program.UseDarkTheme)
                 Theme.ApplyDarkThemeToAll(this);
             // Links
             AddLink("Radfordhound", "https://github.com/Radfordhound");

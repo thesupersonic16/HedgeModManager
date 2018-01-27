@@ -45,6 +45,10 @@ namespace HedgeModManager
         }
 
         // Methods
+        /// <summary>
+        /// Checks if Support should be given by the games current state
+        /// </summary>
+        /// <returns></returns>
         public static bool CheckSupport()
         {
             if (Program.CurrentGame == Games.SonicForces)
@@ -52,12 +56,17 @@ namespace HedgeModManager
             return true;
         }
 
+        /// <summary>
+        /// Opens the Installer
+        /// </summary>
+        /// <returns></returns>
         public bool RunInstaller()
         {
             new InstallForm().ShowDialog();
             Close();
             return false; 
         }
+
         /// <summary>
         /// Loads all the mods from the mods folder into ModsDb
         /// </summary>
@@ -171,8 +180,7 @@ namespace HedgeModManager
 
             // Updates the background colour on the ListView if DarkTheme is enabled
             int i = 0;
-            if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("DarkTheme") &&
-                CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] == "1")
+            if (Program.UseDarkTheme)
                 foreach (ListViewItem lvi in ModsList.Items)
                     if (++i % 2 == 0) lvi.BackColor = Color.FromArgb(46, 46, 46);
                     else lvi.BackColor = Color.FromArgb(54, 54, 54);
@@ -208,14 +216,7 @@ namespace HedgeModManager
         }
 
         public void LoadConfig()
-        {
-            // Writes "cpkredir.ini" if it doesn't exists as HedgeModManager uses it to store its config
-            if (!File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
-            {
-                LogFile.AddMessage("Writing cpkredir.ini");
-                File.WriteAllText(Path.Combine(Program.StartDirectory, "cpkredir.ini"), Resources.cpkredirINI);
-            }
-           
+        {           
             // Checks if "cpkredir.ini" exists as HedgeModManager uses it to store its config
             if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
             {
@@ -278,8 +279,8 @@ namespace HedgeModManager
                     EnableSaveFileRedirectionCheckBox.Checked =
                         CPKREDIRIni["CPKREDIR"]["EnableSaveFileRedirection"] != "0";
                     EnableCPKREDIRConsoleCheckBox.Checked = CPKREDIRIni["CPKREDIR"].ContainsParameter("LogType");
-
-                    if (group["DarkTheme"] != "0")
+                    Program.UseDarkTheme = group["DarkTheme"] != "0";
+                    if (Program.UseDarkTheme)
                     {
                         ModsList.OwnerDraw = true;
                         Theme.ApplyDarkThemeToAll(this, splitContainer.Panel1, splitContainer.Panel2, splitContainer);
@@ -304,7 +305,6 @@ namespace HedgeModManager
                     Program.CurrentGame = Games.SonicGenerations;
                 else if (File.Exists(ForcesExecutablePath))
                     Program.CurrentGame = Games.SonicForces;
-
 
                 if (Program.CurrentGame == Games.SonicLostWorld)
                 {
@@ -386,8 +386,13 @@ namespace HedgeModManager
                     else return;
                 }
 
+                // Remove the codes tab if the game doesn't have a custom loader
+                if (!Program.CurrentGame.HasCustomLoader)
+                    TabControl.Controls.Remove(tabPage1);
+
+
                 // Ask to Download Codes if none exists.
-                if (!File.Exists(Path.Combine(Program.StartDirectory, "mods\\Codes.xml")))
+                if (!File.Exists(Path.Combine(Program.StartDirectory, "mods\\Codes.xml")) && Program.CurrentGame.HasCustomLoader)
                 {
                     if (MessageBox.Show(string.Format(Resources.NoCodesText, Program.CurrentGame),
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
@@ -524,16 +529,18 @@ namespace HedgeModManager
                     key = Registry.ClassesRoot.CreateSubKey(Protocol);
                 key.SetValue("", "URL:" + protName);
                 key.SetValue("URL Protocol", "");
-
+                var prevkey = key;
                 key = key.OpenSubKey("shell", true);
                 if (key == null)
-                    key = key.CreateSubKey("shell");
+                    key = prevkey.CreateSubKey("shell");
+                prevkey = key;
                 key = key.OpenSubKey("open", true);
                 if (key == null)
-                    key = key.CreateSubKey("open");
+                    key = prevkey.CreateSubKey("open");
+                prevkey = key;
                 key = key.OpenSubKey("command", true);
                 if (key == null)
-                    key = key.CreateSubKey("command");
+                    key = prevkey.CreateSubKey("command");
 
                 key.SetValue("", $"\"{Program.HedgeModManagerPath}\" \"-gb\" \"%1\"");
                 key.Close();
@@ -695,7 +702,7 @@ namespace HedgeModManager
         {
             string URL = $"https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/master/HedgeModManager/res/codes/{Program.CurrentGame}.xml";
             string filePath = Path.Combine(Program.StartDirectory, "mods\\Codes.xml");
-            if (Program.CurrentGame.HasCodes)
+            if (Program.CurrentGame.HasCustomLoader)
             {
                 try
                 {
@@ -1197,7 +1204,10 @@ namespace HedgeModManager
                         LogFile.AddMessage("No SaveData Detected! No backup will be made!");
                         return;
                     }
-                    
+
+                    if (!Directory.Exists(backupPath))
+                        Directory.CreateDirectory(backupPath);
+
                     // Creates all of the directories
                     foreach (string dirPath in Directory.GetDirectories(saveFilePath, "*",
                         SearchOption.AllDirectories))

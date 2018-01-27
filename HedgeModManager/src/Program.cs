@@ -26,21 +26,23 @@ namespace HedgeModManager
         public const string VersionString = "6.1-018";
         public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
         public static bool Restart = false;
+        public static bool UseDarkTheme = true;
 
         //Methods
         [STAThread]
         private static void Main(string[] args)
         {
 
-            if (File.Exists(Path.Combine(Program.StartDirectory, "cpkredir.ini")))
-                try
-                {
-                    MainForm.CPKREDIRIni = new IniFile(Path.Combine(Program.StartDirectory, "cpkredir.ini"));
-                }
-                catch
-                {
-                    MainForm.CPKREDIRIni = new IniFile();
-                }
+            // Writes "cpkredir.ini" if it doesn't exists as HedgeModManager uses it to store its config
+            if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.ini")))
+            {
+                LogFile.AddMessage("Writing cpkredir.ini");
+                File.WriteAllText(Path.Combine(StartDirectory, "cpkredir.ini"), Resources.cpkredirINI);
+            }
+
+
+            if (File.Exists(Path.Combine(StartDirectory, "cpkredir.ini")))
+                MainForm.CPKREDIRIni = new IniFile(Path.Combine(StartDirectory, "cpkredir.ini"));
 
             if (args.Length > 0)
             {

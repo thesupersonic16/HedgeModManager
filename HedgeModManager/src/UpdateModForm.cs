@@ -47,7 +47,7 @@ namespace HedgeModManager
         // GUI Events
         private void UpdateModsForm_Load(object sender, EventArgs e)
         {
-            if (MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] != "0")
+            if (Program.UseDarkTheme)
                 Theme.ApplyDarkThemeToAll(this);
             var webClient = new WebClient();
             // Adds the WebClient_DownloadProgressChanged event to the web client.

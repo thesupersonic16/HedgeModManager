@@ -42,7 +42,7 @@ namespace HedgeModManager
 
         private void NewModNameForm_Load(object sender, EventArgs e)
         {
-            if (MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] != "0")
+            if (Program.UseDarkTheme)
                 Theme.ApplyDarkThemeToAll(this);
         }
     }

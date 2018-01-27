@@ -61,7 +61,7 @@ namespace SS16
             Label_Title.Location = new Point(
                 Size.Width / 2 - Label_Title.Size.Width / 2, Label_Title.Location.Y);
             // Applies the dark theme
-            if (MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] != "0")
+            if (Program.UseDarkTheme)
                 Theme.ApplyDarkThemeToAll(this);
         }
     }

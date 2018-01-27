@@ -87,8 +87,7 @@ namespace HedgeModManager
             }
 
             int i = 0;
-            if (MainForm.CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("DarkTheme") &&
-                    MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] == "1")
+            if (Program.UseDarkTheme)
                 foreach (ListViewItem lvi in listView1.Items)
                     if (++i % 2 == 0) lvi.BackColor = Color.FromArgb(46, 46, 46);
                     else lvi.BackColor = Color.FromArgb(54, 54, 54);
@@ -187,7 +186,7 @@ namespace HedgeModManager
 
         private void CreateUpdateForm_Load(object sender, EventArgs e)
         {
-            if (MainForm.CPKREDIRIni[Program.ProgramNameShort]["DarkTheme"] != "0")
+            if (Program.UseDarkTheme)
                 Theme.ApplyDarkThemeToAll(this);
         }
 
