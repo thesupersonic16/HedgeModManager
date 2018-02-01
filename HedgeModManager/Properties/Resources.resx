@@ -192,7 +192,7 @@ However, this mod does have a website.
     <value>The loader for {0} currently isn't installed, would you like to install it now?</value>
   </data>
   <data name="LoaderMismatchText" xml:space="preserve">
-    <value>The currently installed loader doesn't match the version Hedge Mod Manager's Github, Unless you know what you are doing, Click "Reinstall Loader"</value>
+    <value>The currently installed loader doesn't match the version on Hedge Mod Manager's Github, Unless you know what you are doing, Click "Reinstall Loader"</value>
   </data>
   <data name="ForcesModLoader" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\codes\forcesmodloader.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
