@@ -63,7 +63,7 @@ The mod.ini file is a mod configuration file that details all the information ab
 The version of the format used in the HedgeModManager is a variation on the format used in SLWModLoader and SonicGMI, with some minor changes/additions here and there.
 
 Here's an example of a mod.ini file for Sonic Lost World:
-```
+```ini
 [Main]
 IncludeDir0="."
 IncludeDirCount=1
@@ -87,7 +87,7 @@ The following is a list of the most important values that can be used in a mod.i
 
 **IncludeDirCount** Specifies how many folders will be included with your mod.
 
-**UpdateServer** A modification of the existing SonicGMI value that specifies the link to an XML file containing file infomations like its URL and name, I recommend linking a empty XML file or a folder in a http server, as it will allow you to release auto-downloading updates to your mods. The old GMI way of updating still works.
+**UpdateServer** A modification of the existing SonicGMI value that specifies the link to an Update file containing file information this can be a XML or the SonicGMI update file, I recommend linking a folder from a http server, as it will allow you to release auto-downloading updates to your mods.
 
 ### Desc
 

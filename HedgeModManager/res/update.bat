@@ -1,4 +1,3 @@
-﻿# No idea why this line is not executing. Random byte at the start?
 REM 
 @echo off
 REM Clears the Screen
@@ -10,20 +9,23 @@ echo Waiting 3 seconds to ensure process is closed...
 REM Sleeps for 3 seconds
 powershell start-sleep 3
 REM 
-echo Copying update files over the old version of the application...
+echo Applying update over the currectly installed version of the application...
 REM Copies all new files from the temporary folder
-xcopy /s /y ".\updateTemp" ".\"
-REM 
-echo done!
-REM Backs up the log file
+xcopy /s /y ".\updateTemp" ".\" >nul
+REM Backup the log file
+if exist "HedgeModManager_prev.log" (
+del HedgeModManager_prev.log
+)
+if exist "HedgeModManager.log" (
 ren HedgeModManager.log HedgeModManager_prev.log
-REM Cleans the temp folder
-rmdir updateTemp
+)
+REM Deletes the updatetemp folder
+rmdir /S /Q ".\updateTemp"
 REM Sleeps for 1 second
 powershell start-sleep 1
 REM 
-echo Starting application...
+echo Done, Starting application...
 REM Starts the Mod Manager without waiting
 start HedgeModManager.exe
-REM deletes teh current script
-del update.bat
+REM deletes the current script
+del update.bat >nul
