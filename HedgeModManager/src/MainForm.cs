@@ -973,7 +973,7 @@ namespace HedgeModManager
 
         public string UpdateMod(Mod mod, ModUpdater.ModUpdate update)
         {
-            //if (update.VersionString != mod.Version)
+            if (update.VersionString != mod.Version)
             {
                 if (new ChangeLogForm(update.VersionString, update.ChangeLog, "", update.Name).ShowDialog() == DialogResult.Yes)
                 {
@@ -983,8 +983,8 @@ namespace HedgeModManager
                 else
                     return "Available";
             }
-            //else
-               // return "Up to date";
+            else
+                return "Up to date";
         }
 
     #endregion
