@@ -42,6 +42,7 @@ namespace HedgeModManager
             if (games.Any(t => t.GameName == Games.SonicForces.GameName))
                 StartDirectory = Path.GetDirectoryName(games.Find(t => t.GameName == Games.SonicForces.GameName).Path);
 #endif
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             LogFile.AddMessage($"Running {ProgramName} in {StartDirectory}");
 
