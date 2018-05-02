@@ -31,7 +31,7 @@ namespace SS16
             Label_Message.Text = message;
         }
 
-        public void AddButton(string text, int width, EventHandler onClick)
+        public void AddButton(string text, int width, EventHandler onClick, bool enabled = true)
         {
             if (NextButtonX == -1)
                 NextButtonX = Width - ButtonSpacing * 2;
@@ -48,6 +48,8 @@ namespace SS16
             Controls.Add(button);
             // Prepares for the Next Button
             NextButtonX -= width + ButtonSpacing;
+            // Sets the Buttons Active status
+            button.Enabled = enabled;
         }
 
         private void SS16MessageBox_Load(object sender, EventArgs e)

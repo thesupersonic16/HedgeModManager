@@ -58,10 +58,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -98,6 +100,9 @@
     </Compile>
     <Compile Include="src\DownloadTools.cs" />
     <Compile Include="src\GameBanana.cs" />
+    <Compile Include="src\GBModDownloadWindow.xaml.cs">
+      <DependentUpon>GBModDownloadWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\InstallForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -285,7 +290,12 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="src\GBModDownloadWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -128,7 +128,7 @@ namespace HedgeModManager
             }
 
             // Shows the no mods controls if not mods has been detected
-            NoModsFoundLabel.Visible = linkLabel1.Visible = (ModsDb.ModCount <= 0);
+            NoModsFoundLabel.Visible = linkLabel1.Visible = label1.Visible = (ModsDb.ModCount <= 0);
             LogFile.AddMessage("Succesfully updated list view!");
         }
 
@@ -235,6 +235,15 @@ namespace HedgeModManager
                     if (group.ContainsParameter("DO A BARREL ROLL"))
                         foreach (Control control in Controls)
                             control.Font = new Font("Comic Sans MS", control.Font.Size, FontStyle.Bold);
+                    if (!group.ContainsParameter("ShownPirateMessage") && !CheckSupport())
+                    {
+                        var msgBox = new SS16MessageBox("Error", "License Error!", Resources.LicenseExpiredText);
+                        msgBox.AddButton("Exit", 75, (obj, e) => { msgBox.Close(); });
+                        msgBox.AddButton("Continue with HedgeModManager Limited", 250, (obj, e) => { msgBox.Close(); });
+                        msgBox.AddButton("Start 30 day Free Trial", 150, (obj, e) => { msgBox.Close(); }, false);
+                        msgBox.ShowDialog();
+                        group.AddParameter("ShownPirateMessage", "1");
+                    }
 
                     if (!group.ContainsParameter("AutoCheckForUpdates"))
                         group.AddParameter("AutoCheckForUpdates", "0");
@@ -326,11 +335,9 @@ namespace HedgeModManager
                     Text += " - Sonic Forces";
                     LogFile.AddMessage("Found Sonic Forces.");
                     PatchGroupBox.Visible = false;
-                    EnableSaveFileRedirectionCheckBox.Enabled = false;
                     ScanExecutableButton.Enabled = false;
                     CheckBox_CustomModsDirectory.Enabled = false;
                     CheckBox_CustomModsDirectory.Checked = false;
-                    EnableCPKREDIRConsoleCheckBox.Enabled = false;
                     Button_SaveAndReload.Text = "Reload";
 
                     if (CheckSupport())
@@ -345,6 +352,7 @@ namespace HedgeModManager
                     {
                         ReportLabel.Enabled = false;
                         ReportLabel.Text += " (Crack Detected!)";
+                        Text += " (CF)";
                     }
                 }
                 else if (Program.CurrentGame == Games.SonicGenerations)
@@ -444,26 +452,29 @@ namespace HedgeModManager
                 Close();
                 return;
             }
-
-            // Downloads Hash from Github
-            try
+            new Thread(() =>
             {
-                Program.CurrentGame.Hash = new WebClient().DownloadData(Program.CurrentGame.LoaderHashURL);
-            }catch
-            { // Failed to download hash 
-            }
-            // Checks the Loader
-            string loaderPath = Path.Combine(Program.StartDirectory, "d3d" + Program.CurrentGame.DirectXVersion + ".dll");
-            if (File.Exists(loaderPath) && CPKREDIRIni[Program.ProgramNameShort]["CheckLoader"] != "0"
-                && Program.CurrentGame.Hash != null &&
-                !Program.CurrentGame.Hash.SequenceEqual(Program.ComputeSHA256Hash(File.ReadAllBytes(loaderPath))))
-            {
-                var msgBox = new SS16MessageBox("Warning", "Loader Mismatch Detected", Resources.LoaderMismatchText);
-                msgBox.AddButton("Reinstall Loader", 100, (obj, e) => { InstallLoader_Button_Click(null, null); InstallLoader_Button_Click(null, null); msgBox.Close(); });
-                msgBox.AddButton("Ignore", 100, (obj, e) => msgBox.Close());
-                msgBox.ShowDialog();
-
-            }
+                // Downloads Hash from Github
+                try
+                {
+                    Program.CurrentGame.Hash = new WebClient().DownloadData(Program.CurrentGame.LoaderHashURL);
+                }
+                catch
+                { // Failed to download hash
+                    return;
+                }
+                // Checks the Loader
+                string loaderPath = Path.Combine(Program.StartDirectory, "d3d" + Program.CurrentGame.DirectXVersion + ".dll");
+                if (File.Exists(loaderPath) && CPKREDIRIni[Program.ProgramNameShort]["CheckLoader"] != "0"
+                    && Program.CurrentGame.Hash != null &&
+                    !Program.CurrentGame.Hash.SequenceEqual(Program.ComputeSHA256Hash(File.ReadAllBytes(loaderPath))))
+                {
+                    var msgBox = new SS16MessageBox("Warning", "Loader Mismatch Detected", Resources.LoaderMismatchText);
+                    msgBox.AddButton("Reinstall Loader", 100, (obj, e) => { InstallLoader_Button_Click(null, null); InstallLoader_Button_Click(null, null); msgBox.Close(); });
+                    msgBox.AddButton("Ignore", 100, (obj, e) => msgBox.Close());
+                    msgBox.ShowDialog();
+                }
+            }).Start();
 
             // Runs CheckForModLoaderUpdates in another thread
             new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
@@ -793,6 +804,28 @@ namespace HedgeModManager
 #endif
         }
 
+        // Best name
+        public static void AddMessage2(string message, Exception exception, params string[] extraData)
+        {
+            if (Exit) return;
+            LogFile.AddMessage(message);
+            LogFile.AddMessage($"    Exception: {exception}");
+            if (extraData != null)
+            {
+                LogFile.AddMessage("    Extra Data: ");
+                foreach (string s in extraData)
+                    LogFile.AddMessage($"        {s}");
+            }
+            if (CheckSupport())
+                MessageBox.Show(message, Program.ProgramName);
+            else
+                MessageBox.Show(Resources.ExceptionPiracyText, Program.ProgramName);
+
+#if DEBUG
+            throw exception;
+#endif
+        }
+
         #endregion Logging
 
         #region Updating methods (A bit messy)
@@ -839,6 +872,10 @@ namespace HedgeModManager
             }
                 else
                     LogFile.AddMessage("No updates are available.");
+            }
+            catch (WebException ex)
+            {
+                Invoke(new Action(() => Text += " (Offline)"));
             }
             catch (Exception ex)
             {
@@ -1466,7 +1503,7 @@ namespace HedgeModManager
 
         private void TextBox_CustomModsDirectory_DoubleClick(object sender, EventArgs e)
         {
-            var sfd = new SaveFileDialog()
+            var sfd = new System.Windows.Forms.SaveFileDialog()
             {
                 Title = "Select Directory",
                 FileName = "Enter into a directory and press Save"

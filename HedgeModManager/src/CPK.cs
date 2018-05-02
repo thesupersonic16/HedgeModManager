@@ -1,4 +1,5 @@
-﻿using HedgeModManager.Properties;
+﻿// NOTE: This Class is nolonger being used, This class is ready to be removed, But not sure when I will do it
+using HedgeModManager.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;

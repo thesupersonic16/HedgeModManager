@@ -19,7 +19,7 @@ namespace HedgeModManager.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -247,7 +247,17 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The currently installed loader doesn&apos;t match the version on Hedge Mod Manager&apos;s Github, Unless you know what you are doing, Click &quot;Reinstall Loader&quot;.
+        ///   Looks up a localized string similar to Your current license to use HedgeModManager has expired
+        ///Please renew your license to continue using all the features HedgeModManager Pro offers..
+        /// </summary>
+        internal static string LicenseExpiredText {
+            get {
+                return ResourceManager.GetString("LicenseExpiredText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The currently installed loader doesn&apos;t match the version on HedgeModManager&apos;s Github, Unless you know what you are doing, Click &quot;Reinstall Loader&quot;.
         /// </summary>
         internal static string LoaderMismatchText {
             get {

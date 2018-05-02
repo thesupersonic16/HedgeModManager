@@ -28,7 +28,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Never Lose Rings With Super Sonic" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Never Lose Rings With Super Sonic" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>writenop</Type>
       <Address>00E64E80</Address>
@@ -36,7 +36,7 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Can Always Activate Super Sonic" credit="Muzzarino Hezibeth">
+  <Code name="Can Always Activate Super Sonic" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>011D33A4</Address>
@@ -100,7 +100,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Widescreen Support" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Widescreen Support" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>006F23C8</Address>
@@ -247,7 +247,7 @@
     </CodeLine>
   </Code>
   <!-- TODO: Test this Code -->
-  <Code name="Field of View Adjustment" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Field of View Adjustment" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>006F23AA</Address>
@@ -310,7 +310,7 @@
     </CodeLine>
   </Code>
   <!-- TODO: Test this Code -->
-  <Code name="Bypass Boss Key Check" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Bypass Boss Key Check" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00EFB9FC</Address>
@@ -355,7 +355,7 @@
     </CodeLine>
   </Code>
   <!-- TODO: Test this Code -->
-  <Code name="Have All Chaos Emeralds" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Have All Chaos Emeralds" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write32</Type>
       <Address>0108BB11</Address>
@@ -375,7 +375,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Sparkles remain on the hub world" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Sparkles remain on the hub world" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write16</Type>
       <Address>00EE3DA6</Address>
@@ -383,7 +383,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Win challenges without metting the required amount of items" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Win challenges without metting the required amount of items" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write32</Type>
       <Address>00D0EAB9</Address>
@@ -403,7 +403,7 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
-  <Code name="All Levels are selectable" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="All Levels are selectable" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00EE5DE8</Address>
@@ -417,7 +417,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Buy anything at the skill shop with any points" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Buy anything at the skill shop with any points" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>writenop</Type>
       <Address>004409D2</Address>
@@ -425,7 +425,7 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Never subtract points when buying a skill" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Never subtract points when buying a skill" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>writenop</Type>
       <Address>00440726</Address>
@@ -433,7 +433,7 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
-  <Code name="All Levels display names even if not unlocked" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="All Levels display names even if not unlocked" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00D58AD0</Address>
@@ -441,7 +441,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Replay rescue cut-scenes" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Replay rescue cut-scenes" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write16</Type>
       <Address>00D29532</Address>
@@ -450,7 +450,7 @@
     </CodeLine>
   </Code>
   <!-- Use only one of these trail color blending codes -->
-  <Code name="Color Dodge trail blending" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Color Dodge trail blending" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00E8D3AC</Address>
@@ -458,7 +458,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Lighten trail blending" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Lighten trail blending" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00E8D3AC</Address>
@@ -466,7 +466,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Screen trail blending" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Screen trail blending" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00E8D3AC</Address>
@@ -480,7 +480,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Color Burn trail blending" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Color Burn trail blending" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00E8D3B7</Address>
@@ -488,7 +488,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Non-transparent trail blending" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Non-transparent trail blending" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00E8D3B7</Address>
@@ -496,7 +496,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Normal trail blending" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Normal trail blending" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00E8D3B7</Address>
@@ -504,7 +504,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Glowing trail blending" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Glowing trail blending" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00E8D3B7</Address>
@@ -512,7 +512,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Subtractive trail blending" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Subtractive trail blending" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>00E8D3AC</Address>
@@ -520,7 +520,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Subtitles appear additive if color is bright" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Subtitles appear additive if color is bright" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write8</Type>
       <Address>0040FED4</Address>
@@ -636,7 +636,7 @@
       <ValueType>hex</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Freeze timer" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Freeze timer" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>writenop</Type>
       <Address>00D02E48</Address>
@@ -644,7 +644,7 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Freeze challenge timer" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Freeze challenge timer" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>writenop</Type>
       <Address>0124EFC5</Address>
@@ -658,7 +658,7 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
-  <Code name="Don't allow timer to reduce ranks on challenges" patch="true" credit="Muzzarino Hezibeth">
+  <Code name="Don't allow timer to reduce ranks on challenges" patch="true" credit="Muzzarino">
     <CodeLine>
       <Type>write32</Type>
       <Address>00D611B3</Address>

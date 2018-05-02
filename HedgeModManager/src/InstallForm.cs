@@ -83,8 +83,10 @@ namespace HedgeModManager
             if (Steam.SteamLocation == null)
             {
                 MainForm.AddMessageToUser($"Steam is not Setup correctly, " +
-                    $"Please report this issue to {Program.ProgramName}'s GitHub Page with {Program.ProgramName}.log\n" +
+                    $"Please report this issue onto the {Program.ProgramName} GitHub Repo with {Program.ProgramName}.log attached.\n" +
                     $"Please copy all files that came with {Program.ProgramName} into your Game folder. Exiting...");
+                Close();
+                return;
             }
 
             var games = FindGames();
@@ -127,11 +129,11 @@ namespace HedgeModManager
         public bool InstallModLoader(string path, string gameName)
         {
             path = path.Replace('/', '\\');
-            if (MessageBox.Show("Install Hedge Mod Manager in \n" + path + "?", Resources.ApplicationTitle,
+            if (MessageBox.Show("Install HedgeModManager into \n" + path + "?", Resources.ApplicationTitle,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 // HedgeModManager.exe, HedgeModManager.pdb, cpkredir.dll, cpkredir.ini, cpkredir.txt
-                var files = new string[] { Program.ExecutableName,
+                string[] files = new string[] { Program.ExecutableName,
 #if DEBUG
                     Path.ChangeExtension(Program.ExecutableName, "pdb"),
 #endif
@@ -150,7 +152,7 @@ namespace HedgeModManager
                         if (file == Program.ExecutableName)
                             continue;
 
-                        // Trys o delete the old files
+                        // Tries to delete the old files
                         try { File.Delete(filePath); } catch { }
                     }
                     else
@@ -173,7 +175,7 @@ namespace HedgeModManager
                     shortcut.Save();
                     LogFile.AddMessage("    Done.");
                 }
-                catch (Exception ex)
+                catch
                 {
                 }
 
@@ -187,7 +189,7 @@ namespace HedgeModManager
 
                 try
                 {
-                    // Trys to delete HedgeModManager.exe
+                    // Tries to delete the old HedgeModManager.exe
                     startInfo = new ProcessStartInfo()
                     {
                         Arguments = $"/c powershell start-sleep 2 & del \"{Application.ExecutablePath}\"",

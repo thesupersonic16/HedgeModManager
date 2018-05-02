@@ -33,7 +33,7 @@ namespace HedgeModManager
 
             if (RadioButton_Folder.Checked)
             {
-                var sfd = new SaveFileDialog()
+                var sfd = new System.Windows.Forms.SaveFileDialog()
                 {
                     Title = "Install Mod From Folder...",
                     FileName = "Enter into a directory that contains mod.ini and press Save"
@@ -47,7 +47,7 @@ namespace HedgeModManager
 
             if (RadioButton_Archive.Checked)
             {
-                var ofd = new OpenFileDialog()
+                var ofd = new System.Windows.Forms.OpenFileDialog()
                 {
                     Title = "Install Mod From Archive...",
                     Filter = "All Supported Archives (*.zip, *.7z, *.rar)|*.zip;*.7z;*.rar"

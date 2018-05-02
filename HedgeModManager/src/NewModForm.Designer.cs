@@ -158,6 +158,7 @@
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.ListView1_DrawColumnHeader);
             this.listView1.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.ListView1_DrawItem);
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             this.listView1.DoubleClick += new System.EventHandler(this.ListView1_DoubleClick);
             this.listView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListView1_KeyPress);
             // 
@@ -179,7 +180,7 @@
             this.rmvBtn.Name = "rmvBtn";
             this.rmvBtn.Size = new System.Drawing.Size(224, 23);
             this.rmvBtn.TabIndex = 6;
-            this.rmvBtn.Text = "-";
+            this.rmvBtn.Text = "&Remove Property";
             this.rmvBtn.UseVisualStyleBackColor = true;
             this.rmvBtn.Click += new System.EventHandler(this.RmvBtn_Click);
             // 
@@ -191,7 +192,7 @@
             this.addBtn.Name = "addBtn";
             this.addBtn.Size = new System.Drawing.Size(224, 23);
             this.addBtn.TabIndex = 7;
-            this.addBtn.Text = "+";
+            this.addBtn.Text = "&New Property";
             this.addBtn.UseVisualStyleBackColor = true;
             this.addBtn.Click += new System.EventHandler(this.AddBtn_Click);
             // 

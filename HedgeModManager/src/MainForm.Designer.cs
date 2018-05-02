@@ -88,6 +88,7 @@ namespace HedgeModManager
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.Search_TextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -206,6 +207,7 @@ namespace HedgeModManager
             // 
             // splitContainer.Panel1
             // 
+            this.splitContainer.Panel1.Controls.Add(this.label1);
             this.splitContainer.Panel1.Controls.Add(this.linkLabel1);
             this.splitContainer.Panel1.Controls.Add(this.NoModsFoundLabel);
             this.splitContainer.Panel1.Controls.Add(this.ModsList);
@@ -680,7 +682,7 @@ namespace HedgeModManager
             this.AddModButton.Name = "AddModButton";
             this.AddModButton.Size = new System.Drawing.Size(99, 33);
             this.AddModButton.TabIndex = 7;
-            this.AddModButton.Text = "+";
+            this.AddModButton.Text = "Add Mod";
             this.AddModButton.UseVisualStyleBackColor = true;
             this.AddModButton.Click += new System.EventHandler(this.AddModButton_Click);
             // 
@@ -692,7 +694,7 @@ namespace HedgeModManager
             this.RemoveModButton.Name = "RemoveModButton";
             this.RemoveModButton.Size = new System.Drawing.Size(99, 33);
             this.RemoveModButton.TabIndex = 5;
-            this.RemoveModButton.Text = "-";
+            this.RemoveModButton.Text = "Remove Mod";
             this.RemoveModButton.UseVisualStyleBackColor = true;
             this.RemoveModButton.Click += new System.EventHandler(this.RemoveModButton_Click);
             // 
@@ -725,6 +727,16 @@ namespace HedgeModManager
             this.Search_TextBox.Size = new System.Drawing.Size(177, 20);
             this.Search_TextBox.TabIndex = 6;
             this.Search_TextBox.TextChanged += new System.EventHandler(this.Search_TextBox_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 13F);
+            this.label1.Location = new System.Drawing.Point(61, 370);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(385, 25);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Tip: Try draging mod archives into this Window";
             // 
             // MainForm
             // 
@@ -831,6 +843,7 @@ namespace HedgeModManager
         private System.Windows.Forms.Label Label_SaveFileBackupStatus;
         private System.Windows.Forms.Button Button_RestoreSaveFile;
         private System.Windows.Forms.Button Button_BackupSaveFile;
+        private System.Windows.Forms.Label label1;
     }
 }
 

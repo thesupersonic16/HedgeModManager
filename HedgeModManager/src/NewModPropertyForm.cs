@@ -32,6 +32,7 @@ namespace HedgeModManager
             
             // Adds "Add Group" to GroupComboBox so the user can create groups.
             GroupComboBox.Items.Add("Add Group");
+            GroupComboBox.SelectedIndex = 0;
 
             Text = "New Property";
 
@@ -43,6 +44,7 @@ namespace HedgeModManager
                 textBox1.Text = listViewItem.Text;
                 GroupComboBox.SelectedIndex = modform.GetListView().Groups.IndexOf(listViewItem.Group);
                 AddButton.Text = "Update";
+                ValueTextBox.Select();
 
                 UpdateType();
 

@@ -33,6 +33,7 @@
             this.RadioButton_Folder = new System.Windows.Forms.RadioButton();
             this.RadioButton_Make = new System.Windows.Forms.RadioButton();
             this.okBtn = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // RadioButton_Archive
@@ -98,6 +99,15 @@
             this.okBtn.UseVisualStyleBackColor = true;
             this.okBtn.Click += new System.EventHandler(this.OkBtn_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 127);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(255, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Tip: Try dragging mod archives into the main window";
+            // 
             // AddModForm
             // 
             this.AcceptButton = this.okBtn;
@@ -106,6 +116,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.okBtn;
             this.ClientSize = new System.Drawing.Size(367, 152);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.titleLbl);
             this.Controls.Add(this.RadioButton_Archive);
             this.Controls.Add(this.RadioButton_Folder);
@@ -133,5 +144,6 @@
         private System.Windows.Forms.RadioButton RadioButton_Folder;
         private System.Windows.Forms.RadioButton RadioButton_Make;
         private System.Windows.Forms.Button okBtn;
+        private System.Windows.Forms.Label label1;
     }
 }

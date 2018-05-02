@@ -14,31 +14,46 @@ namespace HedgeModManager
 
         public class GameBananaItemSubmittion
         {
-            public string Name, Description, UserId, Credits, ThumbURL;
+            public string Name, Description, UserName, Credits, ThumbURL;
 
             public static string GetResponseFromGameBanana(string itemType, string ItemID)
             {
-                return new WebClient().DownloadString($"https://api.gamebanana.com/Core/Item/Data?itemtype={itemType}&itemid={ItemID}&fields=name,description,text,userid,Credits().aAuthors(),Preview().sStructuredDataFullsizeUrl()&format=xml");
+                return new WebClient().DownloadString($"https://api.gamebanana.com/Core/Item/Data?itemtype={itemType}&itemid={ItemID}&fields=name,description,text,Owner().name,Credits().aAuthors(),Preview().sStructuredDataFullsizeUrl()&format=xml");
             }
 
             public static GameBananaItemSubmittion ReadResponse(string s)
             {
-                var item = new GameBananaItemSubmittion();
-                var xml = XDocument.Parse(s);
-                var values = xml.Root.Elements("value").ToList();
-                item.Name = values[0].Value;
-                item.Description = values[1].Value;
-                item.Description += values[2].Value;
-                item.UserId = values[3].Value;
-                item.ThumbURL = values[4].Value;
-                var credits = xml.Root.Elements("valueset").ToList()[0];
-                foreach (var values2 in credits.Elements("valueset"))
+                try
                 {
-                    item.Credits += values2.Elements("value").ToList()[0].Value + "\n";
-                    item.Credits += "    " + values2.Elements("value").ToList()[1].Value + "\n";
-
+                    var item = new GameBananaItemSubmittion();
+                    var xml = XDocument.Parse(s);
+                    var values = xml.Root.Elements("value").ToList();
+                    item.Name = values[0].Value;
+                    item.Description = values[1].Value;
+                    item.Description += values[2].Value;
+                    item.UserName = values[3].Value;
+                    item.ThumbURL = values[4].Value;
+                    var credits = xml.Root.Elements("valueset").ToList()[0];
+                    foreach (var values2 in credits.Elements("valueset"))
+                    {
+                        item.Credits += "- " + values2.Elements("value").ToList()[0].Value + "\n";
+                        item.Credits += "    " + values2.Elements("value").ToList()[1].Value + "\n";
+                    }
+                    return item;
+                }catch (Exception ex)
+                {
+                    try
+                    {
+                        var xml = XDocument.Parse(s);
+                        MainForm.AddMessage2("A gbAPI error has occured! Please See \"HedgeModManager.log\" for more info," +
+                            " Error: " + xml.Root.Elements("value").ToList()[0].Value, ex, s, xml.Root.Elements("value").ToList()[1].Value);
+                    }
+                    catch
+                    {
+                        MainForm.AddMessage("Exception thrown while Parsing a gbAPI error.", ex, s);
+                    }
                 }
-                return item;
+                return null;
             }
         }
 
@@ -53,12 +68,30 @@ namespace HedgeModManager
 
             public static GameBananaItemMember ReadResponse(string s)
             {
-                var item = new GameBananaItemMember();
-                var xml = XDocument.Parse(s);
-                var values = xml.Root.Elements("value").ToList();
-                item.Name = values[0].Value;
-                item.AvatarURL = values[1].Value;
-                return item;
+                try
+                { 
+                    var item = new GameBananaItemMember();
+                    var xml = XDocument.Parse(s);
+                    var values = xml.Root.Elements("value").ToList();
+                    item.Name = values[0].Value;
+                    item.AvatarURL = values[1].Value;
+                    return item;
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        var xml = XDocument.Parse(s);
+                        MainForm.AddMessage2("A gbAPI error has occured! Please See \"HedgeModManager.log\" for more info," +
+                            " Error: " + xml.Root.Elements("value").ToList()[0].Value, ex, s, xml.Root.Elements("value").ToList()[1].Value);
+                    }
+                    catch
+                    {
+                        MainForm.AddMessage("Exception thrown while Parsing a gbAPI error.", ex, s);
+                    }
+                }
+                return null;
+
             }
         }
     }

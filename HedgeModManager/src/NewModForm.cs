@@ -205,6 +205,11 @@ namespace HedgeModManager
             }
         }
 
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            editBtn.Enabled = listView1.SelectedIndices.Count != 0;
+        }
+
         private void ListView1_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             // Colours

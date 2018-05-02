@@ -2,6 +2,7 @@
 using SS16;
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
@@ -16,22 +17,27 @@ namespace HedgeModManager
 {
     internal static class Program
     {
-        //Variables/Constants
+        // Variables/Constants
         public static string StartDirectory = Application.StartupPath;
         public static string ExecutableName = Path.GetFileName(Application.ExecutablePath);
         public static string HedgeModManagerPath = Application.ExecutablePath;
         public static Game CurrentGame = Games.Unknown;
-        public const string ProgramName = "Hedge Mod Manager";
+        public const string ProgramName = "HedgeModManager";
         public const string ProgramNameShort = "HedgeModManager";
-        public const string VersionString = "6.1-019";
+        public const string VersionString = "6.1-020";
         public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
         public static bool Restart = false;
         public static bool UseDarkTheme = true;
 
-        //Methods
+        // Methods
         [STAThread]
         private static void Main(string[] args)
         {
+            // Language
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
+            // Makes sure HMM uses TLSv1.2
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             LogFile.Initialize(false);
             LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
@@ -42,11 +48,10 @@ namespace HedgeModManager
             if (games.Any(t => t.GameName == Games.SonicForces.GameName))
                 StartDirectory = Path.GetDirectoryName(games.Find(t => t.GameName == Games.SonicForces.GameName).Path);
 #endif
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             LogFile.AddMessage($"Running {ProgramName} in {StartDirectory}");
 
-            // Writes "cpkredir.ini" if it doesn't exists as HedgeModManager uses it to store its config
+            // Writes "cpkredir.ini" if it doesn't exists as HedgeModManager and cpkredir uses it to store its config
             if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.ini")))
             {
                 LogFile.AddMessage("Writing cpkredir.ini");
@@ -75,7 +80,6 @@ namespace HedgeModManager
                 }
             }
 
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
@@ -83,7 +87,7 @@ namespace HedgeModManager
             {
                 LogFile.Initialize(!Restart);
                 Restart = false;
-                LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
+                LogFile.AddMessage($"Re-Starting {ProgramName} (v{VersionString})...");
                 Application.Run(new MainForm());
             }
         }
@@ -92,7 +96,6 @@ namespace HedgeModManager
         {
             try
             {
-
                 // GameBanana Download Protocol
                 if (arg.ToLower().StartsWith(@"hedgemmgens:")
                     || arg.ToLower().StartsWith(@"hedgemmlw:")
@@ -121,10 +124,10 @@ namespace HedgeModManager
 
                     var submittion = GameBanana.GameBananaItemSubmittion.ReadResponse(
                         GameBanana.GameBananaItemSubmittion.GetResponseFromGameBanana(itemType, itemID));
-                    var user = GameBanana.GameBananaItemMember.ReadResponse(
-                        GameBanana.GameBananaItemMember.GetResponseFromGameBanana(submittion.UserId));
-
-                    var download = new DownloadModForm(submittion.Name, user.Name, submittion.Description, url,
+                    if (submittion == null)
+                        return;
+                    
+                    var download = new GBModDownloadWindow(submittion.Name, submittion.UserName, submittion.Description, url,
                         submittion.Credits, submittion.ThumbURL);
                     download.ShowDialog();
                 }

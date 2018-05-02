@@ -192,7 +192,7 @@ However, this mod does have a website.
     <value>The loader for {0} currently isn't installed, would you like to install it now?</value>
   </data>
   <data name="LoaderMismatchText" xml:space="preserve">
-    <value>The currently installed loader doesn't match the version on Hedge Mod Manager's Github, Unless you know what you are doing, Click "Reinstall Loader"</value>
+    <value>The currently installed loader doesn't match the version on HedgeModManager's Github, Unless you know what you are doing, Click "Reinstall Loader"</value>
   </data>
   <data name="ForcesModLoader" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\codes\forcesmodloader.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -215,5 +215,9 @@ To complete the update we will need to restart HedgeModManager as Admin.</value>
   </data>
   <data name="ExceptionPiracyText" xml:space="preserve">
     <value>An error occured! See "HedgeModManager.log" for more info.</value>
+  </data>
+  <data name="LicenseExpiredText" xml:space="preserve">
+    <value>Your current license to use HedgeModManager has expired
+Please renew your license to continue using all the features HedgeModManager Pro offers.</value>
   </data>
 </root>
