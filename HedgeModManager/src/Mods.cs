@@ -222,8 +222,8 @@ namespace HedgeModManager
 
         public bool ReverseLoadOrder
         {
-            get { return (bool)modsDb["Main"]["ReverseLoadOrder", typeof(bool)]; }
-            set { modsDb["Main"]["ReverseLoadOrder", typeof(int)] = value == true ? 1 : 0; }
+            get { return ((int)modsDb["Main"]["ReverseLoadOrder", typeof(int)] != 0); }
+            set { modsDb["Main"]["ReverseLoadOrder", typeof(int)] = value ? 1 : 0; }
         }
 
         public Mod GetMod(int index)

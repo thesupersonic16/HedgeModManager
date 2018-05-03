@@ -184,6 +184,8 @@ namespace HedgeModManager
                 foreach (ListViewItem lvi in ModsList.Items)
                     if (++i % 2 == 0) lvi.BackColor = Color.FromArgb(46, 46, 46);
                     else lvi.BackColor = Color.FromArgb(54, 54, 54);
+            // Updates Options from ModsDB
+            ModOrderButton.Text = ModsDb.ReverseLoadOrder ? "Priority: Bottom to Top" : "Priority: Top to Bottom";
         }
 
         public void SaveModDB()
@@ -1024,9 +1026,15 @@ namespace HedgeModManager
                 return "Up to date";
         }
 
-    #endregion
+        #endregion
 
         #region ButtonEvents
+
+        private void ModOrderButton_Click(object sender, EventArgs e)
+        {
+            ModsDb.ReverseLoadOrder = !ModsDb.ReverseLoadOrder;
+            ModOrderButton.Text = ModsDb.ReverseLoadOrder ? "Priority: Bottom to Top" : "Priority: Top to Bottom";
+        }
 
         private void RefreshButton_Click(object sender, EventArgs e)
         {

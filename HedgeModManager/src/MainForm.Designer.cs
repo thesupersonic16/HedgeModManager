@@ -42,6 +42,7 @@ namespace HedgeModManager
             this.TabControl = new System.Windows.Forms.TabControl();
             this.ModPage = new System.Windows.Forms.TabPage();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.NoModsFoundLabel = new System.Windows.Forms.Label();
             this.ModsList = new System.Windows.Forms.ListView();
@@ -88,7 +89,7 @@ namespace HedgeModManager
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.Search_TextBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.ModOrderButton = new System.Windows.Forms.Button();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -221,6 +222,16 @@ namespace HedgeModManager
             this.splitContainer.Size = new System.Drawing.Size(523, 412);
             this.splitContainer.SplitterDistance = 490;
             this.splitContainer.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 13F);
+            this.label1.Location = new System.Drawing.Point(61, 370);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(385, 25);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Tip: Try draging mod archives into this Window";
             // 
             // linkLabel1
             // 
@@ -407,6 +418,7 @@ namespace HedgeModManager
             // 
             this.SettingsPage.Controls.Add(this.Label_SaveFileBackupStatus);
             this.SettingsPage.Controls.Add(this.Button_RestoreSaveFile);
+            this.SettingsPage.Controls.Add(this.ModOrderButton);
             this.SettingsPage.Controls.Add(this.Button_BackupSaveFile);
             this.SettingsPage.Controls.Add(this.Button_SaveAndReload);
             this.SettingsPage.Controls.Add(this.Label_CustomModsDirectory);
@@ -432,7 +444,7 @@ namespace HedgeModManager
             // Label_SaveFileBackupStatus
             // 
             this.Label_SaveFileBackupStatus.AutoSize = true;
-            this.Label_SaveFileBackupStatus.Location = new System.Drawing.Point(397, 19);
+            this.Label_SaveFileBackupStatus.Location = new System.Drawing.Point(396, 19);
             this.Label_SaveFileBackupStatus.Name = "Label_SaveFileBackupStatus";
             this.Label_SaveFileBackupStatus.Size = new System.Drawing.Size(124, 26);
             this.Label_SaveFileBackupStatus.TabIndex = 27;
@@ -441,9 +453,9 @@ namespace HedgeModManager
             // 
             // Button_RestoreSaveFile
             // 
-            this.Button_RestoreSaveFile.Location = new System.Drawing.Point(276, 43);
+            this.Button_RestoreSaveFile.Location = new System.Drawing.Point(266, 43);
             this.Button_RestoreSaveFile.Name = "Button_RestoreSaveFile";
-            this.Button_RestoreSaveFile.Size = new System.Drawing.Size(115, 23);
+            this.Button_RestoreSaveFile.Size = new System.Drawing.Size(127, 23);
             this.Button_RestoreSaveFile.TabIndex = 26;
             this.Button_RestoreSaveFile.Text = "Restore SaveFile";
             this.Button_RestoreSaveFile.UseVisualStyleBackColor = true;
@@ -452,9 +464,9 @@ namespace HedgeModManager
             // 
             // Button_BackupSaveFile
             // 
-            this.Button_BackupSaveFile.Location = new System.Drawing.Point(276, 14);
+            this.Button_BackupSaveFile.Location = new System.Drawing.Point(266, 14);
             this.Button_BackupSaveFile.Name = "Button_BackupSaveFile";
-            this.Button_BackupSaveFile.Size = new System.Drawing.Size(115, 23);
+            this.Button_BackupSaveFile.Size = new System.Drawing.Size(127, 23);
             this.Button_BackupSaveFile.TabIndex = 25;
             this.Button_BackupSaveFile.Text = "Backup SaveFile";
             this.Button_BackupSaveFile.UseVisualStyleBackColor = true;
@@ -728,15 +740,16 @@ namespace HedgeModManager
             this.Search_TextBox.TabIndex = 6;
             this.Search_TextBox.TextChanged += new System.EventHandler(this.Search_TextBox_TextChanged);
             // 
-            // label1
+            // ModOrderButton
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 13F);
-            this.label1.Location = new System.Drawing.Point(61, 370);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(385, 25);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Tip: Try draging mod archives into this Window";
+            this.ModOrderButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.ModOrderButton.Location = new System.Drawing.Point(266, 72);
+            this.ModOrderButton.Name = "ModOrderButton";
+            this.ModOrderButton.Size = new System.Drawing.Size(127, 23);
+            this.ModOrderButton.TabIndex = 6;
+            this.ModOrderButton.Text = "Priority: Bottom to Top";
+            this.ModOrderButton.UseVisualStyleBackColor = true;
+            this.ModOrderButton.Click += new System.EventHandler(this.ModOrderButton_Click);
             // 
             // MainForm
             // 
@@ -844,6 +857,7 @@ namespace HedgeModManager
         private System.Windows.Forms.Button Button_RestoreSaveFile;
         private System.Windows.Forms.Button Button_BackupSaveFile;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button ModOrderButton;
     }
 }
 
