@@ -24,7 +24,7 @@ namespace HedgeModManager
         public static Game CurrentGame = Games.Unknown;
         public const string ProgramName = "HedgeModManager";
         public const string ProgramNameShort = "HedgeModManager";
-        public const string VersionString = "6.1-020";
+        public const string VersionString = "6.1-020pr3";
         public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
         public static bool Restart = false;
         public static bool UseDarkTheme = true;
