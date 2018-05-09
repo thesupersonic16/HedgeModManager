@@ -325,6 +325,8 @@ namespace HedgeModManager
                 else if (File.Exists(ForcesExecutablePath))
                     Program.CurrentGame = Games.SonicForces;
 
+                HandleGameSelecter();
+
                 if (Program.CurrentGame == Games.SonicLostWorld)
                 {
                     Text += " - Sonic Lost World";
@@ -569,6 +571,29 @@ namespace HedgeModManager
             catch { }
 
             Ready = true;
+        }
+
+        /// <summary>
+        /// Sets up the game selecter
+        /// </summary>
+        public void HandleGameSelecter()
+        {
+            try
+            {
+                Steam.Init();
+                var games = InstallForm.FindGames();
+                if (games.Count > 1)
+                {
+                    GameSelecterComboBox.Visible = true;
+                    GameSelecterComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                    GameSelecterComboBox.Items.AddRange(games.ToArray());
+                    int index = games.FindIndex(t => t.GameName == Program.CurrentGame.GameName);
+                    if (index != -1)
+                        GameSelecterComboBox.SelectedIndex = index;
+                    GameSelecterComboBox.SelectedIndexChanged += new EventHandler(GameSelecterComboBox_SelectedIndexChanged);
+                }
+            }
+            catch { }
         }
 
         /// <summary>
@@ -1580,5 +1605,16 @@ namespace HedgeModManager
         }
         #endregion
 
+        private void GameSelecterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                // Sets the game path
+                Program.StartDirectory = Path.GetDirectoryName(((InstallForm.Entry)GameSelecterComboBox.SelectedItem).Path);
+                // Reload
+                Program.Restart = true;
+                Close();
+            }catch { }
+        }
     }
 }

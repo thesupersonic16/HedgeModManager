@@ -136,6 +136,20 @@ namespace HedgeModManager
             }
         }
 
+        public object this[string key, Type type, object _default]
+        {
+            get
+            {
+                return ContainsParameter(key) ? TypeDescriptor.GetConverter(type).ConvertFrom(parameters[GetIndexOfParameter(key)].Value) : _default;
+            }
+
+            set
+            {
+                if (ContainsParameter(key))
+                    parameters[GetIndexOfParameter(key)].Value = TypeDescriptor.GetConverter(type).ConvertToString(value);
+            }
+        }
+
         internal IniParameter this[int index] => index < parameters.Count ? parameters.ElementAt(index) : new IniParameter();
 
         public void Clear()

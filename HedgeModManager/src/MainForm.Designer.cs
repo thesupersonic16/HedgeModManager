@@ -63,6 +63,7 @@ namespace HedgeModManager
             this.SettingsPage = new System.Windows.Forms.TabPage();
             this.Label_SaveFileBackupStatus = new System.Windows.Forms.Label();
             this.Button_RestoreSaveFile = new System.Windows.Forms.Button();
+            this.ModOrderButton = new System.Windows.Forms.Button();
             this.Button_BackupSaveFile = new System.Windows.Forms.Button();
             this.Button_SaveAndReload = new System.Windows.Forms.Button();
             this.Label_CustomModsDirectory = new System.Windows.Forms.Label();
@@ -89,7 +90,7 @@ namespace HedgeModManager
             this.PlayButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.Search_TextBox = new System.Windows.Forms.TextBox();
-            this.ModOrderButton = new System.Windows.Forms.Button();
+            this.GameSelecterComboBox = new System.Windows.Forms.ComboBox();
             this.ModsListContextMenu.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -444,7 +445,7 @@ namespace HedgeModManager
             // Label_SaveFileBackupStatus
             // 
             this.Label_SaveFileBackupStatus.AutoSize = true;
-            this.Label_SaveFileBackupStatus.Location = new System.Drawing.Point(396, 19);
+            this.Label_SaveFileBackupStatus.Location = new System.Drawing.Point(401, 55);
             this.Label_SaveFileBackupStatus.Name = "Label_SaveFileBackupStatus";
             this.Label_SaveFileBackupStatus.Size = new System.Drawing.Size(124, 26);
             this.Label_SaveFileBackupStatus.TabIndex = 27;
@@ -453,7 +454,7 @@ namespace HedgeModManager
             // 
             // Button_RestoreSaveFile
             // 
-            this.Button_RestoreSaveFile.Location = new System.Drawing.Point(266, 43);
+            this.Button_RestoreSaveFile.Location = new System.Drawing.Point(272, 72);
             this.Button_RestoreSaveFile.Name = "Button_RestoreSaveFile";
             this.Button_RestoreSaveFile.Size = new System.Drawing.Size(127, 23);
             this.Button_RestoreSaveFile.TabIndex = 26;
@@ -462,9 +463,20 @@ namespace HedgeModManager
             this.Button_RestoreSaveFile.Visible = false;
             this.Button_RestoreSaveFile.Click += new System.EventHandler(this.Button_RestoreSaveFile_Click);
             // 
+            // ModOrderButton
+            // 
+            this.ModOrderButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.ModOrderButton.Location = new System.Drawing.Point(272, 14);
+            this.ModOrderButton.Name = "ModOrderButton";
+            this.ModOrderButton.Size = new System.Drawing.Size(127, 23);
+            this.ModOrderButton.TabIndex = 6;
+            this.ModOrderButton.Text = "Priority: Bottom to Top";
+            this.ModOrderButton.UseVisualStyleBackColor = true;
+            this.ModOrderButton.Click += new System.EventHandler(this.ModOrderButton_Click);
+            // 
             // Button_BackupSaveFile
             // 
-            this.Button_BackupSaveFile.Location = new System.Drawing.Point(266, 14);
+            this.Button_BackupSaveFile.Location = new System.Drawing.Point(272, 43);
             this.Button_BackupSaveFile.Name = "Button_BackupSaveFile";
             this.Button_BackupSaveFile.Size = new System.Drawing.Size(127, 23);
             this.Button_BackupSaveFile.TabIndex = 25;
@@ -568,7 +580,7 @@ namespace HedgeModManager
             // InstallUninstallButton
             // 
             this.InstallUninstallButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.InstallUninstallButton.Location = new System.Drawing.Point(16, 43);
+            this.InstallUninstallButton.Location = new System.Drawing.Point(12, 43);
             this.InstallUninstallButton.Name = "InstallUninstallButton";
             this.InstallUninstallButton.Size = new System.Drawing.Size(120, 23);
             this.InstallUninstallButton.TabIndex = 15;
@@ -579,7 +591,7 @@ namespace HedgeModManager
             // PatchLabel
             // 
             this.PatchLabel.AutoSize = true;
-            this.PatchLabel.Location = new System.Drawing.Point(142, 33);
+            this.PatchLabel.Location = new System.Drawing.Point(136, 33);
             this.PatchLabel.Name = "PatchLabel";
             this.PatchLabel.Size = new System.Drawing.Size(53, 13);
             this.PatchLabel.TabIndex = 14;
@@ -588,7 +600,7 @@ namespace HedgeModManager
             // ScanExecutableButton
             // 
             this.ScanExecutableButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ScanExecutableButton.Location = new System.Drawing.Point(16, 14);
+            this.ScanExecutableButton.Location = new System.Drawing.Point(12, 14);
             this.ScanExecutableButton.Name = "ScanExecutableButton";
             this.ScanExecutableButton.Size = new System.Drawing.Size(120, 23);
             this.ScanExecutableButton.TabIndex = 13;
@@ -740,16 +752,14 @@ namespace HedgeModManager
             this.Search_TextBox.TabIndex = 6;
             this.Search_TextBox.TextChanged += new System.EventHandler(this.Search_TextBox_TextChanged);
             // 
-            // ModOrderButton
+            // GameSelecterComboBox
             // 
-            this.ModOrderButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ModOrderButton.Location = new System.Drawing.Point(266, 72);
-            this.ModOrderButton.Name = "ModOrderButton";
-            this.ModOrderButton.Size = new System.Drawing.Size(127, 23);
-            this.ModOrderButton.TabIndex = 6;
-            this.ModOrderButton.Text = "Priority: Bottom to Top";
-            this.ModOrderButton.UseVisualStyleBackColor = true;
-            this.ModOrderButton.Click += new System.EventHandler(this.ModOrderButton_Click);
+            this.GameSelecterComboBox.FormattingEnabled = true;
+            this.GameSelecterComboBox.Location = new System.Drawing.Point(200, -1);
+            this.GameSelecterComboBox.Name = "GameSelecterComboBox";
+            this.GameSelecterComboBox.Size = new System.Drawing.Size(158, 21);
+            this.GameSelecterComboBox.TabIndex = 6;
+            this.GameSelecterComboBox.Visible = false;
             // 
             // MainForm
             // 
@@ -758,6 +768,7 @@ namespace HedgeModManager
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(537, 563);
             this.Controls.Add(this.Search_TextBox);
+            this.Controls.Add(this.GameSelecterComboBox);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.PlayButton);
             this.Controls.Add(this.RemoveModButton);
@@ -858,6 +869,7 @@ namespace HedgeModManager
         private System.Windows.Forms.Button Button_BackupSaveFile;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ModOrderButton;
+        private System.Windows.Forms.ComboBox GameSelecterComboBox;
     }
 }
 

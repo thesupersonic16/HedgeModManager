@@ -104,6 +104,11 @@ namespace HedgeModManager
         public class Entry
         {
             public string GameName, Path;
+
+            public override string ToString()
+            {
+                return GameName;
+            }
         }
 
         private void listView1_DoubleClick(object sender, EventArgs e)
