@@ -582,6 +582,8 @@ namespace HedgeModManager
             {
                 Steam.Init();
                 var games = InstallForm.FindGames();
+                // Remove Games that doesn't have HMM Installed
+                games.RemoveAll(t => !File.Exists(Path.Combine(Path.GetDirectoryName(t.Path), "HedgeModManager.exe")));
                 if (games.Count > 1)
                 {
                     GameSelecterComboBox.Visible = true;
@@ -1611,6 +1613,8 @@ namespace HedgeModManager
             {
                 // Sets the game path
                 Program.StartDirectory = Path.GetDirectoryName(((InstallForm.Entry)GameSelecterComboBox.SelectedItem).Path);
+                // Sets the HMM Path
+                Program.HedgeModManagerPath = Path.Combine(Program.StartDirectory, "HedgeModManager.exe");
                 // Reload
                 Program.Restart = true;
                 Close();
