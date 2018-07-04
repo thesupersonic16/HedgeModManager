@@ -92,6 +92,7 @@
             this.Controls.Add(this.ProgressBarAll);
             this.Controls.Add(this.CancelUpdateButton);
             this.Controls.Add(this.ProgressBarFile);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "UpdateModForm";

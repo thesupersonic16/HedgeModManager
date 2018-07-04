@@ -78,7 +78,6 @@
   <ItemGroup>
     <Compile Include="src\DevTools.cs" />
     <Compile Include="src\Game.cs" />
-    <Compile Include="src\CPK.cs" />
     <Compile Include="src\CodeLoader.cs" />
     <Compile Include="src\CreateUpdateForm.cs">
       <SubType>Form</SubType>
@@ -91,12 +90,6 @@
     </Compile>
     <Compile Include="src\CreateUpdateURLForm.Designer.cs">
       <DependentUpon>CreateUpdateURLForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\DownloadModForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\DownloadModForm.Designer.cs">
-      <DependentUpon>DownloadModForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\DownloadTools.cs" />
     <Compile Include="src\GameBanana.cs" />
@@ -212,9 +205,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\DescriptionForm.resx">
       <DependentUpon>DescriptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\DownloadModForm.resx">
-      <DependentUpon>DownloadModForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\InstallForm.resx">
       <DependentUpon>InstallForm.cs</DependentUpon>

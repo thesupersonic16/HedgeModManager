@@ -355,8 +355,8 @@ namespace HedgeModManager
                     else
                     {
                         ReportLabel.Enabled = false;
-                        ReportLabel.Text += " (Crack Detected!)";
-                        Text += " (CF)";
+                        ReportLabel.Text += " (Pro Users Only)";
+                        Text = Text.Replace(Program.ProgramName, Program.ProgramName + " Limited");
                     }
                 }
                 else if (Program.CurrentGame == Games.SonicGenerations)

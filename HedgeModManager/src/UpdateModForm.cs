@@ -19,6 +19,7 @@ namespace HedgeModManager
         public bool CancelUpdate = false;
         public Mod _Mod;
         public ModUpdater.ModUpdate ModUpdate;
+        WebClient webClient = new WebClient();
 
         // Constructors
         public UpdateModForm(Mod mod, ModUpdater.ModUpdate update)
@@ -49,7 +50,6 @@ namespace HedgeModManager
         {
             if (Program.UseDarkTheme)
                 Theme.ApplyDarkThemeToAll(this);
-            var webClient = new WebClient();
             // Adds the WebClient_DownloadProgressChanged event to the web client.
             webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(WebClient_DownloadProgressChanged);
 
@@ -78,7 +78,7 @@ namespace HedgeModManager
                     // Closes and returns if the user clicked cancel.
                     if (CancelUpdate) { Invoke(new Action(() => Close())); return; }
                     // Sets DownloadLabel's Text to show what file is being downloaded.
-                    Invoke(new Action(() => DownloadLabel.Text = "Downloading... " + Path.GetFileName(fileUrl)));
+                    Invoke(new Action(() => DownloadLabel.Text = "Downloading File: " + Path.GetFileName(fileUrl)));
                     // Centres DownloadLabel's position.
                     Invoke(new Action(() => DownloadLabel.Location =
                         new Point(Size.Width / 2 - DownloadLabel.Size.Width / 2, DownloadLabel.Location.Y)));
@@ -88,7 +88,7 @@ namespace HedgeModManager
                     if (_Mod == null)
                     {
                         webClient.DownloadDataCompleted += DownloadDataCompleted;
-                        Invoke(new Action(() => webClient.DownloadDataAsync(new Uri(fileUrl))));
+                        Invoke(new Action(() => StartFileDownload(fileUrl)));
                     }
                     else
                     {
@@ -131,6 +131,25 @@ namespace HedgeModManager
             });
             // Starts the download thread.
             DownloadThread.Start();
+        }
+
+        public void StartFileDownload(string url)
+        {
+            try
+            {
+                webClient.DownloadDataAsync(new Uri(url));
+            }catch (Exception ex)
+            {
+                if (MessageBox.Show("Failed to Download File! Would you like to retry?", "Failed to Download File", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                {
+                    // Recreate WebClient just in case
+                    webClient.Dispose();
+                    webClient = new WebClient();
+                    // Reload Form
+                    UpdateModsForm_Load(null, null);
+                }
+                Close();
+            }
         }
 
         private void CancelUpdateButton_Click(object sender, EventArgs e)
