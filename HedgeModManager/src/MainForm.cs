@@ -197,7 +197,7 @@ namespace HedgeModManager
             ModsDb.DeactivateAllMods();
             // Activates all mods that are currently checked
             foreach (ListViewItem lvi in ModsList.CheckedItems)
-                ModsDb.ActivateMod(ModsDb.GetMod(lvi.Text));
+                ModsDb.ActivateMod(lvi.Tag as Mod);
 
             // Saves the Codes and Patches dat files
             ModsDb.RemoveAllCodes();

@@ -286,8 +286,11 @@ namespace HedgeModManager
                 }
 
                 string stringResult = stringBuilder.ToString();
-
-                if (hasBracketAtStart && secondBracketPosition != -1)
+                if (string.IsNullOrEmpty(stringResult))
+                {
+                    continue;
+                }
+                else if (hasBracketAtStart && secondBracketPosition != -1)
                 {
                     IniGroup iniGroup = new IniGroup(stringResult.Substring(1, secondBracketPosition - 1));
                     groups.Add(iniGroup);
@@ -298,7 +301,8 @@ namespace HedgeModManager
                     string parameterValue = stringResult.Substring(equalsPosition + 1);
 
                     groups[groups.Count - 1].AddParameter(parameterKey, parameterValue);
-                }else if (equalsPosition == -1 && !hasBracketAtStart && groups.Count > 0)
+                }
+                else if (equalsPosition == -1 && !hasBracketAtStart && groups.Count > 0)
                 {
                     groups[groups.Count - 1].AddParameter(stringResult, "");
                 }
