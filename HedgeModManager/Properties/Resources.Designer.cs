@@ -207,6 +207,16 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We have detected the command for GameBanana&apos;s 1-Click Install is missing.
+        ///To complete the install we will need to restart HedgeModManager as Admin..
+        /// </summary>
+        internal static string GameBananaRegInstallText {
+            get {
+                return ResourceManager.GetString("GameBananaRegInstallText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We have updated the command for GameBanana&apos;s 1-Click Install.
         ///To complete the update we will need to restart HedgeModManager as Admin..
         /// </summary>

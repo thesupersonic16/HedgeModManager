@@ -533,19 +533,40 @@ namespace HedgeModManager
                         msgBox.AddButton("Close", 100, (obj, e2) => msgBox.Close());
                         msgBox.AddButton("Restart HedgeModManager as Admin", 300, (obj, e2) =>
                         {
-                            Close();
-                            msgBox.Close();
                             var startInfo = new ProcessStartInfo(Application.ExecutablePath);
                             // Run as Admin
                             startInfo.Verb = "runas";
+
                             // Starts the process
-                            Process.Start(startInfo);
+                            // We dont want to close if user doesn't run as admin
+                            if (Process.Start(startInfo) != null)
+                                Application.Exit();
                         });
                         msgBox.ShowDialog();
                     }
                     key.Close();
                 }
-
+                else
+                {
+                    if (!Program.RunningAsAdmin())
+                    {
+                        var msgBox = new SS16MessageBox("Registry Missing",
+                            "Missing Registry for GameBanana 1-Click Install", Resources.GameBananaRegInstallText);
+                        msgBox.AddButton("Close", 100, (obj, e2) => msgBox.Close());
+                        msgBox.AddButton("Restart HedgeModManager as Admin", 300, (obj, e2) =>
+                        {
+                            var startInfo = new ProcessStartInfo(Application.ExecutablePath);
+                            // Run as Admin
+                            startInfo.Verb = "runas";
+                            
+                            // Starts the process
+                            // We dont want to close if user doesn't run as admin
+                            if(Process.Start(startInfo) != null)
+                                Application.Exit();
+                        });
+                        msgBox.ShowDialog();
+                    }
+                }
 
                 key = Registry.ClassesRoot.OpenSubKey(Protocol, true);
                 if (key == null)
