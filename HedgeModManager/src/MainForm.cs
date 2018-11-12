@@ -949,12 +949,12 @@ namespace HedgeModManager
                 Invoke(new Action(() => item = ModsList.Items[i]));
                 if (item == null)
                     continue;
-                Invoke(new Action(() => mod = ModsDb.GetMod(item.Text)));
+                Invoke(new Action(() => mod = item.Tag as Mod));
                 if (mod.UpdateServer.Length != 0)
                 {
                     // TODO: Find a way to get the Update SubItem without hardcoding a number
                     Invoke(new Action(() => item.SubItems[4].Text = "Checking..."));
-                    string status = CheckForModUpdates(mod.Title, true);
+                    string status = CheckForModUpdates(mod, true);
                     if (Exit)
                         return;
                     Invoke(new Action(() => item.SubItems[4].Text = status));
@@ -965,14 +965,13 @@ namespace HedgeModManager
         /// <summary>
         /// Checks for individual mod updates
         /// </summary>
-        /// <param name="modName">The Name of the mod (Frendly Name)</param>
+        /// <param name="mod">Reference of the Mod</param>
         /// <param name="silent">True If you don't want dialog constently comming up</param>
         /// <returns>The Status</returns>
-        public string CheckForModUpdates(string modName, bool silent = false)
+        public string CheckForModUpdates(Mod mod, bool silent = false)
         {
             var modUpdater = new ModUpdater();
             string status = "";
-            var mod = ModsDb.GetMod(modName ?? ModsList.FocusedItem.Text);
             if (mod == null) return status;
 
             if (mod.UpdateServer.Length == 0 && mod.Url.Length != 0)
@@ -1171,7 +1170,7 @@ namespace HedgeModManager
             if (MessageBox.Show($"Are you sure you want to delete \"{ModsList.FocusedItem.Text}\"?",
                 Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                Directory.Delete(ModsDb.GetMod(ModsList.FocusedItem.Text).RootDirectory, true);
+                Directory.Delete((ModsList.FocusedItem.Tag as Mod).RootDirectory, true);
                 RefreshModsList();
                 SaveModDB();
             }
@@ -1406,7 +1405,7 @@ namespace HedgeModManager
 
         private void CheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CheckForModUpdates(ModsList.FocusedItem.Text);
+            CheckForModUpdates(ModsList.FocusedItem.Tag as Mod);
         }
 
         private void DeleteModToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1414,7 +1413,7 @@ namespace HedgeModManager
             if (MessageBox.Show("Are you sure you want to delete \"" + ModsList.FocusedItem.Text + "\"?",
                 Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                Directory.Delete(ModsDb.GetMod(ModsList.FocusedItem.Text).RootDirectory, true);
+                Directory.Delete((ModsList.FocusedItem.Tag as Mod).RootDirectory, true);
                 RefreshModsList();
                 SaveModDB();
             }
@@ -1425,25 +1424,25 @@ namespace HedgeModManager
 
         private void OpenModFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer", ModsDb.GetMod(ModsList.FocusedItem.Text).RootDirectory);
+            Process.Start("explorer", (ModsList.FocusedItem.Tag as Mod).RootDirectory);
         }
 
         private void DesciptionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var mod = ModsDb.GetMod(ModsList.FocusedItem.Text);
+            var mod = ModsList.FocusedItem.Tag as Mod;
             new DescriptionForm(mod).ShowDialog();
         }
 
         private void EditModToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var nmf = new NewModForm(ModsDb.GetMod(ModsList.FocusedItem.Text));
+            var nmf = new NewModForm(ModsList.FocusedItem.Tag as Mod);
             nmf.ShowDialog();
             RefreshModsList();
         }
 
         private void CreateModUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var modified = ModsDb.GetMod(ModsList.FocusedItem.Text);
+            var modified = ModsList.FocusedItem.Tag as Mod;
             new CreateUpdateForm(modified).ShowDialog();
         }
 

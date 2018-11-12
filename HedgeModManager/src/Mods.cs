@@ -22,6 +22,7 @@ namespace HedgeModManager
             mainGroup.AddParameter("IncludeDirCount", 0, typeof(int));
             mainGroup.AddParameter("UpdateServer");
             mainGroup.AddParameter("SaveFile");
+            mainGroup.AddParameter("DLLFile");
 
             IniGroup descGroup = new IniGroup("Desc");
             descGroup.AddParameter("Title");
@@ -86,6 +87,12 @@ namespace HedgeModManager
         {
             get { return main["Main"]["SaveFile"]; }
             set { main["Main"]["SaveFile"] = value; }
+        }
+
+        public string DLLFile
+        {
+            get { return main["Main"]["DLLFile"]; }
+            set { main["Main"]["DLLFile"] = value; }
         }
         
         public string Title
@@ -233,7 +240,7 @@ namespace HedgeModManager
 
         public Mod GetMod(string title)
         {
-            return mods.FirstOrDefault(t => t.Title == title);
+            return mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == title);
         }
 
         public void AddMod(Mod mod)
@@ -247,7 +254,7 @@ namespace HedgeModManager
                 mod.RootDirectory = Path.Combine(RootDirectory, Path.GetDirectoryName(mod.RootDirectory));
             }
 
-            modsDb["Mods"].AddParameter(mod.Title, mod.FilePath);
+            modsDb["Mods"].AddParameter(Path.GetFileName(mod.RootDirectory), mod.FilePath);
             mods.Add(mod);
         }
 
@@ -308,7 +315,7 @@ namespace HedgeModManager
                 DeactivateMod(mod);
 
             mods.Remove(mod);
-            modsDb["Mods"].RemoveParameter(mod.Title);
+            modsDb["Mods"].RemoveParameter(Path.GetFileName(mod.RootDirectory));
         }
 
         public void ActivateMod(Mod mod)
@@ -334,7 +341,7 @@ namespace HedgeModManager
             {
                 string parameterKey = $"ActiveMod{i}";
 
-                Mod activeMod = GetMod(modsDb["Main"][parameterKey]);
+                var activeMod = GetMod(modsDb["Main"][parameterKey]);
 
                 if (activeMod != mod)
                     activeMods.Add(activeMod);
@@ -345,7 +352,7 @@ namespace HedgeModManager
             for (int i = 0; i < activeMods.Count; i++)
             {
                 string parameterKey = $"ActiveMod{i}";
-                modsDb["Main"].AddParameter(parameterKey, activeMods[i].Title);
+                modsDb["Main"].AddParameter(parameterKey, Path.GetFileName(mod.RootDirectory));
             }
 
             modsDb["Main"]["ActiveModCount", typeof(int)] = activeMods.Count;
