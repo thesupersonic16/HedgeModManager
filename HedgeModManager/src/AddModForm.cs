@@ -100,7 +100,9 @@ namespace HedgeModManager
                 Directory.CreateDirectory(tempFolder);
 
                 // Extracts the archive to the temp folder.
-                Process.Start(exe, $"x \"{ArchivePath}\" -o\"{tempFolder}\" -y").WaitForExit(1000*60*5);
+                var psi = new ProcessStartInfo(exe, $"x \"{ArchivePath}\" -o\"{tempFolder}\" -y");
+                psi.CreateNoWindow = true;
+                Process.Start(psi).WaitForExit(1000*60*5);
                 
                 // Search and install mods from the temp folder after extracting.
                 InstallFromFolder(tempFolder);
@@ -133,7 +135,9 @@ namespace HedgeModManager
                 Directory.CreateDirectory(tempfolder);
 
                 // Extracts the archive to the temp folder.
-                Process.Start(path, $"x \"{ArchivePath}\" \"{tempfolder}\"").WaitForExit(1000 * 60 * 5);
+                var psi = new ProcessStartInfo(path, $"x \"{ArchivePath}\" \"{tempfolder}\"");
+                psi.CreateNoWindow = true;
+                Process.Start(psi).WaitForExit(1000 * 60 * 5);
 
                 // Installs from the temp folder.
                 InstallFromFolder(tempfolder);

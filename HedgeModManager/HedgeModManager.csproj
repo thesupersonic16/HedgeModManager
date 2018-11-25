@@ -57,6 +57,9 @@
     <ApplicationIcon>res\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -93,9 +96,11 @@
     </Compile>
     <Compile Include="src\DownloadTools.cs" />
     <Compile Include="src\GameBanana.cs" />
-    <Compile Include="src\GBModDownloadWindow.xaml.cs">
+    <Compile Include="src\GameBanana\GameBananaSubmission.cs" />
+    <Compile Include="src\GameBanana\GBModDownloadWindow.xaml.cs">
       <DependentUpon>GBModDownloadWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\HMMCommand.cs" />
     <Compile Include="src\InstallForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -281,7 +286,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="src\GBModDownloadWindow.xaml">
+    <Page Include="src\GameBanana\GBModDownloadWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

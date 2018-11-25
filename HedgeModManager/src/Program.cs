@@ -1,6 +1,7 @@
 ﻿using HedgeModManager.Properties;
 using SS16;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -12,6 +13,9 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Windows.Forms;
 using System.Windows.Input;
+using GameBananaAPI.Core;
+using System.Threading;
+using System.Diagnostics;
 
 namespace HedgeModManager
 {
@@ -28,6 +32,7 @@ namespace HedgeModManager
         public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
         public static bool Restart = false;
         public static bool UseDarkTheme = true;
+        public static MainForm MainWindow;
 
         // Methods
         [STAThread]
@@ -38,6 +43,13 @@ namespace HedgeModManager
             CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
             // Makes sure HMM uses TLSv1.2
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            // Check if HMM is running
+            bool running = Process.GetProcessesByName(ProgramNameShort).Length > 1;
+            
+            // Start Pipe Server
+            if (!running)
+                HMMCommand.Start();
 
             LogFile.Initialize(false);
             LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
@@ -68,27 +80,37 @@ namespace HedgeModManager
                 {
                     LogFile.AddMessage("Starting Dev Tools");
                     DevTools.Init();
+                    HMMCommand.Close();
                     return;
                 }
 
                 if (args[0] == "-gb")
                 {
+                    if (running)
+                    {
+                        HMMCommand.SendMessage("GB " + args[1]);
+                        LogFile.Close();
+                        return;
+                    }
+
                     LogFile.AddMessage("Running GB Installer");
                     DownloadGameBananaItem(args[1]);
-                    LogFile.Close();
-                    return;
                 }
             }
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
-            while (Restart)
+            if (!running)
             {
-                LogFile.Initialize(!Restart);
-                Restart = false;
-                LogFile.AddMessage($"Re-Starting {ProgramName} (v{VersionString})...");
-                Application.Run(new MainForm());
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(MainWindow = new MainForm());
+                while (Restart)
+                {
+                    LogFile.Initialize(!Restart);
+                    Restart = false;
+                    LogFile.AddMessage($"Re-Starting {ProgramName} (v{VersionString})...");
+                    Application.Run(MainWindow = new MainForm());
+                }
+                HMMCommand.Close();
             }
         }
 
@@ -113,7 +135,12 @@ namespace HedgeModManager
 
                     // TODO:
                     string itemType = url.Split(',')[1];
-                    string itemID = url.Split(',')[2];
+                    int itemID = 0;
+                    if (!int.TryParse(url.Split(',')[2], out itemID))
+                    {
+                        MessageBox.Show("Given ItemID is not in a number format or is out of interger range!");
+                    }
+
                     url = url.Substring(0, url.IndexOf(","));
 
                     if (!IsURL(url))
@@ -122,14 +149,13 @@ namespace HedgeModManager
                         return;
                     }
 
-                    var submittion = GameBanana.GameBananaItemSubmittion.ReadResponse(
-                        GameBanana.GameBananaItemSubmittion.GetResponseFromGameBanana(itemType, itemID));
-                    if (submittion == null)
-                        return;
-                    
-                    var download = new GBModDownloadWindow(submittion.Name, submittion.UserName, submittion.Description, url,
-                        submittion.Credits, submittion.ThumbURL);
-                    download.ShowDialog();
+                    var item = new GBAPIItemDataBasic(itemType, itemID);
+                    if (GBAPI.RequestItemData(item))
+                    {
+                        var window = new GameBananaModDownloadWindow(item, url);
+                        window.ShowDialog();
+                    }
+
                 }
             }catch (Exception ex)
             {
@@ -210,5 +236,14 @@ namespace HedgeModManager
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
+        public static bool ContainsHash(byte[] hash, List<byte[]> hashes)
+        {
+            foreach (var hash_ in hashes)
+            {
+                if (hash_.SequenceEqual(hash))
+                    return true;
+            }
+            return false;
+        }
     }
 }

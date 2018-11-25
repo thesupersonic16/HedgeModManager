@@ -38,6 +38,7 @@ namespace HedgeModManager
             logMessage += message;
 
             logWriter.WriteLine(logMessage);
+            Console.WriteLine(logMessage);
             logWriter.Flush();
         }
 
