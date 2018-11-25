@@ -111,6 +111,7 @@ namespace HedgeModManager
         {
             Dispatcher.Invoke(new Action(() => PrograssL1.Content = "Installing..."));
             var bytes = e.Result;
+            WebClient.Dispose();
             new Thread(() => 
             {
                 string tempFolder = Path.Combine(Program.StartDirectory, "downloads");
