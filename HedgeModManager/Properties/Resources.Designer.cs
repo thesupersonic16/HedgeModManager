@@ -227,6 +227,31 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to body
+        ///{
+        ///    background-color: #2D2D30;
+        ///    color: #e2e2e2;
+        ///    font-family: &apos;Open Sans&apos;, sans-serif;
+        ///}
+        ///
+        ///a
+        ///{
+        ///    color: #FFE033;
+        ///}
+        ///
+        ///span.RedColor
+        ///{
+        ///    color: #FF4E4E;
+        ///}
+        ///.
+        /// </summary>
+        internal static string GBStyleSheet {
+            get {
+                return ResourceManager.GetString("GBStyleSheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon icon {

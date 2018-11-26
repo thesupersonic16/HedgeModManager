@@ -272,6 +272,7 @@
   <ItemGroup>
     <Content Include="res\codes\ForcesModLoader.dll" />
     <Content Include="res\codes\SonicGenerationsCodeLoader.dll" />
+    <Content Include="res\GBStyleSheet.css" />
     <Content Include="res\icon.ico" />
   </ItemGroup>
   <ItemGroup>

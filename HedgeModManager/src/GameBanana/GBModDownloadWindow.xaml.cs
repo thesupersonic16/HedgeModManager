@@ -42,7 +42,7 @@ namespace HedgeModManager
 
             // Description
             DescriptionViewer.LoadCompleted += DescriptionViewer_LoadCompleted;
-            DescriptionViewer.NavigateToString(item.Body);
+            DescriptionViewer.NavigateToString($"<html><body><style>{Properties.Resources.GBStyleSheet}</style>{item.Body}</body></html>");
 
             WebClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
             WebClient.DownloadDataCompleted += WebClient_DownloadDataCompleted;
@@ -64,7 +64,7 @@ namespace HedgeModManager
             string s = "";
             for (int i = 0; i < credits.Length; ++i)
             {
-                s += $"- {credits[i].MemberName}\n   {credits[i].Role}\n";
+                s += $"- {credits[i].MemberName}\n     {credits[i].Role}\n";
             }
             return s;
         }
@@ -136,6 +136,9 @@ namespace HedgeModManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // Put window in foreground
+            Topmost = true;
+            Topmost = false;
             Activate();
         }
     }

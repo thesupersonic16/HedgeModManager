@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:HedgeModManager" Height="600" Width="800" Title="GameBanana Mod Download"
+             xmlns:local="clr-namespace:HedgeModManager" Height="800" Width="1200" Title="GameBanana Mod Download"
              WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Window.Resources>
         <Style TargetType="Label">
@@ -81,17 +81,17 @@
         <Image                    x:Name="SubmissionImage"   HorizontalAlignment="Left" Height="145" Margin="18,10,0,0" VerticalAlignment="Top" Width="193"/>
         <Label                    x:Name="ModSubtitleLabel"  Content="MOD SUBTITLE"     Margin="237,67,10,0" VerticalAlignment="Top" Height="26" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
         <Grid x:Name="ModInfoGrid" Margin="18,155,18,10">
-            <Rectangle                                           Fill="#FF007ACC" Margin="0,35,9,50" HorizontalAlignment="Right" Width="181" />
-            <Label                                               Content="  Credits"        Margin="0,9,131,-5"  FontSize="12" Background="#FF007ACC" BorderBrush="#FF3E3E42" HorizontalAlignment="Right" Width="61" VerticalAlignment="Top"/>
-            <Label                    x:Name="SubmitterLabel"    Content=""                 Margin="0,36,10,51" FontSize="12" Background="#FF252526" BorderBrush="#FF3E3E42" HorizontalAlignment="Right" Width="181"/>
-            <Rectangle                                           Fill="#FF007ACC" Margin="10,35,191,50"/>
-            <Rectangle                                           Fill="#FF252526" Margin="11,36,193,51"/>
-            <WebBrowser x:Name="DescriptionViewer"               Margin="11,36,193,51" />
+            <Rectangle                                           Fill="#FF007ACC" Margin="0,35,9,50" HorizontalAlignment="Right" Width="252" />
+            <Label                                               Content="  Credits"        Margin="0,9,200,-5"  FontSize="12" Background="#FF007ACC" BorderBrush="#FF3E3E42" HorizontalAlignment="Right" Width="61" VerticalAlignment="Top"/>
+            <Label                    x:Name="SubmitterLabel"    Content=""                 Margin="0,36,10,51" FontSize="12" Background="#FF252526" BorderBrush="#FF3E3E42" HorizontalAlignment="Right" Width="250"/>
+            <Rectangle                                           Fill="#FF007ACC" Margin="10,35,261,50"/>
+            <Rectangle                                           Fill="#FF252526" Margin="11,36,263,51"/>
+            <WebBrowser x:Name="DescriptionViewer"               Margin="11,36,261,51" />
             <Label Content="  Description" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top" Background="#FF007ACC" Width="90"/>
         </Grid>
         <Grid x:Name="ProgressGrid" Height="63" Margin="18,0,18,4" VerticalAlignment="Bottom" MinWidth="200" Visibility="Hidden">
             <Rectangle x:Name="PrograssO" Fill="#FF007ACC" Margin="10,11,10,0" Height="40"/>
-            <Rectangle x:Name="PrograssI" Fill="#FF2D2D30" Margin="11,11,11,0" Height="38" HorizontalAlignment="Right" MinWidth="200" />
+            <Rectangle x:Name="PrograssI" Fill="#FF2D2D30" Margin="11,11,11,0" Height="38" HorizontalAlignment="Right" />
 
             <Label x:Name="PrograssL1" Content="Starting..." VerticalAlignment="Top" Margin="10,17,10,0" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         </Grid>
