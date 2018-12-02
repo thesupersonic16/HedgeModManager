@@ -672,4 +672,12 @@
       <ValueType>decimal</ValueType>
     </CodeLine>
   </Code>
+  <Code name="Infinite Lives" patch="true" credit="CodenameGamma">
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>00D59A67</Address>
+      <Value>06</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
 </CodeList>

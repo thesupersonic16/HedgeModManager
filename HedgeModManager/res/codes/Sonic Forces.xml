@@ -847,4 +847,30 @@
     </CodeLine>
   </Code>
   -->
-</CodeList>
+
+  <Code name="Wispon Gauge Stay's Full" patch="true" credit="CodenameGamma">
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>1404D228C</Address>
+      <Value>00000004</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+    <Code name="Wispon Special Always Ready (Use Wispon Anytime)" patch="true" credit="CodenameGamma">
+    <CodeLine>
+      <Type>write8</Type>
+      <Address>1423C060C</Address>
+      <Value>01</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+	
+  </Code>
+    <Code name="Disable Wispon Boundaries " patch="true" credit="CodenameGamma">
+    <CodeLine>
+      <Type>writenop</Type>
+      <Address>140267527</Address>
+      <Value>00000005</Value>
+      <ValueType>hex</ValueType>
+    </CodeLine>
+  </Code>
+  </CodeList>
