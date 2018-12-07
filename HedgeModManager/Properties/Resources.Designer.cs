@@ -237,6 +237,20 @@ namespace HedgeModManager.Properties {
         ///a
         ///{
         ///    color: #FFE033;
+        ///    text-decoration: none;
+        ///    vertical-align: baseline;
+        ///}
+        ///
+        ///h1
+        ///{
+        ///    font-size: 18px;
+        ///    margin: 0 0 0.75em;
+        ///    padding: 0 0 0.25em 0;
+        ///}
+        ///
+        ///li
+        ///{
+        ///    list-style-type: square;
         ///}
         ///
         ///span.RedColor

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace GameBananaAPI.Core
+namespace GameBananaAPI
 {
     public class GBAPI
     {
@@ -44,6 +44,12 @@ namespace GameBananaAPI.Core
                 }
             }
 
+            /// <summary>
+            /// Creates Request URL to GameBanana's API.
+            ///  - Core/Item/Data
+            ///      Calls Core/Item/Data with the specified item type, id and fields
+            /// </summary>
+            /// <returns>Request URL</returns>
             public string Build()
             {
                 if (APIType == GBAPIRequestType.COREITEMDATA)
@@ -60,6 +66,12 @@ namespace GameBananaAPI.Core
                 return "";
             }
 
+            /// <summary>
+            /// Parses the response data(XML) and writes all data into parameter "item".
+            /// </summary>
+            /// <param name="response">The Response data from GameBanana API in XML string format</param>
+            /// <param name="item">Reference to a GBAPIItemData to write the data to</param>
+            /// <returns>If Parse completed with no errors</returns>
             public bool ParseResponse(string response, GBAPIItemData item)
             {
                 var responseXML = XDocument.Parse(response).Root;
@@ -76,7 +88,33 @@ namespace GameBananaAPI.Core
                 foreach (var field in Fields)
                 {
                     var element = elements.First();
-                    if (element.Name == "value")
+                    var GBFieldKey = (GBAPIFieldKeyArray)field.Value.GetCustomAttributes(typeof(GBAPIFieldKeyArray), true).FirstOrDefault();
+                    if (GBFieldKey != null)
+                    {
+                        var arrayElements = element.Elements().ToArray();
+                        var array = Array.CreateInstance(field.Value.FieldType.GetElementType(), arrayElements.Length);
+                        var keyInfo = field.Value.FieldType.GetElementType().GetField(GBFieldKey.KeyName);
+                        var arrayInfo = field.Value.FieldType.GetElementType().GetField(GBFieldKey.ArrayName);
+                        for (int i = 0; i < array.Length; ++i)
+                        {
+                            object obj = Activator.CreateInstance(field.Value.FieldType.GetElementType());
+                            // Key
+                            object value = TryConvert(arrayElements[i].Attribute("key").Value, keyInfo.FieldType);
+                            if (value != null)
+                                keyInfo.SetValue(obj, value);
+                            // Array
+                            var subElements = arrayElements[i].Elements().ToArray();
+                            var array2 = Array.CreateInstance(arrayInfo.FieldType.GetElementType(), subElements.Length);
+                            for (int ii = 0; ii < array2.Length; ++ii)
+                                array2.SetValue(XMLtoObject(arrayInfo.FieldType.GetElementType(), subElements[ii]), ii);
+                            arrayInfo.SetValue(obj, array2);
+
+
+                            array.SetValue(obj, i);
+                        }
+                        field.Value.SetValue(item, array);
+                    }
+                    else if (element.Name == "value")
                     {
                         field.Value.SetValue(item, XMLtoObject(field.Value.FieldType, elements.First()));
                     }
@@ -95,6 +133,12 @@ namespace GameBananaAPI.Core
 
         }
 
+        /// <summary>
+        /// A normal Convert.ChangeType but returns null if fails
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static object TryConvert(object obj, Type type)
         {
             try
@@ -115,6 +159,10 @@ namespace GameBananaAPI.Core
             obj = Activator.CreateInstance(type);
             var fields = type.GetFields();
             var elements = new List<XElement>(element.Elements());
+            if (element.Name == "value")
+            {
+                return XMLtoObject(type, elements.First());
+            }
             foreach (var field in fields)
             {
                 var curElement = elements.First();
@@ -177,12 +225,32 @@ namespace GameBananaAPI.Core
         }
     }
 
+    public class GBAPIFieldKeyArray : Attribute
+    {
+        public string KeyName;
+        public string ArrayName;
+
+        public GBAPIFieldKeyArray(string keyName, string arrayName)
+        {
+            KeyName = keyName;
+            ArrayName = arrayName;
+        }
+    }
+
+
     public class GBAPICredit
     {
         public string MemberName;
         public string Role;
         public int MemberID;
     }
+
+    public class GBAPICreditGroup
+    {
+        public string GroupName;
+        public GBAPICredit[] Credits;
+    }
+
 
     public class GBAPIItemDataBasic : GBAPIItemData
     {
@@ -198,8 +266,9 @@ namespace GameBananaAPI.Core
         public string Body;
         [GBAPIField("description")]
         public string Subtitle;
-        [GBAPIField("Credits().aAuthors()")]
-        public GBAPICredit[] Credits;
+        [GBAPIField("Credits().aAuthorsAndGroups()")]
+        [GBAPIFieldKeyArray("GroupName", "Credits")]
+        public GBAPICreditGroup[] Credits;
 
         public GBAPIItemDataBasic(string itemType, int itemID) : base(itemType, itemID)
         {

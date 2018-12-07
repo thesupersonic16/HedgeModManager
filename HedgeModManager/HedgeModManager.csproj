@@ -95,8 +95,7 @@
       <DependentUpon>CreateUpdateURLForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\DownloadTools.cs" />
-    <Compile Include="src\GameBanana.cs" />
-    <Compile Include="src\GameBanana\GameBananaSubmission.cs" />
+    <Compile Include="src\GameBanana\GBAPI.cs" />
     <Compile Include="src\GameBanana\GBModDownloadWindow.xaml.cs">
       <DependentUpon>GBModDownloadWindow.xaml</DependentUpon>
     </Compile>

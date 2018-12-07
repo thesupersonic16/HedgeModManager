@@ -81,12 +81,12 @@
         <Image                    x:Name="SubmissionImage"   HorizontalAlignment="Left" Height="145" Margin="18,10,0,0" VerticalAlignment="Top" Width="193"/>
         <Label                    x:Name="ModSubtitleLabel"  Content="MOD SUBTITLE"     Margin="237,67,10,0" VerticalAlignment="Top" Height="26" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
         <Grid x:Name="ModInfoGrid" Margin="18,155,18,10">
-            <Rectangle                                           Fill="#FF007ACC" Margin="0,35,9,50" HorizontalAlignment="Right" Width="252" />
-            <Label                                               Content="  Credits"        Margin="0,9,200,-5"  FontSize="12" Background="#FF007ACC" BorderBrush="#FF3E3E42" HorizontalAlignment="Right" Width="61" VerticalAlignment="Top"/>
-            <Label                    x:Name="SubmitterLabel"    Content=""                 Margin="0,36,10,51" FontSize="12" Background="#FF252526" BorderBrush="#FF3E3E42" HorizontalAlignment="Right" Width="250"/>
-            <Rectangle                                           Fill="#FF007ACC" Margin="10,35,261,50"/>
-            <Rectangle                                           Fill="#FF252526" Margin="11,36,263,51"/>
-            <WebBrowser x:Name="DescriptionViewer"               Margin="11,36,261,51" />
+            <Rectangle                                           Fill="#FF007ACC" Margin="0,35,9,50" HorizontalAlignment="Right" Width="352" />
+            <Label                                               Content="  Credits"        Margin="0,9,299,0"  FontSize="12" Background="#FF007ACC" BorderBrush="#FF3E3E42" HorizontalAlignment="Right" Width="61" VerticalAlignment="Top"/>
+            <TextBox                  x:Name="SubmitterLabel"    Text=""                    Margin="0,36,10,51"  FontSize="12" Background="#FF252526" BorderBrush="#FF3E3E42" HorizontalAlignment="Right" Width="350" VerticalScrollBarVisibility="Auto" IsReadOnly="True" TextWrapping="WrapWithOverflow"/>
+            <Rectangle                                           Fill="#FF007ACC" Margin="10,35,361,50"/>
+            <Rectangle                                           Fill="#FF252526" Margin="11,36,363,51"/>
+            <WebBrowser x:Name="DescriptionViewer"               Margin="11,36,361,51" />
             <Label Content="  Description" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top" Background="#FF007ACC" Width="90"/>
         </Grid>
         <Grid x:Name="ProgressGrid" Height="63" Margin="18,0,18,4" VerticalAlignment="Bottom" MinWidth="200" Visibility="Hidden">

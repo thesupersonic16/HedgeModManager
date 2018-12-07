@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Windows.Forms;
 using System.Windows.Input;
-using GameBananaAPI.Core;
+using GameBananaAPI;
 using System.Threading;
 using System.Diagnostics;
 

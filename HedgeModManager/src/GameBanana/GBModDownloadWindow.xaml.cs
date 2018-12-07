@@ -16,7 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.IO;
-using GameBananaAPI.Core;
+using GameBananaAPI;
 using Path = System.IO.Path;
 using mshtml;
 
@@ -38,7 +38,7 @@ namespace HedgeModManager
             Item = item;
             ModTitleLabel.Content = item.ModName;
             ModSubtitleLabel.Content = item.Subtitle;
-            SubmitterLabel.Content = new TextBlock() { Text = ProcessCredits(item.Credits), TextWrapping = TextWrapping.Wrap };
+            SubmitterLabel.Text = ProcessCredits(item.Credits);
 
             // Description
             DescriptionViewer.LoadCompleted += DescriptionViewer_LoadCompleted;
@@ -59,12 +59,16 @@ namespace HedgeModManager
 
         }
 
-        public static string ProcessCredits(GBAPICredit[] credits)
+        public static string ProcessCredits(GBAPICreditGroup[] groups)
         {
             string s = "";
-            for (int i = 0; i < credits.Length; ++i)
+            foreach (var group in groups)
             {
-                s += $"- {credits[i].MemberName}\n     {credits[i].Role}\n";
+                s += $"{group.GroupName}\n";
+                for (int i = 0; i < group.Credits.Length; ++i)
+                {
+                    s += $"  - {group.Credits[i].MemberName}\n     {group.Credits[i].Role}\n";
+                }
             }
             return s;
         }
