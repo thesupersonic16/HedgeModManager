@@ -430,20 +430,27 @@ namespace HedgeModManager
                 }
                 // Sets the PatchLabel's Text to show the user if CPKREDIR is installed in either game
                 PatchLabel.Text = Program.CurrentGame + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
-                if (Program.CurrentGame == Games.SonicForces)
+                if (!Program.CurrentGame.UseCPKREDIR && Program.CurrentGame.HasCustomLoader)
                 {
-                    if (!File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")) && 
+                    string DLLFileName = Path.Combine(Program.StartDirectory, $"d3d{Program.CurrentGame.DirectXVersion}.dll");
+
+                    if (!File.Exists(DLLFileName) && 
                         MessageBox.Show(string.Format(Resources.LoaderNotInstalled, Program.CurrentGame),
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                        InstallLoader_Button_Click(null, null);
-                    // NOTE: Do i need this?
-                    PatchLabel.Text = Program.CurrentGame + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
-                        ? "Installed" : "Not Installed");
+                        ReinstallLoader();
                 }
                 if (Program.CurrentGame.HasCustomLoader)
                 {
-                    if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion2"))
-                        LoaderVerLabel.Text = "Loader Version: " + CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion2"];
+                    string DLLFileName = Path.Combine(Program.StartDirectory, $"d3d{Program.CurrentGame.DirectXVersion}.dll");
+                    if (File.Exists(DLLFileName))
+                    {
+                        if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion2"))
+                            LoaderVerLabel.Text = "Loader Version: " + CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion2"];
+                    }
+                    else
+                    {
+                        LoaderVerLabel.Text = "Loader Version: None";
+                    }
                 }
 
             }
@@ -505,14 +512,8 @@ namespace HedgeModManager
                         var window = new ChangeLogWindow(loaderName, newestVersion.ToString(), loaderChangeLog);
                         window.ShowDialog();
                         if (window.Update)
-                        {
                             ReinstallLoader();
-                        }
                     }
-                    //var msgBox = new SS16MessageBox("Warning", "Loader Mismatch Detected", Resources.LoaderMismatchText);
-                    //msgBox.AddButton("Reinstall Loader", 100, (obj, e) => { InstallLoader_Button_Click(null, null); InstallLoader_Button_Click(null, null); msgBox.Close(); });
-                    //msgBox.AddButton("Ignore", 100, (obj, e) => msgBox.Close());
-                    //msgBox.ShowDialog();
                 }
             });
             loaderUpdateThread.SetApartmentState(ApartmentState.STA);
@@ -646,10 +647,12 @@ namespace HedgeModManager
 
         public void ReinstallLoader(bool toggle = false)
         {
-            string DLLFileName = $"d3d{Program.CurrentGame.DirectXVersion}.dll";
+            string DLLFileName = Path.Combine(Program.StartDirectory, $"d3d{Program.CurrentGame.DirectXVersion}.dll");
 
             if (UninstallLoader() && toggle)
-                return;
+            {
+                goto updateUI;
+            }
 
             // Downloads the Loader
             using (var client = new WebClient())
@@ -669,7 +672,9 @@ namespace HedgeModManager
                     if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion"))
                         CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion"] = group["LoaderVersion"];
                     else CPKREDIRIni[Program.ProgramNameShort].AddParameter("LoaderVersion", group["LoaderVersion"]);
-
+                }
+                if (group.ContainsParameter("LoaderVersion2"))
+                {
                     if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion2"))
                         CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion2"] = group["LoaderVersion2"];
                     else CPKREDIRIni[Program.ProgramNameShort].AddParameter("LoaderVersion2", group["LoaderVersion2"]);
@@ -683,11 +688,21 @@ namespace HedgeModManager
                 // Install local copy
                 var loader = Program.CurrentGame.LoaderFile;
                 if (loader != null)
-                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, DLLFileName), loader);
+                    File.WriteAllBytes(DLLFileName, loader);
                 else
                     throw new NotImplementedException("No Loader is available!");
             }
+            updateUI:
             InstallLoader_Button.Text = "Uninstall Loader";
+            PatchLabel.Text = Program.CurrentGame + ": " + (File.Exists(DLLFileName) ? "Installed" : "Not Installed");
+            if (File.Exists(DLLFileName))
+            {
+                if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion2"))
+                    LoaderVerLabel.Text = "Loader Version: " + CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion2"];
+            }else
+            {
+                LoaderVerLabel.Text = "Loader Version: None";
+            }
         }
 
         /// <summary>
