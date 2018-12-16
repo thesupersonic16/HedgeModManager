@@ -33,11 +33,13 @@ namespace HedgeModManager
         public static bool Restart = false;
         public static bool UseDarkTheme = true;
         public static MainForm MainWindow;
+        public static string[] Args;
 
         // Methods
         [STAThread]
         private static void Main(string[] args)
         {
+            Args = args;
             // Language
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
@@ -51,8 +53,21 @@ namespace HedgeModManager
             if (!running)
                 HMMCommand.Start();
 
-            LogFile.Initialize(false);
+            LogFile.Initialize(true);
             LogFile.AddMessage($"Starting {ProgramName} (v{VersionString})...");
+
+#if !DEBUG
+            // Enable our Crash Window if Compiled in Release
+            if (!Debugger.IsAttached)
+            {
+                // Redirects all Unhandle Exceptions to Application.ThreadException
+                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+                // Adds our EVent into the Application.ThreadException handler
+                Application.ThreadException += new ThreadExceptionEventHandler(ExceptionWindow.UnhandledExceptionEventHandler);
+                // Incase anything else throws an exception it will go to our handler
+                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionWindow.UnhandledExceptionEventHandler);
+            }
+#endif
 
 #if DEBUG
             Steam.Init();
@@ -102,13 +117,13 @@ namespace HedgeModManager
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(MainWindow = new MainForm());
+                Application.Run(new MainForm());
                 while (Restart)
                 {
                     LogFile.Initialize(!Restart);
                     Restart = false;
                     LogFile.AddMessage($"Re-Starting {ProgramName} (v{VersionString})...");
-                    Application.Run(MainWindow = new MainForm());
+                    Application.Run(new MainForm());
                 }
                 HMMCommand.Close();
             }
@@ -116,51 +131,42 @@ namespace HedgeModManager
 
         public static void DownloadGameBananaItem(string arg)
         {
-            try
+            // GameBanana Download Protocol
+            if (arg.ToLower().StartsWith(@"hedgemmgens:")
+                || arg.ToLower().StartsWith(@"hedgemmlw:")
+                || arg.ToLower().StartsWith(@"hedgemmforces:"))
             {
-                // GameBanana Download Protocol
-                if (arg.ToLower().StartsWith(@"hedgemmgens:")
-                    || arg.ToLower().StartsWith(@"hedgemmlw:")
-                    || arg.ToLower().StartsWith(@"hedgemmforces:"))
+                string url = arg;
+                if (url.ToLower().StartsWith(@"hedgemmgens:"))
+                    url = url.Substring(12);
+                if (url.ToLower().StartsWith(@"hedgemmlw:"))
+                    url = url.Substring(10);
+                if (url.ToLower().StartsWith(@"hedgemmforces:"))
+                    url = url.Substring(14);
+
+                // TODO:
+                string itemType = url.Split(',')[1];
+                int itemID = 0;
+                if (!int.TryParse(url.Split(',')[2], out itemID))
                 {
-                    Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(false);
-                    string url = arg;
-                    if (url.ToLower().StartsWith(@"hedgemmgens:"))
-                        url = url.Substring(12);
-                    if (url.ToLower().StartsWith(@"hedgemmlw:"))
-                        url = url.Substring(10);
-                    if (url.ToLower().StartsWith(@"hedgemmforces:"))
-                        url = url.Substring(14);
-
-                    // TODO:
-                    string itemType = url.Split(',')[1];
-                    int itemID = 0;
-                    if (!int.TryParse(url.Split(',')[2], out itemID))
-                    {
-                        MessageBox.Show("Given ItemID is not in a number format or is out of interger range!");
-                    }
-
-                    url = url.Substring(0, url.IndexOf(","));
-
-                    if (!IsURL(url))
-                    {
-                        MessageBox.Show("Link Given is not a URL!");
-                        return;
-                    }
-
-                    var item = new GBAPIItemDataBasic(itemType, itemID);
-                    if (GBAPI.RequestItemData(item))
-                    {
-                        var window = new GameBananaModDownloadWindow(item, url);
-                        window.ShowDialog();
-                    }
-
+                    MessageBox.Show("Given ItemID is not in a number format or is out of interger range!");
                 }
-            }catch (Exception ex)
-            {
-                LogFile.Initialize(false);
-                MainForm.AddMessage("Exception thrown on GameBanana Item Installation", ex, arg);
+
+                url = url.Substring(0, url.IndexOf(","));
+
+                if (!IsURL(url))
+                {
+                    MessageBox.Show("Link Given is not a URL!");
+                    return;
+                }
+
+                var item = new GBAPIItemDataBasic(itemType, itemID);
+                if (GBAPI.RequestItemData(item))
+                {
+                    var window = new GameBananaModDownloadWindow(item, url);
+                    window.ShowDialog();
+                }
+
             }
         }
 

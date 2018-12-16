@@ -440,6 +440,11 @@ namespace HedgeModManager
                     PatchLabel.Text = Program.CurrentGame + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
                         ? "Installed" : "Not Installed");
                 }
+                if (Program.CurrentGame.HasCustomLoader)
+                {
+                    if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion2"))
+                        LoaderVerLabel.Text = "Loader Version: " + CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion2"];
+                }
 
             }
             else
@@ -456,29 +461,62 @@ namespace HedgeModManager
                 Close();
                 return;
             }
-            new Thread(() =>
+            var loaderUpdateThread = new Thread(() =>
             {
-                // Downloads Hash from Github
+                float currentVersion = 0.0f;
+                float newestVersion = 0.0f;
+                string loaderName = "Error: No Name";
+                string loaderChangeLog = "Error: No ChangeLog";
+
+                // Download and read Modloader info from GitHub
                 try
                 {
-                    Program.CurrentGame.Hash = new WebClient().DownloadData(Program.CurrentGame.LoaderHashURL);
+                    var ini = new IniFile();
+                    using (var reader = new StreamReader(new MemoryStream(new WebClient().DownloadData(Resources.LoaderListURL))))
+                        ini.Read(reader);
+                    if (ini.ContainsGroup(Program.CurrentGame.GameName))
+                    {
+                        var group = ini[Program.CurrentGame.GameName];
+                        
+                        // Return if Loader doesnt have LoaderVersion
+                        if (!group.ContainsParameter("LoaderVersion")) return;
+                        
+                        // Read the recorded modloader version, if not check with version 0.0
+                        if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion"))
+                            currentVersion = (float)CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion", typeof(float)];
+
+                        newestVersion = (float)group["LoaderVersion", typeof(float)];
+                        loaderName = (group.ContainsParameter("LoaderName") ? group["LoaderName"] : "Error: No Name");
+                        loaderChangeLog = (group.ContainsParameter("LoaderChangeLog") ? group["LoaderChangeLog"] : "Error: No ChangeLog");
+                    }
                 }
                 catch
-                { // Failed to download hash
+                { // Failed to update
+                    AddMessage("Failed to Check for ModLoader Updates");
                     return;
                 }
                 // Checks the Loader
                 string loaderPath = Path.Combine(Program.StartDirectory, "d3d" + Program.CurrentGame.DirectXVersion + ".dll");
-                if (File.Exists(loaderPath) && CPKREDIRIni[Program.ProgramNameShort]["CheckLoader"] != "0"
-                    && Program.CurrentGame.Hash != null &&
-                    !Program.CurrentGame.Hash.SequenceEqual(Program.ComputeSHA256Hash(File.ReadAllBytes(loaderPath))))
+                // Check if modloader Exists
+                if (File.Exists(loaderPath) && CPKREDIRIni[Program.ProgramNameShort]["CheckLoader"] != "0")
                 {
-                    var msgBox = new SS16MessageBox("Warning", "Loader Mismatch Detected", Resources.LoaderMismatchText);
-                    msgBox.AddButton("Reinstall Loader", 100, (obj, e) => { InstallLoader_Button_Click(null, null); InstallLoader_Button_Click(null, null); msgBox.Close(); });
-                    msgBox.AddButton("Ignore", 100, (obj, e) => msgBox.Close());
-                    msgBox.ShowDialog();
+                    if (newestVersion > currentVersion)
+                    {
+                        var window = new ChangeLogWindow(loaderName, newestVersion.ToString(), loaderChangeLog);
+                        window.ShowDialog();
+                        if (window.Update)
+                        {
+                            ReinstallLoader();
+                        }
+                    }
+                    //var msgBox = new SS16MessageBox("Warning", "Loader Mismatch Detected", Resources.LoaderMismatchText);
+                    //msgBox.AddButton("Reinstall Loader", 100, (obj, e) => { InstallLoader_Button_Click(null, null); InstallLoader_Button_Click(null, null); msgBox.Close(); });
+                    //msgBox.AddButton("Ignore", 100, (obj, e) => msgBox.Close());
+                    //msgBox.ShowDialog();
                 }
-            }).Start();
+            });
+            loaderUpdateThread.SetApartmentState(ApartmentState.STA);
+            loaderUpdateThread.Start();
 
             // Runs CheckForModLoaderUpdates in another thread
             new Thread(new ThreadStart(CheckForModLoaderUpdates)).Start();
@@ -592,6 +630,64 @@ namespace HedgeModManager
             catch { }
 
             Ready = true;
+        }
+
+        public bool UninstallLoader()
+        {
+            string DLLFileName = $"d3d{Program.CurrentGame.DirectXVersion}.dll";
+            if (File.Exists(Path.Combine(Program.StartDirectory, DLLFileName)))
+            {
+                File.Delete(Path.Combine(Program.StartDirectory, DLLFileName));
+                InstallLoader_Button.Text = "Install Loader";
+                return true;
+            }
+            return false;
+        }
+
+        public void ReinstallLoader(bool toggle = false)
+        {
+            string DLLFileName = $"d3d{Program.CurrentGame.DirectXVersion}.dll";
+
+            if (UninstallLoader() && toggle)
+                return;
+
+            // Downloads the Loader
+            using (var client = new WebClient())
+                client.DownloadFile(Program.CurrentGame.LoaderDownloadURL, Path.Combine(Program.StartDirectory, DLLFileName));
+            var ini = new IniFile();
+
+            // Get Version
+            using (var reader = new StreamReader(new MemoryStream(new WebClient().DownloadData(Resources.LoaderListURL))))
+                ini.Read(reader);
+            if (ini.ContainsGroup(Program.CurrentGame.GameName))
+            {
+                var group = ini[Program.CurrentGame.GameName];
+
+                // Return if Loader doesnt have LoaderVersion
+                if (group.ContainsParameter("LoaderVersion"))
+                {
+                    if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion"))
+                        CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion"] = group["LoaderVersion"];
+                    else CPKREDIRIni[Program.ProgramNameShort].AddParameter("LoaderVersion", group["LoaderVersion"]);
+
+                    if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion2"))
+                        CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion2"] = group["LoaderVersion2"];
+                    else CPKREDIRIni[Program.ProgramNameShort].AddParameter("LoaderVersion2", group["LoaderVersion2"]);
+
+                }
+            }
+
+            // Checks if the loader is downloaded and saved, If it isn't then write the local copy
+            if (!File.Exists(DLLFileName))
+            { 
+                // Install local copy
+                var loader = Program.CurrentGame.LoaderFile;
+                if (loader != null)
+                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, DLLFileName), loader);
+                else
+                    throw new NotImplementedException("No Loader is available!");
+            }
+            InstallLoader_Button.Text = "Uninstall Loader";
         }
 
         /// <summary>
@@ -1151,18 +1247,7 @@ namespace HedgeModManager
 
         private void InstallUninstallButton_Click(object sender, EventArgs e)
         {
-            StatusLabel.Text = "";
-            // TODO
-            if (Program.CurrentGame == Games.SonicForces)
-            {
-                InstallLoader_Button_Click(null, null);
-                // NOTE: Do I need thuis?
-                PatchLabel.Text = Program.CurrentGame + ": " + (File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll"))
-                    ? "Installed" : "Not Installed");
-
-            }
-            else
-                PatchLabel.Text = Program.CurrentGame + ": " + (InstallCPKREDIR(null) ? "Installed" : "Not Installed");
+            ReinstallLoader(true);
         }
 
         private void RemoveModButton_Click(object sender, EventArgs e)
@@ -1359,34 +1444,7 @@ namespace HedgeModManager
 
         private void InstallLoader_Button_Click(object sender, EventArgs e)
         {
-            string text = "";
-            string DLLFileName = $"d3d{Program.CurrentGame.DirectXVersion}.dll";
-
-            if (File.Exists(Path.Combine(Program.StartDirectory, DLLFileName)))
-            {
-                File.Delete(Path.Combine(Program.StartDirectory, DLLFileName));
-                text = "Install Loader";
-            }
-            else
-            {
-                var loader = Program.CurrentGame.LoaderFile;
-                if (loader == null)
-                {
-                    MessageBox.Show("No loader available for " + Program.CurrentGame, "", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    return;
-                }
-                // Downloads the Loader
-                new UpdateForm(Program.CurrentGame.LoaderDownloadURL, Path.Combine(Program.StartDirectory, DLLFileName)).ShowDialog();
-                // Checks if the loader is downloaded and saved, If it doesn't then Write local copy
-                if (!File.Exists(DLLFileName))
-                { // Install local copy
-                    File.WriteAllBytes(Path.Combine(Program.StartDirectory, DLLFileName), loader);
-                }
-                text = "Uninstall Loader";
-            }
-
-            InstallLoader_Button.Text = text;
+            ReinstallLoader(true);
         }
 
         private void GetCodeList_Button_Click(object sender, EventArgs e)
@@ -1640,5 +1698,6 @@ namespace HedgeModManager
                 Close();
             }catch { }
         }
+
     }
 }

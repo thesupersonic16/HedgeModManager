@@ -61,6 +61,7 @@ namespace HedgeModManager
             this.InstallLoader_Button = new System.Windows.Forms.Button();
             this.Codes_CheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.LoaderVerLabel = new System.Windows.Forms.Label();
             this.Label_SaveFileBackupStatus = new System.Windows.Forms.Label();
             this.Button_RestoreSaveFile = new System.Windows.Forms.Button();
             this.ModOrderButton = new System.Windows.Forms.Button();
@@ -417,6 +418,7 @@ namespace HedgeModManager
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.LoaderVerLabel);
             this.SettingsPage.Controls.Add(this.Label_SaveFileBackupStatus);
             this.SettingsPage.Controls.Add(this.Button_RestoreSaveFile);
             this.SettingsPage.Controls.Add(this.ModOrderButton);
@@ -442,21 +444,30 @@ namespace HedgeModManager
             this.SettingsPage.Text = "Settings";
             this.SettingsPage.UseVisualStyleBackColor = true;
             // 
+            // LoaderVerLabel
+            // 
+            this.LoaderVerLabel.AutoSize = true;
+            this.LoaderVerLabel.Location = new System.Drawing.Point(152, 53);
+            this.LoaderVerLabel.Name = "LoaderVerLabel";
+            this.LoaderVerLabel.Size = new System.Drawing.Size(130, 13);
+            this.LoaderVerLabel.TabIndex = 28;
+            this.LoaderVerLabel.Text = "Loader Version: Unknown";
+            // 
             // Label_SaveFileBackupStatus
             // 
-            this.Label_SaveFileBackupStatus.AutoSize = true;
-            this.Label_SaveFileBackupStatus.Location = new System.Drawing.Point(401, 55);
+            this.Label_SaveFileBackupStatus.Location = new System.Drawing.Point(351, 108);
             this.Label_SaveFileBackupStatus.Name = "Label_SaveFileBackupStatus";
-            this.Label_SaveFileBackupStatus.Size = new System.Drawing.Size(124, 26);
+            this.Label_SaveFileBackupStatus.Size = new System.Drawing.Size(146, 26);
             this.Label_SaveFileBackupStatus.TabIndex = 27;
             this.Label_SaveFileBackupStatus.Text = "SaveFile Backup Status:\r\n    Unknown";
+            this.Label_SaveFileBackupStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Label_SaveFileBackupStatus.Visible = false;
             // 
             // Button_RestoreSaveFile
             // 
-            this.Button_RestoreSaveFile.Location = new System.Drawing.Point(272, 72);
+            this.Button_RestoreSaveFile.Location = new System.Drawing.Point(352, 77);
             this.Button_RestoreSaveFile.Name = "Button_RestoreSaveFile";
-            this.Button_RestoreSaveFile.Size = new System.Drawing.Size(127, 23);
+            this.Button_RestoreSaveFile.Size = new System.Drawing.Size(128, 23);
             this.Button_RestoreSaveFile.TabIndex = 26;
             this.Button_RestoreSaveFile.Text = "Restore SaveFile";
             this.Button_RestoreSaveFile.UseVisualStyleBackColor = true;
@@ -466,9 +477,9 @@ namespace HedgeModManager
             // ModOrderButton
             // 
             this.ModOrderButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ModOrderButton.Location = new System.Drawing.Point(272, 14);
+            this.ModOrderButton.Location = new System.Drawing.Point(352, 19);
             this.ModOrderButton.Name = "ModOrderButton";
-            this.ModOrderButton.Size = new System.Drawing.Size(127, 23);
+            this.ModOrderButton.Size = new System.Drawing.Size(128, 23);
             this.ModOrderButton.TabIndex = 6;
             this.ModOrderButton.Text = "Priority: Bottom to Top";
             this.ModOrderButton.UseVisualStyleBackColor = true;
@@ -476,9 +487,9 @@ namespace HedgeModManager
             // 
             // Button_BackupSaveFile
             // 
-            this.Button_BackupSaveFile.Location = new System.Drawing.Point(272, 43);
+            this.Button_BackupSaveFile.Location = new System.Drawing.Point(352, 48);
             this.Button_BackupSaveFile.Name = "Button_BackupSaveFile";
-            this.Button_BackupSaveFile.Size = new System.Drawing.Size(127, 23);
+            this.Button_BackupSaveFile.Size = new System.Drawing.Size(128, 23);
             this.Button_BackupSaveFile.TabIndex = 25;
             this.Button_BackupSaveFile.Text = "Backup SaveFile";
             this.Button_BackupSaveFile.UseVisualStyleBackColor = true;
@@ -487,9 +498,9 @@ namespace HedgeModManager
             // 
             // Button_SaveAndReload
             // 
-            this.Button_SaveAndReload.Location = new System.Drawing.Point(369, 166);
+            this.Button_SaveAndReload.Location = new System.Drawing.Point(352, 169);
             this.Button_SaveAndReload.Name = "Button_SaveAndReload";
-            this.Button_SaveAndReload.Size = new System.Drawing.Size(111, 23);
+            this.Button_SaveAndReload.Size = new System.Drawing.Size(128, 23);
             this.Button_SaveAndReload.TabIndex = 24;
             this.Button_SaveAndReload.Text = "Save and Reload";
             this.Button_SaveAndReload.UseVisualStyleBackColor = true;
@@ -498,7 +509,7 @@ namespace HedgeModManager
             // Label_CustomModsDirectory
             // 
             this.Label_CustomModsDirectory.AutoSize = true;
-            this.Label_CustomModsDirectory.Location = new System.Drawing.Point(61, 198);
+            this.Label_CustomModsDirectory.Location = new System.Drawing.Point(61, 201);
             this.Label_CustomModsDirectory.Name = "Label_CustomModsDirectory";
             this.Label_CustomModsDirectory.Size = new System.Drawing.Size(106, 13);
             this.Label_CustomModsDirectory.TabIndex = 23;
@@ -507,7 +518,7 @@ namespace HedgeModManager
             // TextBox_CustomModsDirectory
             // 
             this.TextBox_CustomModsDirectory.Enabled = false;
-            this.TextBox_CustomModsDirectory.Location = new System.Drawing.Point(170, 195);
+            this.TextBox_CustomModsDirectory.Location = new System.Drawing.Point(170, 198);
             this.TextBox_CustomModsDirectory.Name = "TextBox_CustomModsDirectory";
             this.TextBox_CustomModsDirectory.Size = new System.Drawing.Size(310, 20);
             this.TextBox_CustomModsDirectory.TabIndex = 22;
@@ -516,7 +527,7 @@ namespace HedgeModManager
             // CheckBox_CustomModsDirectory
             // 
             this.CheckBox_CustomModsDirectory.AutoSize = true;
-            this.CheckBox_CustomModsDirectory.Location = new System.Drawing.Point(33, 172);
+            this.CheckBox_CustomModsDirectory.Location = new System.Drawing.Point(33, 175);
             this.CheckBox_CustomModsDirectory.Name = "CheckBox_CustomModsDirectory";
             this.CheckBox_CustomModsDirectory.Size = new System.Drawing.Size(157, 17);
             this.CheckBox_CustomModsDirectory.TabIndex = 21;
@@ -527,7 +538,7 @@ namespace HedgeModManager
             // EnableSaveFileRedirectionCheckBox
             // 
             this.EnableSaveFileRedirectionCheckBox.AutoSize = true;
-            this.EnableSaveFileRedirectionCheckBox.Location = new System.Drawing.Point(33, 126);
+            this.EnableSaveFileRedirectionCheckBox.Location = new System.Drawing.Point(33, 129);
             this.EnableSaveFileRedirectionCheckBox.Name = "EnableSaveFileRedirectionCheckBox";
             this.EnableSaveFileRedirectionCheckBox.Size = new System.Drawing.Size(163, 17);
             this.EnableSaveFileRedirectionCheckBox.TabIndex = 20;
@@ -538,7 +549,7 @@ namespace HedgeModManager
             // EnableCPKREDIRConsoleCheckBox
             // 
             this.EnableCPKREDIRConsoleCheckBox.AutoSize = true;
-            this.EnableCPKREDIRConsoleCheckBox.Location = new System.Drawing.Point(33, 149);
+            this.EnableCPKREDIRConsoleCheckBox.Location = new System.Drawing.Point(33, 152);
             this.EnableCPKREDIRConsoleCheckBox.Name = "EnableCPKREDIRConsoleCheckBox";
             this.EnableCPKREDIRConsoleCheckBox.Size = new System.Drawing.Size(158, 17);
             this.EnableCPKREDIRConsoleCheckBox.TabIndex = 19;
@@ -549,7 +560,7 @@ namespace HedgeModManager
             // KeepModLoaderOpenCheckBox
             // 
             this.KeepModLoaderOpenCheckBox.AutoSize = true;
-            this.KeepModLoaderOpenCheckBox.Location = new System.Drawing.Point(33, 103);
+            this.KeepModLoaderOpenCheckBox.Location = new System.Drawing.Point(33, 106);
             this.KeepModLoaderOpenCheckBox.Name = "KeepModLoaderOpenCheckBox";
             this.KeepModLoaderOpenCheckBox.Size = new System.Drawing.Size(275, 17);
             this.KeepModLoaderOpenCheckBox.TabIndex = 18;
@@ -560,7 +571,7 @@ namespace HedgeModManager
             // AutoCheckUpdateCheckBox
             // 
             this.AutoCheckUpdateCheckBox.AutoSize = true;
-            this.AutoCheckUpdateCheckBox.Location = new System.Drawing.Point(33, 80);
+            this.AutoCheckUpdateCheckBox.Location = new System.Drawing.Point(33, 83);
             this.AutoCheckUpdateCheckBox.Name = "AutoCheckUpdateCheckBox";
             this.AutoCheckUpdateCheckBox.Size = new System.Drawing.Size(160, 17);
             this.AutoCheckUpdateCheckBox.TabIndex = 17;
@@ -570,7 +581,7 @@ namespace HedgeModManager
             // 
             // PatchGroupBox
             // 
-            this.PatchGroupBox.Location = new System.Drawing.Point(49, 221);
+            this.PatchGroupBox.Location = new System.Drawing.Point(49, 235);
             this.PatchGroupBox.Name = "PatchGroupBox";
             this.PatchGroupBox.Size = new System.Drawing.Size(431, 102);
             this.PatchGroupBox.TabIndex = 16;
@@ -580,9 +591,9 @@ namespace HedgeModManager
             // InstallUninstallButton
             // 
             this.InstallUninstallButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.InstallUninstallButton.Location = new System.Drawing.Point(12, 43);
+            this.InstallUninstallButton.Location = new System.Drawing.Point(18, 48);
             this.InstallUninstallButton.Name = "InstallUninstallButton";
-            this.InstallUninstallButton.Size = new System.Drawing.Size(120, 23);
+            this.InstallUninstallButton.Size = new System.Drawing.Size(128, 23);
             this.InstallUninstallButton.TabIndex = 15;
             this.InstallUninstallButton.Text = "Install / Uninstall";
             this.InstallUninstallButton.UseVisualStyleBackColor = true;
@@ -591,18 +602,18 @@ namespace HedgeModManager
             // PatchLabel
             // 
             this.PatchLabel.AutoSize = true;
-            this.PatchLabel.Location = new System.Drawing.Point(136, 33);
+            this.PatchLabel.Location = new System.Drawing.Point(152, 24);
             this.PatchLabel.Name = "PatchLabel";
-            this.PatchLabel.Size = new System.Drawing.Size(53, 13);
+            this.PatchLabel.Size = new System.Drawing.Size(136, 13);
             this.PatchLabel.TabIndex = 14;
-            this.PatchLabel.Text = "Unknown";
+            this.PatchLabel.Text = "Unknown Game: Unknown";
             // 
             // ScanExecutableButton
             // 
             this.ScanExecutableButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ScanExecutableButton.Location = new System.Drawing.Point(12, 14);
+            this.ScanExecutableButton.Location = new System.Drawing.Point(18, 19);
             this.ScanExecutableButton.Name = "ScanExecutableButton";
-            this.ScanExecutableButton.Size = new System.Drawing.Size(120, 23);
+            this.ScanExecutableButton.Size = new System.Drawing.Size(128, 23);
             this.ScanExecutableButton.TabIndex = 13;
             this.ScanExecutableButton.Text = "Scan Executable";
             this.ScanExecutableButton.UseVisualStyleBackColor = true;
@@ -870,6 +881,7 @@ namespace HedgeModManager
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ModOrderButton;
         private System.Windows.Forms.ComboBox GameSelecterComboBox;
+        private System.Windows.Forms.Label LoaderVerLabel;
     }
 }
 

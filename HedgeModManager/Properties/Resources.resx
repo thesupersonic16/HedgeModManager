@@ -227,4 +227,7 @@ Please renew your license to continue using all the features HedgeModManager Pro
   <data name="GBStyleSheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\gbstylesheet.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="LoaderListURL" xml:space="preserve">
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/Loaders.ini</value>
+  </data>
 </root>

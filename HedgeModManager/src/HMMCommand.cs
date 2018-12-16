@@ -32,6 +32,7 @@ namespace HedgeModManager
 
         public static void SendMessage(string message)
         {
+            LogFile.AddMessage(string.Format("[HMMCOMMAND] MESSAGE SEND \"{0}\"", message));
             using (var pipe = new NamedPipeClientStream(".", Program.ProgramNameShort, PipeDirection.Out))
             {
                 pipe.Connect(2000);

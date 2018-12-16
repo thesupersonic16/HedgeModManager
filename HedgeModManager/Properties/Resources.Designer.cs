@@ -306,6 +306,15 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/Loaders.ini.
+        /// </summary>
+        internal static string LoaderListURL {
+            get {
+                return ResourceManager.GetString("LoaderListURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The currently installed loader doesn&apos;t match the version on HedgeModManager&apos;s Github, Unless you know what you are doing, Click &quot;Reinstall Loader&quot;.
         /// </summary>
         internal static string LoaderMismatchText {
