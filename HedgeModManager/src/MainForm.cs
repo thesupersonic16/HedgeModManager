@@ -25,8 +25,8 @@ namespace HedgeModManager
         public static string ModsDbPath = Path.Combine(ModsFolderPath, "ModsDB.ini");
 
         public static List<CodeLoader.Code> LoadedCodes = new List<CodeLoader.Code>();
+        public static List<Patcher.Patch> GenerationsPatches = new List<Patcher.Patch>();
         public static ModsDatabase ModsDb;
-        public static Dictionary<string, byte[]> GenerationsPatches = new Dictionary<string, byte[]>();
         public static IniFile CPKREDIRIni = null;
         public static Thread ModUpdatingThread;
         public static bool Exit = false;
@@ -165,7 +165,22 @@ namespace HedgeModManager
                 if (index == -1)
                     continue;
                 Codes_CheckedListBox.SetItemChecked(index, true);
+            }
+        }
 
+        public void FillPatchesList()
+        {
+            Patches_CheckedListBox.Items.Clear();
+            Patches_CheckedListBox.Items.AddRange(GenerationsPatches.ToArray());
+            using (var exeStream = File.OpenRead(GensExecutablePath))
+            {
+                foreach (var patch in GenerationsPatches)
+                {
+                    int index = GenerationsPatches.FindIndex(t => t.PatchName == patch.PatchName);
+                    if (index == -1)
+                        continue;
+                    Patches_CheckedListBox.SetItemChecked(index, Patcher.CheckFile(patch.PatchEnable, exeStream));
+                }
             }
         }
 
@@ -175,6 +190,7 @@ namespace HedgeModManager
             LoadMods();
             FillModList();
             FillCodeList();
+            FillPatchesList();
             OrderModList();
             ModsList.Select();
 
@@ -331,14 +347,12 @@ namespace HedgeModManager
                 {
                     Text += " - Sonic Lost World";
                     LogFile.AddMessage("Found Sonic Lost World.");
-                    PatchGroupBox.Visible = false;
                     EnableSaveFileRedirectionCheckBox.Text += " (.sdat > .msdat)";
                 }
                 else if (Program.CurrentGame == Games.SonicForces)
                 {
                     Text += " - Sonic Forces";
                     LogFile.AddMessage("Found Sonic Forces.");
-                    PatchGroupBox.Visible = false;
                     ScanExecutableButton.Enabled = false;
                     CheckBox_CustomModsDirectory.Enabled = false;
                     CheckBox_CustomModsDirectory.Checked = false;
@@ -365,28 +379,8 @@ namespace HedgeModManager
                     LogFile.AddMessage("Found Sonic Generations.");
 
                     // Adds SG Patches
-                    GenerationsPatches.Add("Enable Blue Trail", Resources.Enable_Blue_Trail);
-                    GenerationsPatches.Add("Disable Blue Trail", Resources.Disable_Blue_Trail);
-                    GenerationsPatches.Add("", null);
-                    GenerationsPatches.Add("Enable FxPipeline", Resources.Enable_FxPipeline);
-                    GenerationsPatches.Add("Disable FxPipeline", Resources.Disable_FxPipeline);
-
-                    // Adds a Button for each patch
-                    for (int i = 0; i < GenerationsPatches.Count; ++i)
-                    {
-                        // Ignores entries with no data
-                        if (GenerationsPatches.ToList()[i].Value == null)
-                            continue;
-
-                        var btn = new Button()
-                        {
-                            Text = GenerationsPatches.ToList()[i].Key,
-                            Size = new Size(128, 32),
-                            Location = new Point(12 + 140 * (i / 3), 16 + (i % 3) * 42)
-                        };
-                        btn.Click += new EventHandler(PatchButton_Click);
-                        PatchGroupBox.Controls.Add(btn);
-                    }
+                    GenerationsPatches.Add(new Patcher.Patch("Enable Blue Trail", Resources.Enable_Blue_Trail, Resources.Disable_Blue_Trail));
+                    GenerationsPatches.Add(new Patcher.Patch("Enable FxPipeline", Resources.Enable_FxPipeline, Resources.Disable_FxPipeline));
                 }
 
                 if (Program.RunningAsAdmin())
@@ -422,36 +416,22 @@ namespace HedgeModManager
                 // Loads all the mods, fills the list then reorders them
                 RefreshModsList();
 
-                if (!IsCPKREDIRInstalled() && Program.CurrentGame != Games.SonicForces)
+                if (Program.CurrentGame.UseCPKREDIR && !IsCPKREDIRInstalled())
                 {
                     if (MessageBox.Show(string.Format(Resources.ExecutableNotPatchedText, Program.CurrentGame),
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         InstallCPKREDIR(true);
                 }
-                // Sets the PatchLabel's Text to show the user if CPKREDIR is installed in either game
-                PatchLabel.Text = Program.CurrentGame + ": " + (IsCPKREDIRInstalled() ? "Installed" : "Not Installed");
+
                 if (!Program.CurrentGame.UseCPKREDIR && Program.CurrentGame.HasCustomLoader)
                 {
                     string DLLFileName = Path.Combine(Program.StartDirectory, $"d3d{Program.CurrentGame.DirectXVersion}.dll");
-
-                    if (!File.Exists(DLLFileName) && 
+                    if (!File.Exists(DLLFileName) &&
                         MessageBox.Show(string.Format(Resources.LoaderNotInstalled, Program.CurrentGame),
                         Program.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         ReinstallLoader();
                 }
-                if (Program.CurrentGame.HasCustomLoader)
-                {
-                    string DLLFileName = Path.Combine(Program.StartDirectory, $"d3d{Program.CurrentGame.DirectXVersion}.dll");
-                    if (File.Exists(DLLFileName))
-                    {
-                        if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion2"))
-                            LoaderVerLabel.Text = "Loader Version: " + CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion2"];
-                    }
-                    else
-                    {
-                        LoaderVerLabel.Text = "Loader Version: None";
-                    }
-                }
+                UpdateOptionsUI();
 
             }
             else
@@ -527,11 +507,7 @@ namespace HedgeModManager
                 ModUpdatingThread.Start();
             }
 
-            if (File.Exists(Path.Combine(Program.StartDirectory, "d3d9.dll"))
-                || File.Exists(Path.Combine(Program.StartDirectory, "d3d11.dll")))
-                InstallLoader_Button.Text = "Uninstall Loader";
-            else
-                InstallLoader_Button.Text = "Install Loader";
+            UpdateOptionsUI();
 
             // Add URI Scheme (Requires Admin)
             string protName = "";
@@ -693,16 +669,40 @@ namespace HedgeModManager
                     throw new NotImplementedException("No Loader is available!");
             }
             updateUI:
-            InstallLoader_Button.Text = "Uninstall Loader";
-            PatchLabel.Text = Program.CurrentGame + ": " + (File.Exists(DLLFileName) ? "Installed" : "Not Installed");
-            if (File.Exists(DLLFileName))
+            Invoke(new Action(() => UpdateOptionsUI()));
+        }
+
+        public void UpdateOptionsUI()
+        {
+            bool LoaderInstalled = false;
+            string LoaderVer = "";
+            
+            if (Program.CurrentGame.UseCPKREDIR)
             {
-                if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion2"))
-                    LoaderVerLabel.Text = "Loader Version: " + CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion2"];
-            }else
-            {
-                LoaderVerLabel.Text = "Loader Version: None";
+                LoaderInstalled = IsCPKREDIRInstalled();
+                if (LoaderInstalled)
+                    LoaderVer = "CPKREDIR v0.5";
             }
+
+            if (!Program.CurrentGame.UseCPKREDIR && Program.CurrentGame.HasCustomLoader)
+            {
+                string DLLFileName = Path.Combine(Program.StartDirectory, $"d3d{Program.CurrentGame.DirectXVersion}.dll");
+                LoaderInstalled = File.Exists(DLLFileName);
+            }
+
+            if (Program.CurrentGame.HasCustomLoader)
+            {
+                string DLLFileName = Path.Combine(Program.StartDirectory, $"d3d{Program.CurrentGame.DirectXVersion}.dll");
+                if (File.Exists(DLLFileName))
+                {
+                    LoaderInstalled = true;
+                    if (CPKREDIRIni[Program.ProgramNameShort].ContainsParameter("LoaderVersion2"))
+                        LoaderVer += ((LoaderVer.Length == 0) ? "" : " && ") + CPKREDIRIni[Program.ProgramNameShort]["LoaderVersion2"];
+                }
+            }
+            PatchLabel.Text = Program.CurrentGame + ": " + (LoaderInstalled ? "Installed" : "Not Installed");
+            LoaderVerLabel.Text = (LoaderVer.Length == 0) ? "Loader Version: None" : $"Loader Version: {LoaderVer}";
+            InstallLoader_Button.Text = LoaderInstalled ? "Uninstall Loader" : "Install Loader";
         }
 
         /// <summary>
@@ -803,7 +803,7 @@ namespace HedgeModManager
 
                         // Writes the newly modified executable
                         File.WriteAllBytes(executablePath, bytes);
-                        AddMessage("CPKREDIR has been uninstalled.");
+                        Invoke(new Action(() => UpdateOptionsUI()));
                         return false;
                     }
 
@@ -825,7 +825,7 @@ namespace HedgeModManager
 
                         // Write the newly modified executable
                         File.WriteAllBytes(executablePath, bytes);
-                        AddMessage("CPKREDIR has been installed.");
+                        Invoke(new Action(() => UpdateOptionsUI()));
                         return true;
                     }
                 }
@@ -1262,7 +1262,10 @@ namespace HedgeModManager
 
         private void InstallUninstallButton_Click(object sender, EventArgs e)
         {
-            ReinstallLoader(true);
+            if (Program.CurrentGame.HasCustomLoader && !Program.CurrentGame.UseCPKREDIR)
+                ReinstallLoader(true);
+            if (Program.CurrentGame.UseCPKREDIR)
+                InstallCPKREDIR(null);
         }
 
         private void RemoveModButton_Click(object sender, EventArgs e)
@@ -1339,33 +1342,6 @@ namespace HedgeModManager
             ModsList.Items.Insert(ModsList.CheckedItems.Count, lvi);
             // Selects the moved item
             ModsList.FocusedItem = lvi;
-        }
-
-        private void PatchButton_Click(object sender, EventArgs e)
-        {
-            if (File.Exists(GensExecutablePath))
-            {
-                try
-                {
-                    // Creates a backup of the executable if one hasn't been made
-                    if (!File.Exists(Path.ChangeExtension(GensExecutablePath, ".Backup2.exe")))
-                        File.Copy(GensExecutablePath, Path.ChangeExtension(GensExecutablePath, ".Backup2.exe"), true);
-
-                    string patchName = ((Button)sender).Text;
-                    var patchData = GenerationsPatches[patchName];
-                    
-                    LogFile.AddMessage($"Installing {patchName}");
-
-                    Patcher.PatchFile(patchData, GensExecutablePath);
-                    MessageBox.Show("Done.", Program.ProgramName);
-                    LogFile.AddMessage($"Finished installing {patchName}");
-                }
-                catch (Exception ex)
-                {
-                     AddMessage("Exception thrown while applying a patch.", ex,
-                        "Button Name: " + ((Button)sender).Text);
-                }
-            }
         }
 
         private void Button_SaveAndReload_Click(object sender, EventArgs e)
@@ -1714,5 +1690,32 @@ namespace HedgeModManager
             }catch { }
         }
 
+        private void ApplyPatches_Button_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(GensExecutablePath))
+            {
+                // Creates a backup of the executable if one hasn't been made
+                if (!File.Exists(Path.ChangeExtension(GensExecutablePath, ".Backup2.exe")))
+                    File.Copy(GensExecutablePath, Path.ChangeExtension(GensExecutablePath, ".Backup2.exe"), true);
+                using (var stream = File.OpenWrite(GensExecutablePath))
+                {
+                    foreach (var patch in GenerationsPatches)
+                    {
+                        int index = GenerationsPatches.FindIndex(t => t.PatchName == patch.PatchName);
+                        if (index == -1)
+                            continue;
+
+                        byte[] data = null;
+                        if (Patches_CheckedListBox.GetItemChecked(index))
+                            data = patch.PatchEnable;
+                        else
+                            data = patch.PatchDisable;
+                        Patcher.PatchStream(data, stream);
+                        LogFile.AddMessage($"Writing Patch: {patch.PatchName}");
+                    }
+                }
+                MessageBox.Show("Finished Patching.", Program.ProgramName);
+            }
+        }
     }
 }

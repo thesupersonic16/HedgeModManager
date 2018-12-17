@@ -60,6 +60,10 @@ namespace HedgeModManager
             this.GetCodeList_Button = new System.Windows.Forms.Button();
             this.InstallLoader_Button = new System.Windows.Forms.Button();
             this.Codes_CheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.PatchesTab = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.ApplyPatchs_Button = new System.Windows.Forms.Button();
+            this.Patches_CheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.SettingsPage = new System.Windows.Forms.TabPage();
             this.LoaderVerLabel = new System.Windows.Forms.Label();
             this.Label_SaveFileBackupStatus = new System.Windows.Forms.Label();
@@ -74,7 +78,6 @@ namespace HedgeModManager
             this.EnableCPKREDIRConsoleCheckBox = new System.Windows.Forms.CheckBox();
             this.KeepModLoaderOpenCheckBox = new System.Windows.Forms.CheckBox();
             this.AutoCheckUpdateCheckBox = new System.Windows.Forms.CheckBox();
-            this.PatchGroupBox = new System.Windows.Forms.GroupBox();
             this.InstallUninstallButton = new System.Windows.Forms.Button();
             this.PatchLabel = new System.Windows.Forms.Label();
             this.ScanExecutableButton = new System.Windows.Forms.Button();
@@ -102,6 +105,8 @@ namespace HedgeModManager
             this.splitContainer.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.PatchesTab.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SettingsPage.SuspendLayout();
             this.SettingsBottomPanel.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -180,6 +185,7 @@ namespace HedgeModManager
             // 
             this.TabControl.Controls.Add(this.ModPage);
             this.TabControl.Controls.Add(this.tabPage1);
+            this.TabControl.Controls.Add(this.PatchesTab);
             this.TabControl.Controls.Add(this.SettingsPage);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
@@ -416,6 +422,46 @@ namespace HedgeModManager
             this.Codes_CheckedListBox.Size = new System.Drawing.Size(530, 364);
             this.Codes_CheckedListBox.TabIndex = 0;
             // 
+            // PatchesTab
+            // 
+            this.PatchesTab.Controls.Add(this.panel2);
+            this.PatchesTab.Controls.Add(this.Patches_CheckedListBox);
+            this.PatchesTab.Location = new System.Drawing.Point(4, 22);
+            this.PatchesTab.Name = "PatchesTab";
+            this.PatchesTab.Padding = new System.Windows.Forms.Padding(3);
+            this.PatchesTab.Size = new System.Drawing.Size(529, 418);
+            this.PatchesTab.TabIndex = 3;
+            this.PatchesTab.Text = "Patches";
+            this.PatchesTab.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.ApplyPatchs_Button);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(3, 365);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(523, 50);
+            this.panel2.TabIndex = 3;
+            // 
+            // ApplyPatchs_Button
+            // 
+            this.ApplyPatchs_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.ApplyPatchs_Button.Location = new System.Drawing.Point(374, 13);
+            this.ApplyPatchs_Button.Name = "ApplyPatchs_Button";
+            this.ApplyPatchs_Button.Size = new System.Drawing.Size(130, 23);
+            this.ApplyPatchs_Button.TabIndex = 26;
+            this.ApplyPatchs_Button.Text = "Apply Patches";
+            this.ApplyPatchs_Button.UseVisualStyleBackColor = true;
+            this.ApplyPatchs_Button.Click += new System.EventHandler(this.ApplyPatches_Button_Click);
+            // 
+            // Patches_CheckedListBox
+            // 
+            this.Patches_CheckedListBox.FormattingEnabled = true;
+            this.Patches_CheckedListBox.Location = new System.Drawing.Point(0, 0);
+            this.Patches_CheckedListBox.Name = "Patches_CheckedListBox";
+            this.Patches_CheckedListBox.Size = new System.Drawing.Size(530, 364);
+            this.Patches_CheckedListBox.TabIndex = 2;
+            // 
             // SettingsPage
             // 
             this.SettingsPage.Controls.Add(this.LoaderVerLabel);
@@ -431,7 +477,6 @@ namespace HedgeModManager
             this.SettingsPage.Controls.Add(this.EnableCPKREDIRConsoleCheckBox);
             this.SettingsPage.Controls.Add(this.KeepModLoaderOpenCheckBox);
             this.SettingsPage.Controls.Add(this.AutoCheckUpdateCheckBox);
-            this.SettingsPage.Controls.Add(this.PatchGroupBox);
             this.SettingsPage.Controls.Add(this.InstallUninstallButton);
             this.SettingsPage.Controls.Add(this.PatchLabel);
             this.SettingsPage.Controls.Add(this.ScanExecutableButton);
@@ -446,16 +491,15 @@ namespace HedgeModManager
             // 
             // LoaderVerLabel
             // 
-            this.LoaderVerLabel.AutoSize = true;
-            this.LoaderVerLabel.Location = new System.Drawing.Point(152, 53);
+            this.LoaderVerLabel.Location = new System.Drawing.Point(150, 53);
             this.LoaderVerLabel.Name = "LoaderVerLabel";
-            this.LoaderVerLabel.Size = new System.Drawing.Size(130, 13);
+            this.LoaderVerLabel.Size = new System.Drawing.Size(227, 13);
             this.LoaderVerLabel.TabIndex = 28;
             this.LoaderVerLabel.Text = "Loader Version: Unknown";
             // 
             // Label_SaveFileBackupStatus
             // 
-            this.Label_SaveFileBackupStatus.Location = new System.Drawing.Point(351, 108);
+            this.Label_SaveFileBackupStatus.Location = new System.Drawing.Point(369, 106);
             this.Label_SaveFileBackupStatus.Name = "Label_SaveFileBackupStatus";
             this.Label_SaveFileBackupStatus.Size = new System.Drawing.Size(146, 26);
             this.Label_SaveFileBackupStatus.TabIndex = 27;
@@ -465,7 +509,7 @@ namespace HedgeModManager
             // 
             // Button_RestoreSaveFile
             // 
-            this.Button_RestoreSaveFile.Location = new System.Drawing.Point(352, 77);
+            this.Button_RestoreSaveFile.Location = new System.Drawing.Point(377, 77);
             this.Button_RestoreSaveFile.Name = "Button_RestoreSaveFile";
             this.Button_RestoreSaveFile.Size = new System.Drawing.Size(128, 23);
             this.Button_RestoreSaveFile.TabIndex = 26;
@@ -477,7 +521,7 @@ namespace HedgeModManager
             // ModOrderButton
             // 
             this.ModOrderButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ModOrderButton.Location = new System.Drawing.Point(352, 19);
+            this.ModOrderButton.Location = new System.Drawing.Point(377, 19);
             this.ModOrderButton.Name = "ModOrderButton";
             this.ModOrderButton.Size = new System.Drawing.Size(128, 23);
             this.ModOrderButton.TabIndex = 6;
@@ -487,7 +531,7 @@ namespace HedgeModManager
             // 
             // Button_BackupSaveFile
             // 
-            this.Button_BackupSaveFile.Location = new System.Drawing.Point(352, 48);
+            this.Button_BackupSaveFile.Location = new System.Drawing.Point(377, 48);
             this.Button_BackupSaveFile.Name = "Button_BackupSaveFile";
             this.Button_BackupSaveFile.Size = new System.Drawing.Size(128, 23);
             this.Button_BackupSaveFile.TabIndex = 25;
@@ -498,7 +542,7 @@ namespace HedgeModManager
             // 
             // Button_SaveAndReload
             // 
-            this.Button_SaveAndReload.Location = new System.Drawing.Point(352, 169);
+            this.Button_SaveAndReload.Location = new System.Drawing.Point(377, 169);
             this.Button_SaveAndReload.Name = "Button_SaveAndReload";
             this.Button_SaveAndReload.Size = new System.Drawing.Size(128, 23);
             this.Button_SaveAndReload.TabIndex = 24;
@@ -520,7 +564,7 @@ namespace HedgeModManager
             this.TextBox_CustomModsDirectory.Enabled = false;
             this.TextBox_CustomModsDirectory.Location = new System.Drawing.Point(170, 198);
             this.TextBox_CustomModsDirectory.Name = "TextBox_CustomModsDirectory";
-            this.TextBox_CustomModsDirectory.Size = new System.Drawing.Size(310, 20);
+            this.TextBox_CustomModsDirectory.Size = new System.Drawing.Size(335, 20);
             this.TextBox_CustomModsDirectory.TabIndex = 22;
             this.TextBox_CustomModsDirectory.DoubleClick += new System.EventHandler(this.TextBox_CustomModsDirectory_DoubleClick);
             // 
@@ -579,15 +623,6 @@ namespace HedgeModManager
             this.AutoCheckUpdateCheckBox.UseVisualStyleBackColor = true;
             this.AutoCheckUpdateCheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
-            // PatchGroupBox
-            // 
-            this.PatchGroupBox.Location = new System.Drawing.Point(49, 235);
-            this.PatchGroupBox.Name = "PatchGroupBox";
-            this.PatchGroupBox.Size = new System.Drawing.Size(431, 102);
-            this.PatchGroupBox.TabIndex = 16;
-            this.PatchGroupBox.TabStop = false;
-            this.PatchGroupBox.Text = "Patches";
-            // 
             // InstallUninstallButton
             // 
             this.InstallUninstallButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -601,10 +636,9 @@ namespace HedgeModManager
             // 
             // PatchLabel
             // 
-            this.PatchLabel.AutoSize = true;
-            this.PatchLabel.Location = new System.Drawing.Point(152, 24);
+            this.PatchLabel.Location = new System.Drawing.Point(150, 24);
             this.PatchLabel.Name = "PatchLabel";
-            this.PatchLabel.Size = new System.Drawing.Size(136, 13);
+            this.PatchLabel.Size = new System.Drawing.Size(227, 13);
             this.PatchLabel.TabIndex = 14;
             this.PatchLabel.Text = "Unknown Game: Unknown";
             // 
@@ -810,6 +844,8 @@ namespace HedgeModManager
             this.splitContainer.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.PatchesTab.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.SettingsPage.ResumeLayout(false);
             this.SettingsPage.PerformLayout();
             this.SettingsBottomPanel.ResumeLayout(false);
@@ -858,7 +894,6 @@ namespace HedgeModManager
         private System.Windows.Forms.ToolStripMenuItem openModFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem desciptionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteModToolStripMenuItem;
-        private System.Windows.Forms.GroupBox PatchGroupBox;
         private System.Windows.Forms.ToolStripMenuItem editModToolStripMenuItem;
         private System.Windows.Forms.CheckBox AutoCheckUpdateCheckBox;
         private System.Windows.Forms.CheckBox KeepModLoaderOpenCheckBox;
@@ -882,6 +917,10 @@ namespace HedgeModManager
         private System.Windows.Forms.Button ModOrderButton;
         private System.Windows.Forms.ComboBox GameSelecterComboBox;
         private System.Windows.Forms.Label LoaderVerLabel;
+        private System.Windows.Forms.TabPage PatchesTab;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button ApplyPatchs_Button;
+        private System.Windows.Forms.CheckedListBox Patches_CheckedListBox;
     }
 }
 

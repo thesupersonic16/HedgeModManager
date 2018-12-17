@@ -315,15 +315,6 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The currently installed loader doesn&apos;t match the version on HedgeModManager&apos;s Github, Unless you know what you are doing, Click &quot;Reinstall Loader&quot;.
-        /// </summary>
-        internal static string LoaderMismatchText {
-            get {
-                return ResourceManager.GetString("LoaderMismatchText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The loader for {0} currently isn&apos;t installed, would you like to install it now?.
         /// </summary>
         internal static string LoaderNotInstalled {
