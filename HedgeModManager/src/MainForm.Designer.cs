@@ -62,7 +62,7 @@ namespace HedgeModManager
             this.Codes_CheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.PatchesTab = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.ApplyPatchs_Button = new System.Windows.Forms.Button();
+            this.ApplyPatches_Button = new System.Windows.Forms.Button();
             this.Patches_CheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.SettingsPage = new System.Windows.Forms.TabPage();
             this.LoaderVerLabel = new System.Windows.Forms.Label();
@@ -436,23 +436,23 @@ namespace HedgeModManager
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.ApplyPatchs_Button);
+            this.panel2.Controls.Add(this.ApplyPatches_Button);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(3, 365);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(523, 50);
             this.panel2.TabIndex = 3;
             // 
-            // ApplyPatchs_Button
+            // ApplyPatches_Button
             // 
-            this.ApplyPatchs_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ApplyPatchs_Button.Location = new System.Drawing.Point(374, 13);
-            this.ApplyPatchs_Button.Name = "ApplyPatchs_Button";
-            this.ApplyPatchs_Button.Size = new System.Drawing.Size(130, 23);
-            this.ApplyPatchs_Button.TabIndex = 26;
-            this.ApplyPatchs_Button.Text = "Apply Patches";
-            this.ApplyPatchs_Button.UseVisualStyleBackColor = true;
-            this.ApplyPatchs_Button.Click += new System.EventHandler(this.ApplyPatches_Button_Click);
+            this.ApplyPatches_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.ApplyPatches_Button.Location = new System.Drawing.Point(374, 13);
+            this.ApplyPatches_Button.Name = "ApplyPatches_Button";
+            this.ApplyPatches_Button.Size = new System.Drawing.Size(130, 23);
+            this.ApplyPatches_Button.TabIndex = 26;
+            this.ApplyPatches_Button.Text = "Apply Patches";
+            this.ApplyPatches_Button.UseVisualStyleBackColor = true;
+            this.ApplyPatches_Button.Click += new System.EventHandler(this.ApplyPatches_Button_Click);
             // 
             // Patches_CheckedListBox
             // 
@@ -919,7 +919,7 @@ namespace HedgeModManager
         private System.Windows.Forms.Label LoaderVerLabel;
         private System.Windows.Forms.TabPage PatchesTab;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button ApplyPatchs_Button;
+        private System.Windows.Forms.Button ApplyPatches_Button;
         private System.Windows.Forms.CheckedListBox Patches_CheckedListBox;
     }
 }

@@ -133,6 +133,16 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] Disable_Kick {
+            get {
+                object obj = ResourceManager.GetObject("Disable_Kick", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Enable_Blue_Trail {
             get {
                 object obj = ResourceManager.GetObject("Enable_Blue_Trail", resourceCulture);
@@ -146,6 +156,16 @@ namespace HedgeModManager.Properties {
         internal static byte[] Enable_FxPipeline {
             get {
                 object obj = ResourceManager.GetObject("Enable_FxPipeline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Enable_Kick {
+            get {
+                object obj = ResourceManager.GetObject("Enable_Kick", resourceCulture);
                 return ((byte[])(obj));
             }
         }

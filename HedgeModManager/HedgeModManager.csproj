@@ -264,8 +264,10 @@
     <None Include="res\cpkredir\cpkredir.ini" />
     <None Include="res\patches\sonicgenerations\Disable Blue Trail.bin" />
     <None Include="res\patches\sonicgenerations\Disable FxPipeline.bin" />
+    <None Include="res\patches\sonicgenerations\Disable Kick.bin" />
     <None Include="res\patches\sonicgenerations\Enable Blue Trail.bin" />
     <None Include="res\patches\sonicgenerations\Enable FxPipeline.bin" />
+    <None Include="res\patches\sonicgenerations\Enable Kick.bin" />
     <None Include="res\update.bat" />
   </ItemGroup>
   <ItemGroup>

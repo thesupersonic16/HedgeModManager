@@ -381,6 +381,7 @@ namespace HedgeModManager
                     // Adds SG Patches
                     GenerationsPatches.Add(new Patcher.Patch("Enable Blue Trail", Resources.Enable_Blue_Trail, Resources.Disable_Blue_Trail));
                     GenerationsPatches.Add(new Patcher.Patch("Enable FxPipeline", Resources.Enable_FxPipeline, Resources.Disable_FxPipeline));
+                    GenerationsPatches.Add(new Patcher.Patch("Enable Kick"      , Resources.Enable_Kick      , Resources.Disable_Kick      ));
                 }
 
                 if (Program.RunningAsAdmin())
