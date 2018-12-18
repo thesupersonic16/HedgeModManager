@@ -70,7 +70,8 @@ namespace HedgeModManager
                     {
                         SHA256 = null,
                         FileName = line.Split(' ')[1],
-                        URL = Path.Combine(mod.UpdateServer, line.Split(' ')[1]),
+                        URL = Path.Combine(mod.UpdateServer, 
+                        Path.Combine(Path.GetDirectoryName(line.Split(' ')[1]), Uri.EscapeDataString(Path.GetFileName(line.Split(' ')[1])))),
                         Command = line.Split(' ')[0]
                     };
                     update.Files.Add(file);

@@ -65,6 +65,7 @@ namespace HedgeModManager
                     string fileName = ModUpdate.Files[i].FileName;
                     string fileUrl = ModUpdate.Files[i].URL;
                     string fileSha = ModUpdate.Files[i].SHA256;
+                    string fileCom = ModUpdate.Files[i].Command;
                     if (_Mod != null)
                     {
                         var fileInfo = new FileInfo(Path.Combine(_Mod.RootDirectory, fileName));
@@ -73,58 +74,63 @@ namespace HedgeModManager
                         if (!fileInfo.Directory.Exists)
                             Directory.CreateDirectory(fileInfo.Directory.FullName);
                     }
-
-                    LogFile.AddMessage($"Downloading: {fileName} from {fileUrl}");
-                    // Closes and returns if the user clicked cancel.
-                    if (CancelUpdate) { Invoke(new Action(() => Close())); return; }
-                    // Sets DownloadLabel's Text to show what file is being downloaded.
-                    Invoke(new Action(() => DownloadLabel.Text = "Downloading File: " + Path.GetFileName(fileUrl)));
-                    // Centres DownloadLabel's position.
-                    Invoke(new Action(() => DownloadLabel.Location =
-                        new Point(Size.Width / 2 - DownloadLabel.Size.Width / 2, DownloadLabel.Location.Y)));
-                    // Sets ProgressBarAll's Value to the current file.
-                    Invoke(new Action(() => ProgressBarAll.Value = i));
-                    // Checks if the mod is installed
-                    if (_Mod == null)
+                    if (string.IsNullOrEmpty(fileCom) || fileCom == "add")
                     {
-                        webClient.DownloadDataCompleted += DownloadDataCompleted;
-                        Invoke(new Action(() => StartFileDownload(fileUrl)));
-                    }
-                    else
-                    {
-                        // Downloads the current file to the mod root.
-                        Invoke(new Action(() => webClient.DownloadFileAsync(new Uri(fileUrl),
-                            Path.Combine(_Mod.RootDirectory, fileName))));
-                    }
-                    // Waits for the download to finish.
-                    while (webClient.IsBusy)
-                    {
-                        Thread.Sleep(100);
-                    }
-                    if (_Mod == null)
-                    {
-                        continue;
-                    }
-
-                    using (var stream = File.OpenRead(Path.Combine(_Mod.RootDirectory, fileName)))
-                    {
-                        if (fileSha != 0.ToString("X64") && fileSha != null)
+                        LogFile.AddMessage($"Downloading: {fileName} from {fileUrl}");
+                        // Closes and returns if the user clicked cancel.
+                        if (CancelUpdate) { Invoke(new Action(() => Close())); return; }
+                        // Sets DownloadLabel's Text to show what file is being downloaded.
+                        Invoke(new Action(() => DownloadLabel.Text = "Downloading File: " + Path.GetFileName(fileUrl)));
+                        // Centres DownloadLabel's position.
+                        Invoke(new Action(() => DownloadLabel.Location =
+                            new Point(Size.Width / 2 - DownloadLabel.Size.Width / 2, DownloadLabel.Location.Y)));
+                        // Sets ProgressBarAll's Value to the current file.
+                        Invoke(new Action(() => ProgressBarAll.Value = i));
+                        // Checks if the mod is installed
+                        if (_Mod == null)
                         {
-                            hash = sha.ComputeHash(stream);
-                            if (Encoding.ASCII.GetString(hash) !=
-                                Encoding.ASCII.GetString(Program.StringToByteArray(fileSha)))
+                            webClient.DownloadDataCompleted += DownloadDataCompleted;
+                            Invoke(new Action(() => StartFileDownload(fileUrl)));
+                        }
+                        else
+                        {
+                            // Downloads the current file to the mod root.
+                            Invoke(new Action(() => webClient.DownloadFileAsync(new Uri(fileUrl),
+                                Path.Combine(_Mod.RootDirectory, fileName))));
+                        }
+                        // Waits for the download to finish.
+                        while (webClient.IsBusy)
+                        {
+                            Thread.Sleep(100);
+                        }
+                        if (_Mod == null)
+                        {
+                            continue;
+                        }
+
+                        using (var stream = File.OpenRead(Path.Combine(_Mod.RootDirectory, fileName)))
+                        {
+                            if (fileSha != 0.ToString("X64") && fileSha != null)
                             {
-                                LogFile.AddMessage($"Hash Mismatch on file: {fileName}");
-                                if (MessageBox.Show($"File Hash Mismatch.\n" +
-                                    $"{Program.ByteArrayToString(Program.StringToByteArray(fileSha))}" +
-                                    $" != {Program.ByteArrayToString(hash)}\n" +
-                                    $"Try Redownloading?", "File Hash Mismatch.",
-                                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                                    i--;
+                                hash = sha.ComputeHash(stream);
+                                if (Encoding.ASCII.GetString(hash) !=
+                                    Encoding.ASCII.GetString(Program.StringToByteArray(fileSha)))
+                                {
+                                    LogFile.AddMessage($"Hash Mismatch on file: {fileName}");
+                                    if (MessageBox.Show($"File Hash Mismatch.\n" +
+                                        $"{Program.ByteArrayToString(Program.StringToByteArray(fileSha))}" +
+                                        $" != {Program.ByteArrayToString(hash)}\n" +
+                                        $"Try Redownloading?", "File Hash Mismatch.",
+                                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                                        i--;
+                                }
                             }
                         }
+                        Thread.Sleep(250);
+                    } else if (fileCom == "delete")
+                    {
+                        File.Delete(Path.Combine(_Mod.RootDirectory, fileName));
                     }
-                    Thread.Sleep(250);
                 }
                 // Closes the update dialog after all the file has been downloaded.
                 Invoke(new Action(() => Close()));
