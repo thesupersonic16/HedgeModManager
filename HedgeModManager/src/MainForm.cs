@@ -170,6 +170,8 @@ namespace HedgeModManager
 
         public void FillPatchesList()
         {
+            if (Program.CurrentGame != Games.SonicGenerations)
+                return;
             Patches_CheckedListBox.Items.Clear();
             Patches_CheckedListBox.Items.AddRange(GenerationsPatches.ToArray());
             using (var exeStream = File.OpenRead(GensExecutablePath))
@@ -405,6 +407,10 @@ namespace HedgeModManager
                 if (!Program.CurrentGame.HasCustomLoader)
                     TabControl.Controls.Remove(tabPage1);
 
+                // Remove the patches tab if HMM is loaded outside of Generations
+                if (Program.CurrentGame != Games.SonicGenerations)
+                    TabControl.Controls.Remove(PatchesTab);
+
 
                 // Ask to Download Codes if none exists.
                 if (!File.Exists(Path.Combine(Program.StartDirectory, "mods\\Codes.xml")) && Program.CurrentGame.HasCustomLoader)
@@ -460,7 +466,7 @@ namespace HedgeModManager
                 try
                 {
                     var ini = new IniFile();
-                    using (var reader = new StreamReader(new MemoryStream(new WebClient().DownloadData(Resources.LoaderListURL))))
+                    using (var reader = new StreamReader(WebRequest.Create(Resources.LoaderListURL).GetResponse().GetResponseStream()))
                         ini.Read(reader);
                     if (ini.ContainsGroup(Program.CurrentGame.GameName))
                     {
@@ -677,6 +683,7 @@ namespace HedgeModManager
         {
             bool LoaderInstalled = false;
             string LoaderVer = "";
+            string DLLFileName = Path.Combine(Program.StartDirectory, $"d3d{Program.CurrentGame.DirectXVersion}.dll");
             
             if (Program.CurrentGame.UseCPKREDIR)
             {
@@ -687,13 +694,11 @@ namespace HedgeModManager
 
             if (!Program.CurrentGame.UseCPKREDIR && Program.CurrentGame.HasCustomLoader)
             {
-                string DLLFileName = Path.Combine(Program.StartDirectory, $"d3d{Program.CurrentGame.DirectXVersion}.dll");
                 LoaderInstalled = File.Exists(DLLFileName);
             }
 
             if (Program.CurrentGame.HasCustomLoader)
             {
-                string DLLFileName = Path.Combine(Program.StartDirectory, $"d3d{Program.CurrentGame.DirectXVersion}.dll");
                 if (File.Exists(DLLFileName))
                 {
                     LoaderInstalled = true;
@@ -703,7 +708,7 @@ namespace HedgeModManager
             }
             PatchLabel.Text = Program.CurrentGame + ": " + (LoaderInstalled ? "Installed" : "Not Installed");
             LoaderVerLabel.Text = (LoaderVer.Length == 0) ? "Loader Version: None" : $"Loader Version: {LoaderVer}";
-            InstallLoader_Button.Text = LoaderInstalled ? "Uninstall Loader" : "Install Loader";
+            InstallLoader_Button.Text = File.Exists(DLLFileName) ? "Uninstall Loader" : "Install Loader";
         }
 
         /// <summary>

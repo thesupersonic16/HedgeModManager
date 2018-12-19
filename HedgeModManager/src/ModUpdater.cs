@@ -25,7 +25,12 @@ namespace HedgeModManager
         }
 
 
-        // Don't know why I've made this, Shouldn't have existed
+        /// <summary>
+        /// Parse GMI Mod update
+        /// </summary>
+        /// <param name="mod">Mod to update</param>
+        /// <param name="ini">mod_update.ini of the update</param>
+        /// <returns></returns>
         public ModUpdate GetUpdateFromINI(Mod mod, IniFile ini)
         {
             // Checks

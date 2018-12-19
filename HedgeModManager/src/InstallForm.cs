@@ -137,13 +137,14 @@ namespace HedgeModManager
             if (MessageBox.Show("Install HedgeModManager into \n" + path + "?", Resources.ApplicationTitle,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                // HedgeModManager.exe, HedgeModManager.pdb, cpkredir.dll, cpkredir.ini, cpkredir.txt
-                string[] files = new string[] { Program.ExecutableName,
-#if DEBUG
+                // HedgeModManager.exe, HedgeModManager.pdb, cpkredir.dll, cpkredir.txt
+                string[] files = new string[]
+                {
+                    Program.ExecutableName,
                     Path.ChangeExtension(Program.ExecutableName, "pdb"),
-#endif
                     "cpkredir.dll",
-                    "cpkredir.txt" };
+                    "cpkredir.txt"
+                };
 
                 foreach (string file in files)
                 {
@@ -153,7 +154,7 @@ namespace HedgeModManager
                         // Copies the current file into the custom filepath
                         File.Copy(filePath, Path.Combine(path, file), true);
 
-                        // Don't delete this file as its in use, same thing should be done for the pdb
+                        // Don't delete this file as its in use
                         if (file == Program.ExecutableName)
                             continue;
 
