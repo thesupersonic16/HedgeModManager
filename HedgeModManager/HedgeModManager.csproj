@@ -1,17 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9B08E4A9-F5BA-47EA-A6DC-4BEB4165BCF0}</ProjectGuid>
+    <ProjectGuid>{C3336AA9-8CB9-4756-B27F-4C00D827AB5F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HedgeModManager</RootNamespace>
     <AssemblyName>HedgeModManager</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,288 +33,73 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>res\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\ChangeLogWindow.xaml.cs">
-      <DependentUpon>ChangeLogWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\DevTools.cs" />
-    <Compile Include="src\ExceptionWindow.xaml.cs">
-      <DependentUpon>ExceptionWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\Game.cs" />
-    <Compile Include="src\CodeLoader.cs" />
-    <Compile Include="src\CreateUpdateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\CreateUpdateForm.Designer.cs">
-      <DependentUpon>CreateUpdateForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\CreateUpdateURLForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\CreateUpdateURLForm.Designer.cs">
-      <DependentUpon>CreateUpdateURLForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\DownloadTools.cs" />
-    <Compile Include="src\GameBanana\GBAPI.cs" />
-    <Compile Include="src\GameBanana\GBModDownloadWindow.xaml.cs">
-      <DependentUpon>GBModDownloadWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\HMMCommand.cs" />
-    <Compile Include="src\InstallForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\InstallForm.Designer.cs">
-      <DependentUpon>InstallForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\LogFile.cs" />
-    <Compile Include="src\AboutForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\AboutForm.Designer.cs">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\DescriptionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\DescriptionForm.Designer.cs">
-      <DependentUpon>DescriptionForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\IniFile.cs" />
-    <Compile Include="src\Mods.cs" />
-    <Compile Include="src\ModUpdater.cs" />
-    <Compile Include="src\NewModForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\NewModForm.Designer.cs">
-      <DependentUpon>NewModForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\NewModNameForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\NewModNameForm.Designer.cs">
-      <DependentUpon>NewModNameForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\AddModForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\AddModForm.Designer.cs">
-      <DependentUpon>AddModForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\ChangeLogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\ChangeLogForm.Designer.cs">
-      <DependentUpon>ChangeLogForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\NewModPropertyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\NewModPropertyForm.Designer.cs">
-      <DependentUpon>NewModPropertyForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\Patcher.cs" />
-    <Compile Include="src\Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\SLWSaveForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\SLWSaveForm.Designer.cs">
-      <DependentUpon>SLWSaveForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\SS16MessageBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\SS16MessageBox.Designer.cs">
-      <DependentUpon>SS16MessageBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\Steam.cs" />
-    <Compile Include="src\Theme.cs" />
-    <Compile Include="src\UpdateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\UpdateForm.Designer.cs">
-      <DependentUpon>UpdateForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\UpdateModForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\UpdateModForm.Designer.cs">
-      <DependentUpon>UpdateModForm.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+    </ApplicationDefinition>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IniFile.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ModInfo.cs" />
+    <Compile Include="ModsDB.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="src\AboutForm.resx">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\CreateUpdateForm.resx">
-      <DependentUpon>CreateUpdateForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\CreateUpdateURLForm.resx">
-      <DependentUpon>CreateUpdateURLForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\DescriptionForm.resx">
-      <DependentUpon>DescriptionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\InstallForm.resx">
-      <DependentUpon>InstallForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\NewModForm.resx">
-      <DependentUpon>NewModForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\NewModNameForm.resx">
-      <DependentUpon>NewModNameForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\AddModForm.resx">
-      <DependentUpon>AddModForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\ChangeLogForm.resx">
-      <DependentUpon>ChangeLogForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\NewModPropertyForm.resx">
-      <DependentUpon>NewModPropertyForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\SLWSaveForm.resx">
-      <DependentUpon>SLWSaveForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\SS16MessageBox.resx">
-      <DependentUpon>SS16MessageBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\UpdateForm.resx">
-      <DependentUpon>UpdateForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\UpdateModForm.resx">
-      <DependentUpon>UpdateModForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include=".editorconfig" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="res\cpkredir\cpkredir.ini" />
-    <None Include="res\patches\sonicgenerations\Disable Blue Trail.bin" />
-    <None Include="res\patches\sonicgenerations\Disable FxPipeline.bin" />
-    <None Include="res\patches\sonicgenerations\Disable Kick.bin" />
-    <None Include="res\patches\sonicgenerations\Enable Blue Trail.bin" />
-    <None Include="res\patches\sonicgenerations\Enable FxPipeline.bin" />
-    <None Include="res\patches\sonicgenerations\Enable Kick.bin" />
-    <None Include="res\update.bat" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="mod.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ModsDB.ini" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="res\icon96.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="res\codes\ForcesModLoader.dll" />
-    <Content Include="res\codes\SonicGenerationsCodeLoader.dll" />
-    <Content Include="res\GBStyleSheet.css" />
-    <Content Include="res\icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="IWshRuntimeLibrary">
-      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="src\ChangeLogWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="src\ExceptionWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="src\GameBanana\GBModDownloadWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
