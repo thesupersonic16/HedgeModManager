@@ -140,18 +140,11 @@
             <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style TargetType="GridViewColumnHeader">
-            <Setter Property="SnapsToDevicePixels"   Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="MinHeight"             Value="30px" />
-            <Setter Property="MinWidth"              Value="30px" />
-            <Setter Property="Foreground"            Value="#FFFFFFFF" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="GridViewColumnHeader">
                         <Border TextBlock.Foreground="White"
-                    x:Name="Border"
-                    BorderBrush="#FF3F3F46"
-                    BorderThickness="1,1,1,1">
+                    x:Name="Border">
                             <Border.Background>
                                 <SolidColorBrush Color="#FF3F3F46" />
                             </Border.Background>
@@ -193,16 +186,21 @@
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <ContentPresenter Margin="2"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Center"
-              RecognizesAccessKey="True" />
+                            <Grid>
+                                <ContentPresenter Margin="2"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  RecognizesAccessKey="True" />
+                                <Thumb x:Name="PART_HeaderGripper"
+                                       HorizontalAlignment="Right"
+                                       Margin="0,0,-2,0"/>
+                            </Grid>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-      <Style TargetType="ListViewItem">
+        <Style TargetType="ListViewItem">
           <Setter Property="BorderThickness" Value="1" />
           <Setter Property="Padding" Value="2,0" />
           <Setter Property="Template">
@@ -225,5 +223,22 @@
               </Setter.Value>
           </Setter>
       </Style>
+        <Style TargetType="Thumb">
+            <Setter Property="Width"
+                  Value="2" />
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Padding="{TemplateBinding Padding}"
+                                Background="Transparent">
+                            <Rectangle HorizontalAlignment="Center"
+                                       Width="2"
+                                       Fill="{TemplateBinding Background}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

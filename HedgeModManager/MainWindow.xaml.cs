@@ -36,12 +36,13 @@ namespace HedgeModManager
         private void RefreshClick(object sender, RoutedEventArgs e)
         {
             ModsList.Items.Clear();
-            ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
+			ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
             ModsDatabase.SaveDB();
+            RefreshClick(null, null);
         }
     }
 }

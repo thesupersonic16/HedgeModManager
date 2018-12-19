@@ -18,6 +18,7 @@
                 <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White">
                     <ListView.View>
                         <GridView>
+
                             <GridViewColumn Header="Name" Width="120">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
