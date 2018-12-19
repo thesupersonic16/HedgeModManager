@@ -40,8 +40,11 @@ namespace HedgeModManager
 
             foreach (string folder in Directory.GetDirectories(RootDirectory))
             {
-                var mod = new ModInfo(folder);
-                Mods.Add(mod);
+                if (File.Exists(Path.Combine(folder, "mod.ini")))
+                {
+                    var mod = new ModInfo(folder);
+                    Mods.Add(mod);
+                }
             }
         }
 

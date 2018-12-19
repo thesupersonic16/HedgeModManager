@@ -79,9 +79,9 @@
           <ControlTemplate TargetType="Button">
             <Border TextBlock.Foreground="White"
                     x:Name="Border"
-                    BorderBrush="#FF3F3F46"
-                    BorderThickness="1,1,1,1"
-                    CornerRadius="8,8,8,8" >
+                    BorderBrush="White"
+                    BorderThickness=".2"
+                    CornerRadius="2,2,2,2" >
               <Border.Background>
                 <SolidColorBrush Color="#FF3F3F46" />
               </Border.Background>

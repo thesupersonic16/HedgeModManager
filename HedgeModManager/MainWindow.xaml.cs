@@ -24,7 +24,7 @@ namespace HedgeModManager
         public static string ModsDbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods");
 #endif
 #if DEBUG
-        public static string ModsDbPath = Path.Combine(@"\\Ali\D\Games\Sonic Lost World", "Mods");
+        public static string ModsDbPath = Path.Combine(@"D:\Games\SteamLibrary\steamapps\common\SonicForces\build\main\projects\exec\", "Mods");
 #endif
         public static ModsDB ModsDatabase = new ModsDB(ModsDbPath);
         public MainWindow()
@@ -36,7 +36,7 @@ namespace HedgeModManager
         private void RefreshClick(object sender, RoutedEventArgs e)
         {
             ModsList.Items.Clear();
-			ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
+            ModsDatabase.Mods.ForEach(mod => ModsList.Items.Insert(mod.Enabled ? 0 : ModsList.Items.Count, mod));
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
