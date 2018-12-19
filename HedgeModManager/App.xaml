@@ -136,9 +136,94 @@
     <Style TargetType="Label">
       <Setter Property="Foreground" Value="White"/>
     </Style>
-    <Style TargetType="CheckBox">
-      <Setter Property="Foreground" Value="White"/>
-    </Style>
-
-  </Application.Resources>
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="SnapsToDevicePixels"   Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="MinHeight"             Value="30px" />
+            <Setter Property="MinWidth"              Value="30px" />
+            <Setter Property="Foreground"            Value="#FFFFFFFF" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewColumnHeader">
+                        <Border TextBlock.Foreground="White"
+                    x:Name="Border"
+                    BorderBrush="#FF3F3F46"
+                    BorderThickness="1,1,1,1">
+                            <Border.Background>
+                                <SolidColorBrush Color="#FF3F3F46" />
+                            </Border.Background>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition GeneratedDuration="0:0:0.1" />
+                                        <VisualTransition GeneratedDuration="0" To="Pressed" />
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                          Storyboard.TargetName="Border">
+                                                <EasingColorKeyFrame KeyTime="0" Value="#FF686868" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                          Storyboard.TargetName="Border">
+                                                <EasingColorKeyFrame KeyTime="0" Value="#FFAFABAF" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled" />
+                                    <VisualState x:Name="Focus">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                          Storyboard.TargetName="Border">
+                                                <EasingColorKeyFrame KeyTime="0" Value="#FF333337" />
+                                            </ColorAnimationUsingKeyFrames>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                          Storyboard.TargetName="Border">
+                                                <EasingColorKeyFrame KeyTime="0" Value="White" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter Margin="2"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              RecognizesAccessKey="True" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+      <Style TargetType="ListViewItem">
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="Padding" Value="2,0" />
+          <Setter Property="Template">
+              <Setter.Value>
+                  <ControlTemplate TargetType="{x:Type ListViewItem}">
+                      <Grid>
+                          <Border x:Name="innerBorder" 
+                                  Background="{TemplateBinding Background}" 
+                                  Padding="{TemplateBinding Padding}" 
+                                  SnapsToDevicePixels="true" />
+                          <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                      </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="innerBorder" Property="Background" Value="#FF686868"/>
+                            </Trigger>
+                      </ControlTemplate.Triggers>
+                  </ControlTemplate>
+              </Setter.Value>
+          </Setter>
+      </Style>
+    </Application.Resources>
 </Application>
