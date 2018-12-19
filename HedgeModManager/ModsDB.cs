@@ -10,6 +10,7 @@ namespace HedgeModManager
     public class ModsDB : IniFile
     {
         public List<ModInfo> Mods = new List<ModInfo>();
+        public bool ReverseLoadOrder = true;
         public string RootDirectory { get; set; }
         public int ModCount => Mods.Count;
 
@@ -58,26 +59,28 @@ namespace HedgeModManager
             this["Mods"].Params.Clear();
             foreach (var mod in Mods)
             {
-                //use mod.title
-                // lol I know
-                //that works
-                // looks good?
-                // Dont use Title
-                //cpkredir uses path?
-                // lol We can use numbers iirc
-                // I want it like GMI
-                //GMI stores title tho
-                // uh... Well All I know is that we should never use Titles
-                // Its more likly to crash
-                // seems legit
                 this["Mods"][Path.GetFileName(mod.RootDirectory)] = Path.Combine(mod.RootDirectory, "mod.ini"); 
             }
         }
 
+        public void BuildMain()
+        {
+            this["Main"].Params.Clear();
+            this["Main"].Params.Add("ReverseLoadOrder", Convert.ToInt32(ReverseLoadOrder).ToString());
+            var count = 0;
+            foreach (var mod in Mods.Where(mod => mod.Enabled == true))
+            {
+                this["Main"].Params.Add($"ActiveMod{count}", Path.GetFileName(mod.RootDirectory));
+                ++count;
+            }
+            this["Main"].Params.Add("ActiveModCount", count.ToString());
+        }
+
         public void SaveDB()
         {
+            BuildMain();
             BuildList();
-            using (var stream = File.OpenWrite(Path.Combine(RootDirectory, "ModsDB.ini")))
+            using (var stream = File.Create(Path.Combine(RootDirectory, "ModsDB.ini")))
             {
                 Write(stream);
             }

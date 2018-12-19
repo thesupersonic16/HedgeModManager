@@ -92,6 +92,8 @@ namespace HedgeModManager
                     writer.WriteLine($"{val.Key}={val.Value}");
                 }
             }
+            writer.Flush();
+            writer.Dispose();
         }
 
         public class IniGroup
@@ -103,12 +105,8 @@ namespace HedgeModManager
             {
                 get
                 {
-                    if (Params.ContainsKey(key))
-                    {
-                        Params.TryGetValue(key, out string val);
-                        return val;
-                    }
-                    else return "";
+                    Params.TryGetValue(key, out string val);
+                    return val ?? string.Empty;
                 }
                 set
                 {

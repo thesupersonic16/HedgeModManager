@@ -30,12 +30,18 @@ namespace HedgeModManager
         public MainWindow()
         {
             InitializeComponent();
-            RefreshModsList();
+            RefreshClick(null, null);
         }
 
-        protected void RefreshModsList()
+        private void RefreshClick(object sender, RoutedEventArgs e)
         {
+            ModsList.Items.Clear();
             ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
+        }
+
+        private void SaveClick(object sender, RoutedEventArgs e)
+        {
+            ModsDatabase.SaveDB();
         }
     }
 }
