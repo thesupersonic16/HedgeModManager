@@ -53,7 +53,7 @@ namespace HedgeModManager
             int activeCount = (int)this["Main"]["ActiveModCount", typeof(int)];
             for (int i = 0; i < activeCount; i++)
             {
-                Mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == this["Main"][$"ActiveMod{i}"]).Enabled = true;
+                Mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == this["Main"]?[$"ActiveMod{i}"]).Enabled = true;
             }
         }
 
@@ -71,7 +71,7 @@ namespace HedgeModManager
             this["Main"].Params.Clear();
             this["Main"].Params.Add("ReverseLoadOrder", Convert.ToInt32(ReverseLoadOrder).ToString());
             var count = 0;
-            foreach (var mod in Mods.Where(mod => mod.Enabled == true))
+            foreach (var mod in Mods.Where(mod => mod.Enabled))
             {
                 this["Main"].Params.Add($"ActiveMod{count}", Path.GetFileName(mod.RootDirectory));
                 ++count;

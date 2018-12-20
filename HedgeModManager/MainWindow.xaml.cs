@@ -36,13 +36,62 @@ namespace HedgeModManager
         private void RefreshClick(object sender, RoutedEventArgs e)
         {
             ModsList.Items.Clear();
-            ModsDatabase.Mods.ForEach(mod => ModsList.Items.Insert(mod.Enabled ? 0 : ModsList.Items.Count, mod));
+            ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
+            
+            // Re-arrange the mods
+            var mods = ModsDatabase.Mods;
+            for (int i = 0; i < mods.Count; i++)
+            {
+                if (mods[i].Enabled)
+                {
+                    for (int i2 = 0; i2 < (int)ModsDatabase["Main"]["ActiveModCount", typeof(int)]; i2++)
+                    {
+                        if (ModsDatabase["Main"][$"ActiveMod{i2}"] == Path.GetFileName(mods[i].RootDirectory))
+                        {
+                            ModsList.Items.Remove(mods[i]);
+                            ModsList.Items.Insert(i2, mods[i]);
+                        }
+                    }
+                }
+            }
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
+            ModsDatabase.Mods.Clear();
+            foreach (var mod in ModsList.Items)
+            {
+                ModsDatabase.Mods.Add((ModInfo)mod);
+            }
             ModsDatabase.SaveDB();
             RefreshClick(null, null);
+        }
+
+        private void MoveMod(object sender, RoutedEventArgs e)
+        {
+            var index = Math.Max(0, ModsList.SelectedIndex);
+            var mod = ModsList.Items[index];
+            if (sender.Equals(UpBtn))
+            {
+                ModsList.Items.RemoveAt(index);
+                ModsList.Items.Insert(Math.Max(0, --index), mod);
+            }
+            else if (sender.Equals(TopBtn))
+            {
+                ModsList.Items.RemoveAt(index);
+                ModsList.Items.Insert(0, mod);
+            }
+            else if (sender.Equals(DownBtn))
+            {
+                ModsList.Items.RemoveAt(index);
+                ModsList.Items.Insert(++index, mod);
+            }
+            else if (sender.Equals(BottomBtn))
+            {
+                ModsList.Items.RemoveAt(index);
+                ModsList.Items.Insert(ModsList.Items.Count, mod);
+            }
+            ModsList.SelectedIndex = index;
         }
     }
 }

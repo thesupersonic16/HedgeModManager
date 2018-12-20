@@ -218,6 +218,9 @@
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter TargetName="innerBorder" Property="Background" Value="#FF686868"/>
                             </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="innerBorder" Property="Background" Value="#FF686868"/>
+                            </Trigger>
                       </ControlTemplate.Triggers>
                   </ControlTemplate>
               </Setter.Value>
