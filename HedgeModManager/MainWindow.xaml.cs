@@ -42,21 +42,20 @@ namespace HedgeModManager
         public void RefeshMods()
         {
             ModsList.Items.Clear();
+            ModsDatabase.DetectMods();
+            ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
 
             // Re-arrange the mods
-            var mods = ModsDatabase.Mods;
-            for (int i = 0; i < mods.Count; i++)
+            for (int i = 0; i < (int)ModsDatabase["Main"]["ActiveModCount", typeof(int)]; i++)
             {
-                if (mods[i].Enabled)
+                for (int i2 = 0; i2 < ModsList.Items.Count; i2++)
                 {
-                    for (int i2 = 0; i2 < (int)ModsDatabase["Main"]["ActiveModCount", typeof(int)]; i2++)
+                    ModInfo mod = (ModInfo) ModsList.Items[i2];
+                    if (ModsDatabase["Main"][$"ActiveMod{i}"] == Path.GetFileName(mod.RootDirectory))
                     {
-                        if (ModsDatabase["Main"][$"ActiveMod{i2}"] == Path.GetFileName(mods[i].RootDirectory))
-                        {
-                            ModsList.Items.Remove(mods[i]);
-                            ModsList.Items.Insert(i2, mods[i]);
-                        }
+                        ModsList.Items.Remove(mod);
+                        ModsList.Items.Insert(i, mod);
                     }
                 }
             }
