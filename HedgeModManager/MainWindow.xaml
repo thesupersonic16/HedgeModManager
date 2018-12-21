@@ -5,69 +5,100 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="HedgeModManager" Height="600" Width="560" Background="#FF2D2D30">
+        Title="HedgeModManager"
+        Height="600" Width="560"
+        Loaded="Window_Loaded">
+    <!--
+        LOL
+        Height="1500" Width="1500" Background="Transparent" AllowsTransparency="True" WindowStyle="None"
+        -->
     <Window.Resources>
         <Style TargetType="ListView">
             <Setter Property="Background" Value="#FF2D2D30"/>
         </Style>
     </Window.Resources>
+    <!--
+    <Border x:Name="RotateTest" BorderBrush="#FF2D2D30" BorderThickness="2" Background="#FF2D2D30" Height="600" Width="560">
+        <Border.RenderTransform>
+            <RotateTransform Angle="45" CenterX="280" CenterY="300"/>
+        </Border.RenderTransform>
+    -->
+        <Grid>
+            <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110">
+                <TabItem Header="Mods">
+                    <Grid>
+                        <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" Margin="0,0,31.5,0">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Name" Width="120">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Content="{Binding Title}" IsChecked="{Binding Enabled}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Version"       Width="100" DisplayMemberBinding="{Binding Version}"/>
+                                    <GridViewColumn Header="Author"        Width="100" DisplayMemberBinding="{Binding Author}"/>
+                                    <GridViewColumn Header="Supports Save" Width="90"  DisplayMemberBinding="{Binding SupportsSave}"/>
+                                    <GridViewColumn Header="Updates"       Width="70"  DisplayMemberBinding="{Binding HasUpdates}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Button x:Name="TopBtn"      Click="UI_MoveMod_Click"  Content="↑" FontSize="30" Margin="0,5,0,0" Height="50" />
+                            <Button x:Name="UpBtn"       Click="UI_MoveMod_Click"  Content="˄" FontSize="30" Margin="0,5,0,0" Height="50" />
+                            <Button x:Name="DownBtn"     Click="UI_MoveMod_Click"  Content="˅" FontSize="30" Margin="0,5,0,0" Height="50" />
+                            <Button x:Name="BottomBtn"   Click="UI_MoveMod_Click"  Content="↓" FontSize="30" Margin="0,5,0,0" Height="50" />
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Codes">
+                    <Grid/>
+                </TabItem>
+                <TabItem Header="Settings">
+                    <Grid>
 
-    <Grid>
-        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110">
-            <TabItem Header="Mods">
-                <Grid>
-                    <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" Margin="0,0,31.5,0">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Name" Width="120">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <CheckBox Content="{Binding Title}" IsChecked="{Binding Enabled}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Version"       Width="100" DisplayMemberBinding="{Binding Version}"/>
-                                <GridViewColumn Header="Author"        Width="100" DisplayMemberBinding="{Binding Author}"/>
-                                <GridViewColumn Header="Supports Save" Width="90"  DisplayMemberBinding="{Binding SupportsSave}"/>
-                                <GridViewColumn Header="Updates"       Width="70"  DisplayMemberBinding="{Binding HasUpdates}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <Button x:Name="TopBtn"      Click="UI_MoveMod_Click"  Content="↑" FontSize="30" Margin="0,5,0,0" Height="50" />
-                        <Button x:Name="UpBtn"       Click="UI_MoveMod_Click"  Content="˄" FontSize="30" Margin="0,5,0,0" Height="50" />
-                        <Button x:Name="DownBtn"     Click="UI_MoveMod_Click"  Content="˅" FontSize="30" Margin="0,5,0,0" Height="50" />
-                        <Button x:Name="BottomBtn"   Click="UI_MoveMod_Click"  Content="↓" FontSize="30" Margin="0,5,0,0" Height="50" />
-                    </StackPanel>
+                        <GroupBox Header="Game &amp; ModLoader" HorizontalAlignment="Left" Height="150" Margin="10,10,0,0" VerticalAlignment="Top" Width="526">
+                            <Grid>
+                                <Button Content="Uninstall CPKREDIR"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164"/>
+                                <Button Content="Uninstall {0}"         Margin="10,38,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164"/>
+                                <CheckBox Content="Enable Debug Console" Margin="10,66,342,34" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <CheckBox Content="Enable Save File Redirection" Margin="10,86,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <Label Content="Game Name: Unknown" Margin="179,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="152" Height="27" />
+                                <Label Content="Loaders: Unknown" Margin="179,35,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="152" Height="27" />
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="HedgeModManager" HorizontalAlignment="Left" Height="202" Margin="10,165,0,0" VerticalAlignment="Top" Width="526">
+                            <Grid>
+                                <CheckBox Content="Check for ModLoader Updates" Margin="10,10,194,140"/>
+                                <CheckBox Content="Keep HedgeModManager open after starting a game" Margin="10,27,194,123"/>
+                                <Button Content="About HedgeModManager"         Margin="290,120,10,10" RenderTransformOrigin="0.508,-0.424"/>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            <StackPanel VerticalAlignment="Bottom" >
+                <Grid Margin="10,0,10,10" VerticalAlignment="Bottom" Height="100">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.25*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition Width="0.25*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.45*"/>
+                        <RowDefinition Height="0.6*"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Content="Remove Mod"                       Grid.Column="0" Grid.Row="0" Margin="5"/>
+                    <Button Content="Refresh Mod List" Width="Auto"    Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
+                    <Button Content="Add Mod"          Width="Auto"    Grid.Column="2" Grid.Row="0" Margin="5"/>
+
+                    <Button Content="Save"                             Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
+                    <Button Content="Save and Play"    Width="Auto"    Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
+                    <Button Content="Play"             Width="Auto"    Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
                 </Grid>
-            </TabItem>
-            <TabItem Header="Codes">
-                <Grid/>
-            </TabItem>
-            <TabItem Header="Settings">
-                <Grid/>
-            </TabItem>
-        </TabControl>
-        <StackPanel VerticalAlignment="Bottom" >
-            <Grid Margin="10,0,10,10" VerticalAlignment="Bottom" Height="100">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.25*"/>
-                    <ColumnDefinition Width="0.5*"/>
-                    <ColumnDefinition Width="0.25*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="0.45*"/>
-                    <RowDefinition Height="0.6*"/>
-                </Grid.RowDefinitions>
-                
-                <Button Content="Remove Mod"                       Grid.Column="0" Grid.Row="0" Margin="5"/>
-                <Button Content="Refresh Mod List" Width="Auto"    Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
-                <Button Content="Add Mod"          Width="Auto"    Grid.Column="2" Grid.Row="0" Margin="5"/>
-                                                   
-                <Button Content="Save"                             Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
-                <Button Content="Save and Play"    Width="Auto"    Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
-                <Button Content="Play"             Width="Auto"    Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
-            </Grid>
-        </StackPanel>
-    </Grid>
+            </StackPanel>
+        </Grid>
+    <!--</Border>-->
 </Window>

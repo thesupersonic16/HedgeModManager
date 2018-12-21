@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 
 namespace HedgeModManager
 {
@@ -125,5 +126,21 @@ namespace HedgeModManager
         {
             StartGame();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //var timer = new DispatcherTimer();
+            //timer.Tick += dispatcherTimer_Tick;
+            //timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            //timer.Start();
+        }
+
+        // too slow
+        // :^)
+        // LOL
+        //private void dispatcherTimer_Tick(object sender, EventArgs e)
+        //{
+        //    (RotateTest.RenderTransform as RotateTransform).Angle += 10d;
+        //}
     }
 }

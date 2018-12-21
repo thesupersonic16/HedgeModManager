@@ -3,139 +3,164 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:HedgeModManager"
              StartupUri="MainWindow.xaml">
-  <Application.Resources>
-    <!-- Tabs -->
-    <Style TargetType="TabControl">
-      <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="BorderBrush" Value="#FF3F3F46" />
-    </Style>
-    <Style TargetType="TabItem">
-      <Setter Property="Background" Value="#FF007ACC"/>
-      <Setter Property="Foreground" Value="#FFFFFFFF"/>
-      <Setter Property="MinHeight"             Value="20px" />
-      <Setter Property="MinWidth"              Value="20px" />
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="TabItem">
-            <Border TextBlock.Foreground="#FFFFFFFF"
+    <Application.Resources>
+        <!-- Tabs -->
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#FF3F3F46" />
+        </Style>
+        <Style TargetType="GroupBox">
+            <Setter Property="Background" Value="#FF007ACC"/>
+            <Setter Property="Foreground" Value="#FFFFFFFF"/>
+            <Setter Property="MinHeight"             Value="20px" />
+            <Setter Property="MinWidth"              Value="20px" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" BorderThickness="1" CornerRadius="8,8,0,0" BorderBrush="#FF3F3F46" Background="#FF333337">
+                                <ContentPresenter Margin="8,4,0,4" ContentSource="Header" RecognizesAccessKey="True" />
+                            </Border>
+
+                            <Border Grid.Row="1" BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" BorderBrush="#FF3F3F46">
+                                <ContentPresenter Margin="4" />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="#FF007ACC"/>
+            <Setter Property="Foreground" Value="#FFFFFFFF"/>
+            <Setter Property="MinHeight"             Value="20px" />
+            <Setter Property="MinWidth"              Value="20px" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border TextBlock.Foreground="#FFFFFFFF"
                     x:Name="Border"
                     BorderBrush="Transparent"
                     BorderThickness="0">
-              <Border.Background>
-                <SolidColorBrush Color="Transparent" />
-              </Border.Background>
-              <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup x:Name="CommonStates">
-                  <VisualState x:Name="Normal" />
-                  <VisualState x:Name="MouseOver">
-                    <Storyboard>
-                      <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
-                        <EasingColorKeyFrame KeyTime="0" Value="#FF1C97EA" />
-                      </ColorAnimationUsingKeyFrames>
-                    </Storyboard>
-                  </VisualState>
-                  <VisualState x:Name="MouseLeave" />
-                  <VisualState x:Name="Disabled" />
-                </VisualStateGroup>
-                <VisualStateGroup x:Name="FocusStates">
-                  <VisualState x:Name="Focused" />
-                  <VisualState x:Name="Unfocused" />
-                </VisualStateGroup>
-                <VisualStateGroup x:Name="SelectionStates">
-                  <VisualState x:Name="Selected">
-                    <Storyboard>
-                      <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border" >
-                        <EasingColorKeyFrame KeyTime="0" Value="#FF007ACC" />
-                      </ColorAnimationUsingKeyFrames>
-                    </Storyboard>
-                  </VisualState>
-                  <VisualState x:Name="Unselected" />
-                </VisualStateGroup>
-              </VisualStateManager.VisualStateGroups>
-              <ContentPresenter Margin="4,2,20,2"
+                            <Border.Background>
+                                <SolidColorBrush Color="Transparent" />
+                            </Border.Background>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
+                                                <EasingColorKeyFrame KeyTime="0" Value="#FF1C97EA" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="MouseLeave" />
+                                    <VisualState x:Name="Disabled" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused" />
+                                    <VisualState x:Name="Unfocused" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="SelectionStates">
+                                    <VisualState x:Name="Selected">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border" >
+                                                <EasingColorKeyFrame KeyTime="0" Value="#FF007ACC" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unselected" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter Margin="4,2,20,2"
               HorizontalAlignment="Left"
               VerticalAlignment="Center"
               ContentSource="Header" />
-            </Border>
+                        </Border>
 
-            <ControlTemplate.Triggers>
-              <Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="Border" Property="Background" Value="#FF007ACC" />
-              </Trigger>
-            </ControlTemplate.Triggers>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
-    <!-- Button -->
-    <Style TargetType="Button">
-      <Setter Property="SnapsToDevicePixels"   Value="true" />
-      <Setter Property="OverridesDefaultStyle" Value="true" />
-      <Setter Property="MinHeight"             Value="30px" />
-      <Setter Property="MinWidth"              Value="30px" />
-      <Setter Property="Foreground"            Value="#FFFFFFFF" />
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="Button">
-            <Border TextBlock.Foreground="White"
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#FF007ACC" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Button -->
+        <Style TargetType="Button">
+            <Setter Property="SnapsToDevicePixels"   Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="MinHeight"             Value="10px" />
+            <Setter Property="MinWidth"              Value="30px" />
+            <Setter Property="Foreground"            Value="#FFFFFFFF" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border TextBlock.Foreground="White"
                     x:Name="Border"
                     BorderBrush="White"
                     BorderThickness=".2"
-                    CornerRadius="2,2,2,2" >
-              <Border.Background>
-                <SolidColorBrush Color="#FF3F3F46" />
-              </Border.Background>
-              <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup x:Name="CommonStates">
-                  <VisualStateGroup.Transitions>
-                    <VisualTransition GeneratedDuration="0:0:0.1" />
-                    <VisualTransition GeneratedDuration="0" To="Pressed" />
-                  </VisualStateGroup.Transitions>
-                  <VisualState x:Name="Normal" />
-                  <VisualState x:Name="MouseOver">
-                    <Storyboard>
-                      <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                    CornerRadius="4,4,4,4" >
+                            <Border.Background>
+                                <SolidColorBrush Color="#FF3F3F46" />
+                            </Border.Background>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition GeneratedDuration="0:0:0.1" />
+                                        <VisualTransition GeneratedDuration="0" To="Pressed" />
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
                           Storyboard.TargetName="Border">
-                        <EasingColorKeyFrame KeyTime="0" Value="#FF686868" />
-                      </ColorAnimationUsingKeyFrames>
-                    </Storyboard>
-                  </VisualState>
-                  <VisualState x:Name="Pressed">
-                    <Storyboard>
-                      <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                                <EasingColorKeyFrame KeyTime="0" Value="#FF686868" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
                           Storyboard.TargetName="Border">
-                        <EasingColorKeyFrame KeyTime="0" Value="#FFAFABAF" />
-                      </ColorAnimationUsingKeyFrames>
-                    </Storyboard>
-                  </VisualState>
-                  <VisualState x:Name="Disabled" />
-                  <VisualState x:Name="Focus">
-                    <Storyboard>
-                      <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                                <EasingColorKeyFrame KeyTime="0" Value="#FFAFABAF" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled" />
+                                    <VisualState x:Name="Focus">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
                           Storyboard.TargetName="Border">
-                        <EasingColorKeyFrame KeyTime="0" Value="#FF333337" />
-                      </ColorAnimationUsingKeyFrames>
-                      <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                                                <EasingColorKeyFrame KeyTime="0" Value="#FF333337" />
+                                            </ColorAnimationUsingKeyFrames>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
                           Storyboard.TargetName="Border">
-                        <EasingColorKeyFrame KeyTime="0" Value="White" />
-                      </ColorAnimationUsingKeyFrames>
-                    </Storyboard>
-                  </VisualState>
-                </VisualStateGroup>
-              </VisualStateManager.VisualStateGroups>
-              <ContentPresenter Margin="2"
+                                                <EasingColorKeyFrame KeyTime="0" Value="White" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter Margin="2"
               HorizontalAlignment="Center"
               VerticalAlignment="Center"
               RecognizesAccessKey="True" />
-            </Border>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
-    <!-- Others -->
-    <Style TargetType="Label">
-      <Setter Property="Foreground" Value="White"/>
-    </Style>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Others -->
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
         <Style TargetType="CheckBox">
             <Setter Property="Foreground" Value="White"/>
         </Style>
@@ -201,19 +226,19 @@
             </Setter>
         </Style>
         <Style TargetType="ListViewItem">
-          <Setter Property="BorderThickness" Value="1" />
-          <Setter Property="Padding" Value="2,0" />
-          <Setter Property="Template">
-              <Setter.Value>
-                  <ControlTemplate TargetType="{x:Type ListViewItem}">
-                      <Grid>
-                          <Border x:Name="innerBorder" 
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="2,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                        <Grid>
+                            <Border x:Name="innerBorder" 
                                   Background="{TemplateBinding Background}" 
                                   Padding="{TemplateBinding Padding}" 
                                   SnapsToDevicePixels="true" />
-                          <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                            <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
                                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                      </Grid>
+                        </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter TargetName="innerBorder" Property="Background" Value="#FF686868"/>
@@ -221,11 +246,11 @@
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="innerBorder" Property="Background" Value="#FF686868"/>
                             </Trigger>
-                      </ControlTemplate.Triggers>
-                  </ControlTemplate>
-              </Setter.Value>
-          </Setter>
-      </Style>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style TargetType="Thumb">
             <Setter Property="Width"
                   Value="2" />
