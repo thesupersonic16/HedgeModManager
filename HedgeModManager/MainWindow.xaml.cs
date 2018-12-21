@@ -20,13 +20,9 @@ namespace HedgeModManager
     /// </summary>
     public partial class MainWindow : Window
     {
-#if !DEBUG
-        public static string ModsDbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods");
-#endif
-#if DEBUG
-        public static string ModsDbPath = Path.Combine(@"D:\Games\SteamLibrary\steamapps\common\SonicForces\build\main\projects\exec\", "Mods");
-#endif
+        public static string ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
         public static ModsDB ModsDatabase = new ModsDB(ModsDbPath);
+
         public MainWindow()
         {
             InitializeComponent();
