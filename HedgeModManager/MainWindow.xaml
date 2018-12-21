@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="HedgeModManager"
         Height="600" Width="560"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" Background="#FF2D2D30">
     <!--
         LOL
         Height="1500" Width="1500" Background="Transparent" AllowsTransparency="True" WindowStyle="None"
