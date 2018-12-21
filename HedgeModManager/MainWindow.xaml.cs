@@ -22,16 +22,20 @@ namespace HedgeModManager
     public partial class MainWindow : Window
     {
         public static string ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
+        public static string ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
         public static ModsDB ModsDatabase = new ModsDB(ModsDbPath);
+        public static CPKREDIRConfig Config = new CPKREDIRConfig(ConfigPath);
 
         public MainWindow()
         {
             InitializeComponent();
             UI_Refresh_Click(null, null);
+            DataContext = Config;
         }
 
         public void Refresh()
         {
+            GameLbl.Content = $"Game Name: {App.CurrentGame.GameName}";
             RefeshMods();
         }
 
@@ -60,6 +64,7 @@ namespace HedgeModManager
 
         public void SaveModsDB()
         {
+            Config.Save(ConfigPath);
             ModsDatabase.Mods.Clear();
             foreach (var mod in ModsList.Items)
             {
@@ -71,6 +76,9 @@ namespace HedgeModManager
         public void StartGame()
         {
             App.GetSteamGame(App.CurrentGame).StartGame();
+
+            if(!Config.KeepOpen)
+                Application.Current.Shutdown(0);
         }
 
         private void UI_MoveMod_Click(object sender, RoutedEventArgs e)

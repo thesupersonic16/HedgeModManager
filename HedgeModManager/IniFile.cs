@@ -80,7 +80,7 @@ namespace HedgeModManager
             }
         }
 
-        public void Write(Stream stream)
+        public virtual void Write(Stream stream)
         {
             var writer = new StreamWriter(stream);
 
