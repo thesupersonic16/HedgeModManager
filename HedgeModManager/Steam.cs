@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -63,11 +64,11 @@ namespace HedgeModManager
                     string gensPath = Path.Combine(path, "Sonic Generations\\SonicGenerations.exe");
                     string forcesPath = Path.Combine(path, "SonicForces\\build\\main\\projects\\exec\\Sonic Forces.exe");
                     if (CheckGame(lwPath))
-                        games.Add(new SteamGame("Sonic Lost World"  , lwPath));
+                        games.Add(new SteamGame("Sonic Lost World"  , lwPath, "329440"));
                     if (CheckGame(gensPath))
-                        games.Add(new SteamGame("Sonic Generations" , gensPath));
+                        games.Add(new SteamGame("Sonic Generations" , gensPath, "71340"));
                     if (CheckGame(forcesPath))
-                        games.Add(new SteamGame("Sonic Forces"      , forcesPath));
+                        games.Add(new SteamGame("Sonic Forces"      , forcesPath, "637100"));
                 }
             }
 
@@ -214,15 +215,22 @@ namespace HedgeModManager
     public class SteamGame
     {
         public string GameName { get; set; }
+        public string GameID { get; set; }
         public string ExeName { get; set; }
         public string RootDirectory { get; set; }
         public string ExeDirectory { get { return Path.Combine(RootDirectory, ExeName); } }
 
-        public SteamGame(string gameName, string exe)
+        public SteamGame(string gameName, string exe, string gameID)
         {
             GameName = gameName;
             RootDirectory = Path.GetDirectoryName(exe);
             ExeName = Path.GetFileName(exe);
+            GameID = gameID;
+        }
+
+        public void StartGame()
+        {
+            Process.Start($"steam://rungameid/{GameID}");
         }
     }
 }

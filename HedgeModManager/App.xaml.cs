@@ -17,23 +17,55 @@ namespace HedgeModManager
 
         public static string StartDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
+        public static Game CurrentGame = Games.Unknown;
+
+        public static List<SteamGame> SteamGames = null;
+
+        public static bool Restart = false;
+
         [STAThread]
         public static void Main()
         {
             // Use TLSv1.2
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-#if DEBUG
             Steam.Init();
-            var games = Steam.SearchForGames("Sonic Forces");
-            if (games.Count != 0)
-                StartDirectory = games[0].RootDirectory;
+#if DEBUG
+            SteamGames = Steam.SearchForGames("Sonic Forces");
+#else
+            SteamGames = Steam.SearchForGames();
 #endif
+            SelectSteamGame(SteamGames.FirstOrDefault());
+
+            do
+            {
+                Restart = false;
+                var application = new App();
+                application.InitializeComponent();
+                application.Run();
+            }
+            while (Restart);
+        }
+
+        public static void SelectSteamGame(SteamGame steamGame)
+        {
+            if (steamGame == null)
+                return;
+            StartDirectory = steamGame.RootDirectory;
+            if (steamGame.GameID == "329440")
+                CurrentGame = Games.SonicLostWorld;
+            if (steamGame.GameID == "71340")
+                CurrentGame = Games.SonicGenerations;
+            if (steamGame.GameID == "637100")
+                CurrentGame = Games.SonicForces;
+        }
+
+        public static SteamGame GetSteamGame(Game game)
+        {
+            return SteamGames.FirstOrDefault(t => t.GameName == game.GameName);
+        }
 
 
-            var application = new App();
-            application.InitializeComponent();
-            application.Run();
         }
     }
 }

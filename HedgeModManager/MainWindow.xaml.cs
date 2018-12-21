@@ -26,14 +26,19 @@ namespace HedgeModManager
         public MainWindow()
         {
             InitializeComponent();
-            RefreshClick(null, null);
+            UI_Refresh_Click(null, null);
         }
 
-        private void RefreshClick(object sender, RoutedEventArgs e)
+        public void Refresh()
+        {
+            RefeshMods();
+        }
+
+        public void RefeshMods()
         {
             ModsList.Items.Clear();
             ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
-            
+
             // Re-arrange the mods
             var mods = ModsDatabase.Mods;
             for (int i = 0; i < mods.Count; i++)
@@ -52,7 +57,7 @@ namespace HedgeModManager
             }
         }
 
-        private void SaveClick(object sender, RoutedEventArgs e)
+        public void SaveModsDB()
         {
             ModsDatabase.Mods.Clear();
             foreach (var mod in ModsList.Items)
@@ -60,10 +65,14 @@ namespace HedgeModManager
                 ModsDatabase.Mods.Add((ModInfo)mod);
             }
             ModsDatabase.SaveDB();
-            RefreshClick(null, null);
         }
 
-        private void MoveMod(object sender, RoutedEventArgs e)
+        public void StartGame()
+        {
+            App.GetSteamGame(App.CurrentGame).StartGame();
+        }
+
+        private void UI_MoveMod_Click(object sender, RoutedEventArgs e)
         {
             var index = Math.Max(0, ModsList.SelectedIndex);
             var mod = ModsList.Items[index];
@@ -88,6 +97,33 @@ namespace HedgeModManager
                 ModsList.Items.Insert(ModsList.Items.Count, mod);
             }
             ModsList.SelectedIndex = index;
+        }
+
+        // TODO: RemoveMod
+
+        private void UI_Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
+
+        // TODO: AddMod
+
+        private void UI_Save_Click(object sender, RoutedEventArgs e)
+        {
+            SaveModsDB();
+            Refresh();
+        }
+
+        private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
+        {
+            SaveModsDB();
+            Refresh();
+            StartGame();
+        }
+
+        private void UI_Play_Click(object sender, RoutedEventArgs e)
+        {
+            StartGame();
         }
     }
 }
