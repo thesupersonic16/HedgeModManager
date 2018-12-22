@@ -127,10 +127,16 @@
   <data name="ICO_HedgeModManager" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Graphics\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IMG_HEDGEMODMANAGER" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Graphics\icon256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="URL_FML_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll</value>
   </data>
   <data name="URL_GCL_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/SonicGenerationsCodeLoader.dll</value>
+  </data>
+  <data name="URL_HMM_GITHUB" xml:space="preserve">
+    <value>https://github.com/thesupersonic16/HedgeModManager</value>
   </data>
 </root>

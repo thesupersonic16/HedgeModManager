@@ -68,7 +68,7 @@ namespace HedgeModManager
                         {
                             var line = reader.ReadLine();
 
-                            if (string.IsNullOrEmpty(line))
+                            if (string.IsNullOrEmpty(line) || !line.Contains('='))
                                 break;
 
                             var splits = line.Split('=');

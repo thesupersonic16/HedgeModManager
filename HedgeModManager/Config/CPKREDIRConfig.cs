@@ -89,6 +89,18 @@ namespace HedgeModManager
             set { Groups["HedgeModManager"]["CheckLoader"] = (value ? "1" : "0"); }
         }
 
+        public string ModLoaderVersion
+        {
+            get { return Groups["HedgeModManager"]["ModLoaderVersion"]; }
+            set { Groups["HedgeModManager"]["ModLoaderVersion"] = value; }
+        }
+
+        public string ModLoaderName
+        {
+            get { return Groups["HedgeModManager"]["ModLoaderName"]; }
+            set { Groups["HedgeModManager"]["ModLoaderName"] = value; }
+        }
+
         public CPKREDIRConfig(string path)
         {
             if (File.Exists(path))
@@ -114,6 +126,8 @@ namespace HedgeModManager
                 CheckForUpdates = true;
                 KeepOpen = false;
                 CheckLoaderUpdates = true;
+                ModLoaderVersion = "";
+                ModLoaderName = "";
             }
         }
 

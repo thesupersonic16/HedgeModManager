@@ -91,6 +91,16 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IMG_HEDGEMODMANAGER {
+            get {
+                object obj = ResourceManager.GetObject("IMG_HEDGEMODMANAGER", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll.
         /// </summary>
         internal static string URL_FML_DL {
@@ -105,6 +115,15 @@ namespace HedgeModManager.Properties {
         internal static string URL_GCL_DL {
             get {
                 return ResourceManager.GetString("URL_GCL_DL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager.
+        /// </summary>
+        internal static string URL_HMM_GITHUB {
+            get {
+                return ResourceManager.GetString("URL_HMM_GITHUB", resourceCulture);
             }
         }
     }

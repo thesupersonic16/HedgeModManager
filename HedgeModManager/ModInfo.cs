@@ -55,10 +55,13 @@ namespace HedgeModManager
             Version = Groups["Desc"]["Version"];
             Date = Groups["Desc"]["Date"];
             Author = Groups["Desc"]["Author"];
-            var includeDirCount = int.Parse(Groups["Main"]["IncludeDirCount"]);
-            for (int i = 0; i < includeDirCount; i++)
+            if (!string.IsNullOrEmpty(Groups["Main"]["IncludeDirCount"]))
             {
-                IncludeDirs.Add(Groups["Main"][$"IncludeDir{i}"]);
+                var includeDirCount = int.Parse(Groups["Main"]["IncludeDirCount"]);
+                for (int i = 0; i < includeDirCount; i++)
+                {
+                    IncludeDirs.Add(Groups["Main"][$"IncludeDir{i}"]);
+                }
             }
         }
     }

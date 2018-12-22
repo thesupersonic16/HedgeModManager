@@ -1,0 +1,45 @@
+﻿<Window x:Class="HedgeModManager.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HedgeModManager"
+        mc:Ignorable="d"
+        Title="About HedgeModManager" Height="416" Width="508"  Background="#FF2D2D30" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Image HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Source="Resources/Graphics/icon256.png"/>
+        <Label Content="HedgeModManager" HorizontalAlignment="Left" Margin="79,13,0,0" VerticalAlignment="Top" Height="64" Width="379" FontSize="36"/>
+        <Label Content="A program designed to help people easily load Hedgehog Engine mods." HorizontalAlignment="Left" Margin="44,76,0,0" VerticalAlignment="Top"/>
+        <Label Content="Requires a legally owned version of one of the supported games." HorizontalAlignment="Left" Margin="47,94,0,0" VerticalAlignment="Top"/>
+        <GroupBox Header="Credits (6.1, Needs updating)" HorizontalAlignment="Left" Height="218" Margin="10,125,0,0" VerticalAlignment="Top" Width="473">
+            <Grid Margin="0,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <Label Content="Radfordhound"/>
+                    <Label Content="SuperSonic16"/>
+                    <Label Content="Skyth"/>
+                    <Label Content="Slash "/>
+                    <Label Content="Korama"/>
+                    <Label Content="MainMemory"/>
+                    <Label Content="Sajid"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <Label Content="Developing the Mod Loader"/>
+                    <Label Content="Continuing the Development"/>
+                    <Label Content="Helping out with the projects"/>
+                    <Label Content="Helping out with the projects"/>
+                    <Label Content="CPKREDIR"/>
+                    <Label Content="mod-loader-common"/>
+                    <Label Content="For Winrar Support"/>
+                </StackPanel>
+
+            </Grid>
+        </GroupBox>
+        <Button Content="Close" HorizontalAlignment="Left" Margin="408,348,0,0" VerticalAlignment="Top" Width="75" Click="UI_Close_Click" Height="23"/>
+        <Button Content="Github" HorizontalAlignment="Left" Margin="328,348,0,0" VerticalAlignment="Top" Width="75" Click="UI_GitHub_Click" Height="23"/>
+
+    </Grid>
+</Window>

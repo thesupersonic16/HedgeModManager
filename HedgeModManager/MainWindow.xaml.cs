@@ -23,7 +23,7 @@ namespace HedgeModManager
     {
         public static string ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
         public static string ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
-        public static ModsDB ModsDatabase = new ModsDB(ModsDbPath);
+        public static ModsDB ModsDatabase;
         public static CPKREDIRConfig Config;
 
         public MainWindow()
@@ -40,6 +40,7 @@ namespace HedgeModManager
         public void RefreshMods()
         {
             ModsList.Items.Clear();
+            ModsDatabase = new ModsDB(ModsDbPath);
             ModsDatabase.DetectMods();
             ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
@@ -61,7 +62,20 @@ namespace HedgeModManager
 
         public void RefreshUI()
         {
+            var steamGame = App.GetSteamGame(App.CurrentGame);
+            string loaders = (App.IsCPKREDIRInstalled(steamGame.ExeDirectory) ? "CPKREDIR v0.5" : "");
+            bool hasOtherModLoader = File.Exists(Path.Combine(steamGame.RootDirectory, $"d3d{App.CurrentGame.DirectXVersion}.dll"));
+            if (hasOtherModLoader)
+            {
+                if (string.IsNullOrEmpty(loaders))
+                    loaders = Config.ModLoaderVersion;
+                else
+                    loaders += $" & {Config.ModLoaderName} v{Config.ModLoaderVersion}";
+            }
+
             Label_GameStatus.Content = $"Game Name: {App.CurrentGame.GameName}";
+            Label_MLVersion.Content = $"Loaders: {loaders}";
+            Button_OtherLoader.Content = hasOtherModLoader ? $"Uninstall {Config.ModLoaderName}" : $"Install {Config.ModLoaderName}";
         }
 
         public void SaveModsDB()
@@ -151,6 +165,16 @@ namespace HedgeModManager
         private void UI_Play_Click(object sender, RoutedEventArgs e)
         {
             StartGame();
+        }
+
+        private void UI_CPKREDIR_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UI_About_Click(object sender, RoutedEventArgs e)
+        {
+            new AboutWindow().ShowDialog();
         }
 
         // too slow
