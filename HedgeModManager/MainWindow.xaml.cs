@@ -29,8 +29,6 @@ namespace HedgeModManager
         public MainWindow()
         {
             InitializeComponent();
-            UI_Refresh_Click(null, null);
-            DataContext = Config;
         }
 
         public void Refresh()
@@ -91,8 +89,13 @@ namespace HedgeModManager
             //timer.Tick += dispatcherTimer_Tick;
             //timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
             //timer.Start();
-
+            
+            // Config
             Config = new CPKREDIRConfig(ConfigPath);
+            DataContext = Config;
+
+            Refresh();
+
         }
 
 
