@@ -24,7 +24,7 @@ namespace HedgeModManager
         public static string ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
         public static string ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
         public static ModsDB ModsDatabase = new ModsDB(ModsDbPath);
-        public static CPKREDIRConfig Config = new CPKREDIRConfig(ConfigPath);
+        public static CPKREDIRConfig Config;
 
         public MainWindow()
         {
@@ -35,11 +35,11 @@ namespace HedgeModManager
 
         public void Refresh()
         {
-            GameLbl.Content = $"Game Name: {App.CurrentGame.GameName}";
-            RefeshMods();
+            RefreshMods();
+            RefreshUI();
         }
 
-        public void RefeshMods()
+        public void RefreshMods()
         {
             ModsList.Items.Clear();
             ModsDatabase.DetectMods();
@@ -61,6 +61,11 @@ namespace HedgeModManager
             }
         }
 
+        public void RefreshUI()
+        {
+            Label_GameStatus.Content = $"Game Name: {App.CurrentGame.GameName}";
+        }
+
         public void SaveModsDB()
         {
             Config.Save(ConfigPath);
@@ -79,6 +84,17 @@ namespace HedgeModManager
             if(!Config.KeepOpen)
                 Application.Current.Shutdown(0);
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //var timer = new DispatcherTimer();
+            //timer.Tick += dispatcherTimer_Tick;
+            //timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            //timer.Start();
+
+            Config = new CPKREDIRConfig(ConfigPath);
+        }
+
 
         private void UI_MoveMod_Click(object sender, RoutedEventArgs e)
         {
@@ -132,14 +148,6 @@ namespace HedgeModManager
         private void UI_Play_Click(object sender, RoutedEventArgs e)
         {
             StartGame();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            //var timer = new DispatcherTimer();
-            //timer.Tick += dispatcherTimer_Tick;
-            //timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
-            //timer.Start();
         }
 
         // too slow

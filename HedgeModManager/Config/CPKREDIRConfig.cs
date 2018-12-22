@@ -34,7 +34,7 @@ namespace HedgeModManager
             set { Groups["CPKREDIR"]["LogFile"] = value; }
         }
 
-        public int ReadBlockSizeKb
+        public int ReadBlockSizeKB
         {
             get { return (int)Groups["CPKREDIR"]["ReadBlockSizeKB", typeof(int)]; } 
             set { Groups["CPKREDIR"]["ReadBlockSizeKB"] = value.ToString(); }
@@ -71,7 +71,6 @@ namespace HedgeModManager
         }
 
         // HedgeModManager
-
         public bool CheckForUpdates
         {
             get { return (int)Groups["HedgeModManager"]["AutoCheckForUpdates", typeof(int)] != 0; }
@@ -92,9 +91,29 @@ namespace HedgeModManager
 
         public CPKREDIRConfig(string path)
         {
-            using (var stream = File.OpenRead(path))
+            if (File.Exists(path))
+                using (var stream = File.OpenRead(path))
+                    Read(stream);
+            else
             {
-                Read(stream);
+                Groups.Add("CPKREDIR", new IniGroup());
+                Groups.Add("HedgeModManager", new IniGroup());
+                
+                // CPKREDIR
+                Enabled = true;
+                PlaceTocAtEnd = true;
+                HandleCpksWithoutExtFiles = false;
+                LogFile = "cpkredir.log";
+                ReadBlockSizeKB = 4096;
+                ModsDbIni = "mods\\ModsDB.ini";
+                EnableSaveFileRedirection = false;
+                SaveFileFallback = "cpkredir.sav";
+                SaveFileOverride = "";
+
+                // HedgeModManager
+                CheckForUpdates = true;
+                KeepOpen = false;
+                CheckLoaderUpdates = true;
             }
         }
 
@@ -106,23 +125,5 @@ namespace HedgeModManager
             }
         }
 
-        public override void Write(Stream stream)
-        {
-            // forgive me
-            Groups["CPKREDIR"]["LogFile"] = Groups["CPKREDIR"]["LogFile"].StartsWith("\"")
-                ? Groups["CPKREDIR"]["LogFile"]
-                : $"\"{Groups["CPKREDIR"]["LogFile"]}\"";
-            Groups["CPKREDIR"]["ModsDbIni"] = Groups["CPKREDIR"]["ModsDbIni"].StartsWith("\"")
-                ? Groups["CPKREDIR"]["ModsDbIni"]
-                : $"\"{Groups["CPKREDIR"]["ModsDbIni"]}\"";
-            Groups["CPKREDIR"]["SaveFileFallback"] = Groups["CPKREDIR"]["SaveFileFallback"].StartsWith("\"")
-                ? Groups["CPKREDIR"]["SaveFileFallback"]
-                : $"\"{Groups["CPKREDIR"]["SaveFileFallback"]}\"";
-            Groups["CPKREDIR"]["SaveFileOverride"] = Groups["CPKREDIR"]["SaveFileOverride"].StartsWith("\"")
-                ? Groups["CPKREDIR"]["SaveFileOverride"]
-                : $"\"{Groups["CPKREDIR"]["SaveFileOverride"]}\"";
-
-            base.Write(stream);
-        }
     }
 }

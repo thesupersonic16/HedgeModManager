@@ -89,7 +89,10 @@ namespace HedgeModManager
                 writer.WriteLine($"[{group.Key}]");
                 foreach (var val in group.Value.Params)
                 {
-                    writer.WriteLine($"{val.Key}={val.Value}");
+                    if (int.TryParse(val.Value, out int num))
+                        writer.WriteLine($"{val.Key}={val.Value}");
+                    else
+                        writer.WriteLine($"{val.Key}=\"{val.Value}\"");
                 }
             }
             writer.Flush();
