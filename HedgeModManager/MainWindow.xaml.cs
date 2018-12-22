@@ -169,7 +169,7 @@ namespace HedgeModManager
 
         private void UI_CPKREDIR_Click(object sender, RoutedEventArgs e)
         {
-
+            App.InstallCPKREDIR(App.GetSteamGame(App.CurrentGame).ExeDirectory, false);
         }
 
         private void UI_About_Click(object sender, RoutedEventArgs e)

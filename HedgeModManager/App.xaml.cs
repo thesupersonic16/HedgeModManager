@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -35,7 +36,7 @@ namespace HedgeModManager
 
             Steam.Init();
 #if DEBUG
-            SteamGames = Steam.SearchForGames("Sonic Forces");
+            SteamGames = Steam.SearchForGames("Sonic Generations");
 #else
             SteamGames = Steam.SearchForGames();
 #endif
@@ -72,18 +73,10 @@ namespace HedgeModManager
         public static bool IsCPKREDIRInstalled(string executeablePath)
         {
             var data = File.ReadAllBytes(executeablePath);
-
-            for(int i = 11918000; i < data.Length; i += 2)
-            {
-                if (CompareArray(data, i, CPKREDIR, 0, CPKREDIR.Length))
-                {
-                    data = null;
-                    return true;
-                }
-            }
+            var installed = BoyerMooreSearch(data, CPKREDIR) > 0;
 
             data = null;
-            return false;
+            return installed;
         }
 
         /// <summary>
@@ -100,22 +93,22 @@ namespace HedgeModManager
 
             var data = File.ReadAllBytes(executeablePath);
             var offset = -1;
-            for (int i = 11918000; i < data.Length; i += 2)
-            {
-                if (CompareArray(data, i, CPKREDIR, 0, CPKREDIR.Length) || CompareArray(data, i, IMAGEHLP, 0, IMAGEHLP.Length))
-                {
-                    offset = i;
-                    break;
-                }
-            }
+            byte[] rdata = Encoding.ASCII.GetBytes(".rdata");
+            byte[] buffer = install ? IMAGEHLP : CPKREDIR;
+            byte[] buff = new byte[0x300 - 0x160];
+            Array.Copy(data, 0x160, buff, 0, buff.Length);
+            offset = BoyerMooreSearch(buff, rdata) + 0x160;
 
-            if (offset > 0)
+            int size = BitConverter.ToInt32(data, offset + 0x10);
+            int offset_ = BitConverter.ToInt32(data, offset + 0x14);
+            buff = new byte[size];
+            Array.Copy(data, offset_, buff, 0, buff.Length);
+            offset = BoyerMooreSearch(buff, install ? IMAGEHLP : CPKREDIR) + offset_;
+            using (var stream = File.OpenWrite(executeablePath))
             {
-                Array.Copy(install ? CPKREDIR : IMAGEHLP, 0, data, offset, CPKREDIR.Length);
-                File.WriteAllBytes(executeablePath, data);
+                stream.Seek(offset, SeekOrigin.Begin);
+                stream.Write(install ? CPKREDIR : IMAGEHLP, 0, CPKREDIR.Length);
             }
-
-            data = null;
         }
 
         public static bool CompareArray(byte[] src1, int src1Pos, byte[] src2, int src2Pos, int size)
@@ -124,6 +117,46 @@ namespace HedgeModManager
                 if (src1[src1Pos + i] != src2[src2Pos + i])
                     return false;
             return true;
+        }
+
+        static int BoyerMooreSearch(byte[] haystack, byte[] needle)
+        {
+            int[] lookup = new int[256];
+            for (int i = 0; i < lookup.Length; i++) { lookup[i] = needle.Length; }
+
+            for (int i = 0; i < needle.Length; i++)
+            {
+                lookup[needle[i]] = needle.Length - i - 1;
+            }
+
+            int index = needle.Length - 1;
+            var lastByte = needle.Last();
+            while (index < haystack.Length)
+            {
+                var checkByte = haystack[index];
+                if (haystack[index] == lastByte)
+                {
+                    bool found = true;
+                    for (int j = needle.Length - 2; j >= 0; j--)
+                    {
+                        if (haystack[index - needle.Length + j + 1] != needle[j])
+                        {
+                            found = false;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                        return index - needle.Length + 1;
+                    else
+                        index++;
+                }
+                else
+                {
+                    index += lookup[checkByte];
+                }
+            }
+            return -1;
         }
     }
 }
