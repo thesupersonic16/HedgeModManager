@@ -126,5 +126,16 @@ namespace HedgeModManager.Properties {
                 return ResourceManager.GetString("URL_HMM_GITHUB", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete "{0}"?\nThis Action cannot be undone!
+        /// </summary>
+        internal static string STR_UI_DELETEMOD
+        {
+            get
+            {
+                return ResourceManager.GetString("STR_UI_DELETEMOD", resourceCulture);
+            }
+        }
     }
 }

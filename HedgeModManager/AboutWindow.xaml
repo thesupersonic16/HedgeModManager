@@ -11,29 +11,29 @@
         <Label Content="HedgeModManager" HorizontalAlignment="Left" Margin="79,13,0,0" VerticalAlignment="Top" Height="64" Width="379" FontSize="36"/>
         <Label Content="A program designed to help people easily load Hedgehog Engine mods." HorizontalAlignment="Left" Margin="44,76,0,0" VerticalAlignment="Top"/>
         <Label Content="Requires a legally owned version of one of the supported games." HorizontalAlignment="Left" Margin="47,94,0,0" VerticalAlignment="Top"/>
-        <GroupBox Header="Credits (6.1, Needs updating)" HorizontalAlignment="Left" Height="218" Margin="10,125,0,0" VerticalAlignment="Top" Width="473">
+        <GroupBox Header="Credits:" HorizontalAlignment="Left" Height="218" Margin="10,125,0,0" VerticalAlignment="Top" Width="473">
             <Grid Margin="0,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.4*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <Label Content="Radfordhound"/>
                     <Label Content="SuperSonic16"/>
-                    <Label Content="Skyth"/>
-                    <Label Content="Slash "/>
-                    <Label Content="Korama"/>
-                    <Label Content="MainMemory"/>
                     <Label Content="Sajid"/>
+                    <Label Content="Radfordhound"/>
+                    <Label Content="Korama"/>
+                    <Label Content="Skyth"/>
+                    <Label Content="Slash"/>
+                    <Label Content="MainMemory"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <Label Content="Developing the Mod Loader"/>
-                    <Label Content="Continuing the Development"/>
-                    <Label Content="Helping out with the projects"/>
-                    <Label Content="Helping out with the projects"/>
+                    <Label Content="Managing the project"/>
+                    <Label Content="Kickstarting 7.0"/>
+                    <Label Content="Base Design"/>
                     <Label Content="CPKREDIR"/>
+                    <Label Content="Contributing to the project"/>
+                    <Label Content="Contributing to the project"/>
                     <Label Content="mod-loader-common"/>
-                    <Label Content="For Winrar Support"/>
                 </StackPanel>
 
             </Grid>

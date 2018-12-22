@@ -142,6 +142,28 @@ namespace HedgeModManager
 
         // TODO: RemoveMod
 
+        private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
+        {
+            var mod = ModsList.SelectedValue as ModInfo;
+            if (mod == null)
+                return;
+
+            var box = new HedgeMessageBox("WARNING", string.Format(Properties.Resources.STR_UI_DELETEMOD, mod.Title));
+            
+            box.AddButton("  Cancel  ", () =>
+            {
+                box.Close();
+            });
+            box.AddButton("Delete", () =>
+            {
+                ModsDatabase.DeleteMod(ModsList.SelectedItem as ModInfo);
+                Refresh();
+                box.Close();
+            });
+            box.ShowDialog();
+            Refresh();
+        }
+
         private void UI_Refresh_Click(object sender, RoutedEventArgs e)
         {
             Refresh();

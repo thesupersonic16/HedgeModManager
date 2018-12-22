@@ -87,14 +87,13 @@ namespace HedgeModManager
         /// TRUE: Installs CPKREDIR (default)
         /// FALSE: Uninstalls CPKREDIR
         /// </param>
-        public static void InstallCPKREDIR(string executeablePath, bool install = true)
+        public static void InstallCPKREDIR(string executeablePath, bool? install = true)
         {
             File.Copy(executeablePath, $"{executeablePath}.bak", true);
 
             var data = File.ReadAllBytes(executeablePath);
             var offset = -1;
             byte[] rdata = Encoding.ASCII.GetBytes(".rdata");
-            byte[] buffer = install ? IMAGEHLP : CPKREDIR;
             byte[] buff = new byte[0x300 - 0x160];
             Array.Copy(data, 0x160, buff, 0, buff.Length);
             offset = BoyerMooreSearch(buff, rdata) + 0x160;
@@ -103,11 +102,22 @@ namespace HedgeModManager
             int offset_ = BitConverter.ToInt32(data, offset + 0x14);
             buff = new byte[size];
             Array.Copy(data, offset_, buff, 0, buff.Length);
-            offset = BoyerMooreSearch(buff, install ? IMAGEHLP : CPKREDIR) + offset_;
+
+            bool IsCPKREDIR = false;
+            offset = BoyerMooreSearch(buff, IMAGEHLP);
+            IsCPKREDIR = offset == -1;
+            if (offset == -1)
+                offset = BoyerMooreSearch(buff, CPKREDIR);
+            offset += offset_;
+            byte[] buffer = install == true ? IMAGEHLP : CPKREDIR;
+            // Toggle
+            if (install == null)
+                buffer = IsCPKREDIR ? IMAGEHLP : CPKREDIR;
+
             using (var stream = File.OpenWrite(executeablePath))
             {
                 stream.Seek(offset, SeekOrigin.Begin);
-                stream.Write(install ? CPKREDIR : IMAGEHLP, 0, CPKREDIR.Length);
+                stream.Write(buffer, 0, CPKREDIR.Length);
             }
         }
 

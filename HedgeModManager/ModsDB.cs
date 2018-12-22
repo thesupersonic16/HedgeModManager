@@ -88,5 +88,11 @@ namespace HedgeModManager
                 Write(stream);
             }
         }
+
+        public void DeleteMod(ModInfo mod)
+        {
+            Mods.Remove(mod);
+            Directory.Delete(mod.RootDirectory, true);
+        }
     }
 }

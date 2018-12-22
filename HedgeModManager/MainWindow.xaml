@@ -90,7 +90,7 @@
                     <RowDefinition Height="0.6*"/>
                 </Grid.RowDefinitions>
 
-                <Button Content="Remove Mod"                       Grid.Column="0" Grid.Row="0" Margin="5"/>
+                <Button Content="Remove Mod"                       Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_RemoveMod_Click"/>
                 <Button Content="Refresh Mod List" Width="Auto"    Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
                 <Button Content="Add Mod"          Width="Auto"    Grid.Column="2" Grid.Row="0" Margin="5"/>
 
