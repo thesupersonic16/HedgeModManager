@@ -118,6 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DAT_CPKREDIR_DLL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DAT_CPKREDIR_DLL.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="DAT_CPKREDIR_TXT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DAT_CPKREDIR_TXT.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="DAT_FML_DLL" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ModLoader\ForcesModLoader.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -133,6 +139,10 @@
   <data name="STR_UI_DELETEMOD" xml:space="preserve">
     <value>Are you sure you want to delete "{0}"?
 This Action cannot be undone!</value>
+  </data>
+  <data name="STR_UI_NO_MODS" xml:space="preserve">
+    <value>Hedge Mod Manager did not detect any mods folder.
+Would you like create a mods folder?</value>
   </data>
   <data name="URL_FML_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll</value>

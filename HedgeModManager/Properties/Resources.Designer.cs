@@ -63,6 +63,37 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] DAT_CPKREDIR_DLL {
+            get {
+                object obj = ResourceManager.GetObject("DAT_CPKREDIR_DLL", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CPKREDIR v0.5 - Korama&apos;s CPK file redirector (for Sonic Generations and more)
+        ///===============================================================================
+        ///E-Mail: Koramacode(at)gmail.com
+        ///
+        ///
+        ///0. What&apos;s new
+        ///-------------
+        ///v0.5 - improved patching method, should make CPKREDIR compatible with games
+        ///  other than Sonic Generations. Like Sonic Lost World.
+        ///  Save file redirection is specific to Sonic Generations, though.
+        ///  Also enhanced cpkredirInst, and added DllInjector32.
+        ///
+        ///v0.41 - fixed save file red [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DAT_CPKREDIR_TXT {
+            get {
+                return ResourceManager.GetString("DAT_CPKREDIR_TXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] DAT_FML_DLL {
             get {
                 object obj = ResourceManager.GetObject("DAT_FML_DLL", resourceCulture);
@@ -101,6 +132,26 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete &quot;{0}&quot;?
+        ///This Action cannot be undone!.
+        /// </summary>
+        internal static string STR_UI_DELETEMOD {
+            get {
+                return ResourceManager.GetString("STR_UI_DELETEMOD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hedge Mod Manager did not detect any mods folder.
+        ///Would you like create a mods folder?.
+        /// </summary>
+        internal static string STR_UI_NO_MODS {
+            get {
+                return ResourceManager.GetString("STR_UI_NO_MODS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll.
         /// </summary>
         internal static string URL_FML_DL {
@@ -124,17 +175,6 @@ namespace HedgeModManager.Properties {
         internal static string URL_HMM_GITHUB {
             get {
                 return ResourceManager.GetString("URL_HMM_GITHUB", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete "{0}"?\nThis Action cannot be undone!
-        /// </summary>
-        internal static string STR_UI_DELETEMOD
-        {
-            get
-            {
-                return ResourceManager.GetString("STR_UI_DELETEMOD", resourceCulture);
             }
         }
     }

@@ -57,9 +57,9 @@
             </TabItem>
             <TabItem Header="Settings">
                 <Grid>
-                    <GroupBox Header="Game &amp; ModLoader" HorizontalAlignment="Stretch"   Height="170" Margin="10,10,10,0"    VerticalAlignment="Top" Width="516">
+                    <GroupBox Header="Game &amp; ModLoader" HorizontalAlignment="Stretch"   Height="170" Margin="10,10,10,0"    VerticalAlignment="Top">
                         <Grid>
-                            <Button   x:Name="Button_CPKREDIR"      Content="Uninstall CPKREDIR"            Click="UI_CPKREDIR_Click"                                                 Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164"/>
+                            <Button   x:Name="Button_CPKREDIR"      Content="Install CPKREDIR"            Click="UI_CPKREDIR_Click"                                                 Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164"/>
                             <Button   x:Name="Button_OtherLoader"   Content="Uninstall {0}"                                                                  Margin="10,38,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164"/>
                             <CheckBox                               Content="Enable CPKREDIR"               IsChecked="{Binding Enabled}"                    Margin="10,66,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                             <CheckBox                               Content="Enable Debug Console"          IsChecked="{Binding EnableDebugConsole}"         Margin="10,86,342,34" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -68,7 +68,7 @@
                             <Label    x:Name="Label_MLVersion"      Content="Loaders: Unknown"                                                               Margin="179,35,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="HedgeModManager"      HorizontalAlignment="Stretch"   Height="230" Margin="10,185,10,0"   VerticalAlignment="Top" Width="516">
+                    <GroupBox Header="HedgeModManager"      HorizontalAlignment="Stretch"   Height="230" Margin="10,185,10,0"   VerticalAlignment="Top">
                         <Grid>
                             <CheckBox Content="Check for ModLoader Updates"                     IsChecked="{Binding CheckLoaderUpdates}"    Margin="10,10,194,150"/>
                             <CheckBox Content="Keep HedgeModManager open after starting a game" IsChecked="{Binding KeepOpen}"              Margin="10,27,194,123"/>

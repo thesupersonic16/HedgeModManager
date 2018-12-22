@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Res = HedgeModManager.Properties.Resources;
 
 namespace HedgeModManager
 {
@@ -118,6 +119,12 @@ namespace HedgeModManager
             {
                 stream.Seek(offset, SeekOrigin.Begin);
                 stream.Write(buffer, 0, CPKREDIR.Length);
+            }
+
+            if (install == true)
+            {
+                File.WriteAllBytes(Path.Combine(Path.GetDirectoryName(executeablePath), "cpkredir.dll"), Res.DAT_CPKREDIR_DLL);
+                File.WriteAllBytes(Path.Combine(Path.GetDirectoryName(executeablePath), "cpkredir.txt"), Res.DAT_CPKREDIR_DLL);
             }
         }
 

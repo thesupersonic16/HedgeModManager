@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HedgeModManager
 {
@@ -26,12 +27,39 @@ namespace HedgeModManager
             if (File.Exists(iniPath))
                 using (var stream = File.OpenRead(iniPath))
                     Read(stream);
+            else
+            {
+                Application.Current.MainWindow?.Hide();
+                var box = new HedgeMessageBox("No Mods Found", Properties.Resources.STR_UI_NO_MODS);
+
+                box.AddButton("Yes", () =>
+                {
+                    SetupFirstTime();
+                    box.Close();
+                });
+
+                box.AddButton("No", () => Environment.Exit(0));
+
+                box.ShowDialog();
+                Application.Current?.MainWindow?.Show();
+                return;
+            }
+
             if (!Groups.ContainsKey("Main"))
                 Groups.Add("Main", new IniGroup());
             if (!Groups.ContainsKey("Mods"))
                 Groups.Add("Mods", new IniGroup());
+
             DetectMods();
             GetEnabledMods();
+        }
+
+        public void SetupFirstTime()
+        {
+            Directory.CreateDirectory(RootDirectory);
+            Groups.Add("Main", new IniGroup());
+            Groups.Add("Mods", new IniGroup());
+            SaveDB();
         }
 
         public void DetectMods()
