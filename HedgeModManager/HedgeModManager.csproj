@@ -41,6 +41,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -67,10 +68,17 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Config\CPKREDIRConfig.cs" />
+    <Compile Include="ExceptionWindow.xaml.cs">
+      <DependentUpon>ExceptionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HedgeMessageBox.xaml.cs">
       <DependentUpon>HedgeMessageBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Steam.cs" />
+    <Page Include="ExceptionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="HedgeMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -135,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\cpkredir.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

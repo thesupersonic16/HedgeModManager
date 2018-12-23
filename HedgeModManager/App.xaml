@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:HedgeModManager"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#FF333337"/>
+            <Setter Property="BorderBrush" Value="#FF434346" />
+        </Style>
         <!-- Tabs -->
         <Style TargetType="TabControl">
             <Setter Property="Background" Value="Transparent"/>

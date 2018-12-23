@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using HMMResources = HedgeModManager.Properties.Resources;
 
 namespace HedgeModManager
@@ -19,21 +23,34 @@ namespace HedgeModManager
     {
 
         public static string StartDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
+        public static string ProgramName = "HedgeModManager";
+        public static string VersionString = "7.0-dev";
+        public static string[] Args;
         public static Game CurrentGame = Games.Unknown;
-
         public static List<SteamGame> SteamGames = null;
-
         public static bool Restart = false;
 
         public static byte[] CPKREDIR = new byte[] { 0x63, 0x70, 0x6B, 0x72, 0x65, 0x64, 0x69, 0x72 };
         public static byte[] IMAGEHLP = new byte[] { 0x69, 0x6D, 0x61, 0x67, 0x65, 0x68, 0x6C, 0x70 };
 
         [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
         {
             // Use TLSv1.2
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            var application = new App();
+
+            Args = args;
+
+#if !DEBUG
+            // Enable our Crash Window if Compiled in Release
+            if (!Debugger.IsAttached)
+            {
+                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionWindow.UnhandledExceptionEventHandler);
+            }
+#endif
+
 
             Steam.Init();
 #if DEBUG
@@ -56,7 +73,6 @@ namespace HedgeModManager
             do
             {
                 Restart = false;
-                var application = new App();
                 application.InitializeComponent();
                 application.Run();
             }
@@ -171,5 +187,12 @@ namespace HedgeModManager
             }
             return -1;
         }
+
+        // https://stackoverflow.com/questions/11660184/c-sharp-check-if-run-as-administrator
+        public static bool RunningAsAdmin()
+        {
+            return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
     }
 }

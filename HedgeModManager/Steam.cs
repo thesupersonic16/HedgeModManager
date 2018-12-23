@@ -232,5 +232,10 @@ namespace HedgeModManager
         {
             Process.Start($"steam://rungameid/{GameID}");
         }
+
+        public override string ToString()
+        {
+            return $"SteamGame {{SteamID: {GameID}, GameName: {GameName}, EXE: {ExeDirectory}}}";
+        }
     }
 }

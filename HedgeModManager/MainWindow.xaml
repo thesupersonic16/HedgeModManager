@@ -39,8 +39,8 @@
                                 </GridViewColumn>
                                 <GridViewColumn Header="Version"       Width="50" DisplayMemberBinding="{Binding Version}"/>
                                 <GridViewColumn Header="Author"        Width="88" DisplayMemberBinding="{Binding Author}"/>
-                                <GridViewColumn Header="Supports Save" Width="84"  DisplayMemberBinding="{Binding SupportsSave}"/>
-                                <GridViewColumn Header="Updates"       Width="60"  DisplayMemberBinding="{Binding HasUpdates}"/>
+                                <GridViewColumn Header="Supports Save" Width="84" DisplayMemberBinding="{Binding SupportsSave}"/>
+                                <GridViewColumn Header="Updates"       Width="60" DisplayMemberBinding="{Binding HasUpdates}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
