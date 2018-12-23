@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 using HMMResources = HedgeModManager.Properties.Resources;
 
 namespace HedgeModManager
@@ -40,33 +39,56 @@ namespace HedgeModManager
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             var application = new App();
-
             Args = args;
 
 #if !DEBUG
             // Enable our Crash Window if Compiled in Release
-            if (!Debugger.IsAttached)
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
-                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionWindow.UnhandledExceptionEventHandler);
-            }
+                ExceptionWindow.UnhandledExceptionEventHandler(e.ExceptionObject as Exception, e.IsTerminating);
+            };
 #endif
 
 
             Steam.Init();
 #if DEBUG
+            // Find a Steam Game
             SteamGames = Steam.SearchForGames("Sonic Generations");
-#else
-            SteamGames = Steam.SearchForGames();
-#endif
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
+            StartDirectory = steamGame.RootDirectory;
+#else
+            SteamGames = Steam.SearchForGames();
+            if (File.Exists(Path.Combine(StartDirectory, "SonicGenerations.exe")))
+                CurrentGame = Games.SonicGenerations;
+            if (File.Exists(Path.Combine(StartDirectory, "slw.exe")))
+                CurrentGame = Games.SonicLostWorld;
+            if (File.Exists(Path.Combine(StartDirectory, "Sonic Forces.exe")))
+                CurrentGame = Games.SonicForces;
+#endif
+
+            if (CurrentGame == Games.Unknown)
+            {
+                var box = new HedgeMessageBox("No Game Detected!", HMMResources.STR_MSG_NOGAME);
+
+                box.AddButton("  Cancel  ", () =>
+                {
+                    box.Close();
+                });
+                box.AddButton("  Run Installer  ", () =>
+                {
+                    throw new NotImplementedException("Auto Installer is not yet implemented");
+                });
+                box.ShowDialog();
+                return;
+            }
 
             if (CurrentGame.SupportsCPKREDIR)
             {
-                if (!File.Exists(Path.Combine(steamGame.RootDirectory, "cpkredir.dll")))
+                if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))
                 {
-                    File.WriteAllBytes(Path.Combine(steamGame.RootDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
-                    File.WriteAllBytes(Path.Combine(steamGame.RootDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
+                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
+                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
                 }
             }
 
@@ -79,6 +101,10 @@ namespace HedgeModManager
             while (Restart);
         }
 
+        /// <summary>
+        /// Sets the Current Game to the passed Steam Game
+        /// </summary>
+        /// <param name="steamGame">Steam Game to select</param>
         public static void SelectSteamGame(SteamGame steamGame)
         {
             if (steamGame == null)
@@ -92,14 +118,27 @@ namespace HedgeModManager
                 CurrentGame = Games.SonicForces;
         }
 
+        /// <summary>
+        /// Finds and returns an instance of SteamGame from a HMM Game
+        /// </summary>
+        /// <param name="game">HMM Game</param>
+        /// <returns>Steam Game</returns>
         public static SteamGame GetSteamGame(Game game)
         {
             return SteamGames.FirstOrDefault(t => t.GameName == game.GameName);
         }
 
-        public static bool IsCPKREDIRInstalled(string executeablePath)
+        /// <summary>
+        /// Checks if CPKREDIR is currently Installed
+        /// </summary>
+        /// <param name="executablePath">Path to the executable</param>
+        /// <returns>
+        /// TRUE: CPKREDIR is installed
+        /// FALSE: CPKREDIR is not Installed
+        /// </returns>
+        public static bool IsCPKREDIRInstalled(string executablePath)
         {
-            var data = File.ReadAllBytes(executeablePath);
+            var data = File.ReadAllBytes(executablePath);
             var installed = BoyerMooreSearch(data, CPKREDIR) > 0;
 
             data = null;
@@ -109,24 +148,32 @@ namespace HedgeModManager
         /// <summary>
         /// Installs or Uninstalls CPKREDIR
         /// </summary>
-        /// <param name="executeablePath">Path to the executeable</param>
+        /// <param name="executablePath">Path to the executable</param>
         /// <param name="install">
         /// TRUE: Installs CPKREDIR (default)
         /// FALSE: Uninstalls CPKREDIR
+        /// NULL: Toggle
         /// </param>
-        public static void InstallCPKREDIR(string executeablePath, bool? install = true)
+        public static void InstallCPKREDIR(string executablePath, bool? install = true)
         {
-            File.Copy(executeablePath, $"{executeablePath}.bak", true);
+            // Backup Executable
+            File.Copy(executablePath, $"{executablePath}.bak", true);
 
-            var data = File.ReadAllBytes(executeablePath);
+            // Read Executable
+            var data = File.ReadAllBytes(executablePath);
             var offset = -1;
+
+            // Search for the .rdata entry
             byte[] rdata = Encoding.ASCII.GetBytes(".rdata");
             byte[] buff = new byte[0x300 - 0x160];
             Array.Copy(data, 0x160, buff, 0, buff.Length);
             offset = BoyerMooreSearch(buff, rdata) + 0x160;
 
+            // Read Segment Entry Data
             int size = BitConverter.ToInt32(data, offset + 0x10);
             int offset_ = BitConverter.ToInt32(data, offset + 0x14);
+            
+            // Read Segment
             buff = new byte[size];
             Array.Copy(data, offset_, buff, 0, buff.Length);
 
@@ -136,12 +183,15 @@ namespace HedgeModManager
             if (offset == -1)
                 offset = BoyerMooreSearch(buff, CPKREDIR);
             offset += offset_;
-            byte[] buffer = install == true ? IMAGEHLP : CPKREDIR;
+            byte[] buffer = null;
             // Toggle
             if (install == null)
                 buffer = IsCPKREDIR ? IMAGEHLP : CPKREDIR;
+            else
+                buffer = install == true ? IMAGEHLP : CPKREDIR;
 
-            using (var stream = File.OpenWrite(executeablePath))
+            // Write Patch to file
+            using (var stream = File.OpenWrite(executablePath))
             {
                 stream.Seek(offset, SeekOrigin.Begin);
                 stream.Write(buffer, 0, CPKREDIR.Length);

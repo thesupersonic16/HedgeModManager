@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace HedgeModManager
 {
@@ -73,9 +71,11 @@ namespace HedgeModManager
             return body.ToString();
         }
 
-        public static void UnhandledExceptionEventHandler(object sender, UnhandledExceptionEventArgs e)
+        public static void UnhandledExceptionEventHandler(Exception e, bool fatal = false)
         {
-            var window = new ExceptionWindow(e.ExceptionObject as Exception);
+            var window = new ExceptionWindow(e);
+            if (fatal)
+                window.Header.Content = "HedgeModManager has ran into a Fatal Error!";
             window.ShowDialog();
         }
 

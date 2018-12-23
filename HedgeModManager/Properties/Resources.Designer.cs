@@ -121,6 +121,18 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HedgeModManager could not detect any supported games
+        ///in the current directory!
+        ///
+        ///Do you want run the HMM Auto Installer?.
+        /// </summary>
+        internal static string STR_MSG_NOGAME {
+            get {
+                return ResourceManager.GetString("STR_MSG_NOGAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete &quot;{0}&quot;?
         ///This Action cannot be undone!.
         /// </summary>
