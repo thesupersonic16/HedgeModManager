@@ -74,6 +74,7 @@
         </Style>
         <Style TargetType="TextBox">
             <Setter Property="Background" Value="#FF333337"/>
+            <Setter Property="Foreground" Value="#A4A4A4"/>
             <Setter Property="BorderBrush" Value="#FF434346" />
         </Style>
     </Window.Resources>
