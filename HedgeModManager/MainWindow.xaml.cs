@@ -70,7 +70,7 @@ namespace HedgeModManager
             if (hasOtherModLoader)
             {
                 if (string.IsNullOrEmpty(loaders))
-                    loaders = Config.ModLoaderVersion;
+                    loaders = $"{Config.ModLoaderName} v{Config.ModLoaderVersion}";
                 else
                     loaders += $" & {Config.ModLoaderName} v{Config.ModLoaderVersion}";
             }

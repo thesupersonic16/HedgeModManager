@@ -71,23 +71,12 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CPKREDIR v0.5 - Korama&apos;s CPK file redirector (for Sonic Generations and more)
-        ///===============================================================================
-        ///E-Mail: Koramacode(at)gmail.com
-        ///
-        ///
-        ///0. What&apos;s new
-        ///-------------
-        ///v0.5 - improved patching method, should make CPKREDIR compatible with games
-        ///  other than Sonic Generations. Like Sonic Lost World.
-        ///  Save file redirection is specific to Sonic Generations, though.
-        ///  Also enhanced cpkredirInst, and added DllInjector32.
-        ///
-        ///v0.41 - fixed save file red [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static string DAT_CPKREDIR_TXT {
+        internal static byte[] DAT_CPKREDIR_TXT {
             get {
-                return ResourceManager.GetString("DAT_CPKREDIR_TXT", resourceCulture);
+                object obj = ResourceManager.GetObject("DAT_CPKREDIR_TXT", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

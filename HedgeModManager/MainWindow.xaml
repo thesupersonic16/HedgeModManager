@@ -30,17 +30,17 @@
                     <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" Margin="0,0,31.5,0">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Name" Width="120">
+                                <GridViewColumn Header="Name" Width="200">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <CheckBox Content="{Binding Title}" IsChecked="{Binding Enabled}"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Version"       Width="100" DisplayMemberBinding="{Binding Version}"/>
-                                <GridViewColumn Header="Author"        Width="100" DisplayMemberBinding="{Binding Author}"/>
-                                <GridViewColumn Header="Supports Save" Width="90"  DisplayMemberBinding="{Binding SupportsSave}"/>
-                                <GridViewColumn Header="Updates"       Width="70"  DisplayMemberBinding="{Binding HasUpdates}"/>
+                                <GridViewColumn Header="Version"       Width="50" DisplayMemberBinding="{Binding Version}"/>
+                                <GridViewColumn Header="Author"        Width="88" DisplayMemberBinding="{Binding Author}"/>
+                                <GridViewColumn Header="Supports Save" Width="84"  DisplayMemberBinding="{Binding SupportsSave}"/>
+                                <GridViewColumn Header="Updates"       Width="60"  DisplayMemberBinding="{Binding HasUpdates}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>

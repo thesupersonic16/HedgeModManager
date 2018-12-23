@@ -131,10 +131,10 @@
     <Resource Include="Resources\Graphics\icon256.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\DAT_CPKREDIR_DLL.dll" />
+    <None Include="Resources\cpkredir.dll" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\DAT_CPKREDIR_TXT.txt" />
+    <None Include="Resources\cpkredir.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

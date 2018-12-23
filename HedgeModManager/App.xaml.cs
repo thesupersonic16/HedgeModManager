@@ -8,7 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Res = HedgeModManager.Properties.Resources;
+using HMMResources = HedgeModManager.Properties.Resources;
 
 namespace HedgeModManager
 {
@@ -41,7 +41,17 @@ namespace HedgeModManager
 #else
             SteamGames = Steam.SearchForGames();
 #endif
-            SelectSteamGame(SteamGames.FirstOrDefault());
+            var steamGame = SteamGames.FirstOrDefault();
+            SelectSteamGame(steamGame);
+
+            if (CurrentGame.SupportsCPKREDIR)
+            {
+                if (!File.Exists(Path.Combine(steamGame.RootDirectory, "cpkredir.dll")))
+                {
+                    File.WriteAllBytes(Path.Combine(steamGame.RootDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
+                    File.WriteAllBytes(Path.Combine(steamGame.RootDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
+                }
+            }
 
             do
             {
@@ -120,23 +130,9 @@ namespace HedgeModManager
                 stream.Seek(offset, SeekOrigin.Begin);
                 stream.Write(buffer, 0, CPKREDIR.Length);
             }
-
-            if (install == true)
-            {
-                File.WriteAllBytes(Path.Combine(Path.GetDirectoryName(executeablePath), "cpkredir.dll"), Res.DAT_CPKREDIR_DLL);
-                File.WriteAllBytes(Path.Combine(Path.GetDirectoryName(executeablePath), "cpkredir.txt"), Res.DAT_CPKREDIR_DLL);
-            }
         }
 
-        public static bool CompareArray(byte[] src1, int src1Pos, byte[] src2, int src2Pos, int size)
-        {
-            for (int i = 0; i < size; ++i)
-                if (src1[src1Pos + i] != src2[src2Pos + i])
-                    return false;
-            return true;
-        }
-
-        static int BoyerMooreSearch(byte[] haystack, byte[] needle)
+        public static int BoyerMooreSearch(byte[] haystack, byte[] needle)
         {
             int[] lookup = new int[256];
             for (int i = 0; i < lookup.Length; i++) { lookup[i] = needle.Length; }
