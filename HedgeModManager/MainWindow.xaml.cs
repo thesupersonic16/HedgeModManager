@@ -47,15 +47,15 @@ namespace HedgeModManager
             ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
 
             // Re-arrange the mods
-            for (int i = 0; i < (int)ModsDatabase["Main"]["ActiveModCount", typeof(int)]; i++)
+            for (int i = (int)ModsDatabase["Main"]["ActiveModCount", typeof(int)]; i >= 0; --i)
             {
                 for (int i2 = 0; i2 < ModsList.Items.Count; i2++)
                 {
-                    ModInfo mod = (ModInfo) ModsList.Items[i2];
+                    var mod = ModsList.Items[i2] as ModInfo;
                     if (ModsDatabase["Main"][$"ActiveMod{i}"] == Path.GetFileName(mod.RootDirectory))
                     {
                         ModsList.Items.Remove(mod);
-                        ModsList.Items.Insert(i, mod);
+                        ModsList.Items.Insert(0, mod);
                     }
                 }
             }
@@ -201,6 +201,17 @@ namespace HedgeModManager
         private void UI_About_Click(object sender, RoutedEventArgs e)
         {
             new AboutWindow().ShowDialog();
+        }
+
+        private void UI_ModsList_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                // Try Install mods from all files
+                files.ToList().ForEach(t => ModsDatabase.InstallMod(t));
+                Refresh();
+            }
         }
 
         // too slow
