@@ -21,11 +21,8 @@ namespace HedgeModManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static string ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
-        public static string ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
-        public static CPKREDIRConfig Config;
 
         public MainWindow()
         {
@@ -41,7 +38,7 @@ namespace HedgeModManager
         public void RefreshMods()
         {
             ModsList.Items.Clear();
-            ModsDatabase = new ModsDB(ModsDbPath);
+            ModsDatabase = new ModsDB(App.ModsDbPath);
             ModsDatabase.DetectMods();
             ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
@@ -70,24 +67,24 @@ namespace HedgeModManager
             if (hasOtherModLoader)
             {
                 if (string.IsNullOrEmpty(loaders))
-                    loaders = $"{Config.ModLoaderName} v{Config.ModLoaderVersion}";
+                    loaders = $"{App.Config.ModLoaderName} v{App.Config.ModLoaderVersion}";
                 else
-                    loaders += $" & {Config.ModLoaderName} v{Config.ModLoaderVersion}";
+                    loaders += $" & {App.Config.ModLoaderName} v{App.Config.ModLoaderVersion}";
             }
 
             Label_GameStatus.Content = $"Game Name: {App.CurrentGame.GameName}";
             Label_MLVersion.Content = $"Loaders: {loaders}";
-            Button_OtherLoader.Content = hasOtherModLoader ? $"Uninstall {Config.ModLoaderName}" : $"Install {Config.ModLoaderName}";
+            Button_OtherLoader.Content = hasOtherModLoader ? $"Uninstall {App.Config.ModLoaderName}" : $"Install {App.Config.ModLoaderName}";
             Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} CPKREDIR";
         }
 
         public void SaveModsDB()
         {
-            Config.Save(ConfigPath);
+            App.Config.Save(App.ConfigPath);
             ModsDatabase.Mods.Clear();
             foreach (var mod in ModsList.Items)
             {
-                ModsDatabase.Mods.Add((ModInfo)mod);
+                ModsDatabase.Mods.Add(mod as ModInfo);
             }
             ModsDatabase.SaveDB();
         }
@@ -96,7 +93,7 @@ namespace HedgeModManager
         {
             App.GetSteamGame(App.CurrentGame).StartGame();
 
-            if(!Config.KeepOpen)
+            if(!App.Config.KeepOpen)
                 Application.Current.Shutdown(0);
         }
 
@@ -107,9 +104,8 @@ namespace HedgeModManager
             //timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
             //timer.Start();
             
-            // Config
-            Config = new CPKREDIRConfig(ConfigPath);
-            DataContext = Config;
+            // App.Config
+            DataContext = App.Config;
 
             Refresh();
 
@@ -212,6 +208,12 @@ namespace HedgeModManager
                 files.ToList().ForEach(t => ModsDatabase.InstallMod(t));
                 Refresh();
             }
+        }
+
+        private void UI_OtherLoader_Click(object sender, RoutedEventArgs e)
+        {
+            App.InstallOtherLoader(true);
+            RefreshUI();
         }
 
         // too slow

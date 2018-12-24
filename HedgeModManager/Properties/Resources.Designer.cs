@@ -178,5 +178,14 @@ namespace HedgeModManager.Properties {
                 return ResourceManager.GetString("URL_HMM_GITHUB", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini.
+        /// </summary>
+        internal static string URL_HMM_LOADERS {
+            get {
+                return ResourceManager.GetString("URL_HMM_LOADERS", resourceCulture);
+            }
+        }
     }
 }

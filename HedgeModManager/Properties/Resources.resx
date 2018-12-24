@@ -159,4 +159,7 @@ Would you like create a mods folder?</value>
   <data name="URL_HMM_GITHUB" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager</value>
   </data>
+  <data name="URL_HMM_LOADERS" xml:space="preserve">
+    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini</value>
+  </data>
 </root>

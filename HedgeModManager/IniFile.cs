@@ -15,6 +15,8 @@ namespace HedgeModManager
         {
             get
             {
+                if (!Groups.ContainsKey(key))
+                    Groups.Add(key, new IniGroup());
                 Groups.TryGetValue(key, out IniGroup grp);
                 return grp;
             }

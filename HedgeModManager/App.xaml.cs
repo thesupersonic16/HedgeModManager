@@ -24,10 +24,14 @@ namespace HedgeModManager
         public static string StartDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static string ProgramName = "HedgeModManager";
         public static string VersionString = "7.0-dev";
+        public static string ModsDbPath;
+        public static string ConfigPath;
         public static string[] Args;
         public static Game CurrentGame = Games.Unknown;
+        public static CPKREDIRConfig Config;
         public static List<SteamGame> SteamGames = null;
         public static bool Restart = false;
+
 
         public static byte[] CPKREDIR = new byte[] { 0x63, 0x70, 0x6B, 0x72, 0x65, 0x64, 0x69, 0x72 };
         public static byte[] IMAGEHLP = new byte[] { 0x69, 0x6D, 0x61, 0x67, 0x65, 0x68, 0x6C, 0x70 };
@@ -66,6 +70,8 @@ namespace HedgeModManager
             if (File.Exists(Path.Combine(StartDirectory, "Sonic Forces.exe")))
                 CurrentGame = Games.SonicForces;
 #endif
+            ModsDbPath = Path.Combine(StartDirectory, "Mods");
+            ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
 
             if (CurrentGame == Games.Unknown)
             {
@@ -94,6 +100,7 @@ namespace HedgeModManager
 
             do
             {
+                Config = new CPKREDIRConfig(ConfigPath);
                 Restart = false;
                 application.InitializeComponent();
                 application.Run();
@@ -195,6 +202,46 @@ namespace HedgeModManager
             {
                 stream.Seek(offset, SeekOrigin.Begin);
                 stream.Write(buffer, 0, CPKREDIR.Length);
+            }
+        }
+
+        public static void InstallOtherLoader(bool toggle = true)
+        {
+            string DLLFileName = Path.Combine(StartDirectory, $"d3d{CurrentGame.DirectXVersion}.dll");
+
+            if (File.Exists(DLLFileName) && toggle)
+            {
+                File.Delete(DLLFileName);
+                return;
+            }
+
+            // Downloads the Loader
+            using (var client = new WebClient())
+                client.DownloadFile(CurrentGame.ModLoaderDownloadURL, DLLFileName);
+            var ini = new IniFile();
+            // Get ModLoader List
+            using (var stream = WebRequest.Create(HMMResources.URL_HMM_LOADERS).GetResponse().GetResponseStream())
+                ini.Read(stream);
+            
+            if (ini.Groups.ContainsKey(CurrentGame.GameName))
+            {
+                var group = ini[CurrentGame.GameName];
+
+                if (group.Params.ContainsKey("LoaderVersion"))
+                    Config.ModLoaderVersion = group["LoaderVersion"];
+                if (group.Params.ContainsKey("LoaderName2"))
+                    Config.ModLoaderName = group["LoaderName2"];
+            }
+
+            // Checks if the loader is downloaded and saved, If it isn't then write the local copy
+            if (!File.Exists(DLLFileName))
+            {
+                // Install local copy
+                var loader = CurrentGame.ModLoaderData;
+                if (loader != null)
+                    File.WriteAllBytes(DLLFileName, loader);
+                else
+                    throw new NotImplementedException("No Loader is available!");
             }
         }
 
