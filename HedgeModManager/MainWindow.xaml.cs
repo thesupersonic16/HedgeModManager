@@ -67,9 +67,9 @@ namespace HedgeModManager
             if (hasOtherModLoader)
             {
                 if (string.IsNullOrEmpty(loaders))
-                    loaders = $"{App.Config.ModLoaderName} v{App.Config.ModLoaderVersion}";
+                    loaders = $"{App.Config.ModLoaderName}";
                 else
-                    loaders += $" & {App.Config.ModLoaderName} v{App.Config.ModLoaderVersion}";
+                    loaders += $" & {App.Config.ModLoaderName}";
             }
 
             Label_GameStatus.Content = $"Game Name: {App.CurrentGame.GameName}";
