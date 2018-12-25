@@ -1,0 +1,28 @@
+﻿<Window x:Class="HedgeModManager.DownloadWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HedgeModManager"
+        mc:Ignorable="d"
+        Title="Hedge Mod Manager" Height="150" Width="800" 
+        Background="#FF2D2D30" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="ProgressBar">
+            <Setter Property="Background" Value="#FF2D2D30"/>
+            <Setter Property="Foreground" Value="#0066CC"/>
+            <Setter Property="BorderBrush" Value="#0066CC"/>
+        </Style>
+    </Window.Resources>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="Normal"/>
+    </Window.TaskbarItemInfo>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="Header" Text="HEADER" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0"/>
+        <ProgressBar x:Name="Progress" Grid.Row="1" Margin="20"/>
+    </Grid>
+</Window>
