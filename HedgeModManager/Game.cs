@@ -10,16 +10,24 @@ namespace HedgeModManager
 
     public class Games
     {
-        //                                                     Game Name         Custom  CPKREDIR DX ModLoader Download URL    ModLoader Data
+        //                                                     Game Name          Executeable Name       Custom  CPKREDIR DX ModLoader Download URL    ModLoader Data
         public static Game Unknown              = new Game();
-        public static Game SonicGenerations     = new Game("Sonic Generations"  , true  , true  , 9 , Resources.URL_GCL_DL, Resources.DAT_GCL_DLL);
-        public static Game SonicLostWorld       = new Game("Sonic Lost World"   , false , true  , 9 , null, null);
-        public static Game SonicForces          = new Game("Sonic Forces"       , true  , false , 11, Resources.URL_FML_DL, Resources.DAT_FML_DLL);
+        public static Game SonicGenerations     = new Game("Sonic Generations"  , "SonicGenerations.exe", true  , true  , 9 , Resources.URL_GCL_DL, Resources.DAT_GCL_DLL);
+        public static Game SonicLostWorld       = new Game("Sonic Lost World"   , "slw.exe"             , false , true  , 9 , null, null);
+        public static Game SonicForces          = new Game("Sonic Forces"       , "Sonic Forces.exe"    , true  , false , 11, Resources.URL_FML_DL, Resources.DAT_FML_DLL);
+
+        public static IEnumerable<Game> GetSupportedGames()
+        {
+            yield return SonicGenerations;
+            yield return SonicLostWorld;
+            yield return SonicForces;
+        }
     }
 
     public class Game
     {
         public string GameName = "Unnamed Game";
+        public string ExecuteableName = string.Empty;
         public string ModLoaderDownloadURL = "";
         public byte[] ModLoaderData = null;
         public int DirectXVersion = 0;
@@ -31,9 +39,10 @@ namespace HedgeModManager
 
         }
 
-        public Game(string gameName, bool hasCustomLoader, bool supportsCPKREDIR, int directXVersion, string modLoaderDownloadURL, byte[] modLoaderData)
+        public Game(string gameName, string executeableName, bool hasCustomLoader, bool supportsCPKREDIR, int directXVersion, string modLoaderDownloadURL, byte[] modLoaderData)
         {
             GameName               = gameName;
+            ExecuteableName        = executeableName;
             HasCustomLoader        = hasCustomLoader;
             SupportsCPKREDIR       = supportsCPKREDIR;
             DirectXVersion         = directXVersion;

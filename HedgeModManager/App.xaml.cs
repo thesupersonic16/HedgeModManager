@@ -63,12 +63,13 @@ namespace HedgeModManager
             StartDirectory = steamGame.RootDirectory;
 #else
             SteamGames = Steam.SearchForGames();
-            if (File.Exists(Path.Combine(StartDirectory, "SonicGenerations.exe")))
-                CurrentGame = Games.SonicGenerations;
-            if (File.Exists(Path.Combine(StartDirectory, "slw.exe")))
-                CurrentGame = Games.SonicLostWorld;
-            if (File.Exists(Path.Combine(StartDirectory, "Sonic Forces.exe")))
-                CurrentGame = Games.SonicForces;
+            foreach (var game in Games.GetSupportedGames())
+            {
+                if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
+                {
+                    CurrentGame = game;
+                }
+            }
 #endif
             ModsDbPath = Path.Combine(StartDirectory, "Mods");
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
