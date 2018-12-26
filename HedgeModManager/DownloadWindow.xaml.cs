@@ -40,12 +40,12 @@ namespace HedgeModManager
             Show();
             DownloadClient = new WebClient();
             DownloadClient.Headers.Add("user-agent", App.WebRequestUserAgent);
-            DownloadClient.DownloadProgressChanged += Client_Download_Progress_Changed;
-            DownloadClient.DownloadFileCompleted += Client_Download_Completed;
+            DownloadClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+            DownloadClient.DownloadFileCompleted += WebClient_DownloadCompleted;
             DownloadClient.DownloadFileAsync(new Uri(URL), DestinationPath);
         }
 
-        protected void Client_Download_Progress_Changed(object sender, DownloadProgressChangedEventArgs args)
+        protected void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs args)
         {
             Dispatcher.Invoke(() =>
             {
@@ -55,7 +55,7 @@ namespace HedgeModManager
             });
         }
 
-        protected void Client_Download_Completed(object sender, AsyncCompletedEventArgs args)
+        protected void WebClient_DownloadCompleted(object sender, AsyncCompletedEventArgs args)
         {
             Dispatcher.Invoke(() =>
             {

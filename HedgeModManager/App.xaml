@@ -4,7 +4,11 @@
              xmlns:local="clr-namespace:HedgeModManager"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
+        <Style TargetType="ProgressBar">
+            <Setter Property="Background" Value="#FF2D2D30"/>
+            <Setter Property="Foreground" Value="#0066CC"/>
+            <Setter Property="BorderBrush" Value="#0066CC"/>
+        </Style>
         <Style TargetType="TextBox">
             <Setter Property="Background" Value="#FF333337"/>
             <Setter Property="BorderBrush" Value="#FF434346" />

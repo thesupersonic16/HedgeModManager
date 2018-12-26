@@ -59,14 +59,14 @@
                 <Grid>
                     <GroupBox Header="Game &amp; ModLoader" HorizontalAlignment="Stretch"   Height="185" Margin="10,10,10,0"    VerticalAlignment="Top">
                         <Grid>
-                            <Button   x:Name="Button_CPKREDIR"      Content="Install CPKREDIR"              Click="UI_CPKREDIR_Click"                        Margin="10,10,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164"/>
-                            <Button   x:Name="Button_OtherLoader"   Content="Uninstall {0}"                 Click="UI_OtherLoader_Click"                     Margin="10,38,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164"/>
-                            <CheckBox                               Content="Enable CPKREDIR"               IsChecked="{Binding Enabled}"                    Margin="10,66,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" />
-                            <CheckBox                               Content="Enable Debug Console"          IsChecked="{Binding EnableDebugConsole}"         Margin="10,86,342,34" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <CheckBox                               Content="Enable Save File Redirection"  IsChecked="{Binding EnableSaveFileRedirection}"  Margin="10,106,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <CheckBox                               Content="Load Top to Bottom"                                                             Margin="10,126,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <Label    x:Name="Label_GameStatus"     Content="Game Name: Unknown"                                                             Margin="179,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
-                            <Label    x:Name="Label_MLVersion"      Content="Loaders: Unknown"                                                               Margin="179,35,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
+                            <Button   x:Name="Button_CPKREDIR"      Content="Install CPKREDIR"              Click="UI_CPKREDIR_Click"                       Margin="10,10,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164"/>
+                            <Button   x:Name="Button_OtherLoader"   Content="Uninstall {0}"                 Click="UI_OtherLoader_Click"                    Margin="10,38,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164"/>
+                            <CheckBox                               Content="Enable CPKREDIR"               IsChecked="{Binding CPKREDIR.Enabled}"                   Margin="10,66,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" />
+                            <CheckBox                               Content="Enable Debug Console"          IsChecked="{Binding CPKREDIR.EnableDebugConsole}"        Margin="10,86,342,34" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <CheckBox                               Content="Enable Save File Redirection"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}" Margin="10,106,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="CheckBox_LoadOrder"   Content="Load Top to Bottom"            IsChecked="{Binding ModsDB.ReverseLoadOrder}"          Margin="10,126,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <Label    x:Name="Label_GameStatus"     Content="Game Name: Unknown"                                                            Margin="179,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
+                            <Label    x:Name="Label_MLVersion"      Content="Loaders: Unknown"                                                              Margin="179,35,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="HedgeModManager"      HorizontalAlignment="Stretch"   Height="215" Margin="10,200,10,0"   VerticalAlignment="Top">

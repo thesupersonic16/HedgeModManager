@@ -14,13 +14,17 @@ namespace HedgeModManager
     public class ModsDB : IniFile
     {
         public List<ModInfo> Mods = new List<ModInfo>();
-        public bool ReverseLoadOrder = true;
         public string RootDirectory { get; set; }
         public int ModCount => Mods.Count;
 
+        public bool ReverseLoadOrder
+        {
+            get { return (int)this["Main"]["ReverseLoadOrder", typeof(int)] != 0; }
+            set { this["Main"]["ReverseLoadOrder"] = (value ? "1" : "0"); }
+        }
+
         public ModsDB()
         {
-
         }
 
         public ModsDB(string modsDirectiory)
@@ -101,8 +105,7 @@ namespace HedgeModManager
 
         public void BuildMain()
         {
-            this["Main"].Params.Clear();
-            this["Main"].Params.Add("ReverseLoadOrder", Convert.ToInt32(ReverseLoadOrder).ToString());
+            ClearIniList();
             var count = 0;
             foreach (var mod in Mods.Where(mod => mod.Enabled))
             {
@@ -126,6 +129,19 @@ namespace HedgeModManager
         {
             Mods.Remove(mod);
             Directory.Delete(mod.RootDirectory, true);
+        }
+
+        public void ClearIniList()
+        {
+            var list = new List<KeyValuePair<string, string>>();
+            list.AddRange(this["Main"].Params.Where(t => t.Key.StartsWith("ActiveMod")));
+            foreach (var o in list)
+                this["Main"].Params.Remove(o.Key);
+        }
+
+        public void DisableAllMods()
+        {
+            Mods.Where(mod => mod.Enabled).ToList().ForEach(t => t.Enabled = false);
         }
 
         public void InstallMod(string path)

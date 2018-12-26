@@ -60,6 +60,13 @@ namespace HedgeModManager
 
         public void RefreshUI()
         {
+            // Sets the DataContext for all the Components 
+            DataContext = new
+            {
+                CPKREDIR = App.Config,
+                ModsDB = ModsDatabase
+            };
+
             var steamGame = App.GetSteamGame(App.CurrentGame);
             IsCPKREDIRInstalled = App.IsCPKREDIRInstalled(App.GetSteamGame(App.CurrentGame).ExeDirectory);
             string loaders = (IsCPKREDIRInstalled ? "CPKREDIR v0.5" : "");
@@ -105,7 +112,6 @@ namespace HedgeModManager
             //timer.Start();
             
             // App.Config
-            DataContext = App.Config;
 
             Refresh();
 
