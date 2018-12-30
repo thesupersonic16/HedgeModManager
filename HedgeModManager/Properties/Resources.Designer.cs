@@ -113,6 +113,26 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IMG_FRAME_C {
+            get {
+                object obj = ResourceManager.GetObject("IMG_FRAME_C", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IMG_FRAME_M {
+            get {
+                object obj = ResourceManager.GetObject("IMG_FRAME_M", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IMG_HEDGEMODMANAGER {
             get {
                 object obj = ResourceManager.GetObject("IMG_HEDGEMODMANAGER", resourceCulture);

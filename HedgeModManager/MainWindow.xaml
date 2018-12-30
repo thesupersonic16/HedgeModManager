@@ -6,24 +6,55 @@
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
         Title="HedgeModManager (7.0)"
-        Height="600" Width="560"
-        Loaded="Window_Loaded" Background="#FF2D2D30">
-    <!--
-        LOL
-        Height="1500" Width="1500" Background="Transparent" AllowsTransparency="True" WindowStyle="None"
-        -->
+        Loaded="Window_Loaded"
+        Height="600" Width="560" Background="Transparent" AllowsTransparency="True" WindowStyle="None" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" PreviewMouseMove="UI_Window_PreviewMouseMove" MouseUp="UI_Window_MouseUp">
     <Window.Resources>
         <Style TargetType="ListView">
             <Setter Property="Background" Value="#FF2D2D30"/>
         </Style>
+        <Style TargetType="{x:Type Border}" x:Key="WindowFrame">
+            <Setter Property="BorderBrush" Value="#FF0066CC"/>
+            <Setter Property="Background" Value="#FF2D2D30"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style TargetType="{x:Type Grid}" x:Key="WindowFrameButton">
+            <Setter Property="Width" Value="35"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="Grid.IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF3F3F41" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Grip" TargetType="Rectangle">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Fill" Value="Transparent" />
+            <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+            <EventSetter Event="MouseLeftButtonDown" Handler="UI_Grip_MouseLeftButtonDown"/>
+        </Style>
+
     </Window.Resources>
-    <!--
-    <Border x:Name="RotateTest" BorderBrush="#FF2D2D30" BorderThickness="2" Background="#FF2D2D30" Height="600" Width="560">
+    <Border x:Name="RotateTest" Style="{StaticResource WindowFrame}">
         <Border.RenderTransform>
-            <RotateTransform Angle="45" CenterX="280" CenterY="300"/>
+            <RotateTransform Angle="0" CenterX="280" CenterY="300"/>
         </Border.RenderTransform>
-    -->
-    <Grid>
+        <Grid>
+            <Grid>
+                <Image Width="22" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0" Source="Resources/Graphics/icon256.png"/>
+                <Label x:Name="TitleLabel" Content="HedgeModManager (7.0-dev) - Sonic Generations" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,0,0" Foreground="#FFA4A4A4"/>
+                <Grid Margin="0,0,70,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="25" Background="Transparent" MouseDown="UI_FrameTitle_MouseDown">
+                </Grid>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Grid Style="{StaticResource WindowFrameButton}" MouseLeftButtonUp="UI_FrameM_MouseLeftButtonUp" MouseLeftButtonDown="UI_FrameM_MouseLeftButtonDown">
+                        <Image Width="25" Height="25" Source="Resources/Graphics/IMG_FRAME_M.png"/>
+                    </Grid>
+                    <Grid Style="{StaticResource WindowFrameButton}" MouseLeftButtonUp="UI_FrameC_MouseLeftButtonUp" MouseLeftButtonDown="UI_FrameM_MouseLeftButtonDown">
+                        <Image Width="35" Height="25" Source="Resources/Graphics/IMG_FRAME_C.png"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+            <Grid Margin="0,24,0,-1.2">
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110">
             <TabItem Header="Mods">
                 <Grid>
@@ -69,10 +100,10 @@
                             <Label    x:Name="Label_MLVersion"      Content="Loaders: Unknown"                                                              Margin="179,35,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="HedgeModManager"      HorizontalAlignment="Stretch"   Height="215" Margin="10,200,10,0"   VerticalAlignment="Top">
+                    <GroupBox Header="HedgeModManager"      HorizontalAlignment="Stretch"   Height="221" Margin="10,200,10,0"   VerticalAlignment="Top">
                         <Grid>
-                            <CheckBox Content="Check for ModLoader Updates"                     IsChecked="{Binding CheckLoaderUpdates}"    Margin="10,10,194,150"/>
-                            <CheckBox Content="Keep HedgeModManager open after starting a game" IsChecked="{Binding KeepOpen}"              Margin="10,27,194,123"/>
+                            <CheckBox Content="Check for ModLoader Updates"                     IsChecked="{Binding CheckLoaderUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                            <CheckBox Content="Keep HedgeModManager open after starting a game" IsChecked="{Binding KeepOpen}"              Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                             <Button   Content="About HedgeModManager"                                                                       Margin="0,0,10,10" RenderTransformOrigin="0.508,-0.424" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
                         </Grid>
                     </GroupBox>
@@ -100,6 +131,17 @@
                 <Button Content="Play"             Width="Auto"    Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
             </Grid>
         </StackPanel>
-    </Grid>
-    <!--</Border>-->
+        </Grid>
+            <!-- Source: https://stackoverflow.com/questions/27157390/wpf-custom-window-windows-edge-resize-feature/27157947 -->
+            <Rectangle x:Name="leftSizeGrip"   Width="7"  HorizontalAlignment="Left"  Cursor="SizeWE" Style="{StaticResource Grip}" />
+            <Rectangle x:Name="rightSizeGrip"  Width="7"  HorizontalAlignment="Right" Cursor="SizeWE" Style="{StaticResource Grip}" />
+            <Rectangle x:Name="topSizeGrip"    Height="7" VerticalAlignment="Top"     Cursor="SizeNS" Style="{StaticResource Grip}" />
+            <Rectangle x:Name="bottomSizeGrip" Height="7" VerticalAlignment="Bottom"  Cursor="SizeNS" Style="{StaticResource Grip}" />
+
+            <Rectangle Name="topLeftSizeGrip"      Width="7"  Height="7"  HorizontalAlignment="Left"  VerticalAlignment="Top"    Cursor="SizeNWSE" Style="{StaticResource Grip}" />
+            <Rectangle Name="bottomRightSizeGrip"  Width="7"  Height="7"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="SizeNWSE" Style="{StaticResource Grip}" />
+            <Rectangle Name="topRightSizeGrip"     Width="7"  Height="7"  HorizontalAlignment="Right" VerticalAlignment="Top"    Cursor="SizeNESW" Style="{StaticResource Grip}" />
+            <Rectangle Name="bottomLeftSizeGrip"   Width="7"  Height="7"  HorizontalAlignment="Left"  VerticalAlignment="Bottom" Cursor="SizeNESW" Style="{StaticResource Grip}" />
+        </Grid>
+    </Border>
 </Window>

@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace HedgeModManager
@@ -23,6 +24,8 @@ namespace HedgeModManager
     {
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
+        public static Rectangle ResizeRect = null;
+
 
         public MainWindow()
         {
@@ -49,7 +52,7 @@ namespace HedgeModManager
                 for (int i2 = 0; i2 < ModsList.Items.Count; i2++)
                 {
                     var mod = ModsList.Items[i2] as ModInfo;
-                    if (ModsDatabase["Main"][$"ActiveMod{i}"] == Path.GetFileName(mod.RootDirectory))
+                    if (ModsDatabase["Main"][$"ActiveMod{i}"] == System.IO.Path.GetFileName(mod.RootDirectory))
                     {
                         ModsList.Items.Remove(mod);
                         ModsList.Items.Insert(0, mod);
@@ -67,10 +70,12 @@ namespace HedgeModManager
                 ModsDB = ModsDatabase
             };
 
+            TitleLabel.Content = $"{App.ProgramName} ({App.VersionString}) - {App.CurrentGame.GameName}";
+
             var steamGame = App.GetSteamGame(App.CurrentGame);
             IsCPKREDIRInstalled = App.IsCPKREDIRInstalled(App.GetSteamGame(App.CurrentGame).ExeDirectory);
             string loaders = (IsCPKREDIRInstalled ? "CPKREDIR v0.5" : "");
-            bool hasOtherModLoader = File.Exists(Path.Combine(steamGame.RootDirectory, $"d3d{App.CurrentGame.DirectXVersion}.dll"));
+            bool hasOtherModLoader = File.Exists(System.IO.Path.Combine(steamGame.RootDirectory, $"d3d{App.CurrentGame.DirectXVersion}.dll"));
             if (hasOtherModLoader)
             {
                 if (string.IsNullOrEmpty(loaders))
@@ -229,5 +234,87 @@ namespace HedgeModManager
         //{
         //    (RotateTest.RenderTransform as RotateTransform).Angle += 10d;
         //}
+
+        private void UI_FrameTitle_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
+        }
+
+        private void UI_FrameM_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ((Grid)sender).Background = new SolidColorBrush(Color.FromRgb(0x00, 0x7A, 0xCC));
+        }
+
+        private void UI_FrameM_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void UI_FrameC_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ((Grid)sender).Background = new SolidColorBrush(Color.FromRgb(0x00, 0x7A, 0xCC));
+        }
+
+        private void UI_FrameC_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Close();
+        }
+
+        private void UI_Grip_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Rectangle senderRect)
+            {
+                ResizeRect = senderRect;
+                senderRect.CaptureMouse();
+            }
+        }
+
+        // TODO: Fix Slow Resizing
+        private void UI_Window_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (ResizeRect != null)
+            {
+                var position = e.GetPosition(this);
+                CaptureMouse();
+                if (ResizeRect.Name.ToLower().Contains("right"))
+                {
+                    position.X += 5;
+                    if (position.X > 0)
+                        Width = position.X;
+                }
+                if (ResizeRect.Name.ToLower().Contains("left"))
+                {
+                    position.X -= 5;
+                    Left += position.X;
+                    position.X = Width - position.X;
+                    if (position.X > 0)
+                        Width = position.X;
+                }
+                if (ResizeRect.Name.ToLower().Contains("bottom"))
+                {
+                    position.Y += 5;
+                    if (position.Y > 0)
+                        Height = position.Y;
+                }
+                if (ResizeRect.Name.ToLower().Contains("top"))
+                {
+                    position.Y -= 5;
+                    Top += position.Y;
+                    position.Y = Height - position.Y;
+                    if (position.Y > 0)
+                        Height = position.Y;
+                }
+            }
+        }
+
+        private void UI_Window_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (ResizeRect != null)
+            {
+                ResizeRect = null;
+                ReleaseMouseCapture();
+            }
+        }
     }
 }
