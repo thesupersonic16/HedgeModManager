@@ -109,12 +109,24 @@ namespace HedgeModManager
                 Application.Current.Shutdown(0);
         }
 
+        public void SetupRotation()
+        {
+            RotateTest.Width = Width;
+            RotateTest.Height = Height;
+            Left -= Width / 2d;
+            Top -= Height / 2d;
+            Width *= 2d;
+            Height *= 2d;
+
+            var timer = new DispatcherTimer();
+            timer.Tick += dispatcherTimer_Tick;
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            timer.Start();
+
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //var timer = new DispatcherTimer();
-            //timer.Tick += dispatcherTimer_Tick;
-            //timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
-            //timer.Start();
             
             // App.Config
 
@@ -230,10 +242,10 @@ namespace HedgeModManager
         // too slow
         // :^)
         // LOL
-        //private void dispatcherTimer_Tick(object sender, EventArgs e)
-        //{
-        //    (RotateTest.RenderTransform as RotateTransform).Angle += 10d;
-        //}
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+           (RotateTest.RenderTransform as RotateTransform).Angle += 0.01d;
+        }
 
         private void UI_FrameTitle_MouseDown(object sender, MouseButtonEventArgs e)
         {
