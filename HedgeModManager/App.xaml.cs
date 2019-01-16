@@ -86,7 +86,9 @@ namespace HedgeModManager
                 });
                 box.AddButton("  Run Installer  ", () =>
                 {
-                    throw new NotImplementedException("Auto Installer is not yet implemented");
+                    box.Visibility = Visibility.Collapsed;
+                    new InstallWindow().ShowDialog();
+                    box.Close();
                 });
                 box.ShowDialog();
                 return;
