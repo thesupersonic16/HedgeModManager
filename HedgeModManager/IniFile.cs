@@ -122,18 +122,17 @@ namespace HedgeModManager
                 }
             }
 
-            public object this[string key, Type type]
+            public object this[string key, Type type, object defaultValue = null]
             {
                 get
                 {
+                    if (!Params.ContainsKey(key))
+                        Params.Add(key, defaultValue.ToString());
+                    
+                    string val = "";
                     if (Params.ContainsKey(key))
-                    {
-                        string val = "";
-                        if (Params.ContainsKey(key))
-                            Params.TryGetValue(key, out val);
-                        return Convert.ChangeType(val, type);
-                    }
-                    else return null;
+                        Params.TryGetValue(key, out val);
+                    return Convert.ChangeType(val, type);
                 }
                 set
                 {

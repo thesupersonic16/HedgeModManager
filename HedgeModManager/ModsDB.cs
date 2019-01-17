@@ -19,7 +19,7 @@ namespace HedgeModManager
 
         public bool ReverseLoadOrder
         {
-            get { return (int)this["Main"]["ReverseLoadOrder", typeof(int)] != 0; }
+            get { return (int)this["Main"]["ReverseLoadOrder", typeof(int), 1] != 0; }
             set { this["Main"]["ReverseLoadOrder"] = (value ? "1" : "0"); }
         }
 

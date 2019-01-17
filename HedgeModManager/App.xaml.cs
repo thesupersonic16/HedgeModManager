@@ -59,7 +59,7 @@ namespace HedgeModManager
             Steam.Init();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Generations");
+            SteamGames = Steam.SearchForGames("Sonic Lost World");
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;
@@ -234,8 +234,10 @@ namespace HedgeModManager
 
                 if (group.Params.ContainsKey("LoaderVersion"))
                     Config.ModLoaderVersion = group["LoaderVersion"];
+                if (group.Params.ContainsKey("LoaderName"))
+                    Config.ModLoaderName = group["LoaderName"];
                 if (group.Params.ContainsKey("LoaderName2"))
-                    Config.ModLoaderName = group["LoaderName2"];
+                    Config.ModLoaderNameWithVersion = group["LoaderName2"];
             }
 
             // Checks if the loader is downloaded and saved, If it isn't then write the local copy

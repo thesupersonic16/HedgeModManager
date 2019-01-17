@@ -91,14 +91,20 @@ namespace HedgeModManager
 
         public string ModLoaderVersion
         {
-            get { return this["HedgeModManager"]["ModLoaderVersion"]; }
+            get { return this["HedgeModManager"]["ModLoaderVersion", typeof(string), ""] as string; }
             set { this["HedgeModManager"]["ModLoaderVersion"] = value; }
         }
 
         public string ModLoaderName
         {
-            get { return this["HedgeModManager"]["ModLoaderName"]; }
+            get { return this["HedgeModManager"]["ModLoaderName", typeof(string), ""] as string; }
             set { this["HedgeModManager"]["ModLoaderName"] = value; }
+        }
+
+        public string ModLoaderNameWithVersion
+        {
+            get { return this["HedgeModManager"]["ModLoaderNameWithVersion", typeof(string), ""] as string; }
+            set { this["HedgeModManager"]["ModLoaderNameWithVersion"] = value; }
         }
 
         public CPKREDIRConfig(string path)

@@ -79,10 +79,13 @@ namespace HedgeModManager
             if (hasOtherModLoader)
             {
                 if (string.IsNullOrEmpty(loaders))
-                    loaders = $"{App.Config.ModLoaderName}";
+                    loaders = $"{App.Config.ModLoaderNameWithVersion}";
                 else
-                    loaders += $" & {App.Config.ModLoaderName}";
+                    loaders += $" & {App.Config.ModLoaderNameWithVersion}";
             }
+
+            if (string.IsNullOrEmpty(loaders))
+                loaders = "None";
 
             Label_GameStatus.Content = $"Game Name: {App.CurrentGame.GameName}";
             Label_MLVersion.Content = $"Loaders: {loaders}";
@@ -127,8 +130,12 @@ namespace HedgeModManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            // App.Config
+
+            if (App.CurrentGame.HasCustomLoader)
+                Button_OtherLoader.IsEnabled = true;
+            if (App.CurrentGame.SupportsCPKREDIR)
+                Button_CPKREDIR.IsEnabled = true;
+
 
             Refresh();
 
