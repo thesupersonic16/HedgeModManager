@@ -130,8 +130,8 @@ namespace HedgeModManager
             var timer = new DispatcherTimer();
             timer.Tick += dispatcherTimer_Tick;
             timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
-            //timer.Start();
-            (RotateTest.RenderTransform as RotateTransform).Angle += Math.PI * 57.2958;
+            timer.Start();
+            //(RotateTest.RenderTransform as RotateTransform).Angle += Math.PI * 57.2958;
 
         }
 
@@ -143,8 +143,10 @@ namespace HedgeModManager
             if (App.CurrentGame.SupportsCPKREDIR)
                 Button_CPKREDIR.IsEnabled = true;
 
-            SetupRotation();
             
+            if ((DateTime.Now.Month == 4 && DateTime.Now.Day == 1) || !Steam.CheckDirectory(App.StartDirectory))
+                SetupRotation();
+
             Refresh();
 
         }

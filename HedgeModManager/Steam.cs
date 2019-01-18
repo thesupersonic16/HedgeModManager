@@ -63,11 +63,11 @@ namespace HedgeModManager
                     string lwPath = Path.Combine(path, "Sonic Lost World\\slw.exe");
                     string gensPath = Path.Combine(path, "Sonic Generations\\SonicGenerations.exe");
                     string forcesPath = Path.Combine(path, "SonicForces\\build\\main\\projects\\exec\\Sonic Forces.exe");
-                    if (CheckGame(lwPath))
+                    if (File.Exists(lwPath))
                         games.Add(new SteamGame("Sonic Lost World"  , lwPath, "329440"));
-                    if (CheckGame(gensPath))
+                    if (File.Exists(gensPath))
                         games.Add(new SteamGame("Sonic Generations" , gensPath, "71340"));
-                    if (CheckGame(forcesPath))
+                    if (File.Exists(forcesPath))
                         games.Add(new SteamGame("Sonic Forces"      , forcesPath, "637100"));
                 }
             }
@@ -82,6 +82,13 @@ namespace HedgeModManager
             return File.Exists(path) && !(
                 File.Exists(Path.Combine(Path.GetDirectoryName(path), "steamclient64.dll")) ||
                 File.Exists(Path.Combine(Path.GetDirectoryName(path), "steamclient.dll")));
+        }
+
+        public static bool CheckDirectory(string path)
+        {
+            return !(
+                File.Exists(Path.Combine(path, "steamclient64.dll")) ||
+                File.Exists(Path.Combine(path, "steamclient.dll")));
         }
     }
 
@@ -219,6 +226,7 @@ namespace HedgeModManager
         public string ExeName { get; set; }
         public string RootDirectory { get; set; }
         public string ExeDirectory { get { return Path.Combine(RootDirectory, ExeName); } }
+        public bool Status { get { return Steam.CheckGame(ExeDirectory); } }
 
         public SteamGame(string gameName, string exe, string gameID)
         {

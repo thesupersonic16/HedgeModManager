@@ -108,7 +108,7 @@ namespace HedgeModManager
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             App.SteamGames = Steam.SearchForGames();
-            App.SteamGames.ForEach(t => UI_GameList.Items.Add(t));
+            App.SteamGames.Where(t => t.Status).ToList().ForEach(t => UI_GameList.Items.Add(t));
         }
 
         private void UI_GameItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
