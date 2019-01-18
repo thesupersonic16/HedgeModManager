@@ -116,15 +116,22 @@ namespace HedgeModManager
         {
             RotateTest.Width = Width;
             RotateTest.Height = Height;
-            Left -= Width / 2d;
-            Top -= Height / 2d;
-            Width *= 2d;
-            Height *= 2d;
+
+            double oldWidth = Width;
+            double oldHeight = Height;
+            double newWidth = oldWidth   * Math.Sin(Math.PI / 2 - Math.PI / 4) + oldHeight * Math.Sin(Math.PI / 4);
+            double newHeight = oldHeight * Math.Sin(Math.PI / 2 - Math.PI / 4) + oldWidth * Math.Sin(Math.PI / 4);
+
+            Left -= (newWidth - Width) / 2d;
+            Top -= (newHeight - Height) / 2d;
+            Width = newWidth;
+            Height = newHeight;
 
             var timer = new DispatcherTimer();
             timer.Tick += dispatcherTimer_Tick;
             timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
-            timer.Start();
+            //timer.Start();
+            (RotateTest.RenderTransform as RotateTransform).Angle += Math.PI * 57.2958;
 
         }
 
@@ -136,7 +143,8 @@ namespace HedgeModManager
             if (App.CurrentGame.SupportsCPKREDIR)
                 Button_CPKREDIR.IsEnabled = true;
 
-
+            SetupRotation();
+            
             Refresh();
 
         }
@@ -251,7 +259,7 @@ namespace HedgeModManager
         // LOL
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-           (RotateTest.RenderTransform as RotateTransform).Angle += 0.01d;
+           (RotateTest.RenderTransform as RotateTransform).Angle += 0.001d;
         }
 
         private void UI_FrameTitle_MouseDown(object sender, MouseButtonEventArgs e)
