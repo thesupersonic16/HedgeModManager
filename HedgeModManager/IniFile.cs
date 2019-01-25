@@ -144,6 +144,27 @@ namespace HedgeModManager
             }
 
 
+            public string this[string key, string defaultValue = null]
+            {
+                get
+                {
+                    if (!Params.ContainsKey(key))
+                        Params.Add(key, defaultValue);
+
+                    string val = "";
+                    if (Params.ContainsKey(key))
+                        Params.TryGetValue(key, out val);
+                    return val;
+                }
+                set
+                {
+                    if (Params.ContainsKey(key))
+                        Params[key] = value;
+                    else
+                        Params.Add(key, value);
+                }
+            }
+
             public void AddParameter(string key, object param)
             {
                 Params.Add(key, param.ToString());

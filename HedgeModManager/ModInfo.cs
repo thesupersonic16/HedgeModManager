@@ -49,15 +49,15 @@ namespace HedgeModManager
         public override void Read(Stream stream)
         {
             base.Read(stream);
-            UpdateServer = Groups["Main"]["UpdateServer"];
-            SaveFile = Groups["Main"]["SaveFile"];
-            Description = Groups["Desc"]["Description"];
-            Version = Groups["Desc"]["Version"];
-            Date = Groups["Desc"]["Date"];
-            Author = Groups["Desc"]["Author"];
-            if (!string.IsNullOrEmpty(Groups["Main"]["IncludeDirCount"]))
+            UpdateServer = Groups["Main"]["UpdateServer", ""];
+            SaveFile = Groups["Main"]["SaveFile", ""];
+            Description = Groups["Desc"]["Description", ""];
+            Version = Groups["Desc"]["Version", ""];
+            Date = Groups["Desc"]["Date", ""];
+            Author = Groups["Desc"]["Author", ""];
+            if (!string.IsNullOrEmpty(Groups["Main"]["IncludeDirCount", ""]))
             {
-                var includeDirCount = int.Parse(Groups["Main"]["IncludeDirCount"]);
+                var includeDirCount = int.Parse(Groups["Main"]["IncludeDirCount", "0"]);
                 for (int i = 0; i < includeDirCount; i++)
                 {
                     IncludeDirs.Add(Groups["Main"][$"IncludeDir{i}"]);
