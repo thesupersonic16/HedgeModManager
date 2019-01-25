@@ -144,7 +144,7 @@ namespace HedgeModManager
             }
 
 
-            public string this[string key, string defaultValue = null]
+            public string this[string key, string defaultValue]
             {
                 get
                 {

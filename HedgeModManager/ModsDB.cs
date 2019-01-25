@@ -77,8 +77,12 @@ namespace HedgeModManager
             {
                 if (File.Exists(Path.Combine(folder, "mod.ini")))
                 {
-                    var mod = new ModInfo(folder);
-                    Mods.Add(mod);
+                    try
+                    {
+                        var mod = new ModInfo(folder);
+                        Mods.Add(mod);
+                    }
+                    catch (Exceptions.ModLoadException) { }
                 }
             }
         }
