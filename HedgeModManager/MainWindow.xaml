@@ -76,7 +76,7 @@
             CornerRadius="0" 
             GlassFrameThickness="1"
             NonClientFrameEdges="None"
-            ResizeBorderThickness="2"
+            ResizeBorderThickness="4"
             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Border x:Name="RotateTest" Style="{StaticResource WindowFrame}">
