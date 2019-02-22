@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="HedgeModManager (7.0)"
         Loaded="Window_Loaded"
-        Height="600" Width="560" Background="Transparent" AllowsTransparency="True" WindowStyle="None" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" PreviewMouseMove="UI_Window_PreviewMouseMove" MouseUp="UI_Window_MouseUp">
+        Height="600" Width="560" WindowStartupLocation="CenterScreen">
+
     <Window.Resources>
         <Style TargetType="ListView">
             <Setter Property="Background" Value="#FF2D2D30"/>
@@ -17,12 +18,42 @@
             <Setter Property="Background" Value="#FF2D2D30"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
-        <Style TargetType="{x:Type Grid}" x:Key="WindowFrameButton">
+        <Style TargetType="{x:Type Button}" x:Key="WindowFrameButton">
             <Setter Property="Width" Value="35"/>
             <Setter Property="Height" Value="25"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#FF3F3F41"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#FF3F3F41"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" Value="0.57"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
-                <Trigger Property="Grid.IsMouseOver" Value="True">
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF3F3F41" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Background" Value="#FF3F3F41" />
                 </Trigger>
             </Style.Triggers>
@@ -31,10 +62,23 @@
             <Setter Property="Focusable" Value="False" />
             <Setter Property="Fill" Value="Transparent" />
             <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
-            <EventSetter Event="MouseLeftButtonDown" Handler="UI_Grip_MouseLeftButtonDown"/>
         </Style>
 
     </Window.Resources>
+    <WindowChrome.WindowChrome>
+
+        <!-- Rather than doing hacky things to make borderless windows work nicely without any chrome, the WindowChrome class handles this for you. -->
+        <!-- With this you get window open/close/minimise animations, a window shadow, and transparency -->
+        <!-- https://docs.microsoft.com/en-us/dotnet/api/system.windows.shell.windowchrome?view=netframework-4.7.2 -->
+
+        <WindowChrome 
+            CaptionHeight="22"
+            CornerRadius="0" 
+            GlassFrameThickness="1"
+            NonClientFrameEdges="None"
+            ResizeBorderThickness="4"
+            UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
     <Border x:Name="RotateTest" Style="{StaticResource WindowFrame}">
         <Border.RenderTransform>
             <RotateTransform Angle="0" CenterX="280" CenterY="300"/>
@@ -45,103 +89,93 @@
                 <Label x:Name="TitleLabel" Content="HedgeModManager (7.0-dev) - Sonic Generations" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,0,0" Foreground="#FFA4A4A4"/>
                 <Grid Margin="0,0,70,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="25" Background="Transparent" MouseDown="UI_FrameTitle_MouseDown">
                 </Grid>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Grid Style="{StaticResource WindowFrameButton}" MouseLeftButtonUp="UI_FrameM_MouseLeftButtonUp" MouseLeftButtonDown="UI_FrameM_MouseLeftButtonDown">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Button Style="{StaticResource WindowFrameButton}" Click="UI_FrameM_MouseLeftButtonUp">
                         <Image Width="25" Height="25" Source="Resources/Graphics/IMG_FRAME_M.png"/>
-                    </Grid>
-                    <Grid Style="{StaticResource WindowFrameButton}" MouseLeftButtonUp="UI_FrameC_MouseLeftButtonUp" MouseLeftButtonDown="UI_FrameM_MouseLeftButtonDown">
+                    </Button>
+                    <Button Style="{StaticResource WindowFrameButton}" Click="UI_FrameC_MouseLeftButtonUp">
                         <Image Width="35" Height="25" Source="Resources/Graphics/IMG_FRAME_C.png"/>
-                    </Grid>
+                    </Button>
                 </StackPanel>
             </Grid>
             <Grid Margin="0,24,0,-1.2">
-        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110">
-            <TabItem Header="Mods">
-                <Grid>
-                    <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" Margin="0,0,31.5,0" AllowDrop="True" Drop="UI_ModsList_Drop">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Name" Width="200">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <CheckBox Content="{Binding Title}" IsChecked="{Binding Enabled}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Version"       Width="50" DisplayMemberBinding="{Binding Version}"/>
-                                <GridViewColumn Header="Author"        Width="88" DisplayMemberBinding="{Binding Author}"/>
-                                <GridViewColumn Header="Supports Save" Width="84" DisplayMemberBinding="{Binding SupportsSave}"/>
-                                <GridViewColumn Header="Updates"       Width="60" DisplayMemberBinding="{Binding HasUpdates}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <Button x:Name="TopBtn"      Click="UI_MoveMod_Click"  Content="↑" FontSize="30" Margin="0,5,0,0" Height="50" />
-                        <Button x:Name="UpBtn"       Click="UI_MoveMod_Click"  Content="˄" FontSize="30" Margin="0,5,0,0" Height="50" />
-                        <Button x:Name="DownBtn"     Click="UI_MoveMod_Click"  Content="˅" FontSize="30" Margin="0,5,0,0" Height="50" />
-                        <Button x:Name="BottomBtn"   Click="UI_MoveMod_Click"  Content="↓" FontSize="30" Margin="0,5,0,0" Height="50" />
-                    </StackPanel>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Codes">
-                <Grid/>
-            </TabItem>
-            <TabItem Header="Settings">
-                <Grid>
-                    <GroupBox Header="Game &amp; ModLoader" HorizontalAlignment="Stretch"   Height="185" Margin="10,10,10,0"    VerticalAlignment="Top">
+                <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110">
+                    <TabItem Header="Mods">
                         <Grid>
-                            <Button   x:Name="Button_CPKREDIR"      Content="Install CPKREDIR"              Click="UI_CPKREDIR_Click"                       Margin="10,10,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
-                            <Button   x:Name="Button_OtherLoader"   Content="Uninstall {0}"                 Click="UI_OtherLoader_Click"                    Margin="10,38,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
-                            <CheckBox                               Content="Enable CPKREDIR"               IsChecked="{Binding CPKREDIR.Enabled}"                   Margin="10,66,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" />
-                            <CheckBox                               Content="Enable Debug Console"          IsChecked="{Binding CPKREDIR.EnableDebugConsole}"        Margin="10,86,342,34" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <CheckBox                               Content="Enable Save File Redirection"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}" Margin="10,106,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <CheckBox x:Name="CheckBox_LoadOrder"   Content="Load Top to Bottom"            IsChecked="{Binding ModsDB.ReverseLoadOrder}"          Margin="10,126,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <Label    x:Name="Label_GameStatus"     Content="Game Name: Unknown"                                                            Margin="179,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
-                            <Label    x:Name="Label_MLVersion"      Content="Loaders: Unknown"                                                              Margin="179,35,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
+                            <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" Margin="0,0,31.5,0" AllowDrop="True" Drop="UI_ModsList_Drop">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Name" Width="200">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding Title}" IsChecked="{Binding Enabled}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Version"       Width="50" DisplayMemberBinding="{Binding Version}"/>
+                                        <GridViewColumn Header="Author"        Width="88" DisplayMemberBinding="{Binding Author}"/>
+                                        <GridViewColumn Header="Supports Save" Width="84" DisplayMemberBinding="{Binding SupportsSave}"/>
+                                        <GridViewColumn Header="Updates"       Width="60" DisplayMemberBinding="{Binding HasUpdates}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <Button x:Name="TopBtn"      Click="UI_MoveMod_Click"  Content="↑" FontSize="30" Margin="0,5,0,0" Height="50" />
+                                <Button x:Name="UpBtn"       Click="UI_MoveMod_Click"  Content="˄" FontSize="30" Margin="0,5,0,0" Height="50" />
+                                <Button x:Name="DownBtn"     Click="UI_MoveMod_Click"  Content="˅" FontSize="30" Margin="0,5,0,0" Height="50" />
+                                <Button x:Name="BottomBtn"   Click="UI_MoveMod_Click"  Content="↓" FontSize="30" Margin="0,5,0,0" Height="50" />
+                            </StackPanel>
                         </Grid>
-                    </GroupBox>
-                    <GroupBox Header="HedgeModManager"      HorizontalAlignment="Stretch"   Height="221" Margin="10,200,10,0"   VerticalAlignment="Top">
+                    </TabItem>
+                    <TabItem Header="Codes">
+                        <Grid/>
+                    </TabItem>
+                    <TabItem Header="Settings">
                         <Grid>
-                            <CheckBox Content="Check for ModLoader Updates"                     IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                            <CheckBox Content="Keep HedgeModManager open after starting a game" IsChecked="{Binding CPKREDIR.KeepOpen}"              Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                            <Button   Content="About HedgeModManager"                                                                       Margin="0,0,10,10" RenderTransformOrigin="0.508,-0.424" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
+                            <GroupBox Header="Game &amp; ModLoader" HorizontalAlignment="Stretch"   Height="185" Margin="10,10,10,0"    VerticalAlignment="Top">
+                                <Grid>
+                                    <Button   x:Name="Button_CPKREDIR"      Content="Install CPKREDIR"              Click="UI_CPKREDIR_Click"                       Margin="10,10,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
+                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall {0}"                 Click="UI_OtherLoader_Click"                    Margin="10,38,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
+                                    <CheckBox                               Content="Enable CPKREDIR"               IsChecked="{Binding CPKREDIR.Enabled}"                   Margin="10,66,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                    <CheckBox                               Content="Enable Debug Console"          IsChecked="{Binding CPKREDIR.EnableDebugConsole}"        Margin="10,86,342,34" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                    <CheckBox                               Content="Enable Save File Redirection"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}" Margin="10,106,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                    <CheckBox x:Name="CheckBox_LoadOrder"   Content="Load Top to Bottom"            IsChecked="{Binding ModsDB.ReverseLoadOrder}"          Margin="10,126,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                    <Label    x:Name="Label_GameStatus"     Content="Game Name: Unknown"                                                            Margin="179,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
+                                    <Label    x:Name="Label_MLVersion"      Content="Loaders: Unknown"                                                              Margin="179,35,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox Header="HedgeModManager"      HorizontalAlignment="Stretch"   Height="221" Margin="10,200,10,0"   VerticalAlignment="Top">
+                                <Grid>
+                                    <CheckBox Content="Check for ModLoader Updates"                     IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="Keep HedgeModManager open after starting a game" IsChecked="{Binding CPKREDIR.KeepOpen}"              Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <Button   Content="About HedgeModManager"                                                                       Margin="0,0,10,10" RenderTransformOrigin="0.508,-0.424" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
+                                </Grid>
+                            </GroupBox>
                         </Grid>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
-        </TabControl>
-        <StackPanel VerticalAlignment="Bottom" >
-            <Grid Margin="10,0,10,10" VerticalAlignment="Bottom" Height="100">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.25*"/>
-                    <ColumnDefinition Width="0.5*"/>
-                    <ColumnDefinition Width="0.25*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="0.45*"/>
-                    <RowDefinition Height="0.6*"/>
-                </Grid.RowDefinitions>
+                    </TabItem>
+                </TabControl>
+                <StackPanel VerticalAlignment="Bottom" >
+                    <Grid Margin="10,0,10,10" VerticalAlignment="Bottom" Height="100">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.25*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.45*"/>
+                            <RowDefinition Height="0.6*"/>
+                        </Grid.RowDefinitions>
 
-                <Button Content="Remove Mod"                       Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_RemoveMod_Click"/>
-                <Button Content="Refresh Mod List" Width="Auto"    Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
-                <Button Content="Add Mod"          Width="Auto"    Grid.Column="2" Grid.Row="0" Margin="5"/>
+                        <Button Content="Remove Mod"                       Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_RemoveMod_Click"/>
+                        <Button Content="Refresh Mod List" Width="Auto"    Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
+                        <Button Content="Add Mod"          Width="Auto"    Grid.Column="2" Grid.Row="0" Margin="5"/>
 
-                <Button Content="Save"                             Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
-                <Button Content="Save and Play"    Width="Auto"    Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
-                <Button Content="Play"             Width="Auto"    Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
+                        <Button Content="Save"                             Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
+                        <Button Content="Save and Play"    Width="Auto"    Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
+                        <Button Content="Play"             Width="Auto"    Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
+                    </Grid>
+                </StackPanel>
             </Grid>
-        </StackPanel>
-        </Grid>
-            <!-- Source: https://stackoverflow.com/questions/27157390/wpf-custom-window-windows-edge-resize-feature/27157947 -->
-            <Rectangle x:Name="leftSizeGrip"   Width="7"  HorizontalAlignment="Left"  Cursor="SizeWE" Style="{StaticResource Grip}" />
-            <Rectangle x:Name="rightSizeGrip"  Width="7"  HorizontalAlignment="Right" Cursor="SizeWE" Style="{StaticResource Grip}" />
-            <Rectangle x:Name="topSizeGrip"    Height="7" VerticalAlignment="Top"     Cursor="SizeNS" Style="{StaticResource Grip}" />
-            <Rectangle x:Name="bottomSizeGrip" Height="7" VerticalAlignment="Bottom"  Cursor="SizeNS" Style="{StaticResource Grip}" />
-
-            <Rectangle Name="topLeftSizeGrip"      Width="7"  Height="7"  HorizontalAlignment="Left"  VerticalAlignment="Top"    Cursor="SizeNWSE" Style="{StaticResource Grip}" />
-            <Rectangle Name="bottomRightSizeGrip"  Width="7"  Height="7"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="SizeNWSE" Style="{StaticResource Grip}" />
-            <Rectangle Name="topRightSizeGrip"     Width="7"  Height="7"  HorizontalAlignment="Right" VerticalAlignment="Top"    Cursor="SizeNESW" Style="{StaticResource Grip}" />
-            <Rectangle Name="bottomLeftSizeGrip"   Width="7"  Height="7"  HorizontalAlignment="Left"  VerticalAlignment="Bottom" Cursor="SizeNESW" Style="{StaticResource Grip}" />
         </Grid>
     </Border>
 </Window>
