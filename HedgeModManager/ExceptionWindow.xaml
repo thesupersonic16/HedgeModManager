@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:HedgeModManager"
              mc:Ignorable="d" 
              Height="600" Width="1000" Title="HedgeModManager Crash"
-             WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Background="#FF2D2D30">
+             WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Background="#FF2D2D30" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="SnapsToDevicePixels"   Value="true" />

@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+
 using HMMResources = HedgeModManager.Properties.Resources;
 
 namespace HedgeModManager
@@ -45,6 +47,7 @@ namespace HedgeModManager
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             var application = new App();
+            application.InitializeComponent();
             Args = args;
 
 #if !DEBUG
@@ -59,7 +62,7 @@ namespace HedgeModManager
             Steam.Init();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Forces");
+            SteamGames = Steam.SearchForGames("Sonic Generations");
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;
@@ -93,7 +96,6 @@ namespace HedgeModManager
                 box.ShowDialog();
                 return;
             }
-
             if (CurrentGame.SupportsCPKREDIR)
             {
                 if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))
@@ -107,8 +109,7 @@ namespace HedgeModManager
             {
                 Config = new CPKREDIRConfig(ConfigPath);
                 Restart = false;
-                application.InitializeComponent();
-                application.Run();
+                application.Run(new MainWindow());
             }
             while (Restart);
         }
@@ -298,5 +299,31 @@ namespace HedgeModManager
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            var window = Window.GetWindow((DependencyObject)sender);
+            window.WindowState = WindowState.Minimized;
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            var window = Window.GetWindow((DependencyObject)sender);
+            window.Close();
+        }
+
+        private void MaxBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var window = Window.GetWindow((DependencyObject)sender);
+            window.WindowState = WindowState.Maximized;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var window = Window.GetWindow((DependencyObject)sender);
+            var minbtn = (Button)window.Template.FindName("MinBtn", window);
+            var maxbtn = (Button)window.Template.FindName("MaxBtn", window);
+            maxbtn.IsEnabled = window.ResizeMode == ResizeMode.CanResizeWithGrip || window.ResizeMode == ResizeMode.CanResize;
+            minbtn.IsEnabled = window.ResizeMode != ResizeMode.NoResize;
+        }
     }
 }

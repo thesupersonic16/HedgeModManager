@@ -7,98 +7,13 @@
         mc:Ignorable="d"
         Title="HedgeModManager (7.0)"
         Loaded="Window_Loaded"
-        Height="600" Width="560" WindowStartupLocation="CenterScreen">
-
-    <Window.Resources>
-        <Style TargetType="ListView">
-            <Setter Property="Background" Value="#FF2D2D30"/>
-        </Style>
-        <Style TargetType="{x:Type Border}" x:Key="WindowFrame">
-            <Setter Property="BorderBrush" Value="#FF0066CC"/>
-            <Setter Property="Background" Value="#FF2D2D30"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style TargetType="{x:Type Button}" x:Key="WindowFrameButton">
-            <Setter Property="Width" Value="35"/>
-            <Setter Property="Height" Value="25"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#FF3F3F41"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#FF3F3F41"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Opacity" Value="0.57"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FF3F3F41" />
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#FF3F3F41" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="Grip" TargetType="Rectangle">
-            <Setter Property="Focusable" Value="False" />
-            <Setter Property="Fill" Value="Transparent" />
-            <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
-        </Style>
-
-    </Window.Resources>
-    <WindowChrome.WindowChrome>
-
-        <!-- Rather than doing hacky things to make borderless windows work nicely without any chrome, the WindowChrome class handles this for you. -->
-        <!-- With this you get window open/close/minimise animations, a window shadow, and transparency -->
-        <!-- https://docs.microsoft.com/en-us/dotnet/api/system.windows.shell.windowchrome?view=netframework-4.7.2 -->
-
-        <WindowChrome 
-            CaptionHeight="22"
-            CornerRadius="0" 
-            GlassFrameThickness="1"
-            NonClientFrameEdges="None"
-            ResizeBorderThickness="4"
-            UseAeroCaptionButtons="False" />
-    </WindowChrome.WindowChrome>
-    <Border x:Name="RotateTest" Style="{StaticResource WindowFrame}">
+        Height="600" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
+    <Border x:Name="RotateTest">
         <Border.RenderTransform>
             <RotateTransform Angle="0" CenterX="280" CenterY="300"/>
         </Border.RenderTransform>
         <Grid>
-            <Grid>
-                <Image Width="22" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0" Source="Resources/Graphics/icon256.png"/>
-                <Label x:Name="TitleLabel" Content="HedgeModManager (7.0-dev) - Sonic Generations" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,0,0" Foreground="#FFA4A4A4"/>
-                <Grid Margin="0,0,70,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="25" Background="Transparent" MouseDown="UI_FrameTitle_MouseDown">
-                </Grid>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
-                    <Button Style="{StaticResource WindowFrameButton}" Click="UI_FrameM_MouseLeftButtonUp">
-                        <Image Width="25" Height="25" Source="Resources/Graphics/IMG_FRAME_M.png"/>
-                    </Button>
-                    <Button Style="{StaticResource WindowFrameButton}" Click="UI_FrameC_MouseLeftButtonUp">
-                        <Image Width="35" Height="25" Source="Resources/Graphics/IMG_FRAME_C.png"/>
-                    </Button>
-                </StackPanel>
-            </Grid>
-            <Grid Margin="0,24,0,-1.2">
+            <Grid Margin="0,2,0,-1.2">
                 <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110">
                     <TabItem Header="Mods">
                         <Grid>

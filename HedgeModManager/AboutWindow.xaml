@@ -5,14 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="About HedgeModManager" Height="416" Width="508"  Background="#FF2D2D30" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="About HedgeModManager" Height="440" Width="500"  Background="#FF2D2D30"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
     <Grid>
-        <Image HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Source="Resources/Graphics/icon256.png"/>
-        <Label Content="HedgeModManager" HorizontalAlignment="Left" Margin="79,13,0,0" VerticalAlignment="Top" Height="64" Width="379" FontSize="36"/>
-        <Label Content="A program designed to help people easily load Hedgehog Engine mods." HorizontalAlignment="Left" Margin="44,76,0,0" VerticalAlignment="Top"/>
-        <Label Content="Requires a legally owned version of one of the supported games." HorizontalAlignment="Left" Margin="47,94,0,0" VerticalAlignment="Top"/>
-        <GroupBox Header="Credits:" HorizontalAlignment="Left" Height="218" Margin="10,125,0,0" VerticalAlignment="Top" Width="473">
-            <Grid Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="64"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="64" Height="64" Source="Resources/Graphics/icon256.png"/>
+            <Label Content="HedgeModManager" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="Auto" FontSize="36"/>
+        </StackPanel>
+        <Label Content="A program designed to help people easily load Hedgehog Engine mods." HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
+        <Label Content="Requires a legally owned version of one of the supported games." HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <GroupBox Header="Credits:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Margin="15">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.4*"/>
                     <ColumnDefinition Width="*"/>
@@ -31,15 +40,13 @@
                     <Label Content="Kickstarting 7.0"/>
                     <Label Content="Base Design"/>
                     <Label Content="CPKREDIR"/>
-                    <Label Content="Contributing to the project"/>
+                    <Label Content="Contributing to Forces Mod Loader"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="mod-loader-common"/>
                 </StackPanel>
-
             </Grid>
         </GroupBox>
-        <Button Content="Close" HorizontalAlignment="Left" Margin="408,348,0,0" VerticalAlignment="Top" Width="75" Click="UI_Close_Click" Height="23"/>
-        <Button Content="Github" HorizontalAlignment="Left" Margin="328,348,0,0" VerticalAlignment="Top" Width="75" Click="UI_GitHub_Click" Height="23"/>
-
+        <Button Content="Close" HorizontalAlignment="Left" Margin="408,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_Close_Click" Height="23" Grid.Row="3"/>
+        <Button Content="Github" HorizontalAlignment="Left" Margin="328,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_GitHub_Click" Height="23" Grid.Row="3"/>
     </Grid>
 </Window>

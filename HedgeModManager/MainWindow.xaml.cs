@@ -70,7 +70,7 @@ namespace HedgeModManager
                 ModsDB = ModsDatabase
             };
 
-            TitleLabel.Content = $"{App.ProgramName} ({App.VersionString}) - {App.CurrentGame.GameName}";
+            Title = $"{App.ProgramName} ({App.VersionString}) - {App.CurrentGame.GameName}";
 
             var steamGame = App.GetSteamGame(App.CurrentGame);
             var exeDir = steamGame?.ExeDirectory ?? System.IO.Path.Combine(Directory.GetCurrentDirectory(), App.CurrentGame.ExecuteableName);
@@ -145,8 +145,8 @@ namespace HedgeModManager
                 Button_CPKREDIR.IsEnabled = true;
 
 
-            if ((DateTime.Now.Month == 4 && DateTime.Now.Day == 1) || !Steam.CheckDirectory(App.StartDirectory))
-                SetupRotation();
+            //if ((DateTime.Now.Month == 4 && DateTime.Now.Day == 1) || !Steam.CheckDirectory(App.StartDirectory))
+                //SetupRotation();
 
             Refresh();
 

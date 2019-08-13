@@ -150,7 +150,7 @@ Do you want run the HMM Auto Installer?</value>
   </data>
   <data name="STR_UI_DELETEMOD" xml:space="preserve">
     <value>Are you sure you want to delete "{0}"?
-This Action cannot be undone!</value>
+This action cannot be undone!</value>
   </data>
   <data name="STR_UI_NO_MODS" xml:space="preserve">
     <value>Hedge Mod Manager did not detect any mods folder.

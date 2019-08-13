@@ -5,153 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="HedgeModManager Installer" Height="450" Width="800"  Background="Transparent" AllowsTransparency="True" WindowStyle="None" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
-    <Window.Resources>
-        <Style TargetType="GridViewColumnHeader">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="GridViewColumnHeader">
-                        <Border TextBlock.Foreground="White"
-                    x:Name="Border">
-                            <Border.Background>
-                                <SolidColorBrush Color="#FF3F3F46" />
-                            </Border.Background>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualStateGroup.Transitions>
-                                        <VisualTransition GeneratedDuration="0:0:0.1" />
-                                        <VisualTransition GeneratedDuration="0" To="Pressed" />
-                                    </VisualStateGroup.Transitions>
-                                    <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="MouseOver">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                          Storyboard.TargetName="Border">
-                                                <EasingColorKeyFrame KeyTime="0" Value="#FF686868" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                          Storyboard.TargetName="Border">
-                                                <EasingColorKeyFrame KeyTime="0" Value="#FFAFABAF" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled" />
-                                    <VisualState x:Name="Focus">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                          Storyboard.TargetName="Border">
-                                                <EasingColorKeyFrame KeyTime="0" Value="#FF333337" />
-                                            </ColorAnimationUsingKeyFrames>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
-                          Storyboard.TargetName="Border">
-                                                <EasingColorKeyFrame KeyTime="0" Value="White" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <Grid>
-                                <ContentPresenter Margin="2"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  RecognizesAccessKey="True" />
-                                <Thumb x:Name="PART_HeaderGripper"
-                                       HorizontalAlignment="Right"
-                                       Margin="0,0,-2,0"/>
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="ListViewItem">
-            <EventSetter Event="MouseDoubleClick" Handler="UI_GameItem_MouseDoubleClick" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Padding" Value="2,0" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ListViewItem}">
-                        <Grid>
-                            <Border x:Name="innerBorder" 
-                                  Background="{TemplateBinding Background}" 
-                                  Padding="{TemplateBinding Padding}" 
-                                  SnapsToDevicePixels="true" />
-                            <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter TargetName="innerBorder" Property="Background" Value="#FF686868"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="innerBorder" Property="Background" Value="#FF686868"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="Thumb">
-            <Setter Property="Width"
-                  Value="2" />
-            <Setter Property="Background" Value="Black"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border Padding="{TemplateBinding Padding}"
-                                Background="Transparent">
-                            <Rectangle HorizontalAlignment="Center"
-                                       Width="2"
-                                       Fill="{TemplateBinding Background}" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="ListView">
-            <Setter Property="Background" Value="#FF2D2D30"/>
-        </Style>
-        <Style TargetType="{x:Type Border}" x:Key="WindowFrame">
-            <Setter Property="BorderBrush" Value="#FF0066CC"/>
-            <Setter Property="Background" Value="#FF2D2D30"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style TargetType="{x:Type Grid}" x:Key="WindowFrameButton">
-            <Setter Property="Width" Value="35"/>
-            <Setter Property="Height" Value="25"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Style.Triggers>
-                <Trigger Property="Grid.IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FF3F3F41" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
-    <Border x:Name="RotateTest" Style="{StaticResource WindowFrame}">
+        Title="HedgeModManager Installer" Height="450" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" 
+        Loaded="Window_Loaded" Style="{DynamicResource HedgeWindow}">
+    <Border x:Name="RotateTest">
         <Border.RenderTransform>
             <RotateTransform Angle="0" CenterX="280" CenterY="300"/>
         </Border.RenderTransform>
         <Grid>
-            <Grid>
-                <Image Width="22" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0" Source="Resources/Graphics/icon256.png"/>
-                <Label x:Name="TitleLabel" Content="HedgeModManager Installer" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,0,0" Foreground="#FFA4A4A4"/>
-                <Grid Margin="0,0,70,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="25" Background="Transparent" MouseDown="UI_FrameTitle_MouseDown">
-                </Grid>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Grid Style="{StaticResource WindowFrameButton}" MouseLeftButtonUp="UI_FrameM_MouseLeftButtonUp" MouseLeftButtonDown="UI_FrameM_MouseLeftButtonDown">
-                        <Image Width="25" Height="25" Source="Resources/Graphics/IMG_FRAME_M.png"/>
-                    </Grid>
-                    <Grid Style="{StaticResource WindowFrameButton}" MouseLeftButtonUp="UI_FrameC_MouseLeftButtonUp" MouseLeftButtonDown="UI_FrameM_MouseLeftButtonDown">
-                        <Image Width="35" Height="25" Source="Resources/Graphics/IMG_FRAME_C.png"/>
-                    </Grid>
-                </StackPanel>
-            </Grid>
-            <Grid Margin="0,24,0,-1.2">
-                <TextBlock Text="Please Select a game to install HedgeModManager into" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,16,0,0"/>
+            <Grid Margin="0,0,0,-1.2">
+                <TextBlock Text="Please select a game to install HedgeModManager into" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,16,0,0"/>
                 <TextBlock Text="Detected Games:" FontSize="16" Foreground="#FFFFFF" VerticalAlignment="Top" Margin="24,63,646,0"/>
 
                 <Grid Margin="0,61,0,0.2">
