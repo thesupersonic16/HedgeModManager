@@ -251,6 +251,12 @@ namespace HedgeModManager
             }
         }
 
+        private void UI_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var dialog = new AboutModWindow((ModInfo)ModsList.SelectedItem);
+            dialog.ShowDialog();
+        }
+
         private void UI_OtherLoader_Click(object sender, RoutedEventArgs e)
         {
             App.InstallOtherLoader(true);
@@ -263,22 +269,6 @@ namespace HedgeModManager
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             (RotateTest.RenderTransform as RotateTransform).Angle += 0.001d;
-        }
-
-        private void UI_FrameTitle_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-                DragMove();
-        }
-
-        private void UI_FrameM_MouseLeftButtonUp(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void UI_FrameC_MouseLeftButtonUp(object sender, RoutedEventArgs e)
-        {
-            Close();
         }
     }
 }

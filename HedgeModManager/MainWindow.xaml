@@ -17,7 +17,8 @@
                 <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110">
                     <TabItem Header="Mods">
                         <Grid>
-                            <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" Margin="0,0,31.5,0" AllowDrop="True" Drop="UI_ModsList_Drop">
+                            <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
+                                      Margin="0,0,32,0" AllowDrop="True" Drop="UI_ModsList_Drop" MouseDoubleClick="UI_MouseDoubleClick">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Name" Width="200">

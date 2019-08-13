@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:HedgeModManager">
     <Application.Resources>
+        <DropShadowEffect x:Key="HoverEffect" BlurRadius="5" Color="Aqua"/>
         <Style TargetType="ListView">
             <Setter Property="Background" Value="#FF2D2D30"/>
         </Style>
@@ -21,7 +22,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Window">
-                        <Grid Background="#FF2D2D30" Loaded="Window_Loaded">
+                        <Grid Background="#FF2D2D30" Loaded="Window_Loaded" UseLayoutRounding="True">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="22"/>
                                 <RowDefinition Height="*"/>
@@ -104,6 +105,7 @@
             <Setter Property="BorderBrush" Value="#0066CC"/>
         </Style>
         <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#FF333337"/>
             <Setter Property="BorderBrush" Value="#FF434346" />
         </Style>

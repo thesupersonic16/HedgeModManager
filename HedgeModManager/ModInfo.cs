@@ -79,6 +79,7 @@ namespace HedgeModManager
                     IncludeDirs.Add(this["Main"][$"IncludeDir{i}"]);
                 }
             }
+            Description = Description.Replace("\\n", "\n");
         }
     }
 }
