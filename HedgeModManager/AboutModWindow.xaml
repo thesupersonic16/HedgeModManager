@@ -5,18 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="AboutModWindow" MinWidth="300" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
+        Title="AboutModWindow" MinWidth="300" Height="Auto" Width="Auto" MaxHeight="600" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
         Style="{StaticResource HedgeWindow}" ContentRendered="Window_ContentRendered" WindowStartupLocation="CenterScreen">
     
     <Grid Width="Auto" Height="Auto" Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Label x:Name="TitleLbl" Content="Title" FontSize="22" Width="Auto"/>
             <Label x:Name="AuthorLbl" Content="Author" FontSize="16" Width="Auto"/>
         </StackPanel>
-        <TextBox Grid.Row="1" x:Name="DescBx" AcceptsReturn="True" Text="Description" IsEnabled="False" Margin="5"/>
+        <TextBox Grid.Row="1" x:Name="DescBx" AcceptsReturn="True" Text="Description" IsReadOnly="True" Foreground="#929292"
+                 Margin="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
     </Grid>
 </Window>
