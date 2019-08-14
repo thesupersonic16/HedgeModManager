@@ -32,7 +32,7 @@
                         GlassFrameThickness="1"
                         NonClientFrameEdges="None"
                         ResizeBorderThickness="4"
-                        UseAeroCaptionButtons="False" />
+                        UseAeroCaptionButtons="False"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="Template">

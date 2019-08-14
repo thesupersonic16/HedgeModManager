@@ -76,7 +76,7 @@ namespace HedgeModManager
             var exeDir = steamGame?.ExeDirectory ?? System.IO.Path.Combine(Directory.GetCurrentDirectory(), App.CurrentGame.ExecuteableName);
             bool hasOtherModLoader = File.Exists(System.IO.Path.Combine(steamGame?.RootDirectory ?? exeDir, $"d3d{App.CurrentGame.DirectXVersion}.dll"));
             IsCPKREDIRInstalled = App.CurrentGame.SupportsCPKREDIR ? App.IsCPKREDIRInstalled(exeDir) : hasOtherModLoader;
-            string loaders = (IsCPKREDIRInstalled && App.CurrentGame.SupportsCPKREDIR ? "CPKREDIR v0.5" : "");
+            string loaders = (IsCPKREDIRInstalled && App.CurrentGame.SupportsCPKREDIR ? App.CPKREDIRVersion : "");
             if (hasOtherModLoader)
             {
                 if (string.IsNullOrEmpty(loaders))

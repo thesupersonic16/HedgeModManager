@@ -28,6 +28,7 @@ namespace HedgeModManager
         public static string VersionString = "7.0-dev";
         public static string ModsDbPath;
         public static string ConfigPath;
+        public static string CPKREDIRVersion;
         public static string[] Args;
         public static Game CurrentGame = Games.Unknown;
         public static CPKREDIRConfig Config;
@@ -49,7 +50,7 @@ namespace HedgeModManager
             var application = new App();
             application.InitializeComponent();
             Args = args;
-
+            CPKREDIRVersion = GetCPKREDIRVersion();
 #if !DEBUG
             // Enable our Crash Window if Compiled in Release
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
@@ -62,7 +63,7 @@ namespace HedgeModManager
             Steam.Init();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Forces");
+            SteamGames = Steam.SearchForGames("Sonic Lost World");
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;
@@ -302,6 +303,15 @@ namespace HedgeModManager
         public static bool RunningAsAdmin()
         {
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        private static string GetCPKREDIRVersion()
+        {
+            var temp = Path.GetTempFileName();
+            File.WriteAllBytes(temp, HMMResources.DAT_CPKREDIR_DLL);
+            var info = FileVersionInfo.GetVersionInfo(temp);
+            File.Delete(temp);
+            return $"{info.ProductName} v{info.FileVersion}";
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)
