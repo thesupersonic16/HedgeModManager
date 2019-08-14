@@ -314,7 +314,7 @@ namespace HedgeModManager
         private void MaxBtn_Click(object sender, RoutedEventArgs e)
         {
             var window = Window.GetWindow((DependencyObject)sender);
-            window.WindowState = WindowState.Maximized;
+            window.WindowState = window.WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
