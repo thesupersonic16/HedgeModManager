@@ -30,6 +30,7 @@ namespace HedgeModManager
         public DownloadWindow(string header, string url, string destinationFile)
         {
             InitializeComponent();
+            Title = header;
             Header.Text = header;
             URL = url;
             DestinationPath = destinationFile;
@@ -60,7 +61,7 @@ namespace HedgeModManager
             Dispatcher.Invoke(() =>
             {
                 Close();
-                DownloadCompleted.Invoke();
+                DownloadCompleted?.Invoke();
             });
         }
     }

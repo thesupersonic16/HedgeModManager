@@ -74,15 +74,15 @@ namespace HedgeModManager
 
             var steamGame = App.GetSteamGame(App.CurrentGame);
             var exeDir = steamGame?.ExeDirectory ?? System.IO.Path.Combine(Directory.GetCurrentDirectory(), App.CurrentGame.ExecuteableName);
-            IsCPKREDIRInstalled = App.IsCPKREDIRInstalled(exeDir);
-            string loaders = (IsCPKREDIRInstalled ? "CPKREDIR v0.5" : "");
             bool hasOtherModLoader = File.Exists(System.IO.Path.Combine(steamGame?.RootDirectory ?? exeDir, $"d3d{App.CurrentGame.DirectXVersion}.dll"));
+            IsCPKREDIRInstalled = App.CurrentGame.SupportsCPKREDIR ? App.IsCPKREDIRInstalled(exeDir) : hasOtherModLoader;
+            string loaders = (IsCPKREDIRInstalled && App.CurrentGame.SupportsCPKREDIR ? "CPKREDIR v0.5" : "");
             if (hasOtherModLoader)
             {
                 if (string.IsNullOrEmpty(loaders))
-                    loaders = $"{App.Config.ModLoaderNameWithVersion}";
+                    loaders = $"{App.CurrentGame.CustomLoaderName}";
                 else
-                    loaders += $" & {App.Config.ModLoaderNameWithVersion}";
+                    loaders += $" & {App.CurrentGame.CustomLoaderName}";
             }
 
             if (string.IsNullOrEmpty(loaders))
@@ -90,8 +90,8 @@ namespace HedgeModManager
 
             Label_GameStatus.Content = $"Game Name: {App.CurrentGame.GameName}";
             Label_MLVersion.Content = $"Loaders: {loaders}";
-            Button_OtherLoader.Content = hasOtherModLoader ? $"Uninstall {App.Config.ModLoaderName}" : $"Install {App.Config.ModLoaderName}";
-            Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} CPKREDIR";
+            Button_OtherLoader.Content = hasOtherModLoader && App.CurrentGame.SupportsCPKREDIR ? $"Uninstall Code Loader" : $"Install Code Loader";
+            Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} Mod Loader";
         }
 
         public void SaveModsDB()
@@ -138,13 +138,16 @@ namespace HedgeModManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
-            if (App.CurrentGame.HasCustomLoader)
-                Button_OtherLoader.IsEnabled = true;
-            if (App.CurrentGame.SupportsCPKREDIR)
+            if(App.CurrentGame.HasCustomLoader && !App.CurrentGame.SupportsCPKREDIR)
+            {
                 Button_CPKREDIR.IsEnabled = true;
-
-
+                Button_OtherLoader.IsEnabled = false;
+            }
+            else
+            {
+                Button_CPKREDIR.IsEnabled = App.CurrentGame.SupportsCPKREDIR;
+                Button_OtherLoader.IsEnabled = App.CurrentGame.HasCustomLoader;
+            }
             //if ((DateTime.Now.Month == 4 && DateTime.Now.Day == 1) || !Steam.CheckDirectory(App.StartDirectory))
                 //SetupRotation();
 

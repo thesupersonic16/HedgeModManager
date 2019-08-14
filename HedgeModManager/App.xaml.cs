@@ -169,6 +169,11 @@ namespace HedgeModManager
         /// </param>
         public static void InstallCPKREDIR(string executablePath, bool? install = true)
         {
+            if (!CurrentGame.SupportsCPKREDIR)
+            {
+                InstallOtherLoader(install.Value);
+                return;
+            }
             // Backup Executable
             File.Copy(executablePath, $"{executablePath}.bak", true);
 
@@ -222,8 +227,8 @@ namespace HedgeModManager
             }
 
             // Downloads the Loader
-            using (var client = new WebClient())
-                client.DownloadFile(CurrentGame.ModLoaderDownloadURL, DLLFileName);
+            var downloader = new DownloadWindow($"Downloading {CurrentGame.CustomLoaderName}", CurrentGame.ModLoaderDownloadURL, DLLFileName);
+            downloader.Start();
             var ini = new IniFile();
             // Get ModLoader List
             using (var stream = WebRequest.Create(HMMResources.URL_HMM_LOADERS).GetResponse().GetResponseStream())

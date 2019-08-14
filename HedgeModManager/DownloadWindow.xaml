@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="HedgeModManager" Height="150" Width="800" 
-        Background="#FF2D2D30" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
+        Title="HedgeModManager" Height="150" MinWidth="400" 
+        Background="#FF2D2D30" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}" SizeToContent="Width">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="Normal"/>
     </Window.TaskbarItemInfo>
@@ -15,7 +15,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="Header" Text="HEADER" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0"/>
-        <ProgressBar x:Name="Progress" Grid.Row="1" Margin="20"/>
+        <TextBlock x:Name="Header" Text="Header" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0" Margin="20,0,20,0"/>
+        <ProgressBar x:Name="Progress" Grid.Row="1" Margin="15"/>
     </Grid>
 </Window>
