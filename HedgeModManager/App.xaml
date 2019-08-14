@@ -21,7 +21,10 @@
 
         <DropShadowEffect x:Key="HoverEffect" BlurRadius="5" Color="#FF8ED0F9" Opacity="0" Direction="0" ShadowDepth="0"/>
         <Style TargetType="ListView">
-        <Setter Property="Background" Value="#FF2D2D30"/>
+            <Setter Property="Background" Value="#FF2D2D30"/>
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style x:Key="HedgeWindow" TargetType="{x:Type Window}">
             <Setter Property="WindowChrome.WindowChrome">

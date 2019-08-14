@@ -57,5 +57,10 @@ namespace HedgeModManager
             btn.Click += (caller, args) => { onClick.Invoke(); };
             Stack.Children.Add(btn);
         }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            InvalidateVisual();
+        }
     }
 }

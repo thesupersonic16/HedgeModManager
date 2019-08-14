@@ -49,6 +49,8 @@ namespace HedgeModManager
 
             var application = new App();
             application.InitializeComponent();
+            application.ShutdownMode = ShutdownMode.OnMainWindowClose;
+            application.MainWindow = new MainWindow();
             Args = args;
             CPKREDIRVersion = GetCPKREDIRVersion();
 #if !DEBUG
@@ -59,11 +61,10 @@ namespace HedgeModManager
             };
 #endif
 
-
             Steam.Init();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Lost World");
+            SteamGames = Steam.SearchForGames("Sonic Generations");
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;
@@ -110,7 +111,7 @@ namespace HedgeModManager
             {
                 Config = new CPKREDIRConfig(ConfigPath);
                 Restart = false;
-                application.Run(new MainWindow());
+                application.Run(application.MainWindow);
             }
             while (Restart);
         }
