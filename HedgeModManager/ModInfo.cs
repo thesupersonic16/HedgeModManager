@@ -9,20 +9,25 @@ namespace HedgeModManager
 {
     public class ModInfo : IniFile
     {
-        public List<string> IncludeDirs = new List<string>();
-        public string UpdateServer;
-        public string SaveFile;
         public string RootDirectory;
 
-
+        [PropertyIgnore]
         public bool Enabled { get; set; }
 
+        [PropertyIgnore]
         public bool HasUpdates { get; set; }
- 
+
+        [PropertyIgnore]
         public bool SupportsSave => !string.IsNullOrEmpty(SaveFile);
-        
+
         // Desc
-        public string Title { get { return this["Desc"]["Title", Path.GetFileName(RootDirectory)]; } set { this["Desc"]["Title"] = value; } }
+        public string Title { get { return this["Desc"]["Title", string.IsNullOrEmpty(RootDirectory) ? string.Empty : Path.GetFileName(RootDirectory)]; } set { this["Desc"]["Title"] = value; } }
+
+        public List<string> IncludeDirs { get; set; } = new List<string>();
+
+        public string UpdateServer { get { return this["Main"]["UpdateServer", ""]; } set { this["Main"]["UpdateServer", ""] = value; } }
+
+        public string SaveFile { get { return this["Main"]["SaveFile", ""]; } set { this["Main"]["SaveFile", ""] = value; } }
 
         public string Description { get { return this["Desc"]["Description", "None"]; } set { this["Desc"]["Description"] = value; } }
 
@@ -34,7 +39,7 @@ namespace HedgeModManager
 
         public ModInfo()
         {
- 
+
         }
 
         public ModInfo(string modPath)
@@ -69,8 +74,6 @@ namespace HedgeModManager
                 throw new Exceptions.ModLoadException(RootDirectory, "Mod doesnt contain a Desc Group, Please check mod.ini");
             }
 
-            UpdateServer = this["Main"]["UpdateServer", ""];
-            SaveFile = this["Main"]["SaveFile", ""];
             if (!string.IsNullOrEmpty(this["Main"]["IncludeDirCount", ""]))
             {
                 var includeDirCount = int.Parse(this["Main"]["IncludeDirCount", "0"]);
@@ -80,6 +83,14 @@ namespace HedgeModManager
                 }
             }
             Description = Description.Replace("\\n", "\n");
+        }
+
+        public void Save()
+        {
+            using(var stream = File.Create(Path.Combine(RootDirectory, "mod.ini")))
+            {
+                Write(stream);
+            }
         }
     }
 }

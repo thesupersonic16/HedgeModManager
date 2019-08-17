@@ -14,6 +14,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -58,11 +60,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="AboutModWindow.xaml">
+    <Page Include="UI\AboutModWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AboutWindow.xaml">
+    <Page Include="UI\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -70,47 +72,66 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="AboutModWindow.xaml.cs">
+    <Compile Include="FolderBrowserDialog.cs" />
+    <Compile Include="ShellProvider.cs" />
+    <Compile Include="UI\AboutModWindow.xaml.cs">
       <DependentUpon>AboutModWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AboutWindow.xaml.cs">
+    <Compile Include="UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Config\CPKREDIRConfig.cs" />
-    <Compile Include="DownloadWindow.xaml.cs">
+    <Compile Include="UI\DownloadWindow.xaml.cs">
       <DependentUpon>DownloadWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\EditModWindow.xaml.cs">
+      <DependentUpon>EditModWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EditPropertyWindow.xaml.cs">
+      <DependentUpon>EditPropertyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Exceptions\ModLoadException.cs" />
-    <Compile Include="ExceptionWindow.xaml.cs">
+    <Compile Include="UI\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HedgeMessageBox.xaml.cs">
+    <Compile Include="UI\HedgeMessageBox.xaml.cs">
       <DependentUpon>HedgeMessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InstallWindow.xaml.cs">
+    <Compile Include="UI\InstallWindow.xaml.cs">
       <DependentUpon>InstallWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="OptionsWindow.xaml.cs">
+    <Compile Include="UI\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PropertyEditor.xaml.cs">
+      <DependentUpon>PropertyEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Steam.cs" />
-    <Page Include="DownloadWindow.xaml">
+    <Page Include="UI\DownloadWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ExceptionWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="HedgeMessageBox.xaml">
+    <Page Include="UI\EditModWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InstallWindow.xaml">
+    <Page Include="UI\EditPropertyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="UI\ExceptionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HedgeMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\InstallWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -120,11 +141,15 @@
     </Compile>
     <Compile Include="Game.cs" />
     <Compile Include="IniFile.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="OptionsWindow.xaml">
+    <Page Include="UI\OptionsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PropertyEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -198,5 +223,6 @@
   <ItemGroup>
     <Resource Include="Resources\Graphics\IMG_FRAME_MM.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

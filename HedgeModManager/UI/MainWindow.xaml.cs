@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,12 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.IO;
 
 namespace HedgeModManager
 {
@@ -24,7 +26,6 @@ namespace HedgeModManager
     {
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
-        public static Rectangle ResizeRect = null;
 
 
         public MainWindow()
@@ -256,7 +257,8 @@ namespace HedgeModManager
 
         private void UI_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var dialog = new AboutModWindow((ModInfo)ModsList.SelectedItem);
+            var item = (ListViewItem)sender;
+            var dialog = new AboutModWindow((ModInfo)item.Content);
             dialog.ShowDialog();
         }
 
@@ -264,6 +266,82 @@ namespace HedgeModManager
         {
             App.InstallOtherLoader(true);
             RefreshUI();
+        }
+
+        private void UI_Edit_Mod(object sender, RoutedEventArgs e)
+        {
+            var mod = (ModInfo)ModsList.SelectedItem;
+            var window = new EditModWindow(mod);
+            if (window.ShowDialog().Value == true)
+            {
+                mod.Save();
+            }
+            RefreshMods();
+        }
+
+        private void UI_Description_Click(object sender, RoutedEventArgs e)
+        {
+            UI_MouseDoubleClick(null, null);
+        }
+
+        private void UI_Open_Folder(object sender, RoutedEventArgs e)
+        {
+            var mod = (ModInfo)ModsList.SelectedItem;
+            Process.Start(mod.RootDirectory);
+        }
+
+        private void UI_Install_Mod(object sender, RoutedEventArgs e)
+        {
+            var choice = new OptionsWindow("Install a mod by...", "Installing from a folder", "Installing from an archive", "Making one (for developers!)").Ask();
+            if (choice == 0)
+            {
+                var dialog = new FolderBrowserDialog();
+                if (dialog.ShowDialog())
+                {
+                    ModsDatabase.InstallMod(dialog.SelectedFolder);
+                }
+            }
+            else if(choice == 1)
+            {
+                var dialog = new FileOpenDialog();
+                var filters = new COMDLG_FILTERSPEC[3];
+                filters[0] = new COMDLG_FILTERSPEC() { pszName = "Zip archive", pszSpec = "*.zip" };
+                filters[1] = new COMDLG_FILTERSPEC() { pszName = "7z archive", pszSpec = "*.7z" };
+                filters[2] = new COMDLG_FILTERSPEC() { pszName = "Rar archive", pszSpec = "*.rar" };
+                dialog.SetFileTypes((uint)filters.Length, filters);
+                if(dialog.Show(new WindowInteropHelper(this).Handle) == 0)
+                {
+                    dialog.GetResult(out var item);
+                    item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out var path);
+                    ModsDatabase.InstallMod(path);
+                }
+            }
+            else if(choice == 2)
+            {
+                var mod = new ModInfo
+                {
+                    Title = GenerateModTitle(),
+                    Author = Environment.UserName
+                };
+                mod.IncludeDirs.Add(".");
+                var editor = new EditModWindow(mod);
+                if (editor.ShowDialog().Value)
+                {
+                    ModsDatabase.CreateMod(mod, true);
+                    RefreshMods();
+                }
+            }
+        }
+
+        protected string GenerateModTitle()
+        {
+            for(int i = 1; i < int.MaxValue; i++)
+            {
+                var title = $"{App.CurrentGame.GameName} Mod {i}";
+                if (!Directory.Exists(Path.Combine(ModsDatabase.RootDirectory, title)))
+                    return title;
+            }
+            return string.Empty;
         }
 
         // too slow

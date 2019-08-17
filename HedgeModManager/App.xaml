@@ -20,13 +20,55 @@
         <SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="#CDCDCD"/>
 
         <DropShadowEffect x:Key="HoverEffect" BlurRadius="5" Color="#FF8ED0F9" Opacity="0" Direction="0" ShadowDepth="0"/>
+        
+        <Style TargetType="ContextMenu">
+            <Setter Property="HasDropShadow" Value="True"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContextMenu">
+                        <Border
+                            Background="#3F3F3F"
+                            CornerRadius="4" 
+                            BorderThickness="2"
+                            Padding="0,5,0,5">
+                            <Border.Effect>
+                                <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="5" Color="Gray"/>
+                            </Border.Effect>
+                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="MenuItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Label Margin="10,0,20,0" Content="{TemplateBinding Header}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="#575757"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
         <Style TargetType="ListView">
             <Setter Property="Background" Value="#FF2D2D30"/>
+            <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style TargetType="RadioButton">
             <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style x:Key="HedgeWindow" TargetType="{x:Type Window}">
+            <Setter Property="WindowStyle" Value="None"/>
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome 

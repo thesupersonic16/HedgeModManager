@@ -1,12 +1,13 @@
-﻿<Window x:Class="HedgeModManager.OptionsWindow"
+﻿<Window x:Class="HedgeModManager.HedgeMessageBox"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="Hedge Mod Manager" Height="Auto" Width="Auto" MinWidth="400" MinHeight="200" Style="{StaticResource HedgeWindow}" 
-        SizeToContent="WidthAndHeight" ContentRendered="Window_ContentRendered" ResizeMode="NoResize">
+        Title="Hedge Mod Manager" MinHeight="100" MinWidth="450" 
+        Width="Auto" Height="Auto" WindowStartupLocation="CenterScreen"
+        Style="{StaticResource HedgeWindow}" ResizeMode="NoResize" SizeToContent="WidthAndHeight" ContentRendered="Window_ContentRendered">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -14,10 +15,10 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="Header" Text="HEADER" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <StackPanel x:Name="CheckStack" Grid.Row="1" VerticalAlignment="Center" Margin="5,0,5,0" Width="Auto" Height="Auto"/>
+        <TextBlock x:Name="Message" Width="Auto" Foreground="White" Text="TEXT" Margin="5,0,5,0" Grid.Row="1" FontSize="20"/>
         <StackPanel x:Name="Stack" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Stretch">
-        <Button Width="Auto" Height="23" Margin="5" Content="    Ok    " Click="Ok_Click"/>
-        <Button Width="Auto" Height="23" Margin="5" Content="    Cancel   " IsCancel="True"/>
+            <!--<Button Width="Auto" Height="23" Margin="0" Content="OK"/>
+            <Button Width="Auto" Height="23" Margin="0" Content="CANCEL"/>-->
         </StackPanel>
     </Grid>
 </Window>

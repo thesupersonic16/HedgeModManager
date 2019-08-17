@@ -64,7 +64,7 @@ namespace HedgeModManager
             Steam.Init();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Generations");
+            SteamGames = Steam.SearchForGames("Sonic Forces");
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;
@@ -125,12 +125,13 @@ namespace HedgeModManager
             if (steamGame == null)
                 return;
             StartDirectory = steamGame.RootDirectory;
-            if (steamGame.GameID == "329440")
-                CurrentGame = Games.SonicLostWorld;
-            if (steamGame.GameID == "71340")
-                CurrentGame = Games.SonicGenerations;
-            if (steamGame.GameID == "637100")
-                CurrentGame = Games.SonicForces;
+            foreach(var game in Games.GetSupportedGames())
+            {
+                if(game.AppID == steamGame.GameID)
+                {
+                    CurrentGame = game;
+                }
+            }
         }
 
         /// <summary>

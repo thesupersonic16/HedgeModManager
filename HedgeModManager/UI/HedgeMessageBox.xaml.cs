@@ -51,7 +51,7 @@ namespace HedgeModManager
                 Content = $"    {text}    ",
                 Width = double.NaN,
                 Height = 23,
-                Margin = new Thickness(5)
+                Margin = new Thickness(5, 0, 5, 0)
             };
             
             btn.Click += (caller, args) => { onClick.Invoke(); };

@@ -24,7 +24,7 @@ namespace HedgeModManager
             InitializeComponent();
             Title = $"About {mod.Title}";
             TitleLbl.Content = $"{mod.Title} v{mod.Version}";
-            AuthorLbl.Content = $"By {mod.Author} on {mod.Date}";
+            AuthorLbl.Content = $"Made by {mod.Author} on {mod.Date}";
             DescBx.Text = mod.Description;
         }
 

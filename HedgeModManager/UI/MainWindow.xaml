@@ -8,6 +8,19 @@
         Title="HedgeModManager (7.0)"
         Loaded="Window_Loaded"
         MinHeight="600" MinWidth="560" Height="600" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
+    <Window.Resources>
+        <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+            <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
+            <Setter Property="ContextMenu" Value="{DynamicResource ModContextMenu}"/>
+        </Style>
+        
+        <ContextMenu x:Key="ModContextMenu">
+            <MenuItem Header="Description" Click="UI_Description_Click"/>
+            <MenuItem Header="Open containing folder" Click="UI_Open_Folder"/>
+            <MenuItem Header="Edit mod" Click="UI_Edit_Mod"/>
+            <MenuItem Header="Delete mod" Click="UI_RemoveMod_Click"/>
+        </ContextMenu>
+    </Window.Resources>
     <Border x:Name="RotateTest">
         <Border.RenderTransform>
             <RotateTransform Angle="0" CenterX="280" CenterY="300"/>
@@ -18,7 +31,7 @@
                     <TabItem Header="Mods">
                         <Grid>
                             <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
-                                      Margin="0,0,32,0" AllowDrop="True" Drop="UI_ModsList_Drop" MouseDoubleClick="UI_MouseDoubleClick">
+                                      Margin="0,0,32,0" AllowDrop="True" Drop="UI_ModsList_Drop">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Name" Width="200">
@@ -84,7 +97,7 @@
 
                         <Button Content="Remove Mod"                       Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_RemoveMod_Click"/>
                         <Button Content="Refresh Mod List" Width="Auto"    Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
-                        <Button Content="Add Mod"          Width="Auto"    Grid.Column="2" Grid.Row="0" Margin="5"/>
+                        <Button Content="Add Mod"          Width="Auto"    Grid.Column="2" Grid.Row="0" Margin="5" Click="UI_Install_Mod"/>
 
                         <Button Content="Save"                             Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
                         <Button Content="Save and Play"    Width="Auto"    Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>

@@ -309,5 +309,21 @@ namespace HedgeModManager
                 }
             }
         }
+
+        public void CreateMod(ModInfo mod, bool openFolder = false)
+        {
+            var path = Path.Combine(RootDirectory, mod.Title);
+            Directory.CreateDirectory(path);
+            Directory.CreateDirectory(Path.Combine(path, "disk"));
+            using(var stream = File.Create(Path.Combine(path, "mod.ini")))
+            {
+                mod.Write(stream);
+            }
+
+            if (openFolder)
+            {
+                Process.Start(path);
+            }
+        }
     }
 }
