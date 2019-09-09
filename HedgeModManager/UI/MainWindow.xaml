@@ -27,13 +27,13 @@
         </Border.RenderTransform>
         <Grid>
             <Grid Margin="0,2,0,-1.2">
-                <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110">
+                <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110" Background="Transparent">
                     <TabItem Header="Mods">
                         <Grid>
                             <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
                                       Margin="0,0,32,0" AllowDrop="True" Drop="UI_ModsList_Drop">
                                 <ListView.View>
-                                    <GridView>
+                                    <GridView AllowsColumnReorder="True">
                                         <GridViewColumn Header="Name" Width="200">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -57,7 +57,20 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Codes">
-                        <Grid/>
+                        <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
+                                     Margin="5" AllowDrop="True" Drop="UI_ModsList_Drop">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="True">
+                                    <GridViewColumn Header="Name" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding Enabled}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </TabItem>
                     <TabItem Header="Settings">
                         <Grid>

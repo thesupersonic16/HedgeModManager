@@ -72,7 +72,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="CodeLoader.cs" />
     <Compile Include="FolderBrowserDialog.cs" />
+    <Compile Include="Keys.cs" />
     <Compile Include="ShellProvider.cs" />
     <Compile Include="UI\AboutModWindow.xaml.cs">
       <DependentUpon>AboutModWindow.xaml</DependentUpon>

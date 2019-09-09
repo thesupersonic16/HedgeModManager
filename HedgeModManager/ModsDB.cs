@@ -14,6 +14,8 @@ namespace HedgeModManager
     public class ModsDB : IniFile
     {
         public List<ModInfo> Mods = new List<ModInfo>();
+        public List<string> Codes = new List<string>();
+        public List<string> Patches = new List<string>();
         public string RootDirectory { get; set; }
         public int ModCount => Mods.Count;
 
@@ -56,8 +58,11 @@ namespace HedgeModManager
                 Groups.Add("Main", new IniGroup());
             if (!Groups.ContainsKey("Mods"))
                 Groups.Add("Mods", new IniGroup());
+            if (!Groups.ContainsKey("Codes"))
+                Groups.Add("Codes", new IniGroup());
 
             DetectMods();
+            GetEnabledCodes();
             GetEnabledMods();
         }
 
@@ -98,12 +103,42 @@ namespace HedgeModManager
             }
         }
 
+        public void GetEnabledCodes()
+        {
+            var activeCount = (int)this["Codes"]["ActiveCodeCount", typeof(int), -1];
+            if(activeCount < 0)
+            {
+                //Old HMM
+                for(int i = 0; i < int.MaxValue; i++)
+                {
+                    var code = this["Codes"][$"Code{i}", string.Empty];
+                    if (string.IsNullOrEmpty(code))
+                        break;
+                    else
+                        Codes.Add(code);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < activeCount; i++)
+                {
+                    Codes.Add(this["Codes"][$"Code{i}"]);
+                }
+            }
+        }
+
         public void BuildList()
         {
             this["Mods"].Params.Clear();
             foreach (var mod in Mods)
             {
                 this["Mods"][Path.GetFileName(mod.RootDirectory)] = Path.Combine(mod.RootDirectory, "mod.ini"); 
+            }
+            this["Codes"].Params.Clear();
+            this["Codes"]["ActiveCodeCount"] = Codes.Count.ToString();
+            for (int i = 0; i < Codes.Count; i++)
+            {
+                this["Codes"][$"Code{i}"] = Codes[i];
             }
         }
 
@@ -127,6 +162,8 @@ namespace HedgeModManager
             {
                 Write(stream);
             }
+            CodeList.WriteDatFile(Path.Combine(RootDirectory, "Codes.dat"), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => { return x.Enabled && !x.Patch; })));
+            CodeList.WriteDatFile(Path.Combine(RootDirectory, "Patches.dat"), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => { return x.Enabled && x.Patch; })));
         }
 
         public void DeleteMod(ModInfo mod)
@@ -141,6 +178,8 @@ namespace HedgeModManager
             list.AddRange(this["Main"].Params.Where(t => t.Key.StartsWith("ActiveMod")));
             foreach (var o in list)
                 this["Main"].Params.Remove(o.Key);
+
+            this["Codes"].Params.Clear();
         }
 
         public void DisableAllMods()

@@ -15,7 +15,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using System.IO;
 
 namespace HedgeModManager
 {
@@ -26,7 +25,7 @@ namespace HedgeModManager
     {
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
-
+        public static CodeList CodesDatabase;
 
         public MainWindow()
         {
@@ -42,9 +41,11 @@ namespace HedgeModManager
         public void RefreshMods()
         {
             ModsList.Items.Clear();
+            CodesList.Items.Clear();
             ModsDatabase = new ModsDB(App.ModsDbPath);
             ModsDatabase.DetectMods();
             ModsDatabase.GetEnabledMods();
+            ModsDatabase.Mods.OrderBy(x => x.Title);
             ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
 
             // Re-arrange the mods
@@ -53,13 +54,25 @@ namespace HedgeModManager
                 for (int i2 = 0; i2 < ModsList.Items.Count; i2++)
                 {
                     var mod = ModsList.Items[i2] as ModInfo;
-                    if (ModsDatabase["Main"][$"ActiveMod{i}"] == System.IO.Path.GetFileName(mod.RootDirectory))
+                    if (ModsDatabase["Main"][$"ActiveMod{i}"] == Path.GetFileName(mod.RootDirectory))
                     {
                         ModsList.Items.Remove(mod);
                         ModsList.Items.Insert(0, mod);
                     }
                 }
             }
+
+            CodesDatabase = CodeLoader.LoadAllCodes();
+            ModsDatabase.Codes.ForEach((x) =>
+            {
+                var code = CodesDatabase.Codes.Find((y) => { return y.Name == x; });
+                if(code != null)
+                code.Enabled = true;
+            });
+            CodesDatabase.Codes.ForEach((x) =>
+            {
+                CodesList.Items.Add(x);
+            });
         }
 
         public void RefreshUI()
@@ -99,10 +112,25 @@ namespace HedgeModManager
         {
             App.Config.Save(App.ConfigPath);
             ModsDatabase.Mods.Clear();
+            ModsDatabase.Codes.Clear();
             foreach (var mod in ModsList.Items)
             {
                 ModsDatabase.Mods.Add(mod as ModInfo);
             }
+            CodesDatabase.Codes.ForEach((x) => 
+            {
+                if(x.Enabled)
+                {
+                    if(!x.Patch)
+                    {
+                        ModsDatabase.Codes.Add(x.Name);
+                    }
+                    else
+                    {
+                        ModsDatabase.Patches.Add(x.Name);
+                    }
+                }
+            });
             ModsDatabase.SaveDB();
         }
 
@@ -139,7 +167,7 @@ namespace HedgeModManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if(App.CurrentGame.HasCustomLoader && !App.CurrentGame.SupportsCPKREDIR)
+            if (App.CurrentGame.HasCustomLoader && !App.CurrentGame.SupportsCPKREDIR)
             {
                 Button_CPKREDIR.IsEnabled = true;
                 Button_OtherLoader.IsEnabled = false;
@@ -150,7 +178,7 @@ namespace HedgeModManager
                 Button_OtherLoader.IsEnabled = App.CurrentGame.HasCustomLoader;
             }
             //if ((DateTime.Now.Month == 4 && DateTime.Now.Day == 1) || !Steam.CheckDirectory(App.StartDirectory))
-                //SetupRotation();
+            //SetupRotation();
 
             Refresh();
 
@@ -301,7 +329,7 @@ namespace HedgeModManager
                     ModsDatabase.InstallMod(dialog.SelectedFolder);
                 }
             }
-            else if(choice == 1)
+            else if (choice == 1)
             {
                 var dialog = new FileOpenDialog();
                 var filters = new COMDLG_FILTERSPEC[3];
@@ -309,14 +337,14 @@ namespace HedgeModManager
                 filters[1] = new COMDLG_FILTERSPEC() { pszName = "7z archive", pszSpec = "*.7z" };
                 filters[2] = new COMDLG_FILTERSPEC() { pszName = "Rar archive", pszSpec = "*.rar" };
                 dialog.SetFileTypes((uint)filters.Length, filters);
-                if(dialog.Show(new WindowInteropHelper(this).Handle) == 0)
+                if (dialog.Show(new WindowInteropHelper(this).Handle) == 0)
                 {
                     dialog.GetResult(out var item);
                     item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out var path);
                     ModsDatabase.InstallMod(path);
                 }
             }
-            else if(choice == 2)
+            else if (choice == 2)
             {
                 var mod = new ModInfo
                 {
@@ -335,7 +363,7 @@ namespace HedgeModManager
 
         protected string GenerateModTitle()
         {
-            for(int i = 1; i < int.MaxValue; i++)
+            for (int i = 1; i < int.MaxValue; i++)
             {
                 var title = $"{App.CurrentGame.GameName} Mod {i}";
                 if (!Directory.Exists(Path.Combine(ModsDatabase.RootDirectory, title)))

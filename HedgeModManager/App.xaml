@@ -68,13 +68,13 @@
             <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style x:Key="HedgeWindow" TargetType="{x:Type Window}">
-            <Setter Property="WindowStyle" Value="None"/>
+            <Setter Property="Background" Value="#FF2D2D30"/>
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome 
                         CaptionHeight="22"
                         CornerRadius="0" 
-                        GlassFrameThickness="1"
+                        GlassFrameThickness="0,0,0,1"
                         NonClientFrameEdges="None"
                         ResizeBorderThickness="4"
                         UseAeroCaptionButtons="False"/>
@@ -83,13 +83,13 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Window">
-                        <Grid Background="#FF2D2D30" Loaded="Window_Loaded" UseLayoutRounding="True">
+                        <Grid Background="{TemplateBinding Background}" Loaded="Window_Loaded" UseLayoutRounding="True">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="22"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Image Width="22" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0" Source="Resources/Graphics/icon256.png"/>
-                            <Label Content="{TemplateBinding Title}" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,0,0" Foreground="#FFA4A4A4"/>
+                            <Label Content="{TemplateBinding Title}" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,0,0" Foreground="#E9E9E9"/>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
                                 <Button Name="MinBtn" Style="{DynamicResource WindowFrameButton}" Click="Minimize_Click">
                                     <Image Width="25" Height="25" Source="Resources/Graphics/IMG_FRAME_M.png"/>
@@ -101,13 +101,21 @@
                                     <Image Width="35" Height="25" Source="Resources/Graphics/IMG_FRAME_C.png"/>
                                 </Button>
                             </StackPanel>
-                            <Grid Grid.Row="1">
+                            <Grid Grid.Row="1" Background="#FF2D2D30">
                                 <ContentPresenter/>
                             </Grid>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsActive" Value="False">
+                    <Setter Property="Background" Value="#FF404040"/>
+                </Trigger>
+                <Trigger Property="IsActive" Value="True">
+                    <Setter Property="Background" Value="#2D2D30"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type Border}" x:Key="WindowFrame">
             <Setter Property="BorderBrush" Value="#FF0066CC"/>
@@ -172,8 +180,25 @@
         </Style>
         <!-- Tabs -->
         <Style TargetType="TabControl">
-            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#FF3F3F46" />
+            <EventSetter Event="SelectionChanged" Handler="TabControl_SelectionChanged"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid KeyboardNavigation.TabNavigation="Local">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TabPanel IsItemsHost="True"/>
+                            <Grid Grid.Row="1">
+                                <ContentPresenter x:Name="PART_Presenter" ContentSource="SelectedContent" HorizontalAlignment="Stretch"/>
+                                <Rectangle x:Name="PART_TempArea"/>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style TargetType="GroupBox">
             <Setter Property="Background" Value="#FF007ACC"/>
@@ -230,44 +255,19 @@
             <Setter Property="Foreground" Value="#FFFFFFFF"/>
             <Setter Property="MinHeight"             Value="20px" />
             <Setter Property="MinWidth"              Value="20px" />
+            <Setter Property="Effect" Value="{x:Null}"/>
+            <Setter Property="LayoutTransform" >
+                <Setter.Value>
+                    <ScaleTransform x:Name="scaleTransform" />
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
                         <Border TextBlock.Foreground="#FFFFFFFF"
-                    x:Name="Border"
+                    x:Name="PART_Border"
                     BorderBrush="Transparent"
-                    BorderThickness="0">
-                            <Border.Background>
-                                <SolidColorBrush Color="Transparent" />
-                            </Border.Background>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="MouseOver">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
-                                                <EasingColorKeyFrame KeyTime="0" Value="#FF1C97EA" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="MouseLeave" />
-                                    <VisualState x:Name="Disabled" />
-                                </VisualStateGroup>
-                                <VisualStateGroup x:Name="FocusStates">
-                                    <VisualState x:Name="Focused" />
-                                    <VisualState x:Name="Unfocused" />
-                                </VisualStateGroup>
-                                <VisualStateGroup x:Name="SelectionStates">
-                                    <VisualState x:Name="Selected">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border" >
-                                                <EasingColorKeyFrame KeyTime="0" Value="#FF007ACC" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Unselected" />
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
+                    BorderThickness="0" Effect="{x:Null}" Background="{TemplateBinding Background}">
                             <ContentPresenter Margin="4,2,20,2"
               HorizontalAlignment="Left"
               VerticalAlignment="Center"
@@ -276,8 +276,20 @@
 
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FF007ACC" />
+                                <Setter Property="Background" Value="#FF007ACC" />
                             </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF1C97EA"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="False"/>
+                                    <Condition Property="IsSelected" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <MultiTrigger.Setters>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </MultiTrigger.Setters>
+                            </MultiTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
