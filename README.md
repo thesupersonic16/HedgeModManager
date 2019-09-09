@@ -2,7 +2,7 @@
 A program for managing mods for Sonic Generations, Sonic Lost World and Sonic Forces on PC.
 
 ## So how do I use this?
-Its simple, just grab the [latest version from GitHub](https://github.com/thesupersonic16/HedgeModManager/releases/latest) (or grab the latest compile from [AppVeyor](https://ci.appveyor.com/project/thesupersonic16/slw-mod-loader)) then extract all the files anywhere and run HedgeModManager.exe.
+Its simple, just grab the [latest version from GitHub](https://github.com/thesupersonic16/HedgeModManager/releases/latest) (or grab the latest compile from [AppVeyor](https://ci.appveyor.com/project/thesupersonic16/slw-mod-loader/branch/rewrite)) then extract all the files anywhere and run HedgeModManager.exe.
 
 ## How do I install mods?
 There are multiple ways of installing mods, one of the easy ways of installing mods is by dragging its zip/7z/rar/folder into the mod list along with also being able to drag and drop multiple files and/or folders.
