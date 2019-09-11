@@ -15,7 +15,6 @@ namespace HedgeModManager
     {
         public List<ModInfo> Mods = new List<ModInfo>();
         public List<string> Codes = new List<string>();
-        public List<string> Patches = new List<string>();
         public string RootDirectory { get; set; }
         public int ModCount => Mods.Count;
 

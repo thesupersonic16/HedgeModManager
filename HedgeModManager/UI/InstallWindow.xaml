@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
         Title="HedgeModManager Installer" Height="450" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" 
-        Loaded="Window_Loaded" Style="{DynamicResource HedgeWindow}">
+        Loaded="Window_Loaded" Style="{DynamicResource HedgeWindow}" WindowStyle="None">
     <Border x:Name="RotateTest">
         <Border.RenderTransform>
             <RotateTransform Angle="0" CenterX="280" CenterY="300"/>

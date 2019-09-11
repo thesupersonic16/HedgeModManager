@@ -26,6 +26,7 @@ namespace HedgeModManager
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
         public static CodeList CodesDatabase;
+        public static FileSystemWatcher ModsWatcher;
 
         public MainWindow()
         {
@@ -71,7 +72,10 @@ namespace HedgeModManager
             });
             CodesDatabase.Codes.ForEach((x) =>
             {
-                CodesList.Items.Add(x);
+                if (x.Enabled)
+                    CodesList.Items.Insert(0, x);
+                else
+                    CodesList.Items.Add(x);
             });
         }
 
@@ -121,14 +125,7 @@ namespace HedgeModManager
             {
                 if(x.Enabled)
                 {
-                    if(!x.Patch)
-                    {
-                        ModsDatabase.Codes.Add(x.Name);
-                    }
-                    else
-                    {
-                        ModsDatabase.Patches.Add(x.Name);
-                    }
+                    ModsDatabase.Codes.Add(x.Name);
                 }
             });
             ModsDatabase.SaveDB();
@@ -167,6 +164,25 @@ namespace HedgeModManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            ModsWatcher = new FileSystemWatcher(App.ModsDbPath)
+            {
+                EnableRaisingEvents = true,
+                NotifyFilter = NotifyFilters.DirectoryName
+            };
+            ModsWatcher.Deleted += (x, args) =>
+            {
+                Dispatcher.Invoke(() => 
+                {
+                    Refresh();
+                });
+            };
+            ModsWatcher.Created += (x, args) => 
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    Refresh();
+                });
+            };
             if (App.CurrentGame.HasCustomLoader && !App.CurrentGame.SupportsCPKREDIR)
             {
                 Button_CPKREDIR.IsEnabled = true;
