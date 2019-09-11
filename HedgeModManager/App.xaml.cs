@@ -18,6 +18,8 @@ using System.Windows.Media;
 using HMMResources = HedgeModManager.Properties.Resources;
 using System.Windows.Media.Animation;
 
+using GameBananaAPI;
+
 namespace HedgeModManager
 {
     /// <summary>
@@ -27,6 +29,7 @@ namespace HedgeModManager
     {
 
         public static string StartDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        public static string AppPath = Path.Combine(StartDirectory, AppDomain.CurrentDomain.FriendlyName);
         public static string ProgramName = "HedgeModManager";
         public static string VersionString = "7.0-dev";
         public static string ModsDbPath;
@@ -83,6 +86,13 @@ namespace HedgeModManager
 #endif
             ModsDbPath = Path.Combine(StartDirectory, "Mods");
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
+
+            if (args.Length > 1 && args[0] == "-gb")
+            {
+                string line = args[1].Substring(args[1].IndexOf(':') + 1);
+                GBAPI.ParseCommandLine(line);
+                return;
+            }
 
             if (CurrentGame == Games.Unknown)
             {

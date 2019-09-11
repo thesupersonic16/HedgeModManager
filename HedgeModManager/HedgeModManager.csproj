@@ -74,6 +74,7 @@
     </Page>
     <Compile Include="CodeLoader.cs" />
     <Compile Include="FolderBrowserDialog.cs" />
+    <Compile Include="GameBanana\GBAPI.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="ShellProvider.cs" />
     <Compile Include="UI\AboutModWindow.xaml.cs">
@@ -95,6 +96,9 @@
     <Compile Include="Exceptions\ModLoadException.cs" />
     <Compile Include="UI\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\GBModWindow.xaml.cs">
+      <DependentUpon>GBModWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\HedgeMessageBox.xaml.cs">
       <DependentUpon>HedgeMessageBox.xaml</DependentUpon>
@@ -124,6 +128,10 @@
     <Page Include="UI\ExceptionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\GBModWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\HedgeMessageBox.xaml">
       <SubType>Designer</SubType>
@@ -225,6 +233,8 @@
   <ItemGroup>
     <Resource Include="Resources\Graphics\IMG_FRAME_MM.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\GBStyleSheet.css" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

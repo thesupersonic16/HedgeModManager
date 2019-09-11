@@ -23,10 +23,12 @@ namespace HedgeModManager
     {
 
         public Exception _Exception;
+        public string _ExtraInfo;
         
-        public ExceptionWindow(Exception exception) : this()
+        public ExceptionWindow(Exception exception, string extraInfo = "") : this()
         {
             _Exception = exception;
+            _ExtraInfo = extraInfo;
         }
 
         public ExceptionWindow()
@@ -50,6 +52,11 @@ namespace HedgeModManager
             if (useMarkdown) body.AppendLine("```");
 
             body.AppendLine("");
+
+            if (!string.IsNullOrEmpty(_ExtraInfo))
+            {
+                body.AppendLine($"Extra Information: {_ExtraInfo}");
+            }
 
             if (_Exception != null)
             {

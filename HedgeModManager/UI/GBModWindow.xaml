@@ -1,0 +1,45 @@
+﻿<Window x:Class="HedgeModManager.UI.GBModWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HedgeModManager.UI"
+        mc:Ignorable="d"
+        Title="{Binding ModName, FallbackValue=Name}" Height="450" Width="800" Style="{StaticResource HedgeWindow}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="160"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <Label Content="{Binding ModName, FallbackValue=Name}" FontSize="24"/>
+                <Label Content="{Binding ItemType, FallbackValue=Type}" FontSize="14"/>
+            </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Image x:Name="ScreenshotBx" Width="250" Height="150" HorizontalAlignment="Left" Margin="5"/>
+                <StackPanel Grid.Column="1" Margin="5,0,0,0"/>
+            </Grid>
+            <WebBrowser x:Name="Description" Grid.Row="2"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Credits" FontSize="24"/>
+            <ScrollViewer Grid.Row="1" Margin="5,0,0,0">
+                <StackPanel x:Name="CreditsPanel" Orientation="Vertical"/>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

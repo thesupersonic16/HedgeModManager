@@ -375,6 +375,9 @@
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="White"/>
         </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
         <Style TargetType="CheckBox">
             <Setter Property="Foreground" Value="White"/>
         </Style>
