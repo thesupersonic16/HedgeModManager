@@ -2,10 +2,10 @@ version: '7.0-dev_r{build}'
 
 environment:
   matrix:
-    - appveyor_build_worker_image: Visual Studio 2017
+    - appveyor_build_worker_image: Visual Studio 2019
       configuration: Debug
       platform: Any CPU
-    - appveyor_build_worker_image: Visual Studio 2017
+    - appveyor_build_worker_image: Visual Studio 2019
       configuration: Release
       platform: Any CPU
 
