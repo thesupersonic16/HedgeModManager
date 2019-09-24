@@ -401,7 +401,11 @@ namespace HedgeModManager
         private void Game_Changed(object sender, SelectionChangedEventArgs e)
         {
             App.CurrentGame = (Game)ComboBox_GameStatus.SelectedItem;
-            RefreshUI();
+            var steamGame = App.GetSteamGame(App.CurrentGame);
+            App.StartDirectory = steamGame.RootDirectory;
+            App.ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
+            App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
+            Refresh();
         }
     }
 }
