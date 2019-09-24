@@ -20,12 +20,16 @@ namespace HedgeModManager.UI
     /// </summary>
     public partial class GBModWindow : Window
     {
-        public GBModWindow(GBAPIItemDataBasic mod)
+        public GBModWindow(GBAPIItemDataBasic mod, List<GBAPIScreenshotData> screenshots)
         {
             DataContext = mod;
             InitializeComponent();
-            ScreenshotBx.Source = new BitmapImage(new Uri(mod.ScreenshotURL));
-            ScreenshotBx.Stretch = Stretch.Uniform;
+            ScreenshotBx.Source = new BitmapImage(new Uri(screenshots[0].URL));
+            ScreenshotBx.Stretch = Stretch.Fill;
+            foreach(var screenshot in screenshots)
+            {
+                ScreenshotPanel.Children.Add(new Image() { Source = new BitmapImage(new Uri(screenshot.URLSmall)), Stretch = Stretch.Uniform, Margin = new Thickness(2.5) });
+            }
             Description.NavigateToString($@"
 <html>
     <body>
@@ -37,13 +41,16 @@ namespace HedgeModManager.UI
 </html>");
             foreach(var group in mod.Credits)
             {
-                CreditsPanel.Children.Add(new TextBlock() { Text = group.GroupName, FontSize = 14, TextWrapping = TextWrapping.WrapWithOverflow });
+                if (group.Credits.Length < 1)
+                    continue;
+
+                CreditsPanel.Children.Add(new TextBlock() { Text = group.GroupName, FontSize = 12, TextWrapping = TextWrapping.WrapWithOverflow, FontStyle = FontStyles.Italic, Foreground = Brushes.LightGray });
                 foreach(var credit in group.Credits)
                 {
                     var block = new TextBlock()
                     {
                         Text = credit.MemberID == 0 ? credit.MemberName : string.Empty,
-                        FontSize = 16,
+                        FontSize = 14,
                         TextWrapping = TextWrapping.WrapWithOverflow
                     };
                     if(credit.MemberID != 0)
@@ -57,7 +64,8 @@ namespace HedgeModManager.UI
                         block.Inlines.Add(link);
                     }
                     CreditsPanel.Children.Add(block);
-                    CreditsPanel.Children.Add(new TextBlock() { Text = credit.Role, FontSize = 12, TextWrapping = TextWrapping.WrapWithOverflow });
+                    if(!string.IsNullOrEmpty(credit.Role))
+                        CreditsPanel.Children.Add(new TextBlock() { Text = credit.Role, FontSize = 11.2, TextWrapping = TextWrapping.WrapWithOverflow });
                 }
             }
         }

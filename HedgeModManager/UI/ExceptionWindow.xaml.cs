@@ -67,7 +67,9 @@ namespace HedgeModManager
                 body.AppendLine($"    Message: {_Exception.Message}");
                 body.AppendLine($"    Source: {_Exception.Source}");
                 body.AppendLine($"    Function: {_Exception.TargetSite}");
-                body.AppendLine($"    StackTrace: \n    {_Exception.StackTrace.Replace("\n", "\n    ")}");
+                if(_Exception.StackTrace != null)
+                    body.AppendLine($"    StackTrace: \n    {_Exception.StackTrace.Replace("\n", "\n    ")}");
+
                 body.AppendLine($"    InnerException: {_Exception.InnerException}");
 
                 if (useMarkdown) body.AppendLine("```");

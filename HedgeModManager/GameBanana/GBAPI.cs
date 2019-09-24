@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using HedgeModManager.UI;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace GameBananaAPI
 {
@@ -191,6 +193,17 @@ namespace GameBananaAPI
             return obj;
         }
 
+        public static object JSONToObject(Type type, string data)
+        {
+            //TODO
+            var obj = Activator.CreateInstance(type);
+            foreach(var prop in type.GetProperties())
+            {
+                var attribute = prop.GetCustomAttribute(typeof(GBAPIField));
+            }
+            return obj;
+        }
+
         public static bool RequestItemData(GBAPIItemData item)
         {
             var handler = new GBAPIRequestHandler();
@@ -200,7 +213,6 @@ namespace GameBananaAPI
             return handler.ParseResponse(response, item);
         }
 
-        // TODO: Run this as Admin
         /// <summary>
         /// Installs the GameBanana one-click install handler
         /// </summary>
@@ -224,7 +236,7 @@ namespace GameBananaAPI
             // But I'm lazy
             try
             {
-                var reg = Registry.ClassesRoot.CreateSubKey(protocol);
+                var reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\{protocol}");
                 reg.SetValue("", $"URL:{protocolName}");
                 reg.SetValue("URL Protocol", "");
                 reg = reg.CreateSubKey("shell\\open\\command");
@@ -232,7 +244,7 @@ namespace GameBananaAPI
                 reg.Close();
             }catch
             {
-                new ExceptionWindow(new Exception("Error installing Gamebanana handler. Please restart Hedge Mod Manager as admin")).Show();
+                new ExceptionWindow(new Exception("Error installing Gamebanana handler. Please restart Hedge Mod Manager as admin")).ShowDialog();
             }
 
             return true;
@@ -280,7 +292,8 @@ namespace GameBananaAPI
                 // TODO: Show Error message here
                 return;
             }
-            new GBModWindow(item).ShowDialog();
+            var screenshots = JsonConvert.DeserializeObject<List<GBAPIScreenshotData>>(item.Screenshots);
+            new GBModWindow(item, screenshots).ShowDialog();
             return;
             // TODO: Show Info Window (ofc it will need a Download button)
             // I FORGOT ABOUT THE DOWNLOAD BUTTON
@@ -345,8 +358,8 @@ namespace GameBananaAPI
         public int OwnerID { get; set; }
         [GBAPIField("Owner().name")]
         public string OwnerName { get; set; }
-        [GBAPIField("Preview().sStructuredDataFullsizeUrl()")]
-        public string ScreenshotURL { get; set; }
+        [GBAPIField("screenshots")]
+        public string Screenshots { get; set; }
         [GBAPIField("text")]
         public string Body { get; set; }
         [GBAPIField("description")]
@@ -359,5 +372,39 @@ namespace GameBananaAPI
         {
         }
 
+    }
+
+    public class GBAPIScreenshotData
+    {
+        [JsonProperty("_sCaption")]
+        public string Caption { get; set; }
+
+        [JsonProperty("_sFile")]
+        public string FileName { get; set; }
+
+        [JsonProperty("_nFilesize")]
+        public int FileSize { get; set; }
+
+        [JsonProperty("_sRelativeImageDir")]
+        public string ImageDirectory { get; set; }
+
+        [JsonProperty("_sFile100")]
+        public string FileSmall { get; set; }
+
+        public string URL
+        {
+            get
+            {
+                return $"http://files.gamebanana.com/{ImageDirectory}/{FileName}";
+            }
+        }
+
+        public string URLSmall
+        {
+            get
+            {
+                return $"http://files.gamebanana.com/{ImageDirectory}/{FileSmall}";
+            }
+        }
     }
 }

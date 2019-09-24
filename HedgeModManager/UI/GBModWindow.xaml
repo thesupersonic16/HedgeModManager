@@ -26,8 +26,8 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Image x:Name="ScreenshotBx" Width="250" Height="150" HorizontalAlignment="Left" Margin="5"/>
-                <StackPanel Grid.Column="1" Margin="5,0,0,0"/>
+                <Image x:Name="ScreenshotBx" Width="250" Height="150" Margin="5" Grid.Column="0"/>
+                <UniformGrid x:Name="ScreenshotPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
             </Grid>
             <WebBrowser x:Name="Description" Grid.Row="2"/>
         </Grid>
@@ -37,9 +37,10 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Credits" FontSize="24"/>
-            <ScrollViewer Grid.Row="1" Margin="5,0,0,0">
+            <ScrollViewer Grid.Row="1" Margin="5,0,0,40">
                 <StackPanel x:Name="CreditsPanel" Orientation="Vertical"/>
             </ScrollViewer>
+            <Button Grid.Row="1" Width="150" Height="25" Content="Download" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"/>
         </Grid>
     </Grid>
 </Window>

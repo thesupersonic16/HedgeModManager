@@ -93,6 +93,11 @@ namespace HedgeModManager
                 GBAPI.ParseCommandLine(line);
                 return;
             }
+            else if (args.Length > 0 && args[0] == "-gbinstall")
+            {
+                GBAPI.InstallGBHandler();
+                return;
+            }
 
             if (CurrentGame == Games.Unknown)
             {

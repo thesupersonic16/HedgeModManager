@@ -75,7 +75,7 @@
                     </TabItem>
                     <TabItem Header="Settings">
                         <Grid>
-                            <GroupBox Header="Game &amp; ModLoader" HorizontalAlignment="Stretch"   Height="185" Margin="10,10,10,0"    VerticalAlignment="Top">
+                            <GroupBox Header="Game &amp; Mod Loader" HorizontalAlignment="Stretch"   Height="185" Margin="10,10,10,0"    VerticalAlignment="Top">
                                 <Grid>
                                     <Button   x:Name="Button_CPKREDIR"      Content="Install Mod Loader"              Click="UI_CPKREDIR_Click"                       Margin="10,10,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
                                     <Button   x:Name="Button_OtherLoader"   Content="Uninstall Code Loader"                 Click="UI_OtherLoader_Click"                    Margin="10,38,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
@@ -83,7 +83,8 @@
                                     <CheckBox                               Content="Enable debug console"          IsChecked="{Binding CPKREDIR.EnableDebugConsole}"        Margin="10,86,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                     <CheckBox                               Content="Enable save file redirection"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}" Margin="10,106,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                     <CheckBox x:Name="CheckBox_LoadOrder"   Content="Load top to bottom"            IsChecked="{Binding ModsDB.ReverseLoadOrder}"          Margin="10,126,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                    <Label    x:Name="Label_GameStatus"     Content="Game name: Unknown"                                                            Margin="179,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
+                                    <Label       Content="Game:"            Margin="180,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="Auto" Height="27" />
+                                    <ComboBox    x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="225,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="250" Height="27" SelectionChanged="Game_Changed" />
                                     <Label    x:Name="Label_MLVersion"      Content="Loaders: Unknown"                                                              Margin="179,35,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
                                 </Grid>
                             </GroupBox>
