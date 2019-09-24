@@ -9,6 +9,9 @@ environment:
       configuration: Release
       platform: Any CPU
 
+before_build:
+  - nuget restore
+
 build:
   project: HedgeModManager.sln
   verbosity: minimal
