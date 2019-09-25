@@ -54,7 +54,7 @@ namespace HedgeModManager
 
         public bool EnableDebugConsole
         {
-            get { return this["CPKREDIR"]["LogType"] == "console"; }
+            get { return this["CPKREDIR"]["LogType", "none"] == "console"; }
             set { this["CPKREDIR"]["LogType"] = (value ? "console" : "none"); }
         }
 

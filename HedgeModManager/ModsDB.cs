@@ -161,8 +161,7 @@ namespace HedgeModManager
             {
                 Write(stream);
             }
-            CodeList.WriteDatFile(Path.Combine(RootDirectory, "Codes.dat"), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => { return x.Enabled && !x.Patch; })));
-            CodeList.WriteDatFile(Path.Combine(RootDirectory, "Patches.dat"), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => { return x.Enabled && x.Patch; })));
+            CodeList.WriteDatFile(Path.Combine(RootDirectory, CodeLoader.CodesPath), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => x.Enabled)));
         }
 
         public void DeleteMod(ModInfo mod)

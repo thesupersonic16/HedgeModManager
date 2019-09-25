@@ -101,11 +101,27 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to body
-        ///{
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] DAT_LCL_DLL {
+            get {
+                object obj = ResourceManager.GetObject("DAT_LCL_DLL", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to body {
         ///    background-color: #2D2D30;
         ///    color: #e2e2e2;
         ///    font-family: &apos;Open Sans&apos;, sans-serif;
+        ///    scrollbar-base-color: #2D2D30;
+        ///    scrollbar-face-color: #CDCDCD;
+        ///    scrollbar-3dlight-color: #000;
+        ///    scrollbar-highlight-color: gray;
+        ///    scrollbar-track-color: #2D2D30;
+        ///    scrollbar-arrow-color: white;
+        ///    scrollbar-shadow-color: gray;
         ///}
         ///
         ///a
@@ -119,18 +135,7 @@ namespace HedgeModManager.Properties {
         ///{
         ///    font-size: 18px;
         ///    margin: 0 0 0.75em;
-        ///    padding: 0 0 0.25em 0;
-        ///}
-        ///
-        ///li
-        ///{
-        ///    list-style-type: square;
-        ///}
-        ///
-        ///span.RedColor
-        ///{
-        ///    color: #FF4E4E;
-        ///}.
+        ///    p [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GBStyleSheet {
             get {
@@ -243,6 +248,15 @@ namespace HedgeModManager.Properties {
         internal static string URL_HMM_LOADERS {
             get {
                 return ResourceManager.GetString("URL_HMM_LOADERS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string URL_LCL_DL {
+            get {
+                return ResourceManager.GetString("URL_LCL_DL", resourceCulture);
             }
         }
     }

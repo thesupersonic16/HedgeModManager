@@ -650,7 +650,7 @@
                             <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}"
                                               HorizontalAlignment="Left" VerticalAlignment="Center"
                                               ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="5,0,0,0"/>
-                            <Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}">
+                            <Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Slide">
                                 <Border BorderThickness="1" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                         Background="#FF2D2D30" BorderBrush="Gray" CornerRadius="2">
                                     <ScrollViewer>

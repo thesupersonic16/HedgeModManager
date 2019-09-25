@@ -19,6 +19,7 @@ using HMMResources = HedgeModManager.Properties.Resources;
 using System.Windows.Media.Animation;
 
 using GameBananaAPI;
+using System.Net.NetworkInformation;
 
 namespace HedgeModManager
 {
@@ -70,7 +71,7 @@ namespace HedgeModManager
             Steam.Init();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Lost World");
+            SteamGames = Steam.SearchForGames("Sonic Generations");
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;
@@ -247,30 +248,14 @@ namespace HedgeModManager
                 return;
             }
 
-            // Downloads the Loader
-            var downloader = new DownloadWindow($"Downloading {CurrentGame.CustomLoaderName}", CurrentGame.ModLoaderDownloadURL, DLLFileName);
-            downloader.Start();
-            var ini = new IniFile();
-            // Get ModLoader List
-            using (var stream = WebRequest.Create(HMMResources.URL_HMM_LOADERS).GetResponse().GetResponseStream())
-                ini.Read(stream);
-            
-            if (ini.Groups.ContainsKey(CurrentGame.GameName))
+            if(HasInternet())
             {
-                var group = ini[CurrentGame.GameName];
-
-                if (group.Params.ContainsKey("LoaderVersion"))
-                    Config.ModLoaderVersion = group["LoaderVersion"];
-                if (group.Params.ContainsKey("LoaderName"))
-                    Config.ModLoaderName = group["LoaderName"];
-                if (group.Params.ContainsKey("LoaderName2"))
-                    Config.ModLoaderNameWithVersion = group["LoaderName2"];
+                // Downloads the Loader
+                var downloader = new DownloadWindow($"Downloading {CurrentGame.CustomLoaderName}", CurrentGame.ModLoaderDownloadURL, DLLFileName);
+                downloader.Start();
             }
-
-            // Checks if the loader is downloaded and saved, If it isn't then write the local copy
-            if (!File.Exists(DLLFileName))
+            else
             {
-                // Install local copy
                 var loader = CurrentGame.ModLoaderData;
                 if (loader != null)
                     File.WriteAllBytes(DLLFileName, loader);
@@ -323,6 +308,11 @@ namespace HedgeModManager
         public static bool RunningAsAdmin()
         {
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        public static bool HasInternet()
+        {
+            return new Ping().Send("8.8.8.8", 1000).Status == IPStatus.Success;
         }
 
         private static string GetCPKREDIRVersion()

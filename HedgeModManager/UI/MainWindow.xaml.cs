@@ -81,7 +81,7 @@ namespace HedgeModManager
 
         public void RefreshUI()
         {
-            // Sets the DataContext for all the Components 
+            // Sets the DataContext for all the Components
             DataContext = new
             {
                 CPKREDIR = App.Config,
@@ -199,7 +199,6 @@ namespace HedgeModManager
             //SetupRotation();
 
             Refresh();
-
         }
 
 
@@ -405,6 +404,7 @@ namespace HedgeModManager
             App.StartDirectory = steamGame.RootDirectory;
             App.ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
             App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
+            App.Config = new CPKREDIRConfig(App.ConfigPath);
             Refresh();
         }
     }

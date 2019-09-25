@@ -130,6 +130,9 @@
   <data name="DAT_GCL_DLL" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ModLoader\SonicGenerationsCodeLoader.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="DAT_LCL_DLL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ModLoader\LostCodeLoader.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="GBStyleSheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GBStyleSheet.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -170,5 +173,8 @@ Would you like create a mods folder?</value>
   </data>
   <data name="URL_HMM_LOADERS" xml:space="preserve">
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini</value>
+  </data>
+  <data name="URL_LCL_DL" xml:space="preserve">
+    <value />
   </data>
 </root>

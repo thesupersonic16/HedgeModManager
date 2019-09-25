@@ -11,10 +11,9 @@ namespace HedgeModManager
 {
     public class CodeLoader
     {
-        public static string CodesXMLPath = Path.Combine(App.ModsDbPath, "Codes.xml");
-        public static string CodesHMMPath = Path.Combine(App.ModsDbPath, "Codes.hmm");
-        public static string CodesPath = Path.Combine(App.ModsDbPath, "Codes.dat");
-        public static string PatchesPath = Path.Combine(App.ModsDbPath, "Patches.dat");
+        public static string CodesXMLPath => Path.Combine(App.ModsDbPath, "Codes.xml");
+        public static string CodesHMMPath => Path.Combine(App.ModsDbPath, "Codes.hmm");
+        public static string CodesPath => Path.Combine(App.ModsDbPath, "Codes.dat");
 
         public static CodeList LoadAllCodes()
         {
@@ -232,10 +231,21 @@ namespace HedgeModManager
 
         public static void WriteDatFile(string path, IList<Code> codes)
         {
+            foreach(var code in codes)
+            {
+                if (!code.Patch)
+                    continue;
+
+                foreach(var line in code.Lines)
+                {
+                    line.Patch = code.Patch;
+                }
+            }
+
             using (FileStream fs = File.Create(path))
             using (BinaryWriter bw = new BinaryWriter(fs, Encoding.ASCII))
             {
-                bw.Write(new[] { 'c', 'o', 'd', 'e', 'v', '5' });
+                bw.Write(new[] { 'c', 'o', 'd', 'e', 'v', '5', '1' });
                 bw.Write(codes.Count);
                 foreach (Code item in codes)
                 {
@@ -252,6 +262,7 @@ namespace HedgeModManager
             foreach (CodeLine line in lines)
             {
                 bw.Write((byte)line.Type);
+                bw.Write((byte)(line.Patch ? 1 : 0));
                 uint address;
                 if (line.Address.StartsWith("r"))
                     address = uint.Parse(line.Address.Substring(1), System.Globalization.NumberStyles.None, System.Globalization.NumberFormatInfo.InvariantInfo);
@@ -338,6 +349,8 @@ namespace HedgeModManager
         [XmlElement(IsNullable = false)]
         public string Address { get; set; }
         public bool Pointer { get; set; }
+        [XmlIgnore]
+        public bool Patch { get; set; }
         [XmlIgnore]
         public bool PointerSpecified { get { return Pointer; } set { } }
         [XmlIgnore]
