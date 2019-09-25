@@ -25,7 +25,7 @@ namespace HedgeModManager
     {
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
-        public static CodeList CodesDatabase;
+        public static CodeList CodesDatabase = new CodeList();
         public static FileSystemWatcher ModsWatcher;
 
         public MainWindow()
@@ -174,7 +174,7 @@ namespace HedgeModManager
 
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void SetupWatcher()
         {
             ModsWatcher = new FileSystemWatcher(App.ModsDbPath)
             {
@@ -183,18 +183,22 @@ namespace HedgeModManager
             };
             ModsWatcher.Deleted += (x, args) =>
             {
-                Dispatcher.Invoke(() => 
+                Dispatcher.Invoke(() =>
                 {
                     Refresh();
                 });
             };
-            ModsWatcher.Created += (x, args) => 
+            ModsWatcher.Created += (x, args) =>
             {
                 Dispatcher.Invoke(() =>
                 {
                     Refresh();
                 });
             };
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
             //if ((DateTime.Now.Month == 4 && DateTime.Now.Day == 1) || !Steam.CheckDirectory(App.StartDirectory))
             //SetupRotation();
 
@@ -405,6 +409,8 @@ namespace HedgeModManager
             App.ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
             App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
             App.Config = new CPKREDIRConfig(App.ConfigPath);
+            ModsWatcher?.Dispose();
+            SetupWatcher();
             Refresh();
         }
     }

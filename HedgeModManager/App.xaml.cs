@@ -71,7 +71,7 @@ namespace HedgeModManager
             Steam.Init();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Generations");
+            SteamGames = Steam.SearchForGames("Sonic Lost World");
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;
@@ -376,7 +376,7 @@ namespace HedgeModManager
             {
                 IEasingFunction ease = new BackEase
                 { Amplitude = 0.5, EasingMode = EasingMode.EaseOut };
-                var duration = new Duration(TimeSpan.FromSeconds(0.5));
+                var duration = new Duration(TimeSpan.FromSeconds(0.4));
                 var anim = new DoubleAnimation(from, to, duration)
                 { EasingFunction = ease };
                 if (whenDone != null)
