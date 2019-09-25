@@ -216,7 +216,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll.
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/ForcesModLoader.dll.
         /// </summary>
         internal static string URL_FML_DL {
             get {
@@ -225,7 +225,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/SonicGenerationsCodeLoader.dll.
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/SonicGenerationsCodeLoader.dll.
         /// </summary>
         internal static string URL_GCL_DL {
             get {
@@ -252,7 +252,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/LostCodeLoader.dll.
         /// </summary>
         internal static string URL_LCL_DL {
             get {

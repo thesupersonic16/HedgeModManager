@@ -163,10 +163,10 @@ This action cannot be undone!</value>
 Would you like create a mods folder?</value>
   </data>
   <data name="URL_FML_DL" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/ForcesModLoader.dll</value>
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/ForcesModLoader.dll</value>
   </data>
   <data name="URL_GCL_DL" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager/raw/master/HedgeModManager/res/codes/SonicGenerationsCodeLoader.dll</value>
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/SonicGenerationsCodeLoader.dll</value>
   </data>
   <data name="URL_HMM_GITHUB" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager</value>
@@ -175,6 +175,6 @@ Would you like create a mods folder?</value>
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini</value>
   </data>
   <data name="URL_LCL_DL" xml:space="preserve">
-    <value />
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/LostCodeLoader.dll</value>
   </data>
 </root>
