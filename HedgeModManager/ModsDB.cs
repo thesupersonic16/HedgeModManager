@@ -33,11 +33,20 @@ namespace HedgeModManager
             RootDirectory = modsDirectiory;
             string iniPath = Path.Combine(RootDirectory, "ModsDb.ini");
             if (File.Exists(iniPath))
-                using (var stream = File.OpenRead(iniPath))
-                    Read(stream);
-            else
             {
-                Application.Current.MainWindow?.Hide();
+                try
+                {
+                    using (var stream = File.OpenRead(iniPath))
+                        Read(stream);
+                }
+                catch
+                {
+                    DetectMods();
+                }
+            }
+            else if(!Directory.Exists(RootDirectory))
+            {
+                Application.Current?.MainWindow?.Hide();
                 var box = new HedgeMessageBox("No Mods Found", Properties.Resources.STR_UI_NO_MODS);
 
                 box.AddButton("Yes", () =>
@@ -93,7 +102,7 @@ namespace HedgeModManager
 
         public void GetEnabledMods()
         {
-            int activeCount = (int)this["Main"]["ActiveModCount", typeof(int)];
+            int activeCount = (int)this["Main"]["ActiveModCount", typeof(int), 0];
             for (int i = 0; i < activeCount; i++)
             {
                 var mod = Mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == this["Main"]?[$"ActiveMod{i}"]);

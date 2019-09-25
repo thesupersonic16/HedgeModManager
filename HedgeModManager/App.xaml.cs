@@ -76,7 +76,7 @@ namespace HedgeModManager
             Steam.Init();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Lost World");
+            SteamGames = Steam.SearchForGames("Sonic Generations");
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;

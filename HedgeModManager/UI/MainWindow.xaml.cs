@@ -330,7 +330,8 @@ namespace HedgeModManager
 
         private void UI_Description_Click(object sender, RoutedEventArgs e)
         {
-            UI_MouseDoubleClick(null, null);
+            var dialog = new AboutModWindow((ModInfo)ModsList.SelectedItem);
+            dialog.ShowDialog();
         }
 
         private void UI_Open_Folder(object sender, RoutedEventArgs e)
