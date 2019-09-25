@@ -51,6 +51,10 @@ namespace HedgeModManager
         [STAThread]
         public static void Main(string[] args)
         {
+            // Language
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
+
             // Use TLSv1.2
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
