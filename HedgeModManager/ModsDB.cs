@@ -170,7 +170,7 @@ namespace HedgeModManager
             {
                 Write(stream);
             }
-            CodeList.WriteDatFile(Path.Combine(RootDirectory, CodeLoader.CodesPath), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => x.Enabled)));
+            CodeList.WriteDatFile(Path.Combine(RootDirectory, CodeLoader.CodesPath), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => x.Enabled)), App.CurrentGame.Is64Bit);
         }
 
         public void DeleteMod(ModInfo mod)

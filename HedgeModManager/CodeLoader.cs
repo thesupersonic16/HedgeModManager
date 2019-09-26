@@ -229,7 +229,7 @@ namespace HedgeModManager
         [XmlElement("Code")]
         public List<Code> Codes { get; set; } = new List<Code>();
 
-        public static void WriteDatFile(string path, IList<Code> codes)
+        public static void WriteDatFile(string path, IList<Code> codes, bool is64Bit)
         {
             foreach(var code in codes)
             {
@@ -251,7 +251,10 @@ namespace HedgeModManager
                 {
                     if (item.IsReg)
                         bw.Write((byte)CodeType.newregs);
-                    WriteCodes(item.Lines, bw);
+                    if (is64Bit)
+                        WriteCodes64(item.Lines, bw);
+                    else
+                        WriteCodes(item.Lines, bw);
                 }
                 bw.Write(byte.MaxValue);
             }
@@ -311,6 +314,65 @@ namespace HedgeModManager
                     {
                         bw.Write((byte)CodeType.@else);
                         WriteCodes(line.FalseLines, bw);
+                    }
+                    bw.Write((byte)CodeType.endif);
+                }
+            }
+        }
+        private static void WriteCodes64(List<CodeLine> lines, BinaryWriter bw)
+        {
+            foreach (CodeLine line in lines)
+            {
+                bw.Write((byte)line.Type);
+                bw.Write((byte)(line.Patch ? 1 : 0));
+                ulong address;
+                if (line.Address.StartsWith("r"))
+                    address = ulong.Parse(line.Address.Substring(1), System.Globalization.NumberStyles.None, System.Globalization.NumberFormatInfo.InvariantInfo);
+                else
+                    address = ulong.Parse(line.Address, System.Globalization.NumberStyles.HexNumber);
+                if (line.Pointer)
+                    address |= 0x8000000000000000ul;
+                bw.Write(address);
+                if (line.Pointer)
+                    if (line.Offsets != null)
+                    {
+                        bw.Write((byte)line.Offsets.Count);
+                        foreach (int off in line.Offsets)
+                            bw.Write(off);
+                    }
+                    else
+                        bw.Write((byte)0);
+                if (line.Type == CodeType.ifkbkey)
+                    bw.Write((int)(Keys)Enum.Parse(typeof(Keys), line.Value));
+                else
+                    switch (line.ValueType)
+                    {
+                        case null:
+                            if (line.Value.StartsWith("0x"))
+                                bw.Write(uint.Parse(line.Value.Substring(2), System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.InvariantInfo));
+                            else if (line.IsFloat)
+                                bw.Write(float.Parse(line.Value, System.Globalization.NumberStyles.Float, System.Globalization.NumberFormatInfo.InvariantInfo));
+                            else
+                                bw.Write(unchecked((int)long.Parse(line.Value, System.Globalization.NumberStyles.Integer, System.Globalization.NumberFormatInfo.InvariantInfo)));
+                            break;
+                        case ValueType.@decimal:
+                            if (line.IsFloat)
+                                bw.Write(float.Parse(line.Value, System.Globalization.NumberStyles.Float, System.Globalization.NumberFormatInfo.InvariantInfo));
+                            else
+                                bw.Write(unchecked((int)long.Parse(line.Value, System.Globalization.NumberStyles.Integer, System.Globalization.NumberFormatInfo.InvariantInfo)));
+                            break;
+                        case ValueType.hex:
+                            bw.Write(uint.Parse(line.Value, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.InvariantInfo));
+                            break;
+                    }
+                bw.Write(line.RepeatCount ?? 1);
+                if (line.IsIf)
+                {
+                    WriteCodes64(line.TrueLines, bw);
+                    if (line.FalseLines.Count > 0)
+                    {
+                        bw.Write((byte)CodeType.@else);
+                        WriteCodes64(line.FalseLines, bw);
                     }
                     bw.Write((byte)CodeType.endif);
                 }

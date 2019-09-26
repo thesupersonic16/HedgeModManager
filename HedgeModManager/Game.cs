@@ -12,9 +12,9 @@ namespace HedgeModManager
     {
         //                                                     Game Name          Executeable Name       Custom  CPKREDIR DX ModLoader Download URL    ModLoader Data      Loader Name
         public static Game Unknown              = new Game();
-        public static Game SonicGenerations     = new Game("Sonic Generations"  , "SonicGenerations.exe", true  , true  , 9 , Resources.URL_GCL_DL, Resources.DAT_GCL_DLL, "Generations Code Loader", "71340");
-        public static Game SonicLostWorld       = new Game("Sonic Lost World"   , "slw.exe"             , true , true  , 9 , Resources.URL_LCL_DL, Resources.DAT_LCL_DLL, "Lost Code Loader", "329440");
-        public static Game SonicForces          = new Game("Sonic Forces"       , "Sonic Forces.exe"    , true  , false , 11, Resources.URL_FML_DL, Resources.DAT_FML_DLL, "Forces Mod Loader", "637100");
+        public static Game SonicGenerations     = new Game("Sonic Generations"  , "SonicGenerations.exe", true  , true  , 9 , Resources.URL_GCL_DL, Resources.DAT_GCL_DLL, "Generations Code Loader", "71340", false);
+        public static Game SonicLostWorld       = new Game("Sonic Lost World"   , "slw.exe"             , true , true  , 9 , Resources.URL_LCL_DL, Resources.DAT_LCL_DLL, "Lost Code Loader", "329440", false);
+        public static Game SonicForces          = new Game("Sonic Forces"       , "Sonic Forces.exe"    , true  , false , 11, Resources.URL_FML_DL, Resources.DAT_FML_DLL, "Forces Mod Loader", "637100", true);
 
         public static IEnumerable<Game> GetSupportedGames()
         {
@@ -35,12 +35,13 @@ namespace HedgeModManager
         public bool SupportsCPKREDIR = false;
         public string CustomLoaderName = "None";
         public string AppID = "0";
+        public bool Is64Bit = false;
         public Game()
         {
 
         }
 
-        public Game(string gameName, string executeableName, bool hasCustomLoader, bool supportsCPKREDIR, int directXVersion, string modLoaderDownloadURL, byte[] modLoaderData, string modLoaderName, string appid)
+        public Game(string gameName, string executeableName, bool hasCustomLoader, bool supportsCPKREDIR, int directXVersion, string modLoaderDownloadURL, byte[] modLoaderData, string modLoaderName, string appid, bool is64Bit)
         {
             GameName               = gameName;
             ExecuteableName        = executeableName;
@@ -49,8 +50,9 @@ namespace HedgeModManager
             DirectXVersion         = directXVersion;
             ModLoaderDownloadURL   = modLoaderDownloadURL;
             ModLoaderData          = modLoaderData;
-            CustomLoaderName = modLoaderName;
-            AppID = appid;
+            CustomLoaderName       = modLoaderName;
+            AppID                  = appid;
+            Is64Bit                = is64Bit;
         }
 
         public override string ToString()
