@@ -16,7 +16,7 @@
         <TextBlock x:Name="Header" Text="HEADER" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <StackPanel x:Name="CheckStack" Grid.Row="1" VerticalAlignment="Center" Margin="5,0,5,0" Width="Auto" Height="Auto"/>
         <StackPanel x:Name="Stack" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Stretch">
-        <Button Width="Auto" Height="23" Margin="5" Content="    Ok    " Click="Ok_Click"/>
+        <Button Width="Auto" Height="23" Margin="5" Content="    OK    " Click="Ok_Click"/>
         <Button Width="Auto" Height="23" Margin="5" Content="    Cancel   " IsCancel="True"/>
         </StackPanel>
     </Grid>

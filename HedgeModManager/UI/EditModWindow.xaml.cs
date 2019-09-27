@@ -34,7 +34,7 @@ namespace HedgeModManager
             if (string.IsNullOrEmpty(Mod.Title))
             {
                 var box = new HedgeMessageBox("ERROR!", "Invalid title");
-                box.AddButton("Ok", () => { box.Close(); });
+                box.AddButton("OK", () => { box.Close(); });
                 box.ShowDialog();
                 return;
             }

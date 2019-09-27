@@ -45,6 +45,6 @@
             </Grid>
         </GroupBox>
         <Button Content="Close" HorizontalAlignment="Left" Margin="408,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_Close_Click" Height="23" Grid.Row="3"/>
-        <Button Content="Github" HorizontalAlignment="Left" Margin="328,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_GitHub_Click" Height="23" Grid.Row="3"/>
+        <Button Content="GitHub" HorizontalAlignment="Left" Margin="328,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_GitHub_Click" Height="23" Grid.Row="3"/>
     </Grid>
 </Window>

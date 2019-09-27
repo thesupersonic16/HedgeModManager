@@ -43,7 +43,7 @@ namespace HedgeModManager
             catch
             {
                 var box = new HedgeMessageBox("ERROR!", "Invalid input value");
-                box.AddButton("Ok", () => { box.Close(); });
+                box.AddButton("OK", () => { box.Close(); });
                 box.ShowDialog();
             }
         }
