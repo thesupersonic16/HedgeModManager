@@ -89,7 +89,7 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="Button_CopyLog" Grid.Column="0" Content="Copy Log to Clipboard" HorizontalAlignment="Stretch" Margin="10,0,10,0"  VerticalAlignment="Stretch" Click="Button_CopyLog_Click" />
             <Button x:Name="Button_Ignore" Grid.Column="1" Content="Ignore and Close" HorizontalAlignment="Stretch" Margin="10,0,10,0"  VerticalAlignment="Stretch" Click="Button_Ignore_Click" />
-            <Button x:Name="Button_Report" Grid.Column="2" Content="Submit Report on Github" HorizontalAlignment="Stretch" Margin="10,0,10,0"  VerticalAlignment="Stretch" Click="Button_Report_Click" IsEnabled="False"/>
+            <Button x:Name="Button_Report" Grid.Column="2" Content="Submit Report on GitHub" HorizontalAlignment="Stretch" Margin="10,0,10,0"  VerticalAlignment="Stretch" Click="Button_Report_Click" IsEnabled="False"/>
         </Grid>
 
     </Grid>
