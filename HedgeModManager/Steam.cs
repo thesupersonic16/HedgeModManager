@@ -17,13 +17,13 @@ namespace HedgeModManager
         public static void Init()
         {
             // Gets Steam's Registry Key
-            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam");
+            var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Valve\\Steam");
             // If null then try get it from the 64-bit Registry
             if (key == null)
                 key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
-                    .OpenSubKey("SOFTWARE\\Valve\\Steam");
+                    .OpenSubKey("SOFTWARE\\Wow6432Node\\Valve\\Steam");
             // Checks if the Key and Value exists.
-            if (key != null && key.GetValue("SteamPath") is string steamPath)
+            if (key != null && key.GetValue("InstallPath") is string steamPath)
                 SteamLocation = steamPath;
         }
 
