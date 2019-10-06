@@ -15,7 +15,7 @@ namespace HedgeModManager
         public bool Enabled { get; set; }
 
         [PropertyIgnore]
-        public bool HasUpdates { get; set; }
+        public bool HasUpdates => !string.IsNullOrEmpty(UpdateServer);
 
         [PropertyIgnore]
         public bool SupportsSave => !string.IsNullOrEmpty(SaveFile);

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -103,8 +104,8 @@ namespace HedgeModManager
             }
 
             var steamGame = App.GetSteamGame(App.CurrentGame);
-            var exeDir = steamGame?.ExeDirectory ?? System.IO.Path.Combine(Directory.GetCurrentDirectory(), App.CurrentGame.ExecuteableName);
-            bool hasOtherModLoader = App.CurrentGame.HasCustomLoader ? File.Exists(System.IO.Path.Combine(steamGame?.RootDirectory ?? exeDir, $"d3d{App.CurrentGame.DirectXVersion}.dll")) : false;
+            var exeDir = steamGame?.ExeDirectory ?? Path.Combine(Directory.GetCurrentDirectory(), App.CurrentGame.ExecuteableName);
+            bool hasOtherModLoader = App.CurrentGame.HasCustomLoader ? File.Exists(Path.Combine(steamGame?.RootDirectory ?? exeDir, $"d3d{App.CurrentGame.DirectXVersion}.dll")) : false;
             IsCPKREDIRInstalled = App.CurrentGame.SupportsCPKREDIR ? App.IsCPKREDIRInstalled(exeDir) : hasOtherModLoader;
             string loaders = (IsCPKREDIRInstalled && App.CurrentGame.SupportsCPKREDIR ? App.CPKREDIRVersion : "");
             if (hasOtherModLoader)
@@ -122,6 +123,19 @@ namespace HedgeModManager
             Label_MLVersion.Content = $"Loaders: {loaders}";
             Button_OtherLoader.Content = hasOtherModLoader && App.CurrentGame.SupportsCPKREDIR ? $"Uninstall Code Loader" : $"Install Code Loader";
             Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} Mod Loader";
+        }
+
+        public void CheckForModUpdates(ModInfo mod)
+        {
+            // Downloads the mod update information
+            var update = ModUpdate.GetUpdateFromINI(mod);
+            if (update == null)
+                return;
+            // TODO: Show changelog window
+            
+            // NOTE: Test code
+            var progress = new ModUpdate.ModUpdateProgress();
+            new Thread(() => ModUpdate.DownloadAndApplyUpdate(update, progress)).Start();
         }
 
         public void SaveModsDB()
@@ -292,6 +306,13 @@ namespace HedgeModManager
         {
             App.InstallOtherLoader(true);
             RefreshUI();
+        }
+
+        private void UI_Update_Mod(object sender, RoutedEventArgs e)
+        {
+            var mod = (ModInfo)ModsList.SelectedItem;
+            CheckForModUpdates(mod);
+            RefreshMods();
         }
 
         private void UI_Edit_Mod(object sender, RoutedEventArgs e)

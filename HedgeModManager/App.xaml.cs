@@ -77,7 +77,7 @@ namespace HedgeModManager
             InstallGBHandlers();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Sonic World");
+            SteamGames = Steam.SearchForGames("Sonic Generations");
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;

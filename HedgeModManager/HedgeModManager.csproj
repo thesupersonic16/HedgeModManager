@@ -107,6 +107,7 @@
     <Compile Include="FolderBrowserDialog.cs" />
     <Compile Include="GameBanana\GBAPI.cs" />
     <Compile Include="Keys.cs" />
+    <Compile Include="ModUpdate.cs" />
     <Compile Include="ShellProvider.cs" />
     <Compile Include="UI\AboutModWindow.xaml.cs">
       <DependentUpon>AboutModWindow.xaml</DependentUpon>
@@ -145,8 +146,8 @@
     </Compile>
     <Compile Include="Steam.cs" />
     <Page Include="UI\DownloadWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\EditModWindow.xaml">
       <SubType>Designer</SubType>

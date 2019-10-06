@@ -12,6 +12,7 @@
         <ContextMenu x:Key="ModContextMenu">
             <MenuItem Header="Description" Click="UI_Description_Click"/>
             <MenuItem Header="Open containing folder" Click="UI_Open_Folder"/>
+            <MenuItem Header="Check for updates" Click="UI_Update_Mod"/>
             <MenuItem Header="Edit mod" Click="UI_Edit_Mod"/>
             <MenuItem Header="Delete mod" Click="UI_RemoveMod_Click"/>
         </ContextMenu>
