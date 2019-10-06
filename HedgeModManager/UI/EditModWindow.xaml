@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="EditModWindow" Height="450" Width="400" Style="{StaticResource HedgeWindow}" WindowStartupLocation="CenterScreen">
+        Title="EditModWindow" Style="{StaticResource HedgeWindow}" WindowStartupLocation="CenterScreen"  Height="450" Width="400" MaxHeight="650" MaxWidth="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -13,7 +13,7 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Label Content="Please fill out some details about your mod." FontSize="15" HorizontalAlignment="Center"/>
-        <local:PropertyEditor x:Name="Editor" Grid.Row="1" Margin="5"/>
+        <local:PropertyEditor x:Name="Editor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="5"/>
         <Button Grid.Row="2" HorizontalAlignment="Right" Margin="5" Content="    Ok    " Click="Ok_Click"/>
     </Grid>
 </Window>

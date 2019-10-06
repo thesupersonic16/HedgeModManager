@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,11 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using GameBananaAPI;
+using System.Net;
+using System.Windows.Controls.Primitives;
+using HedgeModManager.Controls;
+using System.Net.Cache;
 
 namespace HedgeModManager.UI
 {
@@ -20,17 +24,76 @@ namespace HedgeModManager.UI
     /// </summary>
     public partial class GBModWindow : Window
     {
-        public GBModWindow(GBAPIItemDataBasic mod, List<GBAPIScreenshotData> screenshots)
+        public Game Game;
+        public string DownloadURL;
+        public GBModWindow(GBAPIItemDataBasic mod, string dl, Game game)
         {
             DataContext = mod;
+            Game = game;
+            DownloadURL = dl;
             InitializeComponent();
-            ScreenshotBx.Source = new BitmapImage(new Uri(screenshots[0].URL));
-            ScreenshotBx.Stretch = Stretch.Fill;
-            foreach(var screenshot in screenshots)
+        }
+
+        private void Screenshot_Click(object sender, RoutedEventArgs e)
+        {
+            var shot = (GBAPIScreenshotData)((Button)sender).Tag;
+            var popup = new PopupBox();
+            var image = new BitmapImage();
+            image.BeginInit();
+            image.UriSource = new Uri(shot.URL);
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.EndInit();
+            popup.Children.Add(new Border()
             {
-                ScreenshotPanel.Children.Add(new Image() { Source = new BitmapImage(new Uri(screenshot.URLSmall)), Stretch = Stretch.Uniform, Margin = new Thickness(2.5) });
+                BorderThickness = new Thickness(2),
+                BorderBrush = Brushes.White,
+                Child = new Image()
+                {
+                    Source = image,
+                    Stretch = Stretch.Fill
+                }
+            });
+            popup.Show(this);
+        }
+
+        private void Download_Click(object sender, RoutedEventArgs e)
+        {
+            var mod = (GBAPIItemDataBasic)DataContext;
+            var root = App.GetSteamGame(Game).RootDirectory;
+            var request = (HttpWebRequest)WebRequest.Create(DownloadURL);
+            var response = request.GetResponse();
+            var URI = response.ResponseUri.ToString();
+            var downloader = new DownloadWindow($"Downloading {mod.ModName}", URI, Path.GetFileName(URI));
+            downloader.DownloadCompleted = new Action(() =>
+            {
+                ModsDB.InstallMod(Path.GetFileName(URI), Path.Combine(root, "Mods"));
+                File.Delete(Path.GetFileName(URI));
+                Close();
+            });
+            downloader.Start();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var mod = (GBAPIItemDataBasic)DataContext;
+            foreach (var screenshot in mod.Screenshots)
+            {
+                var button = new Button()
+                {
+                    Margin = new Thickness(2.5),
+                    Width = 96,
+                    Height = 54,
+                    Tag = screenshot,
+                };
+                button.Content = new Image()
+                {
+                    Source = new BitmapImage(new Uri(screenshot.URLSmall)),
+                    Stretch = Stretch.Fill,
+                };
+                button.Click += Screenshot_Click;
+                Imagebar.Children.Add(button);
             }
-            Description.NavigateToString($@"
+            Description.Text = $@"
 <html>
     <body>
         <style>
@@ -38,22 +101,35 @@ namespace HedgeModManager.UI
         </style>
         {mod.Body}
     </body>
-</html>");
-            foreach(var group in mod.Credits)
+</html>";
+            // You may think why we need to focus on the html panel it seems useless and you would be right but 
+            // if we dont focus on the panel its blurred for some reason and i cant figure out why
+            Description.Focus();
+            foreach (var group in mod.Credits.Credits)
             {
-                if (group.Credits.Length < 1)
+                if (group.Value.Count < 1)
                     continue;
 
-                CreditsPanel.Children.Add(new TextBlock() { Text = group.GroupName, FontSize = 12, TextWrapping = TextWrapping.WrapWithOverflow, FontStyle = FontStyles.Italic, Foreground = Brushes.LightGray });
-                foreach(var credit in group.Credits)
+                CreditsPanel.Children.Add(new TextBlock()
+                {
+                    Text = group.Key,
+                    FontSize = 12,
+                    TextWrapping = TextWrapping.WrapWithOverflow,
+                    FontStyle = FontStyles.Italic,
+                    Foreground = Brushes.LightGray,
+                    Padding = new Thickness(0, 2, 0, 2)
+                });
+
+                foreach (var credit in group.Value)
                 {
                     var block = new TextBlock()
                     {
                         Text = credit.MemberID == 0 ? credit.MemberName : string.Empty,
                         FontSize = 14,
-                        TextWrapping = TextWrapping.WrapWithOverflow
+                        TextWrapping = TextWrapping.WrapWithOverflow,
+                        Padding = new Thickness(0, 0, 0, .5)
                     };
-                    if(credit.MemberID != 0)
+                    if (credit.MemberID != 0)
                     {
                         var link = new Hyperlink();
                         var run = new Run();
@@ -64,8 +140,8 @@ namespace HedgeModManager.UI
                         block.Inlines.Add(link);
                     }
                     CreditsPanel.Children.Add(block);
-                    if(!string.IsNullOrEmpty(credit.Role))
-                        CreditsPanel.Children.Add(new TextBlock() { Text = credit.Role, FontSize = 11.2, TextWrapping = TextWrapping.WrapWithOverflow });
+                    if (!string.IsNullOrEmpty(credit.Role))
+                        CreditsPanel.Children.Add(new TextBlock() { Text = credit.Role, FontSize = 11.2, TextWrapping = TextWrapping.WrapWithOverflow, Padding = new Thickness(0, 0, 0, .5) });
                 }
             }
         }

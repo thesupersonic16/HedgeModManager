@@ -145,40 +145,19 @@ namespace HedgeModManager
 
         public void StartGame()
         {
-            App.GetSteamGame(App.CurrentGame).StartGame();
+            Process.Start(new ProcessStartInfo(Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName))
+            {
+                WorkingDirectory = App.StartDirectory
+            });
 
             if (!App.Config.KeepOpen)
                 Application.Current.Shutdown(0);
-        }
-
-        public void SetupRotation()
-        {
-            RotateTest.Width = Width;
-            RotateTest.Height = Height;
-
-            double oldWidth = Width;
-            double oldHeight = Height;
-            double newWidth = oldWidth * Math.Sin(Math.PI / 2 - Math.PI / 4) + oldHeight * Math.Sin(Math.PI / 4);
-            double newHeight = oldHeight * Math.Sin(Math.PI / 2 - Math.PI / 4) + oldWidth * Math.Sin(Math.PI / 4);
-
-            Left -= (newWidth - Width) / 2d;
-            Top -= (newHeight - Height) / 2d;
-            Width = newWidth;
-            Height = newHeight;
-
-            var timer = new DispatcherTimer();
-            timer.Tick += dispatcherTimer_Tick;
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
-            timer.Start();
-            //(RotateTest.RenderTransform as RotateTransform).Angle += Math.PI * 57.2958;
-
         }
 
         private void SetupWatcher()
         {
             ModsWatcher = new FileSystemWatcher(App.ModsDbPath)
             {
-                EnableRaisingEvents = true,
                 NotifyFilter = NotifyFilters.DirectoryName
             };
             ModsWatcher.Deleted += (x, args) =>
@@ -195,13 +174,11 @@ namespace HedgeModManager
                     Refresh();
                 });
             };
+            ModsWatcher.EnableRaisingEvents = true;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //if ((DateTime.Now.Month == 4 && DateTime.Now.Day == 1) || !Steam.CheckDirectory(App.StartDirectory))
-            //SetupRotation();
-
             Refresh();
         }
 

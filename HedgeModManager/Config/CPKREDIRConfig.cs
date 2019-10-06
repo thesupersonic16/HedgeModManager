@@ -89,24 +89,6 @@ namespace HedgeModManager
             set { this["HedgeModManager"]["CheckLoader"] = (value ? "1" : "0"); }
         }
 
-        public string ModLoaderVersion
-        {
-            get { return this["HedgeModManager"]["ModLoaderVersion", typeof(string), ""] as string; }
-            set { this["HedgeModManager"]["ModLoaderVersion"] = value; }
-        }
-
-        public string ModLoaderName
-        {
-            get { return this["HedgeModManager"]["ModLoaderName", typeof(string), ""] as string; }
-            set { this["HedgeModManager"]["ModLoaderName"] = value; }
-        }
-
-        public string ModLoaderNameWithVersion
-        {
-            get { return this["HedgeModManager"]["ModLoaderNameWithVersion", typeof(string), ""] as string; }
-            set { this["HedgeModManager"]["ModLoaderNameWithVersion"] = value; }
-        }
-
         public CPKREDIRConfig(string path)
         {
             if (File.Exists(path))
@@ -134,8 +116,6 @@ namespace HedgeModManager
                 CheckForUpdates = true;
                 KeepOpen = false;
                 CheckLoaderUpdates = true;
-                ModLoaderVersion = "";
-                ModLoaderName = "";
             }
         }
 

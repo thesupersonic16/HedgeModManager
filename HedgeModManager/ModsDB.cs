@@ -196,21 +196,26 @@ namespace HedgeModManager
 
         public void InstallMod(string path)
         {
-            if (File.Exists(path))
-                InstallModArchive(path);
-            else if (Directory.Exists(path))
-                InstallModDirectory(path);
+            InstallMod(path, RootDirectory);
         }
 
-        public void InstallModArchive(string path)
+        public static void InstallMod(string path, string root)
+        {
+            if (File.Exists(path))
+                InstallModArchive(path, root);
+            else if (Directory.Exists(path))
+                InstallModDirectory(path, root);
+        }
+
+        public static void InstallModArchive(string path, string root)
         {
             if (Path.GetExtension(path) == ".zip")
             {
-                InstallModArchiveUsingZipFile(path);
+                InstallModArchiveUsingZipFile(path, root);
                 return;
             }
-            if (!InstallModArchiveUsing7Zip(path))
-                if (!InstallModArchiveUsingWinRAR(path))
+            if (!InstallModArchiveUsing7Zip(path, root))
+                if (!InstallModArchiveUsingWinRAR(path, root))
                 {
                     var box = new HedgeMessageBox("ERROR", "Failed to install mods using 7-Zip and WinRAR!\n" +
                         "Make sure you have either one installed on your system.");
@@ -219,7 +224,7 @@ namespace HedgeModManager
                 }
         }
 
-        public void InstallModArchiveUsingZipFile(string path)
+        public static void InstallModArchiveUsingZipFile(string path, string root)
         {
             // Path to the install temp folder
             string tempFolder = Path.Combine(App.StartDirectory, "temp_install");
@@ -232,13 +237,13 @@ namespace HedgeModManager
             ZipFile.ExtractToDirectory(path, tempFolder);
 
             // Install mods from the temp folder
-            InstallModDirectory(tempFolder);
+            InstallModDirectory(tempFolder, root);
 
             // Deletes the temp folder with all of its contents
             Directory.Delete(tempFolder, true);
         }
 
-        public bool InstallModArchiveUsing7Zip(string path)
+        public static bool InstallModArchiveUsing7Zip(string path, string root)
         {
             // Gets 7-Zip's Registry Key
             var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\7-Zip");
@@ -267,7 +272,7 @@ namespace HedgeModManager
                 Process.Start(psi).WaitForExit(1000 * 60 * 5);
 
                 // Search and install mods from the temp directory
-                InstallModDirectory(tempDirectory);
+                InstallModDirectory(tempDirectory, root);
 
                 // Deletes the temp directory with all of its contents
                 Directory.Delete(tempDirectory, true);
@@ -280,7 +285,7 @@ namespace HedgeModManager
 
         // TODO: Add WinRAR x86 support
         // TODO: Needs Testing
-        public bool InstallModArchiveUsingWinRAR(string path)
+        public static bool InstallModArchiveUsingWinRAR(string path, string root)
         {
             // Gets WinRAR's Registry Key
             var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WinRAR");
@@ -306,7 +311,7 @@ namespace HedgeModManager
                 Process.Start(psi).WaitForExit(1000 * 60 * 5);
 
                 // Search and install mods from the temp directory
-                InstallModDirectory(tempDirectory);
+                InstallModDirectory(tempDirectory, root);
 
                 // Deletes the temp directory with all of its contents
                 Directory.Delete(tempDirectory, true);
@@ -317,7 +322,7 @@ namespace HedgeModManager
             return false;
         }
 
-        public void InstallModDirectory(string path)
+        public static void InstallModDirectory(string path, string root)
         {
             // A list of folders that have mod.ini in them
             var directories = new List<string>();
@@ -346,12 +351,13 @@ namespace HedgeModManager
                     }
 
                     // Creates all of the directories.
+                    Directory.CreateDirectory(Path.Combine(root, Path.GetFileName(folder)));
                     foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
-                        Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(RootDirectory, directoryName)));
+                        Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(root, directoryName)));
 
                     // Copies all the files from the Directories.
                     foreach (string filePath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
-                        File.Copy(filePath, filePath.Replace(folder, Path.Combine(RootDirectory, directoryName)), true);
+                        File.Copy(filePath, filePath.Replace(folder, Path.Combine(root, directoryName)), true);
                 }
             }
         }

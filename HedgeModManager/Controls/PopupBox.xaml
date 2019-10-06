@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="HedgeModManager.Controls.PopupBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HedgeModManager.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="Button" x:Key="BackgroundButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" Opacity="{TemplateBinding Opacity}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Button Style="{DynamicResource BackgroundButton}" Background="Black" Opacity="0.6" Panel.ZIndex="2" Click="Background_Click"/>
+        <ContentPresenter x:Name="BaseContent" Panel.ZIndex="1">
+            <ContentPresenter.Effect>
+                <BlurEffect Radius="5"/>
+            </ContentPresenter.Effect>
+        </ContentPresenter>
+        <Border Panel.ZIndex="2">
+            <Grid x:Name="ContentHost" Margin="50"/>
+        </Border>
+    </Grid>
+</UserControl>

@@ -38,12 +38,12 @@ namespace HedgeModManager
 
         public void Start()
         {
-            Show();
             DownloadClient = new WebClient();
             DownloadClient.Headers.Add("user-agent", App.WebRequestUserAgent);
             DownloadClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
             DownloadClient.DownloadFileCompleted += WebClient_DownloadCompleted;
             DownloadClient.DownloadFileAsync(new Uri(URL), DestinationPath);
+            ShowDialog();
         }
 
         protected void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs args)

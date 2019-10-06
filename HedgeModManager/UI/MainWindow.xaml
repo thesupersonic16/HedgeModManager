@@ -21,12 +21,12 @@
             <RotateTransform Angle="0" CenterX="280" CenterY="300"/>
         </Border.RenderTransform>
         <Grid>
-            <Grid Margin="0,2,0,-1.2">
+            <Grid Margin="-3,2,-3,-1.2">
                 <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110" Background="Transparent">
                     <TabItem Header="Mods">
                         <Grid>
                             <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
-                                      Margin="0,0,32,0" AllowDrop="True" Drop="UI_ModsList_Drop">
+                                      Margin="10,0,32,5" AllowDrop="True" Drop="UI_ModsList_Drop">
                                 <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                         <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
@@ -35,21 +35,21 @@
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="True">
-                                        <GridViewColumn Header="Name" Width="200">
+                                        <GridViewColumn Header="Name" Width="190">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <CheckBox Content="{Binding Title}" IsChecked="{Binding Enabled}"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Version"       Width="50" DisplayMemberBinding="{Binding Version}"/>
+                                        <GridViewColumn Header="Version"       Width="60" DisplayMemberBinding="{Binding Version}"/>
                                         <GridViewColumn Header="Author"        Width="88" DisplayMemberBinding="{Binding Author}"/>
-                                        <GridViewColumn Header="Supports Save" Width="84" DisplayMemberBinding="{Binding SupportsSave}"/>
-                                        <GridViewColumn Header="Updates"       Width="60" DisplayMemberBinding="{Binding HasUpdates}"/>
+                                        <GridViewColumn Header="Supports Save" Width="90" DisplayMemberBinding="{Binding SupportsSave}"/>
+                                        <GridViewColumn Header="Updates"       Width="70" DisplayMemberBinding="{Binding HasUpdates}"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0">
                                 <Button x:Name="TopBtn"      Click="UI_MoveMod_Click"  Content="↑" FontSize="30" Margin="0,5,0,0" Height="50" />
                                 <Button x:Name="UpBtn"       Click="UI_MoveMod_Click"  Content="˄" FontSize="30" Margin="0,5,0,0" Height="50" />
                                 <Button x:Name="DownBtn"     Click="UI_MoveMod_Click"  Content="˅" FontSize="30" Margin="0,5,0,0" Height="50" />
@@ -59,7 +59,7 @@
                     </TabItem>
                     <TabItem Header="Codes">
                         <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
-                                     Margin="5" AllowDrop="True" Drop="UI_ModsList_Drop">
+                                     Margin="10,5,10,5" AllowDrop="True" Drop="UI_ModsList_Drop">
                             <ListView.View>
                                 <GridView AllowsColumnReorder="True">
                                     <GridViewColumn Header="Name" Width="Auto">
@@ -75,7 +75,7 @@
                     </TabItem>
                     <TabItem Header="Settings">
                         <Grid>
-                            <GroupBox Header="Game &amp; Mod Loader" HorizontalAlignment="Stretch"   Height="185" Margin="10,10,10,0"    VerticalAlignment="Top">
+                            <GroupBox Header="Game &amp; Mod Loader" HorizontalAlignment="Stretch"   Height="185" Margin="10,5,10,0"    VerticalAlignment="Top">
                                 <Grid>
                                     <Button   x:Name="Button_CPKREDIR"      Content="Install Mod Loader"              Click="UI_CPKREDIR_Click"                       Margin="10,10,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
                                     <Button   x:Name="Button_OtherLoader"   Content="Uninstall Code Loader"                 Click="UI_OtherLoader_Click"                    Margin="10,38,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>

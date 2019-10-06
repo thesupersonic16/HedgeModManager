@@ -3,44 +3,49 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
         xmlns:local="clr-namespace:HedgeModManager.UI"
+        xmlns:controls="clr-namespace:HedgeModManager.Controls"
         mc:Ignorable="d"
-        Title="{Binding ModName, FallbackValue=Name}" Height="450" Width="800" Style="{StaticResource HedgeWindow}">
+        Title="{Binding ModName, FallbackValue=Name}" Height="600" Width="900" Style="{DynamicResource HedgeWindow}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="160"/>
         </Grid.ColumnDefinitions>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <StackPanel>
-                <Label Content="{Binding ModName, FallbackValue=Name}" FontSize="24"/>
-                <Label Content="{Binding ItemType, FallbackValue=Type}" FontSize="14"/>
-            </StackPanel>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Image x:Name="ScreenshotBx" Width="250" Height="150" Margin="5" Grid.Column="0"/>
-                <UniformGrid x:Name="ScreenshotPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
+        <controls:Sidebar x:Name="Imagebar" HorizontalAlignment="Left" SidebarWidth="120" OpenOnClick="True" Background="#2D2D2D" Panel.ZIndex="1"/>
+        <Grid Margin="10,10,0,0" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <Label Padding="7,0,0,0" Content="{Binding ModName, FallbackValue=Name}" FontSize="20"/>
+                    <Label Padding="7,0,0,0" Content="{Binding ItemType, FallbackValue=Type}" FontSize="12"/>
+                </StackPanel>
+                <ScrollViewer Grid.Row="1" Margin="0,0,5,0">
+                    <wpf:HtmlPanel x:Name="Description" Background="Transparent"/>
+                </ScrollViewer>
             </Grid>
-            <WebBrowser x:Name="Description" Grid.Row="2"/>
-        </Grid>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Content="Credits" FontSize="24"/>
-            <ScrollViewer Grid.Row="1" Margin="5,0,0,40">
-                <StackPanel x:Name="CreditsPanel" Orientation="Vertical"/>
-            </ScrollViewer>
-            <Button Grid.Row="1" Width="150" Height="25" Content="Download" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"/>
+            <Grid Grid.Column="1">
+                <Rectangle Width="2" HorizontalAlignment="Left" Fill="Gray"/>
+                <Grid Margin="5,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Credits" FontSize="20"/>
+                    <ScrollViewer Grid.Row="1" Margin="10,0,5,40">
+                        <StackPanel x:Name="CreditsPanel" Orientation="Vertical"/>
+                    </ScrollViewer>
+                    <Button Grid.Row="1" Height="25" Content="Download" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="5" Click="Download_Click"/>
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

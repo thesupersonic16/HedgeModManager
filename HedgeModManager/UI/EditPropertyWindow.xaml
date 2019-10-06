@@ -5,19 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="EditPropertyWindow" MinHeight="110" MinWidth="400" MaxHeight="600"
+        Title="EditPropertyWindow" MinHeight="110" MinWidth="400" MaxHeight="600" MaxWidth="600"
         Height="Auto" Width="Auto" Style="{StaticResource HedgeWindow}" WindowStartupLocation="CenterScreen"
         SizeToContent="WidthAndHeight" ContentRendered="Window_ContentRendered">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <StackPanel Margin="5">
-            <Label x:Name="PropName" Content="Edit {0}"/>
-            <TextBox x:Name="ValueBx" Text="Value goes here"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="5" HorizontalAlignment="Right">
+        <Label x:Name="PropName" Content="Edit {0}" Grid.Row="0" Margin="5,0,0,0"/>
+        <TextBox x:Name="ValueBx" Grid.Row="1" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="Value goes here" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="5" HorizontalAlignment="Right">
             <Button Content="    Update    " Margin="0,0,5,0" Click="Update_Click"/>
             <Button Content="    Cancel    " IsCancel="True"/>
         </StackPanel>

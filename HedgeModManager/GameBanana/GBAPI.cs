@@ -11,6 +11,8 @@ using System.Xml.Linq;
 using HedgeModManager.UI;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Runtime.Serialization;
 
 namespace GameBananaAPI
 {
@@ -25,28 +27,8 @@ namespace GameBananaAPI
 
         public class GBAPIRequestHandler
         {
-            public List<KeyValuePair<string, PropertyInfo>> Fields = new List<KeyValuePair<string, PropertyInfo>>();
-            public string ItemType = "";
-            public int ItemID = 0;
-            public string Suffix = "&format=xml";
+            public string Suffix = "&format=json&return_keys=1";
             public GBAPIRequestType APIType = GBAPIRequestType.COREITEMDATA;
-
-            public void ProcessItemData(GBAPIItemData item)
-            {
-                ItemType = item.ItemType;
-                ItemID = item.ItemID;
-                APIType = GBAPIRequestType.COREITEMDATA;
-
-                var type = item.GetType();
-                foreach (var field in type.GetProperties())
-                {
-                    var GBField = (GBAPIField)field.GetCustomAttributes(typeof(GBAPIField), true).FirstOrDefault();
-                    if (GBField != null)
-                    {
-                        Fields.Add(new KeyValuePair<string, PropertyInfo>(GBField.FieldName, field));
-                    }
-                }
-            }
 
             /// <summary>
             /// Creates Request URL to GameBanana's API.
@@ -54,16 +36,20 @@ namespace GameBananaAPI
             ///      Calls Core/Item/Data with the specified item type, id and fields
             /// </summary>
             /// <returns>Request URL</returns>
-            public string Build()
+            public string Build(GBAPIItemData item)
             {
                 if (APIType == GBAPIRequestType.COREITEMDATA)
                 {
-                    string URL = $"https://api.gamebanana.com/Core/Item/Data?itemtype={ItemType}&itemid={ItemID}&fields=";
-                    foreach (var field in Fields)
+                    string URL = $"https://api.gamebanana.com/Core/Item/Data?itemtype={item.ItemType}&itemid={item.ItemID}&fields=";
+                    foreach(var property in item.GetType().GetProperties())
                     {
-                        if (URL.Last() != '=')
-                            URL += ',';
-                        URL += field.Key;
+                        var prop = (JsonPropertyAttribute)property.GetCustomAttribute(typeof(JsonPropertyAttribute));
+                        if(prop != null)
+                        {
+                            if (URL.Last() != '=')
+                                URL += ',';
+                            URL += prop.PropertyName;
+                        }
                     }
                     return URL + Suffix;
                 }
@@ -76,62 +62,18 @@ namespace GameBananaAPI
             /// <param name="response">The Response data from GameBanana API in XML string format</param>
             /// <param name="item">Reference to a GBAPIItemData to write the data to</param>
             /// <returns>If Parse completed with no errors</returns>
-            public bool ParseResponse(string response, GBAPIItemData item)
+            public bool ParseResponse(string response,ref GBAPIItemDataBasic item)
             {
-                var responseXML = XDocument.Parse(response).Root;
-                var elements = responseXML.Elements().ToList();
-                if (elements.Count() != Fields.Count)
+                try
                 {
-                    new ExceptionWindow(new Exception("GameBanana Returned less values than requested! Parsing must abort!"), response).Show();
+                    item = JsonConvert.DeserializeObject<GBAPIItemDataBasic>(response);
+                    return true;
+                }
+                catch
+                {
                     return false;
                 }
-
-                foreach (var field in Fields)
-                {
-                    var element = elements.First();
-                    var GBFieldKey = (GBAPIFieldKeyArray)field.Value.GetCustomAttributes(typeof(GBAPIFieldKeyArray), true).FirstOrDefault();
-                    if (GBFieldKey != null)
-                    {
-                        var arrayElements = element.Elements().ToArray();
-                        var array = Array.CreateInstance(field.Value.PropertyType.GetElementType(), arrayElements.Length);
-                        var keyInfo = field.Value.PropertyType.GetElementType().GetField(GBFieldKey.KeyName);
-                        var arrayInfo = field.Value.PropertyType.GetElementType().GetField(GBFieldKey.ArrayName);
-                        for (int i = 0; i < array.Length; ++i)
-                        {
-                            object obj = Activator.CreateInstance(field.Value.PropertyType.GetElementType());
-                            // Key
-                            object value = TryConvert(arrayElements[i].Attribute("key").Value, keyInfo.FieldType);
-                            if (value != null)
-                                keyInfo.SetValue(obj, value);
-                            // Array
-                            var subElements = arrayElements[i].Elements().ToArray();
-                            var array2 = Array.CreateInstance(arrayInfo.FieldType.GetElementType(), subElements.Length);
-                            for (int ii = 0; ii < array2.Length; ++ii)
-                                array2.SetValue(XMLtoObject(arrayInfo.FieldType.GetElementType(), subElements[ii]), ii);
-                            arrayInfo.SetValue(obj, array2);
-
-
-                            array.SetValue(obj, i);
-                        }
-                        field.Value.SetValue(item, array);
-                    }
-                    else if (element.Name == "value")
-                    {
-                        field.Value.SetValue(item, XMLtoObject(field.Value.PropertyType, elements.First()));
-                    }
-                    else
-                    {
-                        var arrayElements = element.Elements().ToArray();
-                        var array = Array.CreateInstance(field.Value.PropertyType.GetElementType(), arrayElements.Length);
-                        for (int i = 0; i < array.Length; ++i)
-                            array.SetValue(XMLtoObject(field.Value.PropertyType.GetElementType(), arrayElements[i]), i);
-                        field.Value.SetValue(item, array);
-                    }
-                    elements.RemoveAt(0);
-                }
-                return true;
             }
-
         }
 
         /// <summary>
@@ -152,76 +94,27 @@ namespace GameBananaAPI
             }
         }
 
-        public static object XMLtoObject(Type type, XElement element)
+        public static bool RequestItemData(ref GBAPIItemDataBasic item)
         {
-            object obj = TryConvert(element.Value, type);
-            if (obj != null)
-                return obj;
-            obj = Activator.CreateInstance(type);
-            var fields = type.GetFields();
-            var elements = new List<XElement>(element.Elements());
-            if (element.Name == "value")
-            {
-                return XMLtoObject(type, elements.First());
-            }
-            foreach (var field in fields)
-            {
-                var curElement = elements.First();
-                if (field.IsLiteral)
-                {
-                    return obj;
-                }
-                else if (field.FieldType.IsArray)
-                {
-                    var arrayElements = curElement.Elements().ToArray();
-                    var array = Array.CreateInstance(field.FieldType.GetElementType(), arrayElements.Length);
-                    for (int i = 0; i < array.Length; ++i)
-                        array.SetValue(XMLtoObject(field.FieldType.GetElementType(), arrayElements[i]), i);
-                    field.SetValue(obj, array);
-                }
-                else
-                {
-                    object value = TryConvert(curElement.Value, field.FieldType);
-
-                    if (value != null)
-                        field.SetValue(obj, value);
-                    else
-                        field.SetValue(obj, XMLtoObject(field.FieldType, curElement));
-                }
-                elements.RemoveAt(0);
-            }
-            return obj;
-        }
-
-        public static object JSONToObject(Type type, string data)
-        {
-            //TODO
-            var obj = Activator.CreateInstance(type);
-            foreach(var prop in type.GetProperties())
-            {
-                var attribute = prop.GetCustomAttribute(typeof(GBAPIField));
-            }
-            return obj;
-        }
-
-        public static bool RequestItemData(GBAPIItemData item)
-        {
+            var type = item.ItemType;
+            var id = item.ItemID;
             var handler = new GBAPIRequestHandler();
-            handler.ProcessItemData(item);
-            string request = handler.Build();
-            string response = new WebClient().DownloadString(request);
-            return handler.ParseResponse(response, item);
+            string request = handler.Build(item);
+            string response = new WebClient() { Encoding = Encoding.ASCII }.DownloadString(request);
+            response = Uri.UnescapeDataString(response);
+            var result = handler.ParseResponse(response, ref item);
+            item.ItemType = type;
+            item.ItemID = id;
+            return result;
         }
 
         /// <summary>
         /// Installs the GameBanana one-click install handler
         /// </summary>
         /// <returns></returns>
-        public static bool InstallGBHandler()
+        public static bool InstallGBHandler(Game game)
         {
-            // TODO
-            string protocol = "hedgemmforces";
-            string protocolName = "HedgeModManager for Sonic Forces";
+            string protocolName = $"HedgeModManager for {game.GameName}";
             // Can we use LOCAL_USER instead of CLASSES_ROOT?
             // Pretty sure you can, You can try it, Also I cant see errors
             // but i can
@@ -236,7 +129,7 @@ namespace GameBananaAPI
             // But I'm lazy
             try
             {
-                var reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\{protocol}");
+                var reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\{game.GBProtocol}");
                 reg.SetValue("", $"URL:{protocolName}");
                 reg.SetValue("URL Protocol", "");
                 reg = reg.CreateSubKey("shell\\open\\command");
@@ -279,21 +172,33 @@ namespace GameBananaAPI
             if (split.Length < 3) // help, I ddont know math
                 return;
             string itemType = split[1];
-            string itemDLURL = split[0];
+            var protocal = split[0].Substring(0, split[0].IndexOf(':'));
+            string itemDLURL = split[0].Substring(protocal.Length + 1, split[0].Length - (protocal.Length + 1));
             int itemID = 0;
             if (!int.TryParse(split[2], out itemID))
             {
-                // TODO: Show Error message here
+                App.CreateOKMessageBox("Error", $"Invalid Gamebanana item id {itemID}").ShowDialog();
                 return;
             }
             var item = new GBAPIItemDataBasic(itemType, itemID);
-            if (!GBAPI.RequestItemData(item))
+            if (!RequestItemData(ref item))
             {
-                // TODO: Show Error message here
+                App.CreateOKMessageBox("Error", "Invalid Gamebanana item").ShowDialog();
                 return;
             }
-            var screenshots = JsonConvert.DeserializeObject<List<GBAPIScreenshotData>>(item.Screenshots);
-            new GBModWindow(item, screenshots).ShowDialog();
+            var game = Games.Unknown;
+            foreach(var gam in Games.GetSupportedGames())
+            {
+                if(gam.GBProtocol == protocal)
+                {
+                    game = gam;
+                    break;
+                }
+            }
+            if (game == Games.Unknown)
+                return;
+
+            new GBModWindow(item,itemDLURL, game).ShowDialog();
             return;
             // TODO: Show Info Window (ofc it will need a Download button)
             // I FORGOT ABOUT THE DOWNLOAD BUTTON
@@ -312,61 +217,65 @@ namespace GameBananaAPI
         }
     }
 
-
-    public class GBAPIField : Attribute
-    {
-        public string FieldName;
-
-        public GBAPIField(string fieldName)
-        {
-            FieldName = fieldName;
-        }
-    }
-
-    public class GBAPIFieldKeyArray : Attribute
-    {
-        public string KeyName;
-        public string ArrayName;
-
-        public GBAPIFieldKeyArray(string keyName, string arrayName)
-        {
-            KeyName = keyName;
-            ArrayName = arrayName;
-        }
-    }
-
-
     public class GBAPICredit
     {
-        public string MemberName;
-        public string Role;
-        public int MemberID;
+        public string MemberName { get; set; }
+        public string Role { get; set; }
+        public int MemberID { get; set; }
     }
 
-    public class GBAPICreditGroup
+    public class GBAPICreditGroups
     {
-        public string GroupName;
-        public GBAPICredit[] Credits;
+        public Dictionary<string, List<GBAPICredit>> Credits = new Dictionary<string, List<GBAPICredit>>();
+
+        [JsonExtensionData]
+        private Dictionary<string, JToken> CreditsData { get; set; }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            foreach(var credit in CreditsData)
+            {
+                var credits = new List<GBAPICredit>();
+                foreach(var cred in credit.Value)
+                {
+                    credits.Add(new GBAPICredit()
+                    {
+                        MemberName = cred[0].ToString(),
+                        Role = cred[1].ToString(),
+                        MemberID = cred[2].ToObject<int>()
+                    }); ;
+                }
+                Credits.Add(credit.Key, credits);
+            }
+        }
     }
 
 
     public class GBAPIItemDataBasic : GBAPIItemData
     {
-        [GBAPIField("name")]
+        [JsonProperty("name")]
         public string ModName { get; set; }
-        [GBAPIField("userid")]
+        [JsonProperty("userid")]
         public int OwnerID { get; set; }
-        [GBAPIField("Owner().name")]
+        [JsonProperty("Owner().name")]
         public string OwnerName { get; set; }
-        [GBAPIField("screenshots")]
-        public string Screenshots { get; set; }
-        [GBAPIField("text")]
+        [JsonProperty("screenshots")]
+        public string ScreenshotsRaw { get; set; }
+        [JsonProperty("text")]
         public string Body { get; set; }
-        [GBAPIField("description")]
+        [JsonProperty("description")]
         public string Subtitle { get; set; }
-        [GBAPIField("Credits().aAuthorsAndGroups()")]
-        [GBAPIFieldKeyArray("GroupName", "Credits")]
-        public GBAPICreditGroup[] Credits { get; set; }
+        [JsonProperty("Credits().aAuthorsAndGroups()")]
+        public GBAPICreditGroups Credits { get; set; }
+
+        public List<GBAPIScreenshotData> Screenshots
+        {
+            get
+            {
+                return JsonConvert.DeserializeObject<List<GBAPIScreenshotData>>(ScreenshotsRaw);
+            }
+        }
 
         public GBAPIItemDataBasic(string itemType, int itemID) : base(itemType, itemID)
         {

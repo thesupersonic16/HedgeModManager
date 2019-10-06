@@ -74,9 +74,10 @@ namespace HedgeModManager
 #endif
 
             Steam.Init();
+            InstallGBHandlers();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Generations");
+            SteamGames = Steam.SearchForGames("Sonic Sonic World");
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;
@@ -87,6 +88,7 @@ namespace HedgeModManager
                 if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
                 {
                     CurrentGame = game;
+                    break;
                 }
             }
 #endif
@@ -96,12 +98,7 @@ namespace HedgeModManager
             if (args.Length > 1 && args[0] == "-gb")
             {
                 string line = args[1].Substring(args[1].IndexOf(':') + 1);
-                GBAPI.ParseCommandLine(line);
-                return;
-            }
-            else if (args.Length > 0 && args[0] == "-gbinstall")
-            {
-                GBAPI.InstallGBHandler();
+                GBAPI.ParseCommandLine(args[1]);
                 return;
             }
 
@@ -151,10 +148,18 @@ namespace HedgeModManager
             StartDirectory = steamGame.RootDirectory;
             foreach(var game in Games.GetSupportedGames())
             {
-                if(game.AppID == steamGame.GameID)
+                if (game.AppID == steamGame.GameID)
                 {
                     CurrentGame = game;
                 }
+            }
+        }
+
+        public static void InstallGBHandlers()
+        {
+            foreach(var game in Games.GetSupportedGames())
+            {
+                GBAPI.InstallGBHandler(game);
             }
         }
 
@@ -241,6 +246,13 @@ namespace HedgeModManager
                 stream.Seek(offset, SeekOrigin.Begin);
                 stream.Write(buffer, 0, CPKREDIR.Length);
             }
+        }
+
+        public static HedgeMessageBox CreateOKMessageBox(string header, string message)
+        {
+            var box = new HedgeMessageBox(header, message);
+            box.AddButton("OK", () => box.Close());
+            return box;
         }
 
         public static void InstallOtherLoader(bool toggle = true)
