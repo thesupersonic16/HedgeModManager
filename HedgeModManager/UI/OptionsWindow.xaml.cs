@@ -25,7 +25,7 @@ namespace HedgeModManager
             Header.Text = header;
             foreach(var option in options)
             {
-                CheckStack.Children.Add(new RadioButton() { Content = option });
+                CheckStack.Children.Add(new RadioButton() { Content = option, Margin = new Thickness(2) });
             }
         }
 
