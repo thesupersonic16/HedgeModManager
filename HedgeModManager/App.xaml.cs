@@ -97,7 +97,6 @@ namespace HedgeModManager
 
             if (args.Length > 1 && args[0] == "-gb")
             {
-                string line = args[1].Substring(args[1].IndexOf(':') + 1);
                 GBAPI.ParseCommandLine(args[1]);
                 return;
             }

@@ -63,6 +63,7 @@ namespace HedgeModManager.UI
             var request = (HttpWebRequest)WebRequest.Create(DownloadURL);
             var response = request.GetResponse();
             var URI = response.ResponseUri.ToString();
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(App.AppPath));
             var downloader = new DownloadWindow($"Downloading {mod.ModName}", URI, Path.GetFileName(URI));
             downloader.DownloadCompleted = new Action(() =>
             {

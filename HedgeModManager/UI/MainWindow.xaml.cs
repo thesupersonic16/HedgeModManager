@@ -196,7 +196,6 @@ namespace HedgeModManager
             Refresh();
         }
 
-
         private void UI_MoveMod_Click(object sender, RoutedEventArgs e)
         {
             var index = Math.Max(0, ModsList.SelectedIndex);
@@ -204,22 +203,26 @@ namespace HedgeModManager
             if (sender.Equals(UpBtn))
             {
                 ModsList.Items.RemoveAt(index);
-                ModsList.Items.Insert(Math.Max(0, --index), mod);
+                index = Math.Max(0, --index);
+                ModsList.Items.Insert(index, mod);
             }
             else if (sender.Equals(TopBtn))
             {
                 ModsList.Items.RemoveAt(index);
-                ModsList.Items.Insert(0, mod);
+                index = 0;
+                ModsList.Items.Insert(index, mod);
             }
             else if (sender.Equals(DownBtn))
             {
                 ModsList.Items.RemoveAt(index);
-                ModsList.Items.Insert(++index, mod);
+                index = Math.Min(++index, ModsList.Items.Count);
+                ModsList.Items.Insert(index, mod);
             }
             else if (sender.Equals(BottomBtn))
             {
                 ModsList.Items.RemoveAt(index);
-                ModsList.Items.Insert(ModsList.Items.Count, mod);
+                index = ModsList.Items.Count;
+                ModsList.Items.Insert(index, mod);
             }
             ModsList.SelectedIndex = index;
         }
