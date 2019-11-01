@@ -403,7 +403,7 @@
                                     <ColumnDefinition Width="2"/>
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                <Thumb Grid.Column="1"/>
+                                <Thumb x:Name="PART_HeaderGripper" Grid.Column="1"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
