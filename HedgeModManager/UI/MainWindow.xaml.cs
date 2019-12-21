@@ -51,12 +51,12 @@ namespace HedgeModManager
             ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
 
             // Re-arrange the mods
-            for (int i = (int)ModsDatabase["Main"]["ActiveModCount", typeof(int)]; i >= 0; --i)
+            for (int i = ModsDatabase.ActiveModCount - 1; i >= 0; --i)
             {
                 for (int i2 = 0; i2 < ModsList.Items.Count; i2++)
                 {
                     var mod = ModsList.Items[i2] as ModInfo;
-                    if (ModsDatabase["Main"][$"ActiveMod{i}"] == Path.GetFileName(mod.RootDirectory))
+                    if (ModsDatabase.ActiveMods[i] == Path.GetFileName(mod.RootDirectory))
                     {
                         ModsList.Items.Remove(mod);
                         ModsList.Items.Insert(0, mod);
@@ -374,6 +374,7 @@ namespace HedgeModManager
                     Title = GenerateModTitle(),
                     Author = Environment.UserName
                 };
+
                 mod.IncludeDirs.Add(".");
                 var editor = new EditModWindow(mod);
                 if (editor.ShowDialog().Value)
@@ -411,8 +412,8 @@ namespace HedgeModManager
             App.ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
             App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
             App.Config = new CPKREDIRConfig(App.ConfigPath);
-            ModsWatcher?.Dispose();
-            SetupWatcher();
+            //ModsWatcher?.Dispose();
+            //SetupWatcher();
             Refresh();
         }
     }

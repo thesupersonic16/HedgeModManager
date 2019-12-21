@@ -8,21 +8,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HedgeModManager.Serialization;
 
 namespace HedgeModManager
 {
-    public class ModsDB : IniFile
+    public class ModsDB
     {
         public List<ModInfo> Mods = new List<ModInfo>();
+
+        [IniField("Main", "ActiveMod")]
+        public List<string> ActiveMods = new List<string>();
+
+        [IniField("Main", "ReverseLoadOrder")]
+        public bool ReverseLoadOrder { get; set; }
+
+        [IniField("Mods")]
+        private Dictionary<string, string> mMods = new Dictionary<string, string>();
+
+        [IniField("Codes", "Code")]
         public List<string> Codes = new List<string>();
+
         public string RootDirectory { get; set; }
         public int ModCount => Mods.Count;
-
-        public bool ReverseLoadOrder
-        {
-            get { return (int)this["Main"]["ReverseLoadOrder", typeof(int), 1] != 0; }
-            set { this["Main"]["ReverseLoadOrder"] = (value ? "1" : "0"); }
-        }
+        public int ActiveModCount => ActiveMods.Count;
 
         public ModsDB()
         {
@@ -37,7 +45,7 @@ namespace HedgeModManager
                 try
                 {
                     using (var stream = File.OpenRead(iniPath))
-                        Read(stream);
+                        IniSerializer.Deserialize(this, stream);
                 }
                 catch
                 {
@@ -62,23 +70,13 @@ namespace HedgeModManager
                 return;
             }
 
-            if (!Groups.ContainsKey("Main"))
-                Groups.Add("Main", new IniGroup());
-            if (!Groups.ContainsKey("Mods"))
-                Groups.Add("Mods", new IniGroup());
-            if (!Groups.ContainsKey("Codes"))
-                Groups.Add("Codes", new IniGroup());
-
             DetectMods();
-            GetEnabledCodes();
             GetEnabledMods();
         }
 
         public void SetupFirstTime()
         {
             Directory.CreateDirectory(RootDirectory);
-            Groups.Add("Main", new IniGroup());
-            Groups.Add("Mods", new IniGroup());
             SaveDB();
         }
 
@@ -102,73 +100,27 @@ namespace HedgeModManager
 
         public void GetEnabledMods()
         {
-            int activeCount = (int)this["Main"]["ActiveModCount", typeof(int), 0];
+            int activeCount = ActiveMods.Count;
             for (int i = 0; i < activeCount; i++)
             {
-                var mod = Mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == this["Main"]?[$"ActiveMod{i}"]);
+                var mod = Mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == ActiveMods[i]);
                 if (mod != null)
                     mod.Enabled = true;
             }
         }
-
-        public void GetEnabledCodes()
-        {
-            var activeCount = (int)this["Codes"]["ActiveCodeCount", typeof(int), -1];
-            if(activeCount < 0)
-            {
-                //Old HMM
-                for(int i = 0; i < int.MaxValue; i++)
-                {
-                    var code = this["Codes"][$"Code{i}", string.Empty];
-                    if (string.IsNullOrEmpty(code))
-                        break;
-                    else
-                        Codes.Add(code);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < activeCount; i++)
-                {
-                    Codes.Add(this["Codes"][$"Code{i}"]);
-                }
-            }
-        }
-
-        public void BuildList()
-        {
-            this["Mods"].Params.Clear();
-            foreach (var mod in Mods)
-            {
-                this["Mods"][Path.GetFileName(mod.RootDirectory)] = Path.Combine(mod.RootDirectory, "mod.ini"); 
-            }
-            this["Codes"].Params.Clear();
-            this["Codes"]["ActiveCodeCount"] = Codes.Count.ToString();
-            for (int i = 0; i < Codes.Count; i++)
-            {
-                this["Codes"][$"Code{i}"] = Codes[i];
-            }
-        }
-
-        public void BuildMain()
-        {
-            ClearIniList();
-            var count = 0;
-            foreach (var mod in Mods.Where(mod => mod.Enabled))
-            {
-                this["Main"].Params.Add($"ActiveMod{count}", Path.GetFileName(mod.RootDirectory));
-                ++count;
-            }
-            this["Main"].Params.Add("ActiveModCount", count.ToString());
-        }
-
         public void SaveDB()
         {
-            BuildMain();
-            BuildList();
+            ActiveMods.Clear();
+            mMods.Clear();
+            Mods.ForEach(mod => 
+            { 
+                if (mod.Enabled) 
+                    ActiveMods.Add(Path.GetFileName(mod.RootDirectory)); 
+                mMods.Add(Path.GetFileName(mod.RootDirectory), $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini"); 
+            } );
             using (var stream = File.Create(Path.Combine(RootDirectory, "ModsDB.ini")))
             {
-                Write(stream);
+                IniSerializer.Serialize(this, stream);
             }
             CodeList.WriteDatFile(Path.Combine(RootDirectory, CodeLoader.CodesPath), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => x.Enabled)), App.CurrentGame.Is64Bit);
         }
@@ -177,16 +129,6 @@ namespace HedgeModManager
         {
             Mods.Remove(mod);
             Directory.Delete(mod.RootDirectory, true);
-        }
-
-        public void ClearIniList()
-        {
-            var list = new List<KeyValuePair<string, string>>();
-            list.AddRange(this["Main"].Params.Where(t => t.Key.StartsWith("ActiveMod")));
-            foreach (var o in list)
-                this["Main"].Params.Remove(o.Key);
-
-            this["Codes"].Params.Clear();
         }
 
         public void DisableAllMods()
@@ -367,10 +309,8 @@ namespace HedgeModManager
             var path = Path.Combine(RootDirectory, mod.Title);
             Directory.CreateDirectory(path);
             Directory.CreateDirectory(Path.Combine(path, "disk"));
-            using(var stream = File.Create(Path.Combine(path, "mod.ini")))
-            {
-                mod.Write(stream);
-            }
+            mod.RootDirectory = path;
+            mod.Save();
 
             if (openFolder)
             {

@@ -4,99 +4,66 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HedgeModManager.Serialization;
 
 namespace HedgeModManager
 {
-    public class CPKREDIRConfig : IniFile
+    public class CPKREDIRConfig
     {
         // CPKREDIR
-        public bool Enabled
-        {
-            get { return (int)this["CPKREDIR"]["Enabled", typeof(int)] != 0; }
-            set { this["CPKREDIR"]["Enabled"] = (value ? "1" : "0"); }
-        }
+        [IniField("CPKREDIR")]
+        public bool Enabled { get; set; }
 
-        public bool PlaceTocAtEnd
-        {
-            get { return (int)this["CPKREDIR"]["PlaceTocAtEnd", typeof(int)] != 0; }
-            set { this["CPKREDIR"]["PlaceTocAtEnd"] = (value ? "1" : "0"); }
-        }
+        [IniField("CPKREDIR")]
+        public bool PlaceTocAtEnd { get; set; }
 
-        public bool HandleCpksWithoutExtFiles
-        {
-            get { return (int)this["CPKREDIR"]["HandleCpksWithoutExtFiles", typeof(int)] != 0; }
-            set { this["CPKREDIR"]["HandleCpksWithoutExtFiles"] = (value ? "1" : "0"); }
-        }
+        [IniField("CPKREDIR")]
+        public bool HandleCpksWithoutExtFiles { get; set; }
 
-        public string LogFile
-        {
-            get { return this["CPKREDIR"]["LogFile"]; }
-            set { this["CPKREDIR"]["LogFile"] = value; }
-        }
+        [IniField("CPKREDIR")]
+        public string LogFile { get; set; }
 
-        public int ReadBlockSizeKB
-        {
-            get { return (int)this["CPKREDIR"]["ReadBlockSizeKB", typeof(int)]; } 
-            set { this["CPKREDIR"]["ReadBlockSizeKB"] = value.ToString(); }
-        }
+        [IniField("CPKREDIR")]
+        public int ReadBlockSizeKB { get; set; }
 
-        public string ModsDbIni
-        {
-            get { return this["CPKREDIR"]["ModsDbIni"]; }
-            set { this["CPKREDIR"]["ModsDbIni"] = value; }
-        }
+        [IniField("CPKREDIR")]
+        public string ModsDbIni { get; set; }
 
-        public bool EnableSaveFileRedirection
-        {
-            get { return (int)this["CPKREDIR"]["EnableSaveFileRedirection", typeof(int)] != 0; }
-            set { this["CPKREDIR"]["EnableSaveFileRedirection"] = (value ? "1" : "0"); }
-        }
+        [IniField("CPKREDIR")]
+        public bool EnableSaveFileRedirection { get; set; }
 
-        public bool EnableDebugConsole
-        {
-            get { return this["CPKREDIR"]["LogType", "none"] == "console"; }
-            set { this["CPKREDIR"]["LogType"] = (value ? "console" : "none"); }
-        }
+        [IniField("CPKREDIR")]
+        public string SaveFileFallback { get; set; }
 
-        public string SaveFileFallback
-        {
-            get { return this["CPKREDIR"]["SaveFileFallback"]; }
-            set { this["CPKREDIR"]["SaveFileFallback"] = value; }
-        }
+        [IniField("CPKREDIR")]
+        public string SaveFileOverride { get; set; }
 
-        public string SaveFileOverride
-        {
-            get { return this["CPKREDIR"]["SaveFileOverride"]; }
-            set { this["CPKREDIR"]["SaveFileOverride"] = value; }
-        }
+        [IniField("CPKREDIR")]
+        public string LogType { get; set; }
 
         // HedgeModManager
-        public bool CheckForUpdates
-        {
-            get { return (int)this["HedgeModManager"]["AutoCheckForUpdates", typeof(int)] != 0; }
-            set { this["HedgeModManager"]["AutoCheckForUpdates"] = (value ? "1" : "0"); }
-        }
+        [IniField("HedgeModManager", "AutoCheckForUpdates")]
+        public bool CheckForUpdates { get; set; }
 
-        public bool KeepOpen
-        {
-            get { return (int)this["HedgeModManager"]["KeepModLoaderOpen", typeof(int)] != 0; }
-            set { this["HedgeModManager"]["KeepModLoaderOpen"] = (value ? "1" : "0"); }
-        }
+        [IniField("HedgeModManager", "KeepModLoaderOpen")]
+        public bool KeepOpen { get; set; }
 
-        public bool CheckLoaderUpdates
-        {
-            get { return (int)this["HedgeModManager"]["CheckLoader", typeof(int)] != 0; }
-            set { this["HedgeModManager"]["CheckLoader"] = (value ? "1" : "0"); }
+        [IniField("HedgeModManager", "CheckLoader")]
+        public bool CheckLoaderUpdates { get; set; }
+
+        public bool EnableDebugConsole 
+        { 
+            get => LogType == "console"; 
+            set => LogType = value ? "console" : "none";
         }
 
         public CPKREDIRConfig(string path)
         {
             if (File.Exists(path))
                 using (var stream = File.OpenRead(path))
-                    Read(stream);
+                    IniSerializer.Deserialize(this, stream);
             else
             {
-                Groups.Add("CPKREDIR", new IniGroup());
 
                 // CPKREDIR
                 Enabled = true;
@@ -108,10 +75,7 @@ namespace HedgeModManager
                 EnableSaveFileRedirection = false;
                 SaveFileFallback = "cpkredir.sav";
                 SaveFileOverride = "";
-            }
-            if (!Groups.ContainsKey("HedgeModManager"))
-            {
-                Groups.Add("HedgeModManager", new IniGroup());
+
                 // HedgeModManager
                 CheckForUpdates = true;
                 KeepOpen = false;
@@ -123,9 +87,8 @@ namespace HedgeModManager
         {
             using (var stream = File.Create(path))
             {
-                Write(stream);
+                IniSerializer.Serialize(this, stream);
             }
         }
-
     }
 }

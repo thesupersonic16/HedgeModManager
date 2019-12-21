@@ -108,6 +108,7 @@
     <Compile Include="GameBanana\GBAPI.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="ModUpdate.cs" />
+    <Compile Include="Serialization\IniSerializer.cs" />
     <Compile Include="ShellProvider.cs" />
     <Compile Include="UI\AboutModWindow.xaml.cs">
       <DependentUpon>AboutModWindow.xaml</DependentUpon>

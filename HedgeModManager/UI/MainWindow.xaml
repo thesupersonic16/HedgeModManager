@@ -39,7 +39,10 @@
                                         <GridViewColumn Header="Name" Width="190">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox Content="{Binding Title}" IsChecked="{Binding Enabled}"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <CheckBox IsChecked="{Binding Enabled}" Margin="0,0,4,0"/>
+                                                        <TextBlock Text="{Binding Title}"/>
+                                                    </StackPanel>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
