@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
         Title="HedgeModManager (7.0)"
@@ -26,16 +27,24 @@
                 <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110" Background="Transparent">
                     <TabItem Header="Mods">
                         <Grid>
-                            <ListView x:Name="ModsList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
-                                      Margin="10,0,32,5" AllowDrop="True" Drop="UI_ModsList_Drop">
+                            <ListView x:Name="ModsList" AllowDrop="True" Drop="UI_ModsList_Drop"
+                                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
+                                      Margin="12,5,12,5" ItemsSource="{Binding Mods}" 
+                                      dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
+                                      dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True">
                                 <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                         <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
                                         <Setter Property="ContextMenu" Value="{DynamicResource ModContextMenu}"/>
+                                        <Setter Property="ToolTip">
+                                            <Setter.Value>
+                                                <ToolTip Content="Drag and drop items to change the load order of mods."/>
+                                            </Setter.Value>
+                                        </Setter>
                                     </Style>
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
-                                    <GridView AllowsColumnReorder="True">
+                                    <GridView>
                                         <GridViewColumn Header="Name" Width="190">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -53,17 +62,11 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0">
-                                <Button x:Name="TopBtn"      Click="UI_MoveMod_Click"  Content="↑" FontSize="30" Margin="0,5,0,0" Height="50" />
-                                <Button x:Name="UpBtn"       Click="UI_MoveMod_Click"  Content="˄" FontSize="30" Margin="0,5,0,0" Height="50" />
-                                <Button x:Name="DownBtn"     Click="UI_MoveMod_Click"  Content="˅" FontSize="30" Margin="0,5,0,0" Height="50" />
-                                <Button x:Name="BottomBtn"   Click="UI_MoveMod_Click"  Content="↓" FontSize="30" Margin="0,5,0,0" Height="50" />
-                            </StackPanel>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Codes">
                         <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
-                                     Margin="10,5,10,5" AllowDrop="True" Drop="UI_ModsList_Drop">
+                                     Margin="12,5,12,5" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
                             <ListView.View>
                                 <GridView AllowsColumnReorder="True">
                                     <GridViewColumn Header="Name" Width="Auto">

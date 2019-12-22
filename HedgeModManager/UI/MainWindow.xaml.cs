@@ -16,6 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using HedgeModManager.UI;
+using System.Collections.ObjectModel;
 
 namespace HedgeModManager
 {
@@ -27,7 +29,8 @@ namespace HedgeModManager
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
         public static CodeList CodesDatabase = new CodeList();
-        public static FileSystemWatcher ModsWatcher;
+        public static List<FileSystemWatcher> ModsWatchers = new List<FileSystemWatcher>();
+        public MainWindowViewModel ViewModel = new MainWindowViewModel();
 
         public MainWindow()
         {
@@ -42,24 +45,23 @@ namespace HedgeModManager
 
         public void RefreshMods()
         {
-            ModsList.Items.Clear();
             CodesList.Items.Clear();
+
             ModsDatabase = new ModsDB(App.ModsDbPath);
             ModsDatabase.DetectMods();
             ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.OrderBy(x => x.Title);
-            ModsDatabase.Mods.ForEach(mod => ModsList.Items.Add(mod));
 
             // Re-arrange the mods
-            for (int i = ModsDatabase.ActiveModCount - 1; i >= 0; --i)
+            for (int i = 0; i < ModsDatabase.ActiveModCount; i++)
             {
-                for (int i2 = 0; i2 < ModsList.Items.Count; i2++)
+                for (int i2 = 0; i2 < ModsDatabase.Mods.Count; i2++)
                 {
-                    var mod = ModsList.Items[i2] as ModInfo;
-                    if (ModsDatabase.ActiveMods[i] == Path.GetFileName(mod.RootDirectory))
+                    var mod = ModsDatabase.Mods[i2];
+                    if (Path.GetFileName(mod.RootDirectory) == ModsDatabase.ActiveMods[i])
                     {
-                        ModsList.Items.Remove(mod);
-                        ModsList.Items.Insert(0, mod);
+                        ModsDatabase.Mods.Remove(mod);
+                        ModsDatabase.Mods.Insert(i, mod);
                     }
                 }
             }
@@ -71,6 +73,7 @@ namespace HedgeModManager
                 if(code != null)
                 code.Enabled = true;
             });
+
             CodesDatabase.Codes.ForEach((x) =>
             {
                 if (x.Enabled)
@@ -83,12 +86,14 @@ namespace HedgeModManager
         public void RefreshUI()
         {
             // Sets the DataContext for all the Components
-            DataContext = new
+            ViewModel = new MainWindowViewModel
             {
                 CPKREDIR = App.Config,
                 ModsDB = ModsDatabase,
-                Games = Games.GetSupportedGames()
+                Games = Games.GetSupportedGames(),
+                Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods)
             };
+            DataContext = ViewModel;
 
             Title = $"{App.ProgramName} ({App.VersionString}) - {App.CurrentGame.GameName}";
 
@@ -143,10 +148,12 @@ namespace HedgeModManager
             App.Config.Save(App.ConfigPath);
             ModsDatabase.Mods.Clear();
             ModsDatabase.Codes.Clear();
-            foreach (var mod in ModsList.Items)
+
+            foreach (var mod in ViewModel.Mods)
             {
                 ModsDatabase.Mods.Add(mod as ModInfo);
             }
+
             CodesDatabase.Codes.ForEach((x) => 
             {
                 if(x.Enabled)
@@ -154,6 +161,7 @@ namespace HedgeModManager
                     ModsDatabase.Codes.Add(x.Name);
                 }
             });
+
             ModsDatabase.SaveDB();
         }
 
@@ -170,64 +178,61 @@ namespace HedgeModManager
 
         private void SetupWatcher()
         {
-            ModsWatcher = new FileSystemWatcher(App.ModsDbPath)
+            var watcher = new FileSystemWatcher(App.ModsDbPath)
             {
                 NotifyFilter = NotifyFilters.DirectoryName
             };
-            ModsWatcher.Deleted += (x, args) =>
+
+            watcher.Deleted += WatcherEvent;
+            watcher.Created += WatcherEvent;
+            watcher.EnableRaisingEvents = true;
+            ModsWatchers.Add(watcher);
+
+            foreach(var directory in Directory.GetDirectories(App.ModsDbPath))
             {
+                var watch = new FileSystemWatcher(directory);
+                watch.Changed += WatcherModEvent;
+                watch.Deleted += WatcherModEvent;
+                watch.Created += WatcherModEvent;
+                watch.Renamed += WatcherModEvent;
+                watch.EnableRaisingEvents = true;
+                ModsWatchers.Add(watch);
+            }
+
+            void WatcherModEvent(object sender, FileSystemEventArgs e)
+            {
+                if(e.Name == "mod.ini")
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        try { Refresh(); } catch { }
+                    });
+                }
+            }
+
+            void WatcherEvent(object sender, FileSystemEventArgs e)
+            {
+                if(Directory.Exists(e.FullPath))
+                {
+                    var watch = new FileSystemWatcher(e.FullPath);
+                    watch.Changed += WatcherModEvent;
+                    watch.Deleted += WatcherModEvent;
+                    watch.Created += WatcherModEvent;
+                    watch.Renamed += WatcherModEvent;
+                    watch.EnableRaisingEvents = true;
+                    ModsWatchers.Add(watch);
+                }
                 Dispatcher.Invoke(() =>
                 {
-                    Refresh();
+                    try { Refresh(); } catch { }
                 });
-            };
-            ModsWatcher.Created += (x, args) =>
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    Refresh();
-                });
-            };
-            ModsWatcher.EnableRaisingEvents = true;
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Refresh();
         }
-
-        private void UI_MoveMod_Click(object sender, RoutedEventArgs e)
-        {
-            var index = Math.Max(0, ModsList.SelectedIndex);
-            var mod = ModsList.Items[index];
-            if (sender.Equals(UpBtn))
-            {
-                ModsList.Items.RemoveAt(index);
-                index = Math.Max(0, --index);
-                ModsList.Items.Insert(index, mod);
-            }
-            else if (sender.Equals(TopBtn))
-            {
-                ModsList.Items.RemoveAt(index);
-                index = 0;
-                ModsList.Items.Insert(index, mod);
-            }
-            else if (sender.Equals(DownBtn))
-            {
-                ModsList.Items.RemoveAt(index);
-                index = Math.Min(++index, ModsList.Items.Count);
-                ModsList.Items.Insert(index, mod);
-            }
-            else if (sender.Equals(BottomBtn))
-            {
-                ModsList.Items.RemoveAt(index);
-                index = ModsList.Items.Count;
-                ModsList.Items.Insert(index, mod);
-            }
-            ModsList.SelectedIndex = index;
-        }
-
-        // TODO: RemoveMod
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
         {
@@ -255,8 +260,6 @@ namespace HedgeModManager
         {
             Refresh();
         }
-
-        // TODO: AddMod
 
         private void UI_Save_Click(object sender, RoutedEventArgs e)
         {
@@ -406,15 +409,22 @@ namespace HedgeModManager
 
         private void Game_Changed(object sender, SelectionChangedEventArgs e)
         {
-            App.CurrentGame = (Game)ComboBox_GameStatus.SelectedItem;
-            var steamGame = App.GetSteamGame(App.CurrentGame);
-            App.StartDirectory = steamGame.RootDirectory;
-            App.ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
-            App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
-            App.Config = new CPKREDIRConfig(App.ConfigPath);
-            //ModsWatcher?.Dispose();
-            //SetupWatcher();
-            Refresh();
+            if(ComboBox_GameStatus.SelectedItem != null)
+            {
+                App.CurrentGame = (Game)ComboBox_GameStatus.SelectedItem;
+                var steamGame = App.GetSteamGame(App.CurrentGame);
+                App.StartDirectory = steamGame.RootDirectory;
+                App.ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
+                App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
+                App.Config = new CPKREDIRConfig(App.ConfigPath);
+                foreach(var watcher in ModsWatchers)
+                {
+                    watcher.Dispose();
+                }
+                ModsWatchers.Clear();
+                SetupWatcher();
+                Refresh();
+            }
         }
     }
 }

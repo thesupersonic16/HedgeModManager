@@ -112,6 +112,7 @@ namespace HedgeModManager
         {
             ActiveMods.Clear();
             mMods.Clear();
+
             Mods.ForEach(mod => 
             { 
                 if (mod.Enabled) 

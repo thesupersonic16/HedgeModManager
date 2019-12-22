@@ -60,12 +60,22 @@ namespace HedgeModManager
                 if (!Read(stream))
                 {
                     // Close the file so we can write a valid file back
-                    IncludeDirs.Add(".");
                     stream.Close();
+
+                    IncludeDirs.Add(".");
                     Title = Path.GetFileName(RootDirectory);
                     Description = "None";
                     Save();
                 }
+            }
+
+            if (IncludeDirs.Count < 1)
+            {
+                IncludeDirs.Add(".");
+                Title = Path.GetFileName(RootDirectory);
+                Author = "Unknown";
+                Date = "Unknown";
+                Save();
             }
         }
 

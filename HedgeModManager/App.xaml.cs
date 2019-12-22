@@ -91,6 +91,12 @@ namespace HedgeModManager
                     break;
                 }
             }
+            if (CurrentGame == Games.Unknown)
+            {
+                var game = SteamGames.First();
+                SelectSteamGame(game);
+                StartDirectory = game.RootDirectory;
+            }
 #endif
             ModsDbPath = Path.Combine(StartDirectory, "Mods");
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
