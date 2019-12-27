@@ -26,7 +26,7 @@ namespace HedgeModManager
             TitleLbl.Content = $"{mod.Title}";
             if (!string.IsNullOrEmpty(mod.Version))
             {
-                if (mod.Version.ToLower(mod.Version)[0] == 'v')
+                if (mod.Version.ToLower()[0] == 'v')
                     TitleLbl.Content += $" {mod.Version}";
                 else
                     TitleLbl.Content += $" v{mod.Version}";
