@@ -12,74 +12,67 @@ namespace HedgeModManager
     {
         // CPKREDIR
         [IniField("CPKREDIR")]
-        public bool Enabled { get; set; }
+        public bool Enabled { get; set; } = true;
 
         [IniField("CPKREDIR")]
-        public bool PlaceTocAtEnd { get; set; }
+        public bool PlaceTocAtEnd { get; set; } = true;
 
         [IniField("CPKREDIR")]
-        public bool HandleCpksWithoutExtFiles { get; set; }
+        public bool HandleCpksWithoutExtFiles { get; set; } = false;
 
         [IniField("CPKREDIR")]
-        public string LogFile { get; set; }
+        public string LogFile { get; set; } = "cpkredir.log";
 
         [IniField("CPKREDIR")]
-        public int ReadBlockSizeKB { get; set; }
+        public int ReadBlockSizeKB { get; set; } = 4096;
 
         [IniField("CPKREDIR")]
-        public string ModsDbIni { get; set; }
+        public string ModsDbIni { get; set; } = "mods\\ModsDB.ini";
 
         [IniField("CPKREDIR")]
-        public bool EnableSaveFileRedirection { get; set; }
+        public bool EnableSaveFileRedirection { get; set; } = false;
 
         [IniField("CPKREDIR")]
-        public string SaveFileFallback { get; set; }
+        public string SaveFileFallback { get; set; } = "cpkredir.sav";
 
         [IniField("CPKREDIR")]
-        public string SaveFileOverride { get; set; }
+        public string SaveFileOverride { get; set; } = string.Empty;
 
         [IniField("CPKREDIR")]
-        public string LogType { get; set; }
+        public string LogType { get; set; } = "file";
 
         // HedgeModManager
         [IniField("HedgeModManager", "AutoCheckForUpdates")]
-        public bool CheckForUpdates { get; set; }
+        public bool CheckForUpdates { get; set; } = true;
 
         [IniField("HedgeModManager", "KeepModLoaderOpen")]
-        public bool KeepOpen { get; set; }
+        public bool KeepOpen { get; set; } = true;
 
         [IniField("HedgeModManager", "CheckLoader")]
-        public bool CheckLoaderUpdates { get; set; }
+        public bool CheckLoaderUpdates { get; set; } = true;
 
         public bool EnableDebugConsole 
         { 
             get => LogType == "console"; 
-            set => LogType = value ? "console" : "none";
+            set => LogType = value ? "console" : "file";
         }
 
         public CPKREDIRConfig(string path)
         {
             if (File.Exists(path))
-                using (var stream = File.OpenRead(path))
-                    IniSerializer.Deserialize(this, stream);
-            else
             {
-
-                // CPKREDIR
-                Enabled = true;
-                PlaceTocAtEnd = true;
-                HandleCpksWithoutExtFiles = false;
-                LogFile = "cpkredir.log";
-                ReadBlockSizeKB = 4096;
-                ModsDbIni = "mods\\ModsDB.ini";
-                EnableSaveFileRedirection = false;
-                SaveFileFallback = "cpkredir.sav";
-                SaveFileOverride = "";
-
-                // HedgeModManager
-                CheckForUpdates = true;
-                KeepOpen = false;
-                CheckLoaderUpdates = true;
+                using (var stream = File.OpenRead(path))
+                {
+                    if (IniSerializer.ValidateIni(GetType(), stream))
+                    {
+                        IniSerializer.Deserialize(this, stream);
+                    }
+                    else
+                    {
+                        stream.Close();
+                        Save(path);
+                    }
+                }
             }
         }
 

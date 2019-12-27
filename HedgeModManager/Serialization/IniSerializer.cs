@@ -11,6 +11,45 @@ namespace HedgeModManager.Serialization
 {
     class IniSerializer
     {
+        public static bool ValidateIni(Type type, Stream stream)
+        {
+            var file = new IniFile();
+            file.Read(stream);
+            foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
+            {
+                IniField fieldAttribute = property.GetCustomAttribute<IniField>();
+                if (fieldAttribute == null)
+                    continue;
+
+                var group = string.IsNullOrEmpty(fieldAttribute.Group) ? "Main" : fieldAttribute.Group;
+                var name = string.IsNullOrEmpty(fieldAttribute.Name) ? property.Name : fieldAttribute.Name;
+
+                if (!file.Groups.ContainsKey(group))
+                    return false;
+
+                if (!file[group].Params.ContainsKey(name))
+                    return false;
+            }
+
+            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
+            {
+                IniField fieldAttribute = field.GetCustomAttribute<IniField>();
+                if (fieldAttribute == null)
+                    continue;
+
+                var group = string.IsNullOrEmpty(fieldAttribute.Group) ? "Main" : fieldAttribute.Group;
+                var name = string.IsNullOrEmpty(fieldAttribute.Name) ? field.Name : fieldAttribute.Name;
+
+                if (!file.Groups.ContainsKey(group))
+                    return false;
+
+                if (!file[group].Params.ContainsKey(name))
+                    return false;
+            }
+
+            return true;
+        }
+
         public static void Serialize(object obj, Stream stream)
         {
             var type = obj.GetType();
@@ -25,7 +64,7 @@ namespace HedgeModManager.Serialization
                 var group = string.IsNullOrEmpty(fieldAttribute.Group) ? "Main" : fieldAttribute.Group;
                 var name = string.IsNullOrEmpty(fieldAttribute.Name) ? property.Name : fieldAttribute.Name;
                 var value = property.GetValue(obj);
-                WriteValue(name, group, value);
+                WriteValue(name, group, value, property.PropertyType);
             }
 
             foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
@@ -37,14 +76,13 @@ namespace HedgeModManager.Serialization
                 var group = string.IsNullOrEmpty(fieldAttribute.Group) ? "Main" : fieldAttribute.Group;
                 var name = string.IsNullOrEmpty(fieldAttribute.Name) ? field.Name : fieldAttribute.Name;
                 var value = field.GetValue(obj);
-                WriteValue(name, group, value);
+                WriteValue(name, group, value, field.FieldType);
             }
 
             file.Write(stream);
 
-            void WriteValue(string name, string group, object value)
+            void WriteValue(string name, string group, object value, Type valueType)
             {
-                var valueType = value.GetType();
                 if (typeof(IDictionary).IsAssignableFrom(valueType))
                 {
                     var dic = (IDictionary)value;
@@ -86,7 +124,7 @@ namespace HedgeModManager.Serialization
                 }
                 else
                 {
-                    file[group][name] = value.ToString();
+                    file[group][name] = value != null ? value.ToString() : string.Empty;
                 }
             }
         }
@@ -112,6 +150,7 @@ namespace HedgeModManager.Serialization
                 var name = string.IsNullOrEmpty(fieldAttribute.Name) ? property.Name : fieldAttribute.Name;
                 var valueType = property.PropertyType;
 
+                if (file.Groups.ContainsKey(group))
                 property.SetValue(obj, ReadField(group, name, valueType));
             }
 
@@ -125,6 +164,7 @@ namespace HedgeModManager.Serialization
                 var name = string.IsNullOrEmpty(fieldAttribute.Name) ? field.Name : fieldAttribute.Name;
                 var valueType = field.FieldType;
 
+                if (file.Groups.ContainsKey(group))
                 field.SetValue(obj, ReadField(group, name, valueType));
             }
 
@@ -155,7 +195,14 @@ namespace HedgeModManager.Serialization
                 }
                 else
                 {
-                    return Convert.ChangeType(file[group][name], valueType);
+                    try
+                    {
+                        return Convert.ChangeType(file[group][name], valueType);
+                    }
+                    catch
+                    {
+                        return Activator.CreateInstance(valueType);
+                    }
                 }
             }
 
