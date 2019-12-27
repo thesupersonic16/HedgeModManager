@@ -23,7 +23,14 @@ namespace HedgeModManager
         {
             InitializeComponent();
             Title = $"About {mod.Title}";
-            TitleLbl.Content = $"{mod.Title} v{mod.Version}";
+            TitleLbl.Content = $"{mod.Title}";
+            if (!string.IsNullOrEmpty(mod.Version))
+            {
+                if (mod.Version.ToLower(mod.Version)[0] == 'v')
+                    TitleLbl.Content += $" {mod.Version}";
+                else
+                    TitleLbl.Content += $" v{mod.Version}";
+            }
             AuthorLbl.Content = $"Made by {mod.Author} on {mod.Date}";
             DescBx.Text = mod.Description;
         }
