@@ -90,7 +90,7 @@ namespace HedgeModManager
             {
                 CPKREDIR = App.Config,
                 ModsDB = ModsDatabase,
-                Games = Games.GetSupportedGames(),
+                Games = App.SteamGames,
                 Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods)
             };
             DataContext = ViewModel;
@@ -108,11 +108,11 @@ namespace HedgeModManager
                 Button_OtherLoader.IsEnabled = App.CurrentGame.HasCustomLoader;
             }
 
-            var steamGame = App.GetSteamGame(App.CurrentGame);
-            var exeDir = steamGame?.ExeDirectory ?? Path.Combine(Directory.GetCurrentDirectory(), App.CurrentGame.ExecuteableName);
-            bool hasOtherModLoader = App.CurrentGame.HasCustomLoader ? File.Exists(Path.Combine(steamGame?.RootDirectory ?? exeDir, $"d3d{App.CurrentGame.DirectXVersion}.dll")) : false;
-            IsCPKREDIRInstalled = App.CurrentGame.SupportsCPKREDIR ? App.IsCPKREDIRInstalled(exeDir) : hasOtherModLoader;
+            var exeDir = App.StartDirectory;
+            bool hasOtherModLoader = App.CurrentGame.HasCustomLoader ? File.Exists(Path.Combine(exeDir, $"d3d{App.CurrentGame.DirectXVersion}.dll")) : false;
+            IsCPKREDIRInstalled = App.CurrentGame.SupportsCPKREDIR ? App.IsCPKREDIRInstalled(Path.Combine(exeDir, App.CurrentGame.ExecuteableName)) : hasOtherModLoader;
             string loaders = (IsCPKREDIRInstalled && App.CurrentGame.SupportsCPKREDIR ? App.CPKREDIRVersion : "");
+
             if (hasOtherModLoader)
             {
                 if (string.IsNullOrEmpty(loaders))
@@ -124,7 +124,7 @@ namespace HedgeModManager
             if (string.IsNullOrEmpty(loaders))
                 loaders = "None";
 
-            ComboBox_GameStatus.SelectedValue = App.CurrentGame;
+            ComboBox_GameStatus.SelectedValue = App.CurrentSteamGame;
             Label_MLVersion.Content = $"Loaders: {loaders}";
             Button_OtherLoader.Content = hasOtherModLoader && App.CurrentGame.SupportsCPKREDIR ? $"Uninstall Code Loader" : $"Install Code Loader";
             Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} Mod Loader";
@@ -178,6 +178,9 @@ namespace HedgeModManager
 
         private void SetupWatcher()
         {
+            if (!Directory.Exists(App.ModsDbPath))
+                return;
+
             var watcher = new FileSystemWatcher(App.ModsDbPath)
             {
                 NotifyFilter = NotifyFilters.DirectoryName
@@ -281,7 +284,7 @@ namespace HedgeModManager
 
         private void UI_CPKREDIR_Click(object sender, RoutedEventArgs e)
         {
-            App.InstallCPKREDIR(App.GetSteamGame(App.CurrentGame).ExeDirectory, IsCPKREDIRInstalled);
+            App.InstallCPKREDIR(Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName), IsCPKREDIRInstalled);
             RefreshUI();
         }
 
@@ -411,13 +414,11 @@ namespace HedgeModManager
         {
             if(ComboBox_GameStatus.SelectedItem != null)
             {
-                App.CurrentGame = (Game)ComboBox_GameStatus.SelectedItem;
-                var steamGame = App.GetSteamGame(App.CurrentGame);
-                App.StartDirectory = steamGame.RootDirectory;
+                App.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
                 App.ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
                 App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
                 App.Config = new CPKREDIRConfig(App.ConfigPath);
-                foreach(var watcher in ModsWatchers)
+                foreach (var watcher in ModsWatchers)
                 {
                     watcher.Dispose();
                 }

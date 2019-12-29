@@ -28,24 +28,28 @@ namespace HedgeModManager
         [IniField("Main")]
         public string SaveFile { get; set; }
 
+        [PropertyIgnore]
         [IniField("Main", "IncludeDir")]
         public List<string> IncludeDirs { get; set; } = new List<string>();
 
+        [IniField("Main")]
+        public string DLLFile { get; set; } = string.Empty;
+
         // Desc
         [IniField("Desc")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [IniField("Desc")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [IniField("Desc")]
-        public string Version { get; set; }
+        public string Version { get; set; } = string.Empty;
 
         [IniField("Desc")]
-        public string Date { get; set; }
+        public string Date { get; set; } = string.Empty;
 
         [IniField("Desc")]
-        public string Author { get; set; }
+        public string Author { get; set; } = string.Empty;
 
         public ModInfo()
         {
@@ -55,27 +59,39 @@ namespace HedgeModManager
         public ModInfo(string modPath)
         {
             RootDirectory = modPath;
-            using (var stream = File.OpenRead(Path.Combine(modPath, "mod.ini")))
+            try
             {
-                if (!Read(stream))
+                using (var stream = File.OpenRead(Path.Combine(modPath, "mod.ini")))
                 {
-                    // Close the file so we can write a valid file back
-                    stream.Close();
+                    if (!Read(stream))
+                    {
+                        // Close the file so we can write a valid file back
+                        stream.Close();
 
+                        IncludeDirs.Add(".");
+                        Title = Path.GetFileName(RootDirectory);
+                        Version = "0.0";
+                        Date ="Unknown";
+                        Author = "Unknown";
+                        Description = "None";
+                        Save();
+                    }
+                }
+
+                if (IncludeDirs.Count < 1 && string.IsNullOrEmpty(DLLFile))
+                {
                     IncludeDirs.Add(".");
-                    Title = Path.GetFileName(RootDirectory);
-                    Description = "None";
+                    Title = string.IsNullOrEmpty(Title) ? Path.GetFileName(RootDirectory) : Title;
+                    Version = string.IsNullOrEmpty(Version) ? "0.0" : Version;
+                    Date = string.IsNullOrEmpty(Date) ? "Unknown" : Date;
+                    Author = string.IsNullOrEmpty(Author) ? "Unknown" : Author;
+                    Description = string.IsNullOrEmpty(Description) ? "None" : Description;
                     Save();
                 }
             }
-
-            if (IncludeDirs.Count < 1)
+            catch
             {
-                IncludeDirs.Add(".");
                 Title = Path.GetFileName(RootDirectory);
-                Author = "Unknown";
-                Date = "Unknown";
-                Save();
             }
         }
 

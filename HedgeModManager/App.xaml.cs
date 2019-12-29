@@ -39,6 +39,7 @@ namespace HedgeModManager
         public static string CPKREDIRVersion;
         public static string[] Args;
         public static Game CurrentGame = Games.Unknown;
+        public static SteamGame CurrentSteamGame;
         public static CPKREDIRConfig Config;
         public static List<SteamGame> SteamGames = null;
         public static bool Restart = false;
@@ -150,12 +151,14 @@ namespace HedgeModManager
         {
             if (steamGame == null)
                 return;
-            StartDirectory = steamGame.RootDirectory;
+
             foreach(var game in Games.GetSupportedGames())
             {
                 if (game.AppID == steamGame.GameID)
                 {
                     CurrentGame = game;
+                    CurrentSteamGame = steamGame;
+                    StartDirectory = steamGame.RootDirectory;
                 }
             }
         }

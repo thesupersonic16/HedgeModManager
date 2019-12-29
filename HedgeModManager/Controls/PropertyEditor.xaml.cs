@@ -102,7 +102,7 @@ namespace HedgeModManager
                 }
                 return res;
             }
-            return Value.ToString();
+            return Value == null ? string.Empty : Value.ToString();
         }
     }
 

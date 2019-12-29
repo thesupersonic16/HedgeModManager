@@ -12,7 +12,7 @@ namespace HedgeModManager.UI
     {
         public CPKREDIRConfig CPKREDIR { get; set; }
         public ModsDB ModsDB { get; set; }
-        public IEnumerable<Game> Games { get; set; }
+        public IEnumerable<SteamGame> Games { get; set; }
         public ObservableCollection<ModInfo> Mods { get; set; } = new ObservableCollection<ModInfo>();
 
         public event PropertyChangedEventHandler PropertyChanged;

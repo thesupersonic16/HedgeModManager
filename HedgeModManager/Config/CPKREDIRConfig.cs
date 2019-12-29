@@ -29,7 +29,7 @@ namespace HedgeModManager
         [IniField("CPKREDIR")]
         public string ModsDbIni { get; set; } = "mods\\ModsDB.ini";
 
-        [IniField("CPKREDIR")]
+        [IniField("CPKREDIR", "EnableSaveFileRedirection")]
         public bool EnableSaveFileRedirection { get; set; } = false;
 
         [IniField("CPKREDIR")]
@@ -39,7 +39,7 @@ namespace HedgeModManager
         public string SaveFileOverride { get; set; } = string.Empty;
 
         [IniField("CPKREDIR")]
-        public string LogType { get; set; } = "file";
+        public string LogType { get; set; }
 
         // HedgeModManager
         [IniField("HedgeModManager", "AutoCheckForUpdates")]
@@ -63,9 +63,10 @@ namespace HedgeModManager
             {
                 using (var stream = File.OpenRead(path))
                 {
-                    if (IniSerializer.ValidateIni(GetType(), stream))
+                    var file = new IniFile(stream);
+                    if (IniSerializer.ValidateIni(GetType(), file))
                     {
-                        IniSerializer.Deserialize(this, stream);
+                        IniSerializer.Deserialize(this, file);
                     }
                     else
                     {

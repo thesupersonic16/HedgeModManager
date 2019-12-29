@@ -243,7 +243,7 @@ namespace HedgeModManager
 
         public override string ToString()
         {
-            return $"SteamGame {{SteamID: {GameID}, GameName: {GameName}, EXE: {ExeDirectory}}}";
+            return GameName;
         }
     }
 }

@@ -13,8 +13,11 @@ namespace HedgeModManager.Serialization
     {
         public static bool ValidateIni(Type type, Stream stream)
         {
-            var file = new IniFile();
-            file.Read(stream);
+            return ValidateIni(type, new IniFile(stream));
+        }
+
+        public static bool ValidateIni(Type type, IniFile file)
+        {
             foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
             {
                 IniField fieldAttribute = property.GetCustomAttribute<IniField>();
@@ -52,8 +55,14 @@ namespace HedgeModManager.Serialization
 
         public static void Serialize(object obj, Stream stream)
         {
+            var file = new IniFile(stream);
+            Serialize(obj, file);
+            file.Write(stream);
+        }
+
+        public static void Serialize(object obj, IniFile file)
+        {
             var type = obj.GetType();
-            var file = new IniFile();
 
             foreach(var property in type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
             {
@@ -78,8 +87,6 @@ namespace HedgeModManager.Serialization
                 var value = field.GetValue(obj);
                 WriteValue(name, group, value, field.FieldType);
             }
-
-            file.Write(stream);
 
             void WriteValue(string name, string group, object value, Type valueType)
             {
@@ -138,8 +145,11 @@ namespace HedgeModManager.Serialization
 
         public static void Deserialize(object obj, Stream stream)
         {
-            var file = new IniFile();
-            file.Read(stream);
+            Deserialize(obj, new IniFile(stream));
+        }
+
+        public static void Deserialize(object obj, IniFile file)
+        {
             foreach(var property in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
             {
                 IniField fieldAttribute = property.GetCustomAttribute<IniField>();

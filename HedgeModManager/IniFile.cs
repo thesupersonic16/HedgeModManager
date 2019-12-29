@@ -9,7 +9,7 @@ namespace HedgeModManager
 {
     public class IniFile
     {
-        public Dictionary<string, IniGroup> Groups = new Dictionary<string, IniGroup>();
+        public Dictionary<string, IniGroup> Groups = new Dictionary<string, IniGroup>(StringComparer.OrdinalIgnoreCase);
 
         public IniGroup this[string key]
         {
@@ -38,6 +38,11 @@ namespace HedgeModManager
         {
             using (var stream = File.OpenRead(path))
                 Read(stream);
+        }
+
+        public IniFile(Stream stream)
+        {
+            Read(stream);
         }
 
         public virtual void Read(Stream stream)
@@ -104,7 +109,7 @@ namespace HedgeModManager
         public class IniGroup
         {
 
-            public Dictionary<string, string> Params = new Dictionary<string, string>();
+            public Dictionary<string, string> Params = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             public string this[string key]
             {
