@@ -88,7 +88,7 @@ namespace HedgeModManager
             {
                 if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
                 {
-                    var steamGame = SteamGames.First(x => x.GameID == game.AppID);
+                    var steamGame = SteamGames.FirstOrDefault(x => x.GameID == game.AppID);
                     if(steamGame == null)
                     {
                         steamGame = new SteamGame(game.GameName, Path.Combine(StartDirectory, game.ExecuteableName), game.AppID);
