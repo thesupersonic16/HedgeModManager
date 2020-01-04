@@ -109,6 +109,10 @@
     </Compile>
     <Compile Include="FolderBrowserDialog.cs" />
     <Compile Include="GameBanana\GBAPI.cs" />
+    <Compile Include="Github\AssetInfo.cs" />
+    <Compile Include="Github\GithubAPI.cs" />
+    <Compile Include="Github\UserInfo.cs" />
+    <Compile Include="Github\ReleaseInfo.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="ModUpdate.cs" />
     <Compile Include="Serialization\IniSerializer.cs" />

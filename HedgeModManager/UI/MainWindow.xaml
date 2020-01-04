@@ -6,7 +6,7 @@
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="HedgeModManager (7.0)"
+        Title="Hedge Mod Manager (7.0)"
         Loaded="Window_Loaded"
         MinHeight="600" MinWidth="560" Height="600" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>

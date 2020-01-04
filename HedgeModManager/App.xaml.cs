@@ -21,6 +21,7 @@ using System.Windows.Media.Animation;
 
 using GameBananaAPI;
 using System.Net.NetworkInformation;
+using System.Reflection;
 
 namespace HedgeModManager
 {
@@ -29,11 +30,11 @@ namespace HedgeModManager
     /// </summary>
     public partial class App : Application
     {
-
+        public static Version Version = Assembly.GetExecutingAssembly().GetName().Version;
         public static string StartDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static string AppPath = Path.Combine(StartDirectory, AppDomain.CurrentDomain.FriendlyName);
         public static string ProgramName = "HedgeModManager";
-        public static string VersionString = "7.0-dev";
+        public static string VersionString = $"{Version.Major}.{Version.Minor}-{Version.Revision}";
         public static string ModsDbPath;
         public static string ConfigPath;
         public static string CPKREDIRVersion;

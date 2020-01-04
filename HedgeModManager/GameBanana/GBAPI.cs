@@ -171,15 +171,17 @@ namespace GameBananaAPI
             string[] split = line.Split(',');
             if (split.Length < 3) // help, I ddont know math
                 return;
+
             string itemType = split[1];
             var protocal = split[0].Substring(0, split[0].IndexOf(':'));
             string itemDLURL = split[0].Substring(protocal.Length + 1, split[0].Length - (protocal.Length + 1));
-            int itemID = 0;
-            if (!int.TryParse(split[2], out itemID))
+
+            if (!int.TryParse(split[2], out int itemID))
             {
                 App.CreateOKMessageBox("Error", $"Invalid Gamebanana item id {itemID}").ShowDialog();
                 return;
             }
+
             var item = new GBAPIItemDataBasic(itemType, itemID);
             if (!RequestItemData(ref item))
             {
