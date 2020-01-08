@@ -20,6 +20,7 @@ using HMMResources = HedgeModManager.Properties.Resources;
 using System.Windows.Media.Animation;
 
 using GameBananaAPI;
+using HedgeModManager.Github;
 using System.Net.NetworkInformation;
 using System.Reflection;
 
@@ -47,6 +48,9 @@ namespace HedgeModManager
 
         public const string WebRequestUserAgent =
             "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)";
+        
+        public const string RepoOwner = "thesupersonic16";
+        public const string RepoName = "hedgemodmanager";
 
         public static byte[] CPKREDIR = new byte[] { 0x63, 0x70, 0x6B, 0x72, 0x65, 0x64, 0x69, 0x72 };
         public static byte[] IMAGEHLP = new byte[] { 0x69, 0x6D, 0x61, 0x67, 0x65, 0x68, 0x6C, 0x70 };
@@ -61,12 +65,43 @@ namespace HedgeModManager
             // Use TLSv1.2
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+            if(args.Length > 2 && string.Compare(args[0], "-update", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                try
+                {
+                    // The old pid gets passed in the CLI arguments and we use that to make sure the process is terminated before replacing it
+                    int.TryParse(args[2], out int pid);
+                    var process = Process.GetProcessById(pid);
+
+                    process.Kill();
+                    process.WaitForExit();
+                }
+                catch { }
+                
+                File.Copy(AppPath, args[1], true);
+
+                // Start a process that deletes our updater
+                new Process()
+                {
+                    StartInfo = new ProcessStartInfo("cmd.exe", $"/C choice /C Y /N /D Y /T 0 & Del \"{AppPath}\"")
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true
+                    }
+                }.Start();
+
+                Process.Start(args[1]);
+                Environment.Exit(0);
+                return;
+            }
+
             var application = new App();
             application.InitializeComponent();
             application.ShutdownMode = ShutdownMode.OnMainWindowClose;
             application.MainWindow = new MainWindow();
             Args = args;
             CPKREDIRVersion = GetCPKREDIRVersion();
+
 #if !DEBUG
             // Enable our Crash Window if Compiled in Release
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
@@ -341,6 +376,15 @@ namespace HedgeModManager
         public static bool RunningAsAdmin()
         {
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        public static (bool, ReleaseInfo) CheckForUpdates()
+        {
+            var info = GithubAPI.GetLatestRelease(RepoOwner, RepoName);
+            var version = info == null ? Version : info.GetVersion();
+            bool hasUpdate = version.Major >= Version.Major && (version.Minor > Version.Minor || version.Revision > Version.Revision);
+
+            return (hasUpdate, info);
         }
 
         public static bool HasInternet()

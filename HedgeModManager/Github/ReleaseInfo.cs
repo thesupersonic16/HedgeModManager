@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace HedgeModManager.Github
@@ -24,7 +25,7 @@ namespace HedgeModManager.Github
         [JsonProperty("id")]
         public ulong ID { get; set; }
 
-        [JsonProperty("node+id")]
+        [JsonProperty("node_id")]
         public string NodeID { get; set; }
 
         [JsonProperty("tag_name")]
@@ -59,5 +60,34 @@ namespace HedgeModManager.Github
 
         [JsonProperty("body")]
         public string Body { get; set; }
+
+        public Version GetVersion()
+        {
+            var pattern = @"(\d+)\.?(\d+)-?(\d+)?";
+            var match = Regex.Match(TagName, pattern);
+            int major = 0;
+            int minor = 0;
+            int rev = 0;
+
+            switch (match.Groups.Count)
+            {
+                case 2:
+                    int.TryParse(match.Groups[1].Value, out major);
+                    break;
+
+                case 3:
+                    int.TryParse(match.Groups[1].Value, out major);
+                    int.TryParse(match.Groups[2].Value, out minor);
+                    break;
+
+                case 4:
+                    int.TryParse(match.Groups[1].Value, out major);
+                    int.TryParse(match.Groups[2].Value, out minor);
+                    int.TryParse(match.Groups[3].Value, out rev);
+                    break;
+            }
+
+            return new Version(major, minor, 0, rev);
+        }
     }
 }

@@ -15,7 +15,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="Header" Text="HEADER" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <TextBlock x:Name="Message" Width="Auto" Foreground="White" Text="TEXT" Margin="5,0,5,0" Grid.Row="1" FontSize="20"/>
+        <Label x:Name="Message" Width="Auto" Foreground="White" Content="TEXT" Margin="5,0,5,0" Grid.Row="1" FontSize="20"/>
         <StackPanel x:Name="Stack" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Stretch">
             <!--<Button Width="Auto" Height="23" Margin="0" Content="OK"/>
             <Button Width="Auto" Height="23" Margin="0" Content="CANCEL"/>-->

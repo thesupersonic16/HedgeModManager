@@ -19,6 +19,8 @@ using System.Windows.Threading;
 using HedgeModManager.UI;
 using System.Collections.ObjectModel;
 
+using HMMResources = HedgeModManager.Properties.Resources;
+
 namespace HedgeModManager
 {
     /// <summary>
@@ -163,6 +165,7 @@ namespace HedgeModManager
             });
 
             ModsDatabase.SaveDB();
+            UpdateStatus("Saved ModsDB");
         }
 
         public void StartGame()
@@ -174,6 +177,8 @@ namespace HedgeModManager
 
             if (!App.Config.KeepOpen)
                 Application.Current.Shutdown(0);
+
+            UpdateStatus($"Starting {App.CurrentGame.GameName}");
         }
 
         private void SetupWatcher()
@@ -232,9 +237,68 @@ namespace HedgeModManager
             }
         }
 
+        public void CheckForUpdates()
+        {
+            new Thread(() => 
+            {
+                if (App.Config.CheckForUpdates)
+                {
+                    UpdateStatus("Checking for updates");
+                    try
+                    {
+                        var update = App.CheckForUpdates();
+
+                        if (!update.Item1)
+                        {
+                            UpdateStatus("No updates found");
+                            return;
+                        }
+
+                        Dispatcher.Invoke(() => 
+                        {
+
+                            // http://wasteaguid.info/
+                            var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+
+                            var info = update.Item2;
+                            var dialog = new HedgeMessageBox(info.Name, info.Body, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
+
+                            dialog.AddButton("Update", () => 
+                            {
+                                if (info.Assets.Count > 0)
+                                {
+                                    var asset = info.Assets[0];
+                                    dialog.Close();
+                                    var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({info.TagName})", asset.BrowserDownloadUrl.ToString(), path)
+                                    {
+                                        DownloadCompleted = () =>
+                                        {
+                                            Process.Start(path, $"-update \"{App.AppPath}\" {Process.GetCurrentProcess().Id}");
+                                            Application.Current.Shutdown();
+                                        }
+                                    };
+
+                                    downloader.Start();
+                                }
+                            });
+                            
+                            dialog.ShowDialog();
+                        });
+
+                        UpdateStatus(string.Empty);
+                    }
+                    catch
+                    {
+                        UpdateStatus("Failed to check for updates");
+                    }
+                }
+            }).Start();
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Refresh();
+            CheckForUpdates();
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
@@ -249,14 +313,16 @@ namespace HedgeModManager
             {
                 box.Close();
             });
-            box.AddButton("Delete", () =>
+
+            box.AddButton("  Delete  ", () =>
             {
                 ModsDatabase.DeleteMod(ModsList.SelectedItem as ModInfo);
+                UpdateStatus($"Deleted {((ModInfo)ModsList.SelectedItem).Title}");
                 Refresh();
                 box.Close();
             });
+
             box.ShowDialog();
-            Refresh();
         }
 
         private void UI_Refresh_Click(object sender, RoutedEventArgs e)
@@ -402,12 +468,12 @@ namespace HedgeModManager
             return string.Empty;
         }
 
-        // too slow
-        // :^)
-        // LOL
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        public void UpdateStatus(string str)
         {
-            (RotateTest.RenderTransform as RotateTransform).Angle += 0.001d;
+            Dispatcher.Invoke(() => 
+            {
+                StatusLbl.Content = str;
+            });
         }
 
         private void Game_Changed(object sender, SelectionChangedEventArgs e)

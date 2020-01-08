@@ -112,34 +112,47 @@ namespace HedgeModManager.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to body {
-        ///    background-color: #2D2D30;
+        ///    background-color: transparent;
         ///    color: #e2e2e2;
         ///    font-family: &apos;Open Sans&apos;, sans-serif;
-        ///    scrollbar-base-color: #2D2D30;
-        ///    scrollbar-face-color: #CDCDCD;
-        ///    scrollbar-3dlight-color: #000;
-        ///    scrollbar-highlight-color: gray;
-        ///    scrollbar-track-color: #2D2D30;
-        ///    scrollbar-arrow-color: white;
-        ///    scrollbar-shadow-color: gray;
         ///}
         ///
         ///a
         ///{
         ///    color: #FFE033;
-        ///    text-decoration: none;
-        ///    vertical-align: baseline;
+        ///    /*text-decoration: none;
+        ///    vertical-align: baseline;*/
         ///}
         ///
         ///h1
         ///{
         ///    font-size: 18px;
-        ///    margin: 0 0 0.75em;
-        ///    p [rest of string was truncated]&quot;;.
+        ///    /*margin: 0 0 0.75em;
+        ///    padding: 0 0 0.25em 0;*/
+        ///}
+        ///
+        ///li
+        ///{
+        ///    list-style-type: disc;
+        ///}
+        ///
+        ///span.RedColor
+        ///{
+        ///    color: #FF4E4E;
+        ///}.
         /// </summary>
         internal static string GBStyleSheet {
             get {
                 return ResourceManager.GetString("GBStyleSheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Update is available!.
+        /// </summary>
+        internal static string HMM_UPDATE_TEXT {
+            get {
+                return ResourceManager.GetString("HMM_UPDATE_TEXT", resourceCulture);
             }
         }
         

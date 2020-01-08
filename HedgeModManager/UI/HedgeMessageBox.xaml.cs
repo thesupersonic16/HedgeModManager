@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Markdig;
+using TheArtOfDev.HtmlRenderer.WPF;
 
 namespace HedgeModManager
 {
@@ -24,12 +26,40 @@ namespace HedgeModManager
             InitializeComponent();
         }
 
-        public HedgeMessageBox(string header, string message, HorizontalAlignment buttonAlignment = HorizontalAlignment.Right, TextAlignment textAlignment = TextAlignment.Center)
+        public HedgeMessageBox(string header, string message, 
+            HorizontalAlignment buttonAlignment = HorizontalAlignment.Right, TextAlignment textAlignment = TextAlignment.Center, InputType type = InputType.Basic)
         {
             InitializeComponent();
             Header.Text = header;
-            Message.Text = message;
-            Message.TextAlignment = textAlignment;
+            
+            if(type == InputType.Basic)
+            {
+                Message.Content = new TextBox()
+                {
+                    IsEnabled = false,
+                    Text = message,
+                    TextAlignment = textAlignment
+                };
+            }
+            else if(type == InputType.HTML || type == InputType.MarkDown)
+            {
+                Message.Content = new HtmlLabel() 
+                {
+                    Text = $@"
+<html>
+    <body>
+        <style>
+            {Properties.Resources.GBStyleSheet}
+        </style>
+        {(type == InputType.MarkDown ? Markdown.ToHtml(message) : message)}
+    </body>
+</html>", 
+                    Background = new SolidColorBrush(Colors.Transparent),
+                    Width = double.NaN,
+                    Height = double.NaN
+                };
+            }
+
             Stack.HorizontalAlignment = buttonAlignment;
         }
 
@@ -62,5 +92,12 @@ namespace HedgeModManager
         {
             InvalidateVisual();
         }
+    }
+
+    public enum InputType
+    {
+        Basic,
+        HTML,
+        MarkDown
     }
 }

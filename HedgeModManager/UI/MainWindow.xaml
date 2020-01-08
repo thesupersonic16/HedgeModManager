@@ -18,13 +18,14 @@
             <MenuItem Header="Delete mod" Click="UI_RemoveMod_Click"/>
         </ContextMenu>
     </Window.Resources>
-    <Border x:Name="RotateTest">
-        <Border.RenderTransform>
-            <RotateTransform Angle="0" CenterX="280" CenterY="300"/>
-        </Border.RenderTransform>
-        <Grid>
-            <Grid Margin="-3,2,-3,-1.2">
-                <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,110" Background="Transparent">
+    <Grid>
+        <Grid Margin="-3,2,-3,-1.2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem Header="Mods">
                         <Grid>
                             <ListView x:Name="ModsList" AllowDrop="True" Drop="UI_ModsList_Drop"
@@ -84,32 +85,42 @@
                         </ListView>
                     </TabItem>
                     <TabItem Header="Settings">
-                        <Grid>
-                            <GroupBox Header="Game &amp; Mod Loader" HorizontalAlignment="Stretch"   Height="185" Margin="10,5,10,0"    VerticalAlignment="Top">
+                        <Grid Margin="10,5,10,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=".5*"/>
+                                <RowDefinition Height=".5*"/>
+                            </Grid.RowDefinitions>
+                            <GroupBox Header="Game &amp; Mod Loader" HorizontalAlignment="Stretch" Margin="0,0,0,10" VerticalAlignment="Stretch">
                                 <Grid>
-                                    <Button   x:Name="Button_CPKREDIR"      Content="Install Mod Loader"              Click="UI_CPKREDIR_Click"                       Margin="10,10,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
-                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Code Loader"                 Click="UI_OtherLoader_Click"                    Margin="10,38,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
-                                    <CheckBox                               Content="Enable mod loader"               IsChecked="{Binding CPKREDIR.Enabled}"                   Margin="10,66,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" />
-                                    <CheckBox                               Content="Enable debug console"          IsChecked="{Binding CPKREDIR.EnableDebugConsole}"        Margin="10,86,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                    <CheckBox                               Content="Enable save file redirection"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}" Margin="10,106,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                    <CheckBox x:Name="CheckBox_LoadOrder"   Content="Load top to bottom"            IsChecked="{Binding ModsDB.ReverseLoadOrder}"          Margin="10,126,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                    <Label       Content="Game:"            Margin="180,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="Auto" Height="27" />
-                                    <ComboBox    x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="225,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="250" Height="27" SelectionChanged="Game_Changed" />
-                                    <Label    x:Name="Label_MLVersion"      Content="Loaders: Unknown"                                                              Margin="179,35,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
+                                    <Button   x:Name="Button_CPKREDIR"      Content="Install Mod Loader"            Click="UI_CPKREDIR_Click"                       Margin="10,10,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
+                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Code Loader"         Click="UI_OtherLoader_Click"                    Margin="10,38,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
+
+                                    <StackPanel Margin="10,66,0,0">
+                                        <CheckBox Content="Enable mod loader"             IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                        <CheckBox Content="Enable debug console"          IsChecked="{Binding CPKREDIR.EnableDebugConsole}"         Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        <CheckBox Content="Enable save file redirection"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}"  Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        <CheckBox Content="Load top to bottom"            IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                    </StackPanel>
+                                    
+                                    <Label      Content="Game:"            Margin="180,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="Auto" Height="27" />
+                                    <ComboBox   x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="225,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="250" Height="27" SelectionChanged="Game_Changed" />
+                                    <Label      x:Name="Label_MLVersion"      Content="Loaders: Unknown"                                                              Margin="179,35,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
                                 </Grid>
                             </GroupBox>
-                            <GroupBox Header="HedgeModManager"      HorizontalAlignment="Stretch"   Height="221" Margin="10,200,10,0"   VerticalAlignment="Top">
+
+                            <GroupBox Header="HedgeModManager" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,5" Grid.Row="1">
                                 <Grid>
-                                    <CheckBox Content="Check for mod loader updates"                     IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="Keep Hedge Mod Manager open after starting a game" IsChecked="{Binding CPKREDIR.KeepOpen}"              Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="Check for mod loader updates"                      IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="Check for code loader updates"                     IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}"    Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="Keep Hedge Mod Manager open after starting a game" IsChecked="{Binding CPKREDIR.KeepOpen}"             Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <Button   Content="About Hedge Mod Manager"                                                                       Margin="0,0,10,10" RenderTransformOrigin="0.508,-0.424" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
                                 </Grid>
                             </GroupBox>
                         </Grid>
                     </TabItem>
                 </TabControl>
-                <StackPanel VerticalAlignment="Bottom" >
-                    <Grid Margin="10,0,10,10" VerticalAlignment="Bottom" Height="100">
+                <StackPanel VerticalAlignment="Bottom" Grid.Row="1">
+                    <Grid Margin="10,0,10,0" VerticalAlignment="Bottom" Height="100">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.25*"/>
                             <ColumnDefinition Width="0.5*"/>
@@ -128,8 +139,9 @@
                         <Button Content="Save and Play"    Width="Auto"    Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
                         <Button Content="Play"             Width="Auto"    Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
                     </Grid>
+                    <Label x:Name="StatusLbl" Margin="10,0,0,0"/>
                 </StackPanel>
             </Grid>
         </Grid>
-    </Border>
+    </Grid>
 </Window>
