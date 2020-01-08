@@ -61,6 +61,7 @@ namespace HedgeModManager
                                     throw new FormatException($"Invalid code line \"{line}\" in {filename}:line {linenum}");
                                 if (stack.Count == 1)
                                     stack.Pop();
+
                                 code = new Code();
                                 ProcessCodeLine(filename, linenum, split, code);
                                 result.Codes.Add(code);
@@ -96,6 +97,7 @@ namespace HedgeModManager
                                         default:
                                             break;
                                     }
+
                                     CodeLine cl = new CodeLine() { Type = type };
                                     string address = split[1];
                                     if (address.StartsWith("p"))
