@@ -134,7 +134,7 @@ namespace HedgeModManager
 
         public void CheckForModUpdates(ModInfo mod)
         {
-            //new Thread(() => 
+            new Thread(() => 
             {
                 // Downloads the mod update information
                 Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
@@ -150,7 +150,7 @@ namespace HedgeModManager
                     Mouse.OverrideCursor = Cursors.Arrow;
                     if (update.VersionString == mod.Version)
                     {
-                        var box = new HedgeMessageBox("Hedge Mod Manager", $"{mod.Title} is already up to date.");
+                        var box = new HedgeMessageBox(string.Empty, $"{mod.Title} is already up to date.", textAlignment: TextAlignment.Center);
                         box.AddButton("OK", () => box.Close());
                         box.ShowDialog();
                         return;
@@ -173,7 +173,7 @@ namespace HedgeModManager
 
                     dialog.ShowDialog();
                 });
-            }/*).Start();*/
+            }).Start();
         }
 
         public void SaveModsDB()

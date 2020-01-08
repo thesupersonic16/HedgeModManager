@@ -21,9 +21,19 @@ span.RedColor
     color: #FF4E4E;
 }
 
-table 
-{
-    border-width: 1px;
-    border-style: solid;
-    border-color: darkgray;
+table {
+    border-spacing: 5px;
+}
+
+table, th, td {
+    border: 1px solid darkgray;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 2px;
+}
+
+th {
+    text-align: left;
 }
