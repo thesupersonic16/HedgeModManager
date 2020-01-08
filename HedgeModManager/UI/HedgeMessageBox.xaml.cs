@@ -34,7 +34,7 @@ namespace HedgeModManager
             
             if(type == InputType.Basic)
             {
-                Message.Content = new TextBox()
+                Message.Content = new TextBlock()
                 {
                     IsEnabled = false,
                     Text = message,
@@ -43,7 +43,7 @@ namespace HedgeModManager
             }
             else if(type == InputType.HTML || type == InputType.MarkDown)
             {
-                Message.Content = new HtmlLabel() 
+                Message.Content = new HtmlPanel() 
                 {
                     Text = $@"
 <html>
@@ -51,7 +51,7 @@ namespace HedgeModManager
         <style>
             {Properties.Resources.GBStyleSheet}
         </style>
-        {(type == InputType.MarkDown ? Markdown.ToHtml(message) : message)}
+        {(type == InputType.MarkDown ? Markdown.ToHtml(message, new MarkdownPipelineBuilder().UseAdvancedExtensions().Build()) : message)}
     </body>
 </html>", 
                     Background = new SolidColorBrush(Colors.Transparent),

@@ -67,6 +67,7 @@ namespace HedgeModManager
                                 result.Codes.Add(code);
                                 stack.Push(new Tuple<List<CodeLine>, List<CodeLine>>(code.Lines, null));
                                 break;
+
                             case "Patch":
                                 if (stack.Count > 1)
                                     throw new FormatException($"Invalid code line \"{line}\" in {filename}:line {linenum}");
@@ -77,6 +78,7 @@ namespace HedgeModManager
                                 result.Codes.Add(code);
                                 stack.Push(new Tuple<List<CodeLine>, List<CodeLine>>(code.Lines, null));
                                 break;
+
                             default:
                                 if (Enum.TryParse(split[0], out CodeType type))
                                 {

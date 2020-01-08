@@ -20,3 +20,10 @@ span.RedColor
 {
     color: #FF4E4E;
 }
+
+table 
+{
+    border-width: 1px;
+    border-style: solid;
+    border-color: darkgray;
+}

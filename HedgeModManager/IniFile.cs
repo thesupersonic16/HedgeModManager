@@ -78,9 +78,11 @@ namespace HedgeModManager
                             if (string.IsNullOrEmpty(line) || !line.Contains('='))
                                 break;
 
-                            var splits = line.Split('=');
-                            var temp = splits[1].Split('\"');
-                            this[currentGroup].AddParameter($"{c}{splits[0]}", temp.Length == 1 ? temp[0] : temp[1]);
+                            var i = line.IndexOf('=');
+                            var key = line.Substring(0, i);
+                            var value = line.Substring(i + 1, line.Length - (i + 1));
+                            var temp = value.Split('\"');
+                            this[currentGroup].AddParameter($"{c}{key}", temp.Length == 1 ? temp[0] : temp[1]);
                             break;
                         }
                 }

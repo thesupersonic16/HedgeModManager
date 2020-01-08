@@ -134,15 +134,46 @@ namespace HedgeModManager
 
         public void CheckForModUpdates(ModInfo mod)
         {
-            // Downloads the mod update information
-            var update = ModUpdate.GetUpdateFromINI(mod);
-            if (update == null)
-                return;
-            // TODO: Show changelog window
-            
-            // NOTE: Test code
-            var progress = new ModUpdate.ModUpdateProgress();
-            new Thread(() => ModUpdate.DownloadAndApplyUpdate(update, progress)).Start();
+            //new Thread(() => 
+            {
+                // Downloads the mod update information
+                Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
+                var update = ModUpdate.GetUpdateFromINI(mod);
+                if (update == null)
+                {
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                    return;
+                }
+
+                Dispatcher.Invoke(() => 
+                {
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                    if (update.VersionString == mod.Version)
+                    {
+                        var box = new HedgeMessageBox("Hedge Mod Manager", $"{mod.Title} is already up to date.");
+                        box.AddButton("OK", () => box.Close());
+                        box.ShowDialog();
+                        return;
+                    }
+
+                    var dialog = new HedgeMessageBox($"There's a newer version of {mod.Title} available! ({update.VersionString})", update.ChangeLog, type: InputType.MarkDown);
+                    dialog.AddButton("Close", () => dialog.Close());
+
+                    dialog.AddButton("Update", () =>
+                    {
+                        var updater = new ModUpdateWindow(update);
+                        dialog.Close();
+
+                        updater.DownloadCompleted = () =>
+                        {
+                            Refresh();
+                        };
+                        updater.Start();
+                    });
+
+                    dialog.ShowDialog();
+                });
+            }/*).Start();*/
         }
 
         public void SaveModsDB()

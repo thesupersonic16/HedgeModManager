@@ -1,0 +1,26 @@
+﻿<Window x:Class="HedgeModManager.UI.ModUpdateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HedgeModManager.UI"
+        mc:Ignorable="d"
+        Title="ModUpdateWindow" Height="450" Width="800" Style="{StaticResource HedgeWindow}" Closing="Window_Closing">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="Normal"/>
+    </Window.TaskbarItemInfo>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="Header" Text="HEADER" Foreground="#0066CC" TextWrapping="Wrap" FontSize="30"
+                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextAlignment="Center" Margin="20,0,20,0"/>
+        <ProgressBar x:Name="TotalProgress" Grid.Row="1" Margin="15"/>
+        <ProgressBar x:Name="FileProgress" Grid.Row="2" Margin="15"/>
+        <TextBox x:Name="Log" IsReadOnly="True" Grid.Row="3" Margin="15"
+                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+    </Grid>
+</Window>

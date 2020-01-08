@@ -20,6 +20,9 @@ namespace HedgeModManager
         /// <returns>A ModUpdateInfo containing information about the lastest update</returns>
         public static ModUpdateInfo GetUpdateFromINI(ModInfo mod)
         {
+            if (string.IsNullOrEmpty(mod.UpdateServer))
+                return null;
+
             var ini = new IniFile();
             using (var stream = new MemoryStream(WebClient.DownloadData(Path.Combine(mod.UpdateServer, "mod_version.ini"))))
                 ini.Read(stream);
@@ -46,20 +49,33 @@ namespace HedgeModManager
             // Variables
             string modVersion = ini["Main"]["VersionString"];
             string modDLSize = ini["Main"]["DownloadSizeString"];
+            string mdUrl = ini["Main"]["Markdown"];
 
             // Read changelog into one larger string
             string modChangeLog = "";
             int modChangeLogLineCount = int.Parse(ini["Changelog"]["StringCount"]);
-            for (int i = 0; i < modChangeLogLineCount; ++i)
-                modChangeLog += ini["Changelog"][$"String{i}"] + "\n";
+
+            if(string.IsNullOrEmpty(mdUrl))
+            {
+                modChangeLog += "Changelog:<br/>";
+                for (int i = 0; i < modChangeLogLineCount; ++i)
+                    modChangeLog += $"- {ini["Changelog"][$"String{i}"]}<br/>";
+            }
+            else
+            {
+                modChangeLog = WebClient.DownloadString(Path.Combine(mod.UpdateServer, mdUrl));
+            }
+
 
             // Create a mod info
-            var update = new ModUpdateInfo();
-            update.Name = mod.Title;
-            update.VersionString = modVersion;
-            update.DownloadSizeString = modDLSize;
-            update.ChangeLog = modChangeLog;
-            update.Mod = mod;
+            var update = new ModUpdateInfo
+            {
+                Name = mod.Title,
+                VersionString = modVersion,
+                DownloadSizeString = modDLSize,
+                ChangeLog = modChangeLog,
+                Mod = mod
+            };
 
             // Downloads and parses the list of files
             ReadUpdateFileList(WebClient.DownloadString(Path.Combine(mod.UpdateServer, "mod_files.txt")));
@@ -73,7 +89,7 @@ namespace HedgeModManager
                 foreach (string line in data.Split('\n'))
                 {
                     // Checks if the line starts with ';' or '#' if does then continue to the next line
-                    if (line.StartsWith(";") || line.StartsWith("#"))
+                    if (line.StartsWith(";") || line.StartsWith("#") || string.IsNullOrEmpty(line))
                         continue;
 
                     var file = new ModUpdateFile()
@@ -111,6 +127,7 @@ namespace HedgeModManager
                     default:
                         throw new Exception("Unknown Mod Update Command " + file.Command);
                 }
+
                 progress.Progress = ((float)i / modupdate.Files.Count) * 100f;
                 progress.CurrentFile = Path.GetFileName(file.FileName);
             }
