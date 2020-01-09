@@ -136,9 +136,6 @@
   <data name="GBStyleSheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GBStyleSheet.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="HMM_UPDATE_TEXT" xml:space="preserve">
-    <value>New Update is available!</value>
-  </data>
   <data name="ICO_HedgeModManager" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Graphics\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -151,6 +148,13 @@
   <data name="IMG_HEDGEMODMANAGER" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Graphics\icon256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="STR_CANCEL_WARNING" xml:space="preserve">
+    <value>Are you sure you want to cancel updating?
+This may corrupt {0}</value>
+  </data>
+  <data name="STR_MOD_NEWEST" xml:space="preserve">
+    <value>{0} is already up to date.</value>
+  </data>
   <data name="STR_MSG_NOGAME" xml:space="preserve">
     <value>HedgeModManager could not detect any supported games
 in the current directory!
@@ -160,6 +164,9 @@ Do you want run the HMM Auto Installer?</value>
   <data name="STR_UI_DELETEMOD" xml:space="preserve">
     <value>Are you sure you want to delete "{0}"?
 This action cannot be undone!</value>
+  </data>
+  <data name="STR_UI_MOD_UPDATE" xml:space="preserve">
+    <value>A newer version of {0} available! ({1})</value>
   </data>
   <data name="STR_UI_NO_MODS" xml:space="preserve">
     <value>Hedge Mod Manager did not detect any mods folder.
@@ -179,5 +186,8 @@ Would you like create a mods folder?</value>
   </data>
   <data name="URL_LCL_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/LostCodeLoader.dll</value>
+  </data>
+  <data name="URL_LOADERS_INI" xml:space="preserve">
+    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini</value>
   </data>
 </root>

@@ -394,11 +394,32 @@ namespace HedgeModManager
 
         private static string GetCPKREDIRVersion()
         {
-            var temp = Path.GetTempFileName();
-            File.WriteAllBytes(temp, HMMResources.DAT_CPKREDIR_DLL);
-            var info = FileVersionInfo.GetVersionInfo(temp);
-            File.Delete(temp);
+            var temp = Path.Combine(StartDirectory, "cpkredir.dll");
+            FileVersionInfo info = null;
+            if(!File.Exists(temp))
+            {
+                temp = Path.GetTempFileName();
+                File.WriteAllBytes(temp, HMMResources.DAT_CPKREDIR_DLL);
+                info = FileVersionInfo.GetVersionInfo(temp);
+                File.Delete(temp);
+            }
+
+            info = info ?? FileVersionInfo.GetVersionInfo(temp);
             return $"{info.ProductName} v{info.FileVersion}";
+        }
+
+        public static string GetCodeLoaderVersion(Game game)
+        {
+            var loaderPath = Path.Combine(StartDirectory, $"d3d{game.DirectXVersion}.dll");
+
+            if (!game.HasCustomLoader)
+                return string.Empty;
+
+            if (!File.Exists(loaderPath))
+                return string.Empty;
+
+            var info = FileVersionInfo.GetVersionInfo(loaderPath);
+            return info.ProductVersion ?? "1.0";
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)

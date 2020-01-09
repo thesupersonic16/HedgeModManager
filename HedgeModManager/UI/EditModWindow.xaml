@@ -14,6 +14,6 @@
         </Grid.RowDefinitions>
         <Label Content="Please fill out some details about your mod." FontSize="15" HorizontalAlignment="Center"/>
         <local:PropertyEditor x:Name="Editor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="5"/>
-        <Button Grid.Row="2" HorizontalAlignment="Right" Margin="5" Content="    Ok    " Click="Ok_Click"/>
+        <Button Grid.Row="2" HorizontalAlignment="Right" Margin="5" Content="    OK    " Click="Ok_Click"/>
     </Grid>
 </Window>

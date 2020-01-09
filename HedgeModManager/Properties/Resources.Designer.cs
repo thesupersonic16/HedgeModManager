@@ -117,13 +117,6 @@ namespace HedgeModManager.Properties {
         ///    font-family: &apos;Open Sans&apos;, sans-serif;
         ///}
         ///
-        ///a
-        ///{
-        ///    color: #FFE033;
-        ///    /*text-decoration: none;
-        ///    vertical-align: baseline;*/
-        ///}
-        ///
         ///h1
         ///{
         ///    font-size: 18px;
@@ -139,20 +132,28 @@ namespace HedgeModManager.Properties {
         ///span.RedColor
         ///{
         ///    color: #FF4E4E;
+        ///}
+        ///
+        ///table {
+        ///    border-spacing: 5px;
+        ///}
+        ///
+        ///table, th, td {
+        ///    border: 1px solid darkgray;
+        ///    border-collapse: collapse;
+        ///}
+        ///
+        ///th, td {
+        ///    padding: 2px;
+        ///}
+        ///
+        ///th {
+        ///    text-align: left;
         ///}.
         /// </summary>
         internal static string GBStyleSheet {
             get {
                 return ResourceManager.GetString("GBStyleSheet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New Update is available!.
-        /// </summary>
-        internal static string HMM_UPDATE_TEXT {
-            get {
-                return ResourceManager.GetString("HMM_UPDATE_TEXT", resourceCulture);
             }
         }
         
@@ -197,6 +198,25 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to cancel updating?
+        ///This may corrupt {0}.
+        /// </summary>
+        internal static string STR_CANCEL_WARNING {
+            get {
+                return ResourceManager.GetString("STR_CANCEL_WARNING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is already up to date..
+        /// </summary>
+        internal static string STR_MOD_NEWEST {
+            get {
+                return ResourceManager.GetString("STR_MOD_NEWEST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HedgeModManager could not detect any supported games
         ///in the current directory!
         ///
@@ -215,6 +235,15 @@ namespace HedgeModManager.Properties {
         internal static string STR_UI_DELETEMOD {
             get {
                 return ResourceManager.GetString("STR_UI_DELETEMOD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A newer version of {0} available! ({1}).
+        /// </summary>
+        internal static string STR_UI_MOD_UPDATE {
+            get {
+                return ResourceManager.GetString("STR_UI_MOD_UPDATE", resourceCulture);
             }
         }
         
@@ -270,6 +299,15 @@ namespace HedgeModManager.Properties {
         internal static string URL_LCL_DL {
             get {
                 return ResourceManager.GetString("URL_LCL_DL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini.
+        /// </summary>
+        internal static string URL_LOADERS_INI {
+            get {
+                return ResourceManager.GetString("URL_LOADERS_INI", resourceCulture);
             }
         }
     }

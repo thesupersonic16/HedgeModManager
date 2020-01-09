@@ -10,11 +10,11 @@ namespace HedgeModManager
 
     public class Games
     {
-        //                                                     Game Name          Executeable Name       Custom  CPKREDIR DX ModLoader Download URL    ModLoader Data      Loader Name
+        //                                                     Game Name          Executeable Name       Custom  CPKREDIR DX ModLoader Download URL    ModLoader Data      Loader Name                 Steam ID GB Protocol      64Bit
         public static Game Unknown              = new Game();
-        public static Game SonicGenerations     = new Game("Sonic Generations"  , "SonicGenerations.exe", true  , true  , 9 , Resources.URL_GCL_DL, Resources.DAT_GCL_DLL, "Generations Code Loader", "71340","hedgemmgens", false);
-        public static Game SonicLostWorld       = new Game("Sonic Lost World"   , "slw.exe"             , true , true  , 9 , Resources.URL_LCL_DL, Resources.DAT_LCL_DLL, "Lost Code Loader", "329440","hedgemmlw", false);
-        public static Game SonicForces          = new Game("Sonic Forces"       , "Sonic Forces.exe"    , true  , false , 11, Resources.URL_FML_DL, Resources.DAT_FML_DLL, "Forces Mod Loader", "637100", "hedgemmforces", true);
+        public static Game SonicGenerations     = new Game("Sonic Generations"  , "SonicGenerations.exe", true  , true  , 9 , Resources.URL_GCL_DL, Resources.DAT_GCL_DLL, "Generations Code Loader", "71340",  "hedgemmgens",   false);
+        public static Game SonicLostWorld       = new Game("Sonic Lost World"   , "slw.exe"             , true  , true  , 9 , Resources.URL_LCL_DL, Resources.DAT_LCL_DLL, "Lost Code Loader",        "329440", "hedgemmlw",     false);
+        public static Game SonicForces          = new Game("Sonic Forces"       , "Sonic Forces.exe"    , true  , false , 11, Resources.URL_FML_DL, Resources.DAT_FML_DLL, "Forces Mod Loader",       "637100", "hedgemmforces", true);
 
         public static IEnumerable<Game> GetSupportedGames()
         {

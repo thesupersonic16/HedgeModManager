@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using HedgeModManager;
 
+using HMMResources = HedgeModManager.Properties.Resources;
+
 namespace HedgeModManager.UI
 {
     /// <summary>
@@ -130,7 +132,7 @@ namespace HedgeModManager.UI
             }
 
             e.Cancel = true;
-            WarningDialog = new HedgeMessageBox("Hedge Mod Manager", $"Are you sure you want to cancel updating?\nThis may corrupt {UpdateInfo.Mod.Title}");
+            WarningDialog = new HedgeMessageBox("Hedge Mod Manager", string.Format(HMMResources.STR_CANCEL_WARNING, UpdateInfo.Mod.Title));
 
             WarningDialog.AddButton("No", () => 
             {

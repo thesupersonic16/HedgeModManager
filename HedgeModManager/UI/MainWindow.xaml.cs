@@ -20,6 +20,7 @@ using HedgeModManager.UI;
 using System.Collections.ObjectModel;
 
 using HMMResources = HedgeModManager.Properties.Resources;
+using System.Net;
 
 namespace HedgeModManager
 {
@@ -132,7 +133,7 @@ namespace HedgeModManager
             Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} Mod Loader";
         }
 
-        public void CheckForModUpdates(ModInfo mod)
+        public void CheckForModUpdates(ModInfo mod, bool showUpdatedDialog = true)
         {
             new Thread(() => 
             {
@@ -150,13 +151,18 @@ namespace HedgeModManager
                     Mouse.OverrideCursor = Cursors.Arrow;
                     if (update.VersionString == mod.Version)
                     {
-                        var box = new HedgeMessageBox(string.Empty, $"{mod.Title} is already up to date.", textAlignment: TextAlignment.Center);
-                        box.AddButton("OK", () => box.Close());
-                        box.ShowDialog();
+                        if(showUpdatedDialog)
+                        {
+                            var box = new HedgeMessageBox(string.Empty, string.Format(HMMResources.STR_MOD_NEWEST, mod.Title), textAlignment: TextAlignment.Center);
+                            box.AddButton("OK", () => box.Close());
+                            box.ShowDialog();
+                        }
                         return;
                     }
 
-                    var dialog = new HedgeMessageBox($"There's a newer version of {mod.Title} available! ({update.VersionString})", update.ChangeLog, type: InputType.MarkDown);
+                    var dialog = new HedgeMessageBox(string.Format(HMMResources.STR_UI_MOD_UPDATE, mod.Title, update.VersionString)
+                        , update.ChangeLog, type: InputType.MarkDown);
+
                     dialog.AddButton("Close", () => dialog.Close());
 
                     dialog.AddButton("Update", () =>
@@ -326,10 +332,57 @@ namespace HedgeModManager
             }).Start();
         }
 
+        protected void CheckForLoaderUpdate()
+        {
+            if (!App.Config.CheckLoaderUpdates)
+                return;
+
+            new Thread(() => 
+            {
+                UpdateStatus($"Checking for {App.CurrentGame.CustomLoaderName} updates");
+                using (var stream = WebRequest.Create(HMMResources.URL_LOADERS_INI).GetResponse().GetResponseStream())
+                {
+                    var ini = new IniFile(stream);
+                    var info = ini[App.CurrentGame.GameName];
+                    var version = new Version(App.GetCodeLoaderVersion(App.CurrentGame));
+                    var newVersion = new Version(info["LoaderVersion"]);
+
+                    if (newVersion <= version)
+                    {
+                        UpdateStatus($"{App.CurrentGame.CustomLoaderName} is up to date");
+                        return;
+                    }
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        var dialog = new HedgeMessageBox($"{App.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangeLog"]);
+                        Hide();
+
+                        dialog.AddButton("Ignore", () => 
+                        {
+                            Show();
+                            dialog.Close();
+                        });
+
+                        dialog.AddButton("Update", () =>
+                        {
+                            dialog.Close();
+                            App.InstallOtherLoader(false);
+                            Show();
+                            UpdateStatus($"Updated {App.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                        });
+
+                        dialog.ShowDialog();
+                    });
+                }
+            }).Start();
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Refresh();
             CheckForUpdates();
+            CheckForLoaderUpdate();
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
