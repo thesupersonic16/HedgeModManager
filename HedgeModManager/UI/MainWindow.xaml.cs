@@ -35,6 +35,8 @@ namespace HedgeModManager
         public static List<FileSystemWatcher> ModsWatchers = new List<FileSystemWatcher>();
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
 
+        protected Timer StatusTimer;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -202,7 +204,7 @@ namespace HedgeModManager
             });
 
             ModsDatabase.SaveDB();
-            UpdateStatus("Saved ModsDB");
+            UpdateStatus("Saved mods database");
         }
 
         public void StartGame()
@@ -380,6 +382,7 @@ namespace HedgeModManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            StatusTimer = new Timer((state) => UpdateStatus(null));
             Refresh();
             CheckForUpdates();
             CheckForLoaderUpdate();
@@ -558,6 +561,7 @@ namespace HedgeModManager
             {
                 StatusLbl.Content = str;
             });
+            StatusTimer.Change(4000, Timeout.Infinite);
         }
 
         private void Game_Changed(object sender, SelectionChangedEventArgs e)
@@ -575,6 +579,7 @@ namespace HedgeModManager
                 ModsWatchers.Clear();
                 SetupWatcher();
                 Refresh();
+                UpdateStatus($"Changed game to {App.CurrentGame.GameName}");
             }
         }
     }

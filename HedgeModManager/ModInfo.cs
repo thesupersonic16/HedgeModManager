@@ -51,6 +51,9 @@ namespace HedgeModManager
         [IniField("Desc")]
         public string Author { get; set; } = string.Empty;
 
+        [IniField("Desc")]
+        public string AuthorURL { get; set; } = string.Empty;
+
         [PropertyIgnore]
         [IniField("CPKs")]
         public Dictionary<string, string> CPKs { get; set; } = new Dictionary<string, string>();
