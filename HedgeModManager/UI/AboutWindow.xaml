@@ -14,8 +14,10 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="64" Height="64" Source="Resources/Graphics/icon256.png"/>
-        <Label Content="Hedge Mod Manager" HorizontalAlignment="Center" VerticalAlignment="Top" Height="Auto" Width="Auto" FontSize="36"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Image Width="64" Height="64" Source="/Resources/Graphics/icon256.png"/>
+            <Label Content="Hedge Mod Manager" Height="Auto" Width="Auto" FontSize="36"/>
+        </StackPanel>
         <Label Content="A program designed to help people easily load Hedgehog Engine mods." HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
         <Label Content="Requires a legally owned version of one of the supported games." HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Grid.Row="1"/>
         <GroupBox Header="Credits:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Margin="15">
@@ -35,7 +37,7 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Managing the project"/>
-                    <Label Content="Kickstarting 7.0"/>
+                    <Label Content="Writing 7.0"/>
                     <Label Content="Base Design"/>
                     <Label Content="CPKREDIR"/>
                     <Label Content="Contributing to Forces Mod Loader"/>

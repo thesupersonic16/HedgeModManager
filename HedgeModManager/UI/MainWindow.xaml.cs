@@ -342,44 +342,49 @@ namespace HedgeModManager
             new Thread(() => 
             {
                 UpdateStatus($"Checking for {App.CurrentGame.CustomLoaderName} updates");
-                using (var stream = WebRequest.Create(HMMResources.URL_LOADERS_INI).GetResponse().GetResponseStream())
+                try
                 {
-                    string loaderVersion = App.GetCodeLoaderVersion(App.CurrentGame);
-                    // Check if there is a loader version, if not return
-                    if (string.IsNullOrEmpty(loaderVersion))
-                        return;
-                    var ini = new IniFile(stream);
-                    var info = ini[App.CurrentGame.GameName];
-                    var version = new Version(loaderVersion);
-                    var newVersion = new Version(info["LoaderVersion"]);
-
-                    if (newVersion <= version)
+                    using (var stream = WebRequest.Create(HMMResources.URL_LOADERS_INI).GetResponse().GetResponseStream())
                     {
-                        UpdateStatus($"{App.CurrentGame.CustomLoaderName} is up to date");
-                        return;
+                        string loaderVersion = App.GetCodeLoaderVersion(App.CurrentGame);
+                        // Check if there is a loader version, if not return
+                        if (string.IsNullOrEmpty(loaderVersion))
+                            return;
+
+                        var ini = new IniFile(stream);
+                        var info = ini[App.CurrentGame.GameName];
+                        var version = new Version(loaderVersion);
+                        var newVersion = new Version(info["LoaderVersion"]);
+
+                        if (newVersion <= version)
+                        {
+                            UpdateStatus($"{App.CurrentGame.CustomLoaderName} is up to date");
+                            return;
+                        }
+
+                        Dispatcher.Invoke(() =>
+                        {
+                            var dialog = new HedgeMessageBox($"{App.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangeLog"]);
+
+                            dialog.AddButton("Ignore", () =>
+                            {
+                                dialog.Close();
+                            });
+
+                            dialog.AddButton("Update", () =>
+                            {
+                                dialog.Close();
+                                App.InstallOtherLoader(false);
+                                UpdateStatus($"Updated {App.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                            });
+
+                            dialog.ShowDialog();
+                        });
                     }
-
-                    Dispatcher.Invoke(() =>
-                    {
-                        var dialog = new HedgeMessageBox($"{App.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangeLog"]);
-                        Hide();
-
-                        dialog.AddButton("Ignore", () => 
-                        {
-                            Show();
-                            dialog.Close();
-                        });
-
-                        dialog.AddButton("Update", () =>
-                        {
-                            dialog.Close();
-                            App.InstallOtherLoader(false);
-                            Show();
-                            UpdateStatus($"Updated {App.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
-                        });
-
-                        dialog.ShowDialog();
-                    });
+                }
+                catch
+                {
+                    UpdateStatus($"Failed to check for {App.CurrentGame.CustomLoaderName} updates");
                 }
             }).Start();
         }
@@ -584,6 +589,7 @@ namespace HedgeModManager
                 SetupWatcher();
                 Refresh();
                 UpdateStatus($"Changed game to {App.CurrentGame.GameName}");
+                CheckForLoaderUpdate();
             }
         }
     }
