@@ -204,3 +204,13 @@ write16 B210B1 720
 Patch "1080p Media Player"
 write16 B210A1 1920
 write16 B210B1 1080
+
+Code "59.94 FPS Lock"
+writefloat 0019FD2C 59.94
+
+Patch "Longer Blue Trail"
+write16 00E5FB17 0x9090
+write16 00E5FB19 0x9090
+write16 00E5FB1B 0x9090
+write8 00E5FE10 0x48
+write8 00E5FE70 0x48
