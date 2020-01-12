@@ -258,11 +258,29 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codes/SonicForces.hmm.
+        /// </summary>
+        internal static string URL_FML_CODES {
+            get {
+                return ResourceManager.GetString("URL_FML_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/ForcesModLoader.dll.
         /// </summary>
         internal static string URL_FML_DL {
             get {
                 return ResourceManager.GetString("URL_FML_DL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codes/SonicGenerations.hmm.
+        /// </summary>
+        internal static string URL_GCL_CODES {
+            get {
+                return ResourceManager.GetString("URL_GCL_CODES", resourceCulture);
             }
         }
         
@@ -290,6 +308,15 @@ namespace HedgeModManager.Properties {
         internal static string URL_HMM_LOADERS {
             get {
                 return ResourceManager.GetString("URL_HMM_LOADERS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codes/LostWorld.hmm.
+        /// </summary>
+        internal static string URL_LCL_CODES {
+            get {
+                return ResourceManager.GetString("URL_LCL_CODES", resourceCulture);
             }
         }
         

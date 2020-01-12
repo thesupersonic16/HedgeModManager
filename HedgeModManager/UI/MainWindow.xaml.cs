@@ -55,7 +55,7 @@ namespace HedgeModManager
             ModsDatabase = new ModsDB(App.ModsDbPath);
             ModsDatabase.DetectMods();
             ModsDatabase.GetEnabledMods();
-            ModsDatabase.Mods.OrderBy(x => x.Title);
+            ModsDatabase.Mods.Sort((x, y) => x.Title.CompareTo(y.Title));
 
             // Re-arrange the mods
             for (int i = 0; i < ModsDatabase.ActiveModCount; i++)
@@ -86,6 +86,8 @@ namespace HedgeModManager
                 else
                     CodesList.Items.Add(x);
             });
+
+            UpdateStatus($"Loaded {ModsDatabase.Mods.Count} mods");
         }
 
         public void RefreshUI()
@@ -131,7 +133,7 @@ namespace HedgeModManager
 
             ComboBox_GameStatus.SelectedValue = App.CurrentSteamGame;
             Label_MLVersion.Content = $"Loaders: {loaders}";
-            Button_OtherLoader.Content = hasOtherModLoader && App.CurrentGame.SupportsCPKREDIR ? $"Uninstall Code Loader" : $"Install Code Loader";
+            Button_OtherLoader.Content = hasOtherModLoader && App.CurrentGame.SupportsCPKREDIR ? "Uninstall Code Loader" : "Install Code Loader";
             Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} Mod Loader";
         }
 
@@ -398,7 +400,6 @@ namespace HedgeModManager
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
             Refresh();
             CheckForUpdates();
-            CheckForLoaderUpdate();
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
@@ -544,6 +545,8 @@ namespace HedgeModManager
                 var mod = new ModInfo
                 {
                     Title = GenerateModTitle(),
+                    Date = DateTime.Now.ToString(),
+                    Version = "1.0",
                     Author = Environment.UserName
                 };
 
@@ -595,6 +598,20 @@ namespace HedgeModManager
                 UpdateStatus($"Changed game to {App.CurrentGame.GameName}");
                 CheckForLoaderUpdate();
             }
+        }
+
+        private void UI_Download_Codes(object sender, RoutedEventArgs e)
+        {
+            UpdateStatus($"Downloading codes for {App.CurrentGame.GameName}");
+            var downloader = new DownloadWindow($"Downloading codes for {App.CurrentGame.GameName}", App.CurrentGame.CodesURL, CodeLoader.CodesHMMPath)
+            {
+                DownloadCompleted = () => 
+                {
+                    Refresh();
+                    UpdateStatus("Download finished");
+                }
+            };
+            downloader.Start();
         }
     }
 }

@@ -148,7 +148,7 @@ namespace HedgeModManager
 
         private static void ProcessCodeLine(string filename, int linenum, string[] split, Code code)
         {
-            var sb = new System.Text.StringBuilder(split[1].TrimStart('"'));
+            var sb = new StringBuilder(split[1].TrimStart('"'));
             int i = 2;
             if (!split[1].EndsWith("\""))
                 for (; i < split.Length; i++)

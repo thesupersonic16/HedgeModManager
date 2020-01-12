@@ -1,0 +1,5 @@
+Patch "Dont lose rings"
+writenop 466900 0x02
+
+Patch "Disable super music"
+writenop 51ABAD 0x06
