@@ -113,6 +113,7 @@ namespace HedgeModManager
             {
                 Button_CPKREDIR.IsEnabled = App.CurrentGame.SupportsCPKREDIR;
                 Button_OtherLoader.IsEnabled = App.CurrentGame.HasCustomLoader;
+                Button_DownloadCodes.IsEnabled = App.CurrentGame.HasCustomLoader && !string.IsNullOrEmpty(App.CurrentGame.CodesURL);
             }
 
             var exeDir = App.StartDirectory;
@@ -603,15 +604,22 @@ namespace HedgeModManager
         private void UI_Download_Codes(object sender, RoutedEventArgs e)
         {
             UpdateStatus($"Downloading codes for {App.CurrentGame.GameName}");
-            var downloader = new DownloadWindow($"Downloading codes for {App.CurrentGame.GameName}", App.CurrentGame.CodesURL, CodeLoader.CodesHMMPath)
+            try
             {
-                DownloadCompleted = () => 
+                var downloader = new DownloadWindow($"Downloading codes for {App.CurrentGame.GameName}", App.CurrentGame.CodesURL, CodeLoader.CodesHMMPath)
                 {
-                    Refresh();
-                    UpdateStatus("Download finished");
-                }
-            };
-            downloader.Start();
+                    DownloadCompleted = () =>
+                    {
+                        Refresh();
+                        UpdateStatus("Download finished");
+                    }
+                };
+                downloader.Start();
+            }
+            catch
+            {
+                UpdateStatus("Download failed");
+            }
         }
     }
 }
