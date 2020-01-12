@@ -344,9 +344,13 @@ namespace HedgeModManager
                 UpdateStatus($"Checking for {App.CurrentGame.CustomLoaderName} updates");
                 using (var stream = WebRequest.Create(HMMResources.URL_LOADERS_INI).GetResponse().GetResponseStream())
                 {
+                    string loaderVersion = App.GetCodeLoaderVersion(App.CurrentGame);
+                    // Check if there is a loader version, if not return
+                    if (string.IsNullOrEmpty(loaderVersion))
+                        return;
                     var ini = new IniFile(stream);
                     var info = ini[App.CurrentGame.GameName];
-                    var version = new Version(App.GetCodeLoaderVersion(App.CurrentGame));
+                    var version = new Version(loaderVersion);
                     var newVersion = new Version(info["LoaderVersion"]);
 
                     if (newVersion <= version)

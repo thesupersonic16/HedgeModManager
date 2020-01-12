@@ -413,10 +413,10 @@ namespace HedgeModManager
             var loaderPath = Path.Combine(StartDirectory, $"d3d{game.DirectXVersion}.dll");
 
             if (!game.HasCustomLoader)
-                return string.Empty;
+                return null;
 
             if (!File.Exists(loaderPath))
-                return string.Empty;
+                return null;
 
             var info = FileVersionInfo.GetVersionInfo(loaderPath);
             return info.ProductVersion ?? "1.0";
