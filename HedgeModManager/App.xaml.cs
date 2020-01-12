@@ -34,7 +34,7 @@ namespace HedgeModManager
         public static Version Version = Assembly.GetExecutingAssembly().GetName().Version;
         public static string StartDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static string AppPath = Path.Combine(StartDirectory, AppDomain.CurrentDomain.FriendlyName);
-        public static string ProgramName = "HedgeModManager";
+        public static string ProgramName = "Hedge Mod Manager";
         public static string VersionString = $"{Version.Major}.{Version.Minor}-{Version.Revision}";
         public static string ModsDbPath;
         public static string ConfigPath;
@@ -151,23 +151,6 @@ namespace HedgeModManager
                 return;
             }
 
-            if (CurrentGame == Games.Unknown)
-            {
-                var box = new HedgeMessageBox("No Game Detected!", HMMResources.STR_MSG_NOGAME);
-
-                box.AddButton("  Cancel  ", () =>
-                {
-                    box.Close();
-                });
-                box.AddButton("  Run Installer  ", () =>
-                {
-                    box.Visibility = Visibility.Collapsed;
-                    new InstallWindow().ShowDialog();
-                    box.Close();
-                });
-                box.ShowDialog();
-                return;
-            }
             if (CurrentGame.SupportsCPKREDIR)
             {
                 if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))

@@ -151,9 +151,6 @@
     <Compile Include="UI\HedgeMessageBox.xaml.cs">
       <DependentUpon>HedgeMessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\InstallWindow.xaml.cs">
-      <DependentUpon>InstallWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\MainWindowViewModel.cs" />
     <Compile Include="UI\ModUpdateWindow.xaml.cs">
       <DependentUpon>ModUpdateWindow.xaml</DependentUpon>
@@ -186,10 +183,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\HedgeMessageBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\InstallWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

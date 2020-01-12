@@ -25,6 +25,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                <Label x:Name="StatusLbl" Margin="0,-5,0,0" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                 <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem Header="Mods">
                         <Grid>
@@ -46,7 +47,7 @@
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Name" Width="190">
+                                        <GridViewColumn Header="Name" Width="200">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -56,8 +57,8 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Version"       Width="60" DisplayMemberBinding="{Binding Version}"/>
-                                        <GridViewColumn Header="Author"        Width="88" DisplayMemberBinding="{Binding Author}"/>
+                                        <GridViewColumn Header="Version"       Width="70" DisplayMemberBinding="{Binding Version}"/>
+                                        <GridViewColumn Header="Author"        Width="90" DisplayMemberBinding="{Binding Author}"/>
                                         <GridViewColumn Header="Supports Save" Width="90" DisplayMemberBinding="{Binding SupportsSave}"/>
                                         <GridViewColumn Header="Updates"       Width="70" DisplayMemberBinding="{Binding HasUpdates}"/>
                                     </GridView>
@@ -111,9 +112,9 @@
                             <GroupBox Header="HedgeModManager" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,5" Grid.Row="1">
                                 <Grid>
                                     <CheckBox Content="Check for mod loader updates"                      IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="Check for code loader updates"                     IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}"    Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="Keep Hedge Mod Manager open after starting a game" IsChecked="{Binding CPKREDIR.KeepOpen}"             Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <Button   Content="About Hedge Mod Manager"                                                                       Margin="0,0,10,10" RenderTransformOrigin="0.508,-0.424" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
+                                    <CheckBox Content="Check for code loader updates"                     IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="Keep Hedge Mod Manager open after starting a game" IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <Button   Content="About Hedge Mod Manager"                                                                             Margin="0,0,10,10" RenderTransformOrigin="0.508,-0.424" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
                                 </Grid>
                             </GroupBox>
                         </Grid>
@@ -139,7 +140,6 @@
                         <Button Content="Save and Play"    Width="Auto"    Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
                         <Button Content="Play"             Width="Auto"    Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
                     </Grid>
-                    <Label x:Name="StatusLbl" Margin="10,0,0,0"/>
                 </StackPanel>
             </Grid>
         </Grid>

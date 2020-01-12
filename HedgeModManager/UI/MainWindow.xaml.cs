@@ -139,17 +139,21 @@ namespace HedgeModManager
         {
             new Thread(() => 
             {
+                UpdateStatus($"Checking for {mod.Title} updates");
+
                 // Downloads the mod update information
                 Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
                 var update = ModUpdate.GetUpdateFromINI(mod);
                 if (update == null)
                 {
-                    Mouse.OverrideCursor = Cursors.Arrow;
+                    Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
+                    UpdateStatus(string.Empty);
                     return;
                 }
 
                 Dispatcher.Invoke(() => 
                 {
+                    UpdateStatus(string.Empty);
                     Mouse.OverrideCursor = Cursors.Arrow;
                     if (update.VersionString == mod.Version)
                     {
@@ -391,7 +395,7 @@ namespace HedgeModManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            StatusTimer = new Timer((state) => UpdateStatus(null));
+            StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
             Refresh();
             CheckForUpdates();
             CheckForLoaderUpdate();

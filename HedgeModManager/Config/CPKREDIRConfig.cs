@@ -45,11 +45,11 @@ namespace HedgeModManager
         [IniField("HedgeModManager", "AutoCheckForUpdates")]
         public bool CheckForUpdates { get; set; } = true;
 
-        [IniField("HedgeModManager", "KeepModLoaderOpen")]
-        public bool KeepOpen { get; set; } = true;
-
         [IniField("HedgeModManager", "CheckLoader")]
         public bool CheckLoaderUpdates { get; set; } = true;
+
+        [IniField("HedgeModManager", "KeepModLoaderOpen")]
+        public bool KeepOpen { get; set; } = true;
 
         public bool EnableDebugConsole 
         { 
