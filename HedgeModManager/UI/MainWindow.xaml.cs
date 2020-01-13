@@ -21,6 +21,7 @@ using System.Collections.ObjectModel;
 
 using HMMResources = HedgeModManager.Properties.Resources;
 using System.Net;
+using System.IO.Compression;
 
 namespace HedgeModManager
 {
@@ -319,6 +320,21 @@ namespace HedgeModManager
                                     {
                                         DownloadCompleted = () =>
                                         {
+                                            // Extract zip for compatibility for 6.x
+                                            if (asset.ContentType == "application/x-zip-compressed")
+                                            {
+                                                // Stre old path pointing to the zip
+                                                string oldPath = path;
+                                                // Generate new path
+                                                path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+                                                using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
+                                                {
+                                                    var entry = zip.Entries.FirstOrDefault(t => t.Name.Contains(".exe"));
+                                                    entry.ExtractToFile(path);
+                                                }
+                                                File.Delete(oldPath);
+                                            }
+
                                             Process.Start(path, $"-update \"{App.AppPath}\" {Process.GetCurrentProcess().Id}");
                                             Application.Current.Shutdown();
                                         }
