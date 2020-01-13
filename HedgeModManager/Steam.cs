@@ -37,6 +37,9 @@ namespace HedgeModManager
             var paths = new List<string>();
             var games = new List<SteamGame>();
 
+            if (string.IsNullOrEmpty(SteamLocation))
+                return new List<SteamGame>();
+
             string vdfLocation = Path.Combine(SteamLocation, "steamapps\\libraryfolders.vdf");
             Dictionary<string, object> vdf = null;
             try
