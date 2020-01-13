@@ -101,6 +101,7 @@ namespace HedgeModManager
             application.MainWindow = new MainWindow();
             Args = args;
             CPKREDIRVersion = GetCPKREDIRVersion();
+            RegistryConfig.Load();
 
 #if !DEBUG
             // Enable our Crash Window if Compiled in Release
@@ -120,6 +121,10 @@ namespace HedgeModManager
             StartDirectory = steamGame.RootDirectory;
 #else
             SteamGames = Steam.SearchForGames();
+
+            if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory))
+                StartDirectory = RegistryConfig.LastGameDirectory;
+
             foreach (var game in Games.GetSupportedGames())
             {
                 if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
@@ -135,6 +140,7 @@ namespace HedgeModManager
                     break;
                 }
             }
+
             if (CurrentGame == Games.Unknown)
             {
                 var game = SteamGames.First();
@@ -185,6 +191,8 @@ namespace HedgeModManager
                     CurrentGame = game;
                     CurrentSteamGame = steamGame;
                     StartDirectory = steamGame.RootDirectory;
+                    RegistryConfig.LastGameDirectory = StartDirectory;
+                    RegistryConfig.Save();
                 }
             }
         }

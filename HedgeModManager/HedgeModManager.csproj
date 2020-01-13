@@ -109,6 +109,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="CodeLoader.cs" />
+    <Compile Include="Config\RegistryConfig.cs" />
     <Compile Include="Controls\PopupBox.xaml.cs">
       <DependentUpon>PopupBox.xaml</DependentUpon>
     </Compile>
