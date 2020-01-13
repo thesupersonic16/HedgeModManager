@@ -137,6 +137,8 @@ namespace HedgeModManager
                     }
                     CurrentGame = game;
                     CurrentSteamGame = steamGame;
+                    RegistryConfig.LastGameDirectory = StartDirectory;
+                    RegistryConfig.Save();
                     break;
                 }
             }
