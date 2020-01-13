@@ -67,7 +67,7 @@ Here's an example of a mod.ini file for Sonic Lost World:
 [Main]
 IncludeDir0="."
 IncludeDirCount=1
-UpdateServer="https://dl.dropboxusercontent.com/s/xkapkbby1vu4snk/Sonic06UpdateFile.txt"
+;UpdateServer=""
 
 [Desc]
 Title="SLW '06 Project"
@@ -87,7 +87,7 @@ The following is a list of the most important values that can be used in a mod.i
 
 **IncludeDirCount** Specifies how many folders will be included with your mod.
 
-**UpdateServer** A modification of the existing SonicGMI value that specifies the link to an Update file containing file information this can be a XML or the SonicGMI update file, I recommend linking a folder from a http server, as it will allow you to release auto-downloading updates to your mods.
+**UpdateServer** A URL to a directory on a HTTP or HTTPS server containing a mod_version.ini and mod_files.txt file using the SonicGMI update format. e.g. ``UpdateServer="https://colorsproject.000webhostapp.com/qua200/"``
 
 ### Desc
 
