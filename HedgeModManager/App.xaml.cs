@@ -122,9 +122,7 @@ namespace HedgeModManager
 #else
             SteamGames = Steam.SearchForGames();
 
-            if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory))
-                StartDirectory = RegistryConfig.LastGameDirectory;
-
+            SearchGames:
             foreach (var game in Games.GetSupportedGames())
             {
                 if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
@@ -141,6 +139,12 @@ namespace HedgeModManager
                     RegistryConfig.Save();
                     break;
                 }
+            }
+
+            if(!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
+            {
+                StartDirectory = RegistryConfig.LastGameDirectory;
+                goto SearchGames;
             }
 
             if (CurrentGame == Games.Unknown)
