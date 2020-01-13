@@ -82,7 +82,7 @@ namespace HedgeModManager
                             var key = line.Substring(0, i);
                             var value = line.Substring(i + 1, line.Length - (i + 1));
                             var temp = value.Split('\"');
-                            this[currentGroup].AddParameter($"{c}{key}", temp.Length == 1 ? temp[0] : temp[1]);
+                            this[currentGroup][$"{c}{key}"] = temp.Length == 1 ? temp[0] : temp[1];
                             break;
                         }
                 }
