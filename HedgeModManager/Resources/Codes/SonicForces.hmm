@@ -149,3 +149,6 @@ write8 1423C060C 0x01
 Patch "Disable Wispon Boundaries "
 writenop 140267527 0x00000005
 
+Patch "360 Movement"
+write16 14012899A 0xE35A
+write16 1401289B8 0xE33C
