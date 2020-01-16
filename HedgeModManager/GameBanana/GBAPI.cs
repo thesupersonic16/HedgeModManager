@@ -43,6 +43,11 @@ namespace GameBananaAPI
                     string URL = $"https://api.gamebanana.com/Core/Item/Data?itemtype={item.ItemType}&itemid={item.ItemID}&fields=";
                     foreach(var property in item.GetType().GetProperties())
                     {
+                        // Exclude field for some item types
+                        var exclProp = (GBAPIFieldExclude)property.GetCustomAttribute(typeof(GBAPIFieldExclude));
+                        if (exclProp != null && item.ItemType == exclProp.ItemType)
+                            continue;
+
                         var prop = (JsonPropertyAttribute)property.GetCustomAttribute(typeof(JsonPropertyAttribute));
                         if(prop != null)
                         {
@@ -262,6 +267,7 @@ namespace GameBananaAPI
         public int OwnerID { get; set; }
         [JsonProperty("Owner().name")]
         public string OwnerName { get; set; }
+        [GBAPIFieldExclude("Sound")]
         [JsonProperty("screenshots")]
         public string ScreenshotsRaw { get; set; }
         [JsonProperty("text")]
@@ -275,7 +281,9 @@ namespace GameBananaAPI
         {
             get
             {
-                return JsonConvert.DeserializeObject<List<GBAPIScreenshotData>>(ScreenshotsRaw);
+                if (ScreenshotsRaw != null)
+                    return JsonConvert.DeserializeObject<List<GBAPIScreenshotData>>(ScreenshotsRaw);
+                return new List<GBAPIScreenshotData>();
             }
         }
 
@@ -316,6 +324,16 @@ namespace GameBananaAPI
             {
                 return $"http://files.gamebanana.com/{ImageDirectory}/{FileSmall}";
             }
+        }
+    }
+
+    public class GBAPIFieldExclude : Attribute
+    {
+        public string ItemType = "";
+
+        public GBAPIFieldExclude(string itemType)
+        {
+            ItemType = itemType;
         }
     }
 }
