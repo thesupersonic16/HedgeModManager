@@ -8,13 +8,56 @@ using System.Threading.Tasks;
 namespace HedgeModManager
 {
 
-    public class Games
+    public static class Games
     {
-        //                                                     Game Name          Executeable Name       Custom  CPKREDIR DX ModLoader Download URL    ModLoader Data      Loader Name                 Steam ID GB Protocol      64Bit  Codes URL
-        public static Game Unknown              = new Game();
-        public static Game SonicGenerations     = new Game("Sonic Generations"  , "SonicGenerations.exe", true  , true  , 9 , Resources.URL_GCL_DL, Resources.DAT_GCL_DLL, "Generations Code Loader", "71340",  "hedgemmgens",   false, Resources.URL_GCL_CODES);
-        public static Game SonicLostWorld       = new Game("Sonic Lost World"   , "slw.exe"             , true  , true  , 9 , Resources.URL_LCL_DL, Resources.DAT_LCL_DLL, "Lost Code Loader",        "329440", "hedgemmlw",     false, Resources.URL_LCL_CODES);
-        public static Game SonicForces          = new Game("Sonic Forces"       , "Sonic Forces.exe"    , true  , false , 11, Resources.URL_FML_DL, Resources.DAT_FML_DLL, "Forces Mod Loader",       "637100", "hedgemmforces", true,  Resources.URL_FML_CODES);
+        public static Game Unknown = new Game();
+        public static Game SonicGenerations = new Game()
+        {
+            GameName = "Sonic Generations",
+            ExecuteableName = "SonicGenerations.exe",
+            HasCustomLoader = true,
+            SupportsCPKREDIR = true,
+            ModLoaderDownloadURL = Resources.URL_GCL_DL,
+            ModLoaderData = Resources.DAT_GCL_DLL,
+            CustomLoaderName = "Generations Code Loader",
+            AppID = "71340",
+            DirectXVersion = 9,
+            GBProtocol = "hedgemmgens",
+            Is64Bit = false,
+            CodesURL = Resources.URL_GCL_CODES
+        };
+
+        public static Game SonicLostWorld = new Game()
+        {
+            GameName = "Sonic Lost World",
+            ExecuteableName = "slw.exe",
+            HasCustomLoader = true,
+            SupportsCPKREDIR = true,
+            ModLoaderDownloadURL = Resources.URL_LCL_DL,
+            ModLoaderData = Resources.DAT_LCL_DLL,
+            CustomLoaderName = "Lost Code Loader",
+            AppID = "329440",
+            DirectXVersion = 9,
+            GBProtocol = "hedgemmlw",
+            Is64Bit = false,
+            CodesURL = Resources.URL_LCL_CODES
+        };
+
+        public static Game SonicForces = new Game()
+        {
+            GameName = "Sonic Forces",
+            ExecuteableName = "Sonic Forces.exe",
+            HasCustomLoader = true,
+            SupportsCPKREDIR = false,
+            ModLoaderDownloadURL = Resources.URL_FML_DL,
+            ModLoaderData = Resources.DAT_FML_DLL,
+            CustomLoaderName = "Forces Mod Loader",
+            AppID = "637100",
+            DirectXVersion = 11,
+            GBProtocol = "hedgemmforces",
+            Is64Bit = true,
+            CodesURL = Resources.URL_FML_CODES
+        };
 
         public static IEnumerable<Game> GetSupportedGames()
         {
@@ -38,27 +81,6 @@ namespace HedgeModManager
         public string GBProtocol;
         public bool Is64Bit = false;
         public string CodesURL;
-
-        public Game()
-        {
-
-        }
-
-        public Game(string gameName, string executeableName, bool hasCustomLoader, bool supportsCPKREDIR, int directXVersion, string modLoaderDownloadURL, byte[] modLoaderData, string modLoaderName, string appid, string gbProtocol, bool is64Bit, string codesURL)
-        {
-            GameName               = gameName;
-            ExecuteableName        = executeableName;
-            HasCustomLoader        = hasCustomLoader;
-            SupportsCPKREDIR       = supportsCPKREDIR;
-            DirectXVersion         = directXVersion;
-            ModLoaderDownloadURL   = modLoaderDownloadURL;
-            ModLoaderData          = modLoaderData;
-            CustomLoaderName       = modLoaderName;
-            AppID                  = appid;
-            GBProtocol             = gbProtocol;
-            Is64Bit                = is64Bit;
-            CodesURL               = codesURL;
-        }
 
         public override string ToString()
         {
