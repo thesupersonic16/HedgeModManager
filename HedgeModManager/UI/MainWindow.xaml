@@ -115,7 +115,8 @@
                                 <Grid>
                                     <CheckBox Content="Check for mod loader updates"                      IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <CheckBox Content="Check for code loader updates"                     IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="Keep Hedge Mod Manager open after starting a game" IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="Check for mod updates"                             IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="Keep Hedge Mod Manager open after starting a game" IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="10,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <Button   Content="About Hedge Mod Manager"                                                                             Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
                                 </Grid>
                             </GroupBox>

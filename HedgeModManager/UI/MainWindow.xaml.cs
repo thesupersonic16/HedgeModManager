@@ -139,23 +139,33 @@ namespace HedgeModManager
             Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} Mod Loader";
         }
 
-        public void CheckForModUpdates(ModInfo mod, bool showUpdatedDialog = true)
+        public bool CheckForModUpdates(ModInfo mod, bool showUpdatedDialog = true)
         {
-            new Thread(() => 
+            UpdateStatus($"Checking for {mod.Title} updates");
+            ModUpdate.ModUpdateInfo update;
+            try
             {
-                UpdateStatus($"Checking for {mod.Title} updates");
-
                 // Downloads the mod update information
                 Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
-                var update = ModUpdate.GetUpdateFromINI(mod);
+                update = ModUpdate.GetUpdateFromINI(mod);
                 if (update == null)
                 {
                     Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
                     UpdateStatus(string.Empty);
-                    return;
+                    return true;
                 }
+            }
+            catch (Exception e)
+            {
+                Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
+                UpdateStatus($"Failed to update {mod.Title}! {e.Message}");
+                return false;
+            }
 
-                Dispatcher.Invoke(() => 
+            bool status = true;
+            Dispatcher.Invoke(() => 
+            {
+                try
                 {
                     UpdateStatus(string.Empty);
                     Mouse.OverrideCursor = Cursors.Arrow;
@@ -188,8 +198,31 @@ namespace HedgeModManager
                     });
 
                     dialog.ShowDialog();
-                });
-            }).Start();
+                }
+                catch (Exception e)
+                {
+                    // Mark as failed
+                    status = false;
+                }
+
+            });
+            return status;
+        }
+
+        public void CheckAllModsUpdates()
+        {
+            int completedCount = 0;
+            int failedCount = 0;
+            // Filter all mods with updates
+            foreach (var mod in ModsDatabase.Mods.Where(t => t.HasUpdates))
+            {
+                bool status = CheckForModUpdates(mod, false);
+                if (status)
+                    ++completedCount;
+                else
+                    ++failedCount;
+            }
+            UpdateStatus($"Finished checking for mod updates: {completedCount} completed, {failedCount} failed");
         }
 
         public void SaveModsDB()
@@ -286,75 +319,82 @@ namespace HedgeModManager
 
         public void CheckForUpdates()
         {
-            new Thread(() => 
+            new Thread(() =>
             {
-                if (App.Config.CheckForUpdates)
-                {
-                    UpdateStatus("Checking for updates");
-                    try
-                    {
-                        var update = App.CheckForUpdates();
-
-                        if (!update.Item1)
-                        {
-                            UpdateStatus("No updates found");
-                            return;
-                        }
-
-                        Dispatcher.Invoke(() => 
-                        {
-
-                            // http://wasteaguid.info/
-                            var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
-
-                            var info = update.Item2;
-                            var dialog = new HedgeMessageBox(info.Name, info.Body, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
-
-                            dialog.AddButton("Update", () => 
-                            {
-                                if (info.Assets.Count > 0)
-                                {
-                                    var asset = info.Assets[0];
-                                    dialog.Close();
-                                    var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({info.TagName})", asset.BrowserDownloadUrl.ToString(), path)
-                                    {
-                                        DownloadCompleted = () =>
-                                        {
-                                            // Extract zip for compatibility for 6.x
-                                            if (asset.ContentType == "application/x-zip-compressed")
-                                            {
-                                                // Stre old path pointing to the zip
-                                                string oldPath = path;
-                                                // Generate new path
-                                                path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
-                                                using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
-                                                {
-                                                    var entry = zip.Entries.FirstOrDefault(t => t.Name.Contains(".exe"));
-                                                    entry.ExtractToFile(path);
-                                                }
-                                                File.Delete(oldPath);
-                                            }
-
-                                            Process.Start(path, $"-update \"{App.AppPath}\" {Process.GetCurrentProcess().Id}");
-                                            Application.Current.Shutdown();
-                                        }
-                                    };
-
-                                    downloader.Start();
-                                }
-                            });
-                            
-                            dialog.ShowDialog();
-                        });
-
-                        UpdateStatus(string.Empty);
-                    }
-                    catch
-                    {
-                        UpdateStatus("Failed to check for updates");
-                    }
-                }
+                CheckForManagerUpdates();
+                if (App.Config.CheckForModUpdates)
+                    CheckAllModsUpdates();
             }).Start();
+        }
+
+        public void CheckForManagerUpdates()
+        {
+            if (App.Config.CheckForUpdates)
+            {
+                UpdateStatus("Checking for updates");
+                try
+                {
+                    var update = App.CheckForUpdates();
+
+                    if (!update.Item1)
+                    {
+                        UpdateStatus("No updates found");
+                        return;
+                    }
+
+                    Dispatcher.Invoke(() => 
+                    {
+
+                        // http://wasteaguid.info/
+                        var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+
+                        var info = update.Item2;
+                        var dialog = new HedgeMessageBox(info.Name, info.Body, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
+
+                        dialog.AddButton("Update", () => 
+                        {
+                            if (info.Assets.Count > 0)
+                            {
+                                var asset = info.Assets[0];
+                                dialog.Close();
+                                var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({info.TagName})", asset.BrowserDownloadUrl.ToString(), path)
+                                {
+                                    DownloadCompleted = () =>
+                                    {
+                                        // Extract zip for compatibility for 6.x
+                                        if (asset.ContentType == "application/x-zip-compressed")
+                                        {
+                                            // Stre old path pointing to the zip
+                                            string oldPath = path;
+                                            // Generate new path
+                                            path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+                                            using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
+                                            {
+                                                var entry = zip.Entries.FirstOrDefault(t => t.Name.Contains(".exe"));
+                                                entry.ExtractToFile(path);
+                                            }
+                                            File.Delete(oldPath);
+                                        }
+
+                                        Process.Start(path, $"-update \"{App.AppPath}\" {Process.GetCurrentProcess().Id}");
+                                        Application.Current.Shutdown();
+                                    }
+                                };
+
+                                downloader.Start();
+                            }
+                        });
+                        
+                        dialog.ShowDialog();
+                    });
+
+                    UpdateStatus(string.Empty);
+                }
+                catch
+                {
+                    UpdateStatus("Failed to check for updates");
+                }
+            }
         }
 
         protected void CheckForLoaderUpdate()
@@ -504,7 +544,7 @@ namespace HedgeModManager
         private void UI_Update_Mod(object sender, RoutedEventArgs e)
         {
             var mod = (ModInfo)ModsList.SelectedItem;
-            CheckForModUpdates(mod);
+            new Thread(() => CheckForModUpdates(mod)).Start();
             RefreshMods();
         }
 
