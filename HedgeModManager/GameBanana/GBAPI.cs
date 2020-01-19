@@ -40,16 +40,12 @@ namespace GameBananaAPI
             {
                 if (APIType == GBAPIRequestType.COREITEMDATA)
                 {
+                    var supportedFields = GetSupportedFields(item.ItemType);
                     string URL = $"https://api.gamebanana.com/Core/Item/Data?itemtype={item.ItemType}&itemid={item.ItemID}&fields=";
                     foreach(var property in item.GetType().GetProperties())
                     {
-                        // Exclude field for some item types
-                        var exclProp = (GBAPIFieldExclude)property.GetCustomAttribute(typeof(GBAPIFieldExclude));
-                        if (exclProp != null && item.ItemType == exclProp.ItemType)
-                            continue;
-
                         var prop = (JsonPropertyAttribute)property.GetCustomAttribute(typeof(JsonPropertyAttribute));
-                        if(prop != null)
+                        if(prop != null && supportedFields.Contains(prop.PropertyName))
                         {
                             if (URL.Last() != '=')
                                 URL += ',';
@@ -96,6 +92,22 @@ namespace GameBananaAPI
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        public static List<string> GetSupportedFields(string itemType)
+        {
+            var url = $"https://api.gamebanana.com/Core/Item/Data/AllowedFields?itemtype={itemType}";
+            using(var client = new WebClient())
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<List<string>>(client.DownloadString(url));
+                }
+                catch
+                {
+                    return new List<string>();
+                }
             }
         }
 
@@ -207,8 +219,6 @@ namespace GameBananaAPI
 
             new GBModWindow(item,itemDLURL, game).ShowDialog();
             return;
-            // TODO: Show Info Window (ofc it will need a Download button)
-            // I FORGOT ABOUT THE DOWNLOAD BUTTON
         }
 
     }
@@ -267,7 +277,6 @@ namespace GameBananaAPI
         public int OwnerID { get; set; }
         [JsonProperty("Owner().name")]
         public string OwnerName { get; set; }
-        [GBAPIFieldExclude("Sound")]
         [JsonProperty("screenshots")]
         public string ScreenshotsRaw { get; set; }
         [JsonProperty("text")]
@@ -276,6 +285,8 @@ namespace GameBananaAPI
         public string Subtitle { get; set; }
         [JsonProperty("Credits().aAuthorsAndGroups()")]
         public GBAPICreditGroups Credits { get; set; }
+        [JsonProperty("Preview().sPreviewUrl()")]
+        public Uri SoundURL { get; set; }
 
         public List<GBAPIScreenshotData> Screenshots
         {
@@ -324,16 +335,6 @@ namespace GameBananaAPI
             {
                 return $"http://files.gamebanana.com/{ImageDirectory}/{FileSmall}";
             }
-        }
-    }
-
-    public class GBAPIFieldExclude : Attribute
-    {
-        public string ItemType = "";
-
-        public GBAPIFieldExclude(string itemType)
-        {
-            ItemType = itemType;
         }
     }
 }

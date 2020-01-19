@@ -56,6 +56,21 @@ namespace HedgeModManager.UI
             popup.Show(this);
         }
 
+        private void Audio_Click(object sender, RoutedEventArgs e)
+        {
+            var mod = (GBAPIItemDataBasic)DataContext;
+            var url = mod.SoundURL;
+            var popup = new PopupBox();
+            popup.Children.Add(new Border()
+            {
+                Child = new AudioPlayer()
+                {
+                    Source = url,
+                }
+            });
+            popup.Show(this);
+        }
+
         private void Download_Click(object sender, RoutedEventArgs e)
         {
             var mod = (GBAPIItemDataBasic)DataContext;
@@ -86,12 +101,31 @@ namespace HedgeModManager.UI
                     Height = 54,
                     Tag = screenshot,
                 };
+
                 button.Content = new Image()
                 {
                     Source = new BitmapImage(new Uri(screenshot.URLSmall)),
                     Stretch = Stretch.Fill,
                 };
                 button.Click += Screenshot_Click;
+                Imagebar.Children.Add(button);
+            }
+
+            if(!string.IsNullOrEmpty(mod.SoundURL?.AbsoluteUri))
+            {
+                var button = new Button()
+                {
+                    Margin = new Thickness(2.5),
+                    Width = 96,
+                    Height = 54,
+                };
+
+                button.Content = new Image()
+                {
+                    Source = new BitmapImage(new Uri("/Resources/Graphics/AudioThumbnail.png", UriKind.Relative)),
+                    Stretch = Stretch.Fill,
+                };
+                button.Click += Audio_Click;
                 Imagebar.Children.Add(button);
             }
             Description.Text = $@"
@@ -103,9 +137,6 @@ namespace HedgeModManager.UI
         {mod.Body}
     </body>
 </html>";
-            // You may think why we need to focus on the html panel it seems useless and you would be right but 
-            // if we dont focus on the panel its blurred for some reason and i cant figure out why
-            Description.Focus();
             foreach (var group in mod.Credits.Credits)
             {
                 if (group.Value.Count < 1)
@@ -140,6 +171,7 @@ namespace HedgeModManager.UI
                         link.Inlines.Add(run);
                         block.Inlines.Add(link);
                     }
+
                     CreditsPanel.Children.Add(block);
                     if (!string.IsNullOrEmpty(credit.Role))
                         CreditsPanel.Children.Add(new TextBlock() { Text = credit.Role, FontSize = 11.2, TextWrapping = TextWrapping.WrapWithOverflow, Padding = new Thickness(0, 0, 0, .5) });
