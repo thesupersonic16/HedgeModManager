@@ -67,23 +67,28 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Codes">
-                        <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
-                                     Margin="12,5,12,5" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
-                            <ListView.View>
-                                <GridView AllowsColumnReorder="True">
-                                    <GridViewColumn Header="Name" Width="Auto">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <CheckBox IsChecked="{Binding Enabled}" Margin="0,0,4,0"/>
-                                                    <TextBlock Text="{Binding Name}"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                        <Grid>
+                            <GroupBox Margin="12,5,12,5">
+                                <Button   x:Name="Button_DownloadCodes" Content="Download Community Code List"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
+                            </GroupBox>
+                            <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
+                                     Margin="12,5,12,45" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
+                                <ListView.View>
+                                    <GridView AllowsColumnReorder="True">
+                                        <GridViewColumn Header="Name" Width="Auto">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <CheckBox IsChecked="{Binding Enabled}" Margin="0,0,4,0"/>
+                                                        <TextBlock Text="{Binding Name}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
                     </TabItem>
                     <TabItem Header="Settings">
                         <Grid Margin="10,5,10,0">
@@ -96,7 +101,7 @@
                                     <Button   x:Name="Button_CPKREDIR"      Content="Install Mod loader"            Click="UI_CPKREDIR_Click"                       Margin="10,10,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
                                     <Button   x:Name="Button_OtherLoader"   Content="Uninstall Code loader"         Click="UI_OtherLoader_Click"                    Margin="10,38,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="164" IsEnabled="False"/>
 
-                                    <Button   x:Name="Button_DownloadCodes" Content="Download Community Codes"      Click="UI_Download_Codes"                       Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="40" Width="195"/>
+                                    <Button   x:Name="Button_OpenMods"      Content="Open Mods Directory"           Click="UI_OpenMods_Click"                       Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="40" Width="195"/>
 
                                     <StackPanel Margin="10,66,0,0">
                                         <CheckBox Content="Enable mod loader"             IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />

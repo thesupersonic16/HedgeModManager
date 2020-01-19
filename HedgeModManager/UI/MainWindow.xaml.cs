@@ -427,7 +427,7 @@ namespace HedgeModManager
 
                         Dispatcher.Invoke(() =>
                         {
-                            var dialog = new HedgeMessageBox($"{App.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangeLog"]);
+                            var dialog = new HedgeMessageBox($"{App.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"));
 
                             dialog.AddButton("Ignore", () =>
                             {
@@ -676,6 +676,11 @@ namespace HedgeModManager
             {
                 UpdateStatus("Download failed");
             }
+        }
+
+        private void UI_OpenMods_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(App.ModsDbPath);
         }
     }
 }
