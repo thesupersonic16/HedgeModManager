@@ -105,3 +105,98 @@ Typing a "\n" in this value will indicate a new line within the manager, **which
 **URL** The URL of the mod (aka mod homepages/threads/release videos).
 
 There are many other values that can be used in a mod.ini file, many of which are already being used in several mods. So keep an eye out for them in other released mods!
+ 
+## How do I allow mod updating?
+HedgeModManager uses a custom mod updater which is also backwards compatible with SonicGMI.
+ 
+To get started, before releasing your mod, you will need access to a HTTP server with a folder for your mod. From here this folder will be refered as the update server.
+ 
+In your mod.ini file add a field in the `[Main]` section called `UpdateServer` and set the value to the URL of your mod update folder including the forward slash at the end. e.g. ``UpdateServer="https://colorsproject.000webhostapp.com/qua200/"``
+
+### Preparing the server
+On your server create a folder for the mod you want to allow updating for and create two files `mod_files.txt` which will be blank for now and a file called `mod_version.ini` This file will contain the information about the update and the changelog for SonicGMI users. 
+ 
+Here is an example of a mod.ini for HedgeModManager and SonicGMI:
+```ini
+[Main]
+VersionString="2.0"
+DownloadSizeString="0.7 MB"
+Markdown="changelog.md"
+
+[Changelog]
+StringCount=1
+String0="Updated for GCL v2.1"
+```
+
+The following is a list of values that can be used in a mod_version.ini file:
+
+### Main
+
+**VersionString** The version of the mod you will be publishing.
+
+**DownloadSizeString** The size of the mod update that will be shown to the SonicGMI users.
+
+**Markdown** The name of the file on the update server containing markdown code for showing information about the mod update like the changelog. This value is optional, if this is defined then HedgeModManager will use the markdown code to show the information instead, if not the information in `[Changelog]` will be used instead.
+
+### Changelog 
+
+**StringCount** The amount of strings to show to the user. Tip: Set this to the last string number + 1.
+
+**String?** Line about a change that was made in the mod that is going to be updated. You can have many of these by changing the *?* to a sequential number starting from 0. e.g. String0, String1, String2, String3 
+ 
+If you have not made an update just yet then I would recommend:
+- Setting `VersionString` to the current version of the mod
+- Setting `DownloadSizeString` to "0 MB"
+- Setting `StringCount` to `0`
+- Creating a black file called `mod_files.txt` in the update server
+- Including a blank file in `Markdown` (If you want markdown support)
+ 
+Once you have made an update, you will be modifying all these.
+ 
+### Preparing to publish an update
+Once you have made some changes to your mod and have pick out the files you have changed (Do not include files that are untouched from the first release to the current!)
+
+Now you can start moving the files into your update server folder (next to the mod_version.ini and mod_files.txt file) and record down the changes in your mod_files.txt file
+
+### mod_files.txt
+The mod_files.txt file is a simple file containing simple commands for HedgeModManager and SonicGMI to follow to push your update to all the users. 
+ 
+the mod_files.txt format contains two commands:
+ - **add** Downloads a file from the update server into the mod folder on the user's machine 
+ - **delete** Deletes a file from the user's mod folder, Use this if you nolonger need the file being replaced.
+ 
+Here is an example of a mod_files.txt
+```
+add mod.ini
+add DiscordGenerations.dll
+```
+ 
+Once you have finished recording your mod_files.txt file, you can now start modifying your mod_version.ini file that you have created at the start.
+
+In your mod_version.ini file you would want to perform the following changes:
+- Set `VersionString` to the new version of the mod
+- Add up all the files that will be downloaded and set `DownloadSizeString` to the file size e.g. "48 MB"
+- Write your changelog in `[Changelog]`
+
+After writing your changes in mod_version.ini you can now start writing your changelog in markdown (This is if you want to have a markdown changelog for HedgeModManager users)
+ 
+Here is an example of a markdown changelog:
+```md
+
+## DiscordGenerations v2.0
+- Updated for use with GCL v2.1
+ 
+___ 
+## Information
+# Credits
+- Programmer: [@TheSuperSonic16](https://twitter.com/TheSuperSonic16) 
+- Help and Testing: [Slash (Michele) (GB)](https://gamebanana.com/members/1347950) 
+
+# Links
+- [GameBanana Entry](https://gamebanana.com/gamefiles/6969)
+___ 
+## Screenshot
+ ![Screenshot][screenshot_url] 
+
+[screenshot_url]: https://files.gamebanana.com/img/ss/gamefiles/5b2f0ee23ffb5.webp
+```
