@@ -29,11 +29,12 @@
                 <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem Header="Mods">
                         <Grid>
-                            <ListView x:Name="ModsList" AllowDrop="True" Drop="UI_ModsList_Drop"
+                            <ListView x:Name="ModsList"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
                                       Margin="12,5,12,5" ItemsSource="{Binding Mods}" 
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
-                                      dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True">
+                                      dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
+                                      dd:DragDrop.DropHandler="{Binding}">
                                 <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                         <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
