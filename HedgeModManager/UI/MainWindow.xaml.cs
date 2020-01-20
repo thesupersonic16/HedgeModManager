@@ -130,7 +130,7 @@ namespace HedgeModManager
 
             ComboBox_GameStatus.SelectedValue = App.CurrentSteamGame;
             Label_MLVersion.Content = $"Loaders: {loaders}";
-            Button_OtherLoader.Content = hasOtherModLoader && App.CurrentGame.SupportsCPKREDIR ? "Uninstall Mod Loader" : "Install Mod Loader";
+            Button_OtherLoader.Content = hasOtherModLoader ? "Uninstall Mod Loader" : "Install Mod Loader";
             Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} Mod Loader";
         }
 

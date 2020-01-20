@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="About Hedge Mod Manager" Height="440" Width="500"  Background="#FF2D2D30"
+        Title="About Hedge Mod Manager" Height="446.237" Width="500"  Background="#FF2D2D30"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
     <Grid>
         <Grid.RowDefinitions>
@@ -32,6 +32,7 @@
                     <Label Content="Radfordhound"/>
                     <Label Content="Korama"/>
                     <Label Content="Skyth"/>
+                    <Label Content="PTKickass"/>
                     <Label Content="Slash"/>
                     <Label Content="MainMemory"/>
                 </StackPanel>
@@ -41,8 +42,10 @@
                     <Label Content="Base Design"/>
                     <Label Content="CPKREDIR"/>
                     <Label Content="Contributing to Forces Mod Loader"/>
+                    <Label Content="Cheat codes"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="mod-loader-common"/>
+                    <Label Content="Cheat codes"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
