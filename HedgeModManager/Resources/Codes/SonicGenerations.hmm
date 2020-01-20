@@ -1,6 +1,10 @@
 Code "Infinite Rings"
 write32 p01E5E2F0|5B8 0x3E7
 
+Patch "Disable Ring Cap"
+write16 00E68522 0x0DEB
+write8 01098E5F 0xEB
+
 Patch "Disable Damage"
 writenop 00E2836A 0x05
 
