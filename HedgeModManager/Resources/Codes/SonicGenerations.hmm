@@ -1,7 +1,7 @@
 Code "Infinite Rings"
 write32 p01E5E2F0|5B8 0x3E7
 
-Patch "Ignore Damange"
+Patch "Disable Damage"
 writenop 00E2836A 0x05
 
 Patch "Infinite Lives"
@@ -76,57 +76,57 @@ write32 0108BB11 0x900300C6
 write8 0108BB15 0x90
 write16 0108BB1F 0x34EB
 
-Patch "Sparkles remain on the hub world"
+Patch "Sparkles Remain on the Hub World"
 write16 00EE3DA6 0x06EB
 
-Patch "Win challenges without metting the required amount of items"
+Patch "Win Challenges Without Meeting the Required Amount of Items"
 write32 00D0EAB9 0xCCC301B0
 
 Code "Infinite Gauge"
 writefloat p01E5E2F0|5BC 500
 
-Patch "All Levels are selectable"
+Patch "All Levels are Selectable"
 write8 00EE5DE8 0x0C
 write8 00EE6134 0x0C
 
-Patch "Buy anything at the skill shop with any points"
+Patch "Buy Anything at the Skill Shop With Any Points"
 writenop 004409D2 6
 
-Patch "Never subtract points when buying a skill"
+Patch "Never Subtract Points When Buying a Skill"
 writenop 00440726 6
 
-Patch "All Levels display names even if not unlocked"
+Patch "All Levels Display Names Even If Not Unlocked"
 write8 00D58AD0 0xEB
 
-Patch "Replay rescue cut-scenes"
+Patch "Replay Rescue Cutscenes"
 write16 00D29532 0x06EB
 
-Patch "Color Dodge trail blending"
+Patch "Color Dodge Trail Blending"
 write8 00E8D3AC 0x09
 
-Patch "Lighten trail blending"
+Patch "Lighten Trail Blending"
 write8 00E8D3AC 0x0A
 
-Patch "Screen trail blending"
+Patch "Screen Trail Blending"
 write8 00E8D3AC 0x02
 write8 00E8D3B7 0x04
 
-Patch "Color Burn trail blending"
+Patch "Color Burn Trail Blending"
 write8 00E8D3B7 0x03
 
-Patch "Non-transparent trail blending"
+Patch "Opaque Trail Blending"
 write8 00E8D3B7 0x01
 
-Patch "Normal trail blending"
+Patch "Normal Trail Blending"
 write8 00E8D3B7 0x06
 
-Patch "Glowing trail blending"
+Patch "Glowing Trail Blending"
 write8 00E8D3B7 0x07
 
-Patch "Subtractive trail blending"
+Patch "Subtractive Trail Blending"
 write8 00E8D3AC 0x0B
 
-Patch "Subtitles appear additive if color is bright"
+Patch "Subtitles Appear Additive If Color Is Bright"
 write8 0040FED4 0xE9
 write32 0040FED5 0x00FB1DBE
 writenop 0040FED9 2
@@ -147,32 +147,30 @@ write32 013C1CC6 0x04C48324
 write8 013C1CCA 0xE9
 write32 013C1CCB 0xFF04E20C
 
-Patch "Freeze timer"
+Patch "Freeze Timer"
 writenop 00D02E48 8
 
-Patch "Freeze challenge timer"
+Patch "Freeze Challenge Timer"
 writenop 0124EFC5 8
 writenop 00D0E7D5 2
 
-Patch "Don't allow timer to reduce ranks on challenges"
+Patch "Don't Allow Timer to Reduce Ranks on Challenges"
 write32 00D611B3 0x90C0570F
 writenop 00D611B7 4
 
-Patch "Set ShadowMaps to 512x"
+Patch "Set Shadowmaps to 512x"
 write32 010C6039 512
 
-Patch "Set ShadowMaps to 2048x"
+Patch "Set Shadowmaps to 2048x"
 write32 010C6039 2048
 
-Patch "Set ShadowMaps to 4096x"
+Patch "Set Shadowmaps to 4096x"
 write32 010C6039 4096
 
-Patch "Set ShadowMaps to 8192x"
+Patch "Set Shadowmaps to 8192x"
 write32 010C6039 8192
 
-
-
-Patch "Enable FXPipeline"
+Patch "Enable FxPipeline"
 write16 00E6851E 65535
 write32 01098E5B 65535
 write32 016E2164 0x017AC94C
@@ -193,15 +191,11 @@ write32 016E21D8 0x017AC910
 write32 016E21DC 0x01105CC0
 write8 015CA070 0x6C
 
-
-
-
-
-Patch "720p Media Player"
+Patch "1280x720 Media Player"
 write16 B210A1 1280
 write16 B210B1 720
 
-Patch "1080p Media Player"
+Patch "1920x1080 Media Player"
 write16 B210A1 1920
 write16 B210B1 1080
 
@@ -248,7 +242,7 @@ write32 1672618 0x5F676E69
 write32 167261C 0x00004448
 write8 115B826 0x02
 
-Patch "Ice Pillars Replace Fire Pilars"
+Patch "Ice Pillars Replace Fire Pillars"
 write8 E020EB 0x01
 write8 16613CB 0x31
 write8 16613D2 0x31

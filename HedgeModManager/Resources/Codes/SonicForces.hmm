@@ -140,12 +140,11 @@ write32 14086BC12 0xFFCF5C04
 write8 140561815 0xE9
 write32 140561816 0x0030A3EB
 
-Patch "Wispon Gauge Stay's Full"
+Patch "Wispon Gauge Stays Full"
 writenop 1404D228C 0x00000004
 
-Patch "Wispon Special Always Ready (Use Wispon Anytime)"
+Patch "Wispon Special Always Ready (Use Wispon Any Time)"
 write8 1423C060C 0x01
 
-Patch "Disable Wispon Boundaries "
+Patch "Disable Wispon Boundaries"
 writenop 140267527 0x00000005
-
