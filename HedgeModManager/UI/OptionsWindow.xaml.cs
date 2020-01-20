@@ -59,9 +59,7 @@ namespace HedgeModManager
         {
             if(GetSelected() < 0)
             {
-                var box = new HedgeMessageBox("Hedge Mod Manager", "Please select an option");
-                box.AddButton("OK", () => { box.Close(); });
-                box.ShowDialog();
+                ErrorLabel.Visibility = Visibility.Visible;
                 return;
             }
             DialogResult = true;

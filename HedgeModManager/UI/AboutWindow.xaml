@@ -45,7 +45,6 @@
                     <Label Content="Cheat codes"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="mod-loader-common"/>
-                    <Label Content="Cheat codes"/>
                 </StackPanel>
             </Grid>
         </GroupBox>

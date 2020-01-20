@@ -15,9 +15,10 @@
         </Grid.RowDefinitions>
         <TextBlock x:Name="Header" Text="HEADER" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <StackPanel x:Name="CheckStack" Grid.Row="1" VerticalAlignment="Center" Margin="5,0,5,0" Width="Auto" Height="Auto"/>
+        <TextBlock x:Name="ErrorLabel" Text="Please select an option!"  Grid.Row="2" VerticalAlignment="Center" FontSize="12" Margin="5,0,0,0" Foreground="Red" Visibility="Hidden"/>
         <StackPanel x:Name="Stack" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Stretch">
-        <Button Width="60" Height="23" Margin="5" Content="OK" Click="Ok_Click"/>
-        <Button Width="60" Height="23" Margin="5" Content="Cancel" IsCancel="True"/>
+            <Button Width="60" Height="23" Margin="5" Content="OK" Click="Ok_Click"/>
+            <Button Width="60" Height="23" Margin="5" Content="Cancel" IsCancel="True"/>
         </StackPanel>
     </Grid>
 </Window>

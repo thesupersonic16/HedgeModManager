@@ -240,7 +240,6 @@ namespace HedgeModManager
             });
 
             ModsDatabase.SaveDB();
-            UpdateStatus("Saved mods database");
         }
 
         public void StartGame()
@@ -515,6 +514,7 @@ namespace HedgeModManager
             ShowMissingOtherLoaderWarning();
             SaveModsDB();
             Refresh();
+            UpdateStatus("Saved mods database");
         }
 
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
@@ -522,6 +522,7 @@ namespace HedgeModManager
             ShowMissingOtherLoaderWarning();
             SaveModsDB();
             Refresh();
+            UpdateStatus("Saved mods database");
             StartGame();
         }
 
