@@ -121,7 +121,6 @@ namespace HedgeModManager
             StartDirectory = steamGame.RootDirectory;
 #else
             SteamGames = Steam.SearchForGames();
-
             SearchGames:
             foreach (var game in Games.GetSupportedGames())
             {
@@ -141,7 +140,7 @@ namespace HedgeModManager
                 }
             }
 
-            if(!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
+            if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
             {
                 StartDirectory = RegistryConfig.LastGameDirectory;
                 goto SearchGames;
@@ -149,10 +148,24 @@ namespace HedgeModManager
 
             if (CurrentGame == Games.Unknown)
             {
-                var game = SteamGames.First();
+                var game = SteamGames.FirstOrDefault();
                 SelectSteamGame(game);
-                StartDirectory = game.RootDirectory;
+                StartDirectory = game?.RootDirectory;
             }
+
+            if (CurrentGame == Games.Unknown)
+            {
+                var dialog = new HedgeMessageBox($"No Games Found!", 
+                    "Please make sure your games are properly installed on Steam or\nRun Hedge Mod Manager inside of any of the supported game's directory.");
+
+                dialog.AddButton("Exit", () =>
+                {
+                    Environment.Exit(0);
+                });
+
+                dialog.ShowDialog();
+            }
+
 #endif
             ModsDbPath = Path.Combine(StartDirectory, "Mods");
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
