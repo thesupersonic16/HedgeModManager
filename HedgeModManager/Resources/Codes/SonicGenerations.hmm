@@ -260,3 +260,9 @@ writenop 119822E 18
 Patch "All Rings Can Be Light Dashed"
 write32 0105334D 0x010C47C6
 writenop 01053351 16
+
+Patch "Trigger Debug View"
+write8 01E5E39B 1
+
+Patch "Object Collision Debug View"
+write8 01E5E39B 1
