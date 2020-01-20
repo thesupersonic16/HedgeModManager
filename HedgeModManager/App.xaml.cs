@@ -172,6 +172,12 @@ namespace HedgeModManager
                 }
             }
 
+            // Remove old patch
+            string exePath = Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName);
+            if (IsCPKREDIRInstalled(exePath))
+                InstallCPKREDIR(exePath, false);
+
+
             do
             {
                 Config = new CPKREDIRConfig(ConfigPath);
@@ -249,11 +255,6 @@ namespace HedgeModManager
         /// </param>
         public static void InstallCPKREDIR(string executablePath, bool? install = true)
         {
-            if (!CurrentGame.SupportsCPKREDIR)
-            {
-                InstallOtherLoader(install.Value);
-                return;
-            }
             // Backup Executable
             File.Copy(executablePath, $"{executablePath}.bak", true);
 
@@ -286,7 +287,7 @@ namespace HedgeModManager
             if (install == null)
                 buffer = IsCPKREDIR ? IMAGEHLP : CPKREDIR;
             else
-                buffer = install == true ? IMAGEHLP : CPKREDIR;
+                buffer = install == false ? IMAGEHLP : CPKREDIR;
 
             // Write Patch to file
             using (var stream = File.OpenWrite(executablePath))
@@ -305,6 +306,15 @@ namespace HedgeModManager
 
         public static void InstallOtherLoader(bool toggle = true)
         {
+            if (CurrentGame.SupportsCPKREDIR)
+            {
+                if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))
+                {
+                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
+                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
+                }
+            }
+
             string DLLFileName = Path.Combine(StartDirectory, $"d3d{CurrentGame.DirectXVersion}.dll");
 
             if (File.Exists(DLLFileName) && toggle)

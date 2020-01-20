@@ -105,14 +105,9 @@ namespace HedgeModManager
 
             Title = $"{App.ProgramName} ({App.VersionString}) - {App.CurrentGame.GameName}";
 
-            if (App.CurrentGame.HasCustomLoader && !App.CurrentGame.SupportsCPKREDIR)
+            if (App.CurrentGame.HasCustomLoader)
             {
-                Button_CPKREDIR.IsEnabled = true;
-                Button_OtherLoader.IsEnabled = false;
-            }
-            else
-            {
-                Button_CPKREDIR.IsEnabled = App.CurrentGame.SupportsCPKREDIR;
+                //Button_CPKREDIR.IsEnabled = App.CurrentGame.SupportsCPKREDIR;
                 Button_OtherLoader.IsEnabled = App.CurrentGame.HasCustomLoader;
                 Button_DownloadCodes.IsEnabled = App.CurrentGame.HasCustomLoader && !string.IsNullOrEmpty(App.CurrentGame.CodesURL);
             }
@@ -135,7 +130,7 @@ namespace HedgeModManager
 
             ComboBox_GameStatus.SelectedValue = App.CurrentSteamGame;
             Label_MLVersion.Content = $"Loaders: {loaders}";
-            Button_OtherLoader.Content = hasOtherModLoader && App.CurrentGame.SupportsCPKREDIR ? "Uninstall Code Loader" : "Install Code Loader";
+            Button_OtherLoader.Content = hasOtherModLoader && App.CurrentGame.SupportsCPKREDIR ? "Uninstall Mod Loader" : "Install Mod Loader";
             Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} Mod Loader";
         }
 
@@ -452,6 +447,33 @@ namespace HedgeModManager
             }).Start();
         }
 
+        public void ShowMissingOtherLoaderWarning()
+        {
+            if (!App.CurrentGame.HasCustomLoader)
+                return;
+            bool loaderInstalled = File.Exists(Path.Combine(App.StartDirectory, $"d3d{App.CurrentGame.DirectXVersion}.dll"));
+            if (loaderInstalled)
+                return;
+            Dispatcher.Invoke(() =>
+            {
+                var dialog = new HedgeMessageBox($"Mod Loader Not Yet Installed!", $"In order for {App.CurrentGame.GameName} to start loading mods, the mod loader needs to be installed.\n" + "Would you like to install it now?");
+
+                dialog.AddButton("No", () =>
+                {
+                    dialog.Close();
+                });
+
+                dialog.AddButton("Yes", () =>
+                {
+                    dialog.Close();
+                    App.InstallOtherLoader(false);
+                    UpdateStatus($"Installed {App.CurrentGame.CustomLoaderName}");
+                });
+
+                dialog.ShowDialog();
+            });
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
@@ -490,12 +512,14 @@ namespace HedgeModManager
 
         private void UI_Save_Click(object sender, RoutedEventArgs e)
         {
+            ShowMissingOtherLoaderWarning();
             SaveModsDB();
             Refresh();
         }
 
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
+            ShowMissingOtherLoaderWarning();
             SaveModsDB();
             Refresh();
             StartGame();
@@ -642,9 +666,16 @@ namespace HedgeModManager
             if(ComboBox_GameStatus.SelectedItem != null)
             {
                 App.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
+
                 App.ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
                 App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
                 App.Config = new CPKREDIRConfig(App.ConfigPath);
+
+                // Remove old patch
+                string exePath = Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName);
+                if (App.IsCPKREDIRInstalled(exePath))
+                    App.InstallCPKREDIR(exePath, false);
+
                 foreach (var watcher in ModsWatchers)
                 {
                     watcher.Dispose();
