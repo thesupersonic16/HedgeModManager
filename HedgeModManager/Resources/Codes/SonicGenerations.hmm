@@ -259,8 +259,32 @@ Patch "All Rings Can Be Light Dashed"
 write32 0105334D 0x010C47C6
 writenop 01053351 16
 
-Patch "Trigger Debug View"
-write8 01E5E39B 1
-
 Patch "Object Collision Debug View"
 write8 01E5E39B 1
+
+Patch "Borderless Fullscreen"
+write8 00A5EB5B 0xE9
+write32 00A5EB5C 0x0096346E
+writenop 00A5EB60 3
+write8 013C1FCE 0x8B
+write8 013C1FCF 0x45
+write8 013C1FD0 0x18
+write8 013C1FD1 0xC7
+write8 013C1FD2 0x40
+write8 013C1FD3 0x20
+write32 013C1FD4 0x01
+write8 013C1FD8 0xC7
+write8 013C1FD9 0x40
+write8 013C1FDA 0x1C
+write32 013C1FDB 0x00
+write8 013C1FDF 0xC7
+write8 013C1FE0 0x40
+write8 013C1FE1 0x30
+write32 013C1FE2 0x00
+write8 013C1FE6 0x89
+write8 013C1FE7 0x4D
+write8 013C1FE8 0xE4
+write8 013C1FE9 0x68
+write32 013C1FEA 0x3210
+write8 013C1FEE 0xE9
+write32 013C1FEF 0xFF69CB70
