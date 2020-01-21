@@ -288,3 +288,13 @@ write8 013C1FE9 0x68
 write32 013C1FEA 0x3210
 write8 013C1FEE 0xE9
 write32 013C1FEF 0xFF69CB70
+
+Patch "No Out of Control Baloons"
+write32 11BEBAA 0x0000B6E9
+write8 11BEBAF 0x00
+writenop 11BEBB0 2
+
+Patch "No Out of Control JumpSprings"
+write32 011BEA91 0x0001CFE9
+write16 011BEA95 0x8B00
+write8 011BEA97 0x83
