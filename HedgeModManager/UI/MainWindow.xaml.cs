@@ -160,7 +160,11 @@ namespace HedgeModManager
             }
 
             if (AbortModUpdates)
+            {
+                Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
                 return false;
+            }
+
 
             bool status = true;
             Dispatcher.Invoke(() => 
@@ -169,6 +173,7 @@ namespace HedgeModManager
                 {
                     UpdateStatus(string.Empty);
                     Mouse.OverrideCursor = Cursors.Arrow;
+
                     if (update.VersionString == mod.Version)
                     {
                         if(showUpdatedDialog)
@@ -211,6 +216,7 @@ namespace HedgeModManager
 
         public void CheckAllModsUpdates()
         {
+            AbortModUpdates = false;
             int completedCount = 0;
             int failedCount = 0;
             var mods = ModsDatabase.Mods.Where(t => t.HasUpdates).ToList();
@@ -580,9 +586,13 @@ namespace HedgeModManager
 
         private void UI_Update_Mod(object sender, RoutedEventArgs e)
         {
+            AbortModUpdates = false;
             var mod = (ModInfo)ModsList.SelectedItem;
-            new Thread(() => CheckForModUpdates(mod)).Start();
-            RefreshMods();
+            new Thread(() =>
+            {
+                CheckForModUpdates(mod);
+                Dispatcher.Invoke(() => RefreshMods());
+            }).Start();
         }
 
         private void UI_Edit_Mod(object sender, RoutedEventArgs e)
