@@ -35,6 +35,7 @@ namespace HedgeModManager
         public static CodeList CodesDatabase = new CodeList();
         public static List<FileSystemWatcher> ModsWatchers = new List<FileSystemWatcher>();
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
+        public bool AbortModUpdates = false;
 
         protected Timer StatusTimer;
 
@@ -51,6 +52,7 @@ namespace HedgeModManager
 
         public void RefreshMods()
         {
+            AbortModUpdates = true;
             CodesList.Items.Clear();
 
             ModsDatabase = new ModsDB(App.ModsDbPath);
@@ -157,6 +159,9 @@ namespace HedgeModManager
                 return false;
             }
 
+            if (AbortModUpdates)
+                return false;
+
             bool status = true;
             Dispatcher.Invoke(() => 
             {
@@ -208,14 +213,21 @@ namespace HedgeModManager
         {
             int completedCount = 0;
             int failedCount = 0;
+            var mods = ModsDatabase.Mods.Where(t => t.HasUpdates).ToList();
             // Filter all mods with updates
-            foreach (var mod in ModsDatabase.Mods.Where(t => t.HasUpdates))
+            foreach (var mod in mods)
             {
                 bool status = CheckForModUpdates(mod, false);
                 if (status)
                     ++completedCount;
                 else
                     ++failedCount;
+                if (AbortModUpdates)
+                {
+                    AbortModUpdates = false;
+                    UpdateStatus("Update check has been aborted due to the mod list being reloaded");
+                    return;
+                }
             }
             UpdateStatus($"Finished checking for mod updates: {completedCount} completed, {failedCount} failed");
         }
