@@ -86,7 +86,7 @@ write16 00EE3DA6 0x06EB
 Patch "Win Challenges Without Meeting the Required Amount of Items"
 write32 00D0EAB9 0xCCC301B0
 
-Code "Infinite Gauge"
+Code "Infinite Boost Gauge"
 writefloat p01E5E2F0|5BC 500
 
 Patch "All Levels are Selectable"
@@ -294,7 +294,7 @@ write32 11BEBAA 0x0000B6E9
 write8 11BEBAE 0x00
 writenop 11BEBAF 2
 
-Patch "No Out of Control JumpSprings"
+Patch "No Out of Control Jump Springs"
 write32 011BEA91 0x0001CFE9
 write16 011BEA95 0x8B00
 write8 011BEA97 0x83
