@@ -690,9 +690,9 @@ namespace HedgeModManager
             {
                 App.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
 
-                App.ModsDbPath = Path.Combine(App.StartDirectory, "Mods");
                 App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
                 App.Config = new CPKREDIRConfig(App.ConfigPath);
+                App.ModsDbPath = Path.Combine(App.StartDirectory, Path.GetDirectoryName(App.Config.ModsDbIni));
 
                 // Remove old patch
                 string exePath = Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName);
@@ -735,6 +735,22 @@ namespace HedgeModManager
         private void UI_OpenMods_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(App.ModsDbPath);
+        }
+
+        private void UI_ChangeDatabasePath_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new FolderBrowserDialog();
+            dialog.Title = "Select where to load mods from...";
+            if (dialog.ShowDialog())
+            {
+                App.ModsDbPath = dialog.SelectedFolder;
+                ViewModel.CPKREDIR.ModsDbIni = Path.Combine(App.ModsDbPath, "ModsDB.ini");
+                if (ViewModel.CPKREDIR.ModsDbIni.StartsWith(App.StartDirectory))
+                    ViewModel.CPKREDIR.ModsDbIni = ViewModel.CPKREDIR.ModsDbIni.Substring(App.StartDirectory.Length + 1);
+                ViewModel.CPKREDIR.Save(Path.Combine(App.StartDirectory, "cpkredir.ini"));
+                Refresh();
+                UpdateStatus("Updated database location");
+            }
         }
     }
 }

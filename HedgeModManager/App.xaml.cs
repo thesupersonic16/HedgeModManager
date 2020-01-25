@@ -72,8 +72,7 @@ namespace HedgeModManager
                     // The old pid gets passed in the CLI arguments and we use that to make sure the process is terminated before replacing it
                     int.TryParse(args[2], out int pid);
                     var process = Process.GetProcessById(pid);
-
-                    process.Kill();
+                    
                     process.WaitForExit();
                 }
                 catch { }
