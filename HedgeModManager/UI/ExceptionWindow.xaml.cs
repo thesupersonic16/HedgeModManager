@@ -47,8 +47,11 @@ namespace HedgeModManager
             body.AppendLine($"    Args: {string.Join(" ", App.Args)}");
             body.AppendLine($"    StartDir: {App.StartDirectory}");
             body.AppendLine($"    Process Level: " + (App.RunningAsAdmin() ? "Administrator" : "User"));
-            body.AppendLine($"    Game: {App.CurrentGame}");
-            body.AppendLine($"    SteamGame: {App.GetSteamGame(App.CurrentGame)}");
+            try
+            {
+                body.AppendLine($"    Game: {App.CurrentGame}");
+                body.AppendLine($"    SteamGame: {App.GetSteamGame(App.CurrentGame)}");
+            } catch { }
             if (useMarkdown) body.AppendLine("```");
 
             body.AppendLine("");
