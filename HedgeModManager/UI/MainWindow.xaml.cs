@@ -79,8 +79,10 @@ namespace HedgeModManager
             {
                 var code = CodesDatabase.Codes.Find((y) => { return y.Name == x; });
                 if(code != null)
-                code.Enabled = true;
+                    code.Enabled = true;
             });
+
+            CodesDatabase.Codes.Sort((x, y) => x.Name.CompareTo(y.Name));
 
             CodesDatabase.Codes.ForEach((x) =>
             {
