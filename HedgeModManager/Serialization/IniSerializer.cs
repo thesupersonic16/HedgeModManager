@@ -9,7 +9,7 @@ using System.Collections;
 
 namespace HedgeModManager.Serialization
 {
-    class IniSerializer
+    public class IniSerializer
     {
         public static bool ValidateIni(Type type, Stream stream)
         {
