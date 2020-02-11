@@ -298,3 +298,19 @@ Patch "No Out of Control Jump Springs"
 write32 011BEA91 0x0001CFE9
 write16 011BEA95 0x8B00
 write8 011BEA97 0x83
+
+Patch "Use Bumpers to Switch Grind Rails"
+write32 00DFCC92 0x10244C8B
+writenop 00DFCC96 2
+write16 00DFCC99 0xE1BA
+write8 00DFCC9B 0x0D
+writenop 00DFCC9C 3
+write8 00DFCC9F 0x73
+write32 00DFCCA8 0x0CE1BA0F
+writenop 00DFCCAC 7
+write8 00DFCCB3 0x73
+
+Patch "No Boosting Animation When Grinding"
+write16 00DF2380 0xA4E9
+write8 00DF2382 0x00
+writenop 00DF2385 1 
