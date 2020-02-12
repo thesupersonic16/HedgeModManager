@@ -314,3 +314,6 @@ Patch "No Boosting Animation When Grinding"
 write16 00DF2380 0xA4E9
 write8 00DF2382 0x00
 writenop 00DF2385 1 
+
+Code "All Walls Are Wall-Jumpable"
+write8 p01E5E2F0|80C 1
