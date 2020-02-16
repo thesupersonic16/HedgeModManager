@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Markdig;
 using TheArtOfDev.HtmlRenderer.WPF;
-using Lang = HedgeModManager.Language;
 
 namespace HedgeModManager
 {
@@ -79,7 +78,7 @@ namespace HedgeModManager
         {
             var btn = new Button()
             {
-                Content = $"    {Lang.GetLocalizedString(text)}    ",
+                Content = $"    {text}    ",
                 Width = double.NaN,
                 Height = 23,
                 Margin = new Thickness(5, 0, 5, 0)

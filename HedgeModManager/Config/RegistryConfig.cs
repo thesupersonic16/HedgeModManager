@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,9 +12,7 @@ namespace HedgeModManager
         private const string ConfigPath = @"SOFTWARE\HEDGEMM";
 
         public static string LastGameDirectory;
-        public static string UILanguage;
-
-
+        
         static RegistryConfig()
         {
             Load();
@@ -25,7 +22,6 @@ namespace HedgeModManager
         {
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
             key.SetValue("LastGame", LastGameDirectory);
-            key.SetValue("UILanguage", UILanguage);
             key.Close();
         }
 
@@ -33,7 +29,6 @@ namespace HedgeModManager
         {
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
             LastGameDirectory = (string)key.GetValue("LastGame", string.Empty);
-            UILanguage = (string)key.GetValue("UILanguage", CultureInfo.InstalledUICulture.ThreeLetterISOLanguageName);
         }
     }
 }

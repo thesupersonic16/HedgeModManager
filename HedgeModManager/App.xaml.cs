@@ -110,11 +110,7 @@ namespace HedgeModManager
             };
 #endif
 
-            // Languages
-            new Language("English (English)", "eng", null);
-            new Language("中文简体 (Chinese Simplified)", "zho", HMMResources.LNG_ZHO);
             Steam.Init();
-            Language.CurrentLanguage = Language.Languages.FirstOrDefault(t => t.Value.ISO == RegistryConfig.UILanguage).Value;
             InstallGBHandlers();
 #if DEBUG
             // Find a Steam Game

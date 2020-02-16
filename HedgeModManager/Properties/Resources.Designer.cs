@@ -198,36 +198,6 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name=名称
-        ///Version=版本
-        ///Author=作者
-        ///Supports Save=支持存檔
-        ///Updates=更新
-        ///Drag and drop items to change the load order of mods.=拖放项目以更改模组的加载顺序。
-        ///Mods=模组
-        ///Codes=代码
-        ///Settings=设定
-        ///Game &amp; Mod Loader=游戏 及 模组加载程序
-        ///Install Mod Loader=安装模组加载程序
-        ///Uninstall Mod Loader=移除模组加载程序
-        ///Open Mods Directory=打开模组目录
-        ///Enable mod loader=启用模组程序
-        ///Enable debug console=启用调试控制台
-        ///Enable save file redirection=启用重新导向存档
-        ///Load top to bottom=从上到到下排列加载
-        ///Game:=游戏：
-        ///Loaders:=加载程序：
-        ///Mods Directory:=模组目录
-        ///Check for mod loader updates=检查模组加载程序是否有更新
-        ///Check fo [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string LNG_ZHO {
-            get {
-                return ResourceManager.GetString("LNG_ZHO", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to cancel updating?
         ///This may corrupt {0}.
         /// </summary>

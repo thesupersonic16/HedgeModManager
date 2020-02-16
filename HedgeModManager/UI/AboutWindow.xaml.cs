@@ -12,7 +12,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Lang = HedgeModManager.Language;
 
 namespace HedgeModManager
 {
@@ -34,11 +33,6 @@ namespace HedgeModManager
         private void UI_GitHub_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(Properties.Resources.URL_HMM_GITHUB);
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            Title = Lang.GetLocalizedString(Title);
         }
     }
 }

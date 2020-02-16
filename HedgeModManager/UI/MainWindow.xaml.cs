@@ -20,7 +20,6 @@ using HedgeModManager.UI;
 using System.Collections.ObjectModel;
 
 using HMMResources = HedgeModManager.Properties.Resources;
-using Lang = HedgeModManager.Language;
 using System.Net;
 using System.IO.Compression;
 
@@ -131,11 +130,11 @@ namespace HedgeModManager
             }
 
             if (string.IsNullOrEmpty(loaders))
-                loaders = Lang.GetLocalizedString("None");
+                loaders = "None";
 
             ComboBox_GameStatus.SelectedValue = App.CurrentSteamGame;
-            Label_MLVersion.Content = $"{Lang.GetLocalizedString("Loaders:")} {loaders}";
-            Button_OtherLoader.Content = Lang.GetLocalizedString(hasOtherModLoader ? "Uninstall Mod Loader" : "Install Mod Loader");
+            Label_MLVersion.Content = $"Loaders: {loaders}";
+            Button_OtherLoader.Content = hasOtherModLoader ? "Uninstall Mod Loader" : "Install Mod Loader";
             Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} Mod Loader";
         }
 
@@ -499,7 +498,6 @@ namespace HedgeModManager
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
             Refresh();
             CheckForUpdates();
-            ComboBox_Languages.SelectedItem = Lang.Languages.FirstOrDefault(t => t.Value == Lang.CurrentLanguage);
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
@@ -510,12 +508,12 @@ namespace HedgeModManager
 
             var box = new HedgeMessageBox("WARNING", string.Format(Properties.Resources.STR_UI_DELETEMOD, mod.Title));
 
-            box.AddButton("Cancel", () =>
+            box.AddButton("  Cancel  ", () =>
             {
                 box.Close();
             });
 
-            box.AddButton("Delete", () =>
+            box.AddButton("  Delete  ", () =>
             {
                 ModsDatabase.DeleteMod(ModsList.SelectedItem as ModInfo);
                 UpdateStatus($"Deleted {((ModInfo)ModsList.SelectedItem).Title}");
@@ -683,7 +681,7 @@ namespace HedgeModManager
         {
             Dispatcher.Invoke(() => 
             {
-                StatusLbl.Content = Lang.GetLocalizedString(str);
+                StatusLbl.Content = str;
             });
             StatusTimer.Change(4000, Timeout.Infinite);
         }
@@ -744,7 +742,7 @@ namespace HedgeModManager
         private void UI_ChangeDatabasePath_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new FolderBrowserDialog();
-            dialog.Title = Lang.GetLocalizedString("Select where to load mods from...");
+            dialog.Title = "Select where to load mods from...";
             if (dialog.ShowDialog())
             {
                 App.ModsDbPath = dialog.SelectedFolder;
@@ -755,15 +753,6 @@ namespace HedgeModManager
                 Refresh();
                 UpdateStatus("Updated database location");
             }
-        }
-
-        private void ComboBox_Languages_Changed(object sender, SelectionChangedEventArgs e)
-        {
-            var lang = ((KeyValuePair<string, Lang>)ComboBox_Languages.SelectedItem).Value;
-            RegistryConfig.UILanguage = lang.ISO;
-            RegistryConfig.Save();
-            Lang.CurrentLanguage = lang;
-            RefreshUI();
         }
     }
 }

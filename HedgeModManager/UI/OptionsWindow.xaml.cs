@@ -11,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Lang = HedgeModManager.Language;
 
 namespace HedgeModManager
 {
@@ -23,10 +22,10 @@ namespace HedgeModManager
         public OptionsWindow(string header, params string[] options)
         {
             InitializeComponent();
-            Header.Text = Lang.GetLocalizedString(header);
+            Header.Text = header;
             foreach(var option in options)
             {
-                CheckStack.Children.Add(new RadioButton() { Content = Lang.GetLocalizedString(option), Margin = new Thickness(2) });
+                CheckStack.Children.Add(new RadioButton() { Content = option, Margin = new Thickness(2) });
             }
         }
 
