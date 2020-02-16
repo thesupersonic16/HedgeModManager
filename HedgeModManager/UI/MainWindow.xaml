@@ -10,12 +10,13 @@
         Loaded="Window_Loaded"
         MinHeight="600" MinWidth="560" Height="600" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
+        <local:LanguageConverter x:Key="LangConv" />
         <ContextMenu x:Key="ModContextMenu">
-            <MenuItem Header="Description" Click="UI_Description_Click"/>
-            <MenuItem Header="Open containing folder" Click="UI_Open_Folder"/>
-            <MenuItem Header="Check for updates" Click="UI_Update_Mod"/>
-            <MenuItem Header="Edit mod" Click="UI_Edit_Mod"/>
-            <MenuItem Header="Delete mod" Click="UI_RemoveMod_Click"/>
+            <MenuItem Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Description}"            Click="UI_Description_Click"/>
+            <MenuItem Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Open containing folder}" Click="UI_Open_Folder"/>
+            <MenuItem Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Check for updates}"      Click="UI_Update_Mod"/>
+            <MenuItem Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Edit mod}"               Click="UI_Edit_Mod"/>
+            <MenuItem Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Delete mod}"             Click="UI_RemoveMod_Click"/>
         </ContextMenu>
     </Window.Resources>
     <Grid>
@@ -27,7 +28,7 @@
                 </Grid.RowDefinitions>
                 <Label x:Name="StatusLbl" Margin="0,-5,0,0" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                 <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
-                    <TabItem Header="Mods">
+                    <TabItem Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Mods}">
                         <Grid>
                             <ListView x:Name="ModsList"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
@@ -41,14 +42,14 @@
                                         <Setter Property="ContextMenu" Value="{DynamicResource ModContextMenu}"/>
                                         <Setter Property="ToolTip">
                                             <Setter.Value>
-                                                <ToolTip Content="Drag and drop items to change the load order of mods."/>
+                                                <ToolTip Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Drag and drop items to change the load order of mods.}"/>
                                             </Setter.Value>
                                         </Setter>
                                     </Style>
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Name" Width="200">
+                                        <GridViewColumn Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Name}" Width="200">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -58,25 +59,25 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Version"       Width="70" DisplayMemberBinding="{Binding Version}"/>
-                                        <GridViewColumn Header="Author"        Width="90" DisplayMemberBinding="{Binding Author}"/>
-                                        <GridViewColumn Header="Supports Save" Width="90" DisplayMemberBinding="{Binding SupportsSave}"/>
-                                        <GridViewColumn Header="Updates"       Width="70" DisplayMemberBinding="{Binding HasUpdates}"/>
+                                        <GridViewColumn Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Version}"       Width="70" DisplayMemberBinding="{Binding Version}"/>
+                                        <GridViewColumn Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Author}"        Width="90" DisplayMemberBinding="{Binding Author}"/>
+                                        <GridViewColumn Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Supports Save}" Width="90" DisplayMemberBinding="{Binding SupportsSave}"/>
+                                        <GridViewColumn Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Updates}"       Width="70" DisplayMemberBinding="{Binding HasUpdates}"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Codes">
+                    <TabItem Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Codes}">
                         <Grid>
                             <GroupBox Margin="12,5,12,5">
-                                <Button   x:Name="Button_DownloadCodes" Content="Download Community Codes"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
+                                <Button   x:Name="Button_DownloadCodes" Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Download Community Codes}"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
                             </GroupBox>
                             <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
                                      Margin="12,5,12,45" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="True">
-                                        <GridViewColumn Header="Name" Width="Auto">
+                                        <GridViewColumn Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Name}" Width="Auto">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -91,29 +92,29 @@
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Settings">
+                    <TabItem Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Settings}">
                         <Grid Margin="10,5,10,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="230"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <GroupBox Header="Game &amp; Mod Loader" HorizontalAlignment="Stretch" Margin="0,0,0,10" VerticalAlignment="Stretch">
+                            <GroupBox Header="{Binding Converter={StaticResource LangConv}, ConverterParameter=Game &amp; Mod Loader}" HorizontalAlignment="Stretch" Margin="0,0,0,10" VerticalAlignment="Stretch">
                                 <Grid>
-                                    <Button   x:Name="Button_CPKREDIR"      Content="Install Mod loader"            Click="UI_CPKREDIR_Click"                       Margin="352,94,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False" Visibility="Collapsed"/>
-                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod loader"          Click="UI_OtherLoader_Click"                    Margin="10,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False"/>
-                                    <Button   x:Name="Button_OpenMods"      Content="Open Mods Directory"           Click="UI_OpenMods_Click"                       Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164"/>
+                                    <Button   x:Name="Button_CPKREDIR"      Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Install Mod loader}"            Click="UI_CPKREDIR_Click"                       Margin="352,94,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False" Visibility="Collapsed"/>
+                                    <Button   x:Name="Button_OtherLoader"   Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Uninstall Mod loader}"          Click="UI_OtherLoader_Click"                    Margin="10,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False"/>
+                                    <Button   x:Name="Button_OpenMods"      Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Open Mods Directory}"           Click="UI_OpenMods_Click"                       Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164"/>
 
                                     <StackPanel Margin="10,0,0,10" VerticalAlignment="Bottom">
-                                        <CheckBox Content="Enable mod loader"             IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />
-                                        <CheckBox Content="Enable debug console"          IsChecked="{Binding CPKREDIR.EnableDebugConsole}"         Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                        <CheckBox Content="Enable save file redirection"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}"  Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                        <CheckBox Content="Load top to bottom"            IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        <CheckBox Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Enable mod loader}"             IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                        <CheckBox Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Enable debug console}"          IsChecked="{Binding CPKREDIR.EnableDebugConsole}"         Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        <CheckBox Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Enable save file redirection}"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}"  Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        <CheckBox Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Load top to bottom}"            IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                     </StackPanel>
 
-                                    <Label      Content="Game:"                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="180,8,0,0" VerticalContentAlignment="Center" Width="Auto" Height="27" />
+                                    <Label      Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Game:}"                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="180,8,0,0" VerticalContentAlignment="Center" Width="Auto" Height="27" />
                                     <ComboBox   x:Name="ComboBox_GameStatus"       ItemsSource="{Binding Games}"                  Margin="225,8,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="250" Height="27" SelectionChanged="Game_Changed" />
                                     <Label      x:Name="Label_MLVersion"           Content="Loaders: Unknown"                     Margin="180,35,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
-                                    <Label                                         Content="Mods Directory: "                     Margin="10,65,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
+                                    <Label                                         Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Mods Directory:}"                     Margin="10,65,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
                                     <TextBox                                       Text="{Binding ModsDB.RootDirectory}"          Margin="110,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" IsReadOnly="True"  Width="363"/>
                                     <Button                                        Content="..."                                  Margin="480,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="22" Click="UI_ChangeDatabasePath_Click"/>
                                 </Grid>
@@ -121,11 +122,13 @@
 
                             <GroupBox Header="Hedge Mod Manager" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,5" Grid.Row="1">
                                 <Grid>
-                                    <CheckBox Content="Check for mod loader updates"                      IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="Check for code loader updates"                     IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="Check for mod updates"                             IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="Keep Hedge Mod Manager open after starting a game" IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="10,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <Button   Content="About Hedge Mod Manager"                                                                             Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
+                                    <CheckBox Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Check for mod loader updates}"                      IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Check for code loader updates}"                     IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Check for mod updates}"                             IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Keep Hedge Mod Manager open after starting a game}" IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="10,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <Label    Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Language:}"                                                                                           Margin="10,129,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
+                                    <Button   Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=About Hedge Mod Manager}"                                                                             Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
+                                    <ComboBox x:Name="ComboBox_Languages" ItemsSource="{Binding Languages}" DisplayMemberPath="Value"  Margin="80,128,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="236" Height="27" SelectionChanged="ComboBox_Languages_Changed" />
                                 </Grid>
                             </GroupBox>
                         </Grid>
@@ -143,13 +146,13 @@
                             <RowDefinition Height="0.6*"/>
                         </Grid.RowDefinitions>
 
-                        <Button Content="Remove Mod"                       Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_RemoveMod_Click"/>
-                        <Button Content="Refresh Mod List" Width="Auto"    Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
-                        <Button Content="Add Mod"          Width="Auto"    Grid.Column="2" Grid.Row="0" Margin="5" Click="UI_Install_Mod"/>
+                        <Button Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Remove Mod}"                       Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_RemoveMod_Click"/>
+                        <Button Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Refresh Mod List}" Width="Auto"    Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
+                        <Button Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Add Mod}"          Width="Auto"    Grid.Column="2" Grid.Row="0" Margin="5" Click="UI_Install_Mod"/>
 
-                        <Button Content="Save"                             Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
-                        <Button Content="Save and Play"    Width="Auto"    Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
-                        <Button Content="Play"             Width="Auto"    Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
+                        <Button Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Save}"                             Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
+                        <Button Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Save and Play}"    Width="Auto"    Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
+                        <Button Content="{Binding Converter={StaticResource LangConv}, ConverterParameter=Play}"             Width="Auto"    Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
                     </Grid>
                 </StackPanel>
             </Grid>

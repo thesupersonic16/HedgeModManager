@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
+using Lang = HedgeModManager.Language;
 
 namespace HedgeModManager.UI
 {
@@ -17,6 +18,7 @@ namespace HedgeModManager.UI
         public ModsDB ModsDB { get; set; }
         public IEnumerable<SteamGame> Games { get; set; }
         public ObservableCollection<ModInfo> Mods { get; set; } = new ObservableCollection<ModInfo>();
+        public Dictionary<string, Lang> Languages => Lang.Languages;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
