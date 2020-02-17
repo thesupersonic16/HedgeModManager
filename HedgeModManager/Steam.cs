@@ -48,7 +48,7 @@ namespace HedgeModManager
             }
             catch (Exception ex)
             {
-                // TODO
+                return new List<SteamGame>();
             }
 
             // Default Common Path

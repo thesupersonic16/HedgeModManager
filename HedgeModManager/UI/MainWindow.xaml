@@ -94,16 +94,16 @@
                     <TabItem Header="Settings">
                         <Grid Margin="10,5,10,0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height=".5*"/>
-                                <RowDefinition Height=".5*"/>
+                                <RowDefinition Height="230"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <GroupBox Header="Game &amp; Mod Loader" HorizontalAlignment="Stretch" Margin="0,0,0,10" VerticalAlignment="Stretch">
                                 <Grid>
                                     <Button   x:Name="Button_CPKREDIR"      Content="Install Mod loader"            Click="UI_CPKREDIR_Click"                       Margin="352,94,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False" Visibility="Collapsed"/>
-                                    <Button   x:Name="Button_OpenMods"      Content="Open Mods Directory"           Click="UI_OpenMods_Click"                       Margin="10,8,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164"/>
-                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod loader"          Click="UI_OtherLoader_Click"                    Margin="10,37,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False"/>
+                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod loader"          Click="UI_OtherLoader_Click"                    Margin="10,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False"/>
+                                    <Button   x:Name="Button_OpenMods"      Content="Open Mods Directory"           Click="UI_OpenMods_Click"                       Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164"/>
 
-                                    <StackPanel Margin="10,0,0,0" VerticalAlignment="Bottom" Height="105">
+                                    <StackPanel Margin="10,0,0,10" VerticalAlignment="Bottom">
                                         <CheckBox Content="Enable mod loader"             IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />
                                         <CheckBox Content="Enable debug console"          IsChecked="{Binding CPKREDIR.EnableDebugConsole}"         Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                         <CheckBox Content="Enable save file redirection"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}"  Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -111,8 +111,11 @@
                                     </StackPanel>
 
                                     <Label      Content="Game:"                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="180,8,0,0" VerticalContentAlignment="Center" Width="Auto" Height="27" />
-                                    <ComboBox   x:Name="ComboBox_GameStatus"       ItemsSource="{Binding Games}"                  Margin="225,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="250" Height="27" SelectionChanged="Game_Changed" />
-                                    <Label      x:Name="Label_MLVersion"           Content="Loaders: Unknown"                    Margin="180,35,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
+                                    <ComboBox   x:Name="ComboBox_GameStatus"       ItemsSource="{Binding Games}"                  Margin="225,8,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="250" Height="27" SelectionChanged="Game_Changed" />
+                                    <Label      x:Name="Label_MLVersion"           Content="Loaders: Unknown"                     Margin="180,35,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
+                                    <Label                                         Content="Mods Directory: "                     Margin="10,65,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
+                                    <TextBox                                       Text="{Binding ModsDB.RootDirectory}"          Margin="110,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" IsReadOnly="True"  Width="363"/>
+                                    <Button                                        Content="..."                                  Margin="480,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="22" Click="UI_ChangeDatabasePath_Click"/>
                                 </Grid>
                             </GroupBox>
 

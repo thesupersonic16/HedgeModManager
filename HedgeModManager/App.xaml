@@ -234,7 +234,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type GroupBox}">
                         <Grid>
-                            <Border x:Name="EffectBorder" Background="#2D2D30" CornerRadius="8,8,0,0" Effect="{StaticResource HoverEffect}"/>
+                            <Border x:Name="EffectBorder" Background="#2D2D30" CornerRadius="8,8,8,8" Effect="{StaticResource HoverEffect}"/>
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />

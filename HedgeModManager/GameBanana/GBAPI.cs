@@ -152,12 +152,12 @@ namespace GameBananaAPI
                 reg = reg.CreateSubKey("shell\\open\\command");
                 reg.SetValue("", $"\"{App.AppPath}\" -gb \"%1\"");
                 reg.Close();
-            }catch
-            {
-                new ExceptionWindow(new Exception("Error installing Gamebanana handler. Please restart Hedge Mod Manager as admin")).ShowDialog();
+                return true;
             }
-
-            return true;
+            catch 
+            {
+                return false;
+            }
         }
 
         public static void ParseCommandLine(string line)
