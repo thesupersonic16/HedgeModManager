@@ -317,3 +317,7 @@ writenop 00DF2385 1
 
 Code "All Walls Are Wall-Jumpable"
 write8 p01E5E2F0|80C 1
+
+Patch "Tricks don't fill the boost gauge"
+writenop 00E4B323 8
+writenop 00E4B353 8
