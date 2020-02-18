@@ -204,6 +204,11 @@ write16 B210B1 1080
 Code "59.94 FPS Lock"
 writefloat 0019FD2C 59.94
 
+Code "60 FPS Speed Lock"
+writefloat 0019FD2C 60
+writenop E7B5D7 2
+writefloat 1704258 0.0166666666666667
+
 Patch "Longer Blue Trail"
 write16 00E5FB17 0x9090
 write16 00E5FB19 0x9090
