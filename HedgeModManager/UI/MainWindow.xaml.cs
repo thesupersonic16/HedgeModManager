@@ -20,6 +20,7 @@ using HedgeModManager.UI;
 using System.Collections.ObjectModel;
 
 using HMMResources = HedgeModManager.Properties.Resources;
+using static HedgeModManager.Lang;
 using System.Net;
 using System.IO.Compression;
 
@@ -92,7 +93,7 @@ namespace HedgeModManager
                     CodesList.Items.Add(x);
             });
 
-            UpdateStatus($"Loaded {ModsDatabase.Mods.Count} mods");
+            UpdateStatus(string.Format(Localise("StatusUILoadedMods"), ModsDatabase.Mods.Count));
         }
 
         public void RefreshUI()
@@ -130,17 +131,17 @@ namespace HedgeModManager
             }
 
             if (string.IsNullOrEmpty(loaders))
-                loaders = "None";
+                loaders = Localise("CommonUINone");
 
             ComboBox_GameStatus.SelectedValue = App.CurrentSteamGame;
-            Label_MLVersion.Content = $"Loaders: {loaders}";
-            Button_OtherLoader.Content = hasOtherModLoader ? "Uninstall Mod Loader" : "Install Mod Loader";
-            Button_CPKREDIR.Content = $"{(IsCPKREDIRInstalled ? "Uninstall" : "Install")} Mod Loader";
+            Label_MLVersion.Content = $"{Localise("SettingsUILabelLoaders")} {loaders}";
+            Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
+            Button_CPKREDIR.Content = Localise(IsCPKREDIRInstalled ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
         }
 
         public bool CheckForModUpdates(ModInfo mod, bool showUpdatedDialog = true)
         {
-            UpdateStatus($"Checking for {mod.Title} updates");
+            UpdateStatus(string.Format(Localise("StatusUICheckingModUpdates"), mod.Title));
             ModUpdate.ModUpdateInfo update;
             try
             {
@@ -157,7 +158,7 @@ namespace HedgeModManager
             catch (Exception e)
             {
                 Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
-                UpdateStatus($"Failed to update {mod.Title}! {e.Message}");
+                UpdateStatus(string.Format(Localise("StatusUIFailedToUpdate"), mod.Title, e.Message));
                 return false;
             }
 
@@ -181,7 +182,7 @@ namespace HedgeModManager
                         if(showUpdatedDialog)
                         {
                             var box = new HedgeMessageBox(string.Empty, string.Format(HMMResources.STR_MOD_NEWEST, mod.Title), textAlignment: TextAlignment.Center);
-                            box.AddButton("OK", () => box.Close());
+                            box.AddButton(Localise("CommonUIOK"), () => box.Close());
                             box.ShowDialog();
                         }
                         return;
@@ -190,9 +191,9 @@ namespace HedgeModManager
                     var dialog = new HedgeMessageBox(string.Format(HMMResources.STR_UI_MOD_UPDATE, mod.Title, update.VersionString)
                         , update.ChangeLog, type: InputType.MarkDown);
 
-                    dialog.AddButton("Close", () => dialog.Close());
+                    dialog.AddButton(Localise("CommonUIClose"), () => dialog.Close());
 
-                    dialog.AddButton("Update", () =>
+                    dialog.AddButton(Localise("CommonUIUpdate"), () =>
                     {
                         var updater = new ModUpdateWindow(update);
                         dialog.Close();
@@ -233,11 +234,11 @@ namespace HedgeModManager
                 if (AbortModUpdates)
                 {
                     AbortModUpdates = false;
-                    UpdateStatus("Update check has been aborted due to the mod list being reloaded");
+                    UpdateStatus(Localise("StatusUIModUpdateCheckAbort"));
                     return;
                 }
             }
-            UpdateStatus($"Finished checking for mod updates: {completedCount} completed, {failedCount} failed");
+            UpdateStatus(string.Format(Localise("StatusUIModUpdateCheckFinish"), completedCount, failedCount));
         }
 
         public void SaveModsDB()
@@ -272,7 +273,7 @@ namespace HedgeModManager
             if (!App.Config.KeepOpen)
                 Application.Current.Shutdown(0);
 
-            UpdateStatus($"Starting {App.CurrentGame.GameName}");
+            UpdateStatus(string.Format(Localise("StatusUIStartingGame"), App.CurrentGame.GameName));
         }
 
         private void SetupWatcher()
@@ -345,14 +346,14 @@ namespace HedgeModManager
         {
             if (App.Config.CheckForUpdates)
             {
-                UpdateStatus("Checking for updates");
+                UpdateStatus(Localise("StatusUICheckingForUpdates"));
                 try
                 {
                     var update = App.CheckForUpdates();
 
                     if (!update.Item1)
                     {
-                        UpdateStatus("No updates found");
+                        UpdateStatus(Localise("StatusUINoUpdatesFound"));
                         return;
                     }
 
@@ -365,7 +366,7 @@ namespace HedgeModManager
                         var info = update.Item2;
                         var dialog = new HedgeMessageBox(info.Name, info.Body, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
 
-                        dialog.AddButton("Update", () => 
+                        dialog.AddButton(Localise("CommonUIUpdate"), () => 
                         {
                             if (info.Assets.Count > 0)
                             {
@@ -406,7 +407,7 @@ namespace HedgeModManager
                 }
                 catch
                 {
-                    UpdateStatus("Failed to check for updates");
+                    UpdateStatus(Localise("StatusUIFailedToCheckUpdates"));
                 }
             }
         }
@@ -418,7 +419,7 @@ namespace HedgeModManager
 
             new Thread(() => 
             {
-                UpdateStatus($"Checking for {App.CurrentGame.CustomLoaderName} updates");
+                UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), App.CurrentGame.CustomLoaderName));
                 try
                 {
                     using (var stream = WebRequest.Create(HMMResources.URL_LOADERS_INI).GetResponse().GetResponseStream())
@@ -435,7 +436,7 @@ namespace HedgeModManager
 
                         if (newVersion <= version)
                         {
-                            UpdateStatus($"{App.CurrentGame.CustomLoaderName} is up to date");
+                            UpdateStatus(string.Format(Localise("StatusUILoaderUpToDate"), App.CurrentGame.CustomLoaderName));
                             return;
                         }
 
@@ -443,12 +444,12 @@ namespace HedgeModManager
                         {
                             var dialog = new HedgeMessageBox($"{App.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"));
 
-                            dialog.AddButton("Ignore", () =>
+                            dialog.AddButton(Localise("CommonUIIgnore"), () =>
                             {
                                 dialog.Close();
                             });
 
-                            dialog.AddButton("Update", () =>
+                            dialog.AddButton(Localise("CommonUIUpdate"), () =>
                             {
                                 dialog.Close();
                                 App.InstallOtherLoader(false);
@@ -461,7 +462,7 @@ namespace HedgeModManager
                 }
                 catch
                 {
-                    UpdateStatus($"Failed to check for {App.CurrentGame.CustomLoaderName} updates");
+                    UpdateStatus(string.Format(Localise("StatusUIFailedLoaderUpdateCheck"), App.CurrentGame.CustomLoaderName));
                 }
             }).Start();
         }
@@ -475,18 +476,18 @@ namespace HedgeModManager
                 return;
             Dispatcher.Invoke(() =>
             {
-                var dialog = new HedgeMessageBox($"Mod Loader Not Yet Installed!", $"In order for {App.CurrentGame.GameName} to start loading mods, the mod loader needs to be installed.\n" + "Would you like to install it now?");
+                var dialog = new HedgeMessageBox(Localise("MainUIMissingLoaderHeader"), string.Format(Localise("MainUIMissingLoaderDesc"), App.CurrentGame.GameName));
 
-                dialog.AddButton("No", () =>
+                dialog.AddButton(Localise("CommonUINo"), () =>
                 {
                     dialog.Close();
                 });
 
-                dialog.AddButton("Yes", () =>
+                dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     dialog.Close();
                     App.InstallOtherLoader(false);
-                    UpdateStatus($"Installed {App.CurrentGame.CustomLoaderName}");
+                    UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), App.CurrentGame.CustomLoaderName));
                 });
 
                 dialog.ShowDialog();
@@ -498,6 +499,7 @@ namespace HedgeModManager
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
             Refresh();
             CheckForUpdates();
+            ComboBox_Languages.SelectedItem = App.SupportedCultures.FirstOrDefault(t => t.Value == App.GetClosestCulture(RegistryConfig.UILanguage));
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
@@ -506,17 +508,17 @@ namespace HedgeModManager
             if (mod == null)
                 return;
 
-            var box = new HedgeMessageBox("WARNING", string.Format(Properties.Resources.STR_UI_DELETEMOD, mod.Title));
+            var box = new HedgeMessageBox(Localise("CommonUIWarning"), string.Format(Properties.Resources.STR_UI_DELETEMOD, mod.Title));
 
-            box.AddButton("  Cancel  ", () =>
+            box.AddButton(Localise("CommonUICancel"), () =>
             {
                 box.Close();
             });
 
-            box.AddButton("  Delete  ", () =>
+            box.AddButton(Localise("CommonUIDelete"), () =>
             {
                 ModsDatabase.DeleteMod(ModsList.SelectedItem as ModInfo);
-                UpdateStatus($"Deleted {((ModInfo)ModsList.SelectedItem).Title}");
+                UpdateStatus(string.Format(Localise("StatusUIDeletedMod"), ((ModInfo)ModsList.SelectedItem).Title));
                 Refresh();
                 box.Close();
             });
@@ -534,7 +536,7 @@ namespace HedgeModManager
             ShowMissingOtherLoaderWarning();
             SaveModsDB();
             Refresh();
-            UpdateStatus("Saved mods database");
+            UpdateStatus(Localise("StatusUIModsDBSaved"));
         }
 
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
@@ -542,7 +544,7 @@ namespace HedgeModManager
             ShowMissingOtherLoaderWarning();
             SaveModsDB();
             Refresh();
-            UpdateStatus("Saved mods database");
+            UpdateStatus(Localise("StatusUIModsDBSaved"));
             StartGame();
         }
 
@@ -622,7 +624,7 @@ namespace HedgeModManager
 
         private void UI_Install_Mod(object sender, RoutedEventArgs e)
         {
-            var choice = new OptionsWindow("Install a mod by...", "Installing from a folder", "Installing from an archive", "Making one (for developers!)").Ask();
+            var choice = new OptionsWindow(Localise("MainUIInstallFormHeader"), Localise("MainUIInstallFormOptionDir"), Localise("MainUIInstallFormOptionArc"), Localise("MainUIInstallFormOptionNew")).Ask();
             if (choice == 0)
             {
                 var dialog = new FolderBrowserDialog();
@@ -708,14 +710,14 @@ namespace HedgeModManager
                 ModsWatchers.Clear();
                 SetupWatcher();
                 Refresh();
-                UpdateStatus($"Changed game to {App.CurrentGame.GameName}");
+                UpdateStatus(string.Format(Localise("StatusUIGameChange"), App.CurrentGame.GameName));
                 CheckForLoaderUpdate();
             }
         }
 
         private void UI_Download_Codes(object sender, RoutedEventArgs e)
         {
-            UpdateStatus($"Downloading codes for {App.CurrentGame.GameName}");
+            UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), App.CurrentGame.GameName));
             try
             {
                 var downloader = new DownloadWindow($"Downloading codes for {App.CurrentGame.GameName}", App.CurrentGame.CodesURL, CodeLoader.CodesHMMPath)
@@ -723,14 +725,14 @@ namespace HedgeModManager
                     DownloadCompleted = () =>
                     {
                         Refresh();
-                        UpdateStatus("Download finished");
+                        UpdateStatus(Localise("StatusUIDownloadFinished"));
                     }
                 };
                 downloader.Start();
             }
             catch
             {
-                UpdateStatus("Download failed");
+                UpdateStatus(Localise("StatusUIDownloadFailed"));
             }
         }
 
@@ -742,7 +744,7 @@ namespace HedgeModManager
         private void UI_ChangeDatabasePath_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new FolderBrowserDialog();
-            dialog.Title = "Select where to load mods from...";
+            dialog.Title = Localise("MainUISelectModsDBTitle");
             if (dialog.ShowDialog())
             {
                 App.ModsDbPath = dialog.SelectedFolder;
@@ -751,8 +753,17 @@ namespace HedgeModManager
                     ViewModel.CPKREDIR.ModsDbIni = ViewModel.CPKREDIR.ModsDbIni.Substring(App.StartDirectory.Length + 1);
                 ViewModel.CPKREDIR.Save(Path.Combine(App.StartDirectory, "cpkredir.ini"));
                 Refresh();
-                UpdateStatus("Updated database location");
+                UpdateStatus(Localise("StatusUIModsDBLocationChanged"));
             }
+        }
+
+        private void ComboBox_Languages_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            var culture = ((KeyValuePair<string, string>)ComboBox_Languages.SelectedItem).Value;
+            RegistryConfig.UILanguage = culture;
+            RegistryConfig.Save();
+            App.LoadLanaguage(culture);
+            RefreshUI();
         }
     }
 }

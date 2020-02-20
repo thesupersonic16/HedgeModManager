@@ -103,6 +103,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Languages\en-AU.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Languages\pt-PT.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Languages\zh-CN.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Languages\zh-TW.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\AboutModWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -133,6 +149,7 @@
     <Compile Include="Github\UserInfo.cs" />
     <Compile Include="Github\ReleaseInfo.cs" />
     <Compile Include="Keys.cs" />
+    <Compile Include="Lang.cs" />
     <Compile Include="ModUpdate.cs" />
     <Compile Include="Serialization\IniSerializer.cs" />
     <Compile Include="ShellProvider.cs" />
@@ -292,6 +309,7 @@
     <Resource Include="Resources\Graphics\AudioThumbnail.png" />
     <Content Include="Resources\ModLoader\LostCodeLoader.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
