@@ -125,29 +125,13 @@ namespace HedgeModManager
             StartDirectory = steamGame.RootDirectory;
 #else
             SteamGames = Steam.SearchForGames();
-            SearchGames:
-            foreach (var game in Games.GetSupportedGames())
+            if (FindAndSetLocalGame() == null)
             {
-                if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
+                if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
                 {
-                    var steamGame = SteamGames.FirstOrDefault(x => x.GameID == game.AppID);
-                    if(steamGame == null)
-                    {
-                        steamGame = new SteamGame(game.GameName, Path.Combine(StartDirectory, game.ExecuteableName), game.AppID);
-                        SteamGames.Add(steamGame);
-                    }
-                    CurrentGame = game;
-                    CurrentSteamGame = steamGame;
-                    RegistryConfig.LastGameDirectory = StartDirectory;
-                    RegistryConfig.Save();
-                    break;
+                    StartDirectory = RegistryConfig.LastGameDirectory;
+                    FindAndSetLocalGame();
                 }
-            }
-
-            if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
-            {
-                StartDirectory = RegistryConfig.LastGameDirectory;
-                goto SearchGames;
             }
 
             if (CurrentGame == Games.Unknown)
@@ -202,6 +186,28 @@ namespace HedgeModManager
                 application.Run(application.MainWindow);
             }
             while (Restart);
+        }
+
+        public static SteamGame FindAndSetLocalGame()
+        {
+            foreach (var game in Games.GetSupportedGames())
+            {
+                if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
+                {
+                    var steamGame = SteamGames.FirstOrDefault(x => x.GameID == game.AppID);
+                    if (steamGame == null)
+                    {
+                        steamGame = new SteamGame(game.GameName, Path.Combine(StartDirectory, game.ExecuteableName), game.AppID);
+                        SteamGames.Add(steamGame);
+                    }
+                    CurrentGame = game;
+                    CurrentSteamGame = steamGame;
+                    RegistryConfig.LastGameDirectory = StartDirectory;
+                    RegistryConfig.Save();
+                    return steamGame;
+                }
+            }
+            return null;
         }
 
         public static void LoadLanaguage(string culture)
