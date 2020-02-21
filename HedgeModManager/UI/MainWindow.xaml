@@ -69,7 +69,7 @@
                     </TabItem>
                     <TabItem Header="{DynamicResource MainUICodes}">
                         <Grid>
-                            <GroupBox Margin="12,5,12,5">
+                            <GroupBox Margin="10,5,10,5">
                                 <Button   x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
                             </GroupBox>
                             <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 

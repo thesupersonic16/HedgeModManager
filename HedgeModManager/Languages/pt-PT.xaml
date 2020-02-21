@@ -94,7 +94,6 @@
     <system:String x:Key="StatusUILoadedMods"             >{0} mods carregados</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >A verificar por atualizações de {0}</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >Falha ao atualizar {0}! {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckAbort"    >Verificação de atualizações abortada devido a um recarregamento da lista de mods</system:String>
     <system:String x:Key="StatusUIModUpdateCheckFinish"   >Verificação de atualizações de mods terminada: {0} concluída(s), {1} falharam/falhou</system:String>
     <system:String x:Key="StatusUIStartingGame"           >A iniciar {0}</system:String>
     <system:String x:Key="StatusUICheckingForUpdates"     >A verificar por atualizações</system:String>

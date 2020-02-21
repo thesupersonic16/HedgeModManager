@@ -94,7 +94,6 @@
     <system:String x:Key="StatusUILoadedMods"             >已载入 {0} MODS</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >查询 {0} 项更新</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >更新失败 {0}！ {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckAbort"    >由于重新加载了MOD列表，更新已中止查询。</system:String>
     <system:String x:Key="StatusUIModUpdateCheckFinish"   >MOD已查询 {0} 项完成， {1} 项失败</system:String>
     <system:String x:Key="StatusUIStartingGame"           >运行中 {0}</system:String>
     <system:String x:Key="StatusUICheckingForUpdates"     >更新查询中</system:String>

@@ -94,7 +94,6 @@
     <system:String x:Key="StatusUILoadedMods"             >Loaded {0} mods</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >Checking for {0} updates</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >Failed to update {0}! {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckAbort"    >Update check has been aborted due to the mod list being reloaded</system:String>
     <system:String x:Key="StatusUIModUpdateCheckFinish"   >Finished checking for mod updates: {0} completed, {1} failed</system:String>
     <system:String x:Key="StatusUIStartingGame"           >Starting {0}</system:String>
     <system:String x:Key="StatusUICheckingForUpdates"     >Checking for updates</system:String>

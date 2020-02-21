@@ -36,7 +36,8 @@ namespace HedgeModManager
         public static CodeList CodesDatabase = new CodeList();
         public static List<FileSystemWatcher> ModsWatchers = new List<FileSystemWatcher>();
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
-        public bool AbortModUpdates = false;
+        public List<string> CheckedModUpdates = new List<string>();
+        public bool PauseModUpdates = false;
 
         protected Timer StatusTimer;
 
@@ -53,7 +54,7 @@ namespace HedgeModManager
 
         public void RefreshMods()
         {
-            AbortModUpdates = true;
+            PauseModUpdates = true;
             CodesList.Items.Clear();
 
             ModsDatabase = new ModsDB(App.ModsDbPath);
@@ -94,6 +95,7 @@ namespace HedgeModManager
             });
 
             UpdateStatus(string.Format(Localise("StatusUILoadedMods"), ModsDatabase.Mods.Count));
+            PauseModUpdates = false;
         }
 
         public void RefreshUI()
@@ -162,7 +164,7 @@ namespace HedgeModManager
                 return false;
             }
 
-            if (AbortModUpdates)
+            if (PauseModUpdates)
             {
                 Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
                 return false;
@@ -219,25 +221,30 @@ namespace HedgeModManager
 
         public void CheckAllModsUpdates()
         {
-            AbortModUpdates = false;
+            PauseModUpdates = false;
             int completedCount = 0;
             int failedCount = 0;
             var mods = ModsDatabase.Mods.Where(t => t.HasUpdates).ToList();
             // Filter all mods with updates
             foreach (var mod in mods)
             {
+                if (CheckedModUpdates.Any(t => t == mod.RootDirectory))
+                    continue;
                 bool status = CheckForModUpdates(mod, false);
                 if (status)
                     ++completedCount;
                 else
                     ++failedCount;
-                if (AbortModUpdates)
+                CheckedModUpdates.Add(mod.RootDirectory);
+                if (PauseModUpdates)
                 {
-                    AbortModUpdates = false;
-                    UpdateStatus(Localise("StatusUIModUpdateCheckAbort"));
+                    while (PauseModUpdates)
+                        Thread.Sleep(200);
+                    CheckAllModsUpdates();
                     return;
                 }
             }
+            CheckedModUpdates.Clear();
             UpdateStatus(string.Format(Localise("StatusUIModUpdateCheckFinish"), completedCount, failedCount));
         }
 
@@ -590,7 +597,7 @@ namespace HedgeModManager
 
         private void UI_Update_Mod(object sender, RoutedEventArgs e)
         {
-            AbortModUpdates = false;
+            PauseModUpdates = false;
             var mod = (ModInfo)ModsList.SelectedItem;
             new Thread(() =>
             {
