@@ -74,11 +74,11 @@ namespace HedgeModManager.UI
         private void Download_Click(object sender, RoutedEventArgs e)
         {
             var mod = (GBAPIItemDataBasic)DataContext;
-            var root = App.GetSteamGame(Game).RootDirectory;
+            var root = HedgeApp.GetSteamGame(Game).RootDirectory;
             var request = (HttpWebRequest)WebRequest.Create(DownloadURL);
             var response = request.GetResponse();
             var URI = response.ResponseUri.ToString();
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(App.AppPath));
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
             var downloader = new DownloadWindow($"Downloading {mod.ModName}", URI, Path.GetFileName(URI));
             downloader.DownloadCompleted = new Action(() =>
             {

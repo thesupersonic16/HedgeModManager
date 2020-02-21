@@ -39,7 +39,7 @@ namespace HedgeModManager
         public void Start()
         {
             DownloadClient = new WebClient();
-            DownloadClient.Headers.Add("user-agent", App.WebRequestUserAgent);
+            DownloadClient.Headers.Add("user-agent", HedgeApp.WebRequestUserAgent);
             DownloadClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
             DownloadClient.DownloadFileCompleted += WebClient_DownloadCompleted;
             DownloadClient.DownloadFileAsync(new Uri(URL), DestinationPath);

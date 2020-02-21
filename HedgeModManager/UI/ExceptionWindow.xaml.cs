@@ -43,14 +43,14 @@ namespace HedgeModManager
             body.AppendLine($"HMM Info:");
 
             if (useMarkdown) body.AppendLine("```");
-            body.AppendLine($"    Version: {App.VersionString}");
-            body.AppendLine($"    Args: {string.Join(" ", App.Args)}");
-            body.AppendLine($"    StartDir: {App.StartDirectory}");
-            body.AppendLine($"    Process Level: " + (App.RunningAsAdmin() ? "Administrator" : "User"));
+            body.AppendLine($"    Version: {HedgeApp.VersionString}");
+            body.AppendLine($"    Args: {string.Join(" ", HedgeApp.Args)}");
+            body.AppendLine($"    StartDir: {HedgeApp.StartDirectory}");
+            body.AppendLine($"    Process Level: " + (HedgeApp.RunningAsAdmin() ? "Administrator" : "User"));
             try
             {
-                body.AppendLine($"    Game: {App.CurrentGame}");
-                body.AppendLine($"    SteamGame: {App.GetSteamGame(App.CurrentGame)}");
+                body.AppendLine($"    Game: {HedgeApp.CurrentGame}");
+                body.AppendLine($"    SteamGame: {HedgeApp.GetSteamGame(HedgeApp.CurrentGame)}");
             } catch { }
             if (useMarkdown) body.AppendLine("```");
 
@@ -104,7 +104,7 @@ namespace HedgeModManager
         private void Button_Report_Click(object sender, RoutedEventArgs e)
         {
             string url = "https://github.com/thesupersonic16/HedgeModManager/issues/new";
-            url += $"?title=[{App.CurrentGame?.GameName}] ";
+            url += $"?title=[{HedgeApp.CurrentGame?.GameName}] ";
             url += $"&body={Uri.EscapeDataString(GetReport())}";
             Process.Start(url);
         }
