@@ -111,5 +111,8 @@
     <system:String x:Key="StatusUIDownloadFinished"       >已完成下載</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >下載失敗</system:String>
 
+    <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">您確定要刪除 "{0}"？&#x0a;此操作無法撤消！</system:String>
+
 
 </ResourceDictionary>

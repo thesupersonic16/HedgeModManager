@@ -134,6 +134,11 @@ namespace HedgeModManager.Properties {
         ///    color: #FF4E4E;
         ///}
         ///
+        ///span.GreenColor
+        ///{
+        ///    color: #6EE16C;
+        ///}
+        ///
         ///table {
         ///    border-spacing: 5px;
         ///}
@@ -148,8 +153,7 @@ namespace HedgeModManager.Properties {
         ///}
         ///
         ///th {
-        ///    text-align: left;
-        ///}.
+        ///    text-al [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GBStyleSheet {
             get {
@@ -225,16 +229,6 @@ namespace HedgeModManager.Properties {
         internal static string STR_MSG_NOGAME {
             get {
                 return ResourceManager.GetString("STR_MSG_NOGAME", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete &quot;{0}&quot;?
-        ///This action cannot be undone!.
-        /// </summary>
-        internal static string STR_UI_DELETEMOD {
-            get {
-                return ResourceManager.GetString("STR_UI_DELETEMOD", resourceCulture);
             }
         }
         

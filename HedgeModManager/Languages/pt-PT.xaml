@@ -94,7 +94,7 @@
     <system:String x:Key="StatusUILoadedMods"             >{0} mods carregados</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >A verificar por atualizações de {0}</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >Falha ao atualizar {0}! {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Verificação de atualizações de mods terminada: {0} concluída(s), {1} falharam/falhou</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Verificação de atualizações de mods terminada: {0} {2}, {1} {3}.</system:String>
     <system:String x:Key="StatusUIStartingGame"           >A iniciar {0}</system:String>
     <system:String x:Key="StatusUICheckingForUpdates"     >A verificar por atualizações</system:String>
     <system:String x:Key="StatusUINoUpdatesFound"         >Nenhuma atualização encontrada</system:String>
@@ -110,6 +110,16 @@
     <system:String x:Key="StatusUIDownloadingCodes"       >A transferir códigos para {0}</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >Transferência terminada</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >A transferência falhou</system:String>
+
+    <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Tens a certeza de que pretendes apagar "{0}"?&#x0a;Esta ação não pode ser desfeita!</system:String>
+
+
+    <!-- Status UI Lang Stuff Strings -->
+    <system:String x:Key="StatusUIUpdateCompletedSingular"      >concluída</system:String>
+    <system:String x:Key="StatusUIUpdateCompletedPlural"        >concluídas</system:String>
+    <system:String x:Key="StatusUIUpdateFailedSingular"         >falhou</system:String>
+    <system:String x:Key="StatusUIUpdateFailedPlural"           >falharam</system:String>
 
 
 </ResourceDictionary>

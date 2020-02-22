@@ -245,7 +245,12 @@ namespace HedgeModManager
                 }
             }
             CheckedModUpdates.Clear();
-            UpdateStatus(string.Format(Localise("StatusUIModUpdateCheckFinish"), completedCount, failedCount));
+
+            // Language Workaround
+            string g_completed = completedCount == 1 ? Localise("StatusUIUpdateCompletedSingular") : Localise("StatusUIUpdateCompletedPlural");
+            string g_failed = failedCount == 1 ? Localise("StatusUIUpdateFailedSingular") : Localise("StatusUIUpdateFailedPlural");
+            string text = string.Format(Localise("StatusUIModUpdateCheckFinish"), completedCount, failedCount, g_completed, g_failed);
+            UpdateStatus(text);
         }
 
         public void SaveModsDB()
@@ -515,7 +520,7 @@ namespace HedgeModManager
             if (mod == null)
                 return;
 
-            var box = new HedgeMessageBox(Localise("CommonUIWarning"), string.Format(Properties.Resources.STR_UI_DELETEMOD, mod.Title));
+            var box = new HedgeMessageBox(Localise("CommonUIWarning"), string.Format(Localise("DialogUIDeleteMod"), mod.Title));
 
             box.AddButton(Localise("CommonUICancel"), () =>
             {

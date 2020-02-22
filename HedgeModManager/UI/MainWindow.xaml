@@ -100,8 +100,8 @@
                             <GroupBox Header="{DynamicResource SettingsUIGMLHeader}" HorizontalAlignment="Stretch" Margin="0,0,0,10" VerticalAlignment="Stretch">
                                 <Grid>
                                     <Button   x:Name="Button_CPKREDIR"      Content="Install Mod loader"                  Click="UI_CPKREDIR_Click"                       Margin="352,94,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False" Visibility="Collapsed"/>
-                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod loader"                Click="UI_OtherLoader_Click"                    Margin="10,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="170" IsEnabled="False"/>
-                                    <Button   x:Name="Button_OpenMods"      Content="{DynamicResource SettingsUIOpenMods}" Click="UI_OpenMods_Click"                       Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="170"/>
+                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod loader"                Click="UI_OtherLoader_Click"                    Margin="10,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="193" IsEnabled="False"/>
+                                    <Button   x:Name="Button_OpenMods"      Content="{DynamicResource SettingsUIOpenMods}" Click="UI_OpenMods_Click"                       Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="193"/>
 
                                     <StackPanel Margin="10,0,0,10" VerticalAlignment="Bottom">
                                         <CheckBox Content="{DynamicResource SettingsUIEnableML}"      IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />
@@ -110,9 +110,9 @@
                                         <CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                     </StackPanel>
 
-                                    <Label                                   Content="{DynamicResource SettingsUILabelGame}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="185,8,0,0" VerticalContentAlignment="Center" Width="62" Height="27" />
-                                    <ComboBox   x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="252,8,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="250" Height="27" SelectionChanged="Game_Changed" />
-                                    <Label      x:Name="Label_MLVersion"     Content="Loaders: Unknown"                     Margin="185,35,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="312" Height="27" />
+                                    <Label                                   Content="{DynamicResource SettingsUILabelGame}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="211,8,0,0" VerticalContentAlignment="Center" Width="57" Height="27" />
+                                    <ComboBox   x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="272,8,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="230" Height="27" SelectionChanged="Game_Changed" />
+                                    <Label      x:Name="Label_MLVersion"     Content="Loaders: Unknown"                     Margin="211,35,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="286" Height="27" />
                                     <Label                                   Content="{DynamicResource SettingsUILabelMDir}" Margin="10,65,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
                                     <TextBox                                 Text="{Binding ModsDB.RootDirectory}"          Margin="119,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" IsReadOnly="True"  Width="354"/>
                                     <Button                                  Content="..."                                  Margin="480,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="22" Click="UI_ChangeDatabasePath_Click"/>

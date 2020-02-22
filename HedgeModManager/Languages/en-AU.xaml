@@ -110,6 +110,15 @@
     <system:String x:Key="StatusUIDownloadingCodes"       >Downloading codes for {0}</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >Download finished</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >Download failed</system:String>
+    
+    <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Are you sure you want to delete "{0}"?&#x0a;This action cannot be undone!</system:String>
+    
+    <!-- Status UI Lang Stuff Strings -->
+    <system:String x:Key="StatusUIUpdateCompletedSingular"      >completed</system:String>
+    <system:String x:Key="StatusUIUpdateCompletedPlural"        >completed</system:String>
+    <system:String x:Key="StatusUIUpdateFailedSingular"         >failed</system:String>
+    <system:String x:Key="StatusUIUpdateFailedPlural"           >failed</system:String>
 
 
 </ResourceDictionary>
