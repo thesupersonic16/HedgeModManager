@@ -57,7 +57,7 @@ namespace HedgeModManager
             PauseModUpdates = true;
             CodesList.Items.Clear();
 
-            ModsDatabase = new ModsDB(HedgeApp.ModsDbPath);
+            ModsDatabase = new ModsDB(App.ModsDbPath);
             ModsDatabase.DetectMods();
             ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.Sort((x, y) => x.Title.CompareTo(y.Title));
@@ -103,39 +103,39 @@ namespace HedgeModManager
             // Sets the DataContext for all the Components
             ViewModel = new MainWindowViewModel
             {
-                CPKREDIR = HedgeApp.Config,
+                CPKREDIR = App.Config,
                 ModsDB = ModsDatabase,
-                Games = HedgeApp.SteamGames,
+                Games = App.SteamGames,
                 Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods)
             };
             DataContext = ViewModel;
 
-            Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {HedgeApp.CurrentGame.GameName}";
+            Title = $"{App.ProgramName} ({App.VersionString}) - {App.CurrentGame.GameName}";
 
-            if (HedgeApp.CurrentGame.HasCustomLoader)
+            if (App.CurrentGame.HasCustomLoader)
             {
-                //Button_CPKREDIR.IsEnabled = HedgeApp.CurrentGame.SupportsCPKREDIR;
-                Button_OtherLoader.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader;
-                Button_DownloadCodes.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader && !string.IsNullOrEmpty(HedgeApp.CurrentGame.CodesURL);
+                //Button_CPKREDIR.IsEnabled = App.CurrentGame.SupportsCPKREDIR;
+                Button_OtherLoader.IsEnabled = App.CurrentGame.HasCustomLoader;
+                Button_DownloadCodes.IsEnabled = App.CurrentGame.HasCustomLoader && !string.IsNullOrEmpty(App.CurrentGame.CodesURL);
             }
 
-            var exeDir = HedgeApp.StartDirectory;
-            bool hasOtherModLoader = HedgeApp.CurrentGame.HasCustomLoader ? File.Exists(Path.Combine(exeDir, $"d3d{HedgeApp.CurrentGame.DirectXVersion}.dll")) : false;
-            IsCPKREDIRInstalled = HedgeApp.CurrentGame.SupportsCPKREDIR ? HedgeApp.IsCPKREDIRInstalled(Path.Combine(exeDir, HedgeApp.CurrentGame.ExecuteableName)) : hasOtherModLoader;
-            string loaders = (IsCPKREDIRInstalled && HedgeApp.CurrentGame.SupportsCPKREDIR ? HedgeApp.CPKREDIRVersion : "");
+            var exeDir = App.StartDirectory;
+            bool hasOtherModLoader = App.CurrentGame.HasCustomLoader ? File.Exists(Path.Combine(exeDir, $"d3d{App.CurrentGame.DirectXVersion}.dll")) : false;
+            IsCPKREDIRInstalled = App.CurrentGame.SupportsCPKREDIR ? App.IsCPKREDIRInstalled(Path.Combine(exeDir, App.CurrentGame.ExecuteableName)) : hasOtherModLoader;
+            string loaders = (IsCPKREDIRInstalled && App.CurrentGame.SupportsCPKREDIR ? App.CPKREDIRVersion : "");
 
             if (hasOtherModLoader)
             {
                 if (string.IsNullOrEmpty(loaders))
-                    loaders = $"{HedgeApp.CurrentGame.CustomLoaderName}";
+                    loaders = $"{App.CurrentGame.CustomLoaderName}";
                 else
-                    loaders += $" & {HedgeApp.CurrentGame.CustomLoaderName}";
+                    loaders += $" & {App.CurrentGame.CustomLoaderName}";
             }
 
             if (string.IsNullOrEmpty(loaders))
                 loaders = Localise("CommonUINone");
 
-            ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentSteamGame;
+            ComboBox_GameStatus.SelectedValue = App.CurrentSteamGame;
             Label_MLVersion.Content = $"{Localise("SettingsUILabelLoaders")} {loaders}";
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
             Button_CPKREDIR.Content = Localise(IsCPKREDIRInstalled ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
@@ -250,7 +250,7 @@ namespace HedgeModManager
 
         public void SaveModsDB()
         {
-            HedgeApp.Config.Save(HedgeApp.ConfigPath);
+            App.Config.Save(App.ConfigPath);
             ModsDatabase.Mods.Clear();
             ModsDatabase.Codes.Clear();
 
@@ -272,23 +272,23 @@ namespace HedgeModManager
 
         public void StartGame()
         {
-            Process.Start(new ProcessStartInfo(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName))
+            Process.Start(new ProcessStartInfo(Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName))
             {
-                WorkingDirectory = HedgeApp.StartDirectory
+                WorkingDirectory = App.StartDirectory
             });
 
-            if (!HedgeApp.Config.KeepOpen)
+            if (!App.Config.KeepOpen)
                 Application.Current.Shutdown(0);
 
-            UpdateStatus(string.Format(Localise("StatusUIStartingGame"), HedgeApp.CurrentGame.GameName));
+            UpdateStatus(string.Format(Localise("StatusUIStartingGame"), App.CurrentGame.GameName));
         }
 
         private void SetupWatcher()
         {
-            if (!Directory.Exists(HedgeApp.ModsDbPath))
+            if (!Directory.Exists(App.ModsDbPath))
                 return;
 
-            var watcher = new FileSystemWatcher(HedgeApp.ModsDbPath)
+            var watcher = new FileSystemWatcher(App.ModsDbPath)
             {
                 NotifyFilter = NotifyFilters.DirectoryName
             };
@@ -298,7 +298,7 @@ namespace HedgeModManager
             watcher.EnableRaisingEvents = true;
             ModsWatchers.Add(watcher);
 
-            foreach(var directory in Directory.GetDirectories(HedgeApp.ModsDbPath))
+            foreach(var directory in Directory.GetDirectories(App.ModsDbPath))
             {
                 var watch = new FileSystemWatcher(directory);
                 watch.Changed += WatcherModEvent;
@@ -344,19 +344,19 @@ namespace HedgeModManager
             new Thread(() =>
             {
                 CheckForManagerUpdates();
-                if (HedgeApp.Config.CheckForModUpdates)
+                if (App.Config.CheckForModUpdates)
                     CheckAllModsUpdates();
             }).Start();
         }
 
         public void CheckForManagerUpdates()
         {
-            if (HedgeApp.Config.CheckForUpdates)
+            if (App.Config.CheckForUpdates)
             {
                 UpdateStatus(Localise("StatusUICheckingForUpdates"));
                 try
                 {
-                    var update = HedgeApp.CheckForUpdates();
+                    var update = App.CheckForUpdates();
 
                     if (!update.Item1)
                     {
@@ -398,7 +398,7 @@ namespace HedgeModManager
                                             File.Delete(oldPath);
                                         }
 
-                                        Process.Start(path, $"-update \"{HedgeApp.AppPath}\" {Process.GetCurrentProcess().Id}");
+                                        Process.Start(path, $"-update \"{App.AppPath}\" {Process.GetCurrentProcess().Id}");
                                         Application.Current.Shutdown();
                                     }
                                 };
@@ -421,35 +421,35 @@ namespace HedgeModManager
 
         protected void CheckForLoaderUpdate()
         {
-            if (!HedgeApp.Config.CheckLoaderUpdates)
+            if (!App.Config.CheckLoaderUpdates)
                 return;
 
             new Thread(() => 
             {
-                UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), HedgeApp.CurrentGame.CustomLoaderName));
+                UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), App.CurrentGame.CustomLoaderName));
                 try
                 {
                     using (var stream = WebRequest.Create(HMMResources.URL_LOADERS_INI).GetResponse().GetResponseStream())
                     {
-                        string loaderVersion = HedgeApp.GetCodeLoaderVersion(HedgeApp.CurrentGame);
+                        string loaderVersion = App.GetCodeLoaderVersion(App.CurrentGame);
                         // Check if there is a loader version, if not return
                         if (string.IsNullOrEmpty(loaderVersion))
                             return;
 
                         var ini = new IniFile(stream);
-                        var info = ini[HedgeApp.CurrentGame.GameName];
+                        var info = ini[App.CurrentGame.GameName];
                         var version = new Version(loaderVersion);
                         var newVersion = new Version(info["LoaderVersion"]);
 
                         if (newVersion <= version)
                         {
-                            UpdateStatus(string.Format(Localise("StatusUILoaderUpToDate"), HedgeApp.CurrentGame.CustomLoaderName));
+                            UpdateStatus(string.Format(Localise("StatusUILoaderUpToDate"), App.CurrentGame.CustomLoaderName));
                             return;
                         }
 
                         Dispatcher.Invoke(() =>
                         {
-                            var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"));
+                            var dialog = new HedgeMessageBox($"{App.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"));
 
                             dialog.AddButton(Localise("CommonUIIgnore"), () =>
                             {
@@ -459,8 +459,8 @@ namespace HedgeModManager
                             dialog.AddButton(Localise("CommonUIUpdate"), () =>
                             {
                                 dialog.Close();
-                                HedgeApp.InstallOtherLoader(false);
-                                UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                                App.InstallOtherLoader(false);
+                                UpdateStatus($"Updated {App.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
                             });
 
                             dialog.ShowDialog();
@@ -469,21 +469,21 @@ namespace HedgeModManager
                 }
                 catch
                 {
-                    UpdateStatus(string.Format(Localise("StatusUIFailedLoaderUpdateCheck"), HedgeApp.CurrentGame.CustomLoaderName));
+                    UpdateStatus(string.Format(Localise("StatusUIFailedLoaderUpdateCheck"), App.CurrentGame.CustomLoaderName));
                 }
             }).Start();
         }
 
         public void ShowMissingOtherLoaderWarning()
         {
-            if (!HedgeApp.CurrentGame.HasCustomLoader)
+            if (!App.CurrentGame.HasCustomLoader)
                 return;
-            bool loaderInstalled = File.Exists(Path.Combine(HedgeApp.StartDirectory, $"d3d{HedgeApp.CurrentGame.DirectXVersion}.dll"));
+            bool loaderInstalled = File.Exists(Path.Combine(App.StartDirectory, $"d3d{App.CurrentGame.DirectXVersion}.dll"));
             if (loaderInstalled)
                 return;
             Dispatcher.Invoke(() =>
             {
-                var dialog = new HedgeMessageBox(Localise("MainUIMissingLoaderHeader"), string.Format(Localise("MainUIMissingLoaderDesc"), HedgeApp.CurrentGame.GameName));
+                var dialog = new HedgeMessageBox(Localise("MainUIMissingLoaderHeader"), string.Format(Localise("MainUIMissingLoaderDesc"), App.CurrentGame.GameName));
 
                 dialog.AddButton(Localise("CommonUINo"), () =>
                 {
@@ -493,8 +493,8 @@ namespace HedgeModManager
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     dialog.Close();
-                    HedgeApp.InstallOtherLoader(false);
-                    UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.CustomLoaderName));
+                    App.InstallOtherLoader(false);
+                    UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), App.CurrentGame.CustomLoaderName));
                 });
 
                 dialog.ShowDialog();
@@ -506,7 +506,7 @@ namespace HedgeModManager
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
             Refresh();
             CheckForUpdates();
-            ComboBox_Languages.SelectedItem = HedgeApp.SupportedCultures.FirstOrDefault(t => t.Value == HedgeApp.GetClosestCulture(RegistryConfig.UILanguage));
+            ComboBox_Languages.SelectedItem = App.SupportedCultures.FirstOrDefault(t => t.Value == App.GetClosestCulture(RegistryConfig.UILanguage));
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
@@ -562,7 +562,7 @@ namespace HedgeModManager
 
         private void UI_CPKREDIR_Click(object sender, RoutedEventArgs e)
         {
-            HedgeApp.InstallCPKREDIR(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName), IsCPKREDIRInstalled);
+            App.InstallCPKREDIR(Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName), IsCPKREDIRInstalled);
             RefreshUI();
         }
 
@@ -591,7 +591,7 @@ namespace HedgeModManager
 
         private void UI_OtherLoader_Click(object sender, RoutedEventArgs e)
         {
-            HedgeApp.InstallOtherLoader(true);
+            App.InstallOtherLoader(true);
             RefreshUI();
         }
 
@@ -679,7 +679,7 @@ namespace HedgeModManager
         {
             for (int i = 1; i < int.MaxValue; i++)
             {
-                var title = $"{HedgeApp.CurrentGame.GameName} Mod {i}";
+                var title = $"{App.CurrentGame.GameName} Mod {i}";
                 if (!Directory.Exists(Path.Combine(ModsDatabase.RootDirectory, title)))
                     return title;
             }
@@ -699,16 +699,16 @@ namespace HedgeModManager
         {
             if(ComboBox_GameStatus.SelectedItem != null)
             {
-                HedgeApp.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
+                App.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
 
-                HedgeApp.ConfigPath = Path.Combine(HedgeApp.StartDirectory, "cpkredir.ini");
-                HedgeApp.Config = new CPKREDIRConfig(HedgeApp.ConfigPath);
-                HedgeApp.ModsDbPath = Path.Combine(HedgeApp.StartDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni));
+                App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
+                App.Config = new CPKREDIRConfig(App.ConfigPath);
+                App.ModsDbPath = Path.Combine(App.StartDirectory, Path.GetDirectoryName(App.Config.ModsDbIni));
 
                 // Remove old patch
-                string exePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName);
-                if (HedgeApp.IsCPKREDIRInstalled(exePath))
-                    HedgeApp.InstallCPKREDIR(exePath, false);
+                string exePath = Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName);
+                if (App.IsCPKREDIRInstalled(exePath))
+                    App.InstallCPKREDIR(exePath, false);
 
                 foreach (var watcher in ModsWatchers)
                 {
@@ -717,17 +717,17 @@ namespace HedgeModManager
                 ModsWatchers.Clear();
                 SetupWatcher();
                 Refresh();
-                UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGame.GameName));
+                UpdateStatus(string.Format(Localise("StatusUIGameChange"), App.CurrentGame.GameName));
                 CheckForLoaderUpdate();
             }
         }
 
         private void UI_Download_Codes(object sender, RoutedEventArgs e)
         {
-            UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGame.GameName));
+            UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), App.CurrentGame.GameName));
             try
             {
-                var downloader = new DownloadWindow($"Downloading codes for {HedgeApp.CurrentGame.GameName}", HedgeApp.CurrentGame.CodesURL, CodeLoader.CodesHMMPath)
+                var downloader = new DownloadWindow($"Downloading codes for {App.CurrentGame.GameName}", App.CurrentGame.CodesURL, CodeLoader.CodesHMMPath)
                 {
                     DownloadCompleted = () =>
                     {
@@ -745,7 +745,7 @@ namespace HedgeModManager
 
         private void UI_OpenMods_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(HedgeApp.ModsDbPath);
+            Process.Start(App.ModsDbPath);
         }
 
         private void UI_ChangeDatabasePath_Click(object sender, RoutedEventArgs e)
@@ -754,11 +754,11 @@ namespace HedgeModManager
             dialog.Title = Localise("MainUISelectModsDBTitle");
             if (dialog.ShowDialog())
             {
-                HedgeApp.ModsDbPath = dialog.SelectedFolder;
-                ViewModel.CPKREDIR.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, "ModsDB.ini");
-                if (ViewModel.CPKREDIR.ModsDbIni.StartsWith(HedgeApp.StartDirectory))
-                    ViewModel.CPKREDIR.ModsDbIni = ViewModel.CPKREDIR.ModsDbIni.Substring(HedgeApp.StartDirectory.Length + 1);
-                ViewModel.CPKREDIR.Save(Path.Combine(HedgeApp.StartDirectory, "cpkredir.ini"));
+                App.ModsDbPath = dialog.SelectedFolder;
+                ViewModel.CPKREDIR.ModsDbIni = Path.Combine(App.ModsDbPath, "ModsDB.ini");
+                if (ViewModel.CPKREDIR.ModsDbIni.StartsWith(App.StartDirectory))
+                    ViewModel.CPKREDIR.ModsDbIni = ViewModel.CPKREDIR.ModsDbIni.Substring(App.StartDirectory.Length + 1);
+                ViewModel.CPKREDIR.Save(Path.Combine(App.StartDirectory, "cpkredir.ini"));
                 Refresh();
                 UpdateStatus(Localise("StatusUIModsDBLocationChanged"));
             }
@@ -769,7 +769,7 @@ namespace HedgeModManager
             var culture = ((KeyValuePair<string, string>)ComboBox_Languages.SelectedItem).Value;
             RegistryConfig.UILanguage = culture;
             RegistryConfig.Save();
-            HedgeApp.LoadLanaguage(culture);
+            App.LoadLanaguage(culture);
             RefreshUI();
         }
     }

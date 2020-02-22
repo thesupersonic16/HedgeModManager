@@ -11,9 +11,9 @@ namespace HedgeModManager
 {
     public class CodeLoader
     {
-        public static string CodesXMLPath => Path.Combine(HedgeApp.ModsDbPath, "Codes.xml");
-        public static string CodesHMMPath => Path.Combine(HedgeApp.ModsDbPath, "Codes.hmm");
-        public static string CodesPath => Path.Combine(HedgeApp.ModsDbPath, "Codes.dat");
+        public static string CodesXMLPath => Path.Combine(App.ModsDbPath, "Codes.xml");
+        public static string CodesHMMPath => Path.Combine(App.ModsDbPath, "Codes.hmm");
+        public static string CodesPath => Path.Combine(App.ModsDbPath, "Codes.dat");
 
         public static CodeList LoadAllCodes()
         {

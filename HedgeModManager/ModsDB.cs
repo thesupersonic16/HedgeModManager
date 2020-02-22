@@ -123,7 +123,7 @@ namespace HedgeModManager
             {
                 IniSerializer.Serialize(this, stream);
             }
-            CodeList.WriteDatFile(Path.Combine(RootDirectory, CodeLoader.CodesPath), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => x.Enabled)), HedgeApp.CurrentGame.Is64Bit);
+            CodeList.WriteDatFile(Path.Combine(RootDirectory, CodeLoader.CodesPath), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => x.Enabled)), App.CurrentGame.Is64Bit);
         }
 
         public void DeleteMod(ModInfo mod)
@@ -170,7 +170,7 @@ namespace HedgeModManager
         public static void InstallModArchiveUsingZipFile(string path, string root)
         {
             // Path to the install temp folder
-            string tempFolder = Path.Combine(HedgeApp.StartDirectory, "temp_install");
+            string tempFolder = Path.Combine(App.StartDirectory, "temp_install");
 
             // Deletes the temp Directory if it exists
             if (Directory.Exists(tempFolder))
@@ -201,7 +201,7 @@ namespace HedgeModManager
                 string exe = Path.Combine(exePath, "7z.exe");
 
                 // Path to the install temp directory
-                string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
+                string tempDirectory = Path.Combine(App.StartDirectory, "temp_install");
 
                 // Deletes the temp directory if it exists
                 if (Directory.Exists(tempDirectory))
@@ -240,7 +240,7 @@ namespace HedgeModManager
             if (key != null && key.GetValue("exe64") is string exePath)
             {
                 // Path to the install temp directory
-                string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
+                string tempDirectory = Path.Combine(App.StartDirectory, "temp_install");
 
                 // Deletes the temp directory if it exists
                 if (Directory.Exists(tempDirectory))

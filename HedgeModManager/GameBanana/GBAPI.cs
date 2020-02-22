@@ -140,7 +140,7 @@ namespace GameBananaAPI
             // Where?
             // oh
             // How do you get the path to HMM? Need it for the bottom SetValue
-            // There should be a static string in HedgeApp
+            // There should be a static string in App
             // I see StartDirectory, Thats about it
             // Then lets add one lol
             // But I'm lazy
@@ -150,7 +150,7 @@ namespace GameBananaAPI
                 reg.SetValue("", $"URL:{protocolName}");
                 reg.SetValue("URL Protocol", "");
                 reg = reg.CreateSubKey("shell\\open\\command");
-                reg.SetValue("", $"\"{HedgeApp.AppPath}\" -gb \"%1\"");
+                reg.SetValue("", $"\"{App.AppPath}\" -gb \"%1\"");
                 reg.Close();
                 return true;
             }
@@ -166,7 +166,7 @@ namespace GameBananaAPI
             // Does HMM only work with one game per install?
             // How would i know
             // Then tahts a yes
-            // I mean you can change game name in HedgeApp.cs
+            // I mean you can change game name in App.cs
             // Since when does GB do command line stuff
             // Never, We have to do it, Well, Its Fuck cant spell lol
             // pretty much Chrome will call a command
@@ -195,14 +195,14 @@ namespace GameBananaAPI
 
             if (!int.TryParse(split[2], out int itemID))
             {
-                HedgeApp.CreateOKMessageBox("Error", $"Invalid Gamebanana item id {itemID}").ShowDialog();
+                App.CreateOKMessageBox("Error", $"Invalid Gamebanana item id {itemID}").ShowDialog();
                 return;
             }
 
             var item = new GBAPIItemDataBasic(itemType, itemID);
             if (!RequestItemData(ref item))
             {
-                HedgeApp.CreateOKMessageBox("Error", "Invalid Gamebanana item").ShowDialog();
+                App.CreateOKMessageBox("Error", "Invalid Gamebanana item").ShowDialog();
                 return;
             }
             var game = Games.Unknown;

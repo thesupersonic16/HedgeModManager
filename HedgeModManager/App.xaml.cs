@@ -27,9 +27,9 @@ using System.Reflection;
 namespace HedgeModManager
 {
     /// <summary>
-    /// Interaction logic for HedgeApp.xaml
+    /// Interaction logic for App.xaml
     /// </summary>
-    public partial class HedgeApp : Application
+    public partial class App : Application
     {
         public static Version Version = Assembly.GetExecutingAssembly().GetName().Version;
         public static string StartDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -98,7 +98,7 @@ namespace HedgeModManager
                 return;
             }
 
-            var application = new HedgeApp();
+            var application = new App();
             application.InitializeComponent();
             application.ShutdownMode = ShutdownMode.OnMainWindowClose;
             application.MainWindow = new MainWindow();
@@ -174,7 +174,7 @@ namespace HedgeModManager
             }
 
             // Remove old patch
-            string exePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName);
+            string exePath = Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName);
             if (IsCPKREDIRInstalled(exePath))
                 InstallCPKREDIR(exePath, false);
 

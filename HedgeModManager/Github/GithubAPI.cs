@@ -26,7 +26,7 @@ namespace HedgeModManager.Github
             {
                 using (var client = new WebClient())
                 {
-                    client.Headers.Add("user-agent", HedgeApp.WebRequestUserAgent);
+                    client.Headers.Add("user-agent", App.WebRequestUserAgent);
                     return JsonConvert.DeserializeObject<T>(client.DownloadString(url));
                 }
             }
