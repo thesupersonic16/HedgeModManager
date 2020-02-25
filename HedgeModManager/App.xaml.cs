@@ -45,6 +45,7 @@ namespace HedgeModManager
         public static CPKREDIRConfig Config;
         public static List<SteamGame> SteamGames = null;
         public static bool Restart = false;
+        public static string PCCulture = "";
 
         public const string WebRequestUserAgent =
             "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)";
@@ -55,10 +56,13 @@ namespace HedgeModManager
         public static byte[] CPKREDIR = new byte[] { 0x63, 0x70, 0x6B, 0x72, 0x65, 0x64, 0x69, 0x72 };
         public static byte[] IMAGEHLP = new byte[] { 0x69, 0x6D, 0x61, 0x67, 0x65, 0x68, 0x6C, 0x70 };
 
+        public static Dictionary<string, string> SupportedCultures = new Dictionary<string, string>();
+
         [STAThread]
         public static void Main(string[] args)
         {
             // Language
+            PCCulture = Thread.CurrentThread.CurrentCulture.Name;
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
 
@@ -112,6 +116,7 @@ namespace HedgeModManager
 
             Steam.Init();
             InstallGBHandlers();
+            SetupLanguages();
 #if DEBUG
             // Find a Steam Game
             SteamGames = Steam.SearchForGames("Sonic Generations");
@@ -120,29 +125,13 @@ namespace HedgeModManager
             StartDirectory = steamGame.RootDirectory;
 #else
             SteamGames = Steam.SearchForGames();
-            SearchGames:
-            foreach (var game in Games.GetSupportedGames())
+            if (FindAndSetLocalGame() == null)
             {
-                if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
+                if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
                 {
-                    var steamGame = SteamGames.FirstOrDefault(x => x.GameID == game.AppID);
-                    if(steamGame == null)
-                    {
-                        steamGame = new SteamGame(game.GameName, Path.Combine(StartDirectory, game.ExecuteableName), game.AppID);
-                        SteamGames.Add(steamGame);
-                    }
-                    CurrentGame = game;
-                    CurrentSteamGame = steamGame;
-                    RegistryConfig.LastGameDirectory = StartDirectory;
-                    RegistryConfig.Save();
-                    break;
+                    StartDirectory = RegistryConfig.LastGameDirectory;
+                    FindAndSetLocalGame();
                 }
-            }
-
-            if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
-            {
-                StartDirectory = RegistryConfig.LastGameDirectory;
-                goto SearchGames;
             }
 
             if (CurrentGame == Games.Unknown)
@@ -197,6 +186,62 @@ namespace HedgeModManager
                 application.Run(application.MainWindow);
             }
             while (Restart);
+        }
+
+        public static SteamGame FindAndSetLocalGame()
+        {
+            foreach (var game in Games.GetSupportedGames())
+            {
+                if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
+                {
+                    var steamGame = SteamGames.FirstOrDefault(x => x.GameID == game.AppID);
+                    if (steamGame == null)
+                    {
+                        steamGame = new SteamGame(game.GameName, Path.Combine(StartDirectory, game.ExecuteableName), game.AppID);
+                        SteamGames.Add(steamGame);
+                    }
+                    CurrentGame = game;
+                    CurrentSteamGame = steamGame;
+                    RegistryConfig.LastGameDirectory = StartDirectory;
+                    RegistryConfig.Save();
+                    return steamGame;
+                }
+            }
+            return null;
+        }
+
+        public static void LoadLanaguage(string culture)
+        {
+            var langDict = new ResourceDictionary();
+            langDict.Source = new Uri($"Languages/{culture}.xaml", UriKind.Relative);
+            while (Current.Resources.MergedDictionaries.Count > 1)
+                Current.Resources.MergedDictionaries.RemoveAt(1);
+            // No need to load the fallback language on top
+            if (culture == "en-AU")
+                return;
+            Current.Resources.MergedDictionaries.Add(langDict);
+        }
+
+        public static string GetClosestCulture(string culture)
+        {
+            // Check if the culture exists
+            if (SupportedCultures.Values.Any(t => t == culture))
+                return culture;
+            // Find anouther culture based off language
+            string language = culture.Split('-')[0];
+            string newCulture = SupportedCultures.Values.FirstOrDefault(t => t.Split('-')[0] == language);
+            if (string.IsNullOrEmpty(newCulture))
+                newCulture = SupportedCultures.Values.First();
+            return newCulture;
+        }
+
+        public static void SetupLanguages()
+        {
+            SupportedCultures.Add("English (Australia)", "en-AU");
+            SupportedCultures.Add("Français (France)", "fr-FR");
+            SupportedCultures.Add("Português (Portugal)", "pt-PT");
+            SupportedCultures.Add("中文繁體 (Chinese Traditional)", "zh-TW");
+            SupportedCultures.Add("中文简体 (Chinese Simplified)", "zh-CN");
         }
 
         /// <summary>

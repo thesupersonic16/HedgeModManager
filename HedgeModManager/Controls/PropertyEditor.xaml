@@ -15,8 +15,8 @@
         <ListView x:Name="PropList">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"  Width="150"/>
-                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding AsString}" Width="Auto"/>
+                    <GridViewColumn Header="{StaticResource PropertyEditorUIName}" DisplayMemberBinding="{Binding Name}"  Width="150"/>
+                    <GridViewColumn Header="{StaticResource PropertyEditorUIValue}" DisplayMemberBinding="{Binding AsString}" Width="Auto"/>
                 </GridView>
             </ListView.View>
         </ListView>

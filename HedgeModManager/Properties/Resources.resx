@@ -161,10 +161,6 @@ in the current directory!
 
 Do you want run the HMM Auto Installer?</value>
   </data>
-  <data name="STR_UI_DELETEMOD" xml:space="preserve">
-    <value>Are you sure you want to delete "{0}"?
-This action cannot be undone!</value>
-  </data>
   <data name="STR_UI_MOD_UPDATE" xml:space="preserve">
     <value>A newer version of {0} available! ({1})</value>
   </data>

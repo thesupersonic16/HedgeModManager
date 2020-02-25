@@ -11,11 +11,11 @@
         MinHeight="600" MinWidth="560" Height="600" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <ContextMenu x:Key="ModContextMenu">
-            <MenuItem Header="Description" Click="UI_Description_Click"/>
-            <MenuItem Header="Open containing folder" Click="UI_Open_Folder"/>
-            <MenuItem Header="Check for updates" Click="UI_Update_Mod"/>
-            <MenuItem Header="Edit mod" Click="UI_Edit_Mod"/>
-            <MenuItem Header="Delete mod" Click="UI_RemoveMod_Click"/>
+            <MenuItem Header="{DynamicResource ModsUIModDescription}" Click="UI_Description_Click"/>
+            <MenuItem Header="{DynamicResource ModsUIModOpenFolder}" Click="UI_Open_Folder"/>
+            <MenuItem Header="{DynamicResource ModsUIModCheckUpdates}" Click="UI_Update_Mod"/>
+            <MenuItem Header="{DynamicResource ModsUIModEdit}" Click="UI_Edit_Mod"/>
+            <MenuItem Header="{DynamicResource ModsUIModDelete}" Click="UI_RemoveMod_Click"/>
         </ContextMenu>
     </Window.Resources>
     <Grid>
@@ -27,11 +27,11 @@
                 </Grid.RowDefinitions>
                 <Label x:Name="StatusLbl" Margin="0,-5,0,0" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                 <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
-                    <TabItem Header="Mods">
+                    <TabItem Header="{DynamicResource MainUIMods}">
                         <Grid>
                             <ListView x:Name="ModsList"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
-                                      Margin="12,5,12,5" ItemsSource="{Binding Mods}" 
+                                      Margin="10,5,10,5" ItemsSource="{Binding Mods}" 
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                                       dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
                                       dd:DragDrop.DropHandler="{Binding}">
@@ -41,14 +41,14 @@
                                         <Setter Property="ContextMenu" Value="{DynamicResource ModContextMenu}"/>
                                         <Setter Property="ToolTip">
                                             <Setter.Value>
-                                                <ToolTip Content="Drag and drop items to change the load order of mods."/>
+                                                <ToolTip Content="{DynamicResource ModsUIModDragDrop}"/>
                                             </Setter.Value>
                                         </Setter>
                                     </Style>
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Name" Width="200">
+                                        <GridViewColumn Header="{DynamicResource ModsUIName}" Width="200">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -58,25 +58,25 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Version"       Width="70" DisplayMemberBinding="{Binding Version}"/>
-                                        <GridViewColumn Header="Author"        Width="90" DisplayMemberBinding="{Binding Author}"/>
-                                        <GridViewColumn Header="Supports Save" Width="90" DisplayMemberBinding="{Binding SupportsSave}"/>
-                                        <GridViewColumn Header="Updates"       Width="70" DisplayMemberBinding="{Binding HasUpdates}"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUIVersion}"     Width="68" DisplayMemberBinding="{Binding Version}"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUIAuthor}"      Width="89" DisplayMemberBinding="{Binding Author}"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUISupportSave}" Width="97" DisplayMemberBinding="{Binding SupportsSave}"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUIHasUpdate}"   Width="70" DisplayMemberBinding="{Binding HasUpdates}"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Codes">
+                    <TabItem Header="{DynamicResource MainUICodes}">
                         <Grid>
-                            <GroupBox Margin="12,5,12,5">
-                                <Button   x:Name="Button_DownloadCodes" Content="Download Community Codes"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
+                            <GroupBox Margin="10,5,10,5">
+                                <Button   x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
                             </GroupBox>
                             <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
-                                     Margin="12,5,12,45" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
+                                     Margin="10,5,10,45" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="True">
-                                        <GridViewColumn Header="Name" Width="Auto">
+                                        <GridViewColumn Header="{DynamicResource CodesUIName}" Width="Auto">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -91,41 +91,43 @@
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Settings">
+                    <TabItem Header="{DynamicResource MainUISettings}">
                         <Grid Margin="10,5,10,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="230"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <GroupBox Header="Game &amp; Mod Loader" HorizontalAlignment="Stretch" Margin="0,0,0,10" VerticalAlignment="Stretch">
+                            <GroupBox Header="{DynamicResource SettingsUIGMLHeader}" HorizontalAlignment="Stretch" Margin="0,0,0,10" VerticalAlignment="Stretch">
                                 <Grid>
-                                    <Button   x:Name="Button_CPKREDIR"      Content="Install Mod loader"            Click="UI_CPKREDIR_Click"                       Margin="352,94,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False" Visibility="Collapsed"/>
-                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod loader"          Click="UI_OtherLoader_Click"                    Margin="10,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False"/>
-                                    <Button   x:Name="Button_OpenMods"      Content="Open Mods Directory"           Click="UI_OpenMods_Click"                       Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164"/>
+                                    <Button   x:Name="Button_CPKREDIR"      Content="Install Mod loader"                  Click="UI_CPKREDIR_Click"                       Margin="352,94,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="164" IsEnabled="False" Visibility="Collapsed"/>
+                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod loader"                Click="UI_OtherLoader_Click"                    Margin="10,8,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="193" IsEnabled="False"/>
+                                    <Button   x:Name="Button_OpenMods"      Content="{DynamicResource SettingsUIOpenMods}" Click="UI_OpenMods_Click"                       Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="193"/>
 
                                     <StackPanel Margin="10,0,0,10" VerticalAlignment="Bottom">
-                                        <CheckBox Content="Enable mod loader"             IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />
-                                        <CheckBox Content="Enable debug console"          IsChecked="{Binding CPKREDIR.EnableDebugConsole}"         Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                        <CheckBox Content="Enable save file redirection"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}"  Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                        <CheckBox Content="Load top to bottom"            IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIEnableML}"      IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                        <CheckBox Content="{DynamicResource SettingsUIEnableDebug}"   IsChecked="{Binding CPKREDIR.EnableDebugConsole}"         Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIEnableSRedir}"  IsChecked="{Binding CPKREDIR.EnableSaveFileRedirection}"  Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        <CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="0,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                     </StackPanel>
 
-                                    <Label      Content="Game:"                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="180,8,0,0" VerticalContentAlignment="Center" Width="Auto" Height="27" />
-                                    <ComboBox   x:Name="ComboBox_GameStatus"       ItemsSource="{Binding Games}"                  Margin="225,8,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="250" Height="27" SelectionChanged="Game_Changed" />
-                                    <Label      x:Name="Label_MLVersion"           Content="Loaders: Unknown"                     Margin="180,35,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="317" Height="27" />
-                                    <Label                                         Content="Mods Directory: "                     Margin="10,65,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
-                                    <TextBox                                       Text="{Binding ModsDB.RootDirectory}"          Margin="110,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" IsReadOnly="True"  Width="363"/>
-                                    <Button                                        Content="..."                                  Margin="480,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="22" Click="UI_ChangeDatabasePath_Click"/>
+                                    <Label                                   Content="{DynamicResource SettingsUILabelGame}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="211,8,0,0" VerticalContentAlignment="Center" Width="57" Height="27" />
+                                    <ComboBox   x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="272,8,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="230" Height="27" SelectionChanged="Game_Changed" />
+                                    <Label      x:Name="Label_MLVersion"     Content="Loaders: Unknown"                     Margin="211,35,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="286" Height="27" />
+                                    <Label                                   Content="{DynamicResource SettingsUILabelMDir}" Margin="10,65,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
+                                    <TextBox                                 Text="{Binding ModsDB.RootDirectory}"          Margin="119,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" IsReadOnly="True"  Width="354"/>
+                                    <Button                                  Content="..."                                  Margin="480,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="22" Click="UI_ChangeDatabasePath_Click"/>
                                 </Grid>
                             </GroupBox>
 
-                            <GroupBox Header="Hedge Mod Manager" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,5" Grid.Row="1">
+                            <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,5" Grid.Row="1">
                                 <Grid>
-                                    <CheckBox Content="Check for mod loader updates"                      IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="Check for code loader updates"                     IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="Check for mod updates"                             IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="Keep Hedge Mod Manager open after starting a game" IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="10,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <Button   Content="About Hedge Mod Manager"                                                                             Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
+                                    <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"   IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"   IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="10,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}" IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"     IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="10,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <Button   Content="{DynamicResource SettingsUIAboutHMM}"                                                          Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
+                                    <Label    Content="{DynamicResource SettingsUILanguage}"                                                           Margin="10,129,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
+                                    <ComboBox x:Name="ComboBox_Languages" ItemsSource="{Binding SupportedCultures}" DisplayMemberPath="Key"  Margin="80,128,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="236" Height="27" SelectionChanged="ComboBox_Languages_Changed" />
                                 </Grid>
                             </GroupBox>
                         </Grid>
@@ -143,13 +145,13 @@
                             <RowDefinition Height="0.6*"/>
                         </Grid.RowDefinitions>
 
-                        <Button Content="Remove Mod"                       Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_RemoveMod_Click"/>
-                        <Button Content="Refresh Mod List" Width="Auto"    Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
-                        <Button Content="Add Mod"          Width="Auto"    Grid.Column="2" Grid.Row="0" Margin="5" Click="UI_Install_Mod"/>
+                        <Button Content="{DynamicResource MainUIRemoveMod}"                   Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_RemoveMod_Click"/>
+                        <Button Content="{DynamicResource MainUIRefreshModList}" Width="Auto" Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
+                        <Button Content="{DynamicResource MainUIAddMod}"         Width="Auto" Grid.Column="2" Grid.Row="0" Margin="5" Click="UI_Install_Mod"/>
 
-                        <Button Content="Save"                             Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
-                        <Button Content="Save and Play"    Width="Auto"    Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
-                        <Button Content="Play"             Width="Auto"    Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
+                        <Button Content="{DynamicResource MainUISave}"                        Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
+                        <Button Content="{DynamicResource MainUISaveAndPlay}"    Width="Auto" Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
+                        <Button Content="{DynamicResource MainUIPlay}"           Width="Auto" Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
                     </Grid>
                 </StackPanel>
             </Grid>

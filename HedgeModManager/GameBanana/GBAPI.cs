@@ -243,6 +243,7 @@ namespace GameBananaAPI
 
     public class GBAPICreditGroups
     {
+        [JsonIgnoreAttribute]
         public Dictionary<string, List<GBAPICredit>> Credits = new Dictionary<string, List<GBAPICredit>>();
 
         [JsonExtensionData]

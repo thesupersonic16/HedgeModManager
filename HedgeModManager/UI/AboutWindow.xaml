@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="About Hedge Mod Manager" Height="446.237" Width="500"  Background="#FF2D2D30"
+        Title="{StaticResource AboutWindowUITitle}" Height="507.525" Width="500"  Background="#FF2D2D30"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
     <Grid>
         <Grid.RowDefinitions>
@@ -18,9 +18,9 @@
             <Image Width="64" Height="64" Source="/Resources/Graphics/icon256.png"/>
             <Label Content="Hedge Mod Manager" Height="Auto" Width="Auto" FontSize="36"/>
         </StackPanel>
-        <Label Content="A program designed to help people easily load Hedgehog Engine mods." HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
-        <Label Content="Requires a legally owned version of one of the supported games." HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Grid.Row="1"/>
-        <GroupBox Header="Credits:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Margin="15">
+        <Label Content="{StaticResource AboutWindowUILine1}" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
+        <Label Content="{StaticResource AboutWindowUILine2}" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Margin="15">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.4*"/>
@@ -35,6 +35,8 @@
                     <Label Content="PTKickass"/>
                     <Label Content="Slash"/>
                     <Label Content="MainMemory"/>
+                    <Label Content="JoeyLaw"/>
+                    <Label Content="LJSTAR"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Managing the project"/>
@@ -42,13 +44,15 @@
                     <Label Content="Base Design"/>
                     <Label Content="CPKREDIR"/>
                     <Label Content="Contributing to Forces Mod Loader"/>
-                    <Label Content="Cheat codes"/>
+                    <Label Content="Cheat codes and Portuguese translation"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="mod-loader-common"/>
+                    <Label Content="Chinese translation"/>
+                    <Label Content="French translation"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <Button Content="Close" HorizontalAlignment="Left" Margin="408,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_Close_Click" Height="23" Grid.Row="3"/>
-        <Button Content="GitHub" HorizontalAlignment="Left" Margin="328,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_GitHub_Click" Height="23" Grid.Row="3"/>
+        <Button Content="{StaticResource CommonUIClose}" HorizontalAlignment="Left" Margin="408,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_Close_Click" Height="23" Grid.Row="3"/>
+        <Button Content="GitHub"                         HorizontalAlignment="Left" Margin="328,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_GitHub_Click" Height="23" Grid.Row="3"/>
     </Grid>
 </Window>

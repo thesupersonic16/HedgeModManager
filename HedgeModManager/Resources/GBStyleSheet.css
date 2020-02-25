@@ -21,6 +21,11 @@ span.RedColor
     color: #FF4E4E;
 }
 
+span.GreenColor
+{
+    color: #6EE16C;
+}
+
 table {
     border-spacing: 5px;
 }

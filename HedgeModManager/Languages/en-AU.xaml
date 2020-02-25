@@ -1,0 +1,124 @@
+﻿<ResourceDictionary 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Common UI Strings -->
+    <system:String x:Key="CommonUIClose"  >Close</system:String>
+    <system:String x:Key="CommonUIOK"     >OK</system:String>
+    <system:String x:Key="CommonUICancel" >Cancel</system:String>
+    <system:String x:Key="CommonUIYes"    >Yes</system:String>
+    <system:String x:Key="CommonUINo"     >No</system:String>
+    <system:String x:Key="CommonUIUpdate" >Update</system:String>
+    <system:String x:Key="CommonUIDelete" >Delete</system:String>
+    <system:String x:Key="CommonUINone"   >None</system:String>
+    <system:String x:Key="CommonUIIgnore" >Ignore</system:String>
+    <system:String x:Key="CommonUIWarning">WARNING</system:String>
+
+    <!-- Main UI Strings -->
+    <system:String x:Key="MainUIMods"          >Mods</system:String>
+    <system:String x:Key="MainUICodes"         >Codes</system:String>
+    <system:String x:Key="MainUISettings"      >Settings</system:String>
+    <system:String x:Key="MainUIRemoveMod"     >Remove Mod</system:String>
+    <system:String x:Key="MainUIAddMod"        >Add Mod</system:String>
+    <system:String x:Key="MainUIRefreshModList">Refresh Mod List</system:String>
+    <system:String x:Key="MainUISave"          >Save</system:String>
+    <system:String x:Key="MainUISaveAndPlay"   >Save and Play</system:String>
+    <system:String x:Key="MainUIPlay"          >Play</system:String>
+
+    <!-- Mods UI Strings -->
+    <system:String x:Key="ModsUIName"           >Name</system:String>
+    <system:String x:Key="ModsUIVersion"        >Version</system:String>
+    <system:String x:Key="ModsUIAuthor"         >Author</system:String>
+    <system:String x:Key="ModsUISupportSave"    >Supports Save</system:String>
+    <system:String x:Key="ModsUIHasUpdate"      >Updates</system:String>
+    <system:String x:Key="ModsUIModDescription" >Description</system:String>
+    <system:String x:Key="ModsUIModOpenFolder"  >Open containing folder</system:String>
+    <system:String x:Key="ModsUIModCheckUpdates">Check for updates</system:String>
+    <system:String x:Key="ModsUIModEdit"        >Edit mod</system:String>
+    <system:String x:Key="ModsUIModDelete"      >Delete mod</system:String>
+    <system:String x:Key="ModsUIModDragDrop"    >Drag and drop items to change the load order of mods.</system:String>
+
+    <!-- Codes UI Strings -->
+    <system:String x:Key="CodesUIName"    >Name</system:String>
+    <system:String x:Key="CodesUIDownload">Download Community Codes</system:String>
+
+    <!-- Settings UI Strings -->
+    <!--   Game & Mod Loader -->
+    <system:String x:Key="SettingsUIGMLHeader"      >Game &amp; Mod Loader</system:String>
+    <system:String x:Key="SettingsUIInstallLoader"  >Install Mod Loader</system:String>
+    <system:String x:Key="SettingsUIUninstallLoader">Uninstall Mod Loader</system:String>
+    <system:String x:Key="SettingsUIOpenMods"       >Open Mods Directory</system:String>
+    <system:String x:Key="SettingsUIEnableML"       >Enable mod loader</system:String>
+    <system:String x:Key="SettingsUIEnableDebug"    >Enable debug console</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >Enable save file redirection</system:String>
+    <system:String x:Key="SettingsUILoadTopBottom"  >Load top to bottom</system:String>
+    <system:String x:Key="SettingsUILabelLoaders"   >Loaders:</system:String>
+    <system:String x:Key="SettingsUILabelGame"      >Game:</system:String>
+    <system:String x:Key="SettingsUILabelMDir"      >Mods Directory:</system:String>
+    <!--   Hedge Mod Manager -->
+    <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"  >Check for mod loader updates</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"  >Check for code loader updates</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates">Check for mod updates</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"    >Keep Hedge Mod Manager open after starting a game</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"       >About Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUILanguage"       >Language:</system:String>
+
+    <!-- MainWindow UI Strings -->
+    <system:String x:Key="MainUIInstallFormHeader"   >Install a mod by...</system:String>
+    <system:String x:Key="MainUIInstallFormOptionDir">Installing from a folder</system:String>
+    <system:String x:Key="MainUIInstallFormOptionArc">Installing from an archive</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew">Making one (for developers!)</system:String>
+    <system:String x:Key="MainUIMissingLoaderHeader" >Mod Loader Not Yet Installed!</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">In order for {0} to start loading mods, the mod loader needs to be installed.&#x0a;Would you like to install it now?</system:String>
+    <system:String x:Key="MainUISelectModsDBTitle"   >Select where to load mods from...</system:String>
+
+    <!-- OptionsWindow UI Strings -->
+    <system:String x:Key="OptionsWindowUIError"      >Please select an option!</system:String>
+
+    <!-- AboutWindow UI Strings -->
+    <system:String x:Key="AboutWindowUITitle"  >About Hedge Mod Manager</system:String>
+    <system:String x:Key="AboutWindowUILine1"  >A program designed to help people easily load Hedgehog Engine mods.</system:String>
+    <system:String x:Key="AboutWindowUILine2"  >Requires a legally owned version of one of the supported games.</system:String>
+    <system:String x:Key="AboutWindowUICredits">Credits:</system:String>
+
+    <!-- EditModWindow UI Strings -->
+    <system:String x:Key="EditModWindowUIHeader">Please fill out some details about your mod.</system:String>
+
+    <!-- PropertyEditor UI Strings -->
+    <system:String x:Key="PropertyEditorUIName" >Name</system:String>
+    <system:String x:Key="PropertyEditorUIValue">Value</system:String>
+
+    <!-- Status UI Strings -->
+    <system:String x:Key="StatusUILoadedMods"             >Loaded {0} mods</system:String>
+    <system:String x:Key="StatusUICheckingModUpdates"     >Checking for {0} updates</system:String>
+    <system:String x:Key="StatusUIFailedToUpdate"         >Failed to update {0}! {1}</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Finished checking for mod updates: {0} completed, {1} failed</system:String>
+    <system:String x:Key="StatusUIStartingGame"           >Starting {0}</system:String>
+    <system:String x:Key="StatusUICheckingForUpdates"     >Checking for updates</system:String>
+    <system:String x:Key="StatusUINoUpdatesFound"         >No updates found</system:String>
+    <system:String x:Key="StatusUIFailedToCheckUpdates"   >Failed to check for updates</system:String>
+    <system:String x:Key="StatusUICheckingForLoaderUpdate">Checking for {0} updates</system:String>
+    <system:String x:Key="StatusUILoaderUpToDate"         >{0} is up to date</system:String>
+    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Failed to check for {0} updates</system:String>
+    <system:String x:Key="StatusUIInstalledLoader"        >Installed {0}</system:String>
+    <system:String x:Key="StatusUIDeletedMod"             >Deleted {0}</system:String>
+    <system:String x:Key="StatusUIModsDBSaved"            >Saved mods database</system:String>
+    <system:String x:Key="StatusUIModsDBLocationChanged"  >Updated database location</system:String>
+    <system:String x:Key="StatusUIGameChange"             >Changed game to {0}</system:String>
+    <system:String x:Key="StatusUIDownloadingCodes"       >Downloading codes for {0}</system:String>
+    <system:String x:Key="StatusUIDownloadFinished"       >Download finished</system:String>
+    <system:String x:Key="StatusUIDownloadFailed"         >Download failed</system:String>
+    
+    <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Are you sure you want to delete "{0}"?&#x0a;This action cannot be undone!</system:String>
+    
+    <!-- Status UI Lang Stuff Strings -->
+    <system:String x:Key="StatusUIUpdateCompletedSingular"      >completed</system:String>
+    <system:String x:Key="StatusUIUpdateCompletedPlural"        >completed</system:String>
+    <system:String x:Key="StatusUIUpdateFailedSingular"         >failed</system:String>
+    <system:String x:Key="StatusUIUpdateFailedPlural"           >failed</system:String>
+
+
+</ResourceDictionary>
