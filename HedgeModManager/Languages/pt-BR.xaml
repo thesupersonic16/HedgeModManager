@@ -50,7 +50,7 @@
     <system:String x:Key="SettingsUIUninstallLoader">Desinstalar o Carregador de Mods</system:String>
     <system:String x:Key="SettingsUIOpenMods"       >Abrir Diretoria de Mods</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Ativar o carregador de mods</system:String>
-    <system:String x:Key="SettingsUIEnableDebug"    >Ativar consola de depuramento</system:String>
+    <system:String x:Key="SettingsUIEnableDebug"    >Ativar console de depuramento</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Ativar redirecionamento do ficheiro de gravação</system:String>
     <system:String x:Key="SettingsUILoadTopBottom"  >Carregar de cima para baixo</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Carregadores:</system:String>
