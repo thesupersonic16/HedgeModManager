@@ -238,6 +238,7 @@ namespace HedgeModManager
         public static void SetupLanguages()
         {
             SupportedCultures.Add("English (Australia)", "en-AU");
+            SupportedCultures.Add("Français (France)", "fr-FR");
             SupportedCultures.Add("Português (Portugal)", "pt-PT");
             SupportedCultures.Add("中文繁體 (Chinese Traditional)", "zh-TW");
             SupportedCultures.Add("中文简体 (Chinese Simplified)", "zh-CN");

@@ -36,6 +36,7 @@
                     <Label Content="Slash"/>
                     <Label Content="MainMemory"/>
                     <Label Content="JoeyLaw"/>
+                    <Label Content="LJSTAR"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Managing the project"/>
@@ -47,6 +48,7 @@
                     <Label Content="Contributing to the project"/>
                     <Label Content="mod-loader-common"/>
                     <Label Content="Chinese translation"/>
+                    <Label Content="French translation"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
