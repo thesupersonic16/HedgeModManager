@@ -330,3 +330,23 @@ writenop 00E4B353 8
 Patch "Boost Gauge Starts Empty"
 write32 00E64F2F 0x90C9570F
 writenop 00E64F33 4
+
+Code "Everything is 1/4 Speed Except For Sonic"
+write8 p01E0BE5C|8|19D 1
+writefloat p01E0BE5C|8|1A4 0.25
+
+Code "Everything is 1/2 Speed Except For Sonic"
+write8 p01E0BE5C|8|19D 1
+writefloat p01E0BE5C|8|1A4 0.5
+
+Code "Everything is 2x Speed Except For Sonic"
+write8 p01E0BE5C|8|19D 1
+writefloat p01E0BE5C|8|1A4 2
+
+Code "Everything is 4x Speed Except For Sonic"
+write8 p01E0BE5C|8|19D 1
+writefloat p01E0BE5C|8|1A4 4
+
+Code "Everything is 2x Speed"
+write8 p01E0BE5C|8|19C 1
+writefloat p01E0BE5C|8|1A0 2
