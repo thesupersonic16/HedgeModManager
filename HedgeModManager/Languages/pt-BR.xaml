@@ -33,11 +33,11 @@
     <system:String x:Key="ModsUISupportSave"    >Suporta Gravação</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Atualizações</system:String>
     <system:String x:Key="ModsUIModDescription" >Descrição</system:String>
-    <system:String x:Key="ModsUIModOpenFolder"  >Abrir pasta do conteúdo</system:String>
+    <system:String x:Key="ModsUIModOpenFolder"  >Abrir pasta de conteúdo</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Verificar por atualizações</system:String>
     <system:String x:Key="ModsUIModEdit"        >Editar mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Remover mod</system:String>
-    <system:String x:Key="ModsUIModDragDrop"    >Arrasta items para alterar a ordem de carregamento de mods.</system:String>
+    <system:String x:Key="ModsUIModDragDrop"    >Arraste items para alterar a ordem de carregamento de mods.</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Nome</system:String>
@@ -50,7 +50,7 @@
     <system:String x:Key="SettingsUIUninstallLoader">Desinstalar o Carregador de Mods</system:String>
     <system:String x:Key="SettingsUIOpenMods"       >Abrir Diretoria de Mods</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Ativar o carregador de mods</system:String>
-    <system:String x:Key="SettingsUIEnableDebug"    >Ativar consola de depuração</system:String>
+    <system:String x:Key="SettingsUIEnableDebug"    >Ativar console de depuramento</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Ativar redirecionamento do ficheiro de gravação</system:String>
     <system:String x:Key="SettingsUILoadTopBottom"  >Carregar de cima para baixo</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Carregadores:</system:String>
@@ -71,11 +71,11 @@
     <system:String x:Key="MainUIInstallFormOptionArc">Instalar de um arquivo</system:String>
     <system:String x:Key="MainUIInstallFormOptionNew">Criar um (para desenvolvedores!)</system:String>
     <system:String x:Key="MainUIMissingLoaderHeader" >Carregador de Mods Não Instalado!</system:String>
-    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc"   >De maneira a que {0} possa carregar mods, o carregador de mods precisa de estar instalado.&#x0a;Queres instala-lo agora?</system:String>
-    <system:String x:Key="MainUISelectModsDBTitle"   >Seleciona de onde pretendes carregar mods...</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc"   >Para que {0} possa carregar mods, o carregador de mods precisa de estar instalado.&#x0a;Quer instalar agora?</system:String>
+    <system:String x:Key="MainUISelectModsDBTitle"   >Selecione de onde pretende carregar mods...</system:String>
 
     <!-- OptionsWindow UI Strings -->
-    <system:String x:Key="OptionsWindowUIError"      >Por favor seleciona uma opção!</system:String>
+    <system:String x:Key="OptionsWindowUIError"      >Por favor selecione uma opção!</system:String>
 
     <!-- AboutWindow UI Strings -->
     <system:String x:Key="AboutWindowUITitle">Sobre o Hedge Mod Manager</system:String>
@@ -84,7 +84,7 @@
     <system:String x:Key="AboutWindowUICredits">Créditos:</system:String>
 
     <!-- EditModWindow UI Strings -->
-    <system:String x:Key="EditModWindowUIHeader">Por favor preenche alguns detalhes sobre o teu mod.</system:String>
+    <system:String x:Key="EditModWindowUIHeader">Por favor preencha alguns detalhes sobre o seu mod.</system:String>
 
     <!-- PropertyEditor UI Strings -->
     <system:String x:Key="PropertyEditorUIName">Nome</system:String>
@@ -92,14 +92,14 @@
 
     <!-- Status UI Strings -->
     <system:String x:Key="StatusUILoadedMods"             >{0} mods carregados</system:String>
-    <system:String x:Key="StatusUICheckingModUpdates"     >A verificar por atualizações de {0}</system:String>
+    <system:String x:Key="StatusUICheckingModUpdates"     >Verificando por atualizações de {0}</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >Falha ao atualizar {0}! {1}</system:String>
     <system:String x:Key="StatusUIModUpdateCheckFinish"   >Verificação de atualizações de mods terminada: {0} {2}, {1} {3}.</system:String>
-    <system:String x:Key="StatusUIStartingGame"           >A iniciar {0}</system:String>
-    <system:String x:Key="StatusUICheckingForUpdates"     >A verificar por atualizações</system:String>
+    <system:String x:Key="StatusUIStartingGame"           >Iniciando {0}</system:String>
+    <system:String x:Key="StatusUICheckingForUpdates"     >Verificando por atualizações</system:String>
     <system:String x:Key="StatusUINoUpdatesFound"         >Nenhuma atualização encontrada</system:String>
     <system:String x:Key="StatusUIFailedToCheckUpdates"   >Falha ao verificar por atualizações</system:String>
-    <system:String x:Key="StatusUICheckingForLoaderUpdate">A verificar por atualizações de {0}</system:String>
+    <system:String x:Key="StatusUICheckingForLoaderUpdate">Verificando por atualizações de {0}</system:String>
     <system:String x:Key="StatusUILoaderUpToDate"         >{0} está atualizado</system:String>
     <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Falha ao verificar por atualizações de {0}</system:String>
     <system:String x:Key="StatusUIInstalledLoader"        >{0} instalado</system:String>
@@ -107,12 +107,12 @@
     <system:String x:Key="StatusUIModsDBSaved"            >Base de dados de mods guardada</system:String>
     <system:String x:Key="StatusUIModsDBLocationChanged"  >Localização da base de dados atualizada</system:String>
     <system:String x:Key="StatusUIGameChange"             >Jogo mudado para {0}</system:String>
-    <system:String x:Key="StatusUIDownloadingCodes"       >A transferir códigos para {0}</system:String>
+    <system:String x:Key="StatusUIDownloadingCodes"       >Transferindo códigos para {0}</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >Transferência terminada</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >A transferência falhou</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Tens a certeza de que pretendes apagar "{0}"?&#x0a;Esta ação não pode ser desfeita!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Tem a certeza de que pretende apagar "{0}"?&#x0a;Esta ação não pode ser desfeita!</system:String>
 
 
     <!-- Status UI Lang Stuff Strings -->
