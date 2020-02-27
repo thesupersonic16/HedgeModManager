@@ -2,10 +2,12 @@
 A program for managing mods for Sonic Generations, Sonic Lost World and Sonic Forces on PC.
 
 ## So how do I use this?
-Its simple, just grab the [latest version from GitHub](https://github.com/thesupersonic16/HedgeModManager/releases/latest) (or grab the latest compile from [AppVeyor](https://ci.appveyor.com/project/thesupersonic16/slw-mod-loader/branch/rewrite)) then extract all the files anywhere and run HedgeModManager.exe.
+Its simple, just grab the [latest version from GitHub](https://github.com/thesupersonic16/HedgeModManager/releases/) (or grab the latest compile from [AppVeyor](https://ci.appveyor.com/project/thesupersonic16/slw-mod-loader/branch/rewrite)) then extract all the files anywhere and run HedgeModManager.exe.
 
 ## How do I install mods?
 There are multiple ways of installing mods, one of the easy ways of installing mods is by dragging its zip/7z/rar/folder into the mod list along with also being able to drag and drop multiple files and/or folders.
+
+You can also install mods using [GameBanana's](https://gamebanana.com/games/6059) 1-Click Install button. 
 
 Once your done, you can start checking the checkbox(es) of the mods and codes you want to play and click "Save and Play".
 
@@ -62,21 +64,21 @@ The mod.ini file is a mod configuration file that details all the information ab
 
 The version of the format used in the HedgeModManager is a variation on the format used in SLWModLoader and SonicGMI, with some minor changes/additions here and there.
 
-Here's an example of a mod.ini file for Sonic Lost World:
+Here's a mod.ini from a Sonic Generations mod by PTKickass:
 ```ini
 [Main]
+UpdateServer="https://raw.githubusercontent.com/PTKickass/ModUpdates/master/SonicGenerations/SonicUnleashedHUD/"
 IncludeDir0="."
 IncludeDirCount=1
-;UpdateServer=""
+DLLFile="UnleashedHUD.dll"
 
 [Desc]
-Title="SLW '06 Project"
-Description="What if Sonic '06 stages were fully playable in an engine that not only perfectly fit it's level design/gameplay, but was actually GOOD? \n\nIntroducing the SLW '06 Project! A mega mod for Lost World that ports as much of Sonic '06 as humanly possible without the glitches and unattractive visuals!  \n\nCredits:\n UltimateDarkman for making the wonderful '06-esque animations.\n Death for his wonderful beta-testing work. \n Gotta Play Fast and Slash for porting the Sonic '06 player models to Lost World. \n Radfordhound for ripping the stages, rendering GIA/generating lightfields, drawing vertex colors, and porting the HUD/music. \n Radfordhound, Gotta Play Fast, Slash, and Beatz for porting the stages and doing object placement. "
-Version="Alpha 1.0"
-Date="4/20/16"
-Author="Radfordhound & Beatz & GPF & Death & UltimateDarkman"
-AuthorURL="https://www.youtube.com/user/Radfordhound & https://www.youtube.com/channel/UCEjwges-3BTaWsMwOGJDoGQ & https://www.youtube.com/channel/UCZfOGBkXRKICFozWU5bE0Xg & https://www.youtube.com/user/DeathwolvesProjects & https://www.youtube.com/user/UltimateDarkman2010"
-URL="https://onedrive.live.com/redir?resid=A0D011638C5973B3!5011&authkey=!AJXTG3vsMq0OXFc&ithint=folder%2c"
+Title="Sonic Unleashed HUD"
+Description="A Sonic Generations mod that partially ports the Sonic Unleashed HUD"
+Version="1.3.2"
+Date="2020/02/20"
+Author="PTKickass"
+AuthorURL="https://www.youtube.com/user/ENPTKickass"
 ```
 
 The following is a list of the most important values that can be used in a mod.ini file:
@@ -88,6 +90,10 @@ The following is a list of the most important values that can be used in a mod.i
 **IncludeDirCount** Specifies how many folders will be included with your mod.
 
 **UpdateServer** A URL to a directory on a HTTP or HTTPS server containing a mod_version.ini and mod_files.txt file using the SonicGMI update format. e.g. ``UpdateServer="https://colorsproject.000webhostapp.com/qua200/"``
+
+**DLLFile** A path to the mod's DLL file. Only use this if the mod contains a dll file. If not remove this line.
+
+**SaveFile** A path to a save file or to where you want the file save to be located. This only works if save redirection is enabled, and is recommended to be used if the mod needs a curtain progress or if the mod risks breaking save files.
 
 ### Desc
 
@@ -116,7 +122,7 @@ In your mod.ini file add a field in the `[Main]` section called `UpdateServer` a
 ### Preparing the server
 On your server create a folder for the mod you want to allow updating for and create two files `mod_files.txt` which will be blank for now and a file called `mod_version.ini` This file will contain the information about the update and the changelog for SonicGMI users. 
  
-Here is an example of a mod.ini for HedgeModManager and SonicGMI:
+Here is an example of a mod_version.ini for HedgeModManager and SonicGMI:
 ```ini
 [Main]
 VersionString="2.0"
@@ -168,7 +174,39 @@ the mod_files.txt format contains two commands:
 Here is an example of a mod_files.txt
 ```
 add mod.ini
-add DiscordGenerations.dll
+add UnleashedHUD.ini
+add UnleashedHUD.dll
+add disk/bb/SonicActionCommonHud.ar.00
+add disk/bb/SonicActionCommonHud.ar.01
+add disk/bb/SonicActionCommonHud.arl
+add disk/bb/SonicActionCommon.ar.00
+add disk/bb/SonicActionCommon.arl
+add disk/bb/SystemCommon.ar.00
+add disk/bb/SystemCommon.arl
+add disk/bb/Languages/English/SonicActionCommonHud.ar.00
+add disk/bb/Languages/English/SonicActionCommonHud.arl
+add disk/bb/Languages/French/SonicActionCommonHud.ar.00
+add disk/bb/Languages/French/SonicActionCommonHud.arl
+add disk/bb/Languages/German/SonicActionCommonHud.ar.00
+add disk/bb/Languages/German/SonicActionCommonHud.arl
+add disk/bb/Languages/Italian/SonicActionCommonHud.ar.00
+add disk/bb/Languages/Italian/SonicActionCommonHud.arl
+add disk/bb/Languages/Japanese/SonicActionCommonHud.ar.00
+add disk/bb/Languages/Japanese/SonicActionCommonHud.arl
+add disk/bb/Languages/Spanish/SonicActionCommonHud.ar.00
+add disk/bb/Languages/Spanish/SonicActionCommonHud.arl
+add disk/bb3/SonicActionCommonHud.ar.00
+add disk/bb3/SonicActionCommonHud.arl
+add disk/bb3/SonicActionCommon.ar.00
+add disk/bb3/SonicActionCommon.ar.01
+add disk/bb3/SonicActionCommon.arl
+add disk/bb2/HowTo.ar.00
+add disk/bb2/HowTo.arl
+add disk/bb2/pam_cmn.ar.00
+add disk/bb2/pam_cmn.arl
+add disk/bb3/Application.ar.00
+add disk/bb3/Application.arl
+delete disk/bb/SonicActionCommon.ar.01
 ```
  
 Once you have finished recording your mod_files.txt file, you can now start modifying your mod_version.ini file that you have created at the start.
@@ -182,21 +220,38 @@ After writing your changes in mod_version.ini you can now start writing your cha
  
 Here is an example of a markdown changelog:
 ```md
+## Sonic Unleashed HUD v1.3.2
+Unleashed Menu Sounds fixes:
+- Fixed press start volume. Now it's full stereo on it's own without relying on two Synths;
+- Fixed stage title reveal sound. Sonic Team used two synths to make the sound stereo, so now it's real stereo with only one sound.
 
-## DiscordGenerations v2.0
-- Updated for use with GCL v2.1
- 
-___ 
-## Information
-# Credits
-- Programmer: [@TheSuperSonic16](https://twitter.com/TheSuperSonic16) 
-- Help and Testing: [Slash (Michele) (GB)](https://gamebanana.com/members/1347950) 
+## Sonic Unleashed HUD v1.3.1
+- *forgot to include the Bumper Textures woops...*
 
-# Links
-- [GameBanana Entry](https://gamebanana.com/gamefiles/6969)
-___ 
-## Screenshot
- ![Screenshot][screenshot_url] 
+## Sonic Unleashed HUD v1.3
+- Remade PlayStation buttons to be higher res and have even better alignement;
+- Overhauled menu sounds by Mario Tainaka.
 
-[screenshot_url]: https://files.gamebanana.com/img/ss/gamefiles/5b2f0ee23ffb5.webp
+## Sonic Unleashed HUD v1.2.1
+- Adjusted PlayStation bumper alignement/size.
+
+## Sonic Unleashed HUD v1.2
+- Added support for PlayStation button prompts. Please edit the "UnleashedHUD.ini" file in the mod's root directory.
+
+## Sonic Unleashed HUD v1.1.3
+- Fixed **AGAIN** the broken "Ready GO!" intro animation when the game is set to English.
+
+## Sonic Unleashed HUD v1.1.2
+- Fixed broken "Ready GO!" intro animation when the game is set to English.
+
+## Sonic Unleashed HUD v1.1
+- Fixed boost bar "Ring Energy" text not displaying in languages other than English and Japanese;
+- Added multiple language support for the "Ready GO!" intro animation.
+
+## Sonic Unleashed HUD v1.0.1 (RC2)
+- Adjusted slant angle on boost bar;
+- Public release!
+
+## Sonic Unleashed HUD v1.0 (RC1)
+- First release candidate.
 ```
