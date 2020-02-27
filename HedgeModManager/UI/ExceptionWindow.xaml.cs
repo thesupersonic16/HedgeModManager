@@ -105,7 +105,7 @@ namespace HedgeModManager
         {
             string url = "https://github.com/thesupersonic16/HedgeModManager/issues/new";
             url += $"?title=[{App.CurrentGame?.GameName}] ";
-            url += $"&body={Uri.EscapeDataString(GetReport())}";
+            url += $"&body={Uri.EscapeDataString(GetReport(true))}";
             Process.Start(url);
         }
 
