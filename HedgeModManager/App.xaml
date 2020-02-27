@@ -8,6 +8,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Languages/Languages.xaml" />
                 <ResourceDictionary Source="Languages/en-AU.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="ScrollBar.Static.Background" Color="Transparent"/>

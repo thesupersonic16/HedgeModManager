@@ -16,8 +16,6 @@ namespace HedgeModManager
             var resource = Application.Current.TryFindResource(key);
             if (resource is string str)
                 return str;
-            if (Debugger.IsAttached && Debugger.IsLogging())
-                Console.WriteLine("Attempted to localise \"{0}\", but no such string exists!", key);
             return "UNLOCALISED";
         }
     }

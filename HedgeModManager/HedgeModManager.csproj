@@ -111,6 +111,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Languages\Languages.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Languages\pt-BR.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -158,6 +162,9 @@
     <Compile Include="Github\ReleaseInfo.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="Lang.cs" />
+    <Compile Include="Languages\Languages.xaml.cs">
+      <DependentUpon>Languages.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ModUpdate.cs" />
     <Compile Include="Serialization\IniSerializer.cs" />
     <Compile Include="ShellProvider.cs" />

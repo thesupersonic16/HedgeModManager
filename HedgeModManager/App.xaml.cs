@@ -23,6 +23,7 @@ using GameBananaAPI;
 using HedgeModManager.Github;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using HedgeModManager.Languages;
 
 namespace HedgeModManager
 {
@@ -214,7 +215,7 @@ namespace HedgeModManager
         {
             var langDict = new ResourceDictionary();
             langDict.Source = new Uri($"Languages/{culture}.xaml", UriKind.Relative);
-            while (Current.Resources.MergedDictionaries.Count > 1)
+            while (Current.Resources.MergedDictionaries.Count > 2)
                 Current.Resources.MergedDictionaries.RemoveAt(1);
             // No need to load the fallback language on top
             if (culture == "en-AU")
@@ -237,12 +238,9 @@ namespace HedgeModManager
 
         public static void SetupLanguages()
         {
-            SupportedCultures.Add("English (Australia)", "en-AU");
-            SupportedCultures.Add("Français (France)", "fr-FR");
-            SupportedCultures.Add("Português (Portugal)", "pt-PT");
-            SupportedCultures.Add("Português (Brazil)", "pt-BR");
-            SupportedCultures.Add("中文繁體 (Chinese Traditional)", "zh-TW");
-            SupportedCultures.Add("中文简体 (Chinese Simplified)", "zh-CN");
+            var resource = Current.TryFindResource("Languages");
+            if (resource is LanguageList langs)
+                langs.ForEach(t => SupportedCultures.Add(t.Name, t.FileName));
         }
 
         /// <summary>

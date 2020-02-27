@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:HedgeModManager.Languages"
+                    xmlns:col="clr-namespace:System.Collections;assembly=mscorlib">
+
+    <local:LanguageList x:Key="Languages">
+        <local:LangEntry FileName="en-AU" Name="English (Australia)"/>
+        <local:LangEntry FileName="fr-FR" Name="Français (France)"/>
+        <local:LangEntry FileName="pt-PT" Name="Português (Portugal)"/>
+        <local:LangEntry FileName="pt-BR" Name="Português (Brazil)"/>
+        <local:LangEntry FileName="zh-TW" Name="中文繁體 (Chinese Traditional)"/>
+        <local:LangEntry FileName="zh-CN" Name="中文简体 (Chinese Simplified)"/>
+    </local:LanguageList>
+    
+</ResourceDictionary>
