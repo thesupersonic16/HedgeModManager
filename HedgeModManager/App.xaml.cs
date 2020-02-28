@@ -216,7 +216,7 @@ namespace HedgeModManager
             var langDict = new ResourceDictionary();
             langDict.Source = new Uri($"Languages/{culture}.xaml", UriKind.Relative);
             while (Current.Resources.MergedDictionaries.Count > 2)
-                Current.Resources.MergedDictionaries.RemoveAt(1);
+                Current.Resources.MergedDictionaries.RemoveAt(2);
             // No need to load the fallback language on top
             if (culture == "en-AU")
                 return;
