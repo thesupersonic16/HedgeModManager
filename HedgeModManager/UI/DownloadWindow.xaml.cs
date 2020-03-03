@@ -26,7 +26,8 @@ namespace HedgeModManager
         public string DestinationPath;
         public WebClient DownloadClient;
         public Action DownloadCompleted;
-        
+        public Action<Exception> DownloadFailed;
+
         public DownloadWindow(string header, string url, string destinationFile)
         {
             InitializeComponent();
@@ -61,7 +62,11 @@ namespace HedgeModManager
             Dispatcher.Invoke(() =>
             {
                 Close();
-                DownloadCompleted?.Invoke();
+
+                if(args.Error == null)
+                    DownloadCompleted?.Invoke();
+                else
+                    DownloadFailed?.Invoke(args.Error);
             });
         }
     }

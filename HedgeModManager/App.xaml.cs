@@ -379,20 +379,20 @@ namespace HedgeModManager
                 return;
             }
 
-            if(HasInternet())
-            {
-                // Downloads the Loader
-                var downloader = new DownloadWindow($"Downloading {CurrentGame.CustomLoaderName}", CurrentGame.ModLoaderDownloadURL, DLLFileName);
-                downloader.Start();
-            }
-            else
+            // Downloads the loader
+            var downloader = new DownloadWindow($"Downloading {CurrentGame.CustomLoaderName}",
+                CurrentGame.ModLoaderDownloadURL, DLLFileName);
+           
+            downloader.DownloadFailed += (ex) =>
             {
                 var loader = CurrentGame.ModLoaderData;
                 if (loader != null)
                     File.WriteAllBytes(DLLFileName, loader);
                 else
                     throw new NotImplementedException("No Loader is available!");
-            }
+            };
+
+            downloader.Start();
         }
 
         public static int BoyerMooreSearch(byte[] haystack, byte[] needle)
@@ -448,11 +448,6 @@ namespace HedgeModManager
             bool hasUpdate = version.Major >= Version.Major && (version.Minor > Version.Minor || version.Revision > Version.Revision);
 
             return (hasUpdate, info);
-        }
-
-        public static bool HasInternet()
-        {
-            return new Ping().Send("8.8.8.8", 1000).Status == IPStatus.Success;
         }
 
         private static string GetCPKREDIRVersion()
