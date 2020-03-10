@@ -350,3 +350,9 @@ writefloat p01E0BE5C|8|1A4 4
 Code "Everything is 2x Speed"
 write8 p01E0BE5C|8|19C 1
 writefloat p01E0BE5C|8|1A0 2
+
+Patch "Allow Multiple Instances"
+write8 00E7A6E6 0x83
+write8 00E7A6E7 0xC4
+write8 00E7A6E8 0xC
+writenop 00E7A6E9 0x3
