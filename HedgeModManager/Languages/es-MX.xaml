@@ -30,7 +30,7 @@
     <system:String x:Key="ModsUIName"           >Nombre</system:String>
     <system:String x:Key="ModsUIVersion"        >Version</system:String>
     <system:String x:Key="ModsUIAuthor"         >Autor</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Partidas Propias</system:String>
+    <system:String x:Key="ModsUISupportSave"    >Soporta Partida separada</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Actualizacion</system:String>
     <system:String x:Key="ModsUIModDescription" >Descripcion</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Abrir carpeta contenedora</system:String>
@@ -40,7 +40,7 @@
     <system:String x:Key="ModsUIModDragDrop"    >Arrastra y suelta objetos para cambiar el orden de carga de los mods</system:String>
 
     <!-- Codes UI Strings -->
-    <system:String x:Key="CodesUIName"    >Name</system:String>
+    <system:String x:Key="CodesUIName"    >Nombre</system:String>
     <system:String x:Key="CodesUIDownload">Descargar trucos de la comunidad</system:String>
 
     <!-- Settings UI Strings -->
@@ -51,25 +51,25 @@
     <system:String x:Key="SettingsUIOpenMods"       >Abrir carpeta de mdos</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Activar cargador de mods</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Activar consola depuracion</system:String>
-    <system:String x:Key="SettingsUIEnableSRedir"   >Activar Partidas Propias</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >Activar redireccion a partida separada</system:String>
     <system:String x:Key="SettingsUILoadTopBottom"  >Cargar de arriba a abajao</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Cargadores:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Juego:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Carpeta de Mods:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"  >Check for mod loader updates</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"  >Check for code loader updates</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates">Check for mod updates</system:String>
-    <system:String x:Key="SettingsUIKeepHMMOpen"    >Keep Hedge Mod Manager open after starting a game</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"  >Obtener Actualizaciones del cargador de mdos</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"  >Obtener actualizacion del cargador de codigos</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates">Obtener actualizaciones de mods</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"    >Mantener Hedge Mod Manager abierto despues de iniciar el juego</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >About Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUILanguage"       >Language:</system:String>
+    <system:String x:Key="SettingsUILanguage"       >Idioma:</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >Instalando un mod de...</system:String>
     <system:String x:Key="MainUIInstallFormOptionDir">Instalando de una carpeta</system:String>
     <system:String x:Key="MainUIInstallFormOptionArc">Instalando de Archivo</system:String>
-    <system:String x:Key="MainUIInstallFormOptionNew">Haciendo (para desarrolladores!)</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew">Creando mod (para desarrolladores!)</system:String>
     <system:String x:Key="MainUIMissingLoaderHeader" >Cargador de mods no instalado!</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Para que {0} cargue mods, Se debe instalar el cargador de mods. Quieres instalarlo?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"   >Selecciona de donde cargar mods...</system:String>
