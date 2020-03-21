@@ -58,7 +58,7 @@
     <system:String x:Key="SettingsUILabelMDir"      >Carpeta de Mods:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"  >Obtener Actualizaciones del cargador de mdos</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"  >Obtener Actualizaciones del cargador de mods</system:String>
     <system:String x:Key="SettingsUICheckCLUpdate"  >Obtener actualizacion del cargador de codigos</system:String>
     <system:String x:Key="SettingsUICheckModUpdates">Obtener actualizaciones de mods</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Mantener Hedge Mod Manager abierto despues de iniciar el juego</system:String>
@@ -92,14 +92,14 @@
 
     <!-- Status UI Strings -->
     <system:String x:Key="StatusUILoadedMods"             >Cargados {0} mods</system:String>
-    <system:String x:Key="StatusUICheckingModUpdates"     >Checando actualizaciones de{0}</system:String>
+    <system:String x:Key="StatusUICheckingModUpdates"     >Obteniendo actualizaciones de{0}</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >Error al actualizar {0}! {1}</system:String>
     <system:String x:Key="StatusUIModUpdateCheckFinish"   >Revision de Actualizaciones: {0} completadas, {1} fallidas</system:String>
     <system:String x:Key="StatusUIStartingGame"           >Iniciando {0}</system:String>
     <system:String x:Key="StatusUICheckingForUpdates"     >Revisando Actualizaciones</system:String>
     <system:String x:Key="StatusUINoUpdatesFound"         >No se encontraron actualizaciones</system:String>
     <system:String x:Key="StatusUIFailedToCheckUpdates"   >Error al revisar actualizaciones</system:String>
-    <system:String x:Key="StatusUICheckingForLoaderUpdate">Checando actualizaciones de {0}</system:String>
+    <system:String x:Key="StatusUICheckingForLoaderUpdate">Obteniendo actualizaciones de {0}</system:String>
     <system:String x:Key="StatusUILoaderUpToDate"         >{0} esta en la version mas reciente</system:String>
     <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Error al revisar actualizaciones de {0}</system:String>
     <system:String x:Key="StatusUIInstalledLoader"        >Instalado{0}</system:String>
