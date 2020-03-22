@@ -27,6 +27,10 @@
             <SolidColorBrush x:Key="ScrollBar.Pressed.Thumb" Color="#606060"/>
             <SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="#CDCDCD"/>
 
+            <!-- TODO: Complete this -->
+            <!-- HedgeModManager Theme -->
+            <SolidColorBrush x:Key="HMM.Window.DialogBottom" Color="#FF353536"/>
+
             <DropShadowEffect x:Key="HoverEffect" BlurRadius="5" Color="#FF8ED0F9" Opacity="0" Direction="0" ShadowDepth="0"/>
 
             <Style TargetType="{x:Type ContextMenu}">

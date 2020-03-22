@@ -5,22 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="{StaticResource AboutWindowUITitle}" Height="507.525" Width="500"  Background="#FF2D2D30"
+        Title="{StaticResource AboutWindowUITitle}" Height="436" Width="658"  Background="#FF2D2D30"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="64"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="36"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Image Width="64" Height="64" Source="/Resources/Graphics/icon256.png"/>
             <Label Content="Hedge Mod Manager" Height="Auto" Width="Auto" FontSize="36"/>
         </StackPanel>
-        <Label Content="{StaticResource AboutWindowUILine1}" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
-        <Label Content="{StaticResource AboutWindowUILine2}" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Grid.Row="1"/>
-        <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Margin="15">
+        <Label Content="{StaticResource AboutWindowUILine1}" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
+        <Label Content="{StaticResource AboutWindowUILine2}" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="0" Margin="8,8,5,8">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.4*"/>
@@ -35,8 +39,6 @@
                     <Label Content="PTKickass"/>
                     <Label Content="Slash"/>
                     <Label Content="MainMemory"/>
-                    <Label Content="JoeyLaw"/>
-                    <Label Content="LJSTAR"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Managing the project"/>
@@ -44,15 +46,37 @@
                     <Label Content="Base Design"/>
                     <Label Content="CPKREDIR"/>
                     <Label Content="Contributing to Forces Mod Loader"/>
-                    <Label Content="Cheat codes and Portuguese translation"/>
+                    <Label Content="Cheat codes"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="mod-loader-common"/>
-                    <Label Content="Chinese translation"/>
-                    <Label Content="French translation"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <Button Content="{StaticResource CommonUIClose}" HorizontalAlignment="Left" Margin="408,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_Close_Click" Height="23" Grid.Row="3"/>
-        <Button Content="GitHub"                         HorizontalAlignment="Left" Margin="328,0,0,0" VerticalAlignment="Top" Width="75" Click="UI_GitHub_Click" Height="23" Grid.Row="3"/>
+        <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="1" Margin="5,8,8,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <Label Content="PTKickass"/>
+                    <Label Content="JoeyLaw"/>
+                    <Label Content="LJSTAR"/>
+                    <Label Content="ricky-daniel13"/>
+                    <Label Content="Proa"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <Label Content="Portuguese translations"/>
+                    <Label Content="Chinese translations"/>
+                    <Label Content="French translation"/>
+                    <Label Content="Spanish translation"/>
+                    <Label Content="Spanish translation and reviewing"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-4" Grid.Row="3" Grid.ColumnSpan="2" Background="{StaticResource HMM.Window.DialogBottom}">
+            <Button Content="{StaticResource CommonUIClose}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_Close_Click" />
+            <Button Content="GitHub"                         Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_GitHub_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
