@@ -10,6 +10,7 @@
         <local:LangEntry FileName="pt-BR" Name="Português (Brazil)"/>
         <local:LangEntry FileName="zh-TW" Name="中文繁體 (Chinese Traditional)"/>
         <local:LangEntry FileName="zh-CN" Name="中文简体 (Chinese Simplified)"/>
+        <local:LangEntry FileName="es-MX" Name="Spanish (Mexico)"/>
     </local:LanguageList>
     
 </ResourceDictionary>
