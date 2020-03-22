@@ -30,7 +30,7 @@
     <system:String x:Key="ModsUIName"           >Nombre</system:String>
     <system:String x:Key="ModsUIVersion"        >Version</system:String>
     <system:String x:Key="ModsUIAuthor"         >Autor</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Soporta Partida separada</system:String>
+    <system:String x:Key="ModsUISupportSave"    >Soporta Guardado</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Actualizacion</system:String>
     <system:String x:Key="ModsUIModDescription" >Descripcion</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Abrir carpeta contenedora</system:String>
@@ -51,7 +51,7 @@
     <system:String x:Key="SettingsUIOpenMods"       >Abrir carpeta de mdos</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Activar cargador de mods</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Activar consola depuracion</system:String>
-    <system:String x:Key="SettingsUIEnableSRedir"   >Activar redireccion a partida separada</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >Activar redireccion de Guardado</system:String>
     <system:String x:Key="SettingsUILoadTopBottom"  >Cargar de arriba a abajao</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Cargadores:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Juego:</system:String>
@@ -62,7 +62,7 @@
     <system:String x:Key="SettingsUICheckCLUpdate"  >Obtener actualizacion del cargador de codigos</system:String>
     <system:String x:Key="SettingsUICheckModUpdates">Obtener actualizaciones de mods</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Mantener Hedge Mod Manager abierto despues de iniciar el juego</system:String>
-    <system:String x:Key="SettingsUIAboutHMM"       >About Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"       >Acerca de Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Idioma:</system:String>
 
     <!-- MainWindow UI Strings -->
