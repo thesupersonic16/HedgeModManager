@@ -58,9 +58,9 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="{DynamicResource ModsUIVersion}"     Width="68" DisplayMemberBinding="{Binding Version}"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUIVersion}"     Width="60" DisplayMemberBinding="{Binding Version}"/>
                                         <GridViewColumn Header="{DynamicResource ModsUIAuthor}"      Width="89" DisplayMemberBinding="{Binding Author}"/>
-                                        <GridViewColumn Header="{DynamicResource ModsUISupportSave}" Width="97" DisplayMemberBinding="{Binding SupportsSave}"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUISupportSave}" Width="105" DisplayMemberBinding="{Binding SupportsSave}"/>
                                         <GridViewColumn Header="{DynamicResource ModsUIHasUpdate}"   Width="70" DisplayMemberBinding="{Binding HasUpdates}"/>
                                     </GridView>
                                 </ListView.View>

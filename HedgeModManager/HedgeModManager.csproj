@@ -107,6 +107,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Languages\es-MX.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
     <Page Include="Languages\fr-FR.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
