@@ -60,12 +60,21 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type MenuItem}">
                             <Grid Background="{TemplateBinding Background}">
-                                <Label Margin="10,0,20,0" Content="{TemplateBinding Header}"/>
+                                <Border Height="25" Margin="10,0,20,0">
+                                    <TextBlock VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}"/>
+                                </Border>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
                 <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background" Value="#FF323232"/>
+                        <Setter Property="Foreground" Value="#FFC9C9C9"/>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="True">
+                        <Setter Property="Foreground" Value="White"/>
+                    </Trigger>
                     <Trigger Property="IsHighlighted" Value="True">
                         <Setter Property="Background" Value="#575757"/>
                     </Trigger>
@@ -94,8 +103,8 @@
         
             <Style x:Key="HedgeWindow" TargetType="{x:Type Window}">
                 <Setter Property="Background" Value="#FF2D2D30"/>
-                <Setter Property="AllowsTransparency" Value="True"/>
-                <Setter Property="WindowStyle" Value="None"/>
+                <Setter Property="AllowsTransparency" Value="False"/>
+                <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
                 <Setter Property="WindowChrome.WindowChrome">
                     <Setter.Value>
                         <WindowChrome 
@@ -682,6 +691,26 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
+                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Background" Value="#FF333337"/>
+                <Setter Property="BorderBrush" Value="#FF434346" />
+                <Setter Property="AllowDrop" Value="true"/>
+                <Setter Property="MinWidth" Value="0"/>
+                <Setter Property="MinHeight" Value="0"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+                <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <ScrollViewer x:Name="PART_ContentHost" Background="Transparent" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <Style TargetType="{x:Type ComboBox}">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -693,7 +722,9 @@
                                 <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}"
                                                   HorizontalAlignment="Left" VerticalAlignment="Center"
                                                   ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="5,0,0,0"/>
-                                <Popup x:Name="Popup" AllowsTransparency="True" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Fade">
+                                <!--<TextBox x:Name="PART_EditableTextBox" Style="{StaticResource ComboBoxEditableTextBox}" Background="Transparent" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}"
+                                         Margin="2,0,25,0" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>-->
+                                <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Fade">
                                     <Border BorderThickness="1" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                             Background="#FF2D2D30" BorderBrush="Gray" CornerRadius="2">
                                         <ScrollViewer>
@@ -1003,7 +1034,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <SolidColorBrush x:Key="OptionMark.Static.Background" Color="#FFFFFFFF"/>
+            <SolidColorBrush x:Key="OptionMark.Static.Background" Color="#FFE8E8E8"/>
             <SolidColorBrush x:Key="OptionMark.Static.Border" Color="#FF707070"/>
             <Style x:Key="OptionMarkFocusVisual">
                 <Setter Property="Control.Template">
@@ -1014,7 +1045,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="#FFF3F9FF"/>
+            <SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="#FFEEEEEE"/>
             <SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="#FF5593FF"/>
             <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="#FF212121"/>
             <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="#FFE6E6E6"/>
@@ -1022,8 +1053,8 @@
             <SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="#FF707070"/>
             <SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="#FFD9ECFF"/>
             <SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="#FF3C77DD"/>
-            <SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="#FF212121"/>
-            <SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="#FF212121"/>
+            <SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="#FF000000"/>
+            <SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="#FF000000"/>
             <Style TargetType="{x:Type CheckBox}">
                 <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
                 <Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>

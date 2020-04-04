@@ -5,12 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HedgeModManager.Serialization;
+using HedgeModManager.UI;
+using Newtonsoft.Json;
 
 namespace HedgeModManager
 {
     public class ModInfo
     {
         public string RootDirectory;
+        public FormSchema ConfigSchema;
 
         [PropertyIgnore]
         public bool Enabled { get; set; }
@@ -20,6 +23,9 @@ namespace HedgeModManager
 
         [PropertyIgnore]
         public bool SupportsSave => !string.IsNullOrEmpty(SaveFile);
+
+        [PropertyIgnore]
+        public bool HasSchema => ConfigSchema != null;
         
         // Main
         [IniField("Main")]
@@ -34,6 +40,9 @@ namespace HedgeModManager
 
         [IniField("Main")]
         public string DLLFile { get; set; } = string.Empty;
+
+        [IniField("Main")]
+        public string ConfigSchemaFile { get; set; } = "ConfigSchema.json";
 
         // Desc
         [IniField("Desc")]
@@ -82,6 +91,13 @@ namespace HedgeModManager
                         Author = "Unknown";
                         Description = "None";
                         Save();
+                    }
+
+                    var schemaPath = Path.Combine(RootDirectory, ConfigSchemaFile);
+                    if (File.Exists(schemaPath))
+                    {
+                        ConfigSchema = JsonConvert.DeserializeObject<FormSchema>(File.ReadAllText(schemaPath));
+                        ConfigSchema.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
                     }
                 }
 

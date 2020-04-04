@@ -24,6 +24,8 @@ using HedgeModManager.Github;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using HedgeModManager.Languages;
+using HedgeModManager.UI;
+using Newtonsoft.Json;
 
 namespace HedgeModManager
 {
@@ -156,6 +158,7 @@ namespace HedgeModManager
             }
 
 #endif
+
             ModsDbPath = Path.Combine(StartDirectory, "Mods");
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
 
@@ -540,6 +543,22 @@ namespace HedgeModManager
                 anim.Freeze();
                 return anim;
             }
+        }
+
+        public static T FindChild<T>(ContextMenu parent, string childName)
+            where T : FrameworkElement
+        {
+            // Confirm parent and childName are valid. 
+            if (parent == null) return null;
+
+
+            foreach (FrameworkElement item in parent.Items)
+            {
+                if (item.Name == childName)
+                    return (T)item;
+            }
+
+            return null;
         }
     }
 }

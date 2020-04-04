@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using HedgeModManager.Serialization;
+using HedgeModManager.UI;
+using Newtonsoft.Json;
 
 namespace HedgeModManager
 {
@@ -52,7 +54,7 @@ namespace HedgeModManager
                     DetectMods();
                 }
             }
-            else if(!Directory.Exists(RootDirectory))
+            else if (!Directory.Exists(RootDirectory))
             {
                 Application.Current?.MainWindow?.Hide();
                 var box = new HedgeMessageBox("No Mods Found", Properties.Resources.STR_UI_NO_MODS);
@@ -113,12 +115,12 @@ namespace HedgeModManager
             ActiveMods.Clear();
             mMods.Clear();
 
-            Mods.ForEach(mod => 
-            { 
-                if (mod.Enabled) 
-                    ActiveMods.Add(Path.GetFileName(mod.RootDirectory)); 
-                mMods.Add(Path.GetFileName(mod.RootDirectory), $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini"); 
-            } );
+            Mods.ForEach(mod =>
+            {
+                if (mod.Enabled)
+                    ActiveMods.Add(Path.GetFileName(mod.RootDirectory));
+                mMods.Add(Path.GetFileName(mod.RootDirectory), $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini");
+            });
             using (var stream = File.Create(Path.Combine(RootDirectory, "ModsDB.ini")))
             {
                 IniSerializer.Serialize(this, stream);
@@ -273,7 +275,7 @@ namespace HedgeModManager
             // Looks though all the folders for mods
             directories.AddRange(Directory.GetDirectories(path, "*", SearchOption.AllDirectories)
                 .Where(t => File.Exists(Path.Combine(t, "mod.ini"))));
-            
+
             // Checks if there is a file called "mod.ini" inside the selected folder
             if (File.Exists(Path.Combine(path, "mod.ini")))
                 directories.Add(path);
@@ -312,6 +314,47 @@ namespace HedgeModManager
             Directory.CreateDirectory(Path.Combine(path, "disk"));
             mod.RootDirectory = path;
             mod.Save();
+
+            if (!string.IsNullOrEmpty(mod.ConfigSchemaFile))
+            {
+                var schema = new FormSchema() { IniFile = "Config.ini" };
+                schema.Groups.Add(new FormGroup()
+                {
+                    DisplayName = "Example Group",
+                    Name = "Group1",
+                    Elements = new List<FormElement>()
+                    {
+                        new FormElement()
+                        {
+                            DisplayName = "Example Bool", Name = "exBool", DefaultValue = false, Type = "bool", Description = new List<string>() { "Line 1", "Line 2" }
+                        },
+                        new FormElement()
+                        {
+                            DisplayName = "Example String", Name = "exString", DefaultValue = string.Empty, Type = "string", Description = new List<string>() { "Line 1", "Line 2" }
+                        },
+                        new FormElement()
+                        {
+                            DisplayName = "Example Float", Name = "exFloat", DefaultValue = 0.0f, Type = "float", Description = new List<string>() { "Line 1", "Line 2" }
+                        },
+                        new FormElement()
+                        {
+                            DisplayName = "Example Int", Name = "exInt", DefaultValue = 0, Type = "int", Description = new List<string>() { "Line 1", "Line 2" }
+                        },
+                        new FormElement()
+                        {
+                            DisplayName = "Example Enum", Name = "exEnum", DefaultValue = "Item1", Type = "ExampleEnum", Description = new List<string>() { "Line 1", "Line 2" }
+                        }
+                    }
+                });
+
+                schema.Enums.Add("ExampleEnum", new List<FormEnum>()
+                {
+                    new FormEnum(){ DisplayName = "Item 1", Value = "Item1", Description = new List<string>() { "Line 1", "Line 2" }},
+                    new FormEnum(){ DisplayName = "Item 2", Value = "Item2", Description = new List<string>() { "Line 1", "Line 2" }}
+                });
+                schema.SaveIni(Path.Combine(mod.RootDirectory, schema.IniFile));
+                File.WriteAllText(Path.Combine(mod.RootDirectory, mod.ConfigSchemaFile), JsonConvert.SerializeObject(schema, Formatting.Indented));
+            }
 
             if (openFolder)
             {

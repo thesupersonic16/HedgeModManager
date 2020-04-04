@@ -17,6 +17,9 @@ namespace HedgeModManager.UI
         public ModsDB ModsDB { get; set; }
         public IEnumerable<SteamGame> Games { get; set; }
         public ObservableCollection<ModInfo> Mods { get; set; } = new ObservableCollection<ModInfo>();
+
+        public ModInfo SelectedMod { get; set; }
+
         public Dictionary<string, string> SupportedCultures => App.SupportedCultures;
 
         public event PropertyChangedEventHandler PropertyChanged;

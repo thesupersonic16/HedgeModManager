@@ -91,6 +91,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UI\RangeValidator.cs" />
     <Page Include="Controls\AudioPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -192,6 +193,10 @@
     <Compile Include="UI\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\FormBuilder.cs" />
+    <Compile Include="Controls\FormItem.xaml.cs">
+      <DependentUpon>FormItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\GBModWindow.xaml.cs">
       <DependentUpon>GBModWindow.xaml</DependentUpon>
     </Compile>
@@ -199,6 +204,9 @@
       <DependentUpon>HedgeMessageBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\MainWindowViewModel.cs" />
+    <Compile Include="UI\ModConfigWindow.xaml.cs">
+      <DependentUpon>ModConfigWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ModUpdateWindow.xaml.cs">
       <DependentUpon>ModUpdateWindow.xaml</DependentUpon>
     </Compile>
@@ -225,6 +233,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\FormItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\GBModWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -247,6 +259,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\ModConfigWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\ModUpdateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

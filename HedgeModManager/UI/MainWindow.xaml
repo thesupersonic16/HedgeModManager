@@ -12,6 +12,7 @@
     <Window.Resources>
         <ContextMenu x:Key="ModContextMenu">
             <MenuItem Header="{DynamicResource ModsUIModDescription}" Click="UI_Description_Click"/>
+            <MenuItem x:Name="ContextMenuItemConfigure" Header="{DynamicResource ModsUIModConfigure}" Click="UI_ConfigureMod_Click"/>
             <MenuItem Header="{DynamicResource ModsUIModOpenFolder}" Click="UI_Open_Folder"/>
             <MenuItem Header="{DynamicResource ModsUIModCheckUpdates}" Click="UI_Update_Mod"/>
             <MenuItem Header="{DynamicResource ModsUIModEdit}" Click="UI_Edit_Mod"/>
@@ -31,13 +32,14 @@
                         <Grid>
                             <ListView x:Name="ModsList"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
-                                      Margin="10,5,10,5" ItemsSource="{Binding Mods}" 
+                                      Margin="10,5,10,5" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" 
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                                       dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
                                       dd:DragDrop.DropHandler="{Binding}">
                                 <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                         <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
+                                        <EventSetter Event="ContextMenuOpening" Handler="UI_ContextMenu_Opening"/>
                                         <Setter Property="ContextMenu" Value="{DynamicResource ModContextMenu}"/>
                                         <Setter Property="ToolTip">
                                             <Setter.Value>
@@ -142,11 +144,19 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="0.45*"/>
-                            <RowDefinition Height="0.6*"/>
+                            <RowDefinition Height="0.45*"/>
                         </Grid.RowDefinitions>
 
                         <Button Content="{DynamicResource MainUIRemoveMod}"                   Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_RemoveMod_Click"/>
                         <Button Content="{DynamicResource MainUIRefreshModList}" Width="Auto" Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
+                        <!--<Grid Grid.Row="0" Grid.Column="1" Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Content="{DynamicResource MainUIRefreshModList}" Width="Auto" Grid.Column="0" Margin="0,0,5,0" Click="UI_Refresh_Click"/>
+                            <Button Content="Configure Mod" Width="Auto" Grid.Column="1" Margin="5,0,0,0" Click="UI_Refresh_Click"/>
+                        </Grid>-->
                         <Button Content="{DynamicResource MainUIAddMod}"         Width="Auto" Grid.Column="2" Grid.Row="0" Margin="5" Click="UI_Install_Mod"/>
 
                         <Button Content="{DynamicResource MainUISave}"                        Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>

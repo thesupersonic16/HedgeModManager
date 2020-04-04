@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace HedgeModManager
 {
@@ -71,6 +72,11 @@ namespace HedgeModManager
                             reader.ReadLine();
                             break;
                         }
+                    case '\r':
+                    case '\n':
+                    {
+                        break;
+                    }
                     default:
                         {
                             var line = reader.ReadLine();
@@ -98,7 +104,7 @@ namespace HedgeModManager
                 writer.WriteLine($"[{group.Key}]");
                 foreach (var val in group.Value.Params)
                 {
-                    if (int.TryParse(val.Value, out int num))
+                    if (int.TryParse(val.Value, out _) || bool.TryParse(val.Value, out _) || float.TryParse(val.Value, out _))
                         writer.WriteLine($"{val.Key}={val.Value}");
                     else
                         writer.WriteLine($"{val.Key}=\"{val.Value}\"");
@@ -182,7 +188,6 @@ namespace HedgeModManager
                 if (Params.ContainsKey(key))
                     Params.Remove(key);
             }
-
         }
     }
 }

@@ -23,6 +23,16 @@ using HMMResources = HedgeModManager.Properties.Resources;
 using static HedgeModManager.Lang;
 using System.Net;
 using System.IO.Compression;
+using System.Windows.Forms;
+using Application = System.Windows.Application;
+using ContextMenu = System.Windows.Controls.ContextMenu;
+using Cursors = System.Windows.Input.Cursors;
+using DataFormats = System.Windows.DataFormats;
+using DragEventArgs = System.Windows.DragEventArgs;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using ListViewItem = System.Windows.Controls.ListViewItem;
+using MenuItem = System.Windows.Controls.MenuItem;
+using Timer = System.Threading.Timer;
 
 namespace HedgeModManager
 {
@@ -529,8 +539,8 @@ namespace HedgeModManager
 
             box.AddButton(Localise("CommonUIDelete"), () =>
             {
-                ModsDatabase.DeleteMod(ModsList.SelectedItem as ModInfo);
-                UpdateStatus(string.Format(Localise("StatusUIDeletedMod"), ((ModInfo)ModsList.SelectedItem).Title));
+                ModsDatabase.DeleteMod(ViewModel.SelectedMod);
+                UpdateStatus(string.Format(Localise("StatusUIDeletedMod"), ViewModel.SelectedMod.Title));
                 Refresh();
                 box.Close();
             });
@@ -603,19 +613,18 @@ namespace HedgeModManager
         private void UI_Update_Mod(object sender, RoutedEventArgs e)
         {
             PauseModUpdates = false;
-            var mod = (ModInfo)ModsList.SelectedItem;
             new Thread(() =>
             {
-                CheckForModUpdates(mod);
-                Dispatcher.Invoke(() => RefreshMods());
+                CheckForModUpdates(ViewModel.SelectedMod);
+                Dispatcher.Invoke(RefreshMods);
             }).Start();
         }
 
         private void UI_Edit_Mod(object sender, RoutedEventArgs e)
         {
-            var mod = (ModInfo)ModsList.SelectedItem;
+            var mod = ViewModel.SelectedMod;
             var window = new EditModWindow(mod);
-            if (window.ShowDialog().Value == true)
+            if (window.ShowDialog().Value)
             {
                 mod.Save();
             }
@@ -624,14 +633,13 @@ namespace HedgeModManager
 
         private void UI_Description_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new AboutModWindow((ModInfo)ModsList.SelectedItem);
+            var dialog = new AboutModWindow(ViewModel.SelectedMod);
             dialog.ShowDialog();
         }
 
         private void UI_Open_Folder(object sender, RoutedEventArgs e)
         {
-            var mod = (ModInfo)ModsList.SelectedItem;
-            Process.Start(mod.RootDirectory);
+            Process.Start(ViewModel.SelectedMod.RootDirectory);
         }
 
         private void UI_Install_Mod(object sender, RoutedEventArgs e)
@@ -755,8 +763,11 @@ namespace HedgeModManager
 
         private void UI_ChangeDatabasePath_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new FolderBrowserDialog();
-            dialog.Title = Localise("MainUISelectModsDBTitle");
+            var dialog = new FolderBrowserDialog
+            {
+                Title = Localise("MainUISelectModsDBTitle")
+            };
+
             if (dialog.ShowDialog())
             {
                 App.ModsDbPath = dialog.SelectedFolder;
@@ -776,6 +787,20 @@ namespace HedgeModManager
             RegistryConfig.Save();
             App.LoadLanaguage(culture);
             RefreshUI();
+        }
+
+        private void UI_ConfigureMod_Click(object sender, RoutedEventArgs e)
+        {
+            if(!ViewModel.SelectedMod.HasSchema)
+                return;
+
+            var window = new ModConfigWindow(ViewModel.SelectedMod);
+            window.ShowDialog();
+        }
+
+        private void UI_ContextMenu_Opening(object sender, ContextMenuEventArgs e)
+        {
+            App.FindChild<MenuItem>(((ListViewItem)sender).ContextMenu, "ContextMenuItemConfigure").IsEnabled = ViewModel.SelectedMod.HasSchema;
         }
     }
 }

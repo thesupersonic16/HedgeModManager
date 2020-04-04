@@ -18,5 +18,10 @@ namespace HedgeModManager
                 return str;
             return "UNLOCALISED";
         }
+
+        public static string Localise(string key, params string[] args)
+        {
+            return string.Format(Localise(key), args);
+        }
     }
 }
