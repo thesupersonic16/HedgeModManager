@@ -79,20 +79,31 @@ namespace HedgeModManager.Controls
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Stretch,
                             Height = 20,
-                            DataContext = element
+                            DataContext = element,
                         };
-                        enums.ForEach(x => box.Items.Add(x));
-                        
+
+                        foreach (var val in enums)
+                        {
+                            var item = new ComboBoxItem()
+                            {
+                                Content = val.DisplayName, 
+                                DataContext = val, 
+                                ToolTip = new ToolTip() { Content = string.Join("\r\n", val.Description)}
+                            };
+                            box.Items.Add(item);
+                        }
+
                         box.SetBinding(Selector.SelectedValueProperty, "Value");
                         
                         if (element.Value != null)
                         {
                             var value = enums.FirstOrDefault(x => x.Value == element.Value.ToString());
-                            box.SelectedValue = value ?? enums.First();
+                            var i = enums.IndexOf(value);
+                            box.SelectedIndex=  i < 0 ? 0 : i;
                         }
                         else
                         {
-                            box.SelectedValue = enums.First();
+                            box.SelectedIndex = 0;
                         }
 
                         return box;

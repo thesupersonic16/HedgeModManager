@@ -127,8 +127,8 @@ namespace HedgeModManager.UI
             {
                 foreach (var element in group.Elements)
                 {
-                    if (element.Value is FormEnum)
-                        file[group.Name][element.Name] = ((FormEnum)element.Value)?.Value;
+                    if (element.Value is FrameworkElement && ((FrameworkElement)element.Value).DataContext is FormEnum)
+                        file[group.Name][element.Name] = ((FormEnum)((FrameworkElement)element.Value).DataContext)?.Value;
                     else
                         file[group.Name][element.Name] = element.Value?.ToString() ?? element.DefaultValue.ToString();
                 }

@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
 
         <ScrollViewer Margin="15">
-            <Grid x:Name="ItemsHost"/>
+            <Grid x:Name="ItemsHost" Margin="15,0"/>
         </ScrollViewer>
         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-4" Grid.Row="1" Background="{StaticResource HMM.Window.DialogBottom}">
             <Button Content="{StaticResource CommonUICancel}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_Cancel_Click"/>
