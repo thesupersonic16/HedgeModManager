@@ -448,7 +448,7 @@ namespace HedgeModManager
         {
             var info = GithubAPI.GetLatestRelease(RepoOwner, RepoName);
             var version = info == null ? Version : info.GetVersion();
-            bool hasUpdate = version.Major >= Version.Major && (version.Minor > Version.Minor || version.Revision > Version.Revision);
+            bool hasUpdate = version > Version;
 
             return (hasUpdate, info);
         }
