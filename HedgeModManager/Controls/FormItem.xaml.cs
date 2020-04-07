@@ -45,6 +45,11 @@ namespace HedgeModManager.Controls
                     element.DefaultValue = Activator.CreateInstance(t);
             }
 
+            if (element.Value is FrameworkElement fElement && fElement.DataContext is FormEnum fEnum)
+            {
+                element.Value = fEnum.Value;
+            }
+
             if (element.Value == null)
                 element.Value = element.DefaultValue;
             
