@@ -399,7 +399,7 @@ namespace HedgeModManager
                                     DownloadCompleted = () =>
                                     {
                                         // Extract zip for compatibility for 6.x
-                                        if (asset.ContentType == "application/x-zip-compressed")
+                                        if (asset.ContentType == "application/x-zip-compressed" || asset.ContentType == "application/zip")
                                         {
                                             // Stre old path pointing to the zip
                                             string oldPath = path;
