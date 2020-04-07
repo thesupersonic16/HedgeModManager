@@ -123,6 +123,13 @@ namespace HedgeModManager.UI
         public void SaveIni(string path)
         {
             var file = new IniFile();
+            if (File.Exists(path))
+            {
+                using (var stream = File.OpenRead(path))
+                {
+                    file.Read(stream);
+                }
+            }
             foreach (var group in Groups)
             {
                 foreach (var element in group.Elements)

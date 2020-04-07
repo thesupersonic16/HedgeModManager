@@ -35,6 +35,11 @@ namespace HedgeModManager.UI
             InitializeComponent();
             Mod = mod;
             Schema = mod.ConfigSchema;
+            var path = Path.Combine(Mod.RootDirectory, Schema.IniFile);
+            if (File.Exists(path))
+            {
+                Schema.LoadValuesFromIni(path);
+            }
             Title = Localise("ModConfigUITitle", Mod.Title);
             var panel = FormBuilder.Build(mod.ConfigSchema);
             panel.HorizontalAlignment = HorizontalAlignment.Stretch;
