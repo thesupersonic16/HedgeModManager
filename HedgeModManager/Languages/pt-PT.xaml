@@ -33,7 +33,7 @@
     <system:String x:Key="ModsUISupportSave"    >Suporta Gravação</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Atualizações</system:String>
     <system:String x:Key="ModsUIModDescription" >Descrição</system:String>
-	<system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
+    <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Abrir pasta do conteúdo</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Verificar por atualizações</system:String>
     <system:String x:Key="ModsUIModEdit"        >Editar mod</system:String>
