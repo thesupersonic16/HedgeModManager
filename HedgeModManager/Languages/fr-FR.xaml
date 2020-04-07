@@ -33,6 +33,7 @@
     <system:String x:Key="ModsUISupportSave"    >Sauvegarde</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Mise à jours</system:String>
     <system:String x:Key="ModsUIModDescription" >Description</system:String>
+    <system:String x:Key="ModsUIModConfigure"   >Paramètres</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Ouvrir le dossier</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Vérification de MàJ</system:String>
     <system:String x:Key="ModsUIModEdit"        >Modifier mod</system:String>
@@ -124,5 +125,8 @@
 
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Etes-vous sur que vous voulez supprimer "{0}"?&#x0a;Vous ne pourrez pas revenir en arrière !</system:String>
+
+    <!-- Mod Config UI Strings -->
+    <system:String x:Key="ModConfigUITitle">Paramètres de {0}</system:String>
 
 </ResourceDictionary>

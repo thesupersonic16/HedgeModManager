@@ -33,6 +33,7 @@
     <system:String x:Key="ModsUISupportSave"    >Soporta de guardado</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Actualización</system:String>
     <system:String x:Key="ModsUIModDescription" >Descripción</system:String>
+    <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Abrir carpeta contenedora</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Revisar actualización</system:String>
     <system:String x:Key="ModsUIModEdit"        >Editar mod</system:String>
@@ -119,6 +120,9 @@
     <system:String x:Key="StatusUIUpdateCompletedPlural"        >completados</system:String>
     <system:String x:Key="StatusUIUpdateFailedSingular"         >fallidos</system:String>
     <system:String x:Key="StatusUIUpdateFailedPlural"           >fallidos</system:String>
+
+    <!-- Mod Config UI Strings -->
+    <system:String x:Key="ModConfigUITitle">Configurar {0}</system:String>
 
 
 </ResourceDictionary>

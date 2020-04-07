@@ -33,6 +33,7 @@
     <system:String x:Key="ModsUISupportSave"    >支持存檔</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >更新</system:String>
     <system:String x:Key="ModsUIModDescription" >描述</system:String>
+    <system:String x:Key="ModsUIModConfigure"   >设置 MOD</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >打开MOD目录</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">查询更新</system:String>
     <system:String x:Key="ModsUIModEdit"        >更改MOD内客</system:String>
@@ -113,6 +114,9 @@
 
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">您确定要删除 "{0}"？&#x0a;此操作无法撤消！</system:String>
+
+    <!-- Mod Config UI Strings -->
+    <system:String x:Key="ModConfigUITitle">Configure {0}</system:String>
 
 
 </ResourceDictionary>
