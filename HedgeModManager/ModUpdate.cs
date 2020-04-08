@@ -86,7 +86,7 @@ namespace HedgeModManager
             {
 
                 // Adds the file name and url to the files array
-                foreach (string line in data.Split('\n'))
+                foreach (string line in data.Replace("\r", "").Split('\n'))
                 {
                     // Checks if the line starts with ';' or '#' if does then continue to the next line
                     if (line.StartsWith(";") || line.StartsWith("#") || string.IsNullOrEmpty(line))
