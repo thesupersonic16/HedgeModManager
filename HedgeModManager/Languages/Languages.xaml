@@ -5,11 +5,13 @@
 
     <local:LanguageList x:Key="Languages">
         <local:LangEntry FileName="en-AU" Name="English (Australia)"/>
+        <local:LangEntry FileName="nl-NL" Name="Dutch (Netherlands)"/>
         <local:LangEntry FileName="fr-FR" Name="Français (France)"/>
         <local:LangEntry FileName="pt-PT" Name="Português (Portugal)"/>
         <local:LangEntry FileName="pt-BR" Name="Português (Brazil)"/>
         <local:LangEntry FileName="zh-TW" Name="中文繁體 (Chinese Traditional)"/>
         <local:LangEntry FileName="zh-CN" Name="中文简体 (Chinese Simplified)"/>
+        <local:LangEntry FileName="ru-RU" Name="Russian"/>
         <local:LangEntry FileName="es-MX" Name="Spanish (Mexico)"/>
     </local:LanguageList>
     

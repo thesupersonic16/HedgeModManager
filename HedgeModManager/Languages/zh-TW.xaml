@@ -116,7 +116,7 @@
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">您確定要刪除 "{0}"？&#x0a;此操作無法撤消！</system:String>
 
     <!-- Mod Config UI Strings -->
-    <system:String x:Key="ModConfigUITitle">Configure {0}</system:String>
+    <system:String x:Key="ModConfigUITitle">{0} 配置</system:String>
 
 
 </ResourceDictionary>

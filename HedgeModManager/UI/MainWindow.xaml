@@ -128,8 +128,8 @@
                                     <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}" IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="10,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"     IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="10,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <Button   Content="{DynamicResource SettingsUIAboutHMM}"                                                          Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
-                                    <Label    Content="{DynamicResource SettingsUILanguage}"                                                           Margin="10,129,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
-                                    <ComboBox x:Name="ComboBox_Languages" ItemsSource="{Binding SupportedCultures}" DisplayMemberPath="Key"  Margin="80,128,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="236" Height="27" SelectionChanged="ComboBox_Languages_Changed" />
+                                    <Label    Content="{DynamicResource SettingsUILanguage}"                                                           Margin="10,0,0,17" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
+                                    <ComboBox x:Name="ComboBox_Languages" ItemsSource="{Binding SupportedCultures}" DisplayMemberPath="Key"  Margin="73,0,0,16" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="236" Height="27" SelectionChanged="ComboBox_Languages_Changed" />
                                 </Grid>
                             </GroupBox>
                         </Grid>

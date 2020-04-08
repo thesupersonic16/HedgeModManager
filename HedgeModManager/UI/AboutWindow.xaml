@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="{StaticResource AboutWindowUITitle}" Height="436" Width="658"  Background="#FF2D2D30"
+        Title="{StaticResource AboutWindowUITitle}" Height="466" Width="658"  Background="#FF2D2D30"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
     <Grid>
         <Grid.RowDefinitions>
@@ -62,15 +62,21 @@
                     <Label Content="PTKickass"/>
                     <Label Content="JoeyLaw"/>
                     <Label Content="LJSTAR"/>
+                    <Label Content="Nanoposan69"/>
                     <Label Content="ricky-daniel13"/>
                     <Label Content="Proa"/>
+                    <Label Content="Mario Tainaka"/>
+                    <Label Content="Lady Luna"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Portuguese translations"/>
                     <Label Content="Chinese translations"/>
                     <Label Content="French translation"/>
+                    <Label Content="Russian translation"/>
                     <Label Content="Spanish translation"/>
                     <Label Content="Spanish translation and reviewing"/>
+                    <Label Content="Dutch translation"/>
+                    <Label Content="Dutch translation reviewing"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
