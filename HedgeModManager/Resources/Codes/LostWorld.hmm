@@ -5,4 +5,6 @@ Patch "Disable Super Music"
 writenop 51ABAD 0x06
 
 Patch "Enable Stage Retry Option"
-writenop 116E78 2
+write8 51A0E5 0xB2
+write8 51A0E6 0x01
+writenop 51A0E7 1
