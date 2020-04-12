@@ -102,12 +102,13 @@ namespace HedgeModManager
 
         public void GetEnabledMods()
         {
-            int activeCount = ActiveMods.Count;
-            for (int i = 0; i < activeCount; i++)
+            for (int i = 0; i < ActiveMods.Count; i++)
             {
                 var mod = Mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == ActiveMods[i]);
                 if (mod != null)
                     mod.Enabled = true;
+                else
+                    ActiveMods.RemoveAt(i--);
             }
         }
         public void SaveDB()
