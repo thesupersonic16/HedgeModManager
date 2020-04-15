@@ -173,20 +173,20 @@ namespace HedgeModManager
         public static void InstallModArchiveUsingZipFile(string path, string root)
         {
             // Path to the install temp folder
-            string tempFolder = Path.Combine(App.StartDirectory, "temp_install");
+            string tempDirectory = Path.Combine(App.StartDirectory, "temp_install");
 
             // Deletes the temp Directory if it exists
-            if (Directory.Exists(tempFolder))
-                Directory.Delete(tempFolder, true);
+            if (Directory.Exists(tempDirectory))
+                DeleteReadOnlyDirectory(tempDirectory);
 
             // Extracts all contents inside of the zip file
-            ZipFile.ExtractToDirectory(path, tempFolder);
+            ZipFile.ExtractToDirectory(path, tempDirectory);
 
             // Install mods from the temp folder
-            InstallModDirectory(tempFolder, root);
+            InstallModDirectory(tempDirectory, root);
 
             // Deletes the temp folder with all of its contents
-            Directory.Delete(tempFolder, true);
+            DeleteReadOnlyDirectory(tempDirectory);
         }
 
         public static bool InstallModArchiveUsing7Zip(string path, string root)
@@ -208,7 +208,7 @@ namespace HedgeModManager
 
                 // Deletes the temp directory if it exists
                 if (Directory.Exists(tempDirectory))
-                    Directory.Delete(tempDirectory, true);
+                    DeleteReadOnlyDirectory(tempDirectory);
 
                 // Creates the temp directory
                 Directory.CreateDirectory(tempDirectory);
@@ -221,7 +221,7 @@ namespace HedgeModManager
                 InstallModDirectory(tempDirectory, root);
 
                 // Deletes the temp directory with all of its contents
-                Directory.Delete(tempDirectory, true);
+                DeleteReadOnlyDirectory(tempDirectory);
                 key.Close();
                 return true;
             }
@@ -247,7 +247,7 @@ namespace HedgeModManager
 
                 // Deletes the temp directory if it exists
                 if (Directory.Exists(tempDirectory))
-                    Directory.Delete(tempDirectory, true);
+                    DeleteReadOnlyDirectory(tempDirectory);
 
                 // Creates the temp directory
                 Directory.CreateDirectory(tempDirectory);
@@ -260,7 +260,7 @@ namespace HedgeModManager
                 InstallModDirectory(tempDirectory, root);
 
                 // Deletes the temp directory with all of its contents
-                Directory.Delete(tempDirectory, true);
+                DeleteReadOnlyDirectory(tempDirectory);
                 key.Close();
                 return true;
             }
@@ -306,6 +306,30 @@ namespace HedgeModManager
                         File.Copy(filePath, filePath.Replace(folder, Path.Combine(root, directoryName)), true);
                 }
             }
+        }
+
+        public static void DeleteReadOnlyDirectory(string dir)
+        {
+            DeleteReadOnlyDirectory(new DirectoryInfo(dir));
+        }
+
+        public static void DeleteReadOnlyDirectory(DirectoryInfo dir)
+        {
+            // Recursively perform this function 
+            foreach (var subDir in dir.GetDirectories())
+                DeleteReadOnlyDirectory(subDir);
+
+            // Delete all files in the directory and remove readonly
+            foreach (var file in dir.GetFiles())
+            {
+                file.Attributes = FileAttributes.Normal;
+                file.Delete();
+            }
+
+            // remove readonly from the directory
+            dir.Attributes = FileAttributes.Normal;
+            // Delete the directory
+            dir.Delete();
         }
 
         public void CreateMod(ModInfo mod, bool openFolder = false)
