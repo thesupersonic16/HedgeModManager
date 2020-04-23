@@ -354,6 +354,16 @@ namespace HedgeModManager
             }
         }
 
+        private void ResetWatchers()
+        {
+            foreach (var watcher in ModsWatchers)
+            {
+                watcher.Dispose();
+            }
+            ModsWatchers.Clear();
+            SetupWatcher();
+        }
+
         public void CheckForUpdates()
         {
             new Thread(() =>
@@ -539,9 +549,15 @@ namespace HedgeModManager
 
             box.AddButton(Localise("CommonUIDelete"), () =>
             {
+                foreach (var watcher in ModsWatchers)
+                {
+                    watcher.Dispose();
+                }
+                ModsWatchers.Clear();
                 ModsDatabase.DeleteMod(ViewModel.SelectedMod);
                 UpdateStatus(string.Format(Localise("StatusUIDeletedMod"), ViewModel.SelectedMod.Title));
                 Refresh();
+                SetupWatcher();
                 box.Close();
             });
 
@@ -723,12 +739,7 @@ namespace HedgeModManager
                 if (App.IsCPKREDIRInstalled(exePath))
                     App.InstallCPKREDIR(exePath, false);
 
-                foreach (var watcher in ModsWatchers)
-                {
-                    watcher.Dispose();
-                }
-                ModsWatchers.Clear();
-                SetupWatcher();
+                ResetWatchers();
                 Refresh();
                 UpdateStatus(string.Format(Localise("StatusUIGameChange"), App.CurrentGame.GameName));
                 CheckForLoaderUpdate();

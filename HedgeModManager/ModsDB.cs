@@ -131,6 +131,7 @@ namespace HedgeModManager
 
         public void DeleteMod(ModInfo mod)
         {
+            ActiveMods.Clear();
             Mods.Remove(mod);
             Directory.Delete(mod.RootDirectory, true);
         }
