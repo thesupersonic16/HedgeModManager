@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,34 +10,46 @@ using System.Threading.Tasks;
 using HedgeModManager.Serialization;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
+using PropertyTools.DataAnnotations;
 
 namespace HedgeModManager
 {
     public class ModInfo
     {
+        [Browsable(false)]
+        public IEnumerable<Column> IncludeDirColumns { get; } = new[]
+        {
+            new Column("Value", "Directory", null, "*", 'L'),
+        };
+
         public string RootDirectory;
         public FormSchema ConfigSchema;
 
-        [PropertyIgnore]
+        [Browsable(false)]
         public bool Enabled { get; set; }
 
-        [PropertyIgnore]
+        [Browsable(false)]
         public bool HasUpdates => !string.IsNullOrEmpty(UpdateServer);
 
-        [PropertyIgnore]
+        [Browsable(false)]
         public bool SupportsSave => !string.IsNullOrEmpty(SaveFile);
 
-        [PropertyIgnore]
+        [Browsable(false)]
         public bool HasSchema => ConfigSchema != null;
         
         // Main
+        [Category("Main")]
         [IniField("Main")]
         public string UpdateServer { get; set; }
 
         [IniField("Main")]
         public string SaveFile { get; set; }
 
-        [PropertyIgnore]
+        [DisplayName("Include Directories")]
+        [ColumnsProperty(nameof(IncludeDirColumns))]
+        public ObservableCollection<StringWrapper> IncludeDirsProperty { get; set; } = new ObservableCollection<StringWrapper>();
+
+        [Browsable(false)]
         [IniField("Main", "IncludeDir")]
         public List<string> IncludeDirs { get; set; } = new List<string>();
 
@@ -45,9 +60,11 @@ namespace HedgeModManager
         public string ConfigSchemaFile { get; set; } = "ConfigSchema.json";
 
         // Desc
+        [Category("Description")]
         [IniField("Desc")]
         public string Title { get; set; } = string.Empty;
 
+        [DataType(DataType.MultilineText)]
         [IniField("Desc")]
         public string Description { get; set; } = string.Empty;
 
@@ -63,7 +80,7 @@ namespace HedgeModManager
         [IniField("Desc")]
         public string AuthorURL { get; set; } = string.Empty;
 
-        [PropertyIgnore]
+        [Browsable(false)]
         [IniField("CPKs")]
         public Dictionary<string, string> CPKs { get; set; } = new Dictionary<string, string>();
 
@@ -116,6 +133,11 @@ namespace HedgeModManager
             {
                 Title = Path.GetFileName(RootDirectory);
             }
+
+            foreach (var dir in IncludeDirs)
+            {
+                IncludeDirsProperty.Add(new StringWrapper(dir));
+            }
         }
 
         public bool Read(Stream stream)
@@ -140,5 +162,15 @@ namespace HedgeModManager
                 IniSerializer.Serialize(this, stream);
             }
         }
+    }
+
+    public class StringWrapper
+    {
+        public string Value { get; set; }
+
+        public StringWrapper() { }
+
+        public StringWrapper(string str)
+            => Value = str;
     }
 }

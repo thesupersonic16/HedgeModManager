@@ -69,8 +69,16 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="PropertyTools, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyTools.3.0.0\lib\net45\PropertyTools.dll</HintPath>
+    </Reference>
+    <Reference Include="PropertyTools.Wpf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyTools.Wpf.3.0.0\lib\net45\PropertyTools.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
@@ -86,6 +94,7 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -194,9 +203,6 @@
     <Compile Include="UI\EditModWindow.xaml.cs">
       <DependentUpon>EditModWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\EditPropertyWindow.xaml.cs">
-      <DependentUpon>EditPropertyWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Exceptions\ModLoadException.cs" />
     <Compile Include="UI\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
@@ -221,19 +227,12 @@
     <Compile Include="UI\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PropertyEditor.xaml.cs">
-      <DependentUpon>PropertyEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Steam.cs" />
     <Page Include="UI\DownloadWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\EditModWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\EditPropertyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -276,10 +275,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\OptionsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\PropertyEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

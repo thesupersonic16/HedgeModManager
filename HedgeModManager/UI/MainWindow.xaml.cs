@@ -694,7 +694,7 @@ namespace HedgeModManager
                     Author = Environment.UserName
                 };
 
-                mod.IncludeDirs.Add(".");
+                //mod.IncludeDirs.Add(".");
                 var editor = new EditModWindow(mod);
                 if (editor.ShowDialog().Value)
                 {

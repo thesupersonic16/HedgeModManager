@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
+        xmlns:pt="http://propertytools.org/wpf"
         mc:Ignorable="d"
         Title="EditModWindow" Style="{StaticResource HedgeWindow}" WindowStartupLocation="CenterScreen"  Height="450" Width="400" MaxHeight="650" MaxWidth="500">
     <Grid>
@@ -13,7 +14,9 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Label Content="{StaticResource EditModWindowUIHeader}" FontSize="15" HorizontalAlignment="Center"/>
-        <local:PropertyEditor x:Name="Editor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="5"/>
+
+        <pt:PropertyGrid x:Name="Editor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectedObject="{Binding}" Grid.Row="1" Margin="5"/>
+
         <Button Grid.Row="2" HorizontalAlignment="Right" Margin="0,5,5,5" Content="{StaticResource CommonUIOK}" Click="Ok_Click" Width="56"/>
     </Grid>
 </Window>

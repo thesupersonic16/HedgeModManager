@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:HedgeModManager" 
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
+             xmlns:pt="http://propertytools.org/wpf"
              x:Class="HedgeModManager.App">
     
     <Application.Resources>
@@ -214,11 +215,19 @@
                 <Setter Property="Foreground" Value="#0066CC"/>
                 <Setter Property="BorderBrush" Value="#0066CC"/>
             </Style>
+
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="Background" Value="#FF333337"/>
                 <Setter Property="BorderBrush" Value="#FF434346" />
             </Style>
+
+            <Style TargetType="{x:Type pt:TextBoxEx}">
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Background" Value="#FF333337"/>
+                <Setter Property="BorderBrush" Value="#FF434346" />
+            </Style>
+
             <!-- Tabs -->
             <Style TargetType="{x:Type TabControl}">
                 <Setter Property="BorderBrush" Value="#FF3F3F46" />
@@ -1113,7 +1122,179 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-
+            <Style TargetType="{x:Type pt:DataGrid}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Focusable" Value="True"/>
+                <Setter Property="RowsContextMenu">
+                    <Setter.Value>
+                        <ContextMenu>
+                            <MenuItem Header="Insert" Command="pt:DataGridCommands.InsertRows"/>
+                            <MenuItem Header="Delete" Command="pt:DataGridCommands.DeleteRows"/>
+                        </ContextMenu>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="ColumnsContextMenu">
+                    <Setter.Value>
+                        <ContextMenu>
+                            <MenuItem Header="Insert" Command="pt:DataGridCommands.InsertColumns"/>
+                            <MenuItem Header="Delete" Command="pt:DataGridCommands.DeleteColumns"/>
+                            <Separator/>
+                            <MenuItem Header="Sort smallest to largest" Command="pt:DataGridCommands.SortAscending"/>
+                            <MenuItem Header="Sort largest to smallest" Command="pt:DataGridCommands.SortDescending"/>
+                            <MenuItem Header="Do not sort" Command="pt:DataGridCommands.ClearSort"/>
+                        </ContextMenu>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="SheetContextMenu">
+                    <Setter.Value>
+                        <ContextMenu>
+                            <MenuItem Command="ApplicationCommands.Cut"/>
+                            <MenuItem Command="ApplicationCommands.Copy"/>
+                            <MenuItem Command="ApplicationCommands.Paste"/>
+                            <MenuItem Command="ApplicationCommands.Delete"/>
+                        </ContextMenu>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type pt:DataGrid}">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                <Grid x:Name="PART_Grid">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="{TemplateBinding RowHeaderWidth}"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="{TemplateBinding ColumnHeaderHeight}"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <ScrollViewer x:Name="PART_SheetScrollViewer" Grid.Column="1" Focusable="False" HorizontalScrollBarVisibility="Auto" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                        <Grid x:Name="PART_SheetGrid" Background="Transparent">
+                                            <Border x:Name="PART_SelectionBackground" Background="Transparent"/>
+                                            <Border x:Name="PART_CurrentBackground" Background="#FF3F3F46"/>
+                                            <Border x:Name="PART_Selection" BorderBrush="Black" BorderThickness="3" Margin="-1,-1,-2,-2"/>
+                                            <Border x:Name="PART_AutoFillSelection" BorderBrush="Gray" BorderThickness="3" Margin="-1,-1,-2,-2" Visibility="Hidden"/>
+                                            <Border x:Name="PART_AutoFillBox" BorderBrush="Gray" BorderThickness="1" Background="Black" HorizontalAlignment="Right" Height="7" Margin="0,0,-4,-4" SnapsToDevicePixels="True" VerticalAlignment="Bottom" Width="7"/>
+                                        </Grid>
+                                    </ScrollViewer>
+                                    <ScrollViewer x:Name="PART_ColumnScrollViewer" Grid.Column="1" HorizontalScrollBarVisibility="Hidden" Grid.Row="0" VerticalScrollBarVisibility="Hidden">
+                                        <Grid x:Name="PART_ColumnGrid" Background="#FFDFE3E8">
+                                            <Border x:Name="PART_ColumnSelectionBackground" Background="#FF3F3F46"/>
+                                        </Grid>
+                                    </ScrollViewer>
+                                    <ScrollViewer x:Name="PART_RowScrollViewer" Grid.Column="0" HorizontalScrollBarVisibility="Hidden" Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+                                        <Grid x:Name="PART_RowGrid" Background="Transparent">
+                                            <Border x:Name="PART_RowSelectionBackground" Background="#FF3F3F46"/>
+                                        </Grid>
+                                    </ScrollViewer>
+                                    <Grid Grid.Column="0" Grid.Row="0">
+                                        <Border x:Name="PART_TopLeft" BorderBrush="Gray" BorderThickness="1" Background="Transparent" Margin="0">
+                                            <Path Data="F1M0,11L11,11 11,0z" Fill="White" HorizontalAlignment="Right" Margin="3" VerticalAlignment="Bottom"/>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="{x:Type pt:PropertyGrid}">
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="ValidationErrorStyle">
+                    <Setter.Value>
+                        <Style TargetType="{x:Type FrameworkElement}">
+                            <Style.Triggers>
+                                <Trigger Property="Validation.HasError" Value="True">
+                                    <Setter Property="ToolTip">
+                                        <Setter.Value>
+                                            <Binding Path="(Validation.Errors)" RelativeSource="{RelativeSource Self}">
+                                                <Binding.Converter>
+                                                    <pt:ValidationErrorsToStringConverter/>
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="ValidationErrorTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <TextBlock Foreground="Red" TextWrapping="Wrap" Text="{Binding}"/>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="CategoryControlTemplate">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <Separator Grid.Column="1" Margin="4,3,0,0"/>
+                                <ContentPresenter Grid.ColumnSpan="2" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Grid.Row="1"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="TabHeaderTemplate">
+                    <Setter.Value>
+                        <DataTemplate DataType="pt:Tab">
+                            <StackPanel Orientation="Horizontal">
+                                <pt:Bitmap Margin="0,0,4,0" Source="{Binding Icon}">
+                                    <pt:Bitmap.Visibility>
+                                        <Binding Path="Icon">
+                                            <Binding.Converter>
+                                                <pt:NullToVisibilityConverter NotNullVisibility="Visible" NullVisibility="Collapsed"/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </pt:Bitmap.Visibility>
+                                </pt:Bitmap>
+                                <TextBlock Text="{Binding Header}">
+                                    <TextBlock.Style>
+                                        <Style>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasErrors}" Value="True">
+                                                    <Setter Property="TextElement.Foreground" Value="Red"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="ToolTipTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <TextBlock MaxWidth="300" TextWrapping="Wrap" Text="{Binding}"/>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type pt:PropertyGrid}">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                <Grid>
+                                    <TabControl x:Name="PART_Tabs" AutomationProperties.AutomationId="Tabs" Focusable="False" TabStripPlacement="{TemplateBinding TabStripPlacement}"/>
+                                    <ScrollViewer x:Name="PART_ScrollViewer" AutomationProperties.AutomationId="ScrollViewer" Focusable="False" VerticalScrollBarVisibility="Auto">
+                                        <StackPanel x:Name="PART_Panel" Margin="15,0"/>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
