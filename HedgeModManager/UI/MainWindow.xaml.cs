@@ -193,7 +193,7 @@ namespace HedgeModManager
                     {
                         if(showUpdatedDialog)
                         {
-                            var box = new HedgeMessageBox(string.Empty, string.Format(HMMResources.STR_MOD_NEWEST, mod.Title), textAlignment: TextAlignment.Center);
+                            var box = new HedgeMessageBox(string.Empty, string.Format(HMMResources.STR_MOD_NEWEST, mod.Title));
                             box.AddButton(Localise("CommonUIOK"), () => box.Close());
                             box.ShowDialog();
                         }

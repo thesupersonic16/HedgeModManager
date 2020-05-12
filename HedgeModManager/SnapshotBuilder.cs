@@ -73,6 +73,7 @@ namespace HedgeModManager
             StringBuilder body = new StringBuilder();
             var loaderPath = Path.Combine(App.StartDirectory, $"d3d{App.CurrentGame.DirectXVersion}.dll");
             var cpkredirPath = Path.Combine(App.StartDirectory, "cpkredir.dll");
+            var gamePath = Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName);
 
             body.AppendLine($"Start Directory: {App.StartDirectory}");
             body.AppendLine(File.Exists(loaderPath)
@@ -80,13 +81,20 @@ namespace HedgeModManager
                 : $"{App.CurrentGame.CustomLoaderName} does not exist!");
 
             if (App.CurrentGame.SupportsCPKREDIR)
+            {
                 body.AppendLine(File.Exists(cpkredirPath)
                     ? $"CPKREDIR Hash: {App.ComputeMD5Hash(cpkredirPath)}"
                     : "CPKREDIR does not exist!");
 
+                try
+                {
+                    body.AppendLine($"CPKREDIR Installed: {App.IsCPKREDIRInstalled(gamePath)}");
+                }
+                catch { }
+            }
+
             try
             {
-                var gamePath = Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName);
                 body.AppendLine($"{App.CurrentGame.ExecuteableName} Hash: {App.ComputeMD5Hash(gamePath)}");
             }
             catch(Exception e)
@@ -200,8 +208,17 @@ namespace HedgeModManager
                 {
                     keyLevel += 1;
                     var subKey = k.OpenSubKey(sub, false);
-                    GetTree(subKey);
-                    subKey.Close();
+                    if (subKey != null)
+                    {
+                        GetTree(subKey);
+                        subKey.Close();
+                    }
+                    else
+                    {
+                        for (int i = 0; i < keyLevel; i++)
+                            body.Append("--");
+                        body.AppendLine(k.Name);
+                    }
                     keyLevel -= 1;
                 }
             }

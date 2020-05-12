@@ -34,16 +34,17 @@ namespace HedgeModManager
             
             if(type == InputType.Basic)
             {
-                Message.Content = new TextBlock()
+                Message.Child = new TextBlock()
                 {
                     IsEnabled = false,
                     Text = message,
-                    TextAlignment = textAlignment
+                    TextAlignment = textAlignment,
+                    FontSize = 25
                 };
             }
             else if(type == InputType.HTML || type == InputType.MarkDown)
             {
-                Message.Content = new HtmlPanel() 
+                Message.Child = new HtmlPanel() 
                 {
                     Text = $@"
 <html>

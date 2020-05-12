@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IWshRuntimeLibrary;
+using File = System.IO.File;
+using Path = System.IO.Path;
 
 namespace HedgeModManager
 {
@@ -79,7 +82,6 @@ namespace HedgeModManager
                 body.AppendLine("");
             }
 
-
             return body.ToString();
         }
 
@@ -107,6 +109,18 @@ namespace HedgeModManager
             url += $"?title=[{App.CurrentGame?.GameName}] ";
             url += $"&body={Uri.EscapeDataString(GetReport(true))}";
             Process.Start(url);
+
+            try
+            {
+                var time = DateTime.Now;
+                var path =
+                    $"HMM_Snapshot_{time.Date:00}{time.Month:00}{time.Year:0000}{time.Hour:00}{time.Minute:00}{time.Second:00}.txt";
+
+                File.WriteAllText(path, Convert.ToBase64String(SnapshotBuilder.Build()));
+                Process.Start($"explorer.exe", $"/select,\"{Path.GetFullPath(path)}\"");
+                App.CreateOKMessageBox("Hedge Mod Manager", $"Please attach the file\n{path}\nto the issue.").ShowDialog();
+            }
+            catch { }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

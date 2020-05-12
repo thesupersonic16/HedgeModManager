@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d" MaxWidth="1280" MaxHeight="720"
         Title="Hedge Mod Manager" MinHeight="100" MinWidth="450" 
-        Width="Auto" Height="Auto" WindowStartupLocation="CenterScreen"
+        Width="Auto" Height="Auto" WindowStartupLocation="CenterScreen" Topmost="True"
         Style="{StaticResource HedgeWindow}" ResizeMode="NoResize" SizeToContent="WidthAndHeight" ContentRendered="Window_ContentRendered">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,7 +15,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="Header" Text="HEADER" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20,0,20,0"/>
-        <Label x:Name="Message" Width="Auto" Foreground="White" Content="TEXT" Margin="5,0,5,0" Grid.Row="1" FontSize="20"/>
+        <Border x:Name="Message" Width="Auto" Margin="5,0,5,0" Grid.Row="1"/>
         <StackPanel x:Name="Stack" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Stretch">
             <!--<Button Width="Auto" Height="23" Margin="0" Content="OK"/>
             <Button Width="Auto" Height="23" Margin="0" Content="CANCEL"/>-->
