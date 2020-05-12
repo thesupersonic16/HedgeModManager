@@ -23,6 +23,9 @@ using GameBananaAPI;
 using HedgeModManager.Github;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Xml.Serialization;
 using HedgeModManager.Languages;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
@@ -34,6 +37,9 @@ namespace HedgeModManager
     /// </summary>
     public partial class App : Application
     {
+        [DllImport("Kernel32.dll")]
+        public static extern bool AttachConsole(int processId);
+
         public static Version Version = Assembly.GetExecutingAssembly().GetName().Version;
         public static string StartDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static string AppPath = Path.Combine(StartDirectory, AppDomain.CurrentDomain.FriendlyName);
@@ -64,6 +70,9 @@ namespace HedgeModManager
         [STAThread]
         public static void Main(string[] args)
         {
+            // Attach Console
+            AttachConsole(-1);
+
             // Language
             PCCulture = Thread.CurrentThread.CurrentCulture.Name;
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
@@ -108,7 +117,6 @@ namespace HedgeModManager
             Args = args;
             CPKREDIRVersion = GetCPKREDIRVersion();
             RegistryConfig.Load();
-
 #if !DEBUG
             // Enable our Crash Window if Compiled in Release
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
@@ -126,6 +134,14 @@ namespace HedgeModManager
             var steamGame = SteamGames.FirstOrDefault();
             SelectSteamGame(steamGame);
             StartDirectory = steamGame.RootDirectory;
+            if (File.Exists("key.priv.xml"))
+            {
+                using (var stream = File.OpenRead("key.priv.xml"))
+                {
+                    var serializer = new XmlSerializer(typeof(RSAParameters));
+                    CryptoProvider.ImportParameters((RSAParameters) serializer.Deserialize(stream));
+                }
+            }
 #else
             SteamGames = Steam.SearchForGames();
             if (FindAndSetLocalGame() == null)
@@ -158,14 +174,64 @@ namespace HedgeModManager
             }
 
 #endif
-
             ModsDbPath = Path.Combine(StartDirectory, "Mods");
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
 
-            if (args.Length > 1 && args[0] == "-gb")
+            if (args.Length > 0)
             {
-                GBAPI.ParseCommandLine(args[1]);
-                return;
+                if (args[0].ToLower() == "-h")
+                {
+                    ShowHelp();
+                    return;
+                }
+
+                if (args[0].ToLower() == "-gb" && args.Length > 1)
+                {
+                    GBAPI.ParseCommandLine(args[1]);
+                    return;
+                }
+                
+                if (args[0].ToLower() == "-encrypt")
+                {
+                    if (args.Length < 2)
+                    {
+                        Console.WriteLine("Insufficient arguments.");
+                        return;
+                    }
+
+                    var filename = args[1] + ".bytes";
+                    if (args.Length > 2)
+                        filename = args[2];
+
+                    using (var file = File.OpenRead(args[1]))
+                    using (var encrypted = File.Create(filename))
+                    {
+                        CryptoProvider.Encrypt(file, encrypted);
+                        Console.WriteLine($"Successfully encrypted {filename}");
+                    }
+                    return;
+                }
+
+                if (args[0].ToLower() == "-decrypt")
+                {
+                    if (args.Length < 2)
+                    {
+                        Console.WriteLine("Insufficient arguments.");
+                        return;
+                    }
+
+                    var filename = Path.ChangeExtension(args[1], string.Empty);
+                    if (args.Length > 2)
+                        filename = args[2];
+
+                    using (var encrypted = File.OpenRead(args[1]))
+                    using (var decrypted = File.Create(filename))
+                    {
+                        CryptoProvider.Decrypt(encrypted, decrypted);
+                        Console.WriteLine($"Successfully decrypted {filename}");
+                    }
+                    return;
+                }
             }
 
             if (CurrentGame.SupportsCPKREDIR)
@@ -182,7 +248,6 @@ namespace HedgeModManager
             if (IsCPKREDIRInstalled(exePath))
                 InstallCPKREDIR(exePath, false);
 
-
             do
             {
                 Config = new CPKREDIRConfig(ConfigPath);
@@ -190,6 +255,20 @@ namespace HedgeModManager
                 application.Run(application.MainWindow);
             }
             while (Restart);
+        }
+
+        public static void ShowHelp()
+        {
+            Console.WriteLine();
+            Console.WriteLine($"HedgeModManager {VersionString}\n");
+            
+            Console.WriteLine("Commands:");
+
+            Console.WriteLine("    -encrypt");
+            Console.WriteLine("        Usage: filename [output]");
+
+            Console.WriteLine("    -decrypt");
+            Console.WriteLine("        Usage: filename [output]");
         }
 
         public static SteamGame FindAndSetLocalGame()
@@ -481,6 +560,38 @@ namespace HedgeModManager
 
             var info = FileVersionInfo.GetVersionInfo(loaderPath);
             return info.ProductVersion ?? "1.0";
+        }
+
+        public static string ComputeMD5Hash(string path)
+        {
+            using (var md5 = MD5.Create())
+            using (var stream = File.OpenRead(path))
+            {
+                var hash = md5.ComputeHash(stream);
+                var builder = new StringBuilder();
+                foreach (var b in hash)
+                {
+                    builder.Append($"{b:X2}");
+                }
+
+                return builder.ToString();
+            }
+        }
+
+        public static string ComputeSHA1Hash(string path)
+        {
+            using (var sha1 = SHA1.Create())
+            using (var stream = File.OpenRead(path))
+            {
+                var hash = sha1.ComputeHash(stream);
+                var builder = new StringBuilder();
+                foreach (var b in hash)
+                {
+                    builder.Append($"{b:X2}");
+                }
+
+                return builder.ToString();
+            }
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)

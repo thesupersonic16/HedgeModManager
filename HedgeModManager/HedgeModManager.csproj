@@ -100,6 +100,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CryptoProvider.cs" />
+    <Compile Include="SnapshotBuilder.cs" />
     <Compile Include="UI\RangeValidator.cs" />
     <Page Include="Controls\AudioPlayer.xaml">
       <SubType>Designer</SubType>
