@@ -356,3 +356,6 @@ write8 00E7A6E6 0x83
 write8 00E7A6E7 0xC4
 write8 00E7A6E8 0xC
 writenop 00E7A6E9 0x3
+
+Code "Disable Motion Blur"
+write8 01A43103 0
