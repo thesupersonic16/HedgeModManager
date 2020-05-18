@@ -359,3 +359,6 @@ writenop 00E7A6E9 0x3
 
 Code "Disable Motion Blur"
 write8 01A43103 0
+
+Code "Set Shadow Bias to 0.0002"
+writefloat 1A4356C 0.0002
