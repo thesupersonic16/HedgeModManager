@@ -370,3 +370,26 @@ write8 01A43103 0
 
 Code "Set Shadow Bias to 0.0002"
 writefloat 1A4356C 0.0002
+
+Patch "Controller Hotplugging Support"
+write8 009C85FA 0x83
+write8 009C85FB 0xFA
+write8 009C85FC 0x04
+writenop 009C8603 12
+write8 009C86B2 0x83
+write8 009C86B3 0xFA
+write8 009C86B4 0x04
+writenop 009C86BB 12
+writenop 009C8163 2
+writenop 009C8168 8
+writenop 009C8173 1 
+write8 009C8176 0xE8 
+write8 009C8177 0xC7 
+write8 009C8178 0x40
+write8 009C8179 0x0C
+write8 009C817A 0x04
+write8 009C817B 0x00
+write8 009C817C 0x00
+write8 009C817D 0x00 
+writenop 009C8A70 2
+writenop 009C8AC0 2
