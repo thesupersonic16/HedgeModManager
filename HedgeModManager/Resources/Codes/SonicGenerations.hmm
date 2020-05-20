@@ -201,6 +201,14 @@ Patch "1920x1080 Media Player"
 write16 B210A1 1920
 write16 B210B1 1080
 
+Code "29.97 FPS Lock"
+writefloat 0019FD2C 29.97
+
+Code "30 FPS Speed Lock"
+writefloat 0019FD2C 30
+writenop E7B5D7 2
+writefloat 1704258 0.0333333333333334
+
 Code "59.94 FPS Lock"
 writefloat 0019FD2C 59.94
 
