@@ -86,6 +86,12 @@ The following is a list of the most important values that can be used in a mod.i
 ### Main
 
 **IncludeDir?** Specifies which folders the mod loader will load for your mod. The base of the path is your mod folder. For most mods this must point to the folder with the `disk` folder. If it's the root of your mod folder **YOU MUST USE** `.` like `IncludeDir0="."` as for example. Getting this wrong will result your mod **NOT** loading. (`?` is a Zero-based Number)
+Example:
+```ini
+[Main]
+IncludeDir0="." ; Will match to "mods/<MOD NAME>/"
+IncludeDirCount=1 ; Amount of includes, if unsure keep at 1
+```
 
 **IncludeDirCount** Specifies how many folders will be included with your mod.
 
