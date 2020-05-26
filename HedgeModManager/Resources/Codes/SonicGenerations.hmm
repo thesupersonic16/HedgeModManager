@@ -371,6 +371,16 @@ write8 01A43103 0
 Code "Set Shadow Bias to 0.0002"
 writefloat 1A4356C 0.0002
 
+Patch "Disable HUD in Stages"
+write32 00586C94 0x013EADA4
+
+Patch "Disable Sonic Smoke Trail"
+write8 1A44AE2 0
+writenop 011A2D28 23
+
+Patch "Disable Homing Attack"
+writefloat 1704800 0
+
 Patch "Controller Hotplugging Support"
 write8 009C85FA 0x83
 write8 009C85FB 0xFA
