@@ -43,7 +43,7 @@ namespace HedgeModManager
     {
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
-        public static CodeList CodesDatabase = new CodeList();
+        public static List<CodeFile> CodesDatabase = new List<CodeFile>();
         public static List<FileSystemWatcher> ModsWatchers = new List<FileSystemWatcher>();
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
         public List<string> CheckedModUpdates = new List<string>();
@@ -86,17 +86,17 @@ namespace HedgeModManager
                 }
             }
 
-            CodesDatabase = CodeLoader.LoadAllCodes();
+            CodesDatabase = CodeFile.ParseFiles(CodeProvider.CodesTextPath, CodeProvider.ExtraCodesTextPath);
             ModsDatabase.Codes.ForEach((x) =>
             {
-                var code = CodesDatabase.Codes.Find((y) => { return y.Name == x; });
+                var code = CodesDatabase.Find((y) => { return y.Name == x; });
                 if(code != null)
                     code.Enabled = true;
             });
 
-            CodesDatabase.Codes.Sort((x, y) => x.Name.CompareTo(y.Name));
+            CodesDatabase.Sort((x, y) => x.Name.CompareTo(y.Name));
 
-            CodesDatabase.Codes.ForEach((x) =>
+            CodesDatabase.ForEach((x) =>
             {
                 if (x.Enabled)
                     CodesList.Items.Insert(0, x);
@@ -274,7 +274,7 @@ namespace HedgeModManager
                 ModsDatabase.Mods.Add(mod as ModInfo);
             }
 
-            CodesDatabase.Codes.ForEach((x) => 
+            CodesDatabase.ForEach((x) => 
             {
                 if(x.Enabled)
                 {
@@ -391,7 +391,6 @@ namespace HedgeModManager
 
                     Dispatcher.Invoke(() => 
                     {
-
                         // http://wasteaguid.info/
                         var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
 
@@ -751,7 +750,7 @@ namespace HedgeModManager
             UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), App.CurrentGame.GameName));
             try
             {
-                var downloader = new DownloadWindow($"Downloading codes for {App.CurrentGame.GameName}", App.CurrentGame.CodesURL, CodeLoader.CodesHMMPath)
+                var downloader = new DownloadWindow($"Downloading codes for {App.CurrentGame.GameName}", App.CurrentGame.CodesURL, CodeProvider.CodesTextPath)
                 {
                     DownloadCompleted = () =>
                     {

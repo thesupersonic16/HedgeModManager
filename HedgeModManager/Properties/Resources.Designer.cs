@@ -202,6 +202,61 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to namespace HMMCodes
+        ///{
+        ///    public enum Keys
+        ///    {
+        ///        /// &lt;summary&gt;
+        ///        ///  The bit mask to extract a key code from a key value.
+        ///        /// &lt;/summary&gt;
+        ///        KeyCode = 0x0000FFFF,
+        ///
+        ///        /// &lt;summary&gt;
+        ///        ///  The bit mask to extract modifiers from a key value.
+        ///        /// &lt;/summary&gt;
+        ///        Modifiers = unchecked((int)0xFFFF0000),
+        ///
+        ///        /// &lt;summary&gt;
+        ///        ///  No key pressed.
+        ///        /// &lt;/summary&gt;
+        ///        None = 0x00,
+        ///
+        ///        /// &lt;summary&gt;
+        ///        ///  The left mou [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Keys {
+            get {
+                return ResourceManager.GetString("Keys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///using System.Collections.Generic;
+        ///using System.Linq;
+        ///using System.Text;
+        ///using System.Threading.Tasks;
+        ///using System.Runtime.InteropServices;
+        ///
+        ///namespace HMMCodes
+        ///{
+        ///    public static unsafe class MemoryService
+        ///    {
+        ///        [DllImport(&quot;kernel32.dll&quot;)]
+        ///        public static extern bool VirtualProtect(IntPtr lpAddress,
+        ///                IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
+        ///        
+        ///        public static dynamic MemoryProvider;
+        ///
+        ///        public static void Regist [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MemoryService {
+            get {
+                return ResourceManager.GetString("MemoryService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to cancel updating?
         ///This may corrupt {0}.
         /// </summary>

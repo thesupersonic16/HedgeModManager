@@ -29,6 +29,9 @@ namespace HedgeModManager
         public bool Enabled { get; set; }
 
         [Browsable(false)]
+        public List<CodeFile> Codes { get; set; } = new List<CodeFile>();
+        
+        [Browsable(false)]
         public bool HasUpdates => !string.IsNullOrEmpty(UpdateServer);
 
         [Browsable(false)]
@@ -53,8 +56,13 @@ namespace HedgeModManager
         [IniField("Main", "IncludeDir")]
         public List<string> IncludeDirs { get; set; } = new List<string>();
 
+        [DisplayName("DLL File")]
         [IniField("Main")]
         public string DLLFile { get; set; } = string.Empty;
+
+        [DisplayName("Code File")]
+        [IniField("Main")]
+        public string CodeFile { get; set; } = string.Empty;
 
         [IniField("Main")]
         public string ConfigSchemaFile { get; set; } = "ConfigSchema.json";
@@ -115,6 +123,12 @@ namespace HedgeModManager
                     {
                         ConfigSchema = JsonConvert.DeserializeObject<FormSchema>(File.ReadAllText(schemaPath));
                         ConfigSchema.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
+                    }
+
+                    var codesPath = Path.Combine(RootDirectory, CodeFile);
+                    if (File.Exists(codesPath))
+                    {
+                        Codes = HedgeModManager.CodeFile.ParseFile(codesPath);
                     }
                 }
 

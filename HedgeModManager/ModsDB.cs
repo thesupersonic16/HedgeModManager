@@ -126,7 +126,22 @@ namespace HedgeModManager
             {
                 IniSerializer.Serialize(this, stream);
             }
-            CodeList.WriteDatFile(Path.Combine(RootDirectory, CodeLoader.CodesPath), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => x.Enabled)), App.CurrentGame.Is64Bit);
+
+            var codes = new List<CodeFile>();
+
+            foreach (var code in MainWindow.CodesDatabase)
+            {
+                if(code.Enabled)
+                    codes.Add(code);
+            }
+
+            foreach (var mod in Mods)
+            {
+                if(mod.Enabled)
+                    codes.AddRange(mod.Codes);
+            }
+
+            CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
         }
 
         public void DeleteMod(ModInfo mod)
