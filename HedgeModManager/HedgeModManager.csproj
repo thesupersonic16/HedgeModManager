@@ -161,9 +161,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeFile.cs" />
     <Compile Include="CodeProvider.cs" />
     <Compile Include="CryptoProvider.cs" />
+    <Compile Include="Misc\DllResource.cs" />
     <Compile Include="Misc\Extensions.cs" />
+    <Compile Include="Misc\Win32.cs" />
     <None Include="Resources\MemoryService.cs" />
     <None Include="Resources\Keys.cs" />
     <Compile Include="SnapshotBuilder.cs" />

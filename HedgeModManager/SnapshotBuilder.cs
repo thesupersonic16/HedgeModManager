@@ -71,7 +71,7 @@ namespace HedgeModManager
         public static string CreateReport()
         {
             StringBuilder body = new StringBuilder();
-            var loaderPath = Path.Combine(App.StartDirectory, $"d3d{App.CurrentGame.DirectXVersion}.dll");
+            var loaderPath = Path.Combine(App.StartDirectory, App.CurrentGame.CustomLoaderFileName);
             var cpkredirPath = Path.Combine(App.StartDirectory, "cpkredir.dll");
             var gamePath = Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName);
 

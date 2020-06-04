@@ -88,7 +88,7 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Author" DisplayMemberBinding="{Binding Author}" Width="Auto"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="Auto"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>

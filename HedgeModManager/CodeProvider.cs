@@ -60,7 +60,7 @@ namespace HedgeModManager
             CSharpSyntaxTree.ParseText(Resources.Keys)
         };
 
-        public static void CompileCodes(IEnumerable<CodeFile> sources, string assemblyPath, params string[] loadPaths)
+        public static void CompileCodes(IEnumerable<Code> sources, string assemblyPath, params string[] loadPaths)
         {
             var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true);
             var trees = from source in sources select source.CreateSyntaxTree();
@@ -93,7 +93,7 @@ namespace HedgeModManager
             }
         }
 
-        public static List<MetadataReference> GetLoadAssemblies(IEnumerable<CodeFile> sources, params string[] lookupPaths)
+        public static List<MetadataReference> GetLoadAssemblies(IEnumerable<Code> sources, params string[] lookupPaths)
         {
             var meta = new List<MetadataReference>();
 
@@ -135,150 +135,6 @@ namespace HedgeModManager
             }
             
             return meta;
-        }
-    }
-
-    public class CodeFile
-    {
-        public string Name { get; set; }
-        
-        public string Author { get; set; }
-
-        public bool IsPatch { get; set; }
-
-        public bool Enabled { get; set; }
-
-        public StringBuilder Lines { get; set; } = new StringBuilder();
-
-        protected SyntaxTree mCachedSyntaxTree;
-        protected int mCachedHash;
-
-        public static List<CodeFile> ParseFiles(params string[] paths)
-        {
-            var list = new List<CodeFile>();
-
-            foreach (var path in paths)
-            {
-                if(File.Exists(path))
-                    list.AddRange(ParseFile(path));
-            }
-
-            return list;
-        }
-
-        public static List<CodeFile> ParseFile(string path)
-        {
-            var codes = new List<CodeFile>();
-            CodeFile currentCode = null;
-            using (var stream = File.OpenRead(path))
-            using (var reader = new StreamReader(stream))
-            {
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine();
-                    
-                    if(line == null)
-                        continue;
-
-                    bool isCode = line.StartsWith("Code");
-                    bool isPatch = line.StartsWith("Patch");
-                    if (isPatch || isCode)
-                    {
-                        currentCode = new CodeFile();
-                        codes.Add(currentCode);
-
-                        var matches = Regex.Matches(line, "(\"[^\"]*\"|[^\"]+)(\\s+|$)");
-                        currentCode.IsPatch = isPatch;
-                        var name = matches[1].Value.Trim(' ', '"');
-
-                        currentCode.Name = name;
-
-                        for (int i = 2; i < matches.Count; i++)
-                        {
-                            var match = matches[i].Value;
-
-                            if (match.Trim().Equals("by", StringComparison.OrdinalIgnoreCase))
-                            {
-                                i++;
-                                currentCode.Author = matches[i].Value.Trim(' ', '"');
-                            }
-                        }
-                        continue;
-                    }
-
-                    currentCode?.Lines.AppendLine(line);
-                }
-            }
-
-            return codes;
-        }
-
-        public SyntaxTree ParseSyntaxTree()
-        {
-            var hash = Lines.ToString().GetHashCode();
-
-            if (hash != mCachedHash)
-            {
-                mCachedHash = hash;
-                mCachedSyntaxTree = CSharpSyntaxTree.ParseText(Lines.ToString(),
-                    new CSharpParseOptions(kind: SourceCodeKind.Script));
-            }
-
-            return mCachedSyntaxTree;
-        }
-
-        public CompilationUnitSyntax CreateCompilationUnit()
-        {
-            var tree = ParseSyntaxTree();
-
-            var unit = tree.GetCompilationUnitRoot();
-            unit = (CompilationUnitSyntax)new OptionalColonRewriter().Visit(unit);
-
-            var allowedMembers = new List<StatementSyntax>();
-            var disallowedMembers = new List<MemberDeclarationSyntax>();
-
-            foreach (MemberDeclarationSyntax member in unit.Members)
-            {
-                if (member is GlobalStatementSyntax globalStatement)
-                {
-                    allowedMembers.Add(globalStatement.Statement);
-                }
-                else if (member is FieldDeclarationSyntax fieldDeclaration)
-                {
-                    if (!member.Modifiers.Any(SyntaxKind.StaticKeyword))
-                    {
-                        allowedMembers.Add(SyntaxFactory.LocalDeclarationStatement(member.Modifiers, fieldDeclaration.Declaration));
-                    }
-                    else
-                    {
-                        disallowedMembers.Add(member);
-                    }
-                }
-                else
-                {
-                    disallowedMembers.Add(member);
-                }
-            }
-
-            var funcUnit = SyntaxFactoryEx.MethodDeclaration(IsPatch ? "Init" : "OnFrame", "void",
-                SyntaxFactory.Block(allowedMembers), "public");
-            
-            var classUnit = SyntaxFactory
-                .ClassDeclaration(Regex.Replace(Name, "[^a-z]", string.Empty, RegexOptions.IgnoreCase))
-                .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.UnsafeKeyword)))
-                .WithMembers(SyntaxFactory.List(disallowedMembers))
-                .AddMembers(funcUnit)
-                .AddMembers(CodeProvider.LoaderExecutableMethod);
-
-            return SyntaxFactory.CompilationUnit()
-                .AddMembers(classUnit)
-                .WithUsings(unit.Usings)
-                .AddUsings(CodeProvider.PredefinedUsingDirectives);
-        }
-
-        public SyntaxTree CreateSyntaxTree()
-        {
-            return SyntaxFactory.SyntaxTree(CreateCompilationUnit());
         }
     }
 

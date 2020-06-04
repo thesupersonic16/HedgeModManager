@@ -43,6 +43,7 @@
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Name</system:String>
     <system:String x:Key="CodesUIDownload">Download Community Codes</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">The installed codes are incompatible with the code loader.&#x0a;Please update the codes and the code loader.&#x0a;WARNING: This will erase any custom codes.</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->

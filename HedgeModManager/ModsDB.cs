@@ -127,9 +127,9 @@ namespace HedgeModManager
                 IniSerializer.Serialize(this, stream);
             }
 
-            var codes = new List<CodeFile>();
+            var codes = new List<Code>();
 
-            foreach (var code in MainWindow.CodesDatabase)
+            foreach (var code in MainWindow.CodesDatabase.Codes)
             {
                 if(code.Enabled)
                     codes.Add(code);
@@ -137,8 +137,8 @@ namespace HedgeModManager
 
             foreach (var mod in Mods)
             {
-                if(mod.Enabled)
-                    codes.AddRange(mod.Codes);
+                if(mod.Enabled && mod.Codes != null)
+                    codes.AddRange(mod.Codes.Codes);
             }
 
             CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);

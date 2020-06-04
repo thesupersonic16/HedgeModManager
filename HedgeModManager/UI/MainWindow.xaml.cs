@@ -24,6 +24,7 @@ using static HedgeModManager.Lang;
 using System.Net;
 using System.IO.Compression;
 using System.Windows.Forms;
+using HedgeModManager.Misc;
 using Application = System.Windows.Application;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using Cursors = System.Windows.Input.Cursors;
@@ -43,7 +44,7 @@ namespace HedgeModManager
     {
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
-        public static List<CodeFile> CodesDatabase = new List<CodeFile>();
+        public static CodeFile CodesDatabase = new CodeFile();
         public static List<FileSystemWatcher> ModsWatchers = new List<FileSystemWatcher>();
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
         public List<string> CheckedModUpdates = new List<string>();
@@ -86,17 +87,17 @@ namespace HedgeModManager
                 }
             }
 
-            CodesDatabase = CodeFile.ParseFiles(CodeProvider.CodesTextPath, CodeProvider.ExtraCodesTextPath);
+            CodesDatabase = CodeFile.FromFiles(CodeProvider.CodesTextPath, CodeProvider.ExtraCodesTextPath);
             ModsDatabase.Codes.ForEach((x) =>
             {
-                var code = CodesDatabase.Find((y) => { return y.Name == x; });
+                var code = CodesDatabase.Codes.Find((y) => { return y.Name == x; });
                 if(code != null)
                     code.Enabled = true;
             });
 
-            CodesDatabase.Sort((x, y) => x.Name.CompareTo(y.Name));
+            CodesDatabase.Codes.Sort((x, y) => x.Name.CompareTo(y.Name));
 
-            CodesDatabase.ForEach((x) =>
+            CodesDatabase.Codes.ForEach((x) =>
             {
                 if (x.Enabled)
                     CodesList.Items.Insert(0, x);
@@ -104,7 +105,8 @@ namespace HedgeModManager
                     CodesList.Items.Add(x);
             });
 
-            UpdateStatus(string.Format(Localise("StatusUILoadedMods"), ModsDatabase.Mods.Count));
+            UpdateStatus(Localise("StatusUILoadedMods", ModsDatabase.Mods.Count));
+            CheckCodeCompatibility();
             PauseModUpdates = false;
         }
 
@@ -130,7 +132,7 @@ namespace HedgeModManager
             }
 
             var exeDir = App.StartDirectory;
-            bool hasOtherModLoader = App.CurrentGame.HasCustomLoader ? File.Exists(Path.Combine(exeDir, $"d3d{App.CurrentGame.DirectXVersion}.dll")) : false;
+            bool hasOtherModLoader = File.Exists(Path.Combine(exeDir, App.CurrentGame.CustomLoaderFileName));
             IsCPKREDIRInstalled = App.CurrentGame.SupportsCPKREDIR ? App.IsCPKREDIRInstalled(Path.Combine(exeDir, App.CurrentGame.ExecuteableName)) : hasOtherModLoader;
             string loaders = (IsCPKREDIRInstalled && App.CurrentGame.SupportsCPKREDIR ? App.CPKREDIRVersion : "");
 
@@ -170,7 +172,7 @@ namespace HedgeModManager
             catch (Exception e)
             {
                 Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
-                UpdateStatus(string.Format(Localise("StatusUIFailedToUpdate"), mod.Title, e.Message));
+                UpdateStatus(Localise("StatusUIFailedToUpdate", mod.Title, e.Message));
                 return false;
             }
 
@@ -210,16 +212,13 @@ namespace HedgeModManager
                         var updater = new ModUpdateWindow(update);
                         dialog.Close();
 
-                        updater.DownloadCompleted = () =>
-                        {
-                            Refresh();
-                        };
+                        updater.DownloadCompleted = Refresh;
                         updater.Start();
                     });
 
                     dialog.ShowDialog();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // Mark as failed
                     status = false;
@@ -271,10 +270,10 @@ namespace HedgeModManager
 
             foreach (var mod in ViewModel.Mods)
             {
-                ModsDatabase.Mods.Add(mod as ModInfo);
+                ModsDatabase.Mods.Add(mod);
             }
 
-            CodesDatabase.ForEach((x) => 
+            CodesDatabase.Codes.ForEach((x) => 
             {
                 if(x.Enabled)
                 {
@@ -455,17 +454,16 @@ namespace HedgeModManager
                 {
                     using (var stream = WebRequest.Create(HMMResources.URL_LOADERS_INI).GetResponse().GetResponseStream())
                     {
-                        string loaderVersion = App.GetCodeLoaderVersion(App.CurrentGame);
+                        var loaderInfo = App.GetCodeLoaderInfo(App.CurrentGame);
                         // Check if there is a loader version, if not return
-                        if (string.IsNullOrEmpty(loaderVersion))
+                        if (loaderInfo.LoaderVersion == null)
                             return;
 
                         var ini = new IniFile(stream);
                         var info = ini[App.CurrentGame.GameName];
-                        var version = new Version(loaderVersion);
                         var newVersion = new Version(info["LoaderVersion"]);
 
-                        if (newVersion <= version)
+                        if (newVersion <= loaderInfo.LoaderVersion)
                         {
                             UpdateStatus(string.Format(Localise("StatusUILoaderUpToDate"), App.CurrentGame.CustomLoaderName));
                             return;
@@ -498,11 +496,29 @@ namespace HedgeModManager
             }).Start();
         }
 
+        protected void CheckCodeCompatibility()
+        {
+            var info = App.GetCodeLoaderInfo(App.CurrentGame);
+            
+            if(CodesDatabase.FileVersion >= info.MinCodeVersion)
+                return;
+
+            var dialog = new HedgeMessageBox(Localise("CommonUIWarning"), Localise("CodesUIVersionIncompatible"));
+            dialog.AddButton(Localise("CommonUIUpdate"), () =>
+            {
+                App.InstallOtherLoader(false);
+                UI_Download_Codes(null, null);
+                Refresh();
+            });
+            dialog.AddButton(Localise("CommonUICancel"), dialog.Close);
+            dialog.ShowDialog();
+        }
+
         public void ShowMissingOtherLoaderWarning()
         {
             if (!App.CurrentGame.HasCustomLoader)
                 return;
-            bool loaderInstalled = File.Exists(Path.Combine(App.StartDirectory, $"d3d{App.CurrentGame.DirectXVersion}.dll"));
+            bool loaderInstalled = File.Exists(Path.Combine(App.StartDirectory, App.CurrentGame.CustomLoaderFileName));
             if (loaderInstalled)
                 return;
             Dispatcher.Invoke(() =>

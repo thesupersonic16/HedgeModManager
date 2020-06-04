@@ -27,6 +27,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
 using HedgeModManager.Languages;
+using HedgeModManager.Misc;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
 
@@ -453,7 +454,7 @@ namespace HedgeModManager
                 }
             }
 
-            string DLLFileName = Path.Combine(StartDirectory, $"d3d{CurrentGame.DirectXVersion}.dll");
+            string DLLFileName = Path.Combine(StartDirectory, CurrentGame.CustomLoaderFileName);
 
             if (File.Exists(DLLFileName) && toggle)
             {
@@ -550,7 +551,7 @@ namespace HedgeModManager
 
         public static string GetCodeLoaderVersion(Game game)
         {
-            var loaderPath = Path.Combine(StartDirectory, $"d3d{game.DirectXVersion}.dll");
+            var loaderPath = Path.Combine(StartDirectory, game.CustomLoaderFileName);
 
             if (!game.HasCustomLoader)
                 return null;
@@ -559,7 +560,23 @@ namespace HedgeModManager
                 return null;
 
             var info = FileVersionInfo.GetVersionInfo(loaderPath);
-            return info.ProductVersion ?? "1.0";
+            return info.ProductVersion ?? "0.1";
+        }
+
+        public static (Version LoaderVersion, Version MinCodeVersion) GetCodeLoaderInfo(Game game)
+        {
+            var minCodeVersion = "0.1";
+            var loaderVersion = GetCodeLoaderVersion(game);
+
+            if (loaderVersion != minCodeVersion)
+            {
+                using (var res = new DllResource(Path.Combine(StartDirectory, game.CustomLoaderFileName)))
+                {
+                    minCodeVersion = res.GetString(Games.CodeLoaderMinCodeVersionStringId);
+                }
+            }
+
+            return (loaderVersion != "0.1" ? new Version(loaderVersion) : null, new Version(string.IsNullOrEmpty(minCodeVersion) ? "9999.9999" : minCodeVersion));
         }
 
         public static string ComputeMD5Hash(string path)

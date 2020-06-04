@@ -29,7 +29,7 @@ namespace HedgeModManager
         public bool Enabled { get; set; }
 
         [Browsable(false)]
-        public List<CodeFile> Codes { get; set; } = new List<CodeFile>();
+        public CodeFile Codes { get; set; }
         
         [Browsable(false)]
         public bool HasUpdates => !string.IsNullOrEmpty(UpdateServer);
@@ -128,7 +128,7 @@ namespace HedgeModManager
                     var codesPath = Path.Combine(RootDirectory, CodeFile);
                     if (File.Exists(codesPath))
                     {
-                        Codes = HedgeModManager.CodeFile.ParseFile(codesPath);
+                        Codes = HedgeModManager.CodeFile.FromFile(codesPath);
                     }
                 }
 
