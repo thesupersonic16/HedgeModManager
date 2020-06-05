@@ -79,6 +79,7 @@ namespace HedgeModManager
                 }
 
                 stream.Position = start;
+                reader.DiscardBufferedData();
                 Codes = Code.ParseFile(reader);
             }
         }
