@@ -13,6 +13,11 @@ namespace HMMCodes
         public static extern bool VirtualProtect(IntPtr lpAddress,
                 IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
         
+        [DllImport("kernel32.dll", CharSet=CharSet.Auto)]
+        public static extern IntPtr GetModuleHandle(string lpModuleName);
+        
+        public static long ModuleBase = (long)GetModuleHandle(null);
+        
         [DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(Keys vKey);
         
@@ -23,6 +28,9 @@ namespace HMMCodes
             MemoryProvider = provider;
         }
 
+       public static long ASLR(long address)
+            => ModuleBase + (address - 0x400000);
+       
         public static void Write(IntPtr address, IntPtr dataPtr, IntPtr length)
             => MemoryProvider.WriteMemory(address, dataPtr, length);
 
