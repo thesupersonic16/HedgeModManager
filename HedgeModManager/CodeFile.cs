@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -103,7 +105,7 @@ namespace HedgeModManager
         }
     }
 
-    public class Code
+    public class Code : INotifyPropertyChanged
     {
         public string Name { get; set; }
 
@@ -259,5 +261,7 @@ namespace HedgeModManager
         {
             return SyntaxFactory.SyntaxTree(CreateCompilationUnit());
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

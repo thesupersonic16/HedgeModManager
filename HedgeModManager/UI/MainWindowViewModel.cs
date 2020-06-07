@@ -19,6 +19,7 @@ namespace HedgeModManager.UI
         public ObservableCollection<ModInfo> Mods { get; set; } = new ObservableCollection<ModInfo>();
 
         public ModInfo SelectedMod { get; set; }
+        public Code SelectedCode { get; set; }
 
         public Dictionary<string, string> SupportedCultures => App.SupportedCultures;
 

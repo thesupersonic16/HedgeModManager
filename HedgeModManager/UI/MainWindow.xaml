@@ -77,8 +77,8 @@
                             <GroupBox Margin="10,5,10,5">
                                 <Button   x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
                             </GroupBox>
-                            <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
-                                     Margin="10,5,10,45" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
+                            <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}"
+                                     Margin="10,5,10,45" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="True">
                                         <GridViewColumn Header="{DynamicResource CodesUIName}" Width="Auto">

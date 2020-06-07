@@ -882,5 +882,18 @@ namespace HedgeModManager
                 e.Handled = true;
             }
         }
+
+        private void CodesList_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (ViewModel.SelectedCode == null)
+                return;
+
+            var code = ViewModel.SelectedCode;
+
+            if (Keyboard.IsKeyDown(Key.Space))
+            {
+                code.Enabled = !code.Enabled;
+            }
+        }
     }
 }
