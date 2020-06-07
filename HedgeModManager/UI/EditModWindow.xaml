@@ -17,6 +17,6 @@
 
         <pt:PropertyGrid x:Name="Editor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectedObject="{Binding}" Grid.Row="1" Margin="5"/>
 
-        <Button Grid.Row="2" HorizontalAlignment="Right" Margin="0,5,5,5" Content="{StaticResource CommonUIOK}" Click="Ok_Click" Width="56"/>
+        <Button Grid.Row="2" HorizontalAlignment="Right" Margin="0,5,5,5" Content="{StaticResource CommonUIOK}" Click="Ok_Click" Width="56" IsDefault="True"/>
     </Grid>
 </Window>
