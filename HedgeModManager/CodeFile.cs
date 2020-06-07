@@ -245,7 +245,7 @@ namespace HedgeModManager
                 SyntaxFactory.Block(allowedMembers), "public");
 
             var classUnit = SyntaxFactory
-                .ClassDeclaration(Guid.NewGuid().ToString())
+                .ClassDeclaration($"{Regex.Replace(Name, "[^a-z]", string.Empty, RegexOptions.IgnoreCase)}_{Guid.NewGuid()}")
                 .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.UnsafeKeyword)))
                 .WithMembers(SyntaxFactory.List(disallowedMembers))
                 .AddMembers(funcUnit)
