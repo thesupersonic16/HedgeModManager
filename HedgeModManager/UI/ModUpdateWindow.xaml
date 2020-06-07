@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager.UI"
-        mc:Ignorable="d"
+        mc:Ignorable="d" MinHeight="450" MinWidth="800"
         Title="ModUpdateWindow" Height="450" Width="800" Style="{StaticResource HedgeWindow}" Closing="Window_Closing">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="Normal"/>

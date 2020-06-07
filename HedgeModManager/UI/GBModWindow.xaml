@@ -7,7 +7,9 @@
         xmlns:local="clr-namespace:HedgeModManager.UI"
         xmlns:controls="clr-namespace:HedgeModManager.Controls"
         mc:Ignorable="d"
-        Title="{Binding ModName, FallbackValue=Name}" Height="600" Width="900" Style="{DynamicResource HedgeWindow}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="{Binding ModName, FallbackValue=Name}" Height="600" Width="900"
+        MinHeight="600" MinWidth="900"
+        Style="{DynamicResource HedgeWindow}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
