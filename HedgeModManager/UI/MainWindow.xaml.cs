@@ -863,6 +863,8 @@ namespace HedgeModManager
                     UI_Edit_Mod(null, null);
                 else if (Keyboard.IsKeyDown(Key.O))
                     UI_Open_Folder(null, null);
+                else if (Keyboard.IsKeyDown(Key.U))
+                    UI_Update_Mod(null, null);
 
                 e.Handled = true;
             }
