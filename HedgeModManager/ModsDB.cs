@@ -24,6 +24,9 @@ namespace HedgeModManager
         [IniField("Main", "ReverseLoadOrder")]
         public bool ReverseLoadOrder { get; set; }
 
+        [IniField("Main", "FavoriteMod")]
+        public List<string> FavoriteMods = new List<string>();
+
         [IniField("Mods")]
         private Dictionary<string, string> mMods = new Dictionary<string, string>();
 
@@ -32,7 +35,6 @@ namespace HedgeModManager
 
         public string RootDirectory { get; set; }
         public int ModCount => Mods.Count;
-        public int ActiveModCount => ActiveMods.Count;
 
         public ModsDB()
         {
@@ -110,18 +112,35 @@ namespace HedgeModManager
                 else
                     ActiveMods.RemoveAt(i--);
             }
+
+            for (int i = 0; i < FavoriteMods.Count; i++)
+            {
+                var mod = Mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == FavoriteMods[i]);
+                if (mod != null)
+                    mod.Favorite = true;
+                else
+                    FavoriteMods.RemoveAt(i--);
+            }
         }
         public void SaveDB()
         {
             ActiveMods.Clear();
+            FavoriteMods.Clear();
             mMods.Clear();
 
-            Mods.ForEach(mod =>
+            foreach (var mod in Mods)
             {
+                var dirName = Path.GetFileName(mod.RootDirectory);
+
                 if (mod.Enabled)
-                    ActiveMods.Add(Path.GetFileName(mod.RootDirectory));
-                mMods.Add(Path.GetFileName(mod.RootDirectory), $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini");
-            });
+                    ActiveMods.Add(dirName);
+
+                if (mod.Favorite)
+                    FavoriteMods.Add(dirName);
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                mMods.Add(dirName, $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini");
+            }
             using (var stream = File.Create(Path.Combine(RootDirectory, "ModsDB.ini")))
             {
                 IniSerializer.Serialize(this, stream);

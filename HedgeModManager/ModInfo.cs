@@ -40,6 +40,8 @@ namespace HedgeModManager
         [Browsable(false)]
         public bool HasSchema => ConfigSchema != null;
         
+        public bool Favorite { get; set; }
+
         // Main
         [Category("Main")]
         [IniField("Main")]

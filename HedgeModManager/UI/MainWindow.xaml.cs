@@ -73,20 +73,6 @@ namespace HedgeModManager
             ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.Sort((x, y) => x.Title.CompareTo(y.Title));
 
-            // Re-arrange the mods
-            for (int i = 0; i < ModsDatabase.ActiveModCount; i++)
-            {
-                for (int i2 = 0; i2 < ModsDatabase.Mods.Count; i2++)
-                {
-                    var mod = ModsDatabase.Mods[i2];
-                    if (Path.GetFileName(mod.RootDirectory) == ModsDatabase.ActiveMods[i])
-                    {
-                        ModsDatabase.Mods.Remove(mod);
-                        ModsDatabase.Mods.Insert(i, mod);
-                    }
-                }
-            }
-
             CodesDatabase = CodeFile.FromFiles(CodeProvider.CodesTextPath, CodeProvider.ExtraCodesTextPath);
             ModsDatabase.Codes.ForEach((x) =>
             {
@@ -112,6 +98,25 @@ namespace HedgeModManager
 
         public void RefreshUI()
         {
+            // Re-arrange the mods
+            for (int i = 0; i < ModsDatabase.ActiveMods.Count; i++)
+            {
+                for (int i2 = 0; i2 < ModsDatabase.Mods.Count; i2++)
+                {
+                    var mod = ModsDatabase.Mods[i2];
+                    if (Path.GetFileName(mod.RootDirectory) == ModsDatabase.ActiveMods[i])
+                    {
+                        ModsDatabase.Mods.Remove(mod);
+                        ModsDatabase.Mods.Insert(i, mod);
+                    }
+                    else if (mod.Favorite && !mod.Enabled)
+                    {
+                        ModsDatabase.Mods.Remove(mod);
+                        ModsDatabase.Mods.Insert(ModsDatabase.ActiveMods.Count, mod);
+                    }
+                }
+            }
+
             // Sets the DataContext for all the Components
             ViewModel = new MainWindowViewModel
             {
@@ -666,6 +671,12 @@ namespace HedgeModManager
         {
             var dialog = new AboutModWindow(ViewModel.SelectedMod);
             dialog.ShowDialog();
+        }
+
+        private void UI_Favorite_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.SelectedMod.Favorite = !ViewModel.SelectedMod.Favorite;
+            RefreshUI();
         }
 
         private void UI_Open_Folder(object sender, RoutedEventArgs e)

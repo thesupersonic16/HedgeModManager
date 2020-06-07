@@ -10,8 +10,10 @@
         Loaded="Window_Loaded"
         MinHeight="600" MinWidth="560" Height="600" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ContextMenu x:Key="ModContextMenu">
             <MenuItem Header="{DynamicResource ModsUIModDescription}" Click="UI_Description_Click"/>
+            <MenuItem Header="{DynamicResource ModsUIModFavorite}" Click="UI_Favorite_Click"/>
             <MenuItem x:Name="ContextMenuItemConfigure" Header="{DynamicResource ModsUIModConfigure}" Click="UI_ConfigureMod_Click"/>
             <MenuItem Header="{DynamicResource ModsUIModOpenFolder}" Click="UI_Open_Folder"/>
             <MenuItem Header="{DynamicResource ModsUIModCheckUpdates}" Click="UI_Update_Mod"/>
@@ -55,6 +57,7 @@
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
                                                         <CheckBox IsChecked="{Binding Enabled}" Margin="0,0,4,0"/>
+                                                        <Path Data="{StaticResource StarGeometry}" Fill="Gold" Margin="0,0,4,0" Visibility="{Binding Favorite, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                                         <TextBlock Text="{Binding Title}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
