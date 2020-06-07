@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using HedgeModManager.Serialization;
@@ -14,9 +16,9 @@ using PropertyTools.DataAnnotations;
 
 namespace HedgeModManager
 {
-    public class ModInfo
+    public class ModInfo : INotifyPropertyChanged
     {
-        [Browsable(false)]
+        [PropertyTools.DataAnnotations.Browsable(false)]
         public IEnumerable<Column> IncludeDirColumns { get; } = new[]
         {
             new Column("Value", "Directory", null, "*", 'L'),
@@ -25,44 +27,44 @@ namespace HedgeModManager
         public string RootDirectory;
         public FormSchema ConfigSchema;
 
-        [Browsable(false)]
+        [PropertyTools.DataAnnotations.Browsable(false)]
         public bool Enabled { get; set; }
 
-        [Browsable(false)]
+        [PropertyTools.DataAnnotations.Browsable(false)]
         public CodeFile Codes { get; set; }
         
-        [Browsable(false)]
+        [PropertyTools.DataAnnotations.Browsable(false)]
         public bool HasUpdates => !string.IsNullOrEmpty(UpdateServer);
 
-        [Browsable(false)]
+        [PropertyTools.DataAnnotations.Browsable(false)]
         public bool SupportsSave => !string.IsNullOrEmpty(SaveFile);
 
-        [Browsable(false)]
+        [PropertyTools.DataAnnotations.Browsable(false)]
         public bool HasSchema => ConfigSchema != null;
         
         public bool Favorite { get; set; }
 
         // Main
-        [Category("Main")]
+        [PropertyTools.DataAnnotations.Category("Main")]
         [IniField("Main")]
         public string UpdateServer { get; set; }
 
         [IniField("Main")]
         public string SaveFile { get; set; }
 
-        [DisplayName("Include Directories")]
+        [PropertyTools.DataAnnotations.DisplayName("Include Directories")]
         [ColumnsProperty(nameof(IncludeDirColumns))]
         public ObservableCollection<StringWrapper> IncludeDirsProperty { get; set; } = new ObservableCollection<StringWrapper>();
 
-        [Browsable(false)]
+        [PropertyTools.DataAnnotations.Browsable(false)]
         [IniField("Main", "IncludeDir")]
         public List<string> IncludeDirs { get; set; } = new List<string>();
 
-        [DisplayName("DLL File")]
+        [PropertyTools.DataAnnotations.DisplayName("DLL File")]
         [IniField("Main")]
         public string DLLFile { get; set; } = string.Empty;
 
-        [DisplayName("Code File")]
+        [PropertyTools.DataAnnotations.DisplayName("Code File")]
         [IniField("Main")]
         public string CodeFile { get; set; } = string.Empty;
 
@@ -70,7 +72,7 @@ namespace HedgeModManager
         public string ConfigSchemaFile { get; set; } = "ConfigSchema.json";
 
         // Desc
-        [Category("Description")]
+        [PropertyTools.DataAnnotations.Category("Description")]
         [IniField("Desc")]
         public string Title { get; set; } = string.Empty;
 
@@ -90,7 +92,7 @@ namespace HedgeModManager
         [IniField("Desc")]
         public string AuthorURL { get; set; } = string.Empty;
 
-        [Browsable(false)]
+        [PropertyTools.DataAnnotations.Browsable(false)]
         [IniField("CPKs")]
         public Dictionary<string, string> CPKs { get; set; } = new Dictionary<string, string>();
 
@@ -178,6 +180,8 @@ namespace HedgeModManager
                 IniSerializer.Serialize(this, stream);
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
     public class StringWrapper

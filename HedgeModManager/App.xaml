@@ -63,7 +63,14 @@
                         <ControlTemplate TargetType="{x:Type MenuItem}">
                             <Grid Background="{TemplateBinding Background}">
                                 <Border Height="25" Margin="10,0,20,0">
-                                    <TextBlock VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}"/>
+                                        <TextBlock Grid.Column="1" Margin="4,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{TemplateBinding InputGestureText}" Foreground="{TemplateBinding Foreground}"/>
+                                    </Grid>
                                 </Border>
                             </Grid>
                         </ControlTemplate>

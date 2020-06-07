@@ -12,13 +12,13 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ContextMenu x:Key="ModContextMenu">
-            <MenuItem Header="{DynamicResource ModsUIModDescription}" Click="UI_Description_Click"/>
-            <MenuItem Header="{DynamicResource ModsUIModFavorite}" Click="UI_Favorite_Click"/>
-            <MenuItem x:Name="ContextMenuItemConfigure" Header="{DynamicResource ModsUIModConfigure}" Click="UI_ConfigureMod_Click"/>
-            <MenuItem Header="{DynamicResource ModsUIModOpenFolder}" Click="UI_Open_Folder"/>
+            <MenuItem Header="{DynamicResource ModsUIModDescription}" Click="UI_Description_Click" InputGestureText="(Ctrl+G)"/>
+            <MenuItem Header="{DynamicResource ModsUIModFavorite}" Click="UI_Favorite_Click" InputGestureText="(Alt+F)"/>
+            <MenuItem x:Name="ContextMenuItemConfigure" Header="{DynamicResource ModsUIModConfigure}" Click="UI_ConfigureMod_Click" InputGestureText="(Ctrl+C)"/>
+            <MenuItem Header="{DynamicResource ModsUIModOpenFolder}" Click="UI_Open_Folder" InputGestureText="(Ctrl+O)"/>
             <MenuItem Header="{DynamicResource ModsUIModCheckUpdates}" Click="UI_Update_Mod"/>
-            <MenuItem Header="{DynamicResource ModsUIModEdit}" Click="UI_Edit_Mod"/>
-            <MenuItem Header="{DynamicResource ModsUIModDelete}" Click="UI_RemoveMod_Click"/>
+            <MenuItem Header="{DynamicResource ModsUIModEdit}" Click="UI_Edit_Mod" InputGestureText="(Ctrl+E)"/>
+            <MenuItem Header="{DynamicResource ModsUIModDelete}" Click="UI_RemoveMod_Click" InputGestureText="(Delete)"/>
         </ContextMenu>
     </Window.Resources>
     <Grid>
@@ -32,7 +32,7 @@
                 <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem Header="{DynamicResource MainUIMods}">
                         <Grid>
-                            <ListView x:Name="ModsList"
+                            <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
                                       Margin="10,5,10,5" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" 
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"

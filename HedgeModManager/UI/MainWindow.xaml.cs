@@ -31,6 +31,7 @@ using Cursors = System.Windows.Input.Cursors;
 using DataFormats = System.Windows.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using ListViewItem = System.Windows.Controls.ListViewItem;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Timer = System.Threading.Timer;
@@ -838,6 +839,46 @@ namespace HedgeModManager
         private void UI_ContextMenu_Opening(object sender, ContextMenuEventArgs e)
         {
             App.FindChild<MenuItem>(((ListViewItem)sender).ContextMenu, "ContextMenuItemConfigure").IsEnabled = ViewModel.SelectedMod.HasSchema;
+        }
+
+        private void ModsList_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if(ViewModel.SelectedMod == null)
+                return;
+
+            var mod = ViewModel.SelectedMod;
+            var ctrlKey = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            var altKey = Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+
+            if (Keyboard.IsKeyDown(Key.Space))
+                mod.Enabled = !mod.Enabled;
+
+            if (ctrlKey)
+            {
+                if (Keyboard.IsKeyDown(Key.C))
+                    UI_ConfigureMod_Click(null, null);
+                else if (Keyboard.IsKeyDown(Key.D))
+                    UI_Description_Click(null, null);
+                else if (Keyboard.IsKeyDown(Key.E))
+                    UI_Edit_Mod(null, null);
+                else if (Keyboard.IsKeyDown(Key.O))
+                    UI_Open_Folder(null, null);
+
+                e.Handled = true;
+            }
+            else if (altKey)
+            {
+                if (Keyboard.IsKeyDown(Key.F))
+                    UI_Favorite_Click(null, null);
+
+                e.Handled = true;
+            }
+
+            if (Keyboard.IsKeyDown(Key.Delete))
+            {
+                UI_RemoveMod_Click(null, null);
+                e.Handled = true;
+            }
         }
     }
 }
