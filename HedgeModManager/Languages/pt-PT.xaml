@@ -33,6 +33,7 @@
     <system:String x:Key="ModsUISupportSave"    >Suporta Gravação</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Atualizações</system:String>
     <system:String x:Key="ModsUIModDescription" >Descrição</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Favorito</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Abrir pasta do conteúdo</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Verificar por atualizações</system:String>
@@ -43,6 +44,7 @@
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Nome</system:String>
     <system:String x:Key="CodesUIDownload">Transferir Códigos da Comunidade</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Os códigos instalados são incompatíveis com o carregador de códigos.&#x0a;Por favor atualiza os códigos e o carregador.&#x0a;AVISO: Isto irá apagar quaisquer códigos personalizados.</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->

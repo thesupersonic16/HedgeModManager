@@ -33,6 +33,7 @@
     <system:String x:Key="ModsUISupportSave"    >Soporta de guardado</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Actualización</system:String>
     <system:String x:Key="ModsUIModDescription" >Descripción</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Favorite</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Abrir carpeta contenedora</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Revisar actualización</system:String>
@@ -43,6 +44,7 @@
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Nombre</system:String>
     <system:String x:Key="CodesUIDownload">Descargar trucos de la comunidad</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Los códigos instalados son incompatibles con el cargador de códigos.&#x0a;Por favor, actualiza los códigos y el cargador de códigos.&#x0a;ADVERTENCIA: Esto borrará cualquier código personalizado.</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
