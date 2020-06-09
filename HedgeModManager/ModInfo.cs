@@ -181,6 +181,36 @@ namespace HedgeModManager
             }
         }
 
+        public bool ValidateIncludeDirectories()
+        {
+            var valid = true;
+            foreach (var dir in IncludeDirs)
+            {
+                if (!Directory.Exists(Path.Combine(RootDirectory, dir)))
+                {
+                    valid = false;
+                    break;
+                }
+            }
+
+            return valid;
+        }
+
+        public void FixIncludeDirectories()
+        {
+            var validDirs = new List<string>();
+            foreach (var includeDir in IncludeDirs)
+            {
+                if(Directory.Exists(Path.Combine(RootDirectory, includeDir)))
+                    validDirs.Add(includeDir);
+            }
+
+            if(validDirs.Count == 0)
+                validDirs.Add(".");
+
+            IncludeDirs = validDirs;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 

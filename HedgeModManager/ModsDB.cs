@@ -421,5 +421,18 @@ namespace HedgeModManager
                 Process.Start(path);
             }
         }
+
+        public List<ModInfo> GetInvalidMods()
+        {
+            var invalid = new List<ModInfo>();
+
+            foreach (var mod in Mods)
+            {
+                if(!mod.ValidateIncludeDirectories())
+                    invalid.Add(mod);
+            }
+
+            return invalid;
+        }
     }
 }

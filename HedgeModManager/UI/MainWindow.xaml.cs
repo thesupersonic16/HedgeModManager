@@ -3,38 +3,26 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Threading;
 using HedgeModManager.UI;
 using System.Collections.ObjectModel;
-
-using HMMResources = HedgeModManager.Properties.Resources;
-using static HedgeModManager.Lang;
 using System.Net;
 using System.IO.Compression;
-using System.Windows.Forms;
-using HedgeModManager.Misc;
+using System.Text;
 using Application = System.Windows.Application;
-using ContextMenu = System.Windows.Controls.ContextMenu;
 using Cursors = System.Windows.Input.Cursors;
 using DataFormats = System.Windows.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
-using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using ListViewItem = System.Windows.Controls.ListViewItem;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Timer = System.Threading.Timer;
+using HMMResources = HedgeModManager.Properties.Resources;
+using static HedgeModManager.Lang;
 
 namespace HedgeModManager
 {
@@ -94,6 +82,32 @@ namespace HedgeModManager
 
             UpdateStatus(Localise("StatusUILoadedMods", ModsDatabase.Mods.Count));
             CheckCodeCompatibility();
+            var invalid = ModsDatabase.GetInvalidMods();
+            if (invalid.Count > 0)
+            {
+                var messageBuilder = new StringBuilder();
+
+                foreach (var mod in invalid)
+                {
+                    messageBuilder.AppendLine($"· {mod.Title}");
+                }
+
+                var box = new HedgeMessageBox(Localise("ModsUIInvalidIncludeDirs"), messageBuilder.ToString(), textAlignment: TextAlignment.Left);
+                box.AddButton(Localise("CommonUIOK"), () =>
+                {
+                    foreach (var mod in invalid)
+                    {
+                        mod.FixIncludeDirectories();
+                        mod.Save();
+                    }
+
+                    box.Close();
+                });
+
+                box.AddButton(Localise("CommonUICancel"), box.Close);
+                box.ShowDialog();
+            }
+
             PauseModUpdates = false;
         }
 

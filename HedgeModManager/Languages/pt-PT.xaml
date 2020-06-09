@@ -40,6 +40,7 @@
     <system:String x:Key="ModsUIModEdit"        >Editar mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Remover mod</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Arrasta items para alterar a ordem de carregamento de mods.</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">O Hedge Mod Manager detetou que um ou mais mods têm diretorias inválidas.&#x0a;Queres que o Hedge Mod Manager tente corrigir isto?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Nome</system:String>

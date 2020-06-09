@@ -40,6 +40,7 @@
     <system:String x:Key="ModsUIModEdit"        >Edit mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Delete mod</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Drag and drop items to change the load order of mods.</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager has detected that one or more mods have invalid include directories.&#x0a;Do you want Hedge Mod Manager to attempt to fix this?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Name</system:String>
