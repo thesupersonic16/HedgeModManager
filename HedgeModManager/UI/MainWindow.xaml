@@ -12,7 +12,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ContextMenu x:Key="ModContextMenu">
-            <MenuItem Header="{DynamicResource ModsUIModDescription}" Click="UI_Description_Click" InputGestureText="(Ctrl+G)"/>
+            <MenuItem Header="{DynamicResource ModsUIModDescription}" Click="UI_Description_Click" InputGestureText="(Ctrl+D)"/>
             <MenuItem Header="{DynamicResource ModsUIModFavorite}" Click="UI_Favorite_Click" InputGestureText="(Alt+F)"/>
             <MenuItem x:Name="ContextMenuItemConfigure" Header="{DynamicResource ModsUIModConfigure}" Click="UI_ConfigureMod_Click" InputGestureText="(Ctrl+C)"/>
             <MenuItem Header="{DynamicResource ModsUIModOpenFolder}" Click="UI_Open_Folder" InputGestureText="(Ctrl+O)"/>
