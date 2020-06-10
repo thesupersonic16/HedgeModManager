@@ -293,13 +293,13 @@ namespace HedgeModManager
                 ModsDatabase.Mods.Add(mod);
             }
 
-            CodesDatabase.Codes.ForEach((x) => 
+            foreach (var code in CodesDatabase.Codes)
             {
-                if(x.Enabled)
+                if (code.Enabled)
                 {
-                    ModsDatabase.Codes.Add(x.Name);
+                    ModsDatabase.Codes.Add(code.Name);
                 }
-            });
+            }
 
             ModsDatabase.SaveDB();
         }
@@ -564,9 +564,9 @@ namespace HedgeModManager
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
+            ComboBox_Languages.SelectedItem = App.SupportedCultures.FirstOrDefault(t => t.Value == App.GetClosestCulture(RegistryConfig.UILanguage));
             Refresh();
             CheckForUpdates();
-            ComboBox_Languages.SelectedItem = App.SupportedCultures.FirstOrDefault(t => t.Value == App.GetClosestCulture(RegistryConfig.UILanguage));
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)

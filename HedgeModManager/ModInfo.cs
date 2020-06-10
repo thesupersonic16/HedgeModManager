@@ -42,6 +42,7 @@ namespace HedgeModManager
         [PropertyTools.DataAnnotations.Browsable(false)]
         public bool HasSchema => ConfigSchema != null;
         
+        [PropertyTools.DataAnnotations.Browsable(false)]
         public bool Favorite { get; set; }
 
         // Main

@@ -88,13 +88,7 @@ namespace HedgeModManager
                             var key = line.Substring(0, i);
                             var value = line.Substring(i + 1);
 
-                            var isString = value.StartsWith("\"");
-                            var start = isString ? 1 : 0;
-
-                            var idx = value.LastIndexOf('"');
-                            var end = idx <= 0 || idx == start ? -1 : idx;
-
-                            this[currentGroup][$"{c}{key}"] = end < 0 ? value.Substring(start) : value.Substring(start, end - start);
+                            this[currentGroup][$"{c}{key}"] = value.Trim('"');
                             break;
                         }
                 }
