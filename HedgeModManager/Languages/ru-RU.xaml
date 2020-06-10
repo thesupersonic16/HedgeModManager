@@ -25,7 +25,7 @@
     <system:String x:Key="MainUISave"          >Сохранить</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Сохранить и запустить игру</system:String>
     <system:String x:Key="MainUIPlay"          >Запустить игру</system:String>
-    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager обнаружил, что один или несколько модов имеют ошибку в "IncludeDir".&#x0a;Вы хотите, чтобы Hedge Mod Manager попытался исправить ее?</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager обнаружил, что один или&#x0a;несколько модов имеют ошибку в "IncludeDir".&#x0a;Вы хотите, чтобы Hedge Mod Manager попытался исправить ее?</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Название</system:String>

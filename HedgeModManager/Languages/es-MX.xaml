@@ -33,13 +33,14 @@
     <system:String x:Key="ModsUISupportSave"    >Soporta de guardado</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Actualización</system:String>
     <system:String x:Key="ModsUIModDescription" >Descripción</system:String>
-    <system:String x:Key="ModsUIModFavorite"    >Favorite</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Favorito</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Abrir carpeta contenedora</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Revisar actualización</system:String>
     <system:String x:Key="ModsUIModEdit"        >Editar mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Borrar mod</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Arrastra y suelta objetos para cambiar el orden de carga de los mods</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager ha detectado que uno o más mods incluyen directorios inválidos.&#x0a;¿Quieres que Hedge Mod Manager intente arreglarlo?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Nombre</system:String>

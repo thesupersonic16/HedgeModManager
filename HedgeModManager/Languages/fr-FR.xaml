@@ -33,17 +33,19 @@
     <system:String x:Key="ModsUISupportSave"    >Sauvegarde</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Mise à jours</system:String>
     <system:String x:Key="ModsUIModDescription" >Description</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Favoris</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Paramètres</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Ouvrir le dossier</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Vérification de MàJ</system:String>
     <system:String x:Key="ModsUIModEdit"        >Modifier mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Supprimer mod</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Maintenir et déplacer pour changer l'ordre de priorité.</system:String>
-
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager a détecté que un ou plusieurs mods&#x0a;contient(nent) un dossier include invalide.&#x0a;Voulez-vous que Hedge Mod Manager essaye de corriger le problème?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Nom</system:String>
     <system:String x:Key="CodesUIDownload">Télécharger des codes a partir de la base de donnée.</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Les codes installés ne sont pas compatibles avec le code loader.&#x0a;Veuillez mettre à jour les codes ainsi que le code loader.&#x0a;ATTENTION: Ceci va effacer tous les codes personnalisés</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->

@@ -33,16 +33,19 @@
     <system:String x:Key="ModsUISupportSave"    >支持存檔</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >更新</system:String>
     <system:String x:Key="ModsUIModDescription" >描述</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >最喜爱</system:String>
     <system:String x:Key="ModsUIModConfigure"   >设置 MOD</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >打开MOD目录</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">查询更新</system:String>
     <system:String x:Key="ModsUIModEdit"        >更改MOD内客</system:String>
     <system:String x:Key="ModsUIModDelete"      >移除MOD</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >拖放项目以更改MOD的加载顺序。</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager已检测到一个或多个Mod包含无效的包含目录。&#x0a;您是否希望Hedge Mod Manager尝试解决此问题？</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >名称</system:String>
     <system:String x:Key="CodesUIDownload">下载社区代码</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">安装的代码与代码加载器不相容。&#x0a;请更新代码和代码加载器。&#x0a;警告：这将删除所有自定义代码。</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
