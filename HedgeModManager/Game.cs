@@ -1,6 +1,8 @@
 ﻿using HedgeModManager.Properties;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +21,7 @@ namespace HedgeModManager
             HasCustomLoader = true,
             SupportsCPKREDIR = true,
             ModLoaderDownloadURL = Resources.URL_GCL_DL,
-            ModLoaderData = Resources.DAT_GCL_DLL,
+            ModLoaderData = EmbeddedLoaders.GenerationsCodeLoader,
             CustomLoaderName = "Generations Code Loader",
             CustomLoaderFileName = "d3d9.dll",
             AppID = "71340",
@@ -36,7 +38,7 @@ namespace HedgeModManager
             HasCustomLoader = true,
             SupportsCPKREDIR = true,
             ModLoaderDownloadURL = Resources.URL_LCL_DL,
-            ModLoaderData = Resources.DAT_LCL_DLL,
+            ModLoaderData = EmbeddedLoaders.LostCodeLoader,
             CustomLoaderName = "Lost Code Loader",
             CustomLoaderFileName = "d3d9.dll",
             AppID = "329440",
@@ -53,7 +55,7 @@ namespace HedgeModManager
             HasCustomLoader = true,
             SupportsCPKREDIR = false,
             ModLoaderDownloadURL = Resources.URL_FML_DL,
-            ModLoaderData = Resources.DAT_FML_DLL,
+            ModLoaderData = EmbeddedLoaders.ForcesModLoader,
             CustomLoaderName = "Forces Mod Loader",
             CustomLoaderFileName = "d3d11.dll",
             AppID = "637100",
@@ -68,6 +70,35 @@ namespace HedgeModManager
             yield return SonicGenerations;
             yield return SonicLostWorld;
             yield return SonicForces;
+        }
+    }
+
+    internal static class EmbeddedLoaders
+    {
+        public static byte[] GenerationsCodeLoader;
+        public static byte[] ForcesModLoader;
+        public static byte[] LostCodeLoader;
+
+        static EmbeddedLoaders()
+        {
+            using (var stream = new MemoryStream(Resources.DAT_LOADERS_ZIP))
+            using (var zip = new ZipArchive(stream))
+            {
+                GenerationsCodeLoader = GetFile("SonicGenerationsCodeLoader.dll");
+                ForcesModLoader = GetFile("ForcesModLoader.dll");
+                LostCodeLoader = GetFile("LostCodeLoader.dll");
+
+                byte[] GetFile(string name)
+                {
+                    var entry = zip.GetEntry(name);
+                    using (var file = entry.Open())
+                    {
+                        var buffer = new byte[entry.Length];
+                        file.Read(buffer, 0, buffer.Length);
+                        return buffer;
+                    }
+                }
+            }
         }
     }
 

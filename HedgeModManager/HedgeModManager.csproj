@@ -372,9 +372,11 @@
     <EmbeddedResource Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ModLoader\EmbeddedLoaders.zip" />
     <None Include="Resources\ModLoader\ForcesModLoader.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ModLoader\Loaders.zip" />
     <None Include="Resources\ModLoader\SonicGenerationsCodeLoader.dll" />
   </ItemGroup>
   <ItemGroup>

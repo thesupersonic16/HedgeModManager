@@ -124,14 +124,8 @@
   <data name="DAT_CPKREDIR_TXT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cpkredir.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="DAT_FML_DLL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ModLoader\ForcesModLoader.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="DAT_GCL_DLL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ModLoader\SonicGenerationsCodeLoader.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="DAT_LCL_DLL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ModLoader\LostCodeLoader.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="DAT_LOADERS_ZIP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ModLoader\EmbeddedLoaders.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="GBStyleSheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GBStyleSheet.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

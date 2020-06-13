@@ -83,29 +83,9 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DAT_FML_DLL {
+        internal static byte[] DAT_LOADERS_ZIP {
             get {
-                object obj = ResourceManager.GetObject("DAT_FML_DLL", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DAT_GCL_DLL {
-            get {
-                object obj = ResourceManager.GetObject("DAT_GCL_DLL", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DAT_LCL_DLL {
-            get {
-                object obj = ResourceManager.GetObject("DAT_LCL_DLL", resourceCulture);
+                object obj = ResourceManager.GetObject("DAT_LOADERS_ZIP", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -246,9 +226,8 @@ namespace HedgeModManager.Properties {
         ///        public static extern bool VirtualProtect(IntPtr lpAddress,
         ///                IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
         ///        
-        ///        public static dynamic MemoryProvider;
-        ///
-        ///        public static void Regist [rest of string was truncated]&quot;;.
+        ///        [DllImport(&quot;kernel32.dll&quot;, CharSet=CharSet.Auto)]
+        ///        public static e [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MemoryService {
             get {
