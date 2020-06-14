@@ -184,7 +184,7 @@ Write<float>(0x19FD2C, 29.97f)
 Code "30 FPS Speed Lock" by "Skyth"
 Write<float>(0x19FD2C, 30)
 WriteNop(0xE7B5D7, 2)
-WriteProtected<float>(0x1704258, 0.0333333333333334)
+WriteProtected<float>(0x1704258, 0.0333333333333334f)
 
 Code "59.94 FPS Lock" by "PTKickass"
 Write<float>(0x19FD2C, 59.94f)
@@ -192,7 +192,7 @@ Write<float>(0x19FD2C, 59.94f)
 Code "60 FPS Speed Lock" by "Skyth"
 Write<float>(0x19FD2C, 60)
 WriteNop(0xE7B5D7, 2)
-WriteProtected<float>(0x1704258, 0.0166666666666667)
+WriteProtected<float>(0x1704258, 0.0166666666666667f)
 
 Patch "Longer Blue Trail" by "TiMan & Nekit"
 WriteProtected<ushort>(0xE5FB17, 0x9090)
@@ -296,7 +296,7 @@ Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 0.25f)
 
 Code "Everything is 1/2 Speed Except For Sonic" by "Sajid"
 Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19D), 1)
-Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 0.5)
+Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 0.5f)
 
 Code "Everything is 2x Speed Except For Sonic" by "Sajid"
 Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19D), 1)
@@ -320,7 +320,7 @@ Code "Disable Motion Blur" by "Skyth"
 Write<byte>(0x1A43103, 0)
 
 Code "Set Shadow Bias to 0.0002" by "Skyth"
-Write<float>(0x1A4356C, 0.0002)
+Write<float>(0x1A4356C, 0.0002f)
 
 Patch "Disable HUD in Stages" by "Sajid"
 WriteProtected<uint>(0x586C94, 0x13EADA4)
