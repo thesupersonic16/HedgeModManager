@@ -23,6 +23,7 @@ using MenuItem = System.Windows.Controls.MenuItem;
 using Timer = System.Threading.Timer;
 using HMMResources = HedgeModManager.Properties.Resources;
 using static HedgeModManager.Lang;
+using HedgeModManager.Languages;
 
 namespace HedgeModManager
 {
@@ -154,7 +155,7 @@ namespace HedgeModManager
             var exeDir = App.StartDirectory;
             bool hasOtherModLoader = File.Exists(Path.Combine(exeDir, App.CurrentGame.CustomLoaderFileName));
             IsCPKREDIRInstalled = App.CurrentGame.SupportsCPKREDIR ? App.IsCPKREDIRInstalled(Path.Combine(exeDir, App.CurrentGame.ExecuteableName)) : hasOtherModLoader;
-            string loaders = (IsCPKREDIRInstalled && App.CurrentGame.SupportsCPKREDIR ? App.CPKREDIRVersion : "");
+            string loaders = (IsCPKREDIRInstalled && App.CurrentGame.SupportsCPKREDIR ? App.GetCPKREDIRVersionString() : "");
 
             if (hasOtherModLoader)
             {
@@ -564,7 +565,11 @@ namespace HedgeModManager
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
-            ComboBox_Languages.SelectedItem = App.SupportedCultures.FirstOrDefault(t => t.Value == App.GetClosestCulture(RegistryConfig.UILanguage));
+
+            // Update CPKREDIR if needed
+            if (App.CurrentGame.SupportsCPKREDIR)
+                App.UpdateCPKREDIR();
+
             Refresh();
             CheckForUpdates();
         }
@@ -780,6 +785,10 @@ namespace HedgeModManager
                 if (App.IsCPKREDIRInstalled(exePath))
                     App.InstallCPKREDIR(exePath, false);
 
+                // Update CPKREDIR if needed
+                if (App.CurrentGame.SupportsCPKREDIR)
+                    App.UpdateCPKREDIR();
+
                 ResetWatchers();
                 Refresh();
                 UpdateStatus(string.Format(Localise("StatusUIGameChange"), App.CurrentGame.GameName));
@@ -834,11 +843,14 @@ namespace HedgeModManager
 
         private void ComboBox_Languages_Changed(object sender, SelectionChangedEventArgs e)
         {
-            var culture = ((KeyValuePair<string, string>)ComboBox_Languages.SelectedItem).Value;
-            RegistryConfig.UILanguage = culture;
-            RegistryConfig.Save();
-            App.LoadLanaguage(culture);
+            App.ChangeLanguage();
             RefreshUI();
+        }
+
+        private void ComboBox_Languages_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboBox_Languages.GetBindingExpression(ComboBox.ItemsSourceProperty).UpdateTarget();
+            ComboBox_Languages.GetBindingExpression(ComboBox.SelectedItemProperty).UpdateTarget();
         }
 
         private void UI_ConfigureMod_Click(object sender, RoutedEventArgs e)

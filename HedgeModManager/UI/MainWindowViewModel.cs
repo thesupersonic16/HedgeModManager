@@ -21,8 +21,6 @@ namespace HedgeModManager.UI
         public ModInfo SelectedMod { get; set; }
         public Code SelectedCode { get; set; }
 
-        public Dictionary<string, string> SupportedCultures => App.SupportedCultures;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
 
