@@ -40,7 +40,7 @@
     <system:String x:Key="ModsUIModEdit"        >Mod Bewerken</system:String>
     <system:String x:Key="ModsUIModDelete"      >Mod Verwijderen</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Pak En Sleep items Om De Laad Volgorde Van Mods Te Veranderen.</system:String>
-    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Èèn of mèerdere mods bevat ongeldige mappen, &#x0a; Wil je dit coorigeren?</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">ÉÉN of mèerdere mods bevat ongeldige mappen, &#x0a; Wil je dit coorigeren?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Naam</system:String>
