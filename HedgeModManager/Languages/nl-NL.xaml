@@ -33,17 +33,20 @@
     <system:String x:Key="ModsUISupportSave"    >Ondersteunt Spel Data</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Bijwerken</system:String>
     <system:String x:Key="ModsUIModDescription" >Beschrijving</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Favoriete</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Mod Configureren</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Bevattende Map Openen </system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Controleer Op Updates</system:String>
     <system:String x:Key="ModsUIModEdit"        >Mod Bewerken</system:String>
     <system:String x:Key="ModsUIModDelete"      >Mod Verwijderen</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Pak En Sleep items Om De Laad Volgorde Van Mods Te Veranderen.</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Èèn of mèerdere mods bevat ongeldige mappen, &#x0a; Wil je dit coorigeren?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Naam</system:String>
     <system:String x:Key="CodesUIDownload" >Gemeenschap Codes Downloaden</system:String>
-
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">De geïnstalleerde codes zijn niet compatibel met de codelader,&#x0a;Update de CodeLader en Codes A.U.B.&#x0a;WAARSCHUWING : Hiermee worden alle aangepaste codes gewist.</system:String>
+    
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
     <system:String x:Key="SettingsUIGMLHeader"      >Spel &amp; Mod Loader</system:String>
@@ -95,7 +98,7 @@
     <system:String x:Key="StatusUILoadedMods"             >{0} Mods Geladen</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >Controleert Op {0} Updates</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >Update Mislukt {0}! {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Finished checking for mod updates: {0} voltooid, {1} mislukt</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Controleren Op Updates (0) voltooid, (1) mislukt</system:String>
     <system:String x:Key="StatusUIStartingGame"           >Aan het Opstarten {0}</system:String>
     <system:String x:Key="StatusUICheckingForUpdates"     >Updaten Mislukt</system:String>
     <system:String x:Key="StatusUINoUpdatesFound"         >Geen Updates Gevonden</system:String>
