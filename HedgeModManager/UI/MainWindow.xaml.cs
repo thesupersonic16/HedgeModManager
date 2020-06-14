@@ -497,7 +497,7 @@ namespace HedgeModManager
 
                         Dispatcher.Invoke(() =>
                         {
-                            var dialog = new HedgeMessageBox($"{App.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"));
+                            var dialog = new HedgeMessageBox($"{App.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
 
                             dialog.AddButton(Localise("CommonUIIgnore"), () =>
                             {
