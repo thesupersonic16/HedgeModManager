@@ -537,7 +537,7 @@ namespace HedgeModManager
             {
                 App.InstallOtherLoader(false);
                 UI_Download_Codes(null, null);
-                Refresh();
+                dialog.Close();
             });
             dialog.AddButton(Localise("CommonUICancel"), dialog.Close);
             dialog.ShowDialog();
@@ -783,10 +783,6 @@ namespace HedgeModManager
             if(ComboBox_GameStatus.SelectedItem != null)
             {
                 App.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
-
-                App.ConfigPath = Path.Combine(App.StartDirectory, "cpkredir.ini");
-                App.Config = new CPKREDIRConfig(App.ConfigPath);
-                App.ModsDbPath = Path.Combine(App.StartDirectory, Path.GetDirectoryName(App.Config.ModsDbIni));
 
                 // Remove old patch
                 string exePath = Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName);

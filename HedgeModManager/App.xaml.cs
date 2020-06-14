@@ -182,7 +182,8 @@ namespace HedgeModManager
             }
 
 #endif
-            ModsDbPath = Path.Combine(StartDirectory, "Mods");
+            if (string.IsNullOrEmpty(ModsDbPath))
+                ModsDbPath = Path.Combine(StartDirectory, "Mods");
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
 
             if (args.Length > 0)
@@ -295,6 +296,9 @@ namespace HedgeModManager
                     CurrentSteamGame = steamGame;
                     RegistryConfig.LastGameDirectory = StartDirectory;
                     RegistryConfig.Save();
+                    ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
+                    Config = new CPKREDIRConfig(ConfigPath);
+                    ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni));
                     return steamGame;
                 }
             }
@@ -360,6 +364,10 @@ namespace HedgeModManager
                     RegistryConfig.Save();
                 }
             }
+
+            ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
+            Config = new CPKREDIRConfig(ConfigPath);
+            ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni));
         }
 
         public static void InstallGBHandlers()
