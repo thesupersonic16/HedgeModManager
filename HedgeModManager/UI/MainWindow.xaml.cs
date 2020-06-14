@@ -134,10 +134,7 @@ namespace HedgeModManager
                 if (mod.Favorite && !mod.Enabled)
                 {
                     ModsDatabase.Mods.Remove(mod);
-                    ModsDatabase.Mods.Insert(
-                        ModsDatabase.ActiveMods.Count != 0
-                            ? ModsDatabase.ActiveMods.Count - 1
-                            : ModsDatabase.ActiveMods.Count, mod);
+                    ModsDatabase.Mods.Insert(ModsDatabase.ActiveMods.Count, mod);
                 }
             }
 
