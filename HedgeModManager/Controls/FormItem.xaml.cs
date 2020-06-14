@@ -32,7 +32,10 @@ namespace HedgeModManager.Controls
         {
             InitializeComponent();
             Schema = schema;
-            DisplayName.ToolTip = new ToolTip(){ Content = string.Join("\r\n", element.Description)};
+            if (element.Description != null && element.Description.Count > 0)
+            {
+                DisplayName.ToolTip = new ToolTip() { Content = string.Join("\r\n", element.Description) };
+            }
             DisplayName.Content = element.DisplayName;
             DisplayValue.Child = CreateUiElement(element);
         }
@@ -92,9 +95,14 @@ namespace HedgeModManager.Controls
                             var item = new ComboBoxItem()
                             {
                                 Content = val.DisplayName, 
-                                DataContext = val, 
-                                ToolTip = new ToolTip() { Content = string.Join("\r\n", val.Description)}
+                                DataContext = val,
                             };
+
+                            if (val.Description != null && val.Description.Count > 0)
+                            {
+                                item.ToolTip = new ToolTip() {Content = string.Join("\r\n", val.Description)};
+                            }
+
                             box.Items.Add(item);
                         }
 

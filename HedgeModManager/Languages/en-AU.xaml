@@ -33,16 +33,19 @@
     <system:String x:Key="ModsUISupportSave"    >Supports Save</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Updates</system:String>
     <system:String x:Key="ModsUIModDescription" >Description</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Favourite</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configure mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Open containing folder</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Check for updates</system:String>
     <system:String x:Key="ModsUIModEdit"        >Edit mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Delete mod</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Drag and drop items to change the load order of mods.</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager has detected that one or more mods have invalid include directories.&#x0a;Do you want Hedge Mod Manager to attempt to fix this?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Name</system:String>
     <system:String x:Key="CodesUIDownload">Download Community Codes</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">The installed codes are incompatible with the code loader.&#x0a;Please update the codes and the code loader.&#x0a;WARNING: This will erase any custom codes.</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->

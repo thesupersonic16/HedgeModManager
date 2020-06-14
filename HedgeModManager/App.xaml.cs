@@ -27,6 +27,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
 using HedgeModManager.Languages;
+using HedgeModManager.Misc;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
 
@@ -65,7 +66,10 @@ namespace HedgeModManager
         public static byte[] CPKREDIR = new byte[] { 0x63, 0x70, 0x6B, 0x72, 0x65, 0x64, 0x69, 0x72 };
         public static byte[] IMAGEHLP = new byte[] { 0x69, 0x6D, 0x61, 0x67, 0x65, 0x68, 0x6C, 0x70 };
 
-        public static Dictionary<string, string> SupportedCultures = new Dictionary<string, string>();
+        public static LanguageList SupportedCultures { get; set; }
+
+        public static LangEntry CurrentCulture { get; set; }
+
 
         [STAThread]
         public static void Main(string[] args)
@@ -115,8 +119,6 @@ namespace HedgeModManager
             application.ShutdownMode = ShutdownMode.OnMainWindowClose;
             application.MainWindow = new MainWindow();
             Args = args;
-            CPKREDIRVersion = GetCPKREDIRVersion();
-            RegistryConfig.Load();
 #if !DEBUG
             // Enable our Crash Window if Compiled in Release
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
@@ -124,10 +126,16 @@ namespace HedgeModManager
                 ExceptionWindow.UnhandledExceptionEventHandler(e.ExceptionObject as Exception, e.IsTerminating);
             };
 #endif
+            // Gets the embeded version
+            CPKREDIRVersion = GetCPKREDIRFileVersion(true)?.FileVersion;
+            RegistryConfig.Load();
 
             Steam.Init();
             InstallGBHandlers();
             SetupLanguages();
+            CurrentCulture = GetClosestCulture(RegistryConfig.UILanguage);
+            if (CurrentCulture != null)
+                LoadLanaguage(CurrentCulture.FileName);
 #if DEBUG
             // Find a Steam Game
             SteamGames = Steam.SearchForGames("Sonic Generations");
@@ -305,24 +313,31 @@ namespace HedgeModManager
             Current.Resources.MergedDictionaries.Add(langDict);
         }
 
-        public static string GetClosestCulture(string culture)
+        public static LangEntry GetClosestCulture(string culture)
         {
             // Check if the culture exists
-            if (SupportedCultures.Values.Any(t => t == culture))
-                return culture;
+            var cultureEntry = SupportedCultures.FirstOrDefault(t => t.FileName == culture);
+            if (cultureEntry != null)
+                return cultureEntry;
             // Find anouther culture based off language
             string language = culture.Split('-')[0];
-            string newCulture = SupportedCultures.Values.FirstOrDefault(t => t.Split('-')[0] == language);
-            if (string.IsNullOrEmpty(newCulture))
-                newCulture = SupportedCultures.Values.First();
-            return newCulture;
+            cultureEntry = SupportedCultures.FirstOrDefault(t => t.FileName.Split('-')[0] == language);
+            cultureEntry = cultureEntry ?? SupportedCultures.First();
+            return cultureEntry;
         }
 
         public static void SetupLanguages()
         {
             var resource = Current.TryFindResource("Languages");
             if (resource is LanguageList langs)
-                langs.ForEach(t => SupportedCultures.Add(t.Name, t.FileName));
+                SupportedCultures = langs;
+        }
+
+        public static void ChangeLanguage()
+        {
+            RegistryConfig.UILanguage = CurrentCulture.FileName;
+            RegistryConfig.Save();
+            LoadLanaguage(CurrentCulture.FileName);
         }
 
         /// <summary>
@@ -453,7 +468,7 @@ namespace HedgeModManager
                 }
             }
 
-            string DLLFileName = Path.Combine(StartDirectory, $"d3d{CurrentGame.DirectXVersion}.dll");
+            string DLLFileName = Path.Combine(StartDirectory, CurrentGame.CustomLoaderFileName);
 
             if (File.Exists(DLLFileName) && toggle)
             {
@@ -532,7 +547,7 @@ namespace HedgeModManager
             return (hasUpdate, info);
         }
 
-        private static string GetCPKREDIRVersion()
+        public static string GetCPKREDIRVersionString()
         {
             var temp = Path.Combine(StartDirectory, "cpkredir.dll");
             FileVersionInfo info = null;
@@ -548,9 +563,44 @@ namespace HedgeModManager
             return $"{info.ProductName} v{info.FileVersion}";
         }
 
+        private static FileVersionInfo GetCPKREDIRFileVersion(bool? packed = null)
+        {
+            FileVersionInfo info = null;
+            var temp = Path.Combine(StartDirectory, "cpkredir.dll");
+            if (File.Exists(temp) && packed != true)
+                info = FileVersionInfo.GetVersionInfo(temp);
+            
+            if (info == null && packed != false)
+            {
+                temp = Path.GetTempFileName();
+                File.WriteAllBytes(temp, HMMResources.DAT_CPKREDIR_DLL);
+                info = FileVersionInfo.GetVersionInfo(temp);
+                File.Delete(temp);
+            }
+            return info;
+        }
+
+        /// <summary>
+        /// Checks the current version of CPKREDIR with the embeded one and updates it if the current is older
+        /// </summary>
+        public static void UpdateCPKREDIR()
+        {
+            if (GetCPKREDIRFileVersion(false)?.FileVersion is string currentVersionString)
+            {
+                if (int.TryParse(CPKREDIRVersion.Replace(".", ""), out int packedVersion) &&
+                    int.TryParse(currentVersionString.Replace(".", ""), out int currentVersion) &&
+                    packedVersion > currentVersion)
+                {
+                    // Write embeded CPKREDIR
+                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
+                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
+                }
+            }
+        }
+
         public static string GetCodeLoaderVersion(Game game)
         {
-            var loaderPath = Path.Combine(StartDirectory, $"d3d{game.DirectXVersion}.dll");
+            var loaderPath = Path.Combine(StartDirectory, game.CustomLoaderFileName);
 
             if (!game.HasCustomLoader)
                 return null;
@@ -559,7 +609,23 @@ namespace HedgeModManager
                 return null;
 
             var info = FileVersionInfo.GetVersionInfo(loaderPath);
-            return info.ProductVersion ?? "1.0";
+            return info.ProductVersion ?? "0.1";
+        }
+
+        public static (Version LoaderVersion, Version MinCodeVersion) GetCodeLoaderInfo(Game game)
+        {
+            var minCodeVersion = "0.1";
+            var loaderVersion = GetCodeLoaderVersion(game);
+
+            if (loaderVersion != minCodeVersion)
+            {
+                using (var res = new DllResource(Path.Combine(StartDirectory, game.CustomLoaderFileName)))
+                {
+                    minCodeVersion = res.GetString(Games.CodeLoaderMinCodeVersionStringId);
+                }
+            }
+
+            return (loaderVersion != "0.1" ? new Version(loaderVersion) : null, new Version(string.IsNullOrEmpty(minCodeVersion) ? "9999.9999" : minCodeVersion));
         }
 
         public static string ComputeMD5Hash(string path)

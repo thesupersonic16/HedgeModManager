@@ -25,6 +25,7 @@
     <system:String x:Key="MainUISave"          >Сохранить</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Сохранить и запустить игру</system:String>
     <system:String x:Key="MainUIPlay"          >Запустить игру</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager обнаружил, что один или&#x0a;несколько модов имеют ошибку в "IncludeDir".&#x0a;Вы хотите, чтобы Hedge Mod Manager попытался исправить ее?</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Название</system:String>
@@ -33,6 +34,7 @@
     <system:String x:Key="ModsUISupportSave"    >Поддержка сохр.</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Обновления</system:String>
     <system:String x:Key="ModsUIModDescription" >Описание</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Избранное</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Настройки мода</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Открыть папку с модом</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Проверить наличие обновления</system:String>
@@ -43,6 +45,8 @@
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Название</system:String>
     <system:String x:Key="CodesUIDownload">Загрузить пользовательские коды</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Установленные коды несовместимы с загрузчиком кодов.&#x0a;Пожалуйста, обновите коды, а также загрузчик кодов.&#x0a;ВНИМАНИЕ: Это приведет к удалению всех пользовательских кодов.</system:String>
+
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->

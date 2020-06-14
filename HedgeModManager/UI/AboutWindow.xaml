@@ -81,7 +81,7 @@
             </Grid>
         </GroupBox>
         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-4" Grid.Row="3" Grid.ColumnSpan="2" Background="{StaticResource HMM.Window.DialogBottom}">
-            <Button Content="{StaticResource CommonUIClose}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_Close_Click" />
+            <Button Content="{StaticResource CommonUIClose}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_Close_Click" IsCancel="True" />
             <Button Content="GitHub"                         Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_GitHub_Click"/>
         </StackPanel>
     </Grid>

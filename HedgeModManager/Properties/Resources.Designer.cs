@@ -83,29 +83,9 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DAT_FML_DLL {
+        internal static byte[] DAT_LOADERS_ZIP {
             get {
-                object obj = ResourceManager.GetObject("DAT_FML_DLL", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DAT_GCL_DLL {
-            get {
-                object obj = ResourceManager.GetObject("DAT_GCL_DLL", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DAT_LCL_DLL {
-            get {
-                object obj = ResourceManager.GetObject("DAT_LCL_DLL", resourceCulture);
+                object obj = ResourceManager.GetObject("DAT_LOADERS_ZIP", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -198,6 +178,60 @@ namespace HedgeModManager.Properties {
             get {
                 object obj = ResourceManager.GetObject("IMG_HEDGEMODMANAGER", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace HMMCodes
+        ///{
+        ///    public enum Keys
+        ///    {
+        ///        /// &lt;summary&gt;
+        ///        ///  The bit mask to extract a key code from a key value.
+        ///        /// &lt;/summary&gt;
+        ///        KeyCode = 0x0000FFFF,
+        ///
+        ///        /// &lt;summary&gt;
+        ///        ///  The bit mask to extract modifiers from a key value.
+        ///        /// &lt;/summary&gt;
+        ///        Modifiers = unchecked((int)0xFFFF0000),
+        ///
+        ///        /// &lt;summary&gt;
+        ///        ///  No key pressed.
+        ///        /// &lt;/summary&gt;
+        ///        None = 0x00,
+        ///
+        ///        /// &lt;summary&gt;
+        ///        ///  The left mou [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Keys {
+            get {
+                return ResourceManager.GetString("Keys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///using System.Collections.Generic;
+        ///using System.Linq;
+        ///using System.Text;
+        ///using System.Threading.Tasks;
+        ///using System.Runtime.InteropServices;
+        ///
+        ///namespace HMMCodes
+        ///{
+        ///    public static unsafe class MemoryService
+        ///    {
+        ///        [DllImport(&quot;kernel32.dll&quot;)]
+        ///        public static extern bool VirtualProtect(IntPtr lpAddress,
+        ///                IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
+        ///        
+        ///        [DllImport(&quot;kernel32.dll&quot;, CharSet=CharSet.Auto)]
+        ///        public static e [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MemoryService {
+            get {
+                return ResourceManager.GetString("MemoryService", resourceCulture);
             }
         }
         

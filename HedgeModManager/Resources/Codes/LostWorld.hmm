@@ -1,10 +1,12 @@
-Patch "Don't Lose Rings"
-writenop 466900 0x02
+!!VERSION 1.0
 
-Patch "Disable Super Music"
-writenop 51ABAD 0x06
+Patch "Don't Lose Rings" by "Sajid"
+WriteNop(ASLR(0x866900), 2)
 
-Patch "Enable Stage Retry Option"
-write8 51A0E5 0xB2
-write8 51A0E6 0x01
-writenop 51A0E7 1
+Patch "Disable Super Music" by "Sajid"
+WriteNop(ASLR(0x91ABAD), 6)
+
+Patch "Enable Stage Retry Option" by "Sajid"
+WriteProtected<byte>(ASLR(0x91A0E5), 0xB2)
+WriteProtected<byte>(ASLR(0x91A0E6), 0x01)
+WriteNop(ASLR(0x91A0E7), 0x01)

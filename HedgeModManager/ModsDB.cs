@@ -24,6 +24,9 @@ namespace HedgeModManager
         [IniField("Main", "ReverseLoadOrder")]
         public bool ReverseLoadOrder { get; set; }
 
+        [IniField("Main", "FavoriteMod")]
+        public List<string> FavoriteMods = new List<string>();
+
         [IniField("Mods")]
         private Dictionary<string, string> mMods = new Dictionary<string, string>();
 
@@ -32,7 +35,6 @@ namespace HedgeModManager
 
         public string RootDirectory { get; set; }
         public int ModCount => Mods.Count;
-        public int ActiveModCount => ActiveMods.Count;
 
         public ModsDB()
         {
@@ -110,23 +112,55 @@ namespace HedgeModManager
                 else
                     ActiveMods.RemoveAt(i--);
             }
+
+            for (int i = 0; i < FavoriteMods.Count; i++)
+            {
+                var mod = Mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == FavoriteMods[i]);
+                if (mod != null)
+                    mod.Favorite = true;
+                else
+                    FavoriteMods.RemoveAt(i--);
+            }
         }
         public void SaveDB()
         {
             ActiveMods.Clear();
+            FavoriteMods.Clear();
             mMods.Clear();
 
-            Mods.ForEach(mod =>
+            foreach (var mod in Mods)
             {
+                var dirName = Path.GetFileName(mod.RootDirectory);
+
                 if (mod.Enabled)
-                    ActiveMods.Add(Path.GetFileName(mod.RootDirectory));
-                mMods.Add(Path.GetFileName(mod.RootDirectory), $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini");
-            });
+                    ActiveMods.Add(dirName);
+
+                if (mod.Favorite)
+                    FavoriteMods.Add(dirName);
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                mMods.Add(dirName, $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini");
+            }
             using (var stream = File.Create(Path.Combine(RootDirectory, "ModsDB.ini")))
             {
                 IniSerializer.Serialize(this, stream);
             }
-            CodeList.WriteDatFile(Path.Combine(RootDirectory, CodeLoader.CodesPath), new List<Code>(MainWindow.CodesDatabase.Codes.Where((x, y) => x.Enabled)), App.CurrentGame.Is64Bit);
+
+            var codes = new List<Code>();
+
+            foreach (var code in MainWindow.CodesDatabase.Codes)
+            {
+                if(code.Enabled)
+                    codes.Add(code);
+            }
+
+            foreach (var mod in Mods)
+            {
+                if(mod.Enabled && mod.Codes != null)
+                    codes.AddRange(mod.Codes.Codes);
+            }
+
+            CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
         }
 
         public void DeleteMod(ModInfo mod)
@@ -386,6 +420,19 @@ namespace HedgeModManager
             {
                 Process.Start(path);
             }
+        }
+
+        public List<ModInfo> GetInvalidMods()
+        {
+            var invalid = new List<ModInfo>();
+
+            foreach (var mod in Mods)
+            {
+                if(!mod.ValidateIncludeDirectories())
+                    invalid.Add(mod);
+            }
+
+            return invalid;
         }
     }
 }
