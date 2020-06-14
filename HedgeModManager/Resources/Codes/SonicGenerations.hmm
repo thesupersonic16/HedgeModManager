@@ -27,8 +27,13 @@ WriteProtected<byte>(0x111773A, 0xEB)
 WriteProtected<byte>(0xE55D6A, 0x0)
 WriteProtected<byte>(0xE632F1, 0x0)
 WriteProtected<byte>(0xE634C7, 0x0)
-Write<byte>(GetPointer(0x1E5E2F0, 0x1A5), Read<byte>(ptr0) | 0x10)
-Write<byte>(GetPointer(0x1E5E2F0, 0x1228), Read<byte>(ptr1) | 0x10)
+var ptr0 = GetPointer(0x1E5E2F0, 0x1A5)
+var ptr1 = GetPointer(0x1E5E2F0, 0x1228)
+if (ptr0 != 0 && ptr1 != 0)
+{
+    Write<byte>(ptr0, (byte)(Read<byte>(ptr0) | 0x10))
+    Write<byte>(ptr1, (byte)(Read<byte>(ptr1) | 0x10))
+}
 
 Patch "Widescreen Support" by "Muzzarino"
 string code = @"fild dword ptr [0x01DFE228]
