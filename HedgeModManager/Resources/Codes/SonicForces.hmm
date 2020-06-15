@@ -1,152 +1,150 @@
-!!VERSION 1.0
+Patch "Stop Timer"
+writenop 14017EE5A 0x00000005
 
-Patch "Stop Timer" by "CodeNameGamma"
-WriteNop(0x14017EE5A, 5)
+Patch "Disable Ring Loss From Damage"
+writenop 1404F77AC 0x00000004
 
-Patch "Disable Ring Loss From Damage" by "CodeNameGamma"
-WriteNop(0x1404F77AC, 5)
+Patch "Disable Boost Drain"
+writenop 1404CFD62 0x00000005
+writenop 1403DF93E 0x00000007
 
-Patch "Disable Boost Drain" by "CodeNameGamma"
-WriteNop(0x1404CFD62, 0x00000005)
-WriteNop(0x1403DF93E, 0x00000007)
+Patch "Disable Damage"
+write8 14046E1E0 0xC3
 
-Patch "Disable Damage" by "SuperSonic16"
-WriteProtected<byte>(0x14046E1E0, 0xC3)
+Patch "Disable Dashpads"
+write8 14046F9A0 0xC3
 
-Patch "Disable Dashpads" by "SuperSonic16"
-WriteProtected<byte>(0x14046F9A0, 0xC3)
+Patch "Disable Ring Loss From Super Sonic"
+writenop 1404E1F54 0x03
 
-Patch "Disable Ring Loss From Super Sonic" by "SuperSonic16"
-WriteNop(0x1404E1F54, 0x03)
+Patch "Enable Super Sonic with 1 Ring"
+write32 1404E1E8F 0x4890C931
+write8 1404E1E9B 0x7E
 
-Patch "Enable Super Sonic with 1 Ring" by "SuperSonic16"
-WriteProtected<uint>(0x1404E1E8F, 0x4890C931)
-WriteProtected<byte>(0x1404E1E9B, 0x7E)
+Patch "Ignore Ring Count When Getting Hit"
+writenop 14046E4EE 0x06
 
-Patch "Ignore Ring Count When Getting Hit" by "SuperSonic16"
-WriteNop(0x14046E4EE, 0x06)
+Patch "Max Rings"
+write32 1403DA766 0x0010BBE9
+write16 1403DA76A 0x9000
+write32 1403DB826 0x0003E7B9
+write32 1403DB82A 0x1C488900
+write32 1403DB82E 0xE9CF4D89
+write32 1403DB832 0xFFFFEF36
 
-Patch "Max Rings" by "SuperSonic16"
-WriteProtected<uint>(0x1403DA766, 0x0010BBE9)
-WriteProtected<ushort>(0x1403DA76A, 0x9000)
-WriteProtected<uint>(0x1403DB826, 0x0003E7B9)
-WriteProtected<uint>(0x1403DB82A, 0x1C488900)
-WriteProtected<uint>(0x1403DB82E, 0xE9CF4D89)
-WriteProtected<uint>(0x1403DB832, 0xFFFFEF36)
+Patch "Widescreen Fix + FOV"
+writefloat 141DBED94 1.7777777777777778
+writefloat 14086BBE3 1
+write8 14086BA8B 0xE9
+write32 14086BA8C 0x00000145
+writenop 14086BA90 2
+write32 14086BBD5 0xE05E0FF3
+write32 14086BBD9 0x4D413D80
+write32 14086BBDD 0x74010180
+write16 14086BBE1 0x680E
+write32 14086BBE7 0x0C5E0FF3
+write32 14086BBEB 0xC4834824
+write8 14086BBEF 0x08
+write32 14086BBF0 0xE9C1280F
+write32 14086BBF4 0xFFFFFE9A
+write8 1406781CE 0xE9
+write32 1406781CF 0x001F39E3
+write16 14086BBB6 0x05C6
+write32 14086BBB8 0x01804D64
+write16 14086BBBC 0xE801
+write32 14086BBBE 0xFFED410E
+write8 14086BBC2 0xE9
+write32 14086BBC3 0xFFE0C60C
+write32 1401255FD 0x01F4B31C
+write32 1401261E7 0x01F4A732
+write32 140127897 0x01F49082
+write32 140127C1A 0x01F48CFF
+write32 1401284E7 0x01F48432
+write32 14012EC8E 0x01F41C8B
+write32 140132E05 0x01F3DB14
+write32 140133D05 0x01F3CC14
+write32 14039B307 0x01CD5612
+write32 14066A6C7 0x01A06252
+write32 1406AD57F 0x019C339A
+write32 1406E183C 0x0198F0DD
+write32 1406E5025 0x0198B8F4
+write32 14073FB69 0x01930DB0
+write32 14073FBBE 0x93110FF3
+write32 14073FBC2 0x000000B4
+writenop 14073FBC6 2
+write32 142B1A6BA 0xFF55625F
+write32 142B1B89B 0xFF55507E
+write16 14086BB60 0x05C6
+write32 14086BB62 0x01804DBA
+write16 14086BB66 0xE900
+write32 14086BB68 0xFFFFFF2A
+write16 1406C3EB9 0x59EB
+writenop 1406C3EBB 8
+write16 1406C3F14 0x44F3
+write32 1406C3F16 0x248C100F
+write32 1406C3F1A 0x000000A0
+write16 1406C3F1E 0x05EB
+write32 1406C3F20 0xD5D80BE9
+write32 1406C3F24 0xF505C604
+write32 1406C3F28 0x00019AC9
+write16 1406C3F2C 0x95EB
+write8 1406E180F 0xE9
+write32 1406E1810 0x0018A322
+write16 1406E1814 0x5B0F
+write8 1406E1816 0xC0
+write32 14086BA92 0x90905FEB
+write16 14086BAF3 0x36EB
+write32 14086BB36 0x6E0F4166
+write16 14086BBA5 0x05C6
+write32 14086BBA7 0x01804D75
+write16 14086BBAB 0xE801
+write32 14086BBAD 0xFFE0CC0F
+write8 14086BBB1 0xE9
+write32 14086BBB2 0xFFD2243C
+write8 14058DFED 0xE9
+write32 14058DFEE 0x002DDBB3
+write8 14086BB3A 0xC6
+write32 14086BB3B 0x6E0F4466
+write8 14086BB3F 0xE7
+write32 14086BB40 0xE45B0F45
+write32 14086BB44 0x6E0F4566
+write8 14086BB48 0xEE
+write32 14086BB49 0xED5B0F45
+write32 14086BB4D 0x5E0F45F3
+write8 14086BB51 0xE5
+write32 14086BB52 0x110F44F3
+write32 14086BB56 0x804DC225
+write16 14086BB5A 0xE901
+write32 14086BB5C 0xFFE75CB4
+write32 14086BB05 0x88352F0F
+write8 14086BB09 0x32
+write32 14086BB0A 0x14730155
+write32 14086BB0E 0x355E0FF3
+write32 14086BB12 0x0155327E
+write32 14086BB16 0xCE590FF3
+write32 14086BB1A 0x35100FF3
+write32 14086BB1E 0x01553272
+write32 14086BB22 0xC65E0FF3
+write8 14086BB26 0xE9
+write32 14086BB27 0x00000035
+write32 14086BB2B 0x4DEF3D83
+write32 14086BB2F 0x74010180
+write8 14086BB33 0xEE
+write16 14086BB34 0xCFEB
+write16 14086BC05 0x05C6
+write32 14086BC07 0x01804D15
+write16 14086BC0B 0xE801
+write32 14086BC0D 0xFFE0CBAF
+write8 14086BC11 0xE9
+write32 14086BC12 0xFFCF5C04
+write8 140561815 0xE9
+write32 140561816 0x0030A3EB
 
-Patch "Widescreen Fix + FOV" by "Muzzarino Hezibeth"
-WriteProtected<float>(0x141DBED94, 1.7777777777777778f)
-WriteProtected<float>(0x14086BBE3, 1)
-WriteProtected<byte>(0x14086BA8B, 0xE9)
-WriteProtected<uint>(0x14086BA8C, 0x00000145)
-WriteNop(0x14086BA90, 2)
-WriteProtected<uint>(0x14086BBD5, 0xE05E0FF3)
-WriteProtected<uint>(0x14086BBD9, 0x4D413D80)
-WriteProtected<uint>(0x14086BBDD, 0x74010180)
-WriteProtected<ushort>(0x14086BBE1, 0x680E)
-WriteProtected<uint>(0x14086BBE7, 0x0C5E0FF3)
-WriteProtected<uint>(0x14086BBEB, 0xC4834824)
-WriteProtected<byte>(0x14086BBEF, 0x08)
-WriteProtected<uint>(0x14086BBF0, 0xE9C1280F)
-WriteProtected<uint>(0x14086BBF4, 0xFFFFFE9A)
-WriteProtected<byte>(0x1406781CE, 0xE9)
-WriteProtected<uint>(0x1406781CF, 0x001F39E3)
-WriteProtected<ushort>(0x14086BBB6, 0x05C6)
-WriteProtected<uint>(0x14086BBB8, 0x01804D64)
-WriteProtected<ushort>(0x14086BBBC, 0xE801)
-WriteProtected<uint>(0x14086BBBE, 0xFFED410E)
-WriteProtected<byte>(0x14086BBC2, 0xE9)
-WriteProtected<uint>(0x14086BBC3, 0xFFE0C60C)
-WriteProtected<uint>(0x1401255FD, 0x01F4B31C)
-WriteProtected<uint>(0x1401261E7, 0x01F4A732)
-WriteProtected<uint>(0x140127897, 0x01F49082)
-WriteProtected<uint>(0x140127C1A, 0x01F48CFF)
-WriteProtected<uint>(0x1401284E7, 0x01F48432)
-WriteProtected<uint>(0x14012EC8E, 0x01F41C8B)
-WriteProtected<uint>(0x140132E05, 0x01F3DB14)
-WriteProtected<uint>(0x140133D05, 0x01F3CC14)
-WriteProtected<uint>(0x14039B307, 0x01CD5612)
-WriteProtected<uint>(0x14066A6C7, 0x01A06252)
-WriteProtected<uint>(0x1406AD57F, 0x019C339A)
-WriteProtected<uint>(0x1406E183C, 0x0198F0DD)
-WriteProtected<uint>(0x1406E5025, 0x0198B8F4)
-WriteProtected<uint>(0x14073FB69, 0x01930DB0)
-WriteProtected<uint>(0x14073FBBE, 0x93110FF3)
-WriteProtected<uint>(0x14073FBC2, 0x000000B4)
-WriteNop(0x14073FBC6, 2)
-WriteProtected<uint>(0x142B1A6BA, 0xFF55625F)
-WriteProtected<uint>(0x142B1B89B, 0xFF55507E)
-WriteProtected<ushort>(0x14086BB60, 0x05C6)
-WriteProtected<uint>(0x14086BB62, 0x01804DBA)
-WriteProtected<ushort>(0x14086BB66, 0xE900)
-WriteProtected<uint>(0x14086BB68, 0xFFFFFF2A)
-WriteProtected<ushort>(0x1406C3EB9, 0x59EB)
-WriteNop(0x1406C3EBB, 8)
-WriteProtected<ushort>(0x1406C3F14, 0x44F3)
-WriteProtected<uint>(0x1406C3F16, 0x248C100F)
-WriteProtected<uint>(0x1406C3F1A, 0x000000A0)
-WriteProtected<ushort>(0x1406C3F1E, 0x05EB)
-WriteProtected<uint>(0x1406C3F20, 0xD5D80BE9)
-WriteProtected<uint>(0x1406C3F24, 0xF505C604)
-WriteProtected<uint>(0x1406C3F28, 0x00019AC9)
-WriteProtected<ushort>(0x1406C3F2C, 0x95EB)
-WriteProtected<byte>(0x1406E180F, 0xE9)
-WriteProtected<uint>(0x1406E1810, 0x0018A322)
-WriteProtected<ushort>(0x1406E1814, 0x5B0F)
-WriteProtected<byte>(0x1406E1816, 0xC0)
-WriteProtected<uint>(0x14086BA92, 0x90905FEB)
-WriteProtected<ushort>(0x14086BAF3, 0x36EB)
-WriteProtected<uint>(0x14086BB36, 0x6E0F4166)
-WriteProtected<ushort>(0x14086BBA5, 0x05C6)
-WriteProtected<uint>(0x14086BBA7, 0x01804D75)
-WriteProtected<ushort>(0x14086BBAB, 0xE801)
-WriteProtected<uint>(0x14086BBAD, 0xFFE0CC0F)
-WriteProtected<byte>(0x14086BBB1, 0xE9)
-WriteProtected<uint>(0x14086BBB2, 0xFFD2243C)
-WriteProtected<byte>(0x14058DFED, 0xE9)
-WriteProtected<uint>(0x14058DFEE, 0x002DDBB3)
-WriteProtected<byte>(0x14086BB3A, 0xC6)
-WriteProtected<uint>(0x14086BB3B, 0x6E0F4466)
-WriteProtected<byte>(0x14086BB3F, 0xE7)
-WriteProtected<uint>(0x14086BB40, 0xE45B0F45)
-WriteProtected<uint>(0x14086BB44, 0x6E0F4566)
-WriteProtected<byte>(0x14086BB48, 0xEE)
-WriteProtected<uint>(0x14086BB49, 0xED5B0F45)
-WriteProtected<uint>(0x14086BB4D, 0x5E0F45F3)
-WriteProtected<byte>(0x14086BB51, 0xE5)
-WriteProtected<uint>(0x14086BB52, 0x110F44F3)
-WriteProtected<uint>(0x14086BB56, 0x804DC225)
-WriteProtected<ushort>(0x14086BB5A, 0xE901)
-WriteProtected<uint>(0x14086BB5C, 0xFFE75CB4)
-WriteProtected<uint>(0x14086BB05, 0x88352F0F)
-WriteProtected<byte>(0x14086BB09, 0x32)
-WriteProtected<uint>(0x14086BB0A, 0x14730155)
-WriteProtected<uint>(0x14086BB0E, 0x355E0FF3)
-WriteProtected<uint>(0x14086BB12, 0x0155327E)
-WriteProtected<uint>(0x14086BB16, 0xCE590FF3)
-WriteProtected<uint>(0x14086BB1A, 0x35100FF3)
-WriteProtected<uint>(0x14086BB1E, 0x01553272)
-WriteProtected<uint>(0x14086BB22, 0xC65E0FF3)
-WriteProtected<byte>(0x14086BB26, 0xE9)
-WriteProtected<uint>(0x14086BB27, 0x00000035)
-WriteProtected<uint>(0x14086BB2B, 0x4DEF3D83)
-WriteProtected<uint>(0x14086BB2F, 0x74010180)
-WriteProtected<byte>(0x14086BB33, 0xEE)
-WriteProtected<ushort>(0x14086BB34, 0xCFEB)
-WriteProtected<ushort>(0x14086BC05, 0x05C6)
-WriteProtected<uint>(0x14086BC07, 0x01804D15)
-WriteProtected<ushort>(0x14086BC0B, 0xE801)
-WriteProtected<uint>(0x14086BC0D, 0xFFE0CBAF)
-WriteProtected<byte>(0x14086BC11, 0xE9)
-WriteProtected<uint>(0x14086BC12, 0xFFCF5C04)
-WriteProtected<byte>(0x140561815, 0xE9)
-WriteProtected<uint>(0x140561816, 0x0030A3EB)
+Patch "Wispon Gauge Stays Full"
+writenop 1404D228C 0x00000004
 
-Patch "Wispon Gauge Stay's Full" by "CodeNameGamma"
-WriteNop(0x1404D228C, 0x00000004)
+Patch "Wispon Special Always Ready (Use Wispon Any Time)"
+write8 1423C060C 0x01
 
-Patch "Wispon Special Always Ready (Use Wispon Anytime)" by "CodeNameGamma"
-WriteProtected<byte>(0x1423C060C, 0x01)
-
-Patch "Disable Wispon Boundaries" by "CodeNameGamma"
-WriteNop(0x140267527, 0x00000005)
+Patch "Disable Wispon Boundaries"
+writenop 140267527 0x00000005

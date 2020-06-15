@@ -1,357 +1,405 @@
-!!VERSION 1.0
-
-Code "Infinite Rings" by "SuperSonic16"
-Write<uint>(GetPointer(0x1E5E2F0, 0x5B8), 0x3E7)
-
-Patch "Disable Ring Cap" by "SuperSonic16"
-WriteProtected<ushort>(0xE68522, 0xDEB)
-WriteProtected<byte>(0x1098E5F, 0xEB)
-
-Patch "Disable Damage" by "SuperSonic16"
-WriteNop(0xE2836A, 0x5)
-
-Patch "Infinite Lives" by "CodenameGamma"
-WriteNop(0xD59A67, 0x6)
-
-Patch "Always Run in the Background" by "SuperSonic16"
-WriteProtected<byte>(0xE7BF04, 0xEB)
-
-Patch "Never Lose Rings With Super Sonic" by "Muzzarino"
-WriteNop(0xE64E80, 6)
-
-Code "Can Always Activate Super Sonic" by "Muzzarino"
-WriteProtected<byte>(0x11D33A4, 0xEB)
-WriteProtected<byte>(0xE634C5, 0)
-WriteProtected<byte>(0x11D67DC, 0xEB)
-WriteProtected<byte>(0x111773A, 0xEB)
-WriteProtected<byte>(0xE55D6A, 0x0)
-WriteProtected<byte>(0xE632F1, 0x0)
-WriteProtected<byte>(0xE634C7, 0x0)
-var ptr0 = GetPointer(0x1E5E2F0, 0x1A5)
-var ptr1 = GetPointer(0x1E5E2F0, 0x1228)
-if (ptr0 != 0 && ptr1 != 0)
-{
-    Write<byte>(ptr0, (byte)(Read<byte>(ptr0) | 0x10))
-    Write<byte>(ptr1, (byte)(Read<byte>(ptr1) | 0x10))
-}
-
-Patch "Widescreen Support" by "Muzzarino"
-string code = @"fild dword ptr [0x01DFE228]
-fidiv dword ptr [0x01DFE22C]
-push eax
-fstp dword ptr [esp]
-cmp [esp],0x3FE38E39
-jae code
-fld dword ptr [esp]
-mov [esp],0x3FE38E39
-fdiv dword ptr [esp]
-fmul st(2),st(0)
-fstp dword ptr [esp]
-mov [esp],0x3FE38E39
-code:
-fld dword ptr [esp]
-add esp,04
-fdivp st(1),st(0)
-fstp dword ptr [esp+0x14]"
-WriteAsmHook(code, 0x6F23C8, HookBehavior.Replace)
-
-Patch "Field of View Adjustment" by "Muzzarino"
-string code = @"push 0x3F800000
-fdiv dword ptr [esp]
-add esp,0x04
-fstp dword ptr [esp+0x0C]
-fld dword ptr [ebp+0x14]"
-WriteAsmHook(code, 0x6F23AA, HookBehavior.Replace)
-
-Patch "Bypass Boss Key Check" by "Muzzarino"
-WriteProtected<byte>(0xEFB9FC, 0xEB)
-WriteProtected<byte>(0xEFA160, 0x0)
-WriteProtected<byte>(0x108B6DA, 0x0)
-WriteProtected<byte>(0x108B6E7, 0x0)
-WriteProtected<byte>(0x108B6D5, 0x0)
-WriteProtected<byte>(0x4DA787, 0x0)
-WriteProtected<byte>(0x4DA787, 0x8C)
-
-Patch "Have All Chaos Emeralds" by "Muzzarino"
-WriteProtected<uint>(0x108BB11, 0x900300C6)
-WriteProtected<byte>(0x108BB15, 0x90)
-WriteProtected<ushort>(0x108BB1F, 0x34EB)
-
-Patch "Sparkles Remain on the Hub World" by "Muzzarino"
-WriteProtected<ushort>(0xEE3DA6, 0x6EB)
-
-Patch "Win Challenges Without Meeting the Required Amount of Items" by "Muzzarino"
-WriteProtected<uint>(0xD0EAB9, 0xCCC301B0)
-
-Code "Infinite Boost Gauge" by "Zoney"
-Write<float>(Read<uint>(0x1E5E2F0) + 0x5BC, 500)
-
-Patch "All Levels are Selectable" by "Muzzarino"
-WriteProtected<byte>(0xEE5DE8, 0xC)
-WriteProtected<byte>(0xEE6134, 0xC)
-
-Patch "Buy Anything at the Skill Shop With Any Points" by "Muzzarino"
-WriteNop(0x4409D2, 6)
-
-Patch "Never Subtract Points When Buying a Skill" by "Muzzarino"
-WriteNop(0x440726, 6)
-
-Patch "All Levels Display Names Even If Not Unlocked"  by "Muzzarino"
-WriteProtected<byte>(0xD58AD0, 0xEB)
-
-Patch "Replay Rescue Cutscenes" by "Muzzarino"
-WriteProtected<ushort>(0xD29532, 0x6EB)
-
-Patch "Color Dodge Trail Blending" by "Muzzarino"
-WriteProtected<byte>(0xE8D3AC, 0x9)
-
-Patch "Lighten Trail Blending" by "Muzzarino"
-WriteProtected<byte>(0xE8D3AC, 0xA)
-
-Patch "Screen Trail Blending" by "Muzzarino"
-WriteProtected<byte>(0xE8D3AC, 0x2)
-WriteProtected<byte>(0xE8D3B7, 0x4)
-
-Patch "Color Burn Trail Blending" by "Muzzarino"
-WriteProtected<byte>(0xE8D3B7, 0x3)
-
-Patch "Opaque Trail Blending" by "Muzzarino"
-WriteProtected<byte>(0xE8D3B7, 0x1)
-
-Patch "Normal Trail Blending" by "Muzzarino"
-WriteProtected<byte>(0xE8D3B7, 0x6)
-
-Patch "Glowing Trail Blending" by "Muzzarino"
-WriteProtected<byte>(0xE8D3B7, 0x7)
-
-Patch "Subtractive Trail Blending" by "Muzzarino"
-WriteProtected<byte>(0xE8D3AC, 0xB)
-
-Patch "Subtitles Appear Additive If Color Is Bright" by "Muzzarino"
-WriteProtected<byte>(0x40FED4, 0xE9)
-WriteProtected<uint>(0x40FED5, 0xFB1DBE)
-WriteNop(0x40FED9, 2)
-WriteProtected<uint>(0x13C1C97, 0x80FB8053)
-WriteProtected<ushort>(0x13C1C9B, 0x2070)
-WriteProtected<ushort>(0x13C1C9D, 0xEBC1)
-WriteProtected<uint>(0x13C1C9F, 0x80FB8008)
-WriteProtected<ushort>(0x13C1CA3, 0x1870)
-WriteProtected<ushort>(0x13C1CA5, 0xEBC1)
-WriteProtected<uint>(0x13C1CA7, 0x80FB8008)
-WriteProtected<ushort>(0x13C1CAB, 0x1070)
-WriteProtected<uint>(0x13C1CAD, 0x54840C7)
-WriteProtected<uint>(0x13C1CB4, 0x24C40C7)
-WriteProtected<ushort>(0x13C1CBB, 0x7EB)
-WriteProtected<uint>(0x13C1CBD, 0x64C40C7)
-WriteProtected<ushort>(0x13C1CC4, 0x1C8B)
-WriteProtected<uint>(0x13C1CC6, 0x4C48324)
-WriteProtected<byte>(0x13C1CCA, 0xE9)
-WriteProtected<uint>(0x13C1CCB, 0xFF04E20C)
-
-Patch "Freeze Timer" by "Muzzarino"
-WriteNop(0xD02E48, 8)
-
-Patch "Freeze Challenge Timer" by "Muzzarino"
-WriteNop(0x124EFC5, 8)
-WriteNop(0xD0E7D5, 2)
-
-Patch "Don't Allow Timer to Reduce Ranks on Challenges"  by "Muzzarino"
-WriteProtected<uint>(0xD611B3, 0x90C0570F)
-WriteNop(0xD611B7, 4)
-
-Patch "Set Shadowmaps to 512x" by "Darío"
-WriteProtected<uint>(0x10C6039, 512)
-
-Patch "Set Shadowmaps to 2048x" by "Darío"
-WriteProtected<uint>(0x10C6039, 2048)
-
-Patch "Set Shadowmaps to 4096x" by "Darío"
-WriteProtected<uint>(0x10C6039, 4096)
-
-Patch "Set Shadowmaps to 8192x" by "Darío"
-WriteProtected<uint>(0x10C6039, 8192)
-
-Patch "1280x720 Media Player" by "N69"
-WriteProtected<ushort>(0xB210A1, 1280)
-WriteProtected<ushort>(0xB210B1, 720)
-
-Patch "1920x1080 Media Player" by "N69"
-WriteProtected<ushort>(0xB210A1, 1920)
-WriteProtected<ushort>(0xB210B1, 1080)
-
-Code "29.97 FPS Lock" by "PTKickass"
-Write<float>(0x19FD2C, 29.97f)
-
-Code "30 FPS Speed Lock" by "Skyth"
-Write<float>(0x19FD2C, 30)
-WriteNop(0xE7B5D7, 2)
-WriteProtected<float>(0x1704258, 0.0333333333333334f)
-
-Code "59.94 FPS Lock" by "PTKickass"
-Write<float>(0x19FD2C, 59.94f)
-
-Code "60 FPS Speed Lock" by "Skyth"
-Write<float>(0x19FD2C, 60)
-WriteNop(0xE7B5D7, 2)
-WriteProtected<float>(0x1704258, 0.0166666666666667f)
-
-Patch "Longer Blue Trail" by "TiMan & Nekit"
-WriteProtected<ushort>(0xE5FB17, 0x9090)
-WriteProtected<ushort>(0xE5FB19, 0x9090)
-WriteProtected<ushort>(0xE5FB1B, 0x9090)
-WriteProtected<byte>(0xE5FE10, 0x48)
-WriteProtected<byte>(0xE5FE70, 0x48)
-
-Patch "Stomp Keeps Horizontal Velocity" by "TGE"
-string code = @"
-movaps xmm1, [edi+0x290]
-addps xmm0, xmm1
-movaps [edi+0x290], xmm0"
-WriteAsmHook(code, 0x01254D4C, HookBehavior.Replace)
-
-Patch "Unleashed Sweepkick" by "N69"
-WriteProtected<ushort>(0xDFF8D6, 0x5608)
-
-Patch "No Trick Rainbow Rings" by "PTKickass"
-WriteProtected<uint>(0x1672364, 0x5F6E6D63)
-WriteProtected<uint>(0x1672368, 0x5F6A626F)
-WriteProtected<uint>(0x167236C, 0x6E696172)
-WriteProtected<uint>(0x1672370, 0x72776F62)
-WriteProtected<uint>(0x1672374, 0x5F676E69)
-WriteProtected<uint>(0x1672378, 0x4448)
-WriteProtected<uint>(0x1672608, 0x5F6E6D63)
-WriteProtected<uint>(0x167260C, 0x5F6A626F)
-WriteProtected<uint>(0x1672610, 0x6E696172)
-WriteProtected<uint>(0x1672614, 0x72776F62)
-WriteProtected<uint>(0x1672618, 0x5F676E69)
-WriteProtected<uint>(0x167261C, 0x4448)
-WriteProtected<byte>(0x115B826, 0x2)
-
-Patch "Ice Pillars Replace Fire Pillars" by "N69"
-WriteProtected<byte>(0xE020EB, 0x1)
-WriteProtected<byte>(0x16613CB, 0x31)
-WriteProtected<byte>(0x16613D2, 0x31)
-WriteProtected<uint>(0x166149E, 0x63697065)
-WriteProtected<uint>(0x16614A2, 0x6E616C65)
-WriteProtected<ushort>(0x16614A6, 0x5F5F)
-
-Patch "Fix Skydive Collision Detection" by "N69"
-WriteNop(0x119822E, 18)
-
-Patch "All Rings Can Be Light Dashed" by "Skyth"
-WriteProtected<uint>(0x105334D, 0x10C47C6)
-WriteNop(0x1053351, 16)
-
-Patch "Object Collision Debug View" by "Aruki"
-Write<byte>(0x1E5E39B, 1)
-
-Patch "Borderless Fullscreen" by "Sajid"
-string code = @"mov eax,[ebp+18]
-mov [eax+0x20],00000001
-mov [eax+0x1C],00000000
-mov [eax+0x30],00000000
-mov [ebp-0x1C],ecx
-push 0x00003210"
-WriteAsmHook(code, 0xA5EB5B, HookBehavior.Replace)
-
-Patch "No Out of Control Balloons" by "N69"
-WriteProtected<uint>(0x11BEBAA, 0xB6E9)
-WriteProtected<byte>(0x11BEBAE, 0x0)
-WriteNop(0x11BEBAF, 2)
-
-Patch "No Out of Control Jump Springs" by ""
-WriteProtected<uint>(0x11BEA91, 0x1CFE9)
-WriteProtected<ushort>(0x11BEA95, 0x8B00)
-WriteProtected<byte>(0x11BEA97, 0x83)
-
-Patch "Use Bumpers to Switch Grind Rails" by "Skyth"
-WriteProtected<uint>(0xDFCC92, 0x10244C8B)
-WriteNop(0xDFCC96, 2)
-WriteProtected<ushort>(0xDFCC99, 0xE1BA)
-WriteProtected<byte>(0xDFCC9B, 0xD)
-WriteNop(0xDFCC9C, 3)
-WriteProtected<byte>(0xDFCC9F, 0x73)
-WriteProtected<uint>(0xDFCCA8, 0xCE1BA0F)
-WriteNop(0xDFCCAC, 7)
-WriteProtected<byte>(0xDFCCB3, 0x73)
-
-Patch "No Boosting Animation When Grinding" by "Skyth"
-WriteProtected<ushort>(0xDF2380, 0xA4E9)
-WriteProtected<byte>(0xDF2382, 0x0)
-WriteNop(0xDF2385, 1)
-
-Code "All Walls Are Wall-Jumpable" by "SWS90"
-Write<byte>(Read<uint>(0x1E5E2F0) + 0x80C, 1)
-
-Patch "Tricks Don't Fill The Boost Gauge" by ""
-WriteNop(0xE4B323, 8)
-WriteNop(0xE4B353, 8)
-
-Patch "Boost Gauge Starts Empty" by "PTKickass"
-WriteProtected<uint>(0xE64F2F, 0x90C9570F)
-WriteNop(0xE64F33, 4)
-
-Code "Everything is 1/4 Speed Except For Sonic" by "Sajid"
-Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19D), 1)
-Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 0.25f)
-
-Code "Everything is 1/2 Speed Except For Sonic" by "Sajid"
-Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19D), 1)
-Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 0.5f)
-
-Code "Everything is 2x Speed Except For Sonic" by "Sajid"
-Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19D), 1)
-Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 2)
-
-Code "Everything is 4x Speed Except For Sonic" by "Sajid"
-Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19D), 1)
-Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 4)
-
-Code "Everything is 2x Speed" by "Darío"
-Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19C), 1)
-Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A0), 2)
-
-Patch "Allow Multiple Instances" by "Sajid & Skyth"
-WriteProtected<byte>(0xE7A6E6, 0x83)
-WriteProtected<byte>(0xE7A6E7, 0xC4)
-WriteProtected<byte>(0xE7A6E8, 0xC)
-WriteNop(0xE7A6E9, 0x3)
-
-Code "Disable Motion Blur" by "Skyth"
-Write<byte>(0x1A43103, 0)
-
-Code "Set Shadow Bias to 0.0002" by "Skyth"
-Write<float>(0x1A4356C, 0.0002f)
-
-Patch "Disable HUD in Stages" by "Sajid"
-WriteProtected<uint>(0x586C94, 0x13EADA4)
-
-Patch "Disable Sonic Smoke Trail" by "Sajid"
-Write<byte>(0x1A44AE2, 0)
-WriteNop(0x11A2D28, 23)
-
-Patch "Disable Homing Attack" by "Sajid"
-WriteProtected<float>(0x1704800, 0)
-
-Patch "Controller Hotplugging Support" by "Skyth"
-WriteProtected<byte>(0x9C85FA, 0x83)
-WriteProtected<byte>(0x9C85FB, 0xFA)
-WriteProtected<byte>(0x9C85FC, 0x4)
-WriteNop(0x9C8603, 12)
-WriteProtected<byte>(0x9C86B2, 0x83)
-WriteProtected<byte>(0x9C86B3, 0xFA)
-WriteProtected<byte>(0x9C86B4, 0x4)
-WriteNop(0x9C86BB, 12)
-WriteNop(0x9C8163, 2)
-WriteNop(0x9C8168, 8)
-WriteNop(0x9C8173, 1)
-WriteProtected<byte>(0x9C8176, 0xE8)
-WriteProtected<byte>(0x9C8177, 0xC7)
-WriteProtected<byte>(0x9C8178, 0x40)
-WriteProtected<byte>(0x9C8179, 0xC)
-WriteProtected<byte>(0x9C817A, 0x4)
-WriteProtected<byte>(0x9C817B, 0x0)
-WriteProtected<byte>(0x9C817C, 0x0)
-WriteProtected<byte>(0x9C817D, 0x0)
-WriteNop(0x9C8A70, 2)
-WriteNop(0x9C8AC0, 2)
+Code "Infinite Rings"
+write32 p01E5E2F0|5B8 0x3E7
+
+Patch "Disable Ring Cap"
+write16 00E68522 0x0DEB
+write8 01098E5F 0xEB
+
+Patch "Disable Damage"
+writenop 00E2836A 0x05
+
+Patch "Infinite Lives"
+writenop 00D59A67 0x06
+
+Patch "Always Run in the Background"
+write8 00E7BF04 0xEB
+
+Patch "Never Lose Rings With Super Sonic"
+writenop 00E64E80 6
+
+Code "Can Always Activate Super Sonic"
+write8 011D33A4 0xEB
+write8 00E634C5 0
+write8 011D67DC 0xEB
+write8 0111773A 0xEB
+write8 00E55D6A 0x00
+write8 00E632F1 0x00
+write8 00E634C7 0x00
+or8 p01E5E2F0|1A5 0x10
+or8 p01E5E2F0|1228 0x10
+
+Patch "Widescreen Support"
+write8 006F23C8 0xE9
+write32 006F23C9 0x00CCF870
+write16 006F23CD 0x9090
+write32 013C1C3D 0xE22805DB
+write32 013C1C41 0x35DA01DF
+write32 013C1C45 0x01DFE22C
+write8 013C1C49 0x50
+write32 013C1C4A 0x81241CD9
+write16 013C1C4E 0x243C
+writefloat 013C1C50 1.7777777777777778
+write16 013C1C54 0x1973
+write32 013C1C56 0xC72404D9
+write16 013C1C5A 0x2404
+writefloat 013C1C5C 1.7777777777777778
+write32 013C1C60 0xDC2434D8
+write8 013C1C64 0xCA
+write32 013C1C65 0xC7241CD9
+write16 013C1C69 0x2404
+writefloat 013C1C6B 1.7777777777777778
+write32 013C1C6F 0x832404D9
+write32 013C1C73 0xF9DE04C4
+write32 013C1C77 0x14245CD9
+write32 013C1C7B 0x33074FE9
+write8 013C1C7F 0xFF
+
+Patch "Field of View Adjustment"
+write8 006F23AA 0xE9
+write32 006F23AB 0x00CCF8D1
+write16 006F23AF 0x9090
+write8 013C1C80 0x68
+writefloat 013C1C81 1
+write32 013C1C85 0x832434D8
+write16 013C1C89 0x04C4
+write32 013C1C8B 0x0C245CD9
+write32 013C1C8F 0xE91445D9
+write32 013C1C93 0xFF33071A
+
+Patch "Bypass Boss Key Check"
+write8 00EFB9FC 0xEB
+write8 00EFA160 0x00
+write8 0108B6DA 0x00
+write8 0108B6E7 0x00
+write8 0108B6D5 0x00
+write8 004DA787 0x00
+write8 004DA787 0x8C
+
+Patch "Have All Chaos Emeralds"
+write32 0108BB11 0x900300C6
+write8 0108BB15 0x90
+write16 0108BB1F 0x34EB
+
+Patch "Sparkles Remain on the Hub World"
+write16 00EE3DA6 0x06EB
+
+Patch "Win Challenges Without Meeting the Required Amount of Items"
+write32 00D0EAB9 0xCCC301B0
+
+Code "Infinite Boost Gauge"
+writefloat p01E5E2F0|5BC 500
+
+Patch "All Levels are Selectable"
+write8 00EE5DE8 0x0C
+write8 00EE6134 0x0C
+
+Patch "Buy Anything at the Skill Shop With Any Points"
+writenop 004409D2 6
+
+Patch "Never Subtract Points When Buying a Skill"
+writenop 00440726 6
+
+Patch "All Levels Display Names Even If Not Unlocked"
+write8 00D58AD0 0xEB
+
+Patch "Replay Rescue Cutscenes"
+write16 00D29532 0x06EB
+
+Patch "Color Dodge Trail Blending"
+write8 00E8D3AC 0x09
+
+Patch "Lighten Trail Blending"
+write8 00E8D3AC 0x0A
+
+Patch "Screen Trail Blending"
+write8 00E8D3AC 0x02
+write8 00E8D3B7 0x04
+
+Patch "Color Burn Trail Blending"
+write8 00E8D3B7 0x03
+
+Patch "Opaque Trail Blending"
+write8 00E8D3B7 0x01
+
+Patch "Normal Trail Blending"
+write8 00E8D3B7 0x06
+
+Patch "Glowing Trail Blending"
+write8 00E8D3B7 0x07
+
+Patch "Subtractive Trail Blending"
+write8 00E8D3AC 0x0B
+
+Patch "Subtitles Appear Additive If Color Is Bright"
+write8 0040FED4 0xE9
+write32 0040FED5 0x00FB1DBE
+writenop 0040FED9 2
+write32 013C1C97 0x80FB8053
+write16 013C1C9B 0x2070
+write16 013C1C9D 0xEBC1
+write32 013C1C9F 0x80FB8008
+write16 013C1CA3 0x1870
+write16 013C1CA5 0xEBC1
+write32 013C1CA7 0x80FB8008
+write16 013C1CAB 0x1070
+write32 013C1CAD 0x054840C7
+write32 013C1CB4 0x024C40C7
+write16 013C1CBB 0x07EB
+write32 013C1CBD 0x064C40C7
+write16 013C1CC4 0x1C8B
+write32 013C1CC6 0x04C48324
+write8 013C1CCA 0xE9
+write32 013C1CCB 0xFF04E20C
+
+Patch "Freeze Timer"
+writenop 00D02E48 8
+
+Patch "Freeze Challenge Timer"
+writenop 0124EFC5 8
+writenop 00D0E7D5 2
+
+Patch "Don't Allow Timer to Reduce Ranks on Challenges"
+write32 00D611B3 0x90C0570F
+writenop 00D611B7 4
+
+Patch "Set Shadowmaps to 512x"
+write32 010C6039 512
+
+Patch "Set Shadowmaps to 2048x"
+write32 010C6039 2048
+
+Patch "Set Shadowmaps to 4096x"
+write32 010C6039 4096
+
+Patch "Set Shadowmaps to 8192x"
+write32 010C6039 8192
+
+;Patch "Enable FxPipeline"
+;write32 016E2164 0x017AC94C
+;write32 016E2168 0x00578A80
+;write32 016E216C 0x00D1D570
+;write32 016E2174 0x00D1D720
+;write32 016E2180 0x011060E0
+;write32 016E2184 0x01105CD0
+;write32 016E2188 0x01105F40
+;write32 016E218C 0x017AC938
+;write32 016E2190 0x00578AA0
+;write32 016E219C 0x01105F20
+;write32 016E21B4 0x01105CF0
+;write32 016E21C4 0x017AC924
+;write32 016E21C8 0x00578AB0
+;write32 016E21D0 0x01106260
+;write32 016E21D8 0x017AC910
+;write32 016E21DC 0x01105CC0
+;write8 015CA070 0x6C
+
+Patch "1280x720 Media Player"
+write16 B210A1 1280
+write16 B210B1 720
+
+Patch "1920x1080 Media Player"
+write16 B210A1 1920
+write16 B210B1 1080
+
+Code "29.97 FPS Lock"
+writefloat 0019FD2C 29.97
+
+Code "30 FPS Speed Lock"
+writefloat 0019FD2C 30
+writenop E7B5D7 2
+writefloat 1704258 0.0333333333333334
+
+Code "59.94 FPS Lock"
+writefloat 0019FD2C 59.94
+
+Code "60 FPS Speed Lock"
+writefloat 0019FD2C 60
+writenop E7B5D7 2
+writefloat 1704258 0.0166666666666667
+
+Patch "Longer Blue Trail"
+write16 00E5FB17 0x9090
+write16 00E5FB19 0x9090
+write16 00E5FB1B 0x9090
+write8 00E5FE10 0x48
+write8 00E5FE70 0x48
+
+Patch "Stomp Keeps Horizontal Velocity"
+write32 01254D4C 0x16CEECE9
+write8 01254D50 0x00
+writenop 01254D51 2
+write32 013C1C3D 0x908F280F
+write16 013C1C41 0x0002
+write8 013C1C43 0x00
+write16 013C1C44 0x580F
+write8 013C1C46 0xC1
+write32 013C1C47 0x9087290F
+write16 013C1C4B 0x0002
+write8 013C1C4D 0x00
+write32 013C1C4E 0xE93100E9
+write8 013C1C52 0xFF
+
+Patch "Unleashed Sweepkick"
+write16 DFF8D6 0x5608
+
+Patch "No Trick Rainbow Rings"
+write32 1672364 0x5F6E6D63
+write32 1672368 0x5F6A626F
+write32 167236C 0x6E696172
+write32 1672370 0x72776F62
+write32 1672374 0x5F676E69
+write32 1672378 0x00004448
+write32 1672608 0x5F6E6D63
+write32 167260C 0x5F6A626F
+write32 1672610 0x6E696172
+write32 1672614 0x72776F62
+write32 1672618 0x5F676E69
+write32 167261C 0x00004448
+write8 115B826 0x02
+
+Patch "Ice Pillars Replace Fire Pillars"
+write8 E020EB 0x01
+write8 16613CB 0x31
+write8 16613D2 0x31
+write32 166149E 0x63697065
+write32 16614A2 0x6E616C65
+write16 16614A6 0x5F5F
+
+Patch "Fix Skydive Collision Detection"
+writenop 119822E 18
+
+Patch "All Rings Can Be Light Dashed"
+write32 0105334D 0x010C47C6
+writenop 01053351 16
+
+Patch "Object Collision Debug View"
+write8 01E5E39B 1
+
+Patch "Borderless Fullscreen"
+write8 00A5EB5B 0xE9
+write32 00A5EB5C 0x0096346E
+writenop 00A5EB60 3
+write8 013C1FCE 0x8B
+write8 013C1FCF 0x45
+write8 013C1FD0 0x18
+write8 013C1FD1 0xC7
+write8 013C1FD2 0x40
+write8 013C1FD3 0x20
+write32 013C1FD4 0x01
+write8 013C1FD8 0xC7
+write8 013C1FD9 0x40
+write8 013C1FDA 0x1C
+write32 013C1FDB 0x00
+write8 013C1FDF 0xC7
+write8 013C1FE0 0x40
+write8 013C1FE1 0x30
+write32 013C1FE2 0x00
+write8 013C1FE6 0x89
+write8 013C1FE7 0x4D
+write8 013C1FE8 0xE4
+write8 013C1FE9 0x68
+write32 013C1FEA 0x3210
+write8 013C1FEE 0xE9
+write32 013C1FEF 0xFF69CB70
+
+Patch "No Out of Control Balloons"
+write32 11BEBAA 0x0000B6E9
+write8 11BEBAE 0x00
+writenop 11BEBAF 2
+
+Patch "No Out of Control Jump Springs"
+write32 011BEA91 0x0001CFE9
+write16 011BEA95 0x8B00
+write8 011BEA97 0x83
+
+Patch "Use Bumpers to Switch Grind Rails"
+write32 00DFCC92 0x10244C8B
+writenop 00DFCC96 2
+write16 00DFCC99 0xE1BA
+write8 00DFCC9B 0x0D
+writenop 00DFCC9C 3
+write8 00DFCC9F 0x73
+write32 00DFCCA8 0x0CE1BA0F
+writenop 00DFCCAC 7
+write8 00DFCCB3 0x73
+
+Patch "No Boosting Animation When Grinding"
+write16 00DF2380 0xA4E9
+write8 00DF2382 0x00
+writenop 00DF2385 1 
+
+Code "All Walls Are Wall-Jumpable"
+write8 p01E5E2F0|80C 1
+
+Patch "Tricks Don't Fill The Boost Gauge"
+writenop 00E4B323 8
+writenop 00E4B353 8
+
+Patch "Boost Gauge Starts Empty"
+write32 00E64F2F 0x90C9570F
+writenop 00E64F33 4
+
+Code "Everything is 1/4 Speed Except For Sonic"
+write8 p01E0BE5C|8|19D 1
+writefloat p01E0BE5C|8|1A4 0.25
+
+Code "Everything is 1/2 Speed Except For Sonic"
+write8 p01E0BE5C|8|19D 1
+writefloat p01E0BE5C|8|1A4 0.5
+
+Code "Everything is 2x Speed Except For Sonic"
+write8 p01E0BE5C|8|19D 1
+writefloat p01E0BE5C|8|1A4 2
+
+Code "Everything is 4x Speed Except For Sonic"
+write8 p01E0BE5C|8|19D 1
+writefloat p01E0BE5C|8|1A4 4
+
+Code "Everything is 2x Speed"
+write8 p01E0BE5C|8|19C 1
+writefloat p01E0BE5C|8|1A0 2
+
+Patch "Allow Multiple Instances"
+write8 00E7A6E6 0x83
+write8 00E7A6E7 0xC4
+write8 00E7A6E8 0xC
+writenop 00E7A6E9 0x3
+
+Code "Disable Motion Blur"
+write8 01A43103 0
+
+Code "Set Shadow Bias to 0.0002"
+writefloat 1A4356C 0.0002
+
+Patch "Disable HUD in Stages"
+write32 00586C94 0x013EADA4
+
+Patch "Disable Sonic Smoke Trail"
+write8 1A44AE2 0
+writenop 011A2D28 23
+
+Patch "Disable Homing Attack"
+writefloat 1704800 0
+
+Patch "Controller Hotplugging Support"
+write8 009C85FA 0x83
+write8 009C85FB 0xFA
+write8 009C85FC 0x04
+writenop 009C8603 12
+write8 009C86B2 0x83
+write8 009C86B3 0xFA
+write8 009C86B4 0x04
+writenop 009C86BB 12
+writenop 009C8163 2
+writenop 009C8168 8
+writenop 009C8173 1 
+write8 009C8176 0xE8 
+write8 009C8177 0xC7 
+write8 009C8178 0x40
+write8 009C8179 0x0C
+write8 009C817A 0x04
+write8 009C817B 0x00
+write8 009C817C 0x00
+write8 009C817D 0x00 
+writenop 009C8A70 2
+writenop 009C8AC0 2

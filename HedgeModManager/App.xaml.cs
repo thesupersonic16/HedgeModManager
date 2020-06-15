@@ -608,16 +608,23 @@ namespace HedgeModManager
 
         public static string GetCodeLoaderVersion(Game game)
         {
-            var loaderPath = Path.Combine(StartDirectory, game.CustomLoaderFileName);
+            try
+            {
+                var loaderPath = Path.Combine(StartDirectory, game.CustomLoaderFileName);
 
-            if (!game.HasCustomLoader)
-                return null;
+                if (!game.HasCustomLoader)
+                    return null;
 
-            if (!File.Exists(loaderPath))
-                return null;
+                if (!File.Exists(loaderPath))
+                    return null;
 
-            var info = FileVersionInfo.GetVersionInfo(loaderPath);
-            return info.ProductVersion ?? "0.1";
+                var info = FileVersionInfo.GetVersionInfo(loaderPath);
+                return info.ProductVersion ?? "0.1";
+            }
+            catch
+            {
+                return "0.1";
+            }
         }
 
         public static (Version LoaderVersion, Version MinCodeVersion) GetCodeLoaderInfo(Game game)

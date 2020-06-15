@@ -169,13 +169,13 @@ Do you want run the HMM Auto Installer?</value>
 Would you like create a mods folder?</value>
   </data>
   <data name="URL_FML_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codes/SonicForces.hmm</value>
+    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicForces.hmm</value>
   </data>
   <data name="URL_FML_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/ForcesModLoader.dll</value>
   </data>
   <data name="URL_GCL_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codes/SonicGenerations.hmm</value>
+    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicGenerations.hmm</value>
   </data>
   <data name="URL_GCL_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/SonicGenerationsCodeLoader.dll</value>
@@ -187,7 +187,7 @@ Would you like create a mods folder?</value>
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini</value>
   </data>
   <data name="URL_LCL_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codes/LostWorld.hmm</value>
+    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/LostWorld.hmm</value>
   </data>
   <data name="URL_LCL_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/LostCodeLoader.dll</value>
