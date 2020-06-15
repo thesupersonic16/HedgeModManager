@@ -84,7 +84,7 @@ Patch "Win Challenges Without Meeting the Required Amount of Items" by "Muzzarin
 WriteProtected<uint>(0xD0EAB9, 0xCCC301B0)
 
 Code "Infinite Boost Gauge" by "Zoney"
-Write<float>(Read<uint>(0x1E5E2F0) + 0x5BC, 500)
+Write<float>(GetPointer(0x1E5E2F0, 0x5BC), 500)
 
 Patch "All Levels are Selectable" by "Muzzarino"
 WriteProtected<byte>(0xEE5DE8, 0xC)
