@@ -629,18 +629,25 @@ namespace HedgeModManager
 
         public static (Version LoaderVersion, Version MinCodeVersion) GetCodeLoaderInfo(Game game)
         {
-            var minCodeVersion = "0.1";
-            var loaderVersion = GetCodeLoaderVersion(game);
-
-            if (loaderVersion != minCodeVersion)
+            try
             {
-                using (var res = new DllResource(Path.Combine(StartDirectory, game.CustomLoaderFileName)))
-                {
-                    minCodeVersion = res.GetString(Games.CodeLoaderMinCodeVersionStringId);
-                }
-            }
+                var minCodeVersion = "0.1";
+                var loaderVersion = GetCodeLoaderVersion(game);
 
-            return (loaderVersion != "0.1" ? new Version(loaderVersion) : null, new Version(string.IsNullOrEmpty(minCodeVersion) ? "9999.9999" : minCodeVersion));
+                if (loaderVersion != minCodeVersion)
+                {
+                    using (var res = new DllResource(Path.Combine(StartDirectory, game.CustomLoaderFileName)))
+                    {
+                        minCodeVersion = res.GetString(Games.CodeLoaderMinCodeVersionStringId);
+                    }
+                }
+
+                return (loaderVersion != "0.1" ? new Version(loaderVersion) : null, new Version(string.IsNullOrEmpty(minCodeVersion) ? "9999.9999" : minCodeVersion));
+            }
+            catch
+            {
+                return (new Version("0.1"), new Version("9999.9999"));
+            }
         }
 
         public static string ComputeMD5Hash(string path)
