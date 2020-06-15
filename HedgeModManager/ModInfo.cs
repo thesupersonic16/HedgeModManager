@@ -187,7 +187,15 @@ namespace HedgeModManager
             var valid = true;
             foreach (var dir in IncludeDirs)
             {
-                if (!Directory.Exists(Path.Combine(RootDirectory, dir)))
+                try
+                {
+                    if (!Directory.Exists(Path.Combine(RootDirectory, dir)))
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+                catch
                 {
                     valid = false;
                     break;
@@ -202,8 +210,12 @@ namespace HedgeModManager
             var validDirs = new List<string>();
             foreach (var includeDir in IncludeDirs)
             {
-                if(Directory.Exists(Path.Combine(RootDirectory, includeDir)))
-                    validDirs.Add(includeDir);
+                try
+                {
+                    if (Directory.Exists(Path.Combine(RootDirectory, includeDir)))
+                        validDirs.Add(includeDir);
+                }
+                catch { }
             }
 
             if(validDirs.Count == 0)
