@@ -28,10 +28,10 @@ namespace HedgeModManager
 {
     public class CodeProvider
     {
-        public static string CodesTextPath => Path.Combine(App.ModsDbPath, "Codes.hmm");
-        public static string ExtraCodesTextPath => Path.Combine(App.ModsDbPath, "ExtraCodes.hmm");
+        public static string CodesTextPath => Path.Combine(HedgeApp.ModsDbPath, "Codes.hmm");
+        public static string ExtraCodesTextPath => Path.Combine(HedgeApp.ModsDbPath, "ExtraCodes.hmm");
 
-        public static string CompiledCodesPath => Path.Combine(App.ModsDbPath, "Codes.dll");
+        public static string CompiledCodesPath => Path.Combine(HedgeApp.ModsDbPath, "Codes.dll");
 
         public static MethodDeclarationSyntax LoaderExecutableMethod =
             SyntaxFactory.MethodDeclaration(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.BoolKeyword)), "IsLoaderExecutable")

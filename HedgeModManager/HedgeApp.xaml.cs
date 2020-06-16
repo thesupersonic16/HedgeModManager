@@ -34,9 +34,9 @@ using Newtonsoft.Json;
 namespace HedgeModManager
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for HedgeApp.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class HedgeApp : Application
     {
         [DllImport("Kernel32.dll")]
         public static extern bool AttachConsole(int processId);
@@ -114,7 +114,7 @@ namespace HedgeModManager
                 return;
             }
 
-            var application = new App();
+            var application = new HedgeApp();
             application.InitializeComponent();
             application.ShutdownMode = ShutdownMode.OnMainWindowClose;
             application.MainWindow = new MainWindow();
@@ -253,7 +253,7 @@ namespace HedgeModManager
             }
 
             // Remove old patch
-            string exePath = Path.Combine(App.StartDirectory, App.CurrentGame.ExecuteableName);
+            string exePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName);
             if (IsCPKREDIRInstalled(exePath))
                 InstallCPKREDIR(exePath, false);
 
