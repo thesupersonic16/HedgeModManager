@@ -619,23 +619,37 @@ namespace HedgeModManager
         private void UI_Save_Click(object sender, RoutedEventArgs e)
         {
             ShowMissingOtherLoaderWarning();
-            Task.Run(async () =>
+            Task.Factory.StartNew(async () =>
             {
-                await SaveModsDB();
-                Dispatcher.Invoke(Refresh);
-                UpdateStatus(Localise("StatusUIModsDBSaved"));
+                try
+                {
+                    await SaveModsDB();
+                    Dispatcher.Invoke(Refresh);
+                    UpdateStatus(Localise("StatusUIModsDBSaved"));
+                }
+                catch (Exception ex)
+                {
+                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
+                }
             });
         }
 
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
             ShowMissingOtherLoaderWarning();
-            Task.Run(async () =>
+            Task.Factory.StartNew(async () =>
             {
-                await SaveModsDB();
-                Dispatcher.Invoke(Refresh);
-                UpdateStatus(Localise("StatusUIModsDBSaved"));
-                await StartGame();
+                try
+                {
+                    await SaveModsDB();
+                    Dispatcher.Invoke(Refresh);
+                    UpdateStatus(Localise("StatusUIModsDBSaved"));
+                    await StartGame();
+                }
+                catch(Exception ex)
+                {
+                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
+                }
             });
         }
 
