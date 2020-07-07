@@ -75,18 +75,15 @@ namespace HedgeModManager
             }).Start();
         }
 
-        public static void CompileCodes(IEnumerable<Code> sources, string assemblyPath, params string[] loadsPaths)
+        public static async Task CompileCodes(IEnumerable<Code> sources, string assemblyPath, params string[] loadsPaths)
         {
-            lock (mLockContext)
+            using (var stream = File.Create(assemblyPath))
             {
-                using (var stream = File.Create(assemblyPath))
-                {
-                    CompileCodes(sources, stream, loadsPaths);
-                }
+                await CompileCodes(sources, stream, loadsPaths);
             }
         }
 
-        public static void CompileCodes(IEnumerable<Code> sources, Stream resultStream, params string[] loadPaths)
+        public static Task CompileCodes(IEnumerable<Code> sources, Stream resultStream, params string[] loadPaths)
         {
             lock (mLockContext)
             {
@@ -116,6 +113,8 @@ namespace HedgeModManager
                     }
                     throw new Exception(builder.ToString());
                 }
+
+                return Task.CompletedTask;
             }
         }
 

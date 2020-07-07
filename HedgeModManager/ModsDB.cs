@@ -122,7 +122,7 @@ namespace HedgeModManager
                     FavoriteMods.RemoveAt(i--);
             }
         }
-        public void SaveDB()
+        public async Task SaveDB()
         {
             ActiveMods.Clear();
             FavoriteMods.Clear();
@@ -160,7 +160,7 @@ namespace HedgeModManager
                     codes.AddRange(mod.Codes.Codes);
             }
 
-            CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
+            await CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
         }
 
         public void DeleteMod(ModInfo mod)

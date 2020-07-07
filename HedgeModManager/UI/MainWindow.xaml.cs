@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Net;
 using System.IO.Compression;
 using System.Text;
+using System.Threading.Tasks;
 using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
 using DataFormats = System.Windows.DataFormats;
@@ -288,7 +289,7 @@ namespace HedgeModManager
             UpdateStatus(text);
         }
 
-        public void SaveModsDB()
+        public async Task SaveModsDB()
         {
             HedgeApp.Config.Save(HedgeApp.ConfigPath);
             ModsDatabase.Mods.Clear();
@@ -307,10 +308,10 @@ namespace HedgeModManager
                 }
             }
 
-            ModsDatabase.SaveDB();
+            await ModsDatabase.SaveDB();
         }
 
-        public void StartGame()
+        public Task StartGame()
         {
             Process.Start(new ProcessStartInfo(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName))
             {
@@ -321,6 +322,7 @@ namespace HedgeModManager
                 Application.Current.Shutdown(0);
 
             UpdateStatus(string.Format(Localise("StatusUIStartingGame"), HedgeApp.CurrentGame.GameName));
+            return Task.CompletedTask;
         }
 
         private void SetupWatcher()
@@ -617,18 +619,24 @@ namespace HedgeModManager
         private void UI_Save_Click(object sender, RoutedEventArgs e)
         {
             ShowMissingOtherLoaderWarning();
-            SaveModsDB();
-            Refresh();
-            UpdateStatus(Localise("StatusUIModsDBSaved"));
+            Task.Run(async () =>
+            {
+                await SaveModsDB();
+                Dispatcher.Invoke(Refresh);
+                UpdateStatus(Localise("StatusUIModsDBSaved"));
+            });
         }
 
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
             ShowMissingOtherLoaderWarning();
-            SaveModsDB();
-            Refresh();
-            UpdateStatus(Localise("StatusUIModsDBSaved"));
-            StartGame();
+            Task.Run(async () =>
+            {
+                await SaveModsDB();
+                Dispatcher.Invoke(Refresh);
+                UpdateStatus(Localise("StatusUIModsDBSaved"));
+                await StartGame();
+            });
         }
 
         private void UI_Play_Click(object sender, RoutedEventArgs e)
