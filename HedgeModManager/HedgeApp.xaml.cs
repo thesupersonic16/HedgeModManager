@@ -257,6 +257,7 @@ namespace HedgeModManager
             if (IsCPKREDIRInstalled(exePath))
                 InstallCPKREDIR(exePath, false);
 
+            CodeProvider.TryLoadRoslyn();
             do
             {
                 Config = new CPKREDIRConfig(ConfigPath);

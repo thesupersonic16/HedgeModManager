@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using HedgeModManager.Misc;
@@ -28,6 +29,8 @@ namespace HedgeModManager
 {
     public class CodeProvider
     {
+        private static object mLockContext = new object();
+
         public static string CodesTextPath => Path.Combine(HedgeApp.ModsDbPath, "Codes.hmm");
         public static string ExtraCodesTextPath => Path.Combine(HedgeApp.ModsDbPath, "ExtraCodes.hmm");
 
@@ -60,30 +63,53 @@ namespace HedgeModManager
             CSharpSyntaxTree.ParseText(Resources.Keys)
         };
 
-        public static void CompileCodes(IEnumerable<Code> sources, string assemblyPath, params string[] loadPaths)
+        public static void TryLoadRoslyn()
         {
-            var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true);
-            var trees = from source in sources select source.CreateSyntaxTree();
-
-            var loads = GetLoadAssemblies(sources, loadPaths);
-
-            loads.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
-            loads.Add(MetadataReference.CreateFromFile(typeof(Binder).Assembly.Location));
-            loads.Add(MetadataReference.CreateFromFile(typeof(Component).Assembly.Location));
-            loads.Add(MetadataReference.CreateFromFile(typeof(DynamicAttribute).Assembly.Location));
-
-            var compiler = CSharpCompilation.Create("HMMCodes", trees, loads, options).AddSyntaxTrees(PredefinedClasses);
-
-            using (var stream = File.Create(assemblyPath))
+            new Thread(() =>
             {
-                var result = compiler.Emit(stream);
+                try
+                {
+                    CompileCodes(new Code[0], Stream.Null);
+                }
+                catch { }
+            }).Start();
+        }
+
+        public static void CompileCodes(IEnumerable<Code> sources, string assemblyPath, params string[] loadsPaths)
+        {
+            lock (mLockContext)
+            {
+                using (var stream = File.Create(assemblyPath))
+                {
+                    CompileCodes(sources, stream, loadsPaths);
+                }
+            }
+        }
+
+        public static void CompileCodes(IEnumerable<Code> sources, Stream resultStream, params string[] loadPaths)
+        {
+            lock (mLockContext)
+            {
+                var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true);
+                var trees = from source in sources select source.CreateSyntaxTree();
+
+                var loads = GetLoadAssemblies(sources, loadPaths);
+
+                loads.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
+                loads.Add(MetadataReference.CreateFromFile(typeof(Binder).Assembly.Location));
+                loads.Add(MetadataReference.CreateFromFile(typeof(Component).Assembly.Location));
+                loads.Add(MetadataReference.CreateFromFile(typeof(DynamicAttribute).Assembly.Location));
+
+                var compiler = CSharpCompilation.Create("HMMCodes", trees, loads, options).AddSyntaxTrees(PredefinedClasses);
+
+                var result = compiler.Emit(resultStream);
                 if (!result.Success)
                 {
                     var builder = new StringBuilder();
                     builder.AppendLine("Error compiling codes");
                     foreach (var diagnostic in result.Diagnostics)
                     {
-                        if(diagnostic.Severity == DiagnosticSeverity.Error)
+                        if (diagnostic.Severity == DiagnosticSeverity.Error)
                         {
                             builder.AppendLine(diagnostic.ToString());
                         }
