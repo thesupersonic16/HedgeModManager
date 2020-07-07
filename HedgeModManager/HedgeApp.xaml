@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:HedgeModManager" 
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
              xmlns:pt="http://propertytools.org/wpf"
-             x:Class="HedgeModManager.App">
+             x:Class="HedgeModManager.HedgeApp">
     
     <Application.Resources>
         <ResourceDictionary>

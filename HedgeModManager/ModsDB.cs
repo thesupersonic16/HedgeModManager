@@ -208,7 +208,7 @@ namespace HedgeModManager
         public static void InstallModArchiveUsingZipFile(string path, string root)
         {
             // Path to the install temp folder
-            string tempDirectory = Path.Combine(App.StartDirectory, "temp_install");
+            string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
 
             // Deletes the temp Directory if it exists
             if (Directory.Exists(tempDirectory))
@@ -239,7 +239,7 @@ namespace HedgeModManager
                 string exe = Path.Combine(exePath, "7z.exe");
 
                 // Path to the install temp directory
-                string tempDirectory = Path.Combine(App.StartDirectory, "temp_install");
+                string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
 
                 // Deletes the temp directory if it exists
                 if (Directory.Exists(tempDirectory))
@@ -278,7 +278,7 @@ namespace HedgeModManager
             if (key != null && key.GetValue("exe64") is string exePath)
             {
                 // Path to the install temp directory
-                string tempDirectory = Path.Combine(App.StartDirectory, "temp_install");
+                string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
 
                 // Deletes the temp directory if it exists
                 if (Directory.Exists(tempDirectory))

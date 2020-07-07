@@ -31,7 +31,7 @@ namespace HedgeModManager
         {
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
             LastGameDirectory = (string)key.GetValue("LastGame", string.Empty);
-            UILanguage = (string)key.GetValue("UILanguage", App.PCCulture);
+            UILanguage = (string)key.GetValue("UILanguage", HedgeApp.PCCulture);
         }
     }
 }
