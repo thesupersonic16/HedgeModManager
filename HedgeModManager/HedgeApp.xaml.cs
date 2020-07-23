@@ -252,10 +252,14 @@ namespace HedgeModManager
                 }
             }
 
-            // Remove old patch
-            string exePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName);
-            if (IsCPKREDIRInstalled(exePath))
-                InstallCPKREDIR(exePath, false);
+            // Try to remove old patch
+            try
+            {
+                string exePath = Path.Combine(StartDirectory, CurrentGame.ExecuteableName);
+                if (IsCPKREDIRInstalled(exePath))
+                    InstallCPKREDIR(exePath, false);
+            }
+            catch{ }
 
             CodeProvider.TryLoadRoslyn();
             do
