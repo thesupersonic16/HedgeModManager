@@ -319,7 +319,7 @@ namespace HedgeModManager
             });
 
             if (!HedgeApp.Config.KeepOpen)
-                Application.Current.Shutdown(0);
+                Dispatcher.Invoke(() => Close());
 
             UpdateStatus(string.Format(Localise("StatusUIStartingGame"), HedgeApp.CurrentGame.GameName));
             return Task.CompletedTask;
