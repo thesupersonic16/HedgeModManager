@@ -569,6 +569,48 @@ namespace HedgeModManager
             });
         }
 
+        public bool CheckDepends()
+        {
+            bool abort = false;
+            if (!abort)
+                abort = CheckDepend("637100", "system32\\vcruntime140.dll", "MSVC++ Redist 2019 (64 bit)", "https://aka.ms/vs/16/release/vc_redist.x64.exe", "vc_redist.x64.exe");
+            if (!abort)
+                abort = CheckDepend("71340" , "SysWOW64\\vcruntime140.dll", "MSVC++ Redist 2019 (32 bit)", "https://aka.ms/vs/16/release/vc_redist.x86.exe", "vc_redist.x86.exe");
+            if (!abort)
+                abort = CheckDepend("329440", "SysWOW64\\vcruntime140.dll", "MSVC++ Redist 2019 (32 bit)", "https://aka.ms/vs/16/release/vc_redist.x86.exe", "vc_redist.x86.exe");
+            return !abort;
+        }
+ 
+        public bool CheckDepend(string id, string filePath, string dependName, string downloadURL, string fileName)
+        {
+            bool abort = false;
+            if (HedgeApp.CurrentGame.AppID == id && !File.Exists(Path.Combine(Environment.GetEnvironmentVariable("windir"), filePath)))
+            {
+                var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGame.GameName, dependName));
+
+                dialog.AddButton(Localise("CommonUINo"), () =>
+                {
+                    abort = true;
+                    dialog.Close();
+                });
+                dialog.AddButton(Localise("CommonUIYes"), () =>
+                {
+                    DownloadWindow window = new DownloadWindow($"Downloading {dependName}...", downloadURL, fileName);
+                    window.Start();
+                    if (File.Exists(fileName))
+                    {
+                        // For VC++
+                        Process.Start(fileName, "/passive /norestart").WaitForExit(30000);
+                        File.Delete(fileName);
+                    }
+                    dialog.Close();
+                });
+
+                dialog.ShowDialog();
+            }
+            return abort;
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
@@ -637,6 +679,7 @@ namespace HedgeModManager
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
             ShowMissingOtherLoaderWarning();
+            bool startGame = CheckDepends();
             Task.Factory.StartNew(async () =>
             {
                 try
@@ -644,7 +687,8 @@ namespace HedgeModManager
                     await SaveModsDB();
                     Dispatcher.Invoke(Refresh);
                     UpdateStatus(Localise("StatusUIModsDBSaved"));
-                    await StartGame();
+                    if (startGame)
+                        await StartGame();
                 }
                 catch(Exception ex)
                 {
@@ -655,7 +699,8 @@ namespace HedgeModManager
 
         private void UI_Play_Click(object sender, RoutedEventArgs e)
         {
-            StartGame();
+            if (CheckDepends())
+                StartGame();
         }
 
         private void UI_CPKREDIR_Click(object sender, RoutedEventArgs e)

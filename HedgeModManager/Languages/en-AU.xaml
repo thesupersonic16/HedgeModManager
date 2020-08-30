@@ -77,6 +77,8 @@
     <system:String x:Key="MainUIMissingLoaderHeader" >Mod Loader Not Yet Installed!</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">In order for {0} to start loading mods, the mod loader needs to be installed.&#x0a;Would you like to install it now?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"   >Select where to load mods from...</system:String>
+    <system:String x:Key="MainUIRuntimeMissingTitle" >Missing Runtime Detected!</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requires {1} to be installed for mods &#x0a;to function properly, would you like HMM to install this runtime?</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Please select an option!</system:String>
