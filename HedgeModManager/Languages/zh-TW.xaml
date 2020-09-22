@@ -77,7 +77,9 @@
     <system:String x:Key="MainUIMissingLoaderHeader" >MOD載入器尚未完成安裝！</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">開始載入 {0} MOD之前，MOD載入器需要安裝。&#x0a;是否現在安裝？</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"   >請選擇從哪裡載入MOD…</system:String>
-    
+    <system:String x:Key="MainUIRuntimeMissingTitle" >檢測到缺少運行環境！</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} 需要 {1} 安裝在MOD上 &#x0a;來正常運行, 你想要使用HMM來安裝這個運行環境嗎？ </system:String>
+
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >請選擇至少一項！</system:String>
 
