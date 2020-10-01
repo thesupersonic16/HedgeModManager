@@ -585,7 +585,7 @@ namespace HedgeModManager
             
             if (version == null && packed != false)
             {
-
+                version = Games.EmbeddedCPKREDIRVersion;
             }
 
             return version;
