@@ -127,7 +127,7 @@ namespace HedgeModManager
             };
 #endif
             // Gets the embeded version
-            CPKREDIRVersion = GetCPKREDIRFileVersion(true)?.FileVersion;
+            CPKREDIRVersion = GetCPKREDIRFileVersion(true);
             RegistryConfig.Load();
 
             Steam.Init();
@@ -576,21 +576,19 @@ namespace HedgeModManager
             return $"{info.ProductName} v{info.FileVersion}";
         }
 
-        private static FileVersionInfo GetCPKREDIRFileVersion(bool? packed = null)
+        private static string GetCPKREDIRFileVersion(bool? packed = null)
         {
-            FileVersionInfo info = null;
+            string version = null;
             var temp = Path.Combine(StartDirectory, "cpkredir.dll");
             if (File.Exists(temp) && packed != true)
-                info = FileVersionInfo.GetVersionInfo(temp);
+                version = FileVersionInfo.GetVersionInfo(temp).FileVersion;
             
-            if (info == null && packed != false)
+            if (version == null && packed != false)
             {
-                temp = Path.GetTempFileName();
-                File.WriteAllBytes(temp, HMMResources.DAT_CPKREDIR_DLL);
-                info = FileVersionInfo.GetVersionInfo(temp);
-                File.Delete(temp);
+
             }
-            return info;
+
+            return version;
         }
 
         /// <summary>
@@ -598,7 +596,7 @@ namespace HedgeModManager
         /// </summary>
         public static void UpdateCPKREDIR()
         {
-            if (GetCPKREDIRFileVersion(false)?.FileVersion is string currentVersionString)
+            if (GetCPKREDIRFileVersion(false) is string currentVersionString)
             {
                 if (int.TryParse(CPKREDIRVersion.Replace(".", ""), out int packedVersion) &&
                     int.TryParse(currentVersionString.Replace(".", ""), out int currentVersion) &&

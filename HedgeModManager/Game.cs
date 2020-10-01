@@ -1,6 +1,7 @@
 ﻿using HedgeModManager.Properties;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace HedgeModManager
     public static class Games
     {
         public const uint CodeLoaderMinCodeVersionStringId = 101;
+        public const string EmbeddedCPKREDIRVersion = "0.5.0.8";
 
         public static Game Unknown = new Game();
         public static Game SonicGenerations = new Game()
