@@ -118,14 +118,12 @@ namespace HedgeModManager
             // Re-arrange the mods
             for (int i = 0; i < ModsDatabase.ActiveMods.Count; i++)
             {
-                for (int i2 = 0; i2 < ModsDatabase.Mods.Count; i2++)
+                var mod = ModsDatabase.GetModFromID(ModsDatabase.ActiveMods[i]);
+
+                if (mod != null)
                 {
-                    var mod = ModsDatabase.Mods[i2];
-                    if (Path.GetFileName(mod.RootDirectory) == ModsDatabase.ActiveMods[i])
-                    {
-                        ModsDatabase.Mods.Remove(mod);
-                        ModsDatabase.Mods.Insert(i, mod);
-                    }
+                    ModsDatabase.Mods.Remove(mod);
+                    ModsDatabase.Mods.Insert(i, mod);
                 }
             }
 

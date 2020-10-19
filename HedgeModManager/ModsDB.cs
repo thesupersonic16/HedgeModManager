@@ -106,7 +106,7 @@ namespace HedgeModManager
         {
             for (int i = 0; i < ActiveMods.Count; i++)
             {
-                var mod = Mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == ActiveMods[i]);
+                var mod = GetModFromID(ActiveMods[i]);
                 if (mod != null)
                     mod.Enabled = true;
                 else
@@ -115,7 +115,7 @@ namespace HedgeModManager
 
             for (int i = 0; i < FavoriteMods.Count; i++)
             {
-                var mod = Mods.FirstOrDefault(t => Path.GetFileName(t.RootDirectory) == FavoriteMods[i]);
+                var mod = GetModFromID(FavoriteMods[i]);
                 if (mod != null)
                     mod.Favorite = true;
                 else
@@ -130,16 +130,16 @@ namespace HedgeModManager
 
             foreach (var mod in Mods)
             {
-                var dirName = Path.GetFileName(mod.RootDirectory);
+                var id = HedgeApp.GenerateSeededGuid(mod.RootDirectory.GetHashCode()).ToString();
 
                 if (mod.Enabled)
-                    ActiveMods.Add(dirName);
+                    ActiveMods.Add(id);
 
                 if (mod.Favorite)
-                    FavoriteMods.Add(dirName);
+                    FavoriteMods.Add(id);
 
                 // ReSharper disable once AssignNullToNotNullAttribute
-                mMods.Add(dirName, $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini");
+                mMods.Add(id, $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini");
             }
             using (var stream = File.Create(Path.Combine(RootDirectory, "ModsDB.ini")))
             {
@@ -161,6 +161,16 @@ namespace HedgeModManager
             }
 
             await CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
+        }
+
+        public ModInfo GetModFromID(string id)
+        {
+            var modPair = mMods.FirstOrDefault(t => t.Key == id);
+
+            if (modPair.Key == null)
+                return null;
+
+            return Mods.FirstOrDefault(t => Path.GetDirectoryName(modPair.Value) == t.RootDirectory);
         }
 
         public void DeleteMod(ModInfo mod)

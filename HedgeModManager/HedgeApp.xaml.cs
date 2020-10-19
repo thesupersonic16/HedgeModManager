@@ -685,6 +685,15 @@ namespace HedgeModManager
             }
         }
 
+        public static Guid GenerateSeededGuid(int seed)
+        {
+            var random = new Random(seed);
+            var guid = new byte[16];
+
+            random.NextBytes(guid);
+            return new Guid(guid);
+        }
+
         private void Minimize_Click(object sender, RoutedEventArgs e)
         {
             var window = Window.GetWindow((DependencyObject)sender);
