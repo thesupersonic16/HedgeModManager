@@ -39,7 +39,7 @@
     <system:String x:Key="ModsUIModCheckUpdates">Suche Updates</system:String>
     <system:String x:Key="ModsUIModEdit"        >Mod editieren</system:String>
     <system:String x:Key="ModsUIModDelete"      >Mod löschen</system:String>
-    <system:String x:Key="ModsUIModDragDrop"    >Verschiebe die Mods in der Liste mit der Maus, um die Ladereihenfolge zu ändern.</system:String>
+    <system:String x:Key="ModsUIModDragDrop"    >Verschiebe die Mods in der Liste per Drag n' Drop, um die Ladereihenfolge zu ändern.</system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager hat erkannt, dass ein oder mehrere Mods ungültige Verzeichnisse beinhalten.&#x0a;Soll Hedge Mod Manager versuchen dies zu beheben?</system:String>
 
     <!-- Codes UI Strings -->
@@ -73,24 +73,24 @@
     <system:String x:Key="MainUIInstallFormHeader"   >Installiere eine Mod mit...</system:String>
     <system:String x:Key="MainUIInstallFormOptionDir">Installiere aus einem Ordner</system:String>
     <system:String x:Key="MainUIInstallFormOptionArc">Installiere aus einem Archiv</system:String>
-    <system:String x:Key="MainUIInstallFormOptionNew">Kreiere einen (für Entwickler!)</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew">Kreiere eine Mod (für Entwickler!)</system:String>
     <system:String x:Key="MainUIMissingLoaderHeader" >Der Mod Loader wurde noch nicht installiert!</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Damit {0} Mods laden kann, muss der Mod Loader installiert werden.&#x0a;Möchten Sie ihn jetzt installieren?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"   >Auswählen, woher die Mods geladen werden sollen...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >Fehlende Runtime erkannt!</system:String>
-    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} muss {1} installieren, damit Mods &#x0a;richtig funktionieren können.Soll HMM diese Runtime instaliern?</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} muss {1} installieren, damit Mods &#x0a;richtig funktionieren können.Soll HMM diese Runtime installieren?</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Bitte wählen Sie eine Option!</system:String>
 
     <!-- AboutWindow UI Strings -->
     <system:String x:Key="AboutWindowUITitle"  >Über den Hedge Mod Manager</system:String>
-    <system:String x:Key="AboutWindowUILine1"  >Ein Programm, welches hilft Hedgehog Engine Mods einfach zu laden.</system:String>
+    <system:String x:Key="AboutWindowUILine1"  >Ein Programm, welches das Laden von Hedgehog Engine Mods vereinfacht.</system:String>
     <system:String x:Key="AboutWindowUILine2"  >Eine legal erworbene Version eines der unterstützen Spiele wird benötigt.</system:String>
     <system:String x:Key="AboutWindowUICredits">Credits:</system:String>
 
     <!-- EditModWindow UI Strings -->
-    <system:String x:Key="EditModWindowUIHeader">Bitte füge deinem Mod ein paar Details hinzu.</system:String>
+    <system:String x:Key="EditModWindowUIHeader">Bitte füge deiner Mod ein paar Details hinzu.</system:String>
 
     <!-- PropertyEditor UI Strings -->
     <system:String x:Key="PropertyEditorUIName" >Name</system:String>
@@ -108,7 +108,7 @@
     <system:String x:Key="StatusUICheckingForLoaderUpdate">Suche nach {0} Updates</system:String>
     <system:String x:Key="StatusUILoaderUpToDate"         >{0} ist aktuell</system:String>
     <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Konnte keine Updates für {0} finden</system:String>
-    <system:String x:Key="StatusUIInstalledLoader"        >{0} instaliert</system:String>
+    <system:String x:Key="StatusUIInstalledLoader"        >{0} installiert</system:String>
     <system:String x:Key="StatusUIDeletedMod"             >{0} gelöscht</system:String>
     <system:String x:Key="StatusUIModsDBSaved"            >Mod Datenbank gespeichert</system:String>
     <system:String x:Key="StatusUIModsDBLocationChanged"  >Datenbank Verzeichnis aktualisiert</system:String>
@@ -118,7 +118,7 @@
     <system:String x:Key="StatusUIDownloadFailed"         >Download fehlgeschlagen</system:String>
     
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Bist du dir sicher, dass du "{0}" löschen möchtest?&#x0a;Dies kann nicht rückgänging gemacht werden!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Bist Sie sich sicher, dass Sie "{0}" löschen möchten?&#x0a;Dies kann nicht rückgängig gemacht werden!</system:String>
     
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >abgeschlossen</system:String>
