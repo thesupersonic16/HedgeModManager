@@ -85,8 +85,8 @@ namespace HedgeModManager
                                 break;
 
                             var i = line.IndexOf('=');
-                            var key = line.Substring(0, i);
-                            var value = line.Substring(i + 1);
+                            var key = line.Substring(0, i).Trim();
+                            var value = line.Substring(i + 1).Trim();
 
                             this[currentGroup][$"{c}{key}"] = value.Trim('"');
                             break;
