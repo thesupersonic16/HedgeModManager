@@ -151,5 +151,5 @@ WriteProtected<byte>(0x1423C060C, 0x01)
 Patch "Disable Wispon Boundaries" by "CodeNameGamma"
 WriteNop(0x140267527, 0x00000005)
 
-Patch "360 Movement" by "Skyth"
+Patch "360 Degree Movement" by "Skyth"
 WriteNop(0x1404615B7, 4)
