@@ -36,3 +36,15 @@ WriteProtected<uint>(ASLR(0x00C64011), (uint)ASLR(0x00F6072C))
 WriteProtected<uint>(ASLR(0x00C64017), (uint)ASLR(0x00F60730))
 WriteProtected<uint>(ASLR(0x00C2AFE4), (uint)ASLR(0x01082E00))
 WriteProtected<uint>(ASLR(0x00C2B016), (uint)ASLR(0x01082E00))
+
+Patch "21:9 (2560x1080) In-Game Resolution" by "ĐeäTh"
+WriteProtected<int>(ASLR(0xD56D30), 0x4017B426)
+
+Patch "21:9 (3440x1440) In-Game Resolution" by "ĐeäTh"
+WriteProtected<int>(ASLR(0xD56D30), 0x4018E38E)
+
+Patch "21:9 (3840x1600) In-Game Resolution" by "ĐeäTh"
+WriteProtected<int>(ASLR(0xD56D30), 0x4019999A)
+
+Patch "32:9 In-Game Resolution" by "ĐeäTh"
+WriteProtected<int>(ASLR(0xD56D30), 0x40638E39)
