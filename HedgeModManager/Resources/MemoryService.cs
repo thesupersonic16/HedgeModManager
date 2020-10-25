@@ -117,7 +117,7 @@ namespace HMMCodes
         }
         
         public static bool IsKeyDown(Keys key)
-            => (GetAsyncKeyState(key) & 1) == 1;
+            => GetAsyncKeyState(key) > 0;
     }
     
     public enum HookBehavior
