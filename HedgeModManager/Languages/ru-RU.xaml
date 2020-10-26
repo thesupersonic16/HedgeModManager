@@ -78,7 +78,9 @@
     <system:String x:Key="MainUIMissingLoaderHeader" >Загрузчик модов не установлен!</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Чтобы игра {0} начала загружать моды, вам необходимо будет установить загрузчик модов.&#x0a;Хотите его установить сейчас?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"   >Выберите откуда загружать моды...</system:String>
-
+    <system:String x:Key="MainUIRuntimeMissingTitle" >Не найден распространяемый пакет!</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} необходим установленный {1} для корректной работы модов. Вы хотите, чтобы HMM установил данный распространяемый пакет?</system:String>
+    
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Пожалуйста, выберите опцию!</system:String>
 

@@ -77,7 +77,9 @@
     <system:String x:Key="MainUIMissingLoaderHeader" >¡Cargador de mods no instalado!</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Para que {0} cargue mods, se debe instalar el cargador de mods. ¿Quieres instalarlo?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"   >Selecciona de dónde cargar mods...</system:String>
-
+    <system:String x:Key="MainUIRuntimeMissingTitle" >¡Runtime faltante detectado!</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requiere que {1} sea instalado para los mods &#x0a;para que funcionen adecuadamente, ¿Te gustaría que HMM instalase este runtime?</system:String>
+    
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >¡Elige una opción!</system:String>
 
