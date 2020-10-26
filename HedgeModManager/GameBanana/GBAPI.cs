@@ -132,18 +132,6 @@ namespace GameBananaAPI
         public static bool InstallGBHandler(Game game)
         {
             string protocolName = $"HedgeModManager for {game.GameName}";
-            // Can we use LOCAL_USER instead of CLASSES_ROOT?
-            // Pretty sure you can, You can try it, Also I cant see errors
-            // but i can
-            // Any errors?
-            // yes
-            // Where?
-            // oh
-            // How do you get the path to HMM? Need it for the bottom SetValue
-            // There should be a static string in HedgeApp
-            // I see StartDirectory, Thats about it
-            // Then lets add one lol
-            // But I'm lazy
             try
             {
                 var reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\{game.GBProtocol}");
@@ -162,29 +150,6 @@ namespace GameBananaAPI
 
         public static void ParseCommandLine(string line)
         {
-            // soo.....
-            // Does HMM only work with one game per install?
-            // How would i know
-            // Then tahts a yes
-            // I mean you can change game name in HedgeApp.cs
-            // Since when does GB do command line stuff
-            // Never, We have to do it, Well, Its Fuck cant spell lol
-            // pretty much Chrome will call a command
-            // what if
-            // i dont use chrome
-            // Pretty sure Firefox does the same
-            // but what if i use internet explorer 6.0
-            // GB doesnt even support IE 6.0
-            // thats a damn shame
-            // Its a shame that you are using IE 6.0 in the first place
-            // Its a legendary browser ok
-            // Yeah, to download Chrome
-            // And the surf the web in amazing speed
-            // Dial-up speeds?
-            // Fiber optics
-            // :( I dont have fibre
-            // But i do at amazing 10Mbps
-            // Noice
             string[] split = line.Split(',');
             if (split.Length < 3) // help, I ddont know math
                 return;
@@ -195,14 +160,14 @@ namespace GameBananaAPI
 
             if (!int.TryParse(split[2], out int itemID))
             {
-                HedgeApp.CreateOKMessageBox("Error", $"Invalid Gamebanana item id {itemID}").ShowDialog();
+                HedgeApp.CreateOKMessageBox("Error", $"Invalid GameBanana item id {itemID}").ShowDialog();
                 return;
             }
 
             var item = new GBAPIItemDataBasic(itemType, itemID);
             if (!RequestItemData(ref item))
             {
-                HedgeApp.CreateOKMessageBox("Error", "Invalid Gamebanana item").ShowDialog();
+                HedgeApp.CreateOKMessageBox("Error", "Invalid GameBanana item").ShowDialog();
                 return;
             }
             var game = Games.Unknown;
@@ -269,6 +234,75 @@ namespace GameBananaAPI
         }
     }
 
+    public class GBAPIFile
+    {
+        [JsonProperty("_sFile")]
+        public string FileName { get; set; }
+        [JsonProperty("_nFilesize")]
+        public int _nFilesize { get; set; }
+        [JsonProperty("_sDownloadUrl")]
+        public string DownloadURL { get; set; }
+        [JsonProperty("_sDescription")]
+        public string Description { get; set; }
+        [JsonProperty("_tsDateAdded")]
+        public int DateAdded { get; set; }
+        [JsonProperty("_nDownloadCount")]
+        public string DownloadCount { get; set; }
+        [JsonProperty("_aMetadata")]
+        public GBAPIFileMetadata FileMetadata { get; set; }
+    }
+
+    public class GBAPIFileMetadata
+    {
+        [JsonIgnoreAttribute]
+        public List<string> Files = new List<string>();
+        [JsonIgnoreAttribute]
+        public string MimeType { get; set; }
+
+        [JsonExtensionData]
+        private Dictionary<string, JToken> FileMetadata { get; set; }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            try
+            {
+                MimeType = FileMetadata["_sMimeType"].ToString();
+                if (FileMetadata.ContainsKey("_aArchiveFileTree"))
+                    Files.AddRange(LoopDirectory("", FileMetadata["_aArchiveFileTree"].ToObject<JObject>()));
+            }
+            catch
+            {
+                // Failed
+            }
+        }
+
+        private List<string> LoopDirectory(string dir, JObject jObject)
+        {
+            var list = new List<string>();
+            foreach (var data in jObject)
+            {
+                switch (data.Value.Type)
+                {
+                    case JTokenType.String:
+                        list.Add(Path.Combine(dir, data.Value.ToString()));
+                        break;
+                    case JTokenType.Object:
+                        var obj = data.Value.ToObject<JObject>();
+                        list.AddRange(LoopDirectory(Path.Combine(dir, data.Key), obj));
+                        break;
+                    case JTokenType.Array:
+                        var array = data.Value.ToObject<JArray>();
+                        foreach (var file in array)
+                            list.Add(Path.Combine(dir, data.Key, file.ToString()));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return list;
+        }
+    }
 
     public class GBAPIItemDataBasic : GBAPIItemData
     {
@@ -288,6 +322,8 @@ namespace GameBananaAPI
         public GBAPICreditGroups Credits { get; set; }
         [JsonProperty("Preview().sPreviewUrl()")]
         public Uri SoundURL { get; set; }
+        [JsonProperty("Files().aFiles()")]
+        public Dictionary<string, GBAPIFile> Files { get; set; } = new Dictionary<string, GBAPIFile>();
 
         public List<GBAPIScreenshotData> Screenshots
         {
