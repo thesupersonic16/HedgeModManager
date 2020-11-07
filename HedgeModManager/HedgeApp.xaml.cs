@@ -241,6 +241,30 @@ namespace HedgeModManager
                     }
                     return;
                 }
+
+                if (args[0].ToLower() == "-decrypt64")
+                {
+                    if (args.Length < 2)
+                    {
+                        Console.WriteLine("Insufficient arguments.");
+                        return;
+                    }
+
+                    var filename = Path.ChangeExtension(args[1], string.Empty);
+                    if (args.Length > 2)
+                        filename = args[2];
+
+
+                    byte[] data = Convert.FromBase64String(File.ReadAllText(args[1]));
+
+                    using (var encrypted = new MemoryStream(data))
+                    using (var decrypted = File.Create(filename))
+                    {
+                        CryptoProvider.Decrypt(encrypted, decrypted);
+                        Console.WriteLine($"Successfully decrypted {filename}");
+                    }
+                    return;
+                }
             }
 
             if (CurrentGame.SupportsCPKREDIR)
