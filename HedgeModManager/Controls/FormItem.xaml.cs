@@ -136,7 +136,9 @@ namespace HedgeModManager.Controls
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch
             };
-            box.SetBinding(TextBox.TextProperty, binding);
+
+            box.SetBinding(TextBox.TextProperty, new Binding(binding) { UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
+
             box.DataContext = context;
 
             if (context.MinValue.HasValue || context.MaxValue.HasValue)
