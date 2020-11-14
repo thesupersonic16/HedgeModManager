@@ -26,27 +26,30 @@ namespace HedgeModManager
             InitializeComponent();
         }
 
-        public HedgeMessageBox(string header, string message, 
+        public HedgeMessageBox(string header, string message,
             HorizontalAlignment buttonAlignment = HorizontalAlignment.Right, TextAlignment textAlignment = TextAlignment.Center, InputType type = InputType.Basic)
         {
             InitializeComponent();
             Header.Text = header;
-            
-            if(type == InputType.Basic)
+
+            if (type == InputType.Basic)
             {
-                Message.Child = new TextBlock()
+                Message.Child = new ScrollViewer()
                 {
-                    IsEnabled = false,
-                    Text = message,
-                    TextAlignment = textAlignment,
-                    FontSize = 25,
-                    TextWrapping = TextWrapping.Wrap,
-                    VerticalAlignment = VerticalAlignment.Center
+                    Content = new TextBlock()
+                    {
+                        IsEnabled = false,
+                        Text = message,
+                        TextAlignment = textAlignment,
+                        FontSize = 25,
+                        TextWrapping = TextWrapping.Wrap,
+                        VerticalAlignment = VerticalAlignment.Center
+                    }
                 };
             }
-            else if(type == InputType.HTML || type == InputType.MarkDown)
+            else if (type == InputType.HTML || type == InputType.MarkDown)
             {
-                Message.Child = new HtmlPanel() 
+                Message.Child = new HtmlPanel()
                 {
                     Text = $@"
 <html>
@@ -56,7 +59,7 @@ namespace HedgeModManager
         </style>
         {(type == InputType.MarkDown ? Markdown.ToHtml(message, new MarkdownPipelineBuilder().UseAdvancedExtensions().Build()) : message)}
     </body>
-</html>", 
+</html>",
                     Background = new SolidColorBrush(Colors.Transparent),
                     Width = double.NaN,
                     Height = double.NaN
@@ -87,7 +90,7 @@ namespace HedgeModManager
                 Margin = new Thickness(5, 0, 5, 0),
                 Padding = new Thickness(25, 0, 25, 0)
             };
-            
+
             btn.Click += (caller, args) => { onClick.Invoke(); };
             Stack.Children.Add(btn);
         }
