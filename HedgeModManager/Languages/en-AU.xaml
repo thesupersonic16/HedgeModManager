@@ -79,6 +79,7 @@
     <system:String x:Key="MainUISelectModsDBTitle"   >Select where to load mods from...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >Missing Runtime Detected!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requires {1} to be installed for mods &#x0a;to function properly, would you like HMM to install this runtime?</system:String>
+    <system:String x:Key="MainUISaveFileRedictionDisabled" xml:space="preserve">One or more enabled mods require save file redirection to work properly. Enable this feature?&#x0a;Only click no if you know what you are doing.</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Please select an option!</system:String>

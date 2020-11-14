@@ -39,7 +39,9 @@ namespace HedgeModManager
                     IsEnabled = false,
                     Text = message,
                     TextAlignment = textAlignment,
-                    FontSize = 25
+                    FontSize = 25,
+                    TextWrapping = TextWrapping.Wrap,
+                    VerticalAlignment = VerticalAlignment.Center
                 };
             }
             else if(type == InputType.HTML || type == InputType.MarkDown)
@@ -79,10 +81,11 @@ namespace HedgeModManager
         {
             var btn = new Button()
             {
-                Content = $"    {text}    ",
+                Content = text,
                 Width = double.NaN,
                 Height = 23,
-                Margin = new Thickness(5, 0, 5, 0)
+                Margin = new Thickness(5, 0, 5, 0),
+                Padding = new Thickness(25, 0, 25, 0)
             };
             
             btn.Click += (caller, args) => { onClick.Invoke(); };

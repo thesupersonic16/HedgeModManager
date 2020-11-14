@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
-        mc:Ignorable="d" MaxWidth="1280" MaxHeight="720"
+        mc:Ignorable="d" MaxWidth="650" MaxHeight="720"
         Title="Hedge Mod Manager" MinHeight="100" MinWidth="450" 
         Width="Auto" Height="Auto" WindowStartupLocation="CenterScreen" Topmost="True"
         Style="{StaticResource HedgeWindow}" ResizeMode="NoResize" SizeToContent="WidthAndHeight" ContentRendered="Window_ContentRendered">
@@ -14,8 +14,8 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="Header" Text="HEADER" TextAlignment="Center"  FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20,0,20,0"/>
-        <Border x:Name="Message" Width="Auto" Margin="5,0,5,0" Grid.Row="1"/>
+        <TextBlock x:Name="Header" Text="HEADER" TextAlignment="Center" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20,0"/>
+        <Border x:Name="Message" Width="Auto" Margin="5,0" Grid.Row="1" Padding="10,0"/>
         <StackPanel x:Name="Stack" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Stretch">
             <!--<Button Width="Auto" Height="23" Margin="0" Content="OK"/>
             <Button Width="Auto" Height="23" Margin="0" Content="CANCEL"/>-->

@@ -365,6 +365,7 @@
                         BorderBrush="{TemplateBinding Foreground}"
                         BorderThickness=".2"
                         CornerRadius="4" 
+                        Padding="{TemplateBinding Padding}"
                         Background="{TemplateBinding Background}">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup x:Name="CommonStates">

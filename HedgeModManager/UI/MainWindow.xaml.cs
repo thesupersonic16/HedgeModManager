@@ -567,15 +567,54 @@ namespace HedgeModManager
             });
         }
 
+        public void ShowSaveFileRedirectionWarning()
+        {
+            if (HedgeApp.Config.EnableSaveFileRedirection)
+                return;
+
+            var requireRedir = false;
+            foreach (var mod in ModsDatabase.Mods)
+            {
+                if (mod.Enabled && mod.SupportsSave)
+                {
+                    requireRedir = true;
+                    break;
+                }
+            }
+
+            if (!requireRedir)
+                return;
+
+            Dispatcher.Invoke(() =>
+            {
+                var dialog = new HedgeMessageBox(Localise("CommonUIWarning"), Localise("MainUISaveFileRedictionDisabled"));
+
+                dialog.AddButton(Localise("CommonUINo"), () =>
+                {
+                    dialog.Close();
+                });
+
+                dialog.AddButton(Localise("CommonUIYes"), () =>
+                {
+                    dialog.Close();
+                    HedgeApp.Config.EnableSaveFileRedirection = true;
+                    HedgeApp.Config.Save(HedgeApp.ConfigPath);
+                });
+
+                dialog.ShowDialog();
+            });
+        }
+
         public bool CheckDepends()
         {
             bool abort = false;
+
             if (!abort)
-                abort = DependsHandler.AskToInstallRuntime("637100", DependTypes.VS2019x64);
+                abort = DependsHandler.AskToInstallRuntime(Games.SonicForces.AppID, DependTypes.VS2019x64);
             if (!abort)
-                abort = DependsHandler.AskToInstallRuntime("71340", DependTypes.VS2019x86);
+                abort = DependsHandler.AskToInstallRuntime(Games.SonicGenerations.AppID, DependTypes.VS2019x86);
             if (!abort)
-                abort = DependsHandler.AskToInstallRuntime("329440", DependTypes.VS2019x86);
+                abort = DependsHandler.AskToInstallRuntime(Games.SonicLostWorld.AppID, DependTypes.VS2019x86);
             return !abort;
         }
  
@@ -659,6 +698,7 @@ namespace HedgeModManager
         private void UI_Save_Click(object sender, RoutedEventArgs e)
         {
             ShowMissingOtherLoaderWarning();
+            ShowSaveFileRedirectionWarning();
             Task.Factory.StartNew(async () =>
             {
                 try
@@ -677,6 +717,8 @@ namespace HedgeModManager
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
             ShowMissingOtherLoaderWarning();
+            ShowSaveFileRedirectionWarning();
+
             bool startGame = CheckDepends();
             Task.Factory.StartNew(async () =>
             {
