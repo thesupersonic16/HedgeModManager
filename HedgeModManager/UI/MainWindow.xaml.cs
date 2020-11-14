@@ -571,11 +571,11 @@ namespace HedgeModManager
         {
             bool abort = false;
             if (!abort)
-                abort = CheckDepend("637100", "system32\\vcruntime140.dll", "MSVC++ Redist 2019 (64 bit)", "https://aka.ms/vs/16/release/vc_redist.x64.exe", "vc_redist.x64.exe");
+                abort = DependsHandler.AskToInstallRuntime("637100", DependTypes.VS2019x64);
             if (!abort)
-                abort = CheckDepend("71340" , "SysWOW64\\vcruntime140.dll", "MSVC++ Redist 2019 (32 bit)", "https://aka.ms/vs/16/release/vc_redist.x86.exe", "vc_redist.x86.exe");
+                abort = DependsHandler.AskToInstallRuntime("71340", DependTypes.VS2019x86);
             if (!abort)
-                abort = CheckDepend("329440", "SysWOW64\\vcruntime140.dll", "MSVC++ Redist 2019 (32 bit)", "https://aka.ms/vs/16/release/vc_redist.x86.exe", "vc_redist.x86.exe");
+                abort = DependsHandler.AskToInstallRuntime("329440", DependTypes.VS2019x86);
             return !abort;
         }
  
