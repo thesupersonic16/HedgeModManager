@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
-        mc:Ignorable="d" MaxWidth="650" MaxHeight="720"
+        mc:Ignorable="d" MaxWidth="650" MaxHeight="400"
         Title="Hedge Mod Manager" MinHeight="100" MinWidth="450" 
         Width="Auto" Height="Auto" WindowStartupLocation="CenterScreen" Topmost="True"
         Style="{StaticResource HedgeWindow}" ResizeMode="NoResize" SizeToContent="WidthAndHeight" ContentRendered="Window_ContentRendered">
