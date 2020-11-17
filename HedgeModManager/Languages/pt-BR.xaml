@@ -79,6 +79,7 @@
     <system:String x:Key="MainUISelectModsDBTitle"   >Selecione de onde pretende carregar mods...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >Runtime Em Falta Detetada!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requer que {1} esteja instalado/a para que os mods funcionem corretamente. Quer que o HMM instale essa runtime?</system:String>
+    <system:String x:Key="MainUISaveFileRedictionDisabled" xml:space="preserve">Um ou mais mods ativados requerem o redirecionamento do ficheiro de gravação para funcionarem corretamente. Ativar esta funcionalidade?&#x0a;Clique "não" apenas se souber o que está fazendo.</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Por favor selecione uma opção!</system:String>
