@@ -79,6 +79,7 @@
     <system:String x:Key="MainUISelectModsDBTitle"   >請選擇從哪裡載入MOD…</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >檢測到缺少運行環境！</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} 需要 {1} 安裝在MOD上 &#x0a;來正常運行, 你想要使用HMM來安裝這個運行環境嗎？ </system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">使用一個或多個MOD時需要啟用「重新保存文件定向」功能才能正常運作。 要啟用此功能嗎？＆＃x0a;（你要知道自己在做什麼才點擊否。）</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >請選擇至少一項！</system:String>

@@ -587,7 +587,7 @@ namespace HedgeModManager
 
             Dispatcher.Invoke(() =>
             {
-                var dialog = new HedgeMessageBox(Localise("CommonUIWarning"), Localise("MainUISaveFileRedictionDisabled"));
+                var dialog = new HedgeMessageBox(Localise("CommonUIWarning"), Localise("MainUISaveFileRedirectionDisabled"));
 
                 dialog.AddButton(Localise("CommonUINo"), () =>
                 {
