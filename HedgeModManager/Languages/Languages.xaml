@@ -5,8 +5,8 @@
 
     <local:LanguageList x:Key="Languages">
         <local:LangEntry FileName="en-AU" Name="English (Australia)"/>
-	<local:LangEntry FileName="nl-NL" Name="Dutch (Netherlands)"/>
-	<local:LangEntry FileName="de-DE" Name="Deutsch (German)"/>
+        <local:LangEntry FileName="nl-NL" Name="Dutch (Netherlands)"/>
+        <local:LangEntry FileName="de-DE" Name="Deutsch (German)"/>
         <local:LangEntry FileName="fr-FR" Name="Français (France)"/>
         <local:LangEntry FileName="pt-PT" Name="Português (Portugal)"/>
         <local:LangEntry FileName="pt-BR" Name="Português (Brazil)"/>

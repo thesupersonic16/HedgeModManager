@@ -121,7 +121,6 @@
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Tens a certeza de que pretendes apagar "{0}"?&#x0a;Esta ação não pode ser desfeita!</system:String>
 
-
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >concluída</system:String>
     <system:String x:Key="StatusUIUpdateCompletedPlural"        >concluídas</system:String>
@@ -130,5 +129,5 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Configurar {0}</system:String>
-	
+
 </ResourceDictionary>

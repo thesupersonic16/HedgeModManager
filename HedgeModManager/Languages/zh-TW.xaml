@@ -121,8 +121,13 @@
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">您確定要刪除 "{0}"？&#x0a;此操作無法撤消！</system:String>
 
+    <!-- Status UI Lang Stuff Strings -->
+    <system:String x:Key="StatusUIUpdateCompletedSingular"      >項完成</system:String>
+    <system:String x:Key="StatusUIUpdateCompletedPlural"        >項完成</system:String>
+    <system:String x:Key="StatusUIUpdateFailedSingular"         >項失敗</system:String>
+    <system:String x:Key="StatusUIUpdateFailedPlural"           >項失敗</system:String>
+
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">{0} 配置</system:String>
-
 
 </ResourceDictionary>
