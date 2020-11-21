@@ -135,7 +135,8 @@ namespace HedgeModManager
             SetupLanguages();
             CurrentCulture = GetClosestCulture(RegistryConfig.UILanguage);
             if (CurrentCulture != null)
-                LoadLanaguage(CurrentCulture.FileName);
+                LoadLanguage(CurrentCulture.FileName);
+            CountLanguages();
 #if DEBUG
             // Find a Steam Game
             SteamGames = Steam.SearchForGames("Sonic Generations");
@@ -334,7 +335,19 @@ namespace HedgeModManager
             return null;
         }
 
-        public static void LoadLanaguage(string culture)
+        public static void CountLanguages()
+        {
+            foreach (var entry in SupportedCultures)
+            {
+                var langDict = new ResourceDictionary();
+                langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
+                entry.Lines = langDict.Count;
+                if (entry.Lines > LanguageList.TotalLines)
+                    LanguageList.TotalLines = entry.Lines;
+            }
+        }
+
+        public static void LoadLanguage(string culture)
         {
             var langDict = new ResourceDictionary();
             langDict.Source = new Uri($"Languages/{culture}.xaml", UriKind.Relative);
@@ -370,7 +383,7 @@ namespace HedgeModManager
         {
             RegistryConfig.UILanguage = CurrentCulture.FileName;
             RegistryConfig.Save();
-            LoadLanaguage(CurrentCulture.FileName);
+            LoadLanguage(CurrentCulture.FileName);
         }
 
         /// <summary>

@@ -8,12 +8,19 @@ namespace HedgeModManager.Languages
 {
     public class LanguageList : List<LangEntry>
     {
-        
+        public static int TotalLines;
+
     }
 
     public class LangEntry
     {
         public string FileName { get; set; }
         public string Name { get; set; }
+        public int Lines { get; set; }
+
+        public override string ToString()
+        {
+            return Name + $" ({(float)Lines / LanguageList.TotalLines * 100:N0}%)";
+        }
     }
 }
