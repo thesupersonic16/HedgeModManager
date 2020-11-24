@@ -47,7 +47,6 @@
     <system:String x:Key="CodesUIDownload">Загрузить пользовательские коды</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Установленные коды несовместимы с загрузчиком кодов.&#x0a;Пожалуйста, обновите коды, а также загрузчик кодов.&#x0a;ВНИМАНИЕ: Это приведет к удалению всех пользовательских кодов.</system:String>
 
-
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
     <system:String x:Key="SettingsUIGMLHeader"      >Игра и загрузчик модов</system:String>
@@ -80,7 +79,8 @@
     <system:String x:Key="MainUISelectModsDBTitle"   >Выберите откуда загружать моды...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >Не найден распространяемый пакет!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} необходим установленный {1} для корректной работы модов. Вы хотите, чтобы HMM установил данный распространяемый пакет?</system:String>
-    
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Для одного или нескольких активированных модов требуется переадресация сохранения. Включить ее?&#x0a;Нажмите "нет" только если вы знаете, что делаете.</system:String>
+
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Пожалуйста, выберите опцию!</system:String>
 
