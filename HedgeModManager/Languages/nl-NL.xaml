@@ -78,6 +78,9 @@
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Om Mods Voor {0} Te Kunnen Laden, Moet De Lader Geinstalleerd Zijn, Will Je De Lader Nu Installeren?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"   >Kies Van Waar Mods Worden Geladen...</system:String>
 
+    
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Een of meer ingeschakelde mods vereisen omleiding van het opslagbestand om correct te werken. Wilt u deze functie inschakelen?&#x0a;Klik alleen op nee als u weet wat u doet.</system:String>
+
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Selecteer An Optie A.U.B!</system:String>
 
@@ -126,6 +129,5 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Configureren {0}</system:String>
-
 
 </ResourceDictionary>
