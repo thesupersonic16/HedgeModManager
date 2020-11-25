@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="{StaticResource AboutWindowUITitle}" Height="466" Width="658"  Background="#FF2D2D30"
+        Title="{StaticResource AboutWindowUITitle}" Height="490" Width="684"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
     <Grid>
         <Grid.RowDefinitions>
@@ -27,7 +27,7 @@
         <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="0" Margin="8,8,5,8">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="0.5*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
@@ -55,7 +55,7 @@
         <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="1" Margin="5,8,8,8">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="0.5*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
@@ -67,6 +67,8 @@
                     <Label Content="Proa"/>
                     <Label Content="Mario Tainaka"/>
                     <Label Content="Lady Luna"/>
+                    <Label Content="KyRuS"/>
+                    <Label Content="Kitzu"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Portuguese translations"/>
@@ -77,6 +79,8 @@
                     <Label Content="Spanish translation and reviewing"/>
                     <Label Content="Dutch translation"/>
                     <Label Content="Dutch translation reviewing"/>
+                    <Label Content="German translation"/>
+                    <Label Content="German translation"/>
                 </StackPanel>
             </Grid>
         </GroupBox>

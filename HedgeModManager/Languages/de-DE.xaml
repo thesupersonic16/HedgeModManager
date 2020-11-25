@@ -79,7 +79,7 @@
     <system:String x:Key="MainUISelectModsDBTitle"   >Auswählen, woher die Mods geladen werden sollen...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >Fehlende Runtime erkannt!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} muss {1} installieren, damit Mods &#x0a;richtig funktionieren können.Soll HMM diese Runtime installieren?</system:String>
-
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Eine oder Mehrere Mods benötigen die Spielstandsumleitung um problemlos zu funktionieren. Möchten Sie dieses Feature aktivieren? Klicken Sie nur nein, wenn Sie wissen was Sie tun.</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Bitte wählen Sie eine Option!</system:String>
