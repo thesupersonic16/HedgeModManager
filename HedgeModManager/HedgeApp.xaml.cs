@@ -56,12 +56,14 @@ namespace HedgeModManager
         public static List<SteamGame> SteamGames = null;
         public static bool Restart = false;
         public static string PCCulture = "";
+        public static NetworkConfig NetworkConfiguration;
 
         public const string WebRequestUserAgent =
             "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)";
         
         public const string RepoOwner = "thesupersonic16";
         public const string RepoName = "hedgemodmanager";
+        public const string RepoBranch = "rewrite";
 
         public static byte[] CPKREDIR = new byte[] { 0x63, 0x70, 0x6B, 0x72, 0x65, 0x64, 0x69, 0x72 };
         public static byte[] IMAGEHLP = new byte[] { 0x69, 0x6D, 0x61, 0x67, 0x65, 0x68, 0x6C, 0x70 };
@@ -129,6 +131,7 @@ namespace HedgeModManager
             // Gets the embeded version
             CPKREDIRVersion = GetCPKREDIRFileVersion(true);
             RegistryConfig.Load();
+            NetworkConfiguration = NetworkConfig.LoadConfig($"https://raw.githubusercontent.com/{RepoOwner}/{RepoName}/{RepoBranch}/HMMNetworkConfig.json");
 
             Steam.Init();
             InstallGBHandlers();

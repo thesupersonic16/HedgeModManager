@@ -180,6 +180,10 @@ namespace HedgeModManager
 
         public bool CheckForModUpdates(ModInfo mod, bool showUpdatedDialog = true)
         {
+            // Cancel update check if URL is blocked
+            if (HedgeApp.NetworkConfiguration.URLBlockList.Any(t => mod.UpdateServer.ToLowerInvariant().Contains(t)))
+                return false;
+
             UpdateStatus(string.Format(Localise("StatusUICheckingModUpdates"), mod.Title));
             ModUpdate.ModUpdateInfo update;
             try
