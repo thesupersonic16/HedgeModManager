@@ -1033,5 +1033,26 @@ namespace HedgeModManager
                 code.Enabled = !code.Enabled;
             }
         }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var shiftKey = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+
+            if (shiftKey && Keyboard.IsKeyDown(Key.F1))
+            {
+                try
+                {
+                    var time = DateTime.Now;
+                    var path =
+                        $"HMM_Snapshot_{time.Date:00}{time.Month:00}{time.Year:0000}{time.Hour:00}{time.Minute:00}{time.Second:00}.txt";
+
+                    File.WriteAllText(path, Convert.ToBase64String(SnapshotBuilder.Build()));
+                    Process.Start($"explorer.exe", $"/select,\"{System.IO.Path.GetFullPath(path)}\"");
+                    HedgeApp.CreateOKMessageBox("Hedge Mod Manager", $"Please attach the file\n{path}\nto the issue.").ShowDialog();
+                }
+                catch { }
+
+            }
+        }
     }
 }

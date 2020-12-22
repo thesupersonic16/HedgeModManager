@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)"
-        Loaded="Window_Loaded"
+        Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
         MinHeight="600" MinWidth="560" Height="600" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
