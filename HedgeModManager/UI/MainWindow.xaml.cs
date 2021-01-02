@@ -555,7 +555,7 @@ namespace HedgeModManager
             HedgeApp.Config.EnableSaveFileRedirection = false;
             foreach (var mod in ModsDatabase.Mods)
             {
-                if (mod.SupportsSave)
+                if (mod.SupportsSave && mod.Enabled)
                 {
                     HedgeApp.Config.EnableSaveFileRedirection = true;
                     break;
