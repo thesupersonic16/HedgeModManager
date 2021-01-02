@@ -544,6 +544,25 @@ namespace HedgeModManager
             dialog.ShowDialog();
         }
 
+        public void EnableSaveRedirIfUsed()
+        {
+            if (HedgeApp.Config.ForceSaveRedirectionEnabled)
+            {
+                HedgeApp.Config.EnableSaveFileRedirection = true;
+                return;
+            }
+
+            HedgeApp.Config.EnableSaveFileRedirection = false;
+            foreach (var mod in ModsDatabase.Mods)
+            {
+                if (mod.SupportsSave)
+                {
+                    HedgeApp.Config.EnableSaveFileRedirection = true;
+                    break;
+                }
+            }
+        }
+
         public void ShowMissingOtherLoaderWarning()
         {
             if (!HedgeApp.CurrentGame.HasCustomLoader)
@@ -551,6 +570,7 @@ namespace HedgeModManager
             bool loaderInstalled = File.Exists(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.CustomLoaderFileName));
             if (loaderInstalled)
                 return;
+
             Dispatcher.Invoke(() =>
             {
                 var dialog = new HedgeMessageBox(Localise("MainUIMissingLoaderHeader"), string.Format(Localise("MainUIMissingLoaderDesc"), HedgeApp.CurrentGame.GameName));
@@ -565,44 +585,6 @@ namespace HedgeModManager
                     dialog.Close();
                     HedgeApp.InstallOtherLoader(false);
                     UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.CustomLoaderName));
-                });
-
-                dialog.ShowDialog();
-            });
-        }
-
-        public void ShowSaveFileRedirectionWarning()
-        {
-            if (HedgeApp.Config.EnableSaveFileRedirection)
-                return;
-
-            var requireRedir = false;
-            foreach (var mod in ModsDatabase.Mods)
-            {
-                if (mod.Enabled && mod.SupportsSave)
-                {
-                    requireRedir = true;
-                    break;
-                }
-            }
-
-            if (!requireRedir)
-                return;
-
-            Dispatcher.Invoke(() =>
-            {
-                var dialog = new HedgeMessageBox(Localise("CommonUIWarning"), Localise("MainUISaveFileRedirectionDisabled"));
-
-                dialog.AddButton(Localise("CommonUINo"), () =>
-                {
-                    dialog.Close();
-                });
-
-                dialog.AddButton(Localise("CommonUIYes"), () =>
-                {
-                    dialog.Close();
-                    HedgeApp.Config.EnableSaveFileRedirection = true;
-                    HedgeApp.Config.Save(HedgeApp.ConfigPath);
                 });
 
                 dialog.ShowDialog();
@@ -702,7 +684,7 @@ namespace HedgeModManager
         private void UI_Save_Click(object sender, RoutedEventArgs e)
         {
             ShowMissingOtherLoaderWarning();
-            ShowSaveFileRedirectionWarning();
+            EnableSaveRedirIfUsed();
             Task.Factory.StartNew(async () =>
             {
                 try
@@ -721,7 +703,7 @@ namespace HedgeModManager
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
             ShowMissingOtherLoaderWarning();
-            ShowSaveFileRedirectionWarning();
+            EnableSaveRedirIfUsed();
 
             bool startGame = CheckDepends();
             Task.Factory.StartNew(async () =>
