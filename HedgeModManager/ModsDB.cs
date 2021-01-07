@@ -367,14 +367,20 @@ namespace HedgeModManager
             // Delete all files in the directory and remove readonly
             foreach (var file in dir.GetFiles())
             {
-                file.Attributes = FileAttributes.Normal;
-                file.Delete();
+                try
+                {
+                    file.Attributes = FileAttributes.Normal;
+                    file.Delete();
+                }catch{}
             }
 
-            // remove readonly from the directory
-            dir.Attributes = FileAttributes.Normal;
-            // Delete the directory
-            dir.Delete();
+            try
+            {
+                // remove readonly from the directory
+                dir.Attributes = FileAttributes.Normal;
+                // Delete the directory
+                dir.Delete();
+            }catch{}
         }
 
         public void CreateMod(ModInfo mod, bool openFolder = false)
