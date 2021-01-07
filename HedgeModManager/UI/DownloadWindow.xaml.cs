@@ -44,6 +44,7 @@ namespace HedgeModManager
             DownloadClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
             DownloadClient.DownloadFileCompleted += WebClient_DownloadCompleted;
             DownloadClient.DownloadFileAsync(new Uri(URL), DestinationPath);
+            BringIntoView();
             ShowDialog();
         }
 
