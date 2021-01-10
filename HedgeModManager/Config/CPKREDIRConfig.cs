@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using HedgeModManager.Serialization;
 
 namespace HedgeModManager
 {
-    public class CPKREDIRConfig
+    public class CPKREDIRConfig : INotifyPropertyChanged
     {
         // CPKREDIR
         [IniField("CPKREDIR")]
@@ -54,8 +56,8 @@ namespace HedgeModManager
         [IniField("HedgeModManager", "KeepModLoaderOpen")]
         public bool KeepOpen { get; set; } = true;
 
-        [IniField("HedgeModManager", nameof(ForceSaveRedirectionEnabled))]
-        public bool ForceSaveRedirectionEnabled { get; set; } = false;
+        [IniField("HedgeModManager", nameof(EnableFallbackSaveRedirection))]
+        public bool EnableFallbackSaveRedirection { get; set; } = true;
 
         public bool EnableDebugConsole 
         { 
@@ -70,16 +72,12 @@ namespace HedgeModManager
                 using (var stream = File.OpenRead(path))
                 {
                     var file = new IniFile(stream);
-                    if (IniSerializer.ValidateIni(GetType(), file))
-                    {
-                        IniSerializer.Deserialize(this, file);
-                    }
-                    else
-                    {
-                        stream.Close();
-                        Save(path);
-                    }
+                    IniSerializer.Deserialize(this, file);
                 }
+            }
+            else
+            {
+                Save(path);
             }
         }
 
@@ -89,6 +87,13 @@ namespace HedgeModManager
             {
                 IniSerializer.Serialize(this, stream);
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

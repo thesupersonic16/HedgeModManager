@@ -546,7 +546,7 @@ namespace HedgeModManager
 
         public void EnableSaveRedirIfUsed()
         {
-            if (HedgeApp.Config.ForceSaveRedirectionEnabled)
+            if (HedgeApp.Config.EnableFallbackSaveRedirection)
             {
                 HedgeApp.Config.EnableSaveFileRedirection = true;
                 return;
