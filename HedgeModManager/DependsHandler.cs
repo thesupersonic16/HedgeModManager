@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Markup;
 using static HedgeModManager.Lang;
 
@@ -63,6 +64,7 @@ namespace HedgeModManager
                 });
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
+                    dialog.Visibility = Visibility.Hidden;
                     DownloadWindow window = new DownloadWindow($"Downloading {dependName}...", downloadURL, fileName);
                     window.Start();
                     if (File.Exists(fileName))
@@ -71,12 +73,18 @@ namespace HedgeModManager
                         {
                             case DependTypes.VS2019x86:
                             case DependTypes.VS2019x64:
-                                Process.Start(fileName, "/passive /norestart").WaitForExit(30000);
+                                var startInfo = new ProcessStartInfo();
+                                startInfo.Verb = "runas";
+                                startInfo.FileName = fileName;
+                                startInfo.Arguments = "/norestart";
+                                Process.Start(startInfo);
                                 break;
                             default:
                                 throw new Exception("Unknown dependency to install!");
                         }
-                        File.Delete(fileName);
+
+                        // Clean if possible
+                        try { File.Delete(fileName); } catch { }
                     }
                     dialog.Close();
                 });
