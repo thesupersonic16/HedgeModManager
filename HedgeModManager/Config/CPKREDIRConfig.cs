@@ -54,9 +54,6 @@ namespace HedgeModManager
         [IniField("HedgeModManager", "KeepModLoaderOpen")]
         public bool KeepOpen { get; set; } = true;
 
-        [IniField("HedgeModManager", nameof(ForceSaveRedirectionEnabled))]
-        public bool ForceSaveRedirectionEnabled { get; set; } = false;
-
         public bool EnableDebugConsole 
         { 
             get => LogType == "console"; 
