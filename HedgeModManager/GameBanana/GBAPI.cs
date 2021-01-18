@@ -58,7 +58,7 @@ namespace GameBananaAPI
             }
 
             /// <summary>
-            /// Parses the response data(XML) and writes all data into parameter "item".
+            /// Parses the response data(JSON) and writes all data into parameter "item".
             /// </summary>
             /// <param name="response">The Response data from GameBanana API in XML string format</param>
             /// <param name="item">Reference to a GBAPIItemData to write the data to</param>
@@ -67,8 +67,15 @@ namespace GameBananaAPI
             {
                 try
                 {
-                    item = JsonConvert.DeserializeObject<GBAPIItemDataBasic>(response);
-                    return true;
+                    var obj = JsonConvert.DeserializeObject<GBAPIItemDataBasic>(response);
+
+                    if (obj != null)
+                    {
+                        item = obj;
+                        return true;
+                    }
+
+                    return false;
                 }
                 catch
                 {
