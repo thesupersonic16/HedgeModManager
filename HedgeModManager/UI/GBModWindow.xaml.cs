@@ -73,19 +73,20 @@ namespace HedgeModManager.UI
 
         private void Download_Click(object sender, RoutedEventArgs e)
         {
+            var game = HedgeApp.GetSteamGame(Game);
+            HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
             var mod = (GBAPIItemDataBasic)DataContext;
-            var root = HedgeApp.GetSteamGame(Game).RootDirectory;
             var request = (HttpWebRequest)WebRequest.Create(DownloadURL);
             var response = request.GetResponse();
             var URI = response.ResponseUri.ToString();
             Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
             var downloader = new DownloadWindow($"Downloading {mod.ModName}", URI, Path.GetFileName(URI));
-            downloader.DownloadCompleted = new Action(() =>
+            downloader.DownloadCompleted = () =>
             {
-                ModsDB.InstallMod(Path.GetFileName(URI), Path.Combine(root, "Mods"));
+                ModsDB.InstallMod(Path.GetFileName(URI), Path.Combine(game.RootDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
                 File.Delete(Path.GetFileName(URI));
                 Close();
-            });
+            };
             downloader.Start();
         }
 
