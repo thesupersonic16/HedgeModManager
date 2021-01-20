@@ -336,7 +336,7 @@ namespace HedgeModManager
                     // If it doesn't know the name of the mod its installing
                     if (directoryName == "temp_install")
                     {
-                        var mod = new ModInfo(Path.Combine(folder, "mod.ini"));
+                        var mod = new ModInfo(folder);
                         directoryName = new string(mod.Title.Where(x => !Path.GetInvalidFileNameChars()
                             .Contains(x)).ToArray());
                     }
