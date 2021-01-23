@@ -204,14 +204,14 @@ fld1
 fsubrp st(1),st(0)
 fstp dword ptr [esp+0x4C]"
 
-if (Read<uint>(0x6F23C6) == 1977139417 &&
-Read<ushort>(0x64928A) == 40665 &&
-Read<uint>(0xD08F88) == 1225789427 &&
-Read<uint>(0xD09112) == 4288088634 &&
-Read<uint>(0x1059D37) == 1141968883 &&
-Read<uint>(0xB1D845) == 264853263 &&
-Read<uint>(0xB1D86F) == 353374195 &&
-Read<uint>(0x57876F) == 1141968883)
+if (Read<uint>(0x6F23C6) == 0x75D8C0D9 &&
+Read<ushort>(0x64928A) == 0x9ED9 &&
+Read<uint>(0xD08F88) == 0x49100FF3 &&
+Read<uint>(0xD09112) == 0xFF970A3A &&
+Read<uint>(0x1059D37) == 0x44110FF3 &&
+Read<uint>(0xB1D845) == 0xFC9570F &&
+Read<uint>(0xB1D86F) == 0x15100FF3 &&
+Read<uint>(0x57876F) == 0x44110FF3)
 {
 	WriteAsmHook(code, 0x6F23C6, HookBehavior.Replace)
 	WriteAsmHook(code2, 0x64928A, HookBehavior.Replace)
