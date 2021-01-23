@@ -35,25 +35,193 @@ if (ptr0 != 0 && ptr1 != 0)
     Write<byte>(ptr1, (byte)(Read<byte>(ptr1) | 0x10))
 }
 
-Patch "Widescreen Support" by "Muzzarino"
+Code "Widescreen Support" by "Muzzarino"
+Double width = (Double)Read<uint>(0x01DFE228)
+Double height = (Double)Read<uint>(0x01DFE22C)
+Double defaultwidth = 1280.0
+Double defaultheight = 720.0
+Double aspect = width / height
+Double condaspect = 1.777777777777777778
+WriteProtected<double>(0x01703EA0,defaultheight * condaspect / (aspect < condaspect ? aspect : condaspect))
+WriteProtected<double>(0x01703EA8,Read<double>(0x01703EA0) * aspect)
+WriteProtected(0x6754D0,0xC3)
+Double xoffset = (Read<double>(0x01703EA8) - defaultwidth) * 0.5
+Double yoffset = (Read<double>(0x01703EA0) - defaultheight) * 0.5
+WriteProtected<float>(0x01B23F10,Read<float>(0x01B23F08) * (float)xoffset)
+WriteProtected<float>(0x01B23F14,Read<float>(0x01B23F0C) * (float)yoffset)
+WriteProtected<float>(0x013EA85C,200f + (float)yoffset)
+WriteProtected<float>(0x017041F8,880f + (float)xoffset)
+WriteProtected<float>(0x01703CA8,400f + (float)xoffset)
+WriteProtected<double>(0x01703CA0,640 + xoffset)
+WriteProtected<float>(0x016866E4,(float)Read<double>(0x01703CA0))
+WriteProtected<double>(0x01703F58,259 + yoffset)
+
 string code = @"fild dword ptr [0x01DFE228]
 fidiv dword ptr [0x01DFE22C]
-push eax
+fld st(0)
+fld dword ptr [0x01703B38]
+fdiv dword ptr [0x016D2E4C]
+fld st(0)
+fcomi st(0),st(2)
+fcmovb st(0),st(2)
+fdivp st(2),st(0)
+fdivp st(2),st(0)
+fmulp st(2),st(0)
+fmul dword ptr [ebp+0x10]
+fstp dword ptr [ebp+0x10]
+fld st(0)
+fdiv dword ptr [ebp+0x10]"
+
+string code2 = @"fld st(0)
+fild dword ptr [0x01DFE228]
+fidiv dword ptr [0x01DFE22C]
+fdivrp st(1),st(0)
+fmulp st(1),st(0)
+fstp dword ptr [esi+0xB8]"
+
+string code3 = @"fld qword ptr [0x01703EA8]
+fsub dword ptr [0x01703B38]
+fmul qword ptr [0x017038F8]
+fchs
+fstp dword ptr [ecx+0x60]
+fld qword ptr [0x01703EA0]
+fsub dword ptr [0x016D2E4C]
+fmul qword ptr [0x017038F8]
+fsubr dword ptr [ecx+0x64]
+fstp dword ptr [ecx+0x64]"
+
+string code4 = @"mov eax,0x679B50
+fld qword ptr [0x01703EA8]
+fsub dword ptr [0x01703B38]
+fmul qword ptr [0x017038F8]
+fadd dword ptr [esp]
 fstp dword ptr [esp]
-cmp [esp],0x3FE38E39
-jae code
-fld dword ptr [esp]
-mov [esp],0x3FE38E39
-fdiv dword ptr [esp]
-fmul st(2),st(0)
-fstp dword ptr [esp]
-mov [esp],0x3FE38E39
-code:
-fld dword ptr [esp]
-add esp,04
+fld qword ptr [0x01703EA0]
+fsub dword ptr [0x016D2E4C]
+fadd dword ptr [esp+0x4]
+fstp dword ptr [esp+0x4]
+call eax"
+
+string code5 = @"fild dword ptr [0x01DFE228]
+fidiv dword ptr [0x01DFE22C]
+fld dword ptr [0x01703B38]
+fdiv dword ptr [0x016D2E4C]
+fcomi st(0),st(1)
+fcmovb st(0),st(1)
 fdivp st(1),st(0)
-fstp dword ptr [esp+0x14]"
-WriteAsmHook(code, 0x6F23C8, HookBehavior.Replace)
+fld dword ptr [0x01703B38]
+fdiv dword ptr [0x016D2E4C]
+fild dword ptr [0x01DFE228]
+fidiv dword ptr [0x01DFE22C]
+fdivp st(1),st(0)
+fmul st(0),st(1)
+fmul qword ptr [0x017038F8]
+fsub qword ptr [0x017038F8]
+fchs
+fst dword ptr [esp+0x18]
+fld1
+fsubrp st(1),st(0)
+fstp dword ptr [esp+0x20]
+fmul qword ptr [0x017038F8]
+fsub qword ptr [0x017038F8]
+fchs
+fst dword ptr [esp+0x1C]
+fld1
+fsubrp st(1),st(0)
+fstp dword ptr [esp+0x24]
+cmp byte ptr [edi+0x30],00"
+
+string code6 = @"fild dword ptr [0x01DFE228]
+fidiv dword ptr [0x01DFE22C]
+fld dword ptr [0x01703B38]
+fdiv dword ptr [0x016D2E4C]
+fcomi st(0),st(1)
+fcmovb st(0),st(1)
+fdivp st(1),st(0)
+push 00
+fstp dword ptr [esp]
+movss xmm0,[esp]
+fld dword ptr [0x01703B38]
+fdiv dword ptr [0x016D2E4C]
+fild dword ptr [0x01DFE228]
+fidiv dword ptr [0x01DFE22C]
+fdivp st(1),st(0)
+fmul dword ptr [esp]
+fmul qword ptr [0x017038F8]
+fsub qword ptr [0x017038F8]
+fchs
+fstp dword ptr [esp]
+movss xmm1,[esp]
+add esp,04
+cvtps2pd xmm0,xmm0"
+
+string code7 = @"fild dword ptr [0x01DFE228]
+fidiv dword ptr [0x01DFE22C]
+fld dword ptr [0x01703B38]
+fdiv dword ptr [0x016D2E4C]
+fcomi st(0),st(1)
+fcmovb st(0),st(1)
+fdivp st(1),st(0)
+push 00
+fstp dword ptr [esp]
+fld dword ptr [0x01703B38]
+fdiv dword ptr [0x016D2E4C]
+fild dword ptr [0x01DFE228]
+fidiv dword ptr [0x01DFE22C]
+fdivp st(1),st(0)
+fmul dword ptr [esp]
+fmul qword ptr [0x017038F8]
+fsub qword ptr [0x017038F8]
+fchs
+fld1
+fsubrp st(1),st(0)
+fstp dword ptr [esp]
+movss xmm2,[esp]
+add esp,04"
+
+string code8 = @"fild dword ptr [0x01DFE228]
+fidiv dword ptr [0x01DFE22C]
+fld st(0)
+fild dword ptr [edi+0xF0]
+fidiv dword ptr [edi+0xF4]
+fdivr st(2),st(0)
+fcomi st(0),st(1)
+fcmovb st(0),st(1)
+fdivp st(1),st(0)
+fmul st(1),st(0)
+fmul qword ptr [0x017038F8]
+fsub qword ptr [0x017038F8]
+fchs
+fst dword ptr [esp+0x48]
+fld1
+fsubrp st(1),st(0)
+fstp dword ptr [esp+0x50]
+fmul qword ptr [0x017038F8]
+fsub qword ptr [0x017038F8]
+fchs
+fst dword ptr [esp+0x44]
+fld1
+fsubrp st(1),st(0)
+fstp dword ptr [esp+0x4C]"
+
+if (Read<uint>(0x6F23C6) == 0x75D8C0D9 &&
+Read<ushort>(0x64928A) == 0x9ED9 &&
+Read<uint>(0xD08F88) == 0x49100FF3 &&
+Read<uint>(0xD09112) == 0xFF970A3A &&
+Read<uint>(0x1059D37) == 0x44110FF3 &&
+Read<uint>(0xB1D845) == 0xFC9570F &&
+Read<uint>(0xB1D86F) == 0x15100FF3 &&
+Read<uint>(0x57876F) == 0x44110FF3)
+{
+	WriteAsmHook(code, 0x6F23C6, HookBehavior.Replace)
+	WriteAsmHook(code2, 0x64928A, HookBehavior.Replace)
+	WriteAsmHook(code3, 0xD08F88, HookBehavior.After)
+	WriteAsmHook(code4, 0xD09111, HookBehavior.Replace)
+	WriteAsmHook(code5, 0x1059D37, HookBehavior.Before)
+	WriteAsmHook(code6, 0xB1D845, HookBehavior.Replace)
+	WriteAsmHook(code7, 0xB1D86F, HookBehavior.Replace)
+	WriteAsmHook(code8, 0x57876F, HookBehavior.Before)
+}
 
 Patch "Field of View Adjustment" by "Muzzarino"
 string code = @"push 0x3F800000
