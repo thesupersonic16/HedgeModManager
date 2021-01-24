@@ -210,6 +210,12 @@ fidiv dword ptr [0x01DFE22C]
 fdivrp st(1),st(0)
 fmulp st(1),st(0)"
 
+string code9 = @"fld st(0)
+fild dword ptr [0x01DFE228]
+fidiv dword ptr [0x01DFE22C]
+fdivrp st(1),st(0)
+fmulp st(1),st(0)"
+
 if (Read<uint>(0x6F23C6) == 0x75D8C0D9 &&
 Read<ushort>(0x64928A) == 0x9ED9 &&
 Read<uint>(0xD08F88) == 0x49100FF3 &&
