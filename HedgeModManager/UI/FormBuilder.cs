@@ -25,7 +25,7 @@ namespace HedgeModManager.UI
 
         public static Thickness GroupMargin = new Thickness(0, 0, 0, 15);
 
-        public static Panel Build(FormSchema schema)
+        public static Panel Build(FormSchema schema, Action<string> onDescriptionHover = null)
         {
             var stack = new StackPanel();
             foreach (var group in schema.Groups)
@@ -35,7 +35,9 @@ namespace HedgeModManager.UI
                 box.Content = panel;
                 foreach (var element in group.Elements)
                 {
-                    panel.Children.Add(new FormItem(element, schema));
+                    var item = new FormItem(element, schema);
+                    item.OnDescriptionHover += onDescriptionHover;
+                    panel.Children.Add(item);
                 }
 
                 stack.Children.Add(box);

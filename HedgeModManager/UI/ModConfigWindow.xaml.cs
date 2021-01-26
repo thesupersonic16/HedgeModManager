@@ -40,11 +40,17 @@ namespace HedgeModManager.UI
             {
                 Schema.LoadValuesFromIni(path);
             }
+
             Title = Localise("ModConfigUITitle", Mod.Title);
-            var panel = FormBuilder.Build(mod.ConfigSchema);
+            var panel = FormBuilder.Build(mod.ConfigSchema, OnItemHover);
             panel.HorizontalAlignment = HorizontalAlignment.Stretch;
             panel.VerticalAlignment = VerticalAlignment.Stretch;
             ItemsHost.Children.Add(panel);
+        }
+
+        private void OnItemHover(string des)
+        {
+            DescriptionBx.Text = des;
         }
 
         private void UI_OK_Click(object sender, RoutedEventArgs e)

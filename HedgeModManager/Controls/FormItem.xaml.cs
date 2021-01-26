@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace HedgeModManager.Controls
     /// </summary>
     public partial class FormItem : UserControl
     {
+        public event Action<string> OnDescriptionHover;
+        
         public FormSchema Schema { get; }
         public FormItem()
         {
@@ -34,10 +37,16 @@ namespace HedgeModManager.Controls
             Schema = schema;
             if (element.Description != null && element.Description.Count > 0)
             {
-                DisplayName.ToolTip = new ToolTip() { Content = string.Join("\r\n", element.Description) };
+                DisplayName.DataContext = string.Join("\r\n", element.Description);
+
+                DisplayName.MouseEnter += ItemOnMouseEnter;
             }
+
             DisplayName.Content = element.DisplayName;
             DisplayValue.Child = CreateUiElement(element);
+
+            DisplayValue.DataContext = DisplayName.DataContext;
+            DisplayValue.MouseEnter += ItemOnMouseEnter;
         }
 
         public UIElement CreateUiElement(FormElement element)
@@ -100,9 +109,10 @@ namespace HedgeModManager.Controls
 
                             if (val.Description != null && val.Description.Count > 0)
                             {
-                                item.ToolTip = new ToolTip() {Content = string.Join("\r\n", val.Description)};
+                                item.DataContext = string.Join("\r\n", val.Description);
                             }
 
+                            item.MouseMove += ItemOnMouseEnter;
                             box.Items.Add(item);
                         }
 
@@ -127,6 +137,11 @@ namespace HedgeModManager.Controls
                     }
                 }
             }
+        }
+
+        private void ItemOnMouseEnter(object sender, MouseEventArgs e)
+        {
+            OnDescriptionHover?.Invoke((sender as FrameworkElement)?.DataContext as string);
         }
 
         TextBox CreateTextBox(FormElement context, string binding)
