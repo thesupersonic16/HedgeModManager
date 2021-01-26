@@ -204,12 +204,6 @@ fld1
 fsubrp st(1),st(0)
 fstp dword ptr [esp+0x4C]"
 
-string code2 = @"fld st(0)
-fild dword ptr [0x01DFE228]
-fidiv dword ptr [0x01DFE22C]
-fdivrp st(1),st(0)
-fmulp st(1),st(0)"
-
 string code9 = @"fld st(0)
 fild dword ptr [0x01DFE228]
 fidiv dword ptr [0x01DFE22C]
