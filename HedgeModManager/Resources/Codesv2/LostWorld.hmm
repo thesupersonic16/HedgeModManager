@@ -7,7 +7,7 @@ Patch "Disable Super Music" by "Sajid"
 WriteNop(ASLR(0x91ABAD), 6)
 
 Patch "Invisible Cloak Sonic (Requires jump or spin)" by "Muzzarino"
-WriteNop(ASLR(0x45C68E), 6)
+WriteNop(ASLR(0x85C68E), 6)
 
 Patch "Enable Stage Retry Option" by "Sajid"
 WriteProtected<byte>(ASLR(0x91A0E5), 0xB2)
