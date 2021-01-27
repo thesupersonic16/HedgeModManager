@@ -6,7 +6,7 @@ WriteNop(ASLR(0x866900), 2)
 Patch "Disable Super Music" by "Sajid"
 WriteNop(ASLR(0x91ABAD), 6)
 
-Patch "Invisible Cloak Sonic" by "Muzzarino"
+Patch "Invisible Cloak Sonic (Requires jump or spin)" by "Muzzarino"
 WriteNop(ASLR(0x45C68E), 6)
 
 Patch "Enable Stage Retry Option" by "Sajid"
@@ -186,13 +186,25 @@ string code8 = $@"movss xmm4,[edi+0x1B0]
 divss xmm4,[edi+0x1B4]
 maxss xmm4,[{ASLR(0xD56D30)}]
 divss xmm4,[{ASLR(0xD56D30)}]
-mulss xmm7,xmm4"
+divss xmm7,xmm4"
 
 string code9 = $@"movss xmm6,[{ASLR(0xD56D30)}]
 divss xmm0,[{ASLR(0xD56D2C)}]
 minss xmm6,xmm0
 divss xmm6,xmm0
 movss xmm0,xmm6"
+
+string code10 = $@"movss xmm5,[{ASLR(0xE72E24)}]
+divss xmm5,[{ASLR(0xD56D2C)}]
+minss xmm5,[{ASLR(0xD56D30)}]
+mulss xmm2,xmm5
+divss xmm2,[{ASLR(0xD56D30)}]"
+
+string code11 = $@"movss xmm5,[{ASLR(0xE72E24)}]
+divss xmm5,[{ASLR(0xD56D2C)}]
+maxss xmm5,[{ASLR(0xD56D30)}]
+mulss xmm1,xmm5
+divss xmm1,[{ASLR(0xD56D30)}]"
 
 if (Read<byte>(ASLR(0x4178AB)) == 0xE8)
 {
@@ -215,4 +227,6 @@ if (Read<byte>(ASLR(0x4178AB)) == 0xE8)
 	WriteAsmHook(code7, ASLR(0x49C380), HookBehavior.Before)
 	WriteAsmHook(code8, ASLR(0x49C3BA), HookBehavior.Before)
 	WriteAsmHook(code9, ASLR(0x41EA22), HookBehavior.Before)
+	WriteAsmHook(code10, ASLR(0x8FF420), HookBehavior.Before)
+	WriteAsmHook(code11, ASLR(0x8FF456), HookBehavior.Before)
 }
