@@ -197,8 +197,8 @@ movss xmm0,xmm6"
 string code10 = $@"movss xmm5,[{ASLR(0xE72E24)}]
 divss xmm5,[{ASLR(0xD56D2C)}]
 minss xmm5,[{ASLR(0xD56D30)}]
-mulss xmm2,xmm5
-divss xmm2,[{ASLR(0xD56D30)}]"
+divss xmm2,xmm5
+mulss xmm2,[{ASLR(0xD56D30)}]"
 
 string code11 = $@"movss xmm5,[{ASLR(0xE72E24)}]
 divss xmm5,[{ASLR(0xD56D2C)}]
