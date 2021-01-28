@@ -105,7 +105,7 @@ namespace HMMCodes
         public static void WriteAsmHook(string instructions, long address, HookBehavior behavior = HookBehavior.After, HookParameter parameter = HookParameter.Jump)
             => MemoryProvider.WriteASMHook(instructions, (IntPtr)address, (int)behavior, (int)parameter);
         
-        public static void WriteAsmHook(long address, HookBehavior behavior, HookParameter parameter params string[] instructions)
+        public static void WriteAsmHook(long address, HookBehavior behavior, HookParameter parameter, params string[] instructions)
             => WriteAsmHook(string.Join("\r\n", instructions), address, behavior, parameter);
         
         public static void WriteNop(long address, long count)
