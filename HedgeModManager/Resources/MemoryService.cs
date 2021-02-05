@@ -101,13 +101,19 @@ namespace HMMCodes
             Write<T>(address, data);
             VirtualProtect((IntPtr)address, (IntPtr)(sizeof(T) * data.Length), oldProtect, out _);
         }
-        
+
         public static void WriteAsmHook(string instructions, long address, HookBehavior behavior = HookBehavior.After, HookParameter parameter = HookParameter.Jump)
             => MemoryProvider.WriteASMHook(instructions, (IntPtr)address, (int)behavior, (int)parameter);
-        
+
+        public static void WriteAsmHook(string instructions, long address, HookParameter parameter = HookParameter.Jump, HookBehavior behavior = HookBehavior.After)
+            => WriteAsmHook(instructions, address, behavior, parameter);
+
         public static void WriteAsmHook(long address, HookBehavior behavior, HookParameter parameter, params string[] instructions)
             => WriteAsmHook(string.Join("\r\n", instructions), address, behavior, parameter);
-        
+
+        public static void WriteAsmHook(long address, HookBehavior behavior, params string[] instructions)
+            => WriteAsmHook(string.Join("\r\n", instructions), address, behavior, HookParameter.Jump);
+
         public static void WriteNop(long address, long count)
         {
             for (long i = 0; i < count; i++)
@@ -127,9 +133,9 @@ namespace HMMCodes
 		Replace
 	}
 	
-    public enum HookBehavior
-	{
-		Call,
-		Jump
-	}
+    public enum HookParameter
+    {
+        Jump = 0,
+        Call = 1,
+    }
 }
