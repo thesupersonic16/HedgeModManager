@@ -12,15 +12,15 @@ namespace HMMCodes
         [DllImport("kernel32.dll")]
         public static extern bool VirtualProtect(IntPtr lpAddress,
                 IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
-        
-        [DllImport("kernel32.dll", CharSet=CharSet.Auto)]
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr GetModuleHandle(string lpModuleName);
-        
+
         public static long ModuleBase = (long)GetModuleHandle(null);
-        
+
         [DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(Keys vKey);
-        
+
         public static dynamic MemoryProvider;
 
         public static void RegisterProvider(object provider)
@@ -28,73 +28,73 @@ namespace HMMCodes
             MemoryProvider = provider;
         }
 
-       public static long ASLR(long address)
-            => ModuleBase + (address - 0x400000);
-       
+        public static long ASLR(long address)
+             => ModuleBase + (address - 0x400000);
+
         public static void Write(IntPtr address, IntPtr dataPtr, IntPtr length)
             => MemoryProvider.WriteMemory(address, dataPtr, length);
 
         public static void Write<T>(IntPtr address, T data)
             => MemoryProvider.WriteMemory<T>(address, data);
-        
+
         public static void Write<T>(long address, params T[] data)
             => MemoryProvider.WriteMemory<T>((IntPtr)address, data);
-        
+
         public static void Write<T>(long address, T data)
             => Write<T>((IntPtr)address, data);
-        
+
         public static char[] Read(IntPtr address, IntPtr length)
             => MemoryProvider.ReadMemory(address, length);
-        
+
         public static T Read<T>(IntPtr address) where T : unmanaged
             => MemoryProvider.ReadMemory<T>(address);
-            
+
         public static T Read<T>(long address) where T : unmanaged
             => Read<T>((IntPtr)address);
-            
+
         public static byte[] Assemble(string source)
             => MemoryProvider.AssembleInstructions(source);
-        
+
         public static long GetPointer(long address, params long[] offsets)
         {
-            if(address == 0)
+            if (address == 0)
                 return 0;
-            
+
             var result = (long)(*(void**)address);
-            
-            if(result == 0)
+
+            if (result == 0)
                 return 0;
-            
-            if(offsets.Length > 0)
+
+            if (offsets.Length > 0)
             {
-                for(int i = 0; i < offsets.Length - 1; i++)
+                for (int i = 0; i < offsets.Length - 1; i++)
                 {
-                    result = (long)((void *)(result + offsets[i]));
-                    result = (long)(*(void **)result);
+                    result = (long)((void*)(result + offsets[i]));
+                    result = (long)(*(void**)result);
                     if (result == 0)
                         return 0;
                 }
-                
+
                 return result + offsets[offsets.Length - 1];
             }
-            
+
             return result;
         }
-        
+
         public static void WriteProtected(IntPtr address, IntPtr dataPtr, IntPtr length)
         {
             VirtualProtect((IntPtr)address, length, 0x04, out uint oldProtect);
             Write(address, dataPtr, length);
             VirtualProtect((IntPtr)address, length, oldProtect, out _);
         }
-        
+
         public static void WriteProtected<T>(long address, T data) where T : unmanaged
         {
             VirtualProtect((IntPtr)address, (IntPtr)sizeof(T), 0x04, out uint oldProtect);
             Write<T>(address, data);
             VirtualProtect((IntPtr)address, (IntPtr)sizeof(T), oldProtect, out _);
         }
-        
+
         public static void WriteProtected<T>(long address, params T[] data) where T : unmanaged
         {
             VirtualProtect((IntPtr)address, (IntPtr)(sizeof(T) * data.Length), 0x04, out uint oldProtect);
@@ -104,6 +104,12 @@ namespace HMMCodes
 
         public static void WriteAsmHook(string instructions, long address, HookBehavior behavior = HookBehavior.After, HookParameter parameter = HookParameter.Jump)
             => MemoryProvider.WriteASMHook(instructions, (IntPtr)address, (int)behavior, (int)parameter);
+
+        public static uint NopInstructions(long address, uint count)
+            => MemoryProvider.NopInstructions((IntPtr)address, count);
+
+        public static uint NopInstruction(long address)
+            => NopInstructions(address, 1);
 
         public static void WriteAsmHook(string instructions, long address, HookParameter parameter = HookParameter.Jump, HookBehavior behavior = HookBehavior.After)
             => WriteAsmHook(instructions, address, behavior, parameter);
@@ -121,18 +127,18 @@ namespace HMMCodes
                 WriteProtected<byte>(address + i, 0x90);
             }
         }
-        
+
         public static bool IsKeyDown(Keys key)
             => GetAsyncKeyState(key) > 0;
     }
-    
+
     public enum HookBehavior
-	{
-		After,
-		Before,
-		Replace
-	}
-	
+    {
+        After,
+        Before,
+        Replace
+    }
+
     public enum HookParameter
     {
         Jump = 0,
