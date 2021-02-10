@@ -17,8 +17,9 @@ namespace HedgeModManager
         /// Builds a snapshot from the user's system and returns a zip file
         /// </summary>
         /// <param name="encrypt">Should the snapshot data be encrypted</param>
+        /// <param name="extraData">Extra data to be included in the snapshot</param>
         /// <returns></returns>
-        public static byte[] Build(bool encrypt = true)
+        public static byte[] Build(bool encrypt = true, params SnapshotFile[] extraData)
         {
             using (var stream = new MemoryStream())
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Create))
@@ -29,6 +30,15 @@ namespace HedgeModManager
                 using (var writer = new StreamWriter(file))
                 {
                     writer.Write(CreateReport());
+                }
+
+                foreach (var file in extraData)
+                {
+                    var entry = archive.CreateEntry(file.Name);
+                    using (var entryStream = entry.Open())
+                    {
+                        entryStream.Write(file.Data, 0, file.Data.Length);
+                    }
                 }
 
                 try
@@ -223,6 +233,18 @@ namespace HedgeModManager
                     keyLevel -= 1;
                 }
             }
+        }
+    }
+
+    public class SnapshotFile
+    {
+        public string Name { get; set; }
+        public byte[] Data { get; set; }
+
+        public SnapshotFile(string name, byte[] data)
+        {
+            Name = name;
+            Data = data;
         }
     }
 }

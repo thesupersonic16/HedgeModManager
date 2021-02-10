@@ -116,7 +116,10 @@ namespace HedgeModManager
                 var path =
                     $"HMM_Snapshot_{time.Date:00}{time.Month:00}{time.Year:0000}{time.Hour:00}{time.Minute:00}{time.Second:00}.txt";
 
-                File.WriteAllText(path, Convert.ToBase64String(SnapshotBuilder.Build()));
+                File.WriteAllText(path,
+                    Convert.ToBase64String(SnapshotBuilder.Build(true,
+                        new SnapshotFile("Exception.txt", Encoding.UTF8.GetBytes(_Exception.ToString())))));
+
                 Process.Start($"explorer.exe", $"/select,\"{Path.GetFullPath(path)}\"");
                 HedgeApp.CreateOKMessageBox("Hedge Mod Manager", $"Please attach the file\n{path}\nto the issue.").ShowDialog();
             }
