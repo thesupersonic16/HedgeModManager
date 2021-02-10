@@ -530,7 +530,7 @@ namespace HedgeModManager
         {
             var info = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
             
-            if(CodesDatabase.FileVersion >= info.MinCodeVersion)
+            if(CodesDatabase.FileVersion >= info.MinCodeVersion && CodesDatabase.FileVersion <= info.MaxCodeVersion)
                 return;
 
             var dialog = new HedgeMessageBox(Localise("CommonUIWarning"), Localise("CodesUIVersionIncompatible"));
@@ -874,14 +874,16 @@ namespace HedgeModManager
             {
                 HedgeApp.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
 
-                // Remove old patch
-                string exePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName);
-                if (HedgeApp.IsCPKREDIRInstalled(exePath))
-                    HedgeApp.InstallCPKREDIR(exePath, false);
-
-                // Update CPKREDIR if needed
                 if (HedgeApp.CurrentGame.SupportsCPKREDIR)
+                {
+                    // Remove old patch
+                    string exePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName);
+                    if (HedgeApp.IsCPKREDIRInstalled(exePath))
+                        HedgeApp.InstallCPKREDIR(exePath, false);
+
+                    // Update CPKREDIR if needed
                     HedgeApp.UpdateCPKREDIR();
+                }
 
                 ResetWatchers();
                 Refresh();

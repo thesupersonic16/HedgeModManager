@@ -13,6 +13,7 @@ namespace HedgeModManager
     public static class Games
     {
         public const uint CodeLoaderMinCodeVersionStringId = 101;
+        public const uint CodeLoaderMaxCodeVersionStringId = 102;
         public const string EmbeddedCPKREDIRVersion = "0.5.0.8";
 
         public static Game Unknown = new Game();
@@ -123,6 +124,28 @@ namespace HedgeModManager
         public override string ToString()
         {
             return GameName;
+        }
+    }
+
+    public class CodeLoaderInfo
+    {
+        public Version LoaderVersion { get; set; }
+        public Version MinCodeVersion { get; set; }
+        public Version MaxCodeVersion { get; set; }
+
+        public CodeLoaderInfo(Version loader)
+        {
+            LoaderVersion = loader;
+        }
+
+        public CodeLoaderInfo(Version loader, Version minCode) : this(loader)
+        {
+            MinCodeVersion = minCode;
+        }
+
+        public CodeLoaderInfo(Version loader, Version minCode, Version maxCode) : this(loader, minCode)
+        {
+            MaxCodeVersion = maxCode;
         }
     }
 }

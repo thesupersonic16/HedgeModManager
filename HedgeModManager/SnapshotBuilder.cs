@@ -88,7 +88,8 @@ namespace HedgeModManager
 
                 try
                 {
-                    body.AppendLine($"CPKREDIR Installed: {HedgeApp.IsCPKREDIRInstalled(gamePath)}");
+                    if (HedgeApp.CurrentGame.SupportsCPKREDIR)
+                        body.AppendLine($"CPKREDIR Installed: {HedgeApp.IsCPKREDIRInstalled(gamePath)}");
                 }
                 catch { }
             }

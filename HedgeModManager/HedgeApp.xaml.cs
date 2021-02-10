@@ -283,9 +283,12 @@ namespace HedgeModManager
             // Try to remove old patch
             try
             {
-                string exePath = Path.Combine(StartDirectory, CurrentGame.ExecuteableName);
-                if (IsCPKREDIRInstalled(exePath))
-                    InstallCPKREDIR(exePath, false);
+                if (CurrentGame.SupportsCPKREDIR)
+                {
+                    string exePath = Path.Combine(StartDirectory, CurrentGame.ExecuteableName);
+                    if (IsCPKREDIRInstalled(exePath))
+                        InstallCPKREDIR(exePath, false);
+                }
             }
             catch{ }
 
@@ -670,11 +673,12 @@ namespace HedgeModManager
             }
         }
 
-        public static (Version LoaderVersion, Version MinCodeVersion) GetCodeLoaderInfo(Game game)
+        public static CodeLoaderInfo GetCodeLoaderInfo(Game game)
         {
             try
             {
                 var minCodeVersion = "0.1";
+                var maxCodeVersion = minCodeVersion;
                 var loaderVersion = GetCodeLoaderVersion(game);
 
                 if (loaderVersion != minCodeVersion)
@@ -682,14 +686,18 @@ namespace HedgeModManager
                     using (var res = new DllResource(Path.Combine(StartDirectory, game.CustomLoaderFileName)))
                     {
                         minCodeVersion = res.GetString(Games.CodeLoaderMinCodeVersionStringId);
+                        maxCodeVersion = res.GetString(Games.CodeLoaderMaxCodeVersionStringId);
                     }
                 }
 
-                return (loaderVersion != "0.1" ? new Version(loaderVersion) : null, new Version(string.IsNullOrEmpty(minCodeVersion) ? "9999.9999" : minCodeVersion));
+                var lowCodeVersion = new Version(string.IsNullOrEmpty(minCodeVersion) ? "9999.9999" : minCodeVersion);
+                return new CodeLoaderInfo(loaderVersion != "0.1" ? new Version(loaderVersion) : null,
+                    lowCodeVersion,
+                    string.IsNullOrEmpty(maxCodeVersion) ? lowCodeVersion : new Version(maxCodeVersion));
             }
             catch
             {
-                return (new Version("0.1"), new Version("9999.9999"));
+                return new CodeLoaderInfo(new Version("0.1"), new Version("9999.9999"));
             }
         }
 
