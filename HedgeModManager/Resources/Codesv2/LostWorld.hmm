@@ -233,3 +233,12 @@ if (Read<byte>(ASLR(0x4178AB)) == 0xE8)
 	WriteAsmHook(code10, ASLR(0x8FF420), HookBehavior.Before)
 	WriteAsmHook(code11, ASLR(0x8FF456), HookBehavior.Before)
 }
+
+Patch "Disable Lockon (Except for Unbeatable Bosses)" by "Sajid"
+WriteProtected<uint>(ASLR(0x00537D15), 0x5005)
+WriteProtected<uint>(ASLR(0x0053AFD1), 0x1003)
+WriteProtected<uint>(ASLR(0x005A8121), 0x1003)
+WriteProtected<uint>(ASLR(0x005C7A91), 0x1003)
+WriteProtected<uint>(ASLR(0x00587A71), 0x1003)
+WriteProtected<uint>(ASLR(0x0059889A), 0x5005)
+WriteProtected<uint>(ASLR(0x0058FDC1), 0x1003)
