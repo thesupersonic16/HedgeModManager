@@ -10,9 +10,12 @@ Patch "Invisible Cloak Sonic (Requires jump or spin)" by "Muzzarino"
 WriteNop(ASLR(0x85C68E), 6)
 
 Patch "Enable Stage Retry Option" by "Sajid"
-WriteProtected<byte>(ASLR(0x91A0E5), 0xB2)
-WriteProtected<byte>(ASLR(0x91A0E6), 0x01)
-WriteNop(ASLR(0x91A0E7), 0x01)
+WriteAsmHook
+(
+	ASLR(0x005169E3),
+	HookBehavior.After,
+	"mov DWORD PTR [ebp+8], 1"
+)
 
 Patch "Widescreen Support" by "Brandondorf9999"
 uint baseAddress = (uint)0x400C00
