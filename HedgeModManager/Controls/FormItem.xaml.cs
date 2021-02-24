@@ -37,7 +37,7 @@ namespace HedgeModManager.Controls
             Schema = schema;
             if (element.Description != null && element.Description.Count > 0)
             {
-                DisplayName.DataContext = string.Join("\r\n", element.Description);
+                DisplayName.Tag = string.Join("\r\n", element.Description);
 
                 DisplayName.MouseEnter += ItemOnMouseEnter;
             }
@@ -45,7 +45,7 @@ namespace HedgeModManager.Controls
             DisplayName.Content = element.DisplayName;
             DisplayValue.Child = CreateUiElement(element);
 
-            DisplayValue.DataContext = DisplayName.DataContext;
+            DisplayValue.Tag = DisplayName.Tag;
             DisplayValue.MouseEnter += ItemOnMouseEnter;
         }
 
@@ -109,7 +109,7 @@ namespace HedgeModManager.Controls
 
                             if (val.Description != null && val.Description.Count > 0)
                             {
-                                item.DataContext = string.Join("\r\n", val.Description);
+                                item.Tag = string.Join("\r\n", val.Description);
                             }
 
                             item.MouseMove += ItemOnMouseEnter;
@@ -141,7 +141,7 @@ namespace HedgeModManager.Controls
 
         private void ItemOnMouseEnter(object sender, MouseEventArgs e)
         {
-            OnDescriptionHover?.Invoke((sender as FrameworkElement)?.DataContext as string);
+            OnDescriptionHover?.Invoke((sender as FrameworkElement)?.Tag as string);
         }
 
         TextBox CreateTextBox(FormElement context, string binding)
