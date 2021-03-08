@@ -242,3 +242,6 @@ WriteProtected<uint>(ASLR(0x005C7A91), 0x1003)
 WriteProtected<uint>(ASLR(0x00587A71), 0x1003)
 WriteProtected<uint>(ASLR(0x0059889A), 0x5005)
 WriteProtected<uint>(ASLR(0x0058FDC1), 0x1003)
+
+Patch "Disable Voice Option Completely" by "M&M"
+WriteNop(ASLR(0x4A3D82), 5)
