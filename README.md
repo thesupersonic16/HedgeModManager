@@ -31,7 +31,7 @@ Mods designed for HedgeModManager needs to come in the form of folders that cont
 
 So long as the structure of your mod remains in this way, virtually any file in the game can be modified and released as part of your mod.
 
-As an example, the extremely basic "Tanic the Hedgehog" recolor mod for Sonic Generations, Sonic Lost World and Sonic Forces has a file/folder structure that goes like so:
+As an example, a basic character mod for Sonic Generations, Sonic Lost World and Sonic Forces would have a file/folder structure that goes like so:
 - A "mod.ini" file
 - A "disk" folder
   - A "bb3" folder (Sonic Generations)
@@ -44,20 +44,6 @@ As an example, the extremely basic "Tanic the Hedgehog" recolor mod for Sonic Ge
     - A "character" folder
       - Sonic.pac
       - Sonic.pac.000
-      - SonicClassic.pac
-      - SonicClassic.pac.000
-
-Wereas the "MLG Speedrun Zone 1" mod (which modifies certain files not on the root of the .cpk) has a file/folder structure that goes like so:
-
-- A "mod.ini" file
-- A "disk" folder
-  - A "sonic2013_patch_0" folder
-    - A "set" folder
-      - w1a01_obj_00.orc
-      - w1a01_obj_01.orc
-      - w1a01_obj_02.orc
-      - w1a01_obj_03.orc
-    - actstgmission.lua
 
 ### The mod.ini file
 The mod.ini file is a mod configuration file that details all the information about your mod, as well as how CPKREDIR should load the mod.
@@ -95,7 +81,11 @@ IncludeDirCount=1 ; Amount of includes, if unsure keep at 1
 
 **IncludeDirCount** Specifies how many folders will be included with your mod.
 
-**UpdateServer** A URL to a directory on a HTTP or HTTPS server containing a mod_version.ini and mod_files.txt file using the SonicGMI update format. e.g. ``UpdateServer="https://colorsproject.000webhostapp.com/qua200/"``
+**UpdateServer** A URL to a directory on a HTTP or HTTPS server containing a mod_version.ini and mod_files.txt file using the SonicGMI update format.
+Example:
+```ini
+UpdateServer="https://raw.githubusercontent.com/PTKickass/ModUpdates/master/SonicGenerations/SonicUnleashedHUD/"
+```
 
 **DLLFile** A path to the mod's DLL file. Only use this if the mod contains a dll file. If not remove this line.
 
@@ -123,7 +113,11 @@ HedgeModManager uses a custom mod updater which is also backwards compatible wit
  
 To get started, before releasing your mod, you will need access to a HTTP server with a folder for your mod. From here this folder will be refered as the update server.
  
-In your mod.ini file add a field in the `[Main]` section called `UpdateServer` and set the value to the URL of your mod update folder including the forward slash at the end. e.g. ``UpdateServer="https://raw.githubusercontent.com/blueskythlikesclouds/DllMods/master/UpdateServer/GenerationsD3D9Ex/"``
+In your mod.ini file add a field in the `[Main]` section called `UpdateServer` and set the value to the URL of your mod update folder including the forward slash at the end.
+Example:
+```ini
+UpdateServer="https://raw.githubusercontent.com/PTKickass/ModUpdates/master/SonicGenerations/SonicUnleashedHUD/"
+```
 
 ### Preparing the server
 On your server create a folder for the mod you want to allow updating for and create two files `mod_files.txt` which will be blank for now and a file called `mod_version.ini` This file will contain the information about the update and the changelog for SonicGMI users. 
