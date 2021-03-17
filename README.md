@@ -123,7 +123,7 @@ HedgeModManager uses a custom mod updater which is also backwards compatible wit
  
 To get started, before releasing your mod, you will need access to a HTTP server with a folder for your mod. From here this folder will be refered as the update server.
  
-In your mod.ini file add a field in the `[Main]` section called `UpdateServer` and set the value to the URL of your mod update folder including the forward slash at the end. e.g. ``UpdateServer="https://colorsproject.000webhostapp.com/qua200/"``
+In your mod.ini file add a field in the `[Main]` section called `UpdateServer` and set the value to the URL of your mod update folder including the forward slash at the end. e.g. ``UpdateServer="https://raw.githubusercontent.com/blueskythlikesclouds/DllMods/master/UpdateServer/GenerationsD3D9Ex/"``
 
 ### Preparing the server
 On your server create a folder for the mod you want to allow updating for and create two files `mod_files.txt` which will be blank for now and a file called `mod_version.ini` This file will contain the information about the update and the changelog for SonicGMI users. 
