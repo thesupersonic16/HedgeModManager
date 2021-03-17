@@ -37,7 +37,7 @@
                     <Label Content="Korama"/>
                     <Label Content="Skyth"/>
                     <Label Content="PTKickass"/>
-                    <Label Content="M&M"/>
+                    <Label Content="M&amp;M"/>
                     <Label Content="MainMemory"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
