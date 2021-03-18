@@ -960,7 +960,14 @@ namespace HedgeModManager
 
         private void UI_ContextMenu_Opening(object sender, ContextMenuEventArgs e)
         {
-            HedgeApp.FindChild<MenuItem>(((ListViewItem)sender).ContextMenu, "ContextMenuItemConfigure").IsEnabled = ViewModel.SelectedMod.HasSchema;
+            if (!(sender is ListViewItem listItem))
+                return;
+
+            var item = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemConfigure");
+            if (item == null)
+                return;
+
+            item.IsEnabled = ViewModel.SelectedMod.HasSchema;
         }
 
         private void ModsList_OnPreviewKeyDown(object sender, KeyEventArgs e)
