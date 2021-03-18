@@ -130,7 +130,7 @@
                         <ControlTemplate TargetType="{x:Type Window}">
                             <Grid>
                                 <Border x:Name="OutlineBorder" BorderThickness="1" Background="Transparent" IsHitTestVisible="False" BorderBrush="#017ACC" Panel.ZIndex="2"/>
-                                <Grid Margin="1" Background="{TemplateBinding Background}" Loaded="Window_Loaded" Panel.ZIndex="1">
+                                <Grid x:Name="WindowGrid" Margin="1" Background="{TemplateBinding Background}" Loaded="Window_Loaded" Panel.ZIndex="1">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="22"/>
                                         <RowDefinition Height="*"/>
@@ -161,6 +161,9 @@
                                 </Trigger>
                                 <Trigger Property="IsActive" Value="True">
                                     <Setter TargetName="OutlineBorder" Property="Opacity" Value="1"/>
+                                </Trigger>
+                                <Trigger Property="WindowState" Value="Maximized">
+                                    <Setter TargetName="WindowGrid" Property="Margin" Value="8"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
