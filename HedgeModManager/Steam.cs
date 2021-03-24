@@ -66,12 +66,16 @@ namespace HedgeModManager
                     string lwPath = Path.Combine(path, "Sonic Lost World\\slw.exe");
                     string gensPath = Path.Combine(path, "Sonic Generations\\SonicGenerations.exe");
                     string forcesPath = Path.Combine(path, "SonicForces\\build\\main\\projects\\exec\\Sonic Forces.exe");
-                    if (File.Exists(lwPath))
-                        games.Add(new SteamGame("Sonic Lost World"  , lwPath, "329440"));
+                    string tenpexPath = Path.Combine(path, "PuyoPuyoTetris2\\PuyoPuyoTetris2.exe");
+
                     if (File.Exists(gensPath))
-                        games.Add(new SteamGame("Sonic Generations" , gensPath, "71340"));
+                        games.Add(new SteamGame(Games.SonicGenerations.GameName, gensPath, Games.SonicGenerations.AppID));
+                    if (File.Exists(lwPath))
+                        games.Add(new SteamGame(Games.SonicLostWorld.GameName, lwPath, Games.SonicLostWorld.AppID));
                     if (File.Exists(forcesPath))
-                        games.Add(new SteamGame("Sonic Forces"      , forcesPath, "637100"));
+                        games.Add(new SteamGame(Games.SonicForces.GameName, forcesPath, Games.SonicForces.AppID));
+                    if (File.Exists(tenpexPath))
+                        games.Add(new SteamGame(Games.Tenpex.GameName, tenpexPath, Games.Tenpex.AppID));
                 }
             }
 

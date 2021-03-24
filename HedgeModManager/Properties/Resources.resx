@@ -195,4 +195,10 @@ Would you like create a mods folder?</value>
   <data name="URL_LOADERS_INI" xml:space="preserve">
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini</value>
   </data>
+  <data name="URL_TML_CODES" xml:space="preserve">
+    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/PPT2.hmm</value>
+  </data>
+  <data name="URL_TML_DL" xml:space="preserve">
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/TenpexModLoader.dll</value>
+  </data>
 </root>

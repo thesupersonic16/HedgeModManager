@@ -81,6 +81,7 @@ namespace HedgeModManager
         public void SetupFirstTime()
         {
             Directory.CreateDirectory(RootDirectory);
+            MainWindow.CodesDatabase = new CodeFile();
             SaveDB();
         }
 

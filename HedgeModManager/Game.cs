@@ -68,11 +68,29 @@ namespace HedgeModManager
             CodesURL = Resources.URL_FML_CODES
         };
 
+        public static Game Tenpex = new Game()
+        {
+            GameName = "Puyo Puyo Tetris 2",
+            ExecuteableName = "PuyoPuyoTetris2.exe",
+            HasCustomLoader = true,
+            SupportsCPKREDIR = false,
+            ModLoaderDownloadURL = Resources.URL_TML_DL,
+            ModLoaderData = null,
+            CustomLoaderName = "Tenpex Mod Loader",
+            CustomLoaderFileName = "d3d11.dll",
+            AppID = "1259790",
+            DirectXVersion = 11,
+            GBProtocol = "hedgemmtenpex",
+            Is64Bit = true,
+            CodesURL = Resources.URL_TML_CODES
+        };
+
         public static IEnumerable<Game> GetSupportedGames()
         {
             yield return SonicGenerations;
             yield return SonicLostWorld;
             yield return SonicForces;
+            yield return Tenpex;
         }
     }
 
