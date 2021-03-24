@@ -105,13 +105,7 @@ namespace HMMCodes
         public static void WriteAsmHook(string instructions, long address, HookBehavior behavior = HookBehavior.After, HookParameter parameter = HookParameter.Jump)
             => MemoryProvider.WriteASMHook(instructions, (IntPtr)address, (int)behavior, (int)parameter);
 
-        public static uint NopInstructions(long address, uint count)
-            => MemoryProvider.NopInstructions((IntPtr)address, count);
-
-        public static uint NopInstruction(long address)
-            => NopInstructions(address, 1);
-
-        public static void WriteAsmHook(string instructions, long address, HookParameter parameter = HookParameter.Jump, HookBehavior behavior = HookBehavior.After)
+        public static void WriteAsmHook(string instructions, long address, HookParameter parameter, HookBehavior behavior)
             => WriteAsmHook(instructions, address, behavior, parameter);
 
         public static void WriteAsmHook(long address, HookBehavior behavior, HookParameter parameter, params string[] instructions)
@@ -119,6 +113,12 @@ namespace HMMCodes
 
         public static void WriteAsmHook(long address, HookBehavior behavior, params string[] instructions)
             => WriteAsmHook(string.Join("\r\n", instructions), address, behavior, HookParameter.Jump);
+
+        public static uint NopInstructions(long address, uint count)
+            => MemoryProvider.NopInstructions((IntPtr)address, count);
+
+        public static uint NopInstruction(long address)
+            => NopInstructions(address, 1);
 
         public static void WriteNop(long address, long count)
         {

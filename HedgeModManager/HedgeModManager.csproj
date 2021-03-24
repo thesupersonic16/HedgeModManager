@@ -40,9 +40,6 @@
     <None Include="Resources\Keys.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ModLoader\Loaders.zip" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Graphics\icon256.png" />
   </ItemGroup>
   <ItemGroup>
