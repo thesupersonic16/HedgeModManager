@@ -838,11 +838,12 @@ namespace HedgeModManager
                     Author = Environment.UserName
                 };
 
-                //mod.IncludeDirs.Add(".");
+                mod.IncludeDirs.Add(".");
                 var editor = new EditModWindow(mod);
                 if (editor.ShowDialog().Value)
                 {
-                    ModsDatabase.CreateMod(mod, true);
+                    var modDir = HedgeApp.CurrentGame == Games.Tenpex ? "raw" : "disk";
+                    ModsDatabase.CreateMod(mod, modDir, true);
                     RefreshMods();
                 }
             }

@@ -70,7 +70,7 @@ namespace HedgeModManager
         public string CodeFile { get; set; } = string.Empty;
 
         [IniField("Main")]
-        public string ConfigSchemaFile { get; set; } = "ConfigSchema.json";
+        public string ConfigSchemaFile { get; set; } = string.Empty;
 
         // Desc
         [PropertyTools.DataAnnotations.Category("Description")]
