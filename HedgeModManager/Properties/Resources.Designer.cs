@@ -133,7 +133,8 @@ namespace HedgeModManager.Properties {
         ///}
         ///
         ///th {
-        ///    text-al [rest of string was truncated]&quot;;.
+        ///    text-align: left;
+        ///}.
         /// </summary>
         internal static string GBStyleSheet {
             get {
@@ -225,9 +226,9 @@ namespace HedgeModManager.Properties {
         ///        [DllImport(&quot;kernel32.dll&quot;)]
         ///        public static extern bool VirtualProtect(IntPtr lpAddress,
         ///                IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
-        ///        
-        ///        [DllImport(&quot;kernel32.dll&quot;, CharSet=CharSet.Auto)]
-        ///        public static e [rest of string was truncated]&quot;;.
+        ///
+        ///        [DllImport(&quot;kernel32.dll&quot;, CharSet = CharSet.Auto)]
+        ///        public static extern  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MemoryService {
             get {
@@ -363,6 +364,24 @@ namespace HedgeModManager.Properties {
         internal static string URL_LOADERS_INI {
             get {
                 return ResourceManager.GetString("URL_LOADERS_INI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/PPT2.hmm.
+        /// </summary>
+        internal static string URL_TML_CODES {
+            get {
+                return ResourceManager.GetString("URL_TML_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/TenpexModLoader.dll.
+        /// </summary>
+        internal static string URL_TML_DL {
+            get {
+                return ResourceManager.GetString("URL_TML_DL", resourceCulture);
             }
         }
     }

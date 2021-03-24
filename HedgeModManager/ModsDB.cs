@@ -81,6 +81,7 @@ namespace HedgeModManager
         public void SetupFirstTime()
         {
             Directory.CreateDirectory(RootDirectory);
+            MainWindow.CodesDatabase = new CodeFile();
             SaveDB();
         }
 
@@ -383,11 +384,11 @@ namespace HedgeModManager
             }catch{}
         }
 
-        public void CreateMod(ModInfo mod, bool openFolder = false)
+        public void CreateMod(ModInfo mod, string rootDir = "disk", bool openFolder = false)
         {
             var path = Path.Combine(RootDirectory, mod.Title);
             Directory.CreateDirectory(path);
-            Directory.CreateDirectory(Path.Combine(path, "disk"));
+            Directory.CreateDirectory(Path.Combine(path, rootDir));
             mod.RootDirectory = path;
             mod.Save();
 

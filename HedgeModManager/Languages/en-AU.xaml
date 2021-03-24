@@ -25,6 +25,7 @@
     <system:String x:Key="MainUISave"          >Save</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Save and Play</system:String>
     <system:String x:Key="MainUIPlay"          >Play</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">Failed to download mod loader.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Name</system:String>

@@ -509,7 +509,7 @@ namespace HedgeModManager
         public static HedgeMessageBox CreateOKMessageBox(string header, string message)
         {
             var box = new HedgeMessageBox(header, message);
-            box.AddButton("OK", () => box.Close());
+            box.AddButton(Lang.Localise("CommonUIOK"), () => box.Close());
             return box;
         }
 
@@ -542,7 +542,16 @@ namespace HedgeModManager
                 if (loader != null)
                     File.WriteAllBytes(DLLFileName, loader);
                 else
-                    throw new NotImplementedException("No Loader is available!");
+                {
+                    CreateOKMessageBox("Hedge Mod Manager", Lang.Localise("MainUIMLDownloadFail")).ShowDialog();
+                    if (File.Exists(DLLFileName))
+                    {
+                        try
+                        {
+                            File.Delete(DLLFileName);
+                        }catch{}
+                    }
+                }
             };
 
             downloader.Start();

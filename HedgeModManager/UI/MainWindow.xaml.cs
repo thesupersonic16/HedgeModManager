@@ -529,7 +529,9 @@ namespace HedgeModManager
         protected void CheckCodeCompatibility()
         {
             var info = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
-            
+            if (CodesDatabase.Codes.Count == 0)
+                return;
+
             if(CodesDatabase.FileVersion >= info.MinCodeVersion && CodesDatabase.FileVersion <= info.MaxCodeVersion)
                 return;
 
@@ -838,11 +840,12 @@ namespace HedgeModManager
                     Author = Environment.UserName
                 };
 
-                //mod.IncludeDirs.Add(".");
+                mod.IncludeDirs.Add(".");
                 var editor = new EditModWindow(mod);
                 if (editor.ShowDialog().Value)
                 {
-                    ModsDatabase.CreateMod(mod, true);
+                    var modDir = HedgeApp.CurrentGame == Games.Tenpex ? "raw" : "disk";
+                    ModsDatabase.CreateMod(mod, modDir, true);
                     RefreshMods();
                 }
             }
