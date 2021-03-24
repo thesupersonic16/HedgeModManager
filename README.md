@@ -1,4 +1,7 @@
-# HedgeModManager
+<h1>
+    <img width="48" src="https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/Graphics/icon256.png"> HedgeModManager
+</h1>
+
 A mod manager for Hedgehog Engine games on PC.
 
 ### Current Supported Games
