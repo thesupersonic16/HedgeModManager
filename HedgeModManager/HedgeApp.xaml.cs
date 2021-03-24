@@ -542,7 +542,16 @@ namespace HedgeModManager
                 if (loader != null)
                     File.WriteAllBytes(DLLFileName, loader);
                 else
+                {
                     CreateOKMessageBox("Hedge Mod Manager", Lang.Localise("MainUIMLDownloadFail")).ShowDialog();
+                    if (File.Exists(DLLFileName))
+                    {
+                        try
+                        {
+                            File.Delete(DLLFileName);
+                        }catch{}
+                    }
+                }
             };
 
             downloader.Start();
