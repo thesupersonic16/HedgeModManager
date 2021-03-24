@@ -1,5 +1,11 @@
 # HedgeModManager
-A program for managing mods for Sonic Generations, Sonic Lost World and Sonic Forces on PC.
+A program for managing mods for Hedgehog Engine games on PC.
+
+### Current Supported Games
+- [Sonic Generations](https://store.steampowered.com/app/71340)
+- [Sonic Lost World](https://store.steampowered.com/app/329440)
+- [Sonio Forces](https://store.steampowered.com/app/637100)
+- [Puyo Puyo Tetris 2](https://store.steampowered.com/app/1259790)
 
 ## So how do I use this?
 Its simple, just grab the [latest version from GitHub](https://github.com/thesupersonic16/HedgeModManager/releases/) (or grab the latest compile from [AppVeyor](https://ci.appveyor.com/project/thesupersonic16/slw-mod-loader/branch/rewrite)) then extract all the files anywhere and run HedgeModManager.exe.
@@ -28,10 +34,12 @@ Mods designed for HedgeModManager needs to come in the form of folders that cont
     - All your modified files/folders from the root of Sonic Lost World's sonic2013_0.cpk in their raw form.
   - A "wars_patch" folder (for Sonic Forces)
     - All your modified files/folders from the root of Sonic Forces' wars_0.cpk and wars_1.cpk in their raw form.
+- A "raw" folder (for Puyo Puyo Tetris 2)
+  - All your modified files/folders from the root of Puyo Puyo Tetris 2' raw folder in their raw form.
 
 So long as the structure of your mod remains in this way, virtually any file in the game can be modified and released as part of your mod.
 
-As an example, a basic character mod for Sonic Generations, Sonic Lost World and Sonic Forces would have a file/folder structure that goes like so:
+As an example, a basic (Modern) Sonic character mod would have a file/folder structure that goes like so:
 - A "mod.ini" file
 - A "disk" folder
   - A "bb3" folder (Sonic Generations)
@@ -44,6 +52,11 @@ As an example, a basic character mod for Sonic Generations, Sonic Lost World and
     - A "character" folder
       - Sonic.pac
       - Sonic.pac.000
+- A "raw" folder (Puyo Puyo Tetris 2)
+  - A "ui" folder
+    - A "cutin" folder
+      - ui_cutin_2p_son.pac
+      - ui_cutin_4p_son.pac
 
 ### The mod.ini file
 The mod.ini file is a mod configuration file that details all the information about your mod, as well as how CPKREDIR should load the mod.
