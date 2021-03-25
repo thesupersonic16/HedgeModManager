@@ -34,6 +34,7 @@
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Windows" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MemoryService.cs" />

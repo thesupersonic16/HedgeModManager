@@ -23,13 +23,13 @@
         </ContextMenu>
     </Window.Resources>
     <Grid>
-        <Grid Margin="-3,2,-3,-1.2">
+        <Grid Margin="-3,2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Label x:Name="StatusLbl" Margin="0,-5,0,0" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                <TextBlock x:Name="StatusLbl" Margin="175,2,4,4" FontSize="12" TextAlignment="Right" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
                 <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem Header="{DynamicResource MainUIMods}">
                         <Grid>

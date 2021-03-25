@@ -16,6 +16,8 @@ using System.Net;
 using System.Windows.Controls.Primitives;
 using HedgeModManager.Controls;
 using System.Net.Cache;
+using System.Net.Http;
+using HedgeModManager.Misc;
 
 namespace HedgeModManager.UI
 {
@@ -26,6 +28,7 @@ namespace HedgeModManager.UI
     {
         public Game Game;
         public string DownloadURL;
+
         public GBModWindow(GBAPIItemDataBasic mod, string dl, Game game)
         {
             DataContext = mod;
@@ -71,23 +74,43 @@ namespace HedgeModManager.UI
             popup.Show(this);
         }
 
-        private void Download_Click(object sender, RoutedEventArgs e)
+        private async void Download_Click(object sender, RoutedEventArgs e)
         {
-            var game = HedgeApp.GetSteamGame(Game);
-            HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
-            var mod = (GBAPIItemDataBasic)DataContext;
-            var request = (HttpWebRequest)WebRequest.Create(DownloadURL);
-            var response = request.GetResponse();
-            var URI = response.ResponseUri.ToString();
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
-            var downloader = new DownloadWindow($"Downloading {mod.ModName}", URI, Path.GetFileName(URI));
-            downloader.DownloadCompleted = () =>
+            DownloadButton.Visibility = Visibility.Collapsed;
+            Progress.Visibility = Visibility.Visible;
+
+            try
             {
-                ModsDB.InstallMod(Path.GetFileName(URI), Path.Combine(game.RootDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
-                File.Delete(Path.GetFileName(URI));
-                Close();
-            };
-            downloader.Start();
+                var game = HedgeApp.GetSteamGame(Game);
+                HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
+                var mod = (GBAPIItemDataBasic)DataContext;
+
+                using (var resp = await HedgeApp.HttpClient.GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
+                {
+                    resp.EnsureSuccessStatusCode();
+
+                    Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
+                    var destinationPath = Path.GetFileName(resp.RequestMessage.RequestUri.AbsoluteUri);
+                    using (var destinationFile = File.Create(destinationPath, 8192, FileOptions.Asynchronous))
+                        await resp.Content.CopyToAsync(destinationFile);
+
+                    await Dispatcher.InvokeAsync(() => Progress.Value = 50);
+                    ModsDB.InstallMod(destinationPath, Path.Combine(game.RootDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
+                    File.Delete(destinationPath);
+
+                    // a dialog would be nice here but i ain't adding strings
+                    await Dispatcher.InvokeAsync(() => Close());
+                }
+            }
+            catch (Exception ex)
+            {
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    ExceptionWindow.UnhandledExceptionEventHandler(ex);
+                    DownloadButton.Visibility = Visibility.Visible;
+                    Progress.Visibility = Visibility.Collapsed;
+                });
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -112,7 +135,7 @@ namespace HedgeModManager.UI
                 Imagebar.Children.Add(button);
             }
 
-            if(!string.IsNullOrEmpty(mod.SoundURL?.AbsoluteUri))
+            if (!string.IsNullOrEmpty(mod.SoundURL?.AbsoluteUri))
             {
                 var button = new Button()
                 {

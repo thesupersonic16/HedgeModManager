@@ -40,12 +40,14 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Label Content="Credits" FontSize="20"/>
                     <ScrollViewer Grid.Row="1" Margin="10,0,5,40">
                         <StackPanel x:Name="CreditsPanel" Orientation="Vertical"/>
                     </ScrollViewer>
-                    <Button Grid.Row="1" Height="25" Content="Download" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="5" Click="Download_Click" IsDefault="True"/>
+                    <Button x:Name="DownloadButton" Grid.Row="2" Height="25" Content="Download" Margin="5" Click="Download_Click" IsDefault="True"/>
+                    <ProgressBar x:Name="Progress" Visibility="Collapsed" Grid.Row="2" Height="25" Margin="5" />
                 </Grid>
             </Grid>
         </Grid>

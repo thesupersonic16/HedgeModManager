@@ -14,7 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using HedgeModManager;
-
+using HedgeModManager.Misc;
 using HMMResources = HedgeModManager.Properties.Resources;
 
 namespace HedgeModManager.UI
@@ -24,11 +24,11 @@ namespace HedgeModManager.UI
     /// </summary>
     public partial class ModUpdateWindow : Window
     {
-        public WebClient DownloadClient;
         public Action DownloadCompleted;
         protected ModUpdate.ModUpdateInfo UpdateInfo;
         protected HedgeMessageBox WarningDialog;
         protected int CurrentFile = 0;
+        private bool Cancelled = false;
 
         public ModUpdateWindow(ModUpdate.ModUpdateInfo info)
         {
@@ -40,70 +40,62 @@ namespace HedgeModManager.UI
 
         public void Start()
         {
-            DownloadClient = new WebClient();
-            DownloadClient.Headers.Add("user-agent", HedgeApp.WebRequestUserAgent);
-            DownloadClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-            DownloadClient.DownloadFileCompleted += WebClient_DownloadCompleted;
-            ProcessCommand();
+            _ = Task.Run(() => ProcessAsync());
             ShowDialog();
         }
 
-        protected void ProcessCommand()
+        protected async Task ProcessAsync()
         {
-            if (CurrentFile >= UpdateInfo.Files.Count)
+            for (CurrentFile = 0; CurrentFile < UpdateInfo.Files.Count; CurrentFile++)
+            {
+                if (Cancelled)
+                    break;
+
+                try
+                {
+                    await Dispatcher.InvokeAsync(() => TotalProgress.Value = CurrentFile + 1);
+                    var file = UpdateInfo.Files[CurrentFile];
+
+                    switch (file.Command)
+                    {
+                        case "add":
+                            // Creates directories
+                            var fileInfo = new FileInfo(Path.Combine(UpdateInfo.Mod.RootDirectory, file.FileName));
+                            if (!fileInfo.Directory.Exists)
+                                Directory.CreateDirectory(fileInfo.Directory.FullName);
+
+                            await HedgeApp.HttpClient.DownloadFileAsync(file.URL, fileInfo.FullName).ConfigureAwait(false);
+                            await Dispatcher.InvokeAsync(() =>
+                            {
+                                Header.Text = $"Downloading {file.FileName}";
+                                AddLogLine($"Adding {file.FileName}");
+                            });
+
+                            break;
+
+                        case "delete":
+                            await Dispatcher.InvokeAsync(() =>
+                            {
+                                Header.Text = $"Delete {file.FileName}";
+                                AddLogLine($"Deleting {file.FileName}");
+                            });
+
+                            if (File.Exists(Path.Combine(UpdateInfo.Mod.RootDirectory, file.FileName)))
+                                File.Delete(Path.Combine(UpdateInfo.Mod.RootDirectory, file.FileName));
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // todo: handle
+                    break;
+                }
+            }
+
+            await Dispatcher.InvokeAsync(() =>
             {
                 Close();
                 DownloadCompleted.Invoke();
-                return;
-            }
-
-            var file = UpdateInfo.Files[CurrentFile];
-            
-            switch(file.Command)
-            {
-                case "add":
-                    // Creates directories
-                    var fileInfo = new FileInfo(Path.Combine(UpdateInfo.Mod.RootDirectory, file.FileName));
-                    if (!fileInfo.Directory.Exists)
-                        Directory.CreateDirectory(fileInfo.Directory.FullName);
-
-                    DownloadClient.DownloadFileAsync(new Uri(file.URL), fileInfo.FullName);
-                    Header.Text = $"Downloading {file.FileName}";
-                    AddLogLine($"Adding {file.FileName}");
-                    break;
-
-                case "delete":
-                    Header.Text = $"Delete {file.FileName}";
-                    AddLogLine($"Deleting {file.FileName}");
-
-                    if(File.Exists(Path.Combine(UpdateInfo.Mod.RootDirectory, file.FileName)))
-                        File.Delete(Path.Combine(UpdateInfo.Mod.RootDirectory, file.FileName));
-
-                    CurrentFile++;
-                    ProcessCommand();
-                    break;
-            }
-
-            CurrentFile++;
-            TotalProgress.Value = CurrentFile;
-        }
-
-        protected void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs args)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                FileProgress.Maximum = args.TotalBytesToReceive;
-                FileProgress.Value = args.BytesReceived;
-                TaskbarItemInfo.ProgressValue = (float)args.BytesReceived / (float)args.TotalBytesToReceive;
-            });
-        }
-
-        protected void WebClient_DownloadCompleted(object sender, AsyncCompletedEventArgs args)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                FileProgress.Value = 0;
-                ProcessCommand();
             });
         }
 
@@ -134,14 +126,15 @@ namespace HedgeModManager.UI
             e.Cancel = true;
             WarningDialog = new HedgeMessageBox("Hedge Mod Manager", string.Format(HMMResources.STR_CANCEL_WARNING, UpdateInfo.Mod.Title));
 
-            WarningDialog.AddButton("No", () => 
+            WarningDialog.AddButton("No", () =>
             {
                 WarningDialog.Close();
             });
 
-            WarningDialog.AddButton("Yes", () => 
+            WarningDialog.AddButton("Yes", () =>
             {
                 Close();
+                Cancelled = true;
                 WarningDialog.Close();
             });
 

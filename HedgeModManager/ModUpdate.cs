@@ -3,30 +3,32 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using HedgeModManager.Misc;
 
 namespace HedgeModManager
 {
     public static class ModUpdate
     {
 
-        private static WebClient WebClient = new WebClient();
-
         /// <summary>
         /// Parses a GMI mod update from a mod UpdateServer
         /// </summary>
         /// <param name="mod">Mod to be updated</param>
         /// <returns>A ModUpdateInfo containing information about the lastest update</returns>
-        public static ModUpdateInfo GetUpdateFromINI(ModInfo mod)
+        public static async Task<ModUpdateInfo> GetUpdateFromINIAsync(ModInfo mod)
         {
             if (string.IsNullOrEmpty(mod.UpdateServer))
                 return null;
 
             var ini = new IniFile();
-            using (var stream = new MemoryStream(WebClient.DownloadData(Path.Combine(mod.UpdateServer, "mod_version.ini"))))
+            using (var stream = await HedgeApp.HttpClient.GetStreamAsync(Path.Combine(mod.UpdateServer, "mod_version.ini")))
                 ini.Read(stream);
-            return GetUpdateFromINI(mod, ini);
+
+            return await GetUpdateFromINIAsync(mod, ini);
         }
 
 
@@ -36,7 +38,7 @@ namespace HedgeModManager
         /// <param name="mod">Mod to be updated</param>
         /// <param name="ini">ini of the mod_update.ini file downloaded from the server</param>
         /// <returns>A ModUpdateInfo containing information about the lastest update</returns>
-        public static ModUpdateInfo GetUpdateFromINI(ModInfo mod, IniFile ini)
+        public static async Task<ModUpdateInfo> GetUpdateFromINIAsync(ModInfo mod, IniFile ini)
         {
             // Check if the ini contains all the required fields
             if (!ini.Groups.ContainsKey("Main"))
@@ -55,7 +57,7 @@ namespace HedgeModManager
             string modChangeLog = "";
             int modChangeLogLineCount = int.Parse(ini["Changelog"]["StringCount"]);
 
-            if(string.IsNullOrEmpty(mdUrl))
+            if (string.IsNullOrEmpty(mdUrl))
             {
                 modChangeLog += "Changelog:<br/>";
                 for (int i = 0; i < modChangeLogLineCount; ++i)
@@ -63,7 +65,7 @@ namespace HedgeModManager
             }
             else
             {
-                modChangeLog = WebClient.DownloadString(Path.Combine(mod.UpdateServer, mdUrl));
+                modChangeLog = await HedgeApp.HttpClient.GetStringAsync(Path.Combine(mod.UpdateServer, mdUrl)).ConfigureAwait(false);
             }
 
 
@@ -78,7 +80,8 @@ namespace HedgeModManager
             };
 
             // Downloads and parses the list of files
-            ReadUpdateFileList(WebClient.DownloadString(Path.Combine(mod.UpdateServer, "mod_files.txt")));
+            string modFiles = await HedgeApp.HttpClient.GetStringAsync(Path.Combine(mod.UpdateServer, "mod_files.txt")).ConfigureAwait(false);
+            ReadUpdateFileList(modFiles);
             return update;
 
             // Sub-Methods
@@ -104,7 +107,7 @@ namespace HedgeModManager
             }
         }
 
-        public static void DownloadAndApplyUpdate(ModUpdateInfo modupdate, ModUpdateProgress progress)
+        public static async Task DownloadAndApplyUpdateAsync(ModUpdateInfo modupdate, ModUpdateProgress progress)
         {
             for (int i = 0; i < modupdate.Files.Count; ++i)
             {
@@ -116,10 +119,9 @@ namespace HedgeModManager
                         var fileInfo = new FileInfo(Path.Combine(modupdate.Mod.RootDirectory, file.FileName));
                         if (!fileInfo.Directory.Exists)
                             Directory.CreateDirectory(fileInfo.Directory.FullName);
-                        
-                        // Download file
-                        WebClient.DownloadFile(file.URL, fileInfo.FullName);
 
+                        // Download file
+                        await HedgeApp.HttpClient.DownloadFileAsync(file.URL, fileInfo.FullName);
                         break;
                     case "delete":
                         File.Delete(Path.Combine(modupdate.Mod.RootDirectory, file.FileName));

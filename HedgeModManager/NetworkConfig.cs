@@ -15,7 +15,7 @@ namespace HedgeModManager
 
         public List<string> URLBlockList { get; set; } = new List<string>();
 
-        public static NetworkConfig LoadConfig(string updateURL, bool force = false)
+        public static async Task<NetworkConfig> LoadConfig(string updateURL, bool force = false)
         {
             try
             {
@@ -32,16 +32,13 @@ namespace HedgeModManager
 
                 if (update)
                 {
-                    using (var client = new WebClient())
-                    {
-                        client.Headers.Add("user-agent", HedgeApp.WebRequestUserAgent);
-                        config = JsonConvert.DeserializeObject<NetworkConfig>(client.DownloadString(updateURL));
-                        config.LastUpdated = DateTime.Now;
-                        string dir = Path.GetDirectoryName(configPath) ?? "HedgeModManager";
-                        if (!Directory.Exists(dir))
-                            Directory.CreateDirectory(dir);
-                        File.WriteAllText(configPath, JsonConvert.SerializeObject(config));
-                    }
+                    string json = await HedgeApp.HttpClient.GetStringAsync(updateURL);
+                    config = JsonConvert.DeserializeObject<NetworkConfig>(json);
+                    config.LastUpdated = DateTime.Now;
+                    string dir = Path.GetDirectoryName(configPath) ?? "HedgeModManager";
+                    if (!Directory.Exists(dir))
+                        Directory.CreateDirectory(dir);
+                    File.WriteAllText(configPath, JsonConvert.SerializeObject(config));
                 }
 
                 return config;
