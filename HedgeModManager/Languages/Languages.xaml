@@ -14,6 +14,7 @@
         <local:LangEntry FileName="zh-CN" Name="中文简体 (Chinese Simplified)"/>
         <local:LangEntry FileName="ru-RU" Name="Русский (Russian)"/>
         <local:LangEntry FileName="es-MX" Name="Spanish (Mexico)"/>
+        <local:LangEntry FileName="vi-VN" Name="Vietnamese (Vietnam)"/>
     </local:LanguageList>
     
 </ResourceDictionary>
