@@ -25,6 +25,7 @@
     <system:String x:Key="MainUISave"          >Guardar</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Guardar e Jogar</system:String>
     <system:String x:Key="MainUIPlay"          >Jogar</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">Erro ao baixar o carregador de mods.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nome</system:String>
@@ -44,8 +45,8 @@
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Nome</system:String>
-    <system:String x:Key="CodesUIDownload">Transferir Códigos da Comunidade</system:String>
-    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Os códigos instalados são incompatíveis com o carregador de códigos.&#x0a;Por favor atualize os códigos e o carregador.&#x0a;AVISO: Isto irá apagar quaisquer códigos costumizados.</system:String>
+    <system:String x:Key="CodesUIDownload">Baixar Códigos da Comunidade</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Os códigos instalados são incompatíveis com o carregador de códigos.&#x0a;Por favor atualize os códigos e o carregador.&#x0a;AVISO: Isso irá apagar quaisquer códigos costumizados.</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
