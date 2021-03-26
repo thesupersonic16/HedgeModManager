@@ -9,6 +9,7 @@
     <system:String x:Key="CommonUICancel">Cancelar</system:String>
     <system:String x:Key="CommonUIYes"   >Sim</system:String>
     <system:String x:Key="CommonUINo"    >Não</system:String>
+    <system:String x:Key="CommonUIRetry"  >Tentar Novamente</system:String>	
     <system:String x:Key="CommonUIUpdate">Atualizar</system:String>
     <system:String x:Key="CommonUIDelete">Apagar</system:String>
     <system:String x:Key="CommonUINone"  >Nenhum</system:String>
@@ -25,7 +26,7 @@
     <system:String x:Key="MainUISave"          >Guardar</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Guardar e Jogar</system:String>
     <system:String x:Key="MainUIPlay"          >Jogar</system:String>
-    <system:String x:Key="MainUIMLDownloadFail">Erro ao baixar o carregador de mods.</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">Falha ao baixar o carregador de mods.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nome</system:String>
@@ -131,4 +132,7 @@
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Configurar {0}</system:String>
 
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">Falha ao Baixar Mod</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Ocorreu um erro durante a transferência. Os servidores poderão estar em baixo ou sobrecarregados. Por favor tente novamente mais tarde. &#x0a;&#x0a;Detalhes: {0}</system:String>
 </ResourceDictionary>
