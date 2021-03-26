@@ -9,6 +9,7 @@
     <system:String x:Key="CommonUICancel" >Cancel</system:String>
     <system:String x:Key="CommonUIYes"    >Yes</system:String>
     <system:String x:Key="CommonUINo"     >No</system:String>
+    <system:String x:Key="CommonUIRetry"  >Retry</system:String>
     <system:String x:Key="CommonUIUpdate" >Update</system:String>
     <system:String x:Key="CommonUIDelete" >Delete</system:String>
     <system:String x:Key="CommonUINone"   >None</system:String>
@@ -130,5 +131,10 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Configure {0}</system:String>
+
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">Failed to Download Mod</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">An error has occurred during the download. Servers might be down or overloaded. Please try again later. &#x0a;&#x0a;Details: {0}</system:String>
+
 
 </ResourceDictionary>

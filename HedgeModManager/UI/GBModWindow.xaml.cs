@@ -16,6 +16,7 @@ using System.Net;
 using System.Windows.Controls.Primitives;
 using HedgeModManager.Controls;
 using System.Net.Cache;
+using static HedgeModManager.Lang;
 
 namespace HedgeModManager.UI
 {
@@ -73,21 +74,42 @@ namespace HedgeModManager.UI
 
         private void Download_Click(object sender, RoutedEventArgs e)
         {
-            var game = HedgeApp.GetSteamGame(Game);
-            HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
-            var mod = (GBAPIItemDataBasic)DataContext;
-            var request = (HttpWebRequest)WebRequest.Create(DownloadURL);
-            var response = request.GetResponse();
-            var URI = response.ResponseUri.ToString();
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
-            var downloader = new DownloadWindow($"Downloading {mod.ModName}", URI, Path.GetFileName(URI));
-            downloader.DownloadCompleted = () =>
+            try
             {
-                ModsDB.InstallMod(Path.GetFileName(URI), Path.Combine(game.RootDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
-                File.Delete(Path.GetFileName(URI));
+                var game = HedgeApp.GetSteamGame(Game);
+                HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
+                var mod = (GBAPIItemDataBasic)DataContext;
+                var request = (HttpWebRequest)WebRequest.Create(DownloadURL);
+                var response = request.GetResponse();
+                var URI = response.ResponseUri.ToString();
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
+                var downloader = new DownloadWindow($"Downloading {mod.ModName}", URI, Path.GetFileName(URI));
+                downloader.DownloadCompleted = () =>
+                {
+                    ModsDB.InstallMod(Path.GetFileName(URI), Path.Combine(game.RootDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
+                    File.Delete(Path.GetFileName(URI));
+                    Close();
+                };
+                downloader.Start();
+            }catch(WebException ex)
+            {
+                var dialog = new HedgeMessageBox(Localise("ModDownloaderFailed"),
+                    string.Format(Localise("ModDownloaderWebError"), ex.Message),
+                    HorizontalAlignment.Right, TextAlignment.Center, InputType.MarkDown);
+                
+                dialog.AddButton(Localise("CommonUICancel"), () =>
+                {
+                    dialog.Close();
+                });
+
+                dialog.AddButton(Localise("CommonUIRetry"), () =>
+                {
+                    dialog.Close();
+                    Download_Click(sender, e);
+                });
+                dialog.ShowDialog();
                 Close();
-            };
-            downloader.Start();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
