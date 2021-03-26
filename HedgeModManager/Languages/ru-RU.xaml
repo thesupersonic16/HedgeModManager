@@ -9,6 +9,7 @@
     <system:String x:Key="CommonUICancel" >Отмена</system:String>
     <system:String x:Key="CommonUIYes"    >Да</system:String>
     <system:String x:Key="CommonUINo"     >Нет</system:String>
+    <system:String x:Key="CommonUIRetry"  >Повторить</system:String>
     <system:String x:Key="CommonUIUpdate" >Обновить</system:String>
     <system:String x:Key="CommonUIDelete" >Удалить</system:String>
     <system:String x:Key="CommonUINone"   >Нет</system:String>
@@ -25,7 +26,7 @@
     <system:String x:Key="MainUISave"          >Сохранить</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Сохранить и запустить игру</system:String>
     <system:String x:Key="MainUIPlay"          >Запустить игру</system:String>
-    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager обнаружил, что один или&#x0a;несколько модов имеют ошибку в "IncludeDir".&#x0a;Вы хотите, чтобы Hedge Mod Manager попытался исправить ее?</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">Невозможно скачать загрузчик модов</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Название</system:String>
@@ -41,6 +42,7 @@
     <system:String x:Key="ModsUIModEdit"        >Изменить мод</system:String>
     <system:String x:Key="ModsUIModDelete"      >Удалить мод</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Перемещайте строки для изменения порядка загрузки модов.</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager обнаружил, что один или&#x0a;несколько модов имеют ошибку в "IncludeDir".&#x0a;Вы хотите, чтобы Hedge Mod Manager попытался исправить ее?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Название</system:String>
@@ -130,4 +132,7 @@
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Настроить {0}</system:String>
 
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">Невозможно загрузить мод</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Во время загрузки произошла ошибка. Сервера могут быть недоступны или перегружены. Пожалуйста, повторите позднее. &#x0a;&#x0a;Подробности: {0}</system:String>
 </ResourceDictionary>
