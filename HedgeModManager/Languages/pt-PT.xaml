@@ -25,7 +25,8 @@
     <system:String x:Key="MainUISave"          >Guardar</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Guardar e Jogar</system:String>
     <system:String x:Key="MainUIPlay"          >Jogar</system:String>
-
+    <system:String x:Key="MainUIMLDownloadFail">Erro ao transferir o carregador de mods.</system:String>
+	
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nome</system:String>
     <system:String x:Key="ModsUIVersion"        >Versão</system:String>
