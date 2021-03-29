@@ -26,7 +26,7 @@
     <system:String x:Key="MainUISave"          >保存</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >保存並運行</system:String>
     <system:String x:Key="MainUIPlay"          >運行</system:String>
-    <system:String x:Key="MainUIMLDownloadFail"無法下載MOD加載器</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">無法下載MOD加載器</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >名稱</system:String>
