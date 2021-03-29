@@ -9,6 +9,7 @@
     <system:String x:Key="CommonUICancel">取消</system:String>
     <system:String x:Key="CommonUIYes"   >是</system:String>
     <system:String x:Key="CommonUINo"    >否</system:String>
+    <system:String x:Key="CommonUIRetry">重試</system:String>
     <system:String x:Key="CommonUIUpdate">更新</system:String>
     <system:String x:Key="CommonUIDelete">刪除</system:String>
     <system:String x:Key="CommonUINone"  >没有</system:String>
@@ -25,6 +26,7 @@
     <system:String x:Key="MainUISave"          >保存</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >保存並運行</system:String>
     <system:String x:Key="MainUIPlay"          >運行</system:String>
+    <system:String x:Key="MainUIMLDownloadFail"無法下載MOD加載器</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >名稱</system:String>
@@ -129,5 +131,9 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">{0} 配置</system:String>
+
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">無法下載MOD</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">下載期間發生錯誤。 服務器可能已關閉或超載。 請稍後再嘗試。 &#x0a;&#x0a;詳情: {0}</system:String>
 
 </ResourceDictionary>
