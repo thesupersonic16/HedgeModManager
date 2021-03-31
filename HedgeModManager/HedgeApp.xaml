@@ -273,11 +273,11 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <Border Grid.Row="0" CornerRadius="8,8,0,0" BorderBrush="#FF3F3F46" Background="{DynamicResource HMM.Header.BackgroundBrush}" BorderThickness="1">
+                                    <Border Grid.Row="0" CornerRadius="8,8,0,0" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Header.BackgroundBrush}" BorderThickness="1">
                                         <ContentPresenter Margin="8,4,0,4" ContentSource="Header" RecognizesAccessKey="True" />
                                     </Border>
 
-                                    <Border Grid.Row="1" BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" BorderBrush="#FF3F3F46">
+                                    <Border Grid.Row="1" BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" BorderBrush="{DynamicResource HMM.Window.BorderBrush}">
                                         <ContentPresenter Margin="4" />
                                     </Border>
                                 </Grid>
@@ -314,7 +314,7 @@
             </Style>
             <Style TargetType="{x:Type TabItem}">
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.AccentBrush1}"/>
-                <Setter Property="Foreground" Value="#FFFFFFFF"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
                 <Setter Property="MinHeight"             Value="20" />
                 <Setter Property="MinWidth"              Value="50" />
                 <Setter Property="Padding" Value="10,0,10,0"/>
@@ -328,11 +328,13 @@
                         <ControlTemplate TargetType="{x:Type TabItem}">
                             <Border BorderBrush="Transparent" Width="{TemplateBinding Width}" 
                                     Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" ContentSource="Header" />
+                                <!--<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" ContentSource="Header" />-->
+                                <TextBlock Text="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}"></TextBlock>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="Background" Value="{DynamicResource HMM.Window.AccentBrush1}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource HMM.Window.AccentForegroundBrush}" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="{DynamicResource HMM.Window.AccentBrush3}"/>
@@ -777,7 +779,7 @@
 
             <Style TargetType="{x:Type ListView}">
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
-                <Setter Property="BorderBrush" Value="#3F3F46"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.BorderBrush}"/>
                 <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="Foreground" Value="#FF042271"/>
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
