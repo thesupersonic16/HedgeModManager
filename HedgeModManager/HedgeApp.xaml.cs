@@ -304,7 +304,7 @@ namespace HedgeModManager
                 if (random.Next(10) < 4)
                 {
                     var langDict = new ResourceDictionary();
-                    langDict.Source = new Uri($"Languages/Furry.xaml", UriKind.Relative);
+                    langDict.Source = new Uri($"Languages/en-UW.xaml", UriKind.Relative);
                         Current.Resources.MergedDictionaries.RemoveAt(2);
                     Current.Resources.MergedDictionaries.Insert(2, langDict);
                 }

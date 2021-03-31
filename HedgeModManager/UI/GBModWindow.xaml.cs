@@ -77,6 +77,19 @@ namespace HedgeModManager.UI
             try
             {
                 var game = HedgeApp.GetSteamGame(Game);
+                if (game == null)
+                {
+                    var dialog = new HedgeMessageBox(Localise("ModDownloaderNoGame"),
+                        string.Format(Localise("ModDownloaderNoGameMes"), Game.GameName));
+
+                    dialog.AddButton("Exit", () =>
+                    {
+                        dialog.Close();
+                    });
+                    dialog.ShowDialog();
+                    Close();
+                    return;
+                }
                 HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
                 var mod = (GBAPIItemDataBasic)DataContext;
                 var request = (HttpWebRequest)WebRequest.Create(DownloadURL);

@@ -137,6 +137,7 @@
     <!-- m-mod d-downwoadew stwings -->
     <system:String x:Key="ModDownloaderFailed">faiwed to downwoad mod</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">an e-ewwow has o-occuwwed duwing the downwoad. sewvews might be down ow ovewwoaded. p-pwease twy a-again watew. &#x0a;&#x0a;detaiws: {0}</system:String>
-
+    <system:String x:Key="ModDownloaderNoGame">faiwed to find game</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">hedge mod managew w-was unabwe to find a-an instawwation of {0}</system:String>
 
 </ResourceDictionary>

@@ -19,6 +19,9 @@
     <Color           x:Key="HMM.Button.PressedColor" A="255" R="175" G="171" B="175"/>
     <SolidColorBrush x:Key="HMM.Button.DisabledColor" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="HMM.Button.DisabledTextColor" Color="#FF656565"/>
+    <SolidColorBrush x:Key="HMM.Menu.DisabledColor" Color="#FF323232"/>
+    <SolidColorBrush x:Key="HMM.Menu.HoverColor" Color="#FF575757"/>
+    <SolidColorBrush x:Key="HMM.Menu.DisabledTextColor" Color="#FFC9C9C9"/>
 
     <DropShadowEffect x:Key="HoverEffect" BlurRadius="5" Color="#FF8ED0F9" Opacity="0" Direction="0" ShadowDepth="0"/>
 

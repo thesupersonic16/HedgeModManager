@@ -37,7 +37,7 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ContextMenu}">
                             <Border
-                                Background="#3F3F3F"
+                                Background="{DynamicResource HMM.Window.BackgroundBrush2}"
                                 CornerRadius="4" 
                                 BorderThickness="2"
                                 Padding="0,5,0,5">
@@ -73,14 +73,14 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Background" Value="#FF323232"/>
-                        <Setter Property="Foreground" Value="#FFC9C9C9"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Menu.DisabledColor}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource HMM.Menu.DisabledTextColor}"/>
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="True">
                         <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
                     </Trigger>
                     <Trigger Property="IsHighlighted" Value="True">
-                        <Setter Property="Background" Value="#575757"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Menu.HoverColor}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -767,10 +767,10 @@
 
                 <Style.Triggers>
                     <Trigger Property="IsHighlighted" Value="True">
-                        <Setter Property="Background" Value="#575757"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Menu.HoverColor}"/>
                     </Trigger>
                     <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="#575757"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Menu.HoverColor}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
