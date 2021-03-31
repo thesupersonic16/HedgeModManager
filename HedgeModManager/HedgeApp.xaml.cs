@@ -292,6 +292,24 @@ namespace HedgeModManager
             }
             catch{ }
 
+            if (DateTime.Now.Day == 1 && DateTime.Now.Month == 4)
+            {
+                var lightTheme = new ResourceDictionary();
+                lightTheme.Source = new Uri($"Themes/LightTheme.xaml", UriKind.Relative);
+
+                Current.Resources.MergedDictionaries.RemoveAt(0);
+                Current.Resources.MergedDictionaries.Insert(0, lightTheme);
+
+                var random = new Random();
+                if (random.Next(10) < 4)
+                {
+                    var langDict = new ResourceDictionary();
+                    langDict.Source = new Uri($"Languages/Furry.xaml", UriKind.Relative);
+                        Current.Resources.MergedDictionaries.RemoveAt(2);
+                    Current.Resources.MergedDictionaries.Insert(2, langDict);
+                }
+            }
+
             CodeProvider.TryLoadRoslyn();
             do
             {
@@ -357,8 +375,8 @@ namespace HedgeModManager
         {
             var langDict = new ResourceDictionary();
             langDict.Source = new Uri($"Languages/{culture}.xaml", UriKind.Relative);
-            while (Current.Resources.MergedDictionaries.Count > 2)
-                Current.Resources.MergedDictionaries.RemoveAt(2);
+            while (Current.Resources.MergedDictionaries.Count > 3)
+                Current.Resources.MergedDictionaries.RemoveAt(3);
             // No need to load the fallback language on top
             if (culture == "en-AU")
                 return;
