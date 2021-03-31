@@ -135,4 +135,7 @@
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Falha ao Baixar Mod</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Ocorreu um erro durante a transferência. Os servidores poderão estar em baixo ou sobrecarregados. Por favor tente novamente mais tarde. &#x0a;&#x0a;Detalhes: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">Falha ao Encontrar Jogo</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">O Hedge Mod Manager foi incapaz de encontrar uma instalação de {0}</system:String>
+
 </ResourceDictionary>
