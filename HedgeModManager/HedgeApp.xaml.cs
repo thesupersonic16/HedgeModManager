@@ -187,6 +187,15 @@ namespace HedgeModManager
             }
 
 #endif
+
+            if (RegistryConfig.UseLightMode)
+            {
+                var lightTheme = new ResourceDictionary { Source = new Uri("Themes/LightTheme.xaml", UriKind.Relative) };
+
+                Current.Resources.MergedDictionaries.RemoveAt(0);
+                Current.Resources.MergedDictionaries.Insert(0, lightTheme);
+            }
+
             if (string.IsNullOrEmpty(ModsDbPath))
                 ModsDbPath = Path.Combine(StartDirectory, "Mods");
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
@@ -295,11 +304,6 @@ namespace HedgeModManager
 
             if (DateTime.Now.Day == 1 && DateTime.Now.Month == 4)
             {
-                var lightTheme = new ResourceDictionary { Source = new Uri("Themes/LightTheme.xaml", UriKind.Relative) };
-
-                Current.Resources.MergedDictionaries.RemoveAt(0);
-                Current.Resources.MergedDictionaries.Insert(0, lightTheme);
-
                 var random = new Random();
                 if (random.Next(10) < 4)
                 {
