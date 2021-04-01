@@ -29,6 +29,7 @@ using System.Xml.Serialization;
 using HedgeModManager.Languages;
 using HedgeModManager.Misc;
 using HedgeModManager.UI;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 
 namespace HedgeModManager
@@ -188,13 +189,8 @@ namespace HedgeModManager
 
 #endif
 
-            if (RegistryConfig.UseLightMode)
-            {
-                var lightTheme = new ResourceDictionary { Source = new Uri("Themes/LightTheme.xaml", UriKind.Relative) };
-
-                Current.Resources.MergedDictionaries.RemoveAt(0);
-                Current.Resources.MergedDictionaries.Insert(0, lightTheme);
-            }
+            SystemEvents.UserPreferenceChanging += SystemPreferencesChanged;
+            ChangeTheme(RegistryConfig.UseLightMode);
 
             if (string.IsNullOrEmpty(ModsDbPath))
                 ModsDbPath = Path.Combine(StartDirectory, "Mods");
@@ -323,6 +319,16 @@ namespace HedgeModManager
             while (Restart);
         }
 
+        // This gets hit quite often
+        private static void SystemPreferencesChanged(object sender, UserPreferenceChangingEventArgs e)
+        {
+            var lastMode = RegistryConfig.UseLightMode;
+            RegistryConfig.Load();
+
+            if (lastMode != RegistryConfig.UseLightMode)
+                ChangeTheme(RegistryConfig.UseLightMode);
+        }
+
         public static void ShowHelp()
         {
             Console.WriteLine();
@@ -411,6 +417,17 @@ namespace HedgeModManager
             RegistryConfig.UILanguage = CurrentCulture.FileName;
             RegistryConfig.Save();
             LoadLanguage(CurrentCulture.FileName);
+        }
+
+        public static void ChangeTheme(bool lightMode)
+        {
+            var theme = new ResourceDictionary
+            {
+                Source = new Uri(lightMode ? "Themes/LightTheme.xaml" : "Themes/DarkTheme.xaml", UriKind.Relative)
+            };
+
+            Current.Resources.MergedDictionaries.RemoveAt(0);
+            Current.Resources.MergedDictionaries.Insert(0, theme);
         }
 
         /// <summary>

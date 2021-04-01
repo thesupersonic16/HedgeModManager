@@ -40,7 +40,7 @@ namespace HedgeModManager
 
             if (personalizeKey != null)
             {
-                var useLightThemeStr = personalizeKey.GetValue("SystemUsesLightTheme", 0)?.ToString();
+                var useLightThemeStr = personalizeKey.GetValue("AppsUseLightTheme", 0)?.ToString();
                 if (int.TryParse(useLightThemeStr, out int useLightTheme))
                 {
                     UseLightMode = useLightTheme != 0;
