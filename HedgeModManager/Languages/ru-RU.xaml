@@ -135,4 +135,7 @@
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Невозможно загрузить мод</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Во время загрузки произошла ошибка. Сервера могут быть недоступны или перегружены. Пожалуйста, повторите позднее. &#x0a;&#x0a;Подробности: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">Не удалось обнаружить игру</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager не смог обнаружить {0} установленным</system:String>
+    
 </ResourceDictionary>
