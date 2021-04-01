@@ -17,7 +17,7 @@
             <Label x:Name="TitleLbl" Content="Title" FontSize="22" Width="Auto"/>
             <Label x:Name="AuthorLbl" Content="Author" FontSize="16" Width="Auto"/>
         </StackPanel>
-        <TextBox Grid.Row="1" x:Name="DescBx" AcceptsReturn="True" Text="Description" IsReadOnly="True" Foreground="#929292"
+        <TextBox Grid.Row="1" x:Name="DescBx" AcceptsReturn="True" Text="Description" IsReadOnly="True" Foreground="{DynamicResource HMM.Menu.DisabledTextColor}"
                  Margin="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
     </Grid>
 </Window>

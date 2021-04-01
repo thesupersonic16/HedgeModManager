@@ -21,9 +21,22 @@ namespace HedgeModManager
     /// </summary>
     public partial class HedgeMessageBox : Window
     {
+        private static string HtmlStyleSheet = null;
+
         public HedgeMessageBox()
         {
             InitializeComponent();
+        }
+
+        public static string GetHtmlStyleSheet()
+        {
+            if (!string.IsNullOrEmpty(HtmlStyleSheet))
+                return HtmlStyleSheet;
+
+            var fgBrush = HedgeApp.GetThemeColor("HMM.Button.ForegroundBrush");
+            HtmlStyleSheet =
+                Properties.Resources.GBStyleSheet.Replace("$FORECOLOR", $"rgb({fgBrush.R}, {fgBrush.G}, {fgBrush.B})");
+            return HtmlStyleSheet;
         }
 
         public HedgeMessageBox(string header, string message,
@@ -55,7 +68,7 @@ namespace HedgeModManager
 <html>
     <body>
         <style>
-            {Properties.Resources.GBStyleSheet}
+            {GetHtmlStyleSheet()}
         </style>
         {(type == InputType.MarkDown ? Markdown.ToHtml(message, new MarkdownPipelineBuilder().UseAdvancedExtensions().Build()) : message)}
     </body>

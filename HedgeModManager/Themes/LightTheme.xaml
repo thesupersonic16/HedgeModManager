@@ -4,6 +4,7 @@
 
     <!-- Colours -->
     <SolidColorBrush x:Key="HMM.Window.DialogBottom" Color="#FFEEEEEE"/>
+    <SolidColorBrush x:Key="HMM.Window.HeaderAccentBrush" Color="#FF0066CC"/>
     <SolidColorBrush x:Key="HMM.Window.AccentBrush" Color="#FF0066CC"/>
     <SolidColorBrush x:Key="HMM.Window.AccentBrush1" Color="#FF007ACC"/>
     <SolidColorBrush x:Key="HMM.Window.AccentBrush2" Color="#FF017ACC"/>
@@ -14,6 +15,7 @@
     <SolidColorBrush x:Key="HMM.Window.BackgroundBrush1" Color="{DynamicResource HMM.Window.BackgroundColor1}"/>
     <SolidColorBrush x:Key="HMM.Window.BackgroundBrush2" Color="#FFDDDDDD"/>
     <SolidColorBrush x:Key="HMM.Window.ForegroundBrush" Color="#FF000000"/>
+    <SolidColorBrush x:Key="HMM.Window.LightForegroundBrush" Color="Gray"/>
     <SolidColorBrush x:Key="HMM.Window.BorderBrush" Color="#FFBBBBBB"/>
     <SolidColorBrush x:Key="HMM.Button.BackgroundBrush" Color="#FFDDDDDD"/>
     <SolidColorBrush x:Key="HMM.Button.ForegroundBrush" Color="#FF000000"/>
@@ -21,6 +23,7 @@
     <Color           x:Key="HMM.Button.PressedColor" A="255" R="196" G="229" B="246"/>
     <SolidColorBrush x:Key="HMM.Button.HoverBrush" Color="{DynamicResource HMM.Button.HoverColor}"/>
     <SolidColorBrush x:Key="HMM.Button.DisabledColor" Color="#FFBBBBBB"/>
+    <Color           x:Key="HMM.Button.FocusColor" A="255" R="255" G="255" B="255"/>
     <SolidColorBrush x:Key="HMM.Button.DisabledTextColor" Color="#FF858585"/>
     <SolidColorBrush x:Key="HMM.Menu.DisabledColor" Color="#FFBBBBBB"/>
     <SolidColorBrush x:Key="HMM.Menu.HoverColor" Color="#FFEEEEEE"/>

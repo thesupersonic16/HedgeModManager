@@ -16,7 +16,9 @@ using System.Net;
 using System.Windows.Controls.Primitives;
 using HedgeModManager.Controls;
 using System.Net.Cache;
+using PropertyTools.Wpf;
 using static HedgeModManager.Lang;
+using PopupBox = HedgeModManager.Controls.PopupBox;
 
 namespace HedgeModManager.UI
 {
@@ -47,7 +49,7 @@ namespace HedgeModManager.UI
             popup.Children.Add(new Border()
             {
                 BorderThickness = new Thickness(2),
-                BorderBrush = Brushes.White,
+                BorderBrush = HedgeApp.GetThemeBrush("HMM.Window.ForegroundBrush"),
                 Child = new Image()
                 {
                     Source = image,
@@ -90,6 +92,7 @@ namespace HedgeModManager.UI
                     Close();
                     return;
                 }
+
                 HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
                 var mod = (GBAPIItemDataBasic)DataContext;
                 var request = (HttpWebRequest)WebRequest.Create(DownloadURL);
@@ -164,11 +167,12 @@ namespace HedgeModManager.UI
                 button.Click += Audio_Click;
                 Imagebar.Children.Add(button);
             }
+
             Description.Text = $@"
 <html>
     <body>
         <style>
-            {Properties.Resources.GBStyleSheet}
+            {HedgeMessageBox.GetHtmlStyleSheet()}
         </style>
         {mod.Body}
     </body>
@@ -184,7 +188,7 @@ namespace HedgeModManager.UI
                     FontSize = 12,
                     TextWrapping = TextWrapping.WrapWithOverflow,
                     FontStyle = FontStyles.Italic,
-                    Foreground = Brushes.LightGray,
+                    Foreground = HedgeApp.GetThemeBrush("HMM.Window.LightForegroundBrush"),
                     Padding = new Thickness(0, 2, 0, 2)
                 });
 

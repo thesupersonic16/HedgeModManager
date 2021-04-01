@@ -9,7 +9,6 @@ namespace HedgeModManager.Languages
     public class LanguageList : List<LangEntry>
     {
         public static int TotalLines;
-
     }
 
     public class LangEntry

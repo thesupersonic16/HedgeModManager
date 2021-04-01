@@ -120,6 +120,7 @@ namespace HedgeModManager
             application.InitializeComponent();
             application.ShutdownMode = ShutdownMode.OnMainWindowClose;
             application.MainWindow = new MainWindow();
+
             Args = args;
 #if !DEBUG
             // Enable our Crash Window if Compiled in Release
@@ -294,8 +295,7 @@ namespace HedgeModManager
 
             if (DateTime.Now.Day == 1 && DateTime.Now.Month == 4)
             {
-                var lightTheme = new ResourceDictionary();
-                lightTheme.Source = new Uri($"Themes/LightTheme.xaml", UriKind.Relative);
+                var lightTheme = new ResourceDictionary { Source = new Uri("Themes/LightTheme.xaml", UriKind.Relative) };
 
                 Current.Resources.MergedDictionaries.RemoveAt(0);
                 Current.Resources.MergedDictionaries.Insert(0, lightTheme);
@@ -303,9 +303,8 @@ namespace HedgeModManager
                 var random = new Random();
                 if (random.Next(10) < 4)
                 {
-                    var langDict = new ResourceDictionary();
-                    langDict.Source = new Uri($"Languages/en-UW.xaml", UriKind.Relative);
-                        Current.Resources.MergedDictionaries.RemoveAt(2);
+                    var langDict = new ResourceDictionary {Source = new Uri("Languages/en-UW.xaml", UriKind.Relative)};
+                    Current.Resources.MergedDictionaries.RemoveAt(2);
                     Current.Resources.MergedDictionaries.Insert(2, langDict);
                 }
             }
@@ -767,6 +766,25 @@ namespace HedgeModManager
 
             random.NextBytes(guid);
             return new Guid(guid);
+        }
+
+        public static Color GetThemeColor(string key)
+        {
+            var resource = Current.TryFindResource(key);
+            if (resource is null)
+                return Colors.Black;
+
+            if (resource is SolidColorBrush brush)
+                return brush.Color;
+            else if (resource is Color color)
+                return color;
+
+            return Colors.Black;
+        }
+
+        public static Brush GetThemeBrush(string key)
+        {
+            return Current.TryFindResource(key) as Brush;
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)
