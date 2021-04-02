@@ -9,6 +9,7 @@
     <system:String x:Key="CommonUICancel" >Annuleren</system:String>
     <system:String x:Key="CommonUIYes"    >Ja</system:String>
     <system:String x:Key="CommonUINo"     >Nee</system:String>
+    <system:String x:Key="CommonUIRetry"  >Opnieuw Proberen</system:String>
     <system:String x:Key="CommonUIUpdate" >Bijwerken</system:String>
     <system:String x:Key="CommonUIDelete" >Verwijderen</system:String>
     <system:String x:Key="CommonUINone"   >Geen</system:String>
@@ -25,6 +26,7 @@
     <system:String x:Key="MainUISave"          >Opslaan</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Opslaan En Spel Starten</system:String>
     <system:String x:Key="MainUIPlay"          >Spel Starten</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">Downloaden van mod loader is mislukt.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Naam</system:String>
@@ -130,4 +132,10 @@
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Configureren {0}</system:String>
 
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">Downloaden van Mod Mislukt</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Er is een fout opgetreden tijdens het downloaden. Servers zijn mogelijk uitgeschakeld of overbelast. Probeer het later nog eens. &#x0a;&#x0a;Details: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">Kan Game Niet Vinden</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager kon geen installatie vinden van {0}</system:String>
+    
 </ResourceDictionary>
