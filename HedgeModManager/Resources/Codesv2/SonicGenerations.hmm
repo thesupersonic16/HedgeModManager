@@ -566,3 +566,6 @@ Write<byte>(0x01A4358D, 0)
 
 Code "Full Resolution Planar Reflections" by "Luig"
 Write<float>(0x01B22e84, 1f)
+
+Patch "Disable Brightness Adjustment" by "Skyth"
+WriteProtected<byte>(0xD68183, 0x83, 0xC4, 0x08, 0x90, 0x90);
