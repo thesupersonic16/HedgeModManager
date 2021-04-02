@@ -21,7 +21,7 @@ WriteNop(0xE64E80, 6)
 
 Patch "Custom Material Blend Modes" by "Muzzarino"
 /* Overrides the game's default blend parameter with user specified blend params.
-To use, create a copy of the original material, and hex edit the model's ".material" file with the blend flag changed enabled to mark the offset to be changed;
+To use, hex edit the model's ".material" file with the blend flag set to mark the offset to be changed.
 When specifying blend types, the source blend is shifted 4 bytes, and the destination factor is added onto the byte. Default is 00.
 
 Examples:
