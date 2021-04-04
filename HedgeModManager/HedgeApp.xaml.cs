@@ -298,17 +298,6 @@ namespace HedgeModManager
             }
             catch{ }
 
-            if (DateTime.Now.Day == 1 && DateTime.Now.Month == 4)
-            {
-                var random = new Random();
-                if (random.Next(10) < 4)
-                {
-                    var langDict = new ResourceDictionary {Source = new Uri("Languages/en-UW.xaml", UriKind.Relative)};
-                    Current.Resources.MergedDictionaries.RemoveAt(2);
-                    Current.Resources.MergedDictionaries.Insert(2, langDict);
-                }
-            }
-
             CodeProvider.TryLoadRoslyn();
             do
             {
