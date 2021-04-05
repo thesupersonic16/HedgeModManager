@@ -245,3 +245,6 @@ WriteProtected<uint>(ASLR(0x0058FDC1), 0x1003)
 
 Patch "Disable Voice Option Completely" by "M&M"
 WriteNop(ASLR(0x4A3D82), 5)
+
+Patch "Enable DLC Music in Battle Mode" by "ĐeäTh"
+WriteNop(ASLR(0x0095B570), 6)
