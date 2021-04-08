@@ -10,22 +10,28 @@
     
     <Grid Width="Auto" Height="Auto" Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="75"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Margin="5,0,0,0"
             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TextBlock x:Name="TitleLbl" Text="Title" FontSize="22" Width="Auto"/>
-            <TextBlock x:Name="AuthorLbl" FontSize="16" Width="Auto">
+            <TextBlock x:Name="TitleLbl" Text="Title" FontSize="36" Width="Auto"/>
+            <TextBlock x:Name="AuthorLbl" FontSize="14" Width="Auto">
                 <TextBlock Text="Made by"/>
-                <Hyperlink NavigateUri="{Binding AuthorURL}" Click="Hyperlink_OnClick">
+                <TextBlock Visibility="{Binding AuthorURL, Converter={StaticResource EmptyStringToVisibilityConverter}}">
+                    <Hyperlink NavigateUri="{Binding AuthorURL}" Click="Hyperlink_OnClick">
+                        <TextBlock Text="{Binding Author}" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}"/>
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock Visibility="{Binding AuthorURL, Converter={StaticResource InverseEmptyStringToVisibilityConverter}}">
                     <TextBlock Text="{Binding Author}"/>
-                </Hyperlink>
+                </TextBlock>
                 <TextBlock Text="on"/>
                 <TextBlock Text="{Binding Date}"/>
             </TextBlock>
         </StackPanel>
-        <TextBox Grid.Row="1" x:Name="DescBx" AcceptsReturn="True" Text="Description" IsReadOnly="True" Foreground="{DynamicResource HMM.Menu.DisabledTextColor}"
-                 Margin="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+        <Rectangle Grid.Row="0" Height="1" Fill="{DynamicResource HMM.Window.BorderBrush}" VerticalAlignment="Bottom"/>
+        <TextBox Grid.Row="1" x:Name="DescBx" AcceptsReturn="True" Text="Description" IsReadOnly="True" Foreground="{DynamicResource HMM.Window.LightForegroundBrush}"
+                 Margin="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0"/>
     </Grid>
 </Window>
