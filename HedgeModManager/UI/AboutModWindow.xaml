@@ -16,16 +16,17 @@
         <StackPanel Margin="5,0,0,0"
             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <TextBlock x:Name="TitleLbl" Text="Title" FontSize="26" Width="Auto"/>
-            <TextBlock x:Name="AuthorLbl" FontSize="14" Width="Auto">
+            <TextBlock FontSize="14" Width="Auto" Visibility="{Binding AuthorURL, Converter={StaticResource EmptyStringToVisibilityConverter}}">
                 <Run Text="Made by"/>
-                <TextBlock Visibility="{Binding AuthorURL, Converter={StaticResource InverseEmptyStringToVisibilityConverter}}">
-                    <Run Text="{Binding Author}"/>
-                </TextBlock>
-                <TextBlock Visibility="{Binding AuthorURL, Converter={StaticResource EmptyStringToVisibilityConverter}}">
-                    <Hyperlink NavigateUri="{Binding AuthorURL}" Click="Hyperlink_OnClick">
-                        <Run Text="{Binding Author}" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}"/>
-                    </Hyperlink>
-                </TextBlock>
+                <Hyperlink NavigateUri="{Binding AuthorURL}" Click="Hyperlink_OnClick">
+                    <Run Text="{Binding Author}" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}"/>
+                </Hyperlink>
+                <Run Text="on"/>
+                <Run Text="{Binding Date}"/>
+            </TextBlock>
+            <TextBlock FontSize="14" Width="Auto" Visibility="{Binding AuthorURL, Converter={StaticResource InverseEmptyStringToVisibilityConverter}}">
+                <Run Text="Made by"/>
+                <Run Text="{Binding Author}"/>
                 <Run Text="on"/>
                 <Run Text="{Binding Date}"/>
             </TextBlock>
