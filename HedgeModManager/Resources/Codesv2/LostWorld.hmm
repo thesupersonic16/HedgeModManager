@@ -248,3 +248,6 @@ WriteNop(ASLR(0x4A3D82), 5)
 
 Patch "Enable DLC Music in Battle Mode" by "ĐeäTh"
 WriteNop(ASLR(0x0095B570), 6)
+
+Patch "Sideways wall jump fix" by "Sajid"
+WriteNop(ASLR(0x008C142C), 2)
