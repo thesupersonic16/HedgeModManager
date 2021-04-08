@@ -5,29 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d" PreviewKeyDown="AboutModWindow_OnPreviewKeyDown"
-        Title="AboutModWindow" MinWidth="300" Height="Auto" Width="Auto" MaxHeight="600" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
+        Title="AboutModWindow" MinWidth="450" Height="Auto" Width="Auto" MaxHeight="700" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
         Style="{StaticResource HedgeWindow}" ContentRendered="Window_ContentRendered" WindowStartupLocation="CenterScreen">
     
     <Grid Width="Auto" Height="Auto" Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="75"/>
+            <RowDefinition Height="65"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Margin="5,0,0,0"
             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TextBlock x:Name="TitleLbl" Text="Title" FontSize="36" Width="Auto"/>
+            <TextBlock x:Name="TitleLbl" Text="Title" FontSize="26" Width="Auto"/>
             <TextBlock x:Name="AuthorLbl" FontSize="14" Width="Auto">
-                <TextBlock Text="Made by"/>
+                <Run Text="Made by"/>
+                <TextBlock Visibility="{Binding AuthorURL, Converter={StaticResource InverseEmptyStringToVisibilityConverter}}">
+                    <Run Text="{Binding Author}"/>
+                </TextBlock>
                 <TextBlock Visibility="{Binding AuthorURL, Converter={StaticResource EmptyStringToVisibilityConverter}}">
                     <Hyperlink NavigateUri="{Binding AuthorURL}" Click="Hyperlink_OnClick">
-                        <TextBlock Text="{Binding Author}" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}"/>
+                        <Run Text="{Binding Author}" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}"/>
                     </Hyperlink>
                 </TextBlock>
-                <TextBlock Visibility="{Binding AuthorURL, Converter={StaticResource InverseEmptyStringToVisibilityConverter}}">
-                    <TextBlock Text="{Binding Author}"/>
-                </TextBlock>
-                <TextBlock Text="on"/>
-                <TextBlock Text="{Binding Date}"/>
+                <Run Text="on"/>
+                <Run Text="{Binding Date}"/>
             </TextBlock>
         </StackPanel>
         <Rectangle Grid.Row="0" Height="1" Fill="{DynamicResource HMM.Window.BorderBrush}" VerticalAlignment="Bottom"/>
