@@ -176,6 +176,7 @@ namespace HedgeModManager
 
         public void Save()
         {
+            Description = Description.Replace("\r", "").Replace("\n", "\\n");
             using (var stream = File.Create(Path.Combine(RootDirectory, "mod.ini")))
             {
                 IniSerializer.Serialize(this, stream);

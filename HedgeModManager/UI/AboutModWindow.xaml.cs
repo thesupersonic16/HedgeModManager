@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,17 +22,17 @@ namespace HedgeModManager
     {
         public AboutModWindow(ModInfo mod)
         {
+            DataContext = mod;
             InitializeComponent();
             Title = $"About {mod.Title}";
-            TitleLbl.Content = $"{mod.Title}";
+            TitleLbl.Text = $"{mod.Title}";
             if (!string.IsNullOrEmpty(mod.Version))
             {
                 if (mod.Version.ToLower()[0] == 'v')
-                    TitleLbl.Content += $" {mod.Version}";
+                    TitleLbl.Text += $" {mod.Version}";
                 else
-                    TitleLbl.Content += $" v{mod.Version}";
+                    TitleLbl.Text += $" v{mod.Version}";
             }
-            AuthorLbl.Content = $"Made by {mod.Author} on {mod.Date}";
             DescBx.Text = mod.Description;
         }
 
@@ -44,6 +45,14 @@ namespace HedgeModManager
         {
             if(e.Key == Key.Escape)
                 Close();
+        }
+
+        private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
+        {
+            var uri = ((Hyperlink)sender).NavigateUri.ToString();
+
+            if (!string.IsNullOrEmpty(uri))
+                Process.Start(uri);
         }
     }
 }

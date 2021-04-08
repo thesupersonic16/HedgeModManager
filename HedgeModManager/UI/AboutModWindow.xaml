@@ -10,12 +10,20 @@
     
     <Grid Width="Auto" Height="Auto" Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Label x:Name="TitleLbl" Content="Title" FontSize="22" Width="Auto"/>
-            <Label x:Name="AuthorLbl" Content="Author" FontSize="16" Width="Auto"/>
+        <StackPanel Margin="5,0,0,0"
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TextBlock x:Name="TitleLbl" Text="Title" FontSize="22" Width="Auto"/>
+            <TextBlock x:Name="AuthorLbl" FontSize="16" Width="Auto">
+                <TextBlock Text="Made by"/>
+                <Hyperlink NavigateUri="{Binding AuthorURL}" Click="Hyperlink_OnClick">
+                    <TextBlock Text="{Binding Author}"/>
+                </Hyperlink>
+                <TextBlock Text="on"/>
+                <TextBlock Text="{Binding Date}"/>
+            </TextBlock>
         </StackPanel>
         <TextBox Grid.Row="1" x:Name="DescBx" AcceptsReturn="True" Text="Description" IsReadOnly="True" Foreground="{DynamicResource HMM.Menu.DisabledTextColor}"
                  Margin="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
