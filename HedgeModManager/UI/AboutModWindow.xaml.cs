@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Markdig.Helpers;
 
 namespace HedgeModManager
 {
@@ -28,7 +29,7 @@ namespace HedgeModManager
             TitleLbl.Text = $"{mod.Title}";
             if (!string.IsNullOrEmpty(mod.Version))
             {
-                if (mod.Version.ToLower()[0] == 'v')
+                if (!mod.Version.ToLower()[0].IsDigit())
                     TitleLbl.Text += $" {mod.Version}";
                 else
                     TitleLbl.Text += $" v{mod.Version}";
