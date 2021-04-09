@@ -248,3 +248,9 @@ WriteNop(ASLR(0x4A3D82), 5)
 
 Patch "Enable DLC Music in Battle Mode" by "ĐeäTh"
 WriteNop(ASLR(0x0095B570), 6)
+
+Patch "DLC Stages Always Replayable" by "ĐeäTh"
+WriteProtected<byte>(ASLR(0x00912338), 0x57);
+WriteProtected<byte>(ASLR(0x00912326), 0x6A, 0x00);
+WriteNop(ASLR(0x0094594F), 12);
+WriteNop(ASLR(0x0094595B), 12);
