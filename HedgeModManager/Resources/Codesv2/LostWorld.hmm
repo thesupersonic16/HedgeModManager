@@ -251,3 +251,12 @@ WriteNop(ASLR(0x0095B570), 6)
 
 Patch "Sideways wall jump fix" by "Sajid"
 WriteNop(ASLR(0x008C142C), 2)
+
+Patch "DLC Stages Always Replayable" by "ĐeäTh"
+WriteProtected<byte>(ASLR(0x00912338), 0x57);
+WriteProtected<byte>(ASLR(0x00912326), 0x6A, 0x00);
+WriteNop(ASLR(0x0094594F), 12);
+
+Patch "Disable DLC Prizes" by "ĐeäTh"
+WriteNop(ASLR(0x0094595B), 12);
+WriteNop(ASLR(0x00945630), 5);
