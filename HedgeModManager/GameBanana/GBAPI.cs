@@ -329,8 +329,6 @@ namespace GameBananaAPI
         public GBAPICreditGroups Credits { get; set; }
         [JsonProperty("Preview().sPreviewUrl()")]
         public Uri SoundURL { get; set; }
-        [JsonProperty("Files().aFiles()")]
-        public Dictionary<string, GBAPIFile> Files { get; set; } = new Dictionary<string, GBAPIFile>();
 
         public List<GBAPIScreenshotData> Screenshots
         {

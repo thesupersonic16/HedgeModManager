@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
         Title="HedgeModManager" Height="150" MinWidth="400" 
-        Background="#FF2D2D30" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}" SizeToContent="Width">
+        WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}" SizeToContent="Width">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="Normal"/>
     </Window.TaskbarItemInfo>
