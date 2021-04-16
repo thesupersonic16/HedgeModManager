@@ -253,6 +253,35 @@ Patch "Sideways wall jump fix" by "Sajid"
 WriteNop(ASLR(0x008C142C), 2)
 
 Patch "DLC Stages Always Replayable" by "ĐeäTh"
+WriteNop(ASLR(0x0090D2BC), 2);
+String code = $@"mov eax, {ASLR(0x0090D210)}
+push 0
+push 0
+push 0
+mov ecx, esi
+call eax
+mov eax, {ASLR(0x0090D210)}
+push 0
+push 0
+push 1
+mov ecx, esi
+call eax
+mov eax, {ASLR(0x0090D210)}
+push 0
+push 0
+push 2
+mov ecx, esi
+call eax
+mov ecx, [ebp+0xC]
+mov eax, [ecx]
+cmp eax, -4";
+WriteAsmHook
+(
+	ASLR(0x00911F2D),
+	HookBehavior.Replace,
+	code
+)
+
 WriteAsmHook
 (
 	ASLR(0x00912332),
