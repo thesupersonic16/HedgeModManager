@@ -952,6 +952,18 @@ namespace HedgeModManager
             ComboBox_Languages.GetBindingExpression(ComboBox.SelectedItemProperty).UpdateTarget();
         }
 
+        private void ComboBox_Themes_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            HedgeApp.UpdateTheme();
+            RefreshUI();
+        }
+
+        private void ComboBox_Themes_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboBox_Themes.GetBindingExpression(ComboBox.ItemsSourceProperty).UpdateTarget();
+            ComboBox_Themes.GetBindingExpression(ComboBox.SelectedItemProperty).UpdateTarget();
+        }
+
         private void UI_ConfigureMod_Click(object sender, RoutedEventArgs e)
         {
             if(!ViewModel.SelectedMod.HasSchema)

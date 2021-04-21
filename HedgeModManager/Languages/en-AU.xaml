@@ -70,6 +70,7 @@
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Keep Hedge Mod Manager open after starting a game</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >About Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Language:</system:String>
+    <system:String x:Key="SettingsUITheme"       >Theme:</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >Install a mod by...</system:String>

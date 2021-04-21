@@ -29,8 +29,8 @@ using System.Xml.Serialization;
 using HedgeModManager.Languages;
 using HedgeModManager.Misc;
 using HedgeModManager.UI;
-using Microsoft.Win32;
 using Newtonsoft.Json;
+using HedgeModManager.Themes;
 
 namespace HedgeModManager
 {
@@ -70,8 +70,10 @@ namespace HedgeModManager
         public static byte[] IMAGEHLP = new byte[] { 0x69, 0x6D, 0x61, 0x67, 0x65, 0x68, 0x6C, 0x70 };
 
         public static LanguageList SupportedCultures { get; set; }
+        public static ThemeList InstalledThemes { get; set; }
 
         public static LangEntry CurrentCulture { get; set; }
+        public static ThemeEntry CurrentTheme { get; set; }
 
 
         [STAThread]
@@ -138,6 +140,9 @@ namespace HedgeModManager
             Steam.Init();
             InstallGBHandlers();
             SetupLanguages();
+            SetupThemes();
+            CurrentTheme = InstalledThemes.FirstOrDefault(t => t.FileName == RegistryConfig.UITheme);
+            LoadTheme(CurrentTheme?.FileName ?? InstalledThemes.First().FileName);
             CurrentCulture = GetClosestCulture(RegistryConfig.UILanguage);
             if (CurrentCulture != null)
                 LoadLanguage(CurrentCulture.FileName);
@@ -188,9 +193,6 @@ namespace HedgeModManager
             }
 
 #endif
-
-            SystemEvents.UserPreferenceChanging += SystemPreferencesChanged;
-            ChangeTheme(RegistryConfig.UseLightMode);
 
             if (string.IsNullOrEmpty(ModsDbPath))
                 ModsDbPath = Path.Combine(StartDirectory, "Mods");
@@ -319,16 +321,6 @@ namespace HedgeModManager
             while (Restart);
         }
 
-        // This gets hit quite often
-        private static void SystemPreferencesChanged(object sender, UserPreferenceChangingEventArgs e)
-        {
-            var lastMode = RegistryConfig.UseLightMode;
-            RegistryConfig.Load();
-
-            if (lastMode != RegistryConfig.UseLightMode)
-                ChangeTheme(RegistryConfig.UseLightMode);
-        }
-
         public static void ShowHelp()
         {
             Console.WriteLine();
@@ -384,8 +376,8 @@ namespace HedgeModManager
         {
             var langDict = new ResourceDictionary();
             langDict.Source = new Uri($"Languages/{culture}.xaml", UriKind.Relative);
-            while (Current.Resources.MergedDictionaries.Count > 3)
-                Current.Resources.MergedDictionaries.RemoveAt(3);
+            while (Current.Resources.MergedDictionaries.Count > 4)
+                Current.Resources.MergedDictionaries.RemoveAt(4);
             // No need to load the fallback language on top
             if (culture == "en-AU")
                 return;
@@ -419,15 +411,27 @@ namespace HedgeModManager
             LoadLanguage(CurrentCulture.FileName);
         }
 
-        public static void ChangeTheme(bool lightMode)
+        public static void SetupThemes()
         {
-            var theme = new ResourceDictionary
-            {
-                Source = new Uri(lightMode ? "Themes/LightTheme.xaml" : "Themes/DarkTheme.xaml", UriKind.Relative)
-            };
+            var resource = Current.TryFindResource("Themes");
+            if (resource is ThemeList langs)
+                InstalledThemes = langs;
+        }
 
-            Current.Resources.MergedDictionaries.RemoveAt(0);
-            Current.Resources.MergedDictionaries.Insert(0, theme);
+        public static void UpdateTheme()
+        {
+            RegistryConfig.UITheme = CurrentTheme.FileName;
+            RegistryConfig.Save();
+            LoadTheme(CurrentTheme.FileName);
+        }
+
+        public static void LoadTheme(string themeName)
+        {
+            var themeDict = new ResourceDictionary();
+            themeDict.Source = new Uri($"Themes/{themeName}.xaml", UriKind.Relative);
+
+            Current.Resources.MergedDictionaries.RemoveAt(1);
+            Current.Resources.MergedDictionaries.Insert(1, themeDict);
         }
 
         /// <summary>
