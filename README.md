@@ -173,7 +173,7 @@ If you have not made an update just yet then I would recommend:
 - Setting `VersionString` to the current version of the mod
 - Setting `DownloadSizeString` to "0 MB"
 - Setting `StringCount` to `0`
-- Creating a black file called `mod_files.txt` in the update server
+- Creating a blank file called `mod_files.txt` in the update server
 - Including a blank file in `Markdown` (If you want markdown support)
  
 Once you have made an update, you will be modifying all these.
