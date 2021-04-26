@@ -575,3 +575,17 @@ WriteProtected<uint>(0x10C63F2, 0x85);
 WriteProtected<uint>(0x10C641C, 0x85);
 WriteProtected<uint>(0x10C65CB, 0x85);
 WriteProtected<uint>(0x10C65F5, 0x85);
+
+Patch "Disable Spin Jump Particles" by "HyperBE32"
+WriteProtected<byte>(0x15E902C, 0x00);
+
+Patch "Disable Light Dash Particles" by "HyperBE32"
+WriteProtected<byte>(0x10538EC, 0x85);
+
+Patch "Disable Input Guides" by "HyperBE32"
+WriteNop(0x529046, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateBoostDive */
+WriteNop(0x529846, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateQuickStep */
+WriteNop(0x529E36, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateDirection */
+WriteNop(0x52A333, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateSliding */
+WriteNop(0x52A963, 7); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateCommonButtonSign */
+WriteNop(0x528E41, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateLeftRightSign */
