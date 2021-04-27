@@ -58,6 +58,8 @@ namespace HedgeModManager
         public static bool Restart = false;
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration;
+        public static List<ModProfile> ModProfiles = new List<ModProfile>();
+
 
         public const string WebRequestUserAgent =
             "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)";

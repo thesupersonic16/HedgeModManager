@@ -35,15 +35,17 @@ namespace HedgeModManager
 
         public string RootDirectory { get; set; }
         public int ModCount => Mods.Count;
+        protected string FileName = "ModsDb.ini";
 
         public ModsDB()
         {
         }
 
-        public ModsDB(string modsDirectiory)
+        public ModsDB(string modsDirectiory, string fileName = "ModsDb.ini")
         {
             RootDirectory = modsDirectiory;
-            string iniPath = Path.Combine(RootDirectory, "ModsDb.ini");
+            FileName = fileName;
+            string iniPath = Path.Combine(RootDirectory, fileName);
             if (File.Exists(iniPath))
             {
                 try
@@ -142,7 +144,7 @@ namespace HedgeModManager
                 // ReSharper disable once AssignNullToNotNullAttribute
                 mMods.Add(id, $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini");
             }
-            using (var stream = File.Create(Path.Combine(RootDirectory, "ModsDB.ini")))
+            using (var stream = File.Create(Path.Combine(RootDirectory, FileName)))
             {
                 IniSerializer.Serialize(this, stream);
             }

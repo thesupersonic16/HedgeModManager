@@ -25,6 +25,7 @@ using Timer = System.Threading.Timer;
 using HMMResources = HedgeModManager.Properties.Resources;
 using static HedgeModManager.Lang;
 using HedgeModManager.Languages;
+using Newtonsoft.Json;
 
 namespace HedgeModManager
 {
@@ -40,6 +41,7 @@ namespace HedgeModManager
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
         public List<string> CheckedModUpdates = new List<string>();
         public bool PauseModUpdates = false;
+        public ModProfile SelectedModProfile = null;
 
         protected Timer StatusTimer;
 
@@ -54,12 +56,36 @@ namespace HedgeModManager
             RefreshUI();
         }
 
+        public void RefreshProfiles()
+        {
+            HedgeApp.ModProfiles.Clear();
+            try
+            {
+                string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+                if (File.Exists(profilePath))
+                    HedgeApp.ModProfiles = JsonConvert.DeserializeObject<List<ModProfile>>(File.ReadAllText(profilePath));
+                // Create new profile set if needed
+                if (HedgeApp.ModProfiles.Count == 0)
+                    HedgeApp.ModProfiles.Add(new ModProfile("Default", HedgeApp.ModsDbPath));
+
+                SelectedModProfile = HedgeApp.ModProfiles.FirstOrDefault(t => t.Name == HedgeApp.Config.ModProfile)
+                    ?? HedgeApp.ModProfiles.First();
+            }
+            catch (Exception e)
+            {
+                new ExceptionWindow(e).ShowDialog();
+                if (HedgeApp.ModProfiles.Count == 0)
+                    HedgeApp.ModProfiles.Add(new ModProfile("Default", HedgeApp.ModsDbPath));
+                SelectedModProfile = HedgeApp.ModProfiles.First();
+            }
+        }
+
         public void RefreshMods()
         {
             PauseModUpdates = true;
             CodesList.Items.Clear();
 
-            ModsDatabase = new ModsDB(HedgeApp.ModsDbPath);
+            ModsDatabase = new ModsDB(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
             ModsDatabase.DetectMods();
             ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.Sort((x, y) => x.Title.CompareTo(y.Title));
@@ -143,7 +169,9 @@ namespace HedgeModManager
                 CPKREDIR = HedgeApp.Config,
                 ModsDB = ModsDatabase,
                 Games = HedgeApp.SteamGames,
-                Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods)
+                Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods),
+                Profiles = new ObservableCollection<ModProfile>(HedgeApp.ModProfiles),
+                SelectedModProfile = SelectedModProfile
             };
             DataContext = ViewModel;
 
@@ -173,7 +201,6 @@ namespace HedgeModManager
                 loaders = Localise("CommonUINone");
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentSteamGame;
-            Label_MLVersion.Content = $"{Localise("SettingsUILabelLoaders")} {loaders}";
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
             Button_CPKREDIR.Content = Localise(IsCPKREDIRInstalled ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
         }
@@ -644,6 +671,7 @@ namespace HedgeModManager
             if (HedgeApp.CurrentGame.SupportsCPKREDIR)
                 HedgeApp.UpdateCPKREDIR();
 
+            RefreshProfiles();
             Refresh();
             CheckForUpdates();
         }
@@ -889,6 +917,7 @@ namespace HedgeModManager
                 }
 
                 ResetWatchers();
+                RefreshProfiles();
                 Refresh();
                 UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGame.GameName));
                 CheckForLoaderUpdate();
@@ -1059,6 +1088,18 @@ namespace HedgeModManager
                 catch { }
 
             }
+        }
+
+        private void ComboBox_ModProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedModProfile = ComboBox_ModProfile.SelectedItem as ModProfile ?? HedgeApp.ModProfiles.First();
+            HedgeApp.Config.ModProfile = SelectedModProfile.Name;
+            Refresh();
+        }
+
+        private void UI_ManageProfile_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

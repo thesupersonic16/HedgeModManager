@@ -61,6 +61,7 @@
     <system:String x:Key="SettingsUILoadTopBottom"  >Load top to bottom</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Loaders:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Game:</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >Profile:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Mods Directory:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
