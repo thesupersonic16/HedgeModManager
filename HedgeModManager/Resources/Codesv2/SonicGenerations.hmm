@@ -590,3 +590,6 @@ WriteNop(0x529E36, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateDirec
 WriteNop(0x52A333, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateSliding */
 WriteNop(0x52A963, 7); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateCommonButtonSign */
 WriteNop(0x528E41, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateLeftRightSign */
+
+Patch "Disable Lap Time Display" by "Hyper"
+WriteProtected<byte>(0x10976EF, 0x90, 0xE9)
