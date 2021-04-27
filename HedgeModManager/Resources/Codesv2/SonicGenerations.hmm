@@ -595,5 +595,4 @@ Patch "Disable Lap Time Display" by "Hyper"
 WriteProtected<byte>(0x10976EF, 0x90, 0xE9)
 
 Patch "Disable Homing Reticle" by "Hyper"
-WriteProtected<uint>(0xDEBDB7, 0xFFFFFF)
-WriteNop(0xDEC1F9, 5)
+WriteProtected<byte>(0xDEBC36, 0x00)
