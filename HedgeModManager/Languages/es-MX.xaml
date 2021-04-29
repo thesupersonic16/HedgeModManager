@@ -9,6 +9,7 @@
     <system:String x:Key="CommonUICancel" >Cancelar</system:String>
     <system:String x:Key="CommonUIYes"    >Si</system:String>
     <system:String x:Key="CommonUINo"     >No</system:String>
+    <system:String x:Key="CommonUIRetry"  >Reintentar</system:String>
     <system:String x:Key="CommonUIUpdate" >Actualizar</system:String>
     <system:String x:Key="CommonUIDelete" >Borrar</system:String>
     <system:String x:Key="CommonUINone"   >Ninguno</system:String>
@@ -25,7 +26,8 @@
     <system:String x:Key="MainUISave"          >Guardar</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Guardar y Jugar</system:String>
     <system:String x:Key="MainUIPlay"          >Jugar</system:String>
-
+    <system:String x:Key="MainUIMLDownloadFail">Descarga de Cargador de mods Fallida</system:String>
+    
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nombre</system:String>
     <system:String x:Key="ModsUIVersion"        >Versión</system:String>
@@ -59,6 +61,7 @@
     <system:String x:Key="SettingsUILoadTopBottom"  >Cargar de arriba a abajo</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Cargadores:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Juego:</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >Perfil:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Carpeta de Mods:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
@@ -68,6 +71,7 @@
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Mantener Hedge Mod Manager abierto después de iniciar el juego</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >Acerca de Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Idioma:</system:String>
+    <system:String x:Key="SettingsUITheme"          >Tema:</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >Instalando un mod de...</system:String>
@@ -130,5 +134,10 @@
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Configurar {0}</system:String>
 
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">Descarga de Mod fallida</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Ocurrió un error en la descarga. Los servidores están sobrecargados o caídos. Intenta de nuevo más tarde. &#x0a;&#x0a;Detalles: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">Fallo al buscar juego</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager no pudo encontrar la instalacion de {0}</system:String>
 
 </ResourceDictionary>
