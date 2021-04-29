@@ -66,7 +66,7 @@ namespace HedgeModManager
                     HedgeApp.ModProfiles = JsonConvert.DeserializeObject<List<ModProfile>>(File.ReadAllText(profilePath));
                 // Create new profile set if needed
                 if (HedgeApp.ModProfiles.Count == 0)
-                    HedgeApp.ModProfiles.Add(new ModProfile("Default", HedgeApp.ModsDbPath));
+                    HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDb.ini"));
 
                 SelectedModProfile = HedgeApp.ModProfiles.FirstOrDefault(t => t.Name == HedgeApp.Config.ModProfile)
                     ?? HedgeApp.ModProfiles.First();
@@ -75,7 +75,7 @@ namespace HedgeModManager
             {
                 new ExceptionWindow(e).ShowDialog();
                 if (HedgeApp.ModProfiles.Count == 0)
-                    HedgeApp.ModProfiles.Add(new ModProfile("Default", HedgeApp.ModsDbPath));
+                    HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDb.ini"));
                 SelectedModProfile = HedgeApp.ModProfiles.First();
             }
         }
@@ -713,6 +713,8 @@ namespace HedgeModManager
 
         private void UI_Save_Click(object sender, RoutedEventArgs e)
         {
+            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             ShowMissingOtherLoaderWarning();
             EnableSaveRedirIfUsed();
             Task.Factory.StartNew(async () =>
