@@ -26,7 +26,7 @@
     <system:String x:Key="MainUISave"          >Guardar</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Guardar y Jugar</system:String>
     <system:String x:Key="MainUIPlay"          >Jugar</system:String>
-    <system:String x:Key="MainUIMLDownloadFail">Descarga de Cargador de mods Fallida</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">Descarga del cargador de mods fallida</system:String>
     
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nombre</system:String>
