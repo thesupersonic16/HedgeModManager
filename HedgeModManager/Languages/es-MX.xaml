@@ -135,7 +135,7 @@
     <system:String x:Key="ModConfigUITitle">Configurar {0}</system:String>
 
     <!-- Mod Downloader Strings -->
-    <system:String x:Key="ModDownloaderFailed">Descarga de Mod fallida</system:String>
+    <system:String x:Key="ModDownloaderFailed">Descarga del mod fallida</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Ocurrió un error en la descarga. Los servidores están sobrecargados o caídos. Intenta de nuevo más tarde. &#x0a;&#x0a;Detalles: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Fallo al buscar juego</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager no pudo encontrar la instalacion de {0}</system:String>
