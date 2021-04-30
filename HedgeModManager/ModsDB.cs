@@ -35,13 +35,13 @@ namespace HedgeModManager
 
         public string RootDirectory { get; set; }
         public int ModCount => Mods.Count;
-        protected string FileName = "ModsDb.ini";
+        protected string FileName = "ModsDB.ini";
 
         public ModsDB()
         {
         }
 
-        public ModsDB(string modsDirectiory, string fileName = "ModsDb.ini")
+        public ModsDB(string modsDirectiory, string fileName = "ModsDB.ini")
         {
             RootDirectory = modsDirectiory;
             FileName = fileName;

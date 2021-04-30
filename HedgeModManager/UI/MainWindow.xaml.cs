@@ -66,7 +66,7 @@ namespace HedgeModManager
                     HedgeApp.ModProfiles = JsonConvert.DeserializeObject<List<ModProfile>>(File.ReadAllText(profilePath));
                 // Create new profile set if needed
                 if (HedgeApp.ModProfiles.Count == 0)
-                    HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDb.ini"));
+                    HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDB.ini"));
 
                 SelectedModProfile = HedgeApp.ModProfiles.FirstOrDefault(t => t.Name == HedgeApp.Config.ModProfile)
                     ?? HedgeApp.ModProfiles.First();
@@ -75,7 +75,7 @@ namespace HedgeModManager
             {
                 new ExceptionWindow(e).ShowDialog();
                 if (HedgeApp.ModProfiles.Count == 0)
-                    HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDb.ini"));
+                    HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDB.ini"));
                 SelectedModProfile = HedgeApp.ModProfiles.First();
             }
         }
@@ -320,6 +320,7 @@ namespace HedgeModManager
 
         public async Task SaveModsDB()
         {
+            HedgeApp.Config.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
             HedgeApp.Config.Save(HedgeApp.ConfigPath);
             ModsDatabase.Mods.Clear();
             ModsDatabase.Codes.Clear();
@@ -734,6 +735,8 @@ namespace HedgeModManager
 
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
+            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             ShowMissingOtherLoaderWarning();
             EnableSaveRedirIfUsed();
 
@@ -962,7 +965,7 @@ namespace HedgeModManager
             if (dialog.ShowDialog())
             {
                 HedgeApp.ModsDbPath = dialog.SelectedFolder;
-                ViewModel.CPKREDIR.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, "ModsDB.ini");
+                ViewModel.CPKREDIR.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
                 if (ViewModel.CPKREDIR.ModsDbIni.StartsWith(HedgeApp.StartDirectory))
                     ViewModel.CPKREDIR.ModsDbIni = ViewModel.CPKREDIR.ModsDbIni.Substring(HedgeApp.StartDirectory.Length + 1);
                 ViewModel.CPKREDIR.Save(Path.Combine(HedgeApp.StartDirectory, "cpkredir.ini"));
@@ -1094,14 +1097,22 @@ namespace HedgeModManager
 
         private void ComboBox_ModProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            SelectedModProfile.Enabled = false;
             SelectedModProfile = ComboBox_ModProfile.SelectedItem as ModProfile ?? HedgeApp.ModProfiles.First();
+            SelectedModProfile.Enabled = true;
             HedgeApp.Config.ModProfile = SelectedModProfile.Name;
             Refresh();
         }
 
         private void UI_ManageProfile_Click(object sender, RoutedEventArgs e)
         {
-
+            var manager = new ProfileManagerWindow();
+            manager.SelectedModProfile = SelectedModProfile;
+            manager.DataContext = DataContext;
+            manager.ShowDialog();
+            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
+            Refresh();
         }
     }
 }

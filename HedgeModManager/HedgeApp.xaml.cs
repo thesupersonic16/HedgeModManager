@@ -60,7 +60,6 @@ namespace HedgeModManager
         public static NetworkConfig NetworkConfiguration;
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
 
-
         public const string WebRequestUserAgent =
             "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)";
         
@@ -335,6 +334,19 @@ namespace HedgeModManager
 
             Console.WriteLine("    -decrypt");
             Console.WriteLine("        Usage: filename [output]");
+        }
+
+        public static string GenerateModDBFileName()
+        {
+            if (!ModProfiles.Any(t => t.ModDBPath == "ModsDB.ini"))
+                return "ModsDB.ini";
+            for (int i = 1; i < 999; ++i)
+            {
+                string fileName = $"ModsDB{i}.ini";
+                if (!ModProfiles.Any(t => t.ModDBPath == fileName) && !File.Exists(Path.Combine(ModsDbPath, fileName)))
+                    return fileName;
+            }
+            throw new Exception("Failed to generate file name for profiles!");
         }
 
         public static SteamGame FindAndSetLocalGame()

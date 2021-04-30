@@ -94,6 +94,17 @@
     <system:String x:Key="AboutWindowUILine2"  >Requires a legally owned version of one of the supported games.</system:String>
     <system:String x:Key="AboutWindowUICredits">Credits:</system:String>
 
+    <!-- ProfileWindow UI Strings -->
+    <system:String x:Key="ProfileWindowUITitle"      >Manage Profiles</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">Rename Profile</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">Create Profile</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >Profile Name</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >Profile File Name</system:String>
+    <system:String x:Key="ProfileWindowUIAdd"        >Add Profile</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >Rename Profile</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >Delete Profile</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >Profile Name:</system:String>
+
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Please fill out some details about your mod.</system:String>
 
