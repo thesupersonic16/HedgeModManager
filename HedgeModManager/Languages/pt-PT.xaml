@@ -61,6 +61,7 @@
     <system:String x:Key="SettingsUILoadTopBottom"  >Carregar de cima para baixo</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Carregadores:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Jogo:</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >Perfil:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Diretoria de Mods:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
@@ -70,6 +71,7 @@
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Manter o Hedge Mod Manager aberto após iniciar um jogo</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >Sobre o Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Idioma:</system:String>
+    <system:String x:Key="SettingsUITheme"          >Tema:</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >Instalar um mod através de...</system:String>

@@ -61,6 +61,7 @@
     <system:String x:Key="SettingsUILoadTopBottom"  >由上到下排列載入</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >載入器：</system:String>
     <system:String x:Key="SettingsUILabelGame"      >遊戲：</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >設定檔：</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >MOD目錄：</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
@@ -70,6 +71,7 @@
     <system:String x:Key="SettingsUIKeepHMMOpen"    >運行後並保持程式開啟</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >關於Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >語言：</system:String>
+    <system:String x:Key="SettingsUITheme"          >主題：</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >MOD安裝方法</system:String>
@@ -135,5 +137,7 @@
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">無法下載MOD</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">下載期間發生錯誤。 服務器可能已關閉或超載。 請稍後再嘗試。 &#x0a;&#x0a;詳情: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">找不到遊戲</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager無法找到{0}安裝程序</system:String>
 
 </ResourceDictionary>

@@ -61,6 +61,7 @@
     <system:String x:Key="SettingsUILoadTopBottom"  >Инверсия приоритета загрузки модов</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Загрузчик:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Игра:</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >Профиль:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Папка с модами:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
@@ -70,6 +71,7 @@
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Оставить Hedge Mod Manager открытым после запуска игры</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >О программе Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Язык:</system:String>
+    <system:String x:Key="SettingsUITheme"          >Тема:</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >Установить мод, используя...</system:String>

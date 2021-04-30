@@ -61,6 +61,7 @@
     <system:String x:Key="SettingsUILoadTopBottom"  >Mods Van Boven Naar Onder Laden</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Laders:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Spel:</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >Profiel:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Mod Map:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
