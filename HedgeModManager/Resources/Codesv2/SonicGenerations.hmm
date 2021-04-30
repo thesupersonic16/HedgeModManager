@@ -611,3 +611,6 @@ WriteProtected<byte>(0x1289ADE, 0x14, 0xAE);
 
 Patch "Always Use Sphere Spin Dash" by "Hyper"
 WriteProtected<byte>(0x1A545A4, 0xEC, 0xAD);
+
+Patch "Disable Loading Hints" by "Hyper"
+WriteProtected<byte>(0x448959, 0xE9, 0x12, 0x01, 0x00, 0x00);
