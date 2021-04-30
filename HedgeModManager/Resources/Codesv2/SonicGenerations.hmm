@@ -605,3 +605,9 @@ WriteNop(0x109B8DD, 2);
 
 Patch "Disable Boost Button Prompt" by "Hyper"
 WriteProtected<byte>(0x109BC7C, 0xE9, 0x71, 0x01, 0x00, 0x00);
+
+Patch "Always Use Sphere Spindash" by "Hyper"
+WriteProtected<byte>(0x1A545A4, 0xEC, 0xAD);
+
+Patch "Always Use Ellipse Spindash" by "Hyper"
+WriteProtected<byte>(0x1289ADE, 0x14, 0xAE);
