@@ -582,13 +582,8 @@ WriteProtected<byte>(0x15E902C, 0x00);
 Patch "Disable Light Dash Particles" by "Hyper"
 WriteProtected<byte>(0x10538EB, 0xE9, 0x8F, 0x00, 0x00, 0x00, 0x90);
 
-Patch "Disable Input Guides" by "Hyper"
-WriteNop(0x529046, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateBoostDive        */
-WriteNop(0x529846, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateQuickStep        */
-WriteNop(0x529E36, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateDirection        */
-WriteNop(0x52A333, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateSliding          */
-WriteNop(0x52A963, 7); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateCommonButtonSign */
-WriteNop(0x528E41, 6); /* Sonic::Player::Hud::Guide::CSonicHudGuide::CStateLeftRightSign    */
+Patch "Disable Light Dash Hints" by "Hyper"
+WriteProtected<byte>(0x528A08, 0xE9, 0xC8, 0x00, 0x00, 0x00);
 
 Patch "Disable Lap Time Display" by "Hyper"
 WriteProtected<byte>(0x10976EF, 0x90, 0xE9);
