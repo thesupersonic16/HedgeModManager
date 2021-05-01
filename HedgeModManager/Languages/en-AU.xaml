@@ -102,7 +102,7 @@
     <system:String x:Key="ProfileWindowUIFile"       >Profile File Name</system:String>
     <system:String x:Key="ProfileWindowUIAdd"        >Add Profile</system:String>
     <system:String x:Key="ProfileWindowUIRename"     >Rename Profile</system:String>
-    <system:String x:Key="ProfileWindowUIDuplicate"  >Duplicate Profile</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Clone Profile</system:String>
     <system:String x:Key="ProfileWindowUIDelete"     >Delete Profile</system:String>
     <system:String x:Key="ProfileWindowUINameLabel"  >Profile Name:</system:String>
 

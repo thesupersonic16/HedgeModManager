@@ -106,6 +106,8 @@ namespace HedgeModManager.UI
                 return;
             if (!(DataContext is MainWindowViewModel mainWindow))
                 return;
+            if (profile.ModDBPath == "ModsDB.ini")
+                return;
             if (File.Exists(Path.Combine(HedgeApp.ModsDbPath, profile.ModDBPath)))
                 File.Delete(Path.Combine(HedgeApp.ModsDbPath, profile.ModDBPath));
 

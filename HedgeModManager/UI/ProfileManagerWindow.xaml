@@ -12,7 +12,7 @@
         <ContextMenu x:Key="ProfileContextMenu">
             <MenuItem Header="{DynamicResource ProfileWindowUIRename}"    Click="UI_ProfileRename_Click" InputGestureText="(Space)"/>
             <MenuItem Header="{DynamicResource ProfileWindowUIAdd}"       Click="UI_Add_Click" InputGestureText="(Ctrl+N)"/>
-            <MenuItem Header="{DynamicResource ProfileWindowUIDuplicate}" Click="UI_ProfileDuplicate_Click" InputGestureText="(Ctrl+D)"/>
+            <MenuItem Header="{DynamicResource ProfileWindowUIClone}" Click="UI_ProfileDuplicate_Click" InputGestureText="(Ctrl+D)"/>
             <MenuItem x:Name="ContextMenuItemDelete" Header="{DynamicResource ProfileWindowUIDelete}" Click="UI_ProfileDelete_Click" InputGestureText="(Delete)"/>
         </ContextMenu>
     </Window.Resources>
