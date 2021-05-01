@@ -1107,7 +1107,6 @@ namespace HedgeModManager
         private void UI_ManageProfile_Click(object sender, RoutedEventArgs e)
         {
             var manager = new ProfileManagerWindow();
-            manager.SelectedModProfile = SelectedModProfile;
             manager.DataContext = DataContext;
             manager.ShowDialog();
             string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");

@@ -6,12 +6,13 @@
         xmlns:local="clr-namespace:HedgeModManager.UI"
         mc:Ignorable="d"
         Title="{StaticResource ProfileWindowUITitle}" Height="441.778" Width="600"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}" PreviewKeyDown="Window_PreviewKeyDown">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ContextMenu x:Key="ProfileContextMenu">
-            <MenuItem Header="{DynamicResource ProfileWindowUIRename}" Click="UI_ProfileRename_Click" InputGestureText="(Ctrl+R)"/>
-            <MenuItem Header="{DynamicResource ProfileWindowUIAdd}" Click="UI_Add_Click" InputGestureText="(Ctrl+N)"/>
+            <MenuItem Header="{DynamicResource ProfileWindowUIRename}"    Click="UI_ProfileRename_Click" InputGestureText="(Space)"/>
+            <MenuItem Header="{DynamicResource ProfileWindowUIAdd}"       Click="UI_Add_Click" InputGestureText="(Ctrl+N)"/>
+            <MenuItem Header="{DynamicResource ProfileWindowUIDuplicate}" Click="UI_ProfileDuplicate_Click" InputGestureText="(Ctrl+D)"/>
             <MenuItem x:Name="ContextMenuItemDelete" Header="{DynamicResource ProfileWindowUIDelete}" Click="UI_ProfileDelete_Click" InputGestureText="(Delete)"/>
         </ContextMenu>
     </Window.Resources>
@@ -24,7 +25,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="ProfileListView" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" Margin="10,10,10,15" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedProfile}">
+        <ListView x:Name="ProfileListView" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
+                  Margin="10,10,10,15" ItemsSource="{Binding Profiles}" PreviewKeyDown="ProfileListView_PreviewKeyDown">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                     <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>

@@ -42,5 +42,10 @@ namespace HedgeModManager.UI
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void ProfileNameTextbox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            UI_OK_Click(null, null);
+        }
     }
 }

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:HedgeModManager.UI"
         mc:Ignorable="d"
         Title="{StaticResource ProfileWindowUIRenameTitle}" Height="200" Width="540"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}"
+        FocusManager.FocusedElement="{Binding ElementName=ProfileNameTextbox}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,7 +16,7 @@
         </Grid.RowDefinitions>
         <TextBlock x:Name="Header" Text="HEADER" TextAlignment="Center" FontSize="30" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20,0" TextWrapping="Wrap"/>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{DynamicResource ProfileWindowUINameLabel}" Margin="55,3,398.667,41" Grid.Row="1"></TextBlock>
-        <TextBox Text="{Binding NewProfileName, Mode=TwoWay}" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,21,0,18" Width="414"></TextBox>
+        <TextBox x:Name="ProfileNameTextbox" Text="{Binding NewProfileName, Mode=TwoWay}" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,21,0,18" Width="414" PreviewKeyDown="ProfileNameTextbox_PreviewKeyDown"></TextBox>
         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-4" Grid.Row="2" Background="{StaticResource HMM.Window.DialogBottom}">
             <Button Content="{StaticResource CommonUIOK}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_OK_Click" />
             <Button Content="{StaticResource CommonUICancel}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" IsCancel="True" />
