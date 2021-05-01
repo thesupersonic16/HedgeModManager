@@ -582,9 +582,6 @@ WriteProtected<byte>(0x15E902C, 0x00);
 Patch "Disable Light Dash Particles" by "Hyper"
 WriteProtected<byte>(0x10538EB, 0xE9, 0x8F, 0x00, 0x00, 0x00, 0x90);
 
-Patch "Disable Light Dash Hints" by "Hyper"
-WriteProtected<byte>(0x528A08, 0xE9, 0xC8, 0x00, 0x00, 0x00);
-
 Patch "Disable Lap Time Display" by "Hyper"
 WriteProtected<byte>(0x10976EF, 0x90, 0xE9);
 
@@ -609,3 +606,6 @@ WriteProtected<byte>(0x1A545A4, 0xEC, 0xAD);
 
 Patch "Disable Loading Hints" by "Hyper"
 WriteProtected<byte>(0x448959, 0xE9, 0x12, 0x01, 0x00, 0x00);
+
+Patch "Disable Title Loading Video" by "Hyper"
+WriteProtected<byte>(0xD6966E, 0xE9, 0x14, 0x01, 0x00, 0x00);
