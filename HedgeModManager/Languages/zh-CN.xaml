@@ -94,6 +94,18 @@
     <system:String x:Key="AboutWindowUILine2"  >需要合法拥有的游戏版本来支持。</system:String>
     <system:String x:Key="AboutWindowUICredits">来源：</system:String>
 
+    <!-- ProfileWindow UI Strings -->
+    <system:String x:Key="ProfileWindowUITitle"      >管理设定档</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">更改设定档</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">创建设定档</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >设定档名称</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >配置设定档名称</system:String>
+    <system:String x:Key="ProfileWindowUIAdd"        >新增设定档</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >更改设定档</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >克隆设定档</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >删除设定档</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >设定档名称：</system:String>
+
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">请填写有关您的MOD的一些详细信息</system:String>
 

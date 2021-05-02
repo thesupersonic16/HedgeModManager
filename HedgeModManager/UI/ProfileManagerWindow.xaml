@@ -51,7 +51,7 @@
             </ListView.View>
         </ListView>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-4" Grid.Row="2" Grid.Column="0" Background="{StaticResource HMM.Window.DialogBottom}">
-            <Button Content="{StaticResource ProfileWindowUIAdd}" Margin="8,8,0,8" VerticalAlignment="Center" Width="86" Height="22" Click="UI_Add_Click" />
+            <Button Content="{StaticResource ProfileWindowUIAdd}" Margin="8,8,0,8" VerticalAlignment="Center" Width="117" Height="22" Click="UI_Add_Click" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-4" Grid.Row="2" Grid.Column="1" Background="{StaticResource HMM.Window.DialogBottom}">
             <Button Content="{StaticResource CommonUIOK}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_OK_Click" />
