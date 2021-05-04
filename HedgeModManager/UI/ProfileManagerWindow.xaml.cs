@@ -39,7 +39,6 @@ namespace HedgeModManager.UI
                 // Generate filename
                 window.Profile.ModDBPath = HedgeApp.GenerateModDBFileName();
                 // Add Profile
-                HedgeApp.ModProfiles.Add(window.Profile);
                 if (DataContext is MainWindowViewModel mainWindow)
                     mainWindow.Profiles.Add(window.Profile);
             }
@@ -94,7 +93,6 @@ namespace HedgeModManager.UI
                 }
                 catch { }
                 // Add Profile
-                HedgeApp.ModProfiles.Add(window.Profile);
                 if (DataContext is MainWindowViewModel mainWindow)
                     mainWindow.Profiles.Add(window.Profile);
             }
@@ -112,7 +110,6 @@ namespace HedgeModManager.UI
                 File.Delete(Path.Combine(HedgeApp.ModsDbPath, profile.ModDBPath));
 
             mainWindow.Profiles.Remove(profile);
-            HedgeApp.ModProfiles.Remove(profile);
         }
 
         private void ProfileListView_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -126,9 +123,10 @@ namespace HedgeModManager.UI
                 UI_ProfileRename_Click(null, null);
             if (ctrlKey && Keyboard.IsKeyDown(Key.N))
                 UI_Add_Click(null, null);
+            if (ctrlKey && Keyboard.IsKeyDown(Key.D))
+                UI_ProfileDuplicate_Click(null, null);
             if (Keyboard.IsKeyDown(Key.Delete))
                 UI_ProfileDelete_Click(null, null);
-
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)

@@ -175,11 +175,10 @@ namespace HedgeModManager
             };
             DataContext = ViewModel;
 
-            Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {HedgeApp.CurrentGame.GameName}";
+            Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {HedgeApp.CurrentGame.GameName} ({SelectedModProfile?.Name})";
 
             if (HedgeApp.CurrentGame.HasCustomLoader)
             {
-                //Button_CPKREDIR.IsEnabled = HedgeApp.CurrentGame.SupportsCPKREDIR;
                 Button_OtherLoader.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader;
                 Button_DownloadCodes.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader && !string.IsNullOrEmpty(HedgeApp.CurrentGame.CodesURL);
             }
@@ -202,7 +201,6 @@ namespace HedgeModManager
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentSteamGame;
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
-            Button_CPKREDIR.Content = Localise(IsCPKREDIRInstalled ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
         }
 
         public bool CheckForModUpdates(ModInfo mod, bool showUpdatedDialog = true)
@@ -1097,6 +1095,18 @@ namespace HedgeModManager
 
         private void ComboBox_ModProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Save profile
+            Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    await SaveModsDB();
+                }
+                catch (Exception ex)
+                {
+                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
+                }
+            });
             SelectedModProfile.Enabled = false;
             SelectedModProfile = ComboBox_ModProfile.SelectedItem as ModProfile ?? HedgeApp.ModProfiles.First();
             SelectedModProfile.Enabled = true;
@@ -1109,6 +1119,10 @@ namespace HedgeModManager
             var manager = new ProfileManagerWindow();
             manager.DataContext = DataContext;
             manager.ShowDialog();
+            // Update profiles
+            HedgeApp.ModProfiles.Clear();
+            HedgeApp.ModProfiles.AddRange(ViewModel.Profiles);
+            // Save profiles
             string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
             File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             Refresh();

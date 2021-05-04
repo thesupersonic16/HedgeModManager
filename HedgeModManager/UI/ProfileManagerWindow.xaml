@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:local="clr-namespace:HedgeModManager.UI"
         mc:Ignorable="d"
         Title="{StaticResource ProfileWindowUITitle}" Height="441.778" Width="600"
@@ -26,7 +27,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ListView x:Name="ProfileListView" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
-                  Margin="10,10,10,15" ItemsSource="{Binding Profiles}" PreviewKeyDown="ProfileListView_PreviewKeyDown">
+                  Margin="10,10,10,15" ItemsSource="{Binding Profiles}" PreviewKeyDown="ProfileListView_PreviewKeyDown"
+                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                     <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
