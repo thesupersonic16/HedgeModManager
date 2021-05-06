@@ -9,7 +9,7 @@
     <system:String x:Key="CommonUICancel">Cancelar</system:String>
     <system:String x:Key="CommonUIYes"   >Sim</system:String>
     <system:String x:Key="CommonUINo"    >Não</system:String>
-    <system:String x:Key="CommonUIRetry"  >Tentar Novamente</system:String>	
+    <system:String x:Key="CommonUIRetry"  >Tentar Novamente</system:String>
     <system:String x:Key="CommonUIUpdate">Atualizar</system:String>
     <system:String x:Key="CommonUIDelete">Apagar</system:String>
     <system:String x:Key="CommonUINone"  >Nenhum</system:String>
@@ -93,6 +93,18 @@
     <system:String x:Key="AboutWindowUILine1">Um programa desenhado para facilitar o carregamento de mods para a Hedgehog Engine.</system:String>
     <system:String x:Key="AboutWindowUILine2">Requer uma cópia legal de um dos jogos suportados.</system:String>
     <system:String x:Key="AboutWindowUICredits">Créditos:</system:String>
+
+    <!-- ProfileWindow UI Strings -->
+    <system:String x:Key="ProfileWindowUITitle"      >Gerenciar Perfis</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">Renomear Perfil</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">Criar Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >Nome do Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >Nome do Ficheiro do Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIAdd"        >Adicionar um Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >Renomear Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Clonar Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >Eliminar Perfil</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >Nome do Perfil:</system:String>
 
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Por favor preencha alguns detalhes sobre o seu mod.</system:String>

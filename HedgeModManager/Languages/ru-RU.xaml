@@ -94,6 +94,18 @@
     <system:String x:Key="AboutWindowUILine2"  >Requires a legally owned version of one of the supported games.</system:String>
     <system:String x:Key="AboutWindowUICredits">Авторы:</system:String>
 
+    <!-- ProfileWindow UI Strings -->
+    <system:String x:Key="ProfileWindowUITitle"      >Управление профилями</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">Переименование профиля</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">Создание профиля</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >Имя профиля</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >Имя файла у профиля</system:String>
+    <system:String x:Key="ProfileWindowUIAdd"        >Добавить профиль</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >Переименовать профиль</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Скопировать профиль</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >Удалить профиль</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >Имя профиля:</system:String>
+
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Добавьте немного информации о своем моде.</system:String>
 

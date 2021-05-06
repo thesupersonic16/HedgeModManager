@@ -9,7 +9,7 @@
     <system:String x:Key="CommonUICancel">Cancelar</system:String>
     <system:String x:Key="CommonUIYes"   >Sim</system:String>
     <system:String x:Key="CommonUINo"    >Não</system:String>
-    <system:String x:Key="CommonUIRetry"  >Tentar Novamente</system:String>	
+    <system:String x:Key="CommonUIRetry"  >Tentar Novamente</system:String>
     <system:String x:Key="CommonUIUpdate">Atualizar</system:String>
     <system:String x:Key="CommonUIDelete">Apagar</system:String>
     <system:String x:Key="CommonUINone"  >Nenhum</system:String>
@@ -27,7 +27,7 @@
     <system:String x:Key="MainUISaveAndPlay"   >Guardar e Jogar</system:String>
     <system:String x:Key="MainUIPlay"          >Jogar</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Falha ao transferir o carregador de mods.</system:String>
-    
+
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nome</system:String>
     <system:String x:Key="ModsUIVersion"        >Versão</system:String>
@@ -94,6 +94,18 @@
     <system:String x:Key="AboutWindowUILine2">Requer uma cópia legal de um dos jogos suportados.</system:String>
     <system:String x:Key="AboutWindowUICredits">Créditos:</system:String>
 
+    <!-- ProfileWindow UI Strings -->
+    <system:String x:Key="ProfileWindowUITitle"      >Gerir Perfis</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">Renomear Perfil</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">Criar Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >Nome do Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >Nome do Ficheiro do Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIAdd"        >Adicionar um Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >Renomear Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Clonar Perfil</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >Eliminar Perfil</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >Nome do Perfil:</system:String>
+
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Por favor preenche alguns detalhes sobre o teu mod.</system:String>
 
@@ -133,11 +145,11 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Configurar {0}</system:String>
-    
+
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Falha ao Transferir Mod</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Ocorreu um erro durante a transferência. Os servidores poderão estar em baixo ou sobrecarregados. Por favor tenta novamente mais tarde. &#x0a;&#x0a;Detalhes: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Falha ao Encontrar Jogo</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">O Hedge Mod Manager foi incapaz de encontrar uma instalação de {0}</system:String>
-    
+
 </ResourceDictionary>
