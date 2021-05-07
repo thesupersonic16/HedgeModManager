@@ -627,3 +627,9 @@ WriteProtected<byte>(0x109B1A4, 0xE9, 0xDC, 0x02, 0x00, 0x00);
 WriteProtected<byte>(0x11CCA82, 0xE9, 0xB1, 0x00, 0x00, 0x00);
 WriteProtected<byte>(0x166463C, 0x00);
 WriteProtected<byte>(0x167DDE4, 0x00);
+
+Patch "Use Japanese Name for Rooftop Run" by "Hyper"
+WriteNop(0xEE51E5, 2);
+
+Patch "Use Original Stage Text Colours" by "Hyper"
+WriteProtected<byte>(0xEE3F90, 0xEB, 0x2A);
