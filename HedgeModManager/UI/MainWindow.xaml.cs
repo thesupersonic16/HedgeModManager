@@ -209,16 +209,8 @@ namespace HedgeModManager
         {
             if (CodesTab.IsSelected)
             {
-                if (CodesOutdated)
-                {
-                    // Display update alert if codes are outdated.
-                    UpdateStatus(Localise("StatusUICodeUpdatesAvailable"));
-                }
-                else
-                {
-                    // Display feedback if no code updates are found.
-                    UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
-                }
+                // Display update alert.
+                UpdateStatus(Localise(CodesOutdated ? "StatusUICodeUpdatesAvailable" : "StatusUINoCodeUpdatesFound"));
             }
         }
 
