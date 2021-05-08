@@ -139,7 +139,7 @@ namespace HedgeModManager
             PauseModUpdates = false;
         }
 
-        public async void RefreshUI()
+        public void RefreshUI()
         {
             // Re-arrange the mods
             for (int i = 0; i < ModsDatabase.ActiveMods.Count; i++)
@@ -181,10 +181,6 @@ namespace HedgeModManager
             {
                 Button_OtherLoader.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader;
                 Button_DownloadCodes.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader && !string.IsNullOrEmpty(HedgeApp.CurrentGame.CodesURL);
-
-                // Schedule checking for code updates if available.
-                if (Button_DownloadCodes.IsEnabled && CodesTab.IsSelected)
-                    await CheckForCodeUpdates();
             }
 
             var exeDir = HedgeApp.StartDirectory;
@@ -232,8 +228,7 @@ namespace HedgeModManager
                 }
                 else
                 {
-                    /* TODO - Should we give feedback here?
-                              Making the button flash could be a good enough indicator too. */
+                    // TODO - Should we give feedback here?
                     UpdateStatus(string.Empty);
 
                     // Codes are different, report update possibility.
@@ -948,9 +943,9 @@ namespace HedgeModManager
             StatusTimer.Change(4000, Timeout.Infinite);
         }
 
-        private void Game_Changed(object sender, SelectionChangedEventArgs e)
+        private async void Game_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if(ComboBox_GameStatus.SelectedItem != null)
+            if (ComboBox_GameStatus.SelectedItem != null)
             {
                 HedgeApp.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
 
@@ -970,6 +965,10 @@ namespace HedgeModManager
                 Refresh();
                 UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGame.GameName));
                 CheckForLoaderUpdate();
+
+                // Schedule checking for code updates if available.
+                if (Button_DownloadCodes.IsEnabled)
+                    await CheckForCodeUpdates();
             }
         }
 

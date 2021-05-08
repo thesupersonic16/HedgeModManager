@@ -73,7 +73,7 @@
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}">
+                    <TabItem Header="{DynamicResource MainUICodes}">
                         <Grid>
                             <GroupBox Margin="10,5,10,5">
                                 <Button   x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
@@ -117,14 +117,14 @@
                                         <CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="-1,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                     </StackPanel>
 
-                                    <Label                                   Content="{DynamicResource SettingsUILabelGame}" VerticalAlignment="Top" Margin="0,7,245,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
-                                    <ComboBox   x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="0,7,3,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="Game_Changed" HorizontalAlignment="Right" Width="237" />
-                                    <Label                                   Content="{DynamicResource SettingsUILabelProfile}" VerticalAlignment="Top" Margin="0,38,245,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
-                                    <ComboBox   x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Margin="0,38,32,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Right" Width="208" />
+                                    <Label                                   Content="{DynamicResource SettingsUILabelGame}" VerticalAlignment="Top" Margin="0,7,253,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
+                                    <ComboBox   x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="0,7,10,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="Game_Changed" HorizontalAlignment="Right" Width="237" />
+                                    <Label                                   Content="{DynamicResource SettingsUILabelProfile}" VerticalAlignment="Top" Margin="0,38,253,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
+                                    <ComboBox   x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Margin="0,38,39,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Right" Width="208" />
                                     <Label                                   Content="{DynamicResource SettingsUILabelMDir}"    Margin="4,68,0,0"      HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
-                                    <Button                                  Content="⚙"                                       Margin="0,39,3,0" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Height="24" HorizontalAlignment="Right" Width="24"/>
-                                    <TextBox                                 Text="{Binding ModsDB.RootDirectory}"              Margin="113,71,32,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
-                                    <Button                                  Content="..."                                      Margin="0,71,3,0" VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
+                                    <Button                                  Content="⚙"                                       Margin="0,39,10,0" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Height="24" HorizontalAlignment="Right" Width="24"/>
+                                    <TextBox                                 Text="{Binding ModsDB.RootDirectory}"              Margin="113,71,39,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
+                                    <Button                                  Content="..."                                      Margin="0,71,10,0" VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
                                 </Grid>
                             </GroupBox>
 
