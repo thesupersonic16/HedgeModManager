@@ -38,7 +38,7 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="{DynamicResource ProfileWindowUIName}" Width="300">
+                    <GridViewColumn Header="{DynamicResource ProfileWindowUIName}" Width="360">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

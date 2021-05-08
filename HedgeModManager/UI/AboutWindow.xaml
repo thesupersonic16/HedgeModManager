@@ -38,6 +38,7 @@
                     <Label Content="Skyth"/>
                     <Label Content="PTKickass"/>
                     <Label Content="M&amp;M"/>
+                    <Label Content="Hyper"/>
                     <Label Content="MainMemory"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
@@ -46,6 +47,7 @@
                     <Label Content="Base Design"/>
                     <Label Content="CPKREDIR"/>
                     <Label Content="Contributing to Forces Mod Loader"/>
+                    <Label Content="Contributing to the project"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="mod-loader-common"/>

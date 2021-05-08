@@ -139,7 +139,7 @@ namespace HedgeModManager
             PauseModUpdates = false;
         }
 
-        public void RefreshUI()
+        public async void RefreshUI()
         {
             // Re-arrange the mods
             for (int i = 0; i < ModsDatabase.ActiveMods.Count; i++)
@@ -181,6 +181,10 @@ namespace HedgeModManager
             {
                 Button_OtherLoader.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader;
                 Button_DownloadCodes.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader && !string.IsNullOrEmpty(HedgeApp.CurrentGame.CodesURL);
+
+                // Schedule checking for code updates if available.
+                if (Button_DownloadCodes.IsEnabled && CodesTab.IsSelected)
+                    await CheckForCodeUpdates();
             }
 
             var exeDir = HedgeApp.StartDirectory;
@@ -201,6 +205,45 @@ namespace HedgeModManager
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentSteamGame;
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
+        }
+
+        public async Task CheckForCodeUpdates()
+        {
+            // Codes from disk.
+            string localCodes = File.ReadAllText(CodeProvider.CodesTextPath);
+
+            UpdateStatus(Localise("StatusUICheckingForCodeUpdates"));
+
+            try
+            {
+                // Codes from the GitHub repository.
+                string repoCodes = await new WebClient()
+                {
+                    Encoding = Encoding.UTF8 // Use UTF-8 encoding so accented characters don't die.
+                }
+                .DownloadStringTaskAsync(new Uri(HedgeApp.CurrentGame.CodesURL));
+
+                if (localCodes == repoCodes)
+                {
+                    UpdateStatus(Localise("StatusUINoUpdatesFound"));
+
+                    // Codes are the same, so use default text.
+                    Button_DownloadCodes.Content = Localise("CodesUIDownload");
+                }
+                else
+                {
+                    /* TODO - Should we give feedback here?
+                              Making the button flash could be a good enough indicator too. */
+                    UpdateStatus(string.Empty);
+
+                    // Codes are different, report update possibility.
+                    Button_DownloadCodes.Content = Localise("CodesUIUpdate");
+                }
+            }
+            catch (WebException)
+            {
+                UpdateStatus(Localise("StatusUIFailedToCheckCodeUpdates"));
+            }
         }
 
         public bool CheckForModUpdates(ModInfo mod, bool showUpdatedDialog = true)
@@ -424,9 +467,13 @@ namespace HedgeModManager
             new Thread(() =>
             {
                 CheckForManagerUpdates();
+
                 if (HedgeApp.Config.CheckForModUpdates)
                     CheckAllModsUpdates();
-            }).Start();
+            })
+            .Start();
+
+            _ = CheckForCodeUpdates();
         }
 
         public void CheckForManagerUpdates()
