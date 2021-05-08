@@ -205,13 +205,10 @@ namespace HedgeModManager
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
         }
 
-        private void UI_TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void UI_CodesTab_Click(object sender, RoutedEventArgs e)
         {
-            if (CodesTab.IsSelected)
-            {
-                // Display update alert.
-                UpdateStatus(Localise(CodesOutdated ? "StatusUICodeUpdatesAvailable" : "StatusUINoCodeUpdatesFound"));
-            }
+            // Display update alert.
+            UpdateStatus(Localise(CodesOutdated ? "StatusUICodeUpdatesAvailable" : "StatusUINoCodeUpdatesFound"));
         }
 
         public async Task CheckForCodeUpdates()

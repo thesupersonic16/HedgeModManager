@@ -30,7 +30,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Label x:Name="StatusLbl" Margin="0,-5,0,0" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" SelectionChanged="UI_TabControl_SelectionChanged">
+                <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem Header="{DynamicResource MainUIMods}">
                         <Grid>
                             <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown"
@@ -73,7 +73,7 @@
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}" Margin="1,0,-1,0">
+                    <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}" Selector.Selected="UI_CodesTab_Click" Margin="1,0,-1,0">
                         <Grid>
                             <GroupBox Margin="10,5,10,5">
                                 <Button   x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
