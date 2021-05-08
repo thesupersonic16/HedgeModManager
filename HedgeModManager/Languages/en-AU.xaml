@@ -115,27 +115,27 @@
     <system:String x:Key="PropertyEditorUIValue">Value</system:String>
 
     <!-- Status UI Strings -->
-    <system:String x:Key="StatusUILoadedMods"              >Loaded {0} mods</system:String>
-    <system:String x:Key="StatusUICheckingModUpdates"      >Checking for {0} updates</system:String>
-    <system:String x:Key="StatusUIFailedToUpdate"          >Failed to update {0}! {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckFinish"    >Finished checking for mod updates: {0} completed, {1} failed</system:String>
-    <system:String x:Key="StatusUIStartingGame"            >Starting {0}</system:String>
-    <system:String x:Key="StatusUICheckingForUpdates"      >Checking for updates</system:String>
-    <system:String x:Key="StatusUINoUpdatesFound"          >No updates found</system:String>
-    <system:String x:Key="StatusUIFailedToCheckUpdates"    >Failed to check for updates</system:String>
-    <system:String x:Key="StatusUICheckingForLoaderUpdate" >Checking for {0} updates</system:String>
-    <system:String x:Key="StatusUILoaderUpToDate"          >{0} is up to date</system:String>
-    <system:String x:Key="StatusUIFailedLoaderUpdateCheck" >Failed to check for {0} updates</system:String>
-    <system:String x:Key="StatusUIInstalledLoader"         >Installed {0}</system:String>
-    <system:String x:Key="StatusUIDeletedMod"              >Deleted {0}</system:String>
-    <system:String x:Key="StatusUIModsDBSaved"             >Saved mods database</system:String>
-    <system:String x:Key="StatusUIModsDBLocationChanged"   >Updated database location</system:String>
-    <system:String x:Key="StatusUIGameChange"              >Changed game to {0}</system:String>
-    <system:String x:Key="StatusUIDownloadingCodes"        >Downloading codes for {0}</system:String>
-    <system:String x:Key="StatusUIDownloadFinished"        >Download finished</system:String>
-    <system:String x:Key="StatusUIDownloadFailed"          >Download failed</system:String>
-    <system:String x:Key="StatusUICheckingForCodeUpdates"  >Checking for code updates</system:String>
-    <system:String x:Key="StatusUIFailedToCheckCodeUpdates">Failed to check for code updates</system:String>
+    <system:String x:Key="StatusUILoadedMods"             >Loaded {0} mods</system:String>
+    <system:String x:Key="StatusUICheckingModUpdates"     >Checking for {0} updates</system:String>
+    <system:String x:Key="StatusUIFailedToUpdate"         >Failed to update {0}! {1}</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Finished checking for mod updates: {0} completed, {1} failed</system:String>
+    <system:String x:Key="StatusUIStartingGame"           >Starting {0}</system:String>
+    <system:String x:Key="StatusUICheckingForUpdates"     >Checking for updates</system:String>
+    <system:String x:Key="StatusUINoUpdatesFound"         >No updates found</system:String>
+    <system:String x:Key="StatusUIFailedToCheckUpdates"   >Failed to check for updates</system:String>
+    <system:String x:Key="StatusUICheckingForLoaderUpdate">Checking for {0} updates</system:String>
+    <system:String x:Key="StatusUILoaderUpToDate"         >{0} is up to date</system:String>
+    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Failed to check for {0} updates</system:String>
+    <system:String x:Key="StatusUIInstalledLoader"        >Installed {0}</system:String>
+    <system:String x:Key="StatusUIDeletedMod"             >Deleted {0}</system:String>
+    <system:String x:Key="StatusUIModsDBSaved"            >Saved mods database</system:String>
+    <system:String x:Key="StatusUIModsDBLocationChanged"  >Updated database location</system:String>
+    <system:String x:Key="StatusUIGameChange"             >Changed game to {0}</system:String>
+    <system:String x:Key="StatusUIDownloadingCodes"       >Downloading codes for {0}</system:String>
+    <system:String x:Key="StatusUIDownloadFinished"       >Download finished</system:String>
+    <system:String x:Key="StatusUIDownloadFailed"         >Download failed</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >Code updates available!</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >No code updates found</system:String>
     
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Are you sure you want to delete "{0}"?&#x0a;This action cannot be undone!</system:String>

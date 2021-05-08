@@ -45,6 +45,8 @@ namespace HedgeModManager
 
         protected Timer StatusTimer;
 
+        private bool CodesOutdated = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -203,15 +205,30 @@ namespace HedgeModManager
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
         }
 
+        private void UI_TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CodesTab.IsSelected)
+            {
+                if (CodesOutdated)
+                {
+                    // Display update alert if codes are outdated.
+                    UpdateStatus(Localise("StatusUICodeUpdatesAvailable"));
+                }
+                else
+                {
+                    // Display feedback if no code updates are found.
+                    UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
+                }
+            }
+        }
+
         public async Task CheckForCodeUpdates()
         {
-            // Codes from disk.
-            string localCodes = File.ReadAllText(CodeProvider.CodesTextPath);
-
-            UpdateStatus(Localise("StatusUICheckingForCodeUpdates"));
-
             try
             {
+                // Codes from disk.
+                string localCodes = File.ReadAllText(CodeProvider.CodesTextPath);
+
                 // Codes from the GitHub repository.
                 string repoCodes = await new WebClient()
                 {
@@ -221,24 +238,20 @@ namespace HedgeModManager
 
                 if (localCodes == repoCodes)
                 {
-                    UpdateStatus(Localise("StatusUINoUpdatesFound"));
+                    CodesOutdated = false;
 
                     // Codes are the same, so use default text.
                     Button_DownloadCodes.Content = Localise("CodesUIDownload");
                 }
                 else
                 {
-                    // TODO - Should we give feedback here?
-                    UpdateStatus(string.Empty);
+                    CodesOutdated = true;
 
                     // Codes are different, report update possibility.
                     Button_DownloadCodes.Content = Localise("CodesUIUpdate");
                 }
             }
-            catch (WebException)
-            {
-                UpdateStatus(Localise("StatusUIFailedToCheckCodeUpdates"));
-            }
+            catch (WebException) { /* do nothing for web exceptions */ }
         }
 
         public bool CheckForModUpdates(ModInfo mod, bool showUpdatedDialog = true)
@@ -465,9 +478,9 @@ namespace HedgeModManager
 
                 if (HedgeApp.Config.CheckForModUpdates)
                     CheckAllModsUpdates();
-            }).Start();
 
-            _ = CheckForCodeUpdates();
+                _ = CheckForCodeUpdates();
+            }).Start();
         }
 
         public void CheckForManagerUpdates()
@@ -983,6 +996,14 @@ namespace HedgeModManager
                     {
                         Refresh();
                         UpdateStatus(Localise("StatusUIDownloadFinished"));
+
+                        // Update button visual.
+                        {
+                            CodesOutdated = false;
+
+                            // Reset button text if there was an update that was just downloaded.
+                            Button_DownloadCodes.Content = Localise("CodesUIDownload");
+                        }
                     }
                 };
                 downloader.Start();
