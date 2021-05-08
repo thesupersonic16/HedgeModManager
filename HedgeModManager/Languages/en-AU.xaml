@@ -47,6 +47,7 @@
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Name</system:String>
     <system:String x:Key="CodesUIDownload">Download Community Codes</system:String>
+    <system:String x:Key="CodesUIUpdate"  >Update Community Codes</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">The installed codes are incompatible with the code loader.&#x0a;Please update the codes and the code loader.&#x0a;WARNING: This will erase any custom codes.</system:String>
 
     <!-- Settings UI Strings -->
@@ -133,6 +134,8 @@
     <system:String x:Key="StatusUIDownloadingCodes"       >Downloading codes for {0}</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >Download finished</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >Download failed</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >Code updates available!</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >No code updates found</system:String>
     
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Are you sure you want to delete "{0}"?&#x0a;This action cannot be undone!</system:String>

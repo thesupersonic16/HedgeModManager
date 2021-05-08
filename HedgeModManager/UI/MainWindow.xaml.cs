@@ -45,6 +45,8 @@ namespace HedgeModManager
 
         protected Timer StatusTimer;
 
+        private bool CodesOutdated = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -201,6 +203,44 @@ namespace HedgeModManager
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentSteamGame;
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
+        }
+
+        private void UI_CodesTab_Click(object sender, RoutedEventArgs e)
+        {
+            // Display update alert.
+            UpdateStatus(Localise(CodesOutdated ? "StatusUICodeUpdatesAvailable" : "StatusUINoCodeUpdatesFound"));
+        }
+
+        public async Task CheckForCodeUpdates()
+        {
+            try
+            {
+                // Codes from disk.
+                string localCodes = File.ReadAllText(CodeProvider.CodesTextPath);
+
+                // Codes from the GitHub repository.
+                string repoCodes = await new WebClient()
+                {
+                    Encoding = Encoding.UTF8 // Use UTF-8 encoding so accented characters don't die.
+                }
+                .DownloadStringTaskAsync(new Uri(HedgeApp.CurrentGame.CodesURL));
+
+                if (localCodes == repoCodes)
+                {
+                    CodesOutdated = false;
+
+                    // Codes are the same, so use default text.
+                    Button_DownloadCodes.Content = Localise("CodesUIDownload");
+                }
+                else
+                {
+                    CodesOutdated = true;
+
+                    // Codes are different, report update possibility.
+                    Button_DownloadCodes.Content = Localise("CodesUIUpdate");
+                }
+            }
+            catch (WebException) { /* do nothing for web exceptions */ }
         }
 
         public bool CheckForModUpdates(ModInfo mod, bool showUpdatedDialog = true)
@@ -424,8 +464,11 @@ namespace HedgeModManager
             new Thread(() =>
             {
                 CheckForManagerUpdates();
+
                 if (HedgeApp.Config.CheckForModUpdates)
                     CheckAllModsUpdates();
+
+                _ = CheckForCodeUpdates();
             }).Start();
         }
 
@@ -902,9 +945,9 @@ namespace HedgeModManager
             StatusTimer.Change(4000, Timeout.Infinite);
         }
 
-        private void Game_Changed(object sender, SelectionChangedEventArgs e)
+        private async void Game_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if(ComboBox_GameStatus.SelectedItem != null)
+            if (ComboBox_GameStatus.SelectedItem != null)
             {
                 HedgeApp.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
 
@@ -924,6 +967,10 @@ namespace HedgeModManager
                 Refresh();
                 UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGame.GameName));
                 CheckForLoaderUpdate();
+
+                // Schedule checking for code updates if available.
+                if (Button_DownloadCodes.IsEnabled)
+                    await CheckForCodeUpdates();
             }
         }
 
@@ -938,6 +985,14 @@ namespace HedgeModManager
                     {
                         Refresh();
                         UpdateStatus(Localise("StatusUIDownloadFinished"));
+
+                        // Update button visual.
+                        {
+                            CodesOutdated = false;
+
+                            // Reset button text if there was an update that was just downloaded.
+                            Button_DownloadCodes.Content = Localise("CodesUIDownload");
+                        }
                     }
                 };
                 downloader.Start();

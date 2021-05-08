@@ -73,7 +73,7 @@
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="{DynamicResource MainUICodes}">
+                    <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}" Selector.Selected="UI_CodesTab_Click" Margin="1,0,-1,0">
                         <Grid>
                             <GroupBox Margin="10,5,10,5">
                                 <Button   x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
@@ -82,7 +82,7 @@
                                      Margin="10,5,10,45" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="True">
-                                        <GridViewColumn Header="{DynamicResource CodesUIName}" Width="Auto">
+                                        <GridViewColumn Header="{DynamicResource CodesUIName}" Width="370">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -92,14 +92,14 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="Auto"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="152"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
                         </Grid>
                     </TabItem>
 
-                    <TabItem Header="{DynamicResource MainUISettings}">
+                    <TabItem Header="{DynamicResource MainUISettings}" Margin="2,0,-2,0">
                         <Grid Margin="10,5,10,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="230"/>
@@ -107,7 +107,7 @@
                             </Grid.RowDefinitions>
                             <GroupBox Header="{DynamicResource SettingsUIGMLHeader}" HorizontalAlignment="Stretch" Margin="0,0,0,10" VerticalAlignment="Stretch">
                                 <Grid>
-                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod loader"                 Click="UI_OtherLoader_Click" Margin="10,7,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193" IsEnabled="False"/>
+                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod Loader"                 Click="UI_OtherLoader_Click" Margin="10,7,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193" IsEnabled="False"/>
                                     <Button   x:Name="Button_OpenMods"      Content="{DynamicResource SettingsUIOpenMods}" Click="UI_OpenMods_Click"    Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193"/>
 
                                     <StackPanel Margin="10,0,0,8" VerticalAlignment="Bottom">
@@ -117,24 +117,24 @@
                                         <CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="-1,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                     </StackPanel>
 
-                                    <Label                                   Content="{DynamicResource SettingsUILabelGame}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="211,7,0,0" VerticalContentAlignment="Center" Width="62" Height="27" />
-                                    <ComboBox   x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="273,7,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="229" Height="27" SelectionChanged="Game_Changed" />
-                                    <Label                                   Content="{DynamicResource SettingsUILabelProfile}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="211,38,0,0" VerticalContentAlignment="Center" Width="62" Height="27" />
-                                    <ComboBox   x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Margin="273,38,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="200" Height="27" SelectionChanged="ComboBox_ModProfile_SelectionChanged" />
-                                    <Label                                   Content="{DynamicResource SettingsUILabelMDir}"    Margin="4,67,0,0"      HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
-                                    <Button                                  Content="⚙"                                       Margin="476,39,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Click="UI_ManageProfile_Click" Height="24"/>
-                                    <TextBox                                 Text="{Binding ModsDB.RootDirectory}"              Margin="119,72,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" IsReadOnly="True"  Width="354"/>
-                                    <Button                                  Content="..."                                      Margin="476,72,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Click="UI_ChangeDatabasePath_Click" Height="21"/>
+                                    <Label                                   Content="{DynamicResource SettingsUILabelGame}" VerticalAlignment="Top" Margin="0,7,253,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
+                                    <ComboBox   x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="0,7,10,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="Game_Changed" HorizontalAlignment="Right" Width="237" />
+                                    <Label                                   Content="{DynamicResource SettingsUILabelProfile}" VerticalAlignment="Top" Margin="0,38,253,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
+                                    <ComboBox   x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Margin="0,38,39,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Right" Width="208" />
+                                    <Label                                   Content="{DynamicResource SettingsUILabelMDir}"    Margin="4,70,0,0"      HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
+                                    <Button                                  Content="⚙"                                       Margin="0,39,10,0" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Height="24" HorizontalAlignment="Right" Width="24"/>
+                                    <TextBox                                 Text="{Binding ModsDB.RootDirectory}"              Margin="113,73,39,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
+                                    <Button                                  Content="..."                                      Margin="0,73,10,0" VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
                                 </Grid>
                             </GroupBox>
 
                             <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,5" Grid.Row="1">
                                 <Grid>
-                                    <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"   IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="9,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"   IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="9,30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}" IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="9,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"     IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="9,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <Button   Content="{DynamicResource SettingsUIAboutHMM}"                                                          Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="48" Width="195" Click="UI_About_Click"/>
+                                    <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"   IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="9,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"   IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="9,28,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}" IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="9,48,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"     IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="9,68,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
+                                    <Button   Content="{DynamicResource SettingsUIAboutHMM}"                                                          Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="61" Width="195" Click="UI_About_Click"/>
                                     <Label    Content="{DynamicResource SettingsUITheme}"                                                           Margin="4,0,0,45" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
                                     <ComboBox x:Name="ComboBox_Themes" ItemsSource="{Binding InstalledThemes, Source={x:Static Application.Current}}" SelectedItem="{Binding CurrentTheme, Source={x:Static Application.Current}}" Margin="71,0,0,44" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="236" Height="27" SelectionChanged="ComboBox_Themes_Changed" Loaded="ComboBox_Themes_Loaded" />
                                     <Label    Content="{DynamicResource SettingsUILanguage}"                                                           Margin="4,0,0,12" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
