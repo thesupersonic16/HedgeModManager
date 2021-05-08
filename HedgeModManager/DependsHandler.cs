@@ -57,11 +57,6 @@ namespace HedgeModManager
             {
                 var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGame.GameName, dependName));
 
-                dialog.AddButton(Localise("CommonUINo"), () =>
-                {
-                    abort = true;
-                    dialog.Close();
-                });
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     dialog.Visibility = Visibility.Hidden;
@@ -86,6 +81,12 @@ namespace HedgeModManager
                         // Clean if possible
                         try { File.Delete(fileName); } catch { }
                     }
+                    dialog.Close();
+                });
+
+                dialog.AddButton(Localise("CommonUINo"), () =>
+                {
+                    abort = true;
                     dialog.Close();
                 });
 
