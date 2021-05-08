@@ -470,8 +470,7 @@ namespace HedgeModManager
 
                 if (HedgeApp.Config.CheckForModUpdates)
                     CheckAllModsUpdates();
-            })
-            .Start();
+            }).Start();
 
             _ = CheckForCodeUpdates();
         }
