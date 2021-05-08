@@ -10,9 +10,6 @@ WriteProtected<byte>(0x1098E5F, 0xEB)
 Patch "Disable Damage" by "SuperSonic16"
 WriteNop(0xE2836A, 0x5)
 
-Patch "Infinite Lives" by "CodenameGamma"
-WriteNop(0xD59A67, 0x6)
-
 Patch "Always Run in the Background" by "SuperSonic16"
 WriteProtected<byte>(0xE7BF04, 0xEB)
 
