@@ -73,7 +73,7 @@
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}">
+                    <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}" Margin="1,0,-1,0">
                         <Grid>
                             <GroupBox Margin="10,5,10,5">
                                 <Button   x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
@@ -99,7 +99,7 @@
                         </Grid>
                     </TabItem>
 
-                    <TabItem Header="{DynamicResource MainUISettings}">
+                    <TabItem Header="{DynamicResource MainUISettings}" Margin="2,0,-2,0">
                         <Grid Margin="10,5,10,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="230"/>
