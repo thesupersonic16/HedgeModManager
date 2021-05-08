@@ -299,8 +299,6 @@ namespace HedgeModManager
                     var dialog = new HedgeMessageBox(string.Format(HMMResources.STR_UI_MOD_UPDATE, mod.Title, update.VersionString)
                         , update.ChangeLog, type: InputType.MarkDown);
 
-                    dialog.AddButton(Localise("CommonUIClose"), () => dialog.Close());
-
                     dialog.AddButton(Localise("CommonUIUpdate"), () =>
                     {
                         var updater = new ModUpdateWindow(update);
@@ -309,6 +307,8 @@ namespace HedgeModManager
                         updater.DownloadCompleted = Refresh;
                         updater.Start();
                     });
+
+                    dialog.AddButton(Localise("CommonUIClose"), () => dialog.Close());
 
                     dialog.ShowDialog();
                 }
@@ -572,16 +572,16 @@ namespace HedgeModManager
                         {
                             var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
 
-                            dialog.AddButton(Localise("CommonUIIgnore"), () =>
-                            {
-                                dialog.Close();
-                            });
-
                             dialog.AddButton(Localise("CommonUIUpdate"), () =>
                             {
                                 dialog.Close();
                                 HedgeApp.InstallOtherLoader(false);
                                 UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                            });
+
+                            dialog.AddButton(Localise("CommonUIIgnore"), () =>
+                            {
+                                dialog.Close();
                             });
 
                             dialog.ShowDialog();
@@ -646,16 +646,16 @@ namespace HedgeModManager
             {
                 var dialog = new HedgeMessageBox(Localise("MainUIMissingLoaderHeader"), string.Format(Localise("MainUIMissingLoaderDesc"), HedgeApp.CurrentGame.GameName));
 
-                dialog.AddButton(Localise("CommonUINo"), () =>
-                {
-                    dialog.Close();
-                });
-
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     dialog.Close();
                     HedgeApp.InstallOtherLoader(false);
                     UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.CustomLoaderName));
+                });
+
+                dialog.AddButton(Localise("CommonUINo"), () =>
+                {
+                    dialog.Close();
                 });
 
                 dialog.ShowDialog();
@@ -682,11 +682,6 @@ namespace HedgeModManager
             {
                 var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGame.GameName, dependName));
 
-                dialog.AddButton(Localise("CommonUINo"), () =>
-                {
-                    abort = true;
-                    dialog.Close();
-                });
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     DownloadWindow window = new DownloadWindow($"Downloading {dependName}...", downloadURL, fileName);
@@ -697,6 +692,12 @@ namespace HedgeModManager
                         Process.Start(fileName, "/passive /norestart").WaitForExit(30000);
                         File.Delete(fileName);
                     }
+                    dialog.Close();
+                });
+
+                dialog.AddButton(Localise("CommonUINo"), () =>
+                {
+                    abort = true;
                     dialog.Close();
                 });
 
@@ -726,11 +727,6 @@ namespace HedgeModManager
 
             var box = new HedgeMessageBox(Localise("CommonUIWarning"), string.Format(Localise("DialogUIDeleteMod"), mod.Title));
 
-            box.AddButton(Localise("CommonUICancel"), () =>
-            {
-                box.Close();
-            });
-
             box.AddButton(Localise("CommonUIDelete"), () =>
             {
                 foreach (var watcher in ModsWatchers)
@@ -742,6 +738,11 @@ namespace HedgeModManager
                 UpdateStatus(string.Format(Localise("StatusUIDeletedMod"), ViewModel.SelectedMod.Title));
                 Refresh();
                 SetupWatcher();
+                box.Close();
+            });
+
+            box.AddButton(Localise("CommonUICancel"), () =>
+            {
                 box.Close();
             });
 
