@@ -406,7 +406,7 @@ WriteAsmHook(code, 0x01254D4C, HookBehavior.Replace)
 Patch "Unleashed Sweepkick" by "N69"
 WriteProtected<ushort>(0xDFF8D6, 0x5608)
 
-Patch "No Trick Rainbow Rings" by "PTKickass"
+Patch "No Trick Rainbow Rings" by "PTKickass & brianuuuSonic"
 WriteProtected<uint>(0x1672364, 0x5F6E6D63)
 WriteProtected<uint>(0x1672368, 0x5F6A626F)
 WriteProtected<uint>(0x167236C, 0x6E696172)
@@ -420,6 +420,7 @@ WriteProtected<uint>(0x1672614, 0x72776F62)
 WriteProtected<uint>(0x1672618, 0x5F676E69)
 WriteProtected<uint>(0x167261C, 0x4448)
 WriteProtected<byte>(0x115B826, 0x2)
+WriteProtected<uint>(0x1A6B800, 0x003D10E5)
 
 Patch "Ice Pillars Replace Fire Pillars" by "N69"
 WriteProtected<byte>(0xE020EB, 0x1)
