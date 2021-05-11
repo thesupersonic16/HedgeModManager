@@ -642,3 +642,4 @@ Code "2x Shadowmap Draw Distance but Lower Quality Shadows" by "Luig"
 Write<float>(0x01A57310, 50f)
 Write<float>(0x01A57314, 50f)
 Write<float>(0x01A57318, 60f)
+
