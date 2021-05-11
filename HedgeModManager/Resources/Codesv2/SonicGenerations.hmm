@@ -290,7 +290,7 @@ WriteNop(0x4409D2, 6)
 Patch "Never Subtract Points When Buying a Skill" by "Muzzarino"
 WriteNop(0x440726, 6)
 
-Patch "All Levels Display Names Even If Not Unlocked"  by "brianuuu"
+Patch "All Levels Display Names Even If Not Unlocked"  by "Muzzarino & brianuuu"
 WriteProtected<byte>(0xD58A93, 0xEB, 0x41, 0xEB, 0x3F)
 
 Patch "Replay Rescue Cutscenes" by "Muzzarino"
