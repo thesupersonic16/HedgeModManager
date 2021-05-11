@@ -290,8 +290,8 @@ WriteNop(0x4409D2, 6)
 Patch "Never Subtract Points When Buying a Skill" by "Muzzarino"
 WriteNop(0x440726, 6)
 
-Patch "All Levels Display Names Even If Not Unlocked"  by "Muzzarino"
-WriteProtected<byte>(0xD58AD0, 0xEB)
+Patch "All Levels Display Names Even If Not Unlocked"  by "Muzzarino & brianuuu"
+WriteProtected<byte>(0xD58A93, 0xEB, 0x41, 0xEB, 0x3F)
 
 Patch "Replay Rescue Cutscenes" by "Muzzarino"
 WriteProtected<ushort>(0xD29532, 0x6EB)
@@ -406,7 +406,7 @@ WriteAsmHook(code, 0x01254D4C, HookBehavior.Replace)
 Patch "Unleashed Sweepkick" by "N69"
 WriteProtected<ushort>(0xDFF8D6, 0x5608)
 
-Patch "No Trick Rainbow Rings" by "PTKickass & brianuuuSonic"
+Patch "No Trick Rainbow Rings" by "PTKickass & brianuuu"
 WriteProtected<uint>(0x1672364, 0x5F6E6D63)
 WriteProtected<uint>(0x1672368, 0x5F6A626F)
 WriteProtected<uint>(0x167236C, 0x6E696172)
