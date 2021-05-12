@@ -634,3 +634,11 @@ WriteNop(0xEE51E5, 2);
 
 Patch "Use Original Stage Text Colours" by "Hyper"
 WriteProtected<byte>(0xEE3F90, 0xEB, 0x2A);
+
+Code "Full Resolution Distortion Effects" by "Luig"
+Write<float>(0x01B22E6C, 1f)
+
+Code "2x Shadowmap Draw Distance but Lower Quality Shadows" by "Luig"
+Write<float>(0x01A57310, 50f)
+Write<float>(0x01A57314, 50f)
+Write<float>(0x01A57318, 60f)
