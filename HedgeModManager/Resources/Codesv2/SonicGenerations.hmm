@@ -389,6 +389,9 @@ Write<float>(0x19FD2C, 60)
 WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 0.0166666666666667f)
 
+Code "60 FPS Cutscenes"
+WriteProtected<float>(0x13E08A0, 0.0166666675f)
+
 Patch "Longer Blue Trail" by "N69 & Nekit"
 WriteProtected<ushort>(0xE5FB17, 0x9090)
 WriteProtected<ushort>(0xE5FB19, 0x9090)
