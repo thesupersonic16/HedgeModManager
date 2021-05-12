@@ -379,7 +379,7 @@ Write<float>(0x19FD2C, 29.97f)
 Code "59.94 FPS Cap" by "PTKickass"
 Write<float>(0x19FD2C, 59.94f)
 
-Code "Locked 30 FPS" by "Skyth & M&M"
+Code "Locked 30 FPS (experimental)" by "Skyth & M&M"
 Write<float>(0x19FD2C, 30.0f)
 WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 1.0f / 30.0f)
