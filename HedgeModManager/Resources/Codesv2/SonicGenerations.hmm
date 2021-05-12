@@ -653,6 +653,7 @@ WriteNop(0x1205D44, 8);
 WriteProtected<byte>(0x15FA49C, 0x00);
 
 Patch "Disable Lives" by "Hyper"
+WriteNop(0xD59A67, 6);
 WriteNop(0xE68562, 5);
 WriteProtected<byte>(0x1098C82, 0xEB);
 WriteProtected<byte>(0x109B1A4, 0xE9, 0xDC, 0x02, 0x00, 0x00);
@@ -673,3 +674,16 @@ Code "2x Shadowmap Draw Distance but Lower Quality Shadows" by "Luig"
 Write<float>(0x01A57310, 50f)
 Write<float>(0x01A57314, 50f)
 Write<float>(0x01A57318, 60f)
+
+Patch "Remove SEGA from Title Bar" by "Hyper"
+WriteProtected<byte>(0xE7A99D, 0x3C);
+
+Patch "Start Stages Standing Still" by "Hyper"
+WriteProtected<byte>(0xD944D4, 0x85);
+
+Patch "Disable Checkpoints" by "Hyper"
+WriteNop(0x1033338, 2);
+
+Patch "Never Receive Boost From Enemies" by "Hyper"
+WriteProtected<byte>(0x112435C, 0xE9, 0xAB, 0x00, 0x00, 0x00);
+WriteNop(0x11246D9, 5);
