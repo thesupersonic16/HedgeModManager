@@ -399,6 +399,13 @@ Patch "Fix Input Delay with Arbitrary Framerates (experimental)" by "Skyth"
 WriteProtected<byte>(0xD6CBCA, 0xF3, 0x0F, 0x10, 0x44, 0x24, 0x24);
 WriteNop(0xD6CBD0, 14);
 
+Code "Locked 75 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 75.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 75.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 75.0f)
+WriteProtected<float>(0x13E08A0, 1.0f / 75.0f) /* Cutscene Playback */
+
 Code "Locked 120 FPS (experimental)" by "Skyth & M&M"
 Write<float>(0x19FD2C, 120.0f);
 WriteNop(0xE7B5D7, 2);
