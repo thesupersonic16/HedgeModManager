@@ -373,24 +373,59 @@ Patch "1920x1080 Media Player" by "N69"
 WriteProtected<ushort>(0xB210A1, 1920)
 WriteProtected<ushort>(0xB210B1, 1080)
 
-Code "29.97 FPS Lock" by "PTKickass"
+Code "29.97 FPS Cap" by "PTKickass"
 Write<float>(0x19FD2C, 29.97f)
 
-Code "30 FPS Speed Lock" by "Skyth"
-Write<float>(0x19FD2C, 30)
-WriteNop(0xE7B5D7, 2)
-WriteProtected<float>(0x1704258, 0.0333333333333334f)
-
-Code "59.94 FPS Lock" by "PTKickass"
+Code "59.94 FPS Cap" by "PTKickass"
 Write<float>(0x19FD2C, 59.94f)
 
-Code "60 FPS Speed Lock" by "Skyth"
-Write<float>(0x19FD2C, 60)
+Code "Locked 30 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 30.0f)
 WriteNop(0xE7B5D7, 2)
-WriteProtected<float>(0x1704258, 0.0166666666666667f)
+WriteProtected<float>(0x1704258, 1.0f / 30.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 30.0f)
+WriteProtected<float>(0x13E08A0, 1.0f / 30.0f) /* Cutscene Playback */
 
-Code "60 FPS Cutscenes (experimental)"
-WriteProtected<float>(0x13E08A0, 0.0166666675f)
+Code "Locked 60 FPS" by "Skyth & M&M"
+Write<float>(0x19FD2C, 60.0f)
+WriteNop(0xE7B5D7, 2)
+WriteProtected<float>(0x1704258, 1.0f / 60.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 60.0f)
+
+Code "60 FPS Cutscenes (experimental, requires Locked 60 FPS)"
+WriteProtected<float>(0x13E08A0, 1.0f / 60.0f)
+
+Patch "Fix Input Delay with Arbitrary Framerates (experimental)" by "Skyth"
+WriteProtected<byte>(0xD6CBCA, 0xF3, 0x0F, 0x10, 0x44, 0x24, 0x24);
+WriteNop(0xD6CBD0, 14);
+
+Code "Locked 75 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 75.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 75.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 75.0f)
+WriteProtected<float>(0x13E08A0, 1.0f / 75.0f) /* Cutscene Playback */
+
+Code "Locked 120 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 120.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 120.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 120.0f)
+WriteProtected<float>(0x13E08A0, 1.0f / 120.0f) /* Cutscene Playback */
+
+Code "Locked 144 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 144.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 144.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 144.0f)
+WriteProtected<float>(0x13E08A0, 1.0f / 144.0f) /* Cutscene Playback */
+
+Code "Locked 165 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 165.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 165.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 165.0f)
+WriteProtected<float>(0x13E08A0, 1.0f / 165.0f) /* Cutscene Playback */
 
 Patch "Longer Blue Trail" by "N69 & Nekit"
 WriteProtected<ushort>(0xE5FB17, 0x9090)
