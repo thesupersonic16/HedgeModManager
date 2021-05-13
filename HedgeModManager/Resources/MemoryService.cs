@@ -29,7 +29,7 @@ namespace HMMCodes
         }
 
         public static long ASLR(long address)
-             => ModuleBase + (address - 0x400000);
+             => ModuleBase + (address - (IntPtr.Size == 8 ? 0x140000000 : 0x400000));
 
         public static void Write(IntPtr address, IntPtr dataPtr, IntPtr length)
             => MemoryProvider.WriteMemory(address, dataPtr, length);
