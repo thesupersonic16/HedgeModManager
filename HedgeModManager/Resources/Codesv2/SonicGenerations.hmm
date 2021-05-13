@@ -695,3 +695,6 @@ WriteNop(0x1033338, 2);
 Patch "Never Receive Boost From Enemies" by "Hyper"
 WriteProtected<byte>(0x112435C, 0xE9, 0xAB, 0x00, 0x00, 0x00);
 WriteNop(0x11246D9, 5);
+
+Patch "Disable FPS Limit" by "Skyth"
+WriteProtected<byte>(0xE7B580, 0xEB);
