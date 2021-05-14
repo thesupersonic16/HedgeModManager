@@ -181,4 +181,3 @@ Write<float>(0x88D23BD8, 165.0f); /* external framerate */
 WriteNop(0x14061AE3B, 3); /* nop out framerate changer */
 WriteNop(0x14061D4FD, 5); /* nop out framerate changer */
 WriteNop(0x1406E5F96, 5); /* nop out framerate changer */
-
