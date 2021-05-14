@@ -153,3 +153,40 @@ WriteNop(0x140267527, 0x00000005)
 
 Patch "360 Degree Movement" by "Skyth"
 WriteNop(0x1404615B7, 4)
+
+Code "75 FPS (experimental)" by "M&M"
+Write<float>(GetPointer(0x14240E818, 0x34), 1.0f / 75.0f); /* internal framerate */
+Write<float>(0x88D23BD8, 75.0f); /* external framerate */
+WriteProtected<float>(0x140D85394, 75.0f); /* unknown */
+WriteProtected<float>(0x140D85398, 1.0f / 75.0f); /* unknown */
+WriteNop(0x14061AE3B, 3); /* nop out framerate changer */
+WriteNop(0x14061D4FD, 5); /* nop out framerate changer */
+WriteNop(0x1406E5F96, 5); /* nop out framerate changer */
+
+Code "120 FPS (experimental)" by "M&M"
+Write<float>(GetPointer(0x14240E818, 0x34), 1.0f / 120.0f); /* internal framerate */
+Write<float>(0x88D23BD8, 120.0f); /* external framerate */
+WriteProtected<float>(0x140D85394, 120.0f); /* unknown */
+WriteProtected<float>(0x140D85398, 1.0f / 120.0f); /* unknown */
+WriteNop(0x14061AE3B, 3); /* nop out framerate changer */
+WriteNop(0x14061D4FD, 5); /* nop out framerate changer */
+WriteNop(0x1406E5F96, 5); /* nop out framerate changer */
+
+Code "144 FPS (experimental)" by "M&M"
+Write<float>(GetPointer(0x14240E818, 0x34), 1.0f / 144.0f); /* internal framerate */
+Write<float>(0x88D23BD8, 144.0f); /* external framerate */
+WriteProtected<float>(0x140D85394, 144.0f); /* unknown */
+WriteProtected<float>(0x140D85398, 1.0f / 144.0f); /* unknown */
+WriteNop(0x14061AE3B, 3); /* nop out framerate changer */
+WriteNop(0x14061D4FD, 5); /* nop out framerate changer */
+WriteNop(0x1406E5F96, 5); /* nop out framerate changer */
+
+Code "165 FPS (experimental)" by "M&M"
+Write<float>(GetPointer(0x14240E818, 0x34), 1.0f / 165.0f); /* internal framerate */
+Write<float>(0x88D23BD8, 165.0f); /* external framerate */
+WriteProtected<float>(0x140D85394, 165.0f); /* unknown */
+WriteProtected<float>(0x140D85398, 1.0f / 165.0f); /* unknown */
+WriteNop(0x14061AE3B, 3); /* nop out framerate changer */
+WriteNop(0x14061D4FD, 5); /* nop out framerate changer */
+WriteNop(0x1406E5F96, 5); /* nop out framerate changer */
+
