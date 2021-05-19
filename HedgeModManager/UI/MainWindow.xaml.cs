@@ -662,6 +662,29 @@ namespace HedgeModManager
             });
         }
 
+        public void SaveConfig(bool startGame = false)
+        {
+            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
+            ShowMissingOtherLoaderWarning();
+            EnableSaveRedirIfUsed();
+            Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    await SaveModsDB();
+                    Dispatcher.Invoke(Refresh);
+                    UpdateStatus(Localise("StatusUIModsDBSaved"));
+                    if (startGame)
+                        await StartGame();
+                }
+                catch (Exception ex)
+                {
+                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
+                }
+            });
+        }
+
         public bool CheckDepends()
         {
             bool abort = false;
@@ -756,48 +779,12 @@ namespace HedgeModManager
 
         private void UI_Save_Click(object sender, RoutedEventArgs e)
         {
-            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
-            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
-            ShowMissingOtherLoaderWarning();
-            EnableSaveRedirIfUsed();
-            Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    await SaveModsDB();
-                    Dispatcher.Invoke(Refresh);
-                    UpdateStatus(Localise("StatusUIModsDBSaved"));
-                }
-                catch (Exception ex)
-                {
-                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
-                }
-            });
+            SaveConfig();
         }
 
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
-            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
-            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
-            ShowMissingOtherLoaderWarning();
-            EnableSaveRedirIfUsed();
-
-            bool startGame = CheckDepends();
-            Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    await SaveModsDB();
-                    Dispatcher.Invoke(Refresh);
-                    UpdateStatus(Localise("StatusUIModsDBSaved"));
-                    if (startGame)
-                        await StartGame();
-                }
-                catch(Exception ex)
-                {
-                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
-                }
-            });
+            SaveConfig(CheckDepends());
         }
 
         private void UI_Play_Click(object sender, RoutedEventArgs e)
