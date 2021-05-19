@@ -696,7 +696,7 @@ namespace HedgeModManager
             if (!abort)
                 abort = DependsHandler.AskToInstallRuntime(Games.SonicLostWorld.AppID, DependTypes.VS2019x86);
             if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.Tenpex.AppID, DependTypes.VS2019x64);
+                abort = DependsHandler.AskToInstallRuntime(Games.PuyoPuyoTetris2.AppID, DependTypes.VS2019x64);
             return !abort;
         }
  
@@ -908,7 +908,7 @@ namespace HedgeModManager
                 var editor = new EditModWindow(mod);
                 if (editor.ShowDialog().Value)
                 {
-                    var modDir = HedgeApp.CurrentGame == Games.Tenpex ? "raw" : "disk";
+                    var modDir = HedgeApp.CurrentGame == Games.PuyoPuyoTetris2 ? "raw" : "disk";
                     ModsDatabase.CreateMod(mod, modDir, true);
                     RefreshMods();
                 }

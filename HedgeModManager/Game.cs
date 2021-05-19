@@ -68,7 +68,7 @@ namespace HedgeModManager
             CodesURL = Resources.URL_FML_CODES
         };
 
-        public static Game Tenpex = new Game()
+        public static Game PuyoPuyoTetris2 = new Game()
         {
             GameName = "Puyo Puyo Tetris 2",
             ExecuteableName = "PuyoPuyoTetris2.exe",
@@ -90,7 +90,7 @@ namespace HedgeModManager
             yield return SonicGenerations;
             yield return SonicLostWorld;
             yield return SonicForces;
-            yield return Tenpex;
+            yield return PuyoPuyoTetris2;
         }
     }
 
