@@ -695,6 +695,8 @@ namespace HedgeModManager
                 abort = DependsHandler.AskToInstallRuntime(Games.SonicGenerations.AppID, DependTypes.VS2019x86);
             if (!abort)
                 abort = DependsHandler.AskToInstallRuntime(Games.SonicLostWorld.AppID, DependTypes.VS2019x86);
+            if (!abort)
+                abort = DependsHandler.AskToInstallRuntime(Games.Tenpex.AppID, DependTypes.VS2019x64);
             return !abort;
         }
  
