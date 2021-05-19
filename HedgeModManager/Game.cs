@@ -97,8 +97,8 @@ namespace HedgeModManager
     internal static class EmbeddedLoaders
     {
         public static byte[] GenerationsCodeLoader;
-        public static byte[] ForcesModLoader;
         public static byte[] LostCodeLoader;
+        public static byte[] ForcesModLoader;
 
         static EmbeddedLoaders()
         {
@@ -106,8 +106,8 @@ namespace HedgeModManager
             using (var zip = new ZipArchive(stream))
             {
                 GenerationsCodeLoader = GetFile("SonicGenerationsCodeLoader.dll");
-                ForcesModLoader = GetFile("ForcesModLoader.dll");
                 LostCodeLoader = GetFile("LostCodeLoader.dll");
+                ForcesModLoader = GetFile("ForcesModLoader.dll");
 
                 byte[] GetFile(string name)
                 {

@@ -63,8 +63,8 @@ namespace HedgeModManager
             {
                 if (Directory.Exists(path))
                 {
-                    string lwPath = Path.Combine(path, "Sonic Lost World\\slw.exe");
                     string gensPath = Path.Combine(path, "Sonic Generations\\SonicGenerations.exe");
+                    string lwPath = Path.Combine(path, "Sonic Lost World\\slw.exe");
                     string forcesPath = Path.Combine(path, "SonicForces\\build\\main\\projects\\exec\\Sonic Forces.exe");
                     string ppt2Path = Path.Combine(path, "PuyoPuyoTetris2\\PuyoPuyoTetris2.exe");
 

@@ -690,11 +690,11 @@ namespace HedgeModManager
             bool abort = false;
 
             if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.SonicForces.AppID, DependTypes.VS2019x64);
-            if (!abort)
                 abort = DependsHandler.AskToInstallRuntime(Games.SonicGenerations.AppID, DependTypes.VS2019x86);
             if (!abort)
                 abort = DependsHandler.AskToInstallRuntime(Games.SonicLostWorld.AppID, DependTypes.VS2019x86);
+            if (!abort)
+                abort = DependsHandler.AskToInstallRuntime(Games.SonicForces.AppID, DependTypes.VS2019x64);
             if (!abort)
                 abort = DependsHandler.AskToInstallRuntime(Games.PuyoPuyoTetris2.AppID, DependTypes.VS2019x64);
             return !abort;
