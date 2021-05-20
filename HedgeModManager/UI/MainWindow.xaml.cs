@@ -668,12 +668,12 @@ namespace HedgeModManager
             File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             ShowMissingOtherLoaderWarning();
             EnableSaveRedirIfUsed();
-            Task.Factory.StartNew(async () =>
+            Dispatcher.Invoke(async () =>
             {
                 try
                 {
                     await SaveModsDB();
-                    Dispatcher.Invoke(Refresh);
+                    Refresh();
                     UpdateStatus(Localise("StatusUIModsDBSaved"));
                     if (startGame)
                         await StartGame();
@@ -1144,7 +1144,7 @@ namespace HedgeModManager
             if (ComboBox_ModProfile.SelectedItem == null)
                 return;
             // Save profile
-            Task.Factory.StartNew(async () =>
+            Dispatcher.Invoke(async () =>
             {
                 try
                 {
@@ -1152,7 +1152,7 @@ namespace HedgeModManager
                 }
                 catch (Exception ex)
                 {
-                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
+                    new ExceptionWindow(ex).ShowDialog();
                 }
             });
             SelectedModProfile.Enabled = false;
