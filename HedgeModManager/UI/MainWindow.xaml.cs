@@ -1140,6 +1140,9 @@ namespace HedgeModManager
 
         private void ComboBox_ModProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Ignore event when combobox is initalising 
+            if (ComboBox_ModProfile.SelectedItem == null)
+                return;
             // Save profile
             Task.Factory.StartNew(async () =>
             {
