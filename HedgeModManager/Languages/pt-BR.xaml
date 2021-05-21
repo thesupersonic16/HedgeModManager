@@ -4,17 +4,18 @@
   xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <!-- Common UI Strings -->
-    <system:String x:Key="CommonUIClose" >Fechar</system:String>
-    <system:String x:Key="CommonUIOK"    >OK</system:String>
-    <system:String x:Key="CommonUICancel">Cancelar</system:String>
-    <system:String x:Key="CommonUIYes"   >Sim</system:String>
-    <system:String x:Key="CommonUINo"    >Não</system:String>
+    <system:String x:Key="CommonUIClose"  >Fechar</system:String>
+    <system:String x:Key="CommonUIOK"     >OK</system:String>
+    <system:String x:Key="CommonUICancel" >Cancelar</system:String>
+    <system:String x:Key="CommonUIYes"    >Sim</system:String>
+    <system:String x:Key="CommonUINo"     >Não</system:String>
     <system:String x:Key="CommonUIRetry"  >Tentar Novamente</system:String>
-    <system:String x:Key="CommonUIUpdate">Atualizar</system:String>
-    <system:String x:Key="CommonUIDelete">Apagar</system:String>
-    <system:String x:Key="CommonUINone"  >Nenhum</system:String>
-    <system:String x:Key="CommonUIIgnore">Ignorar</system:String>
+    <system:String x:Key="CommonUIUpdate" >Atualizar</system:String>
+    <system:String x:Key="CommonUIDelete" >Apagar</system:String>
+    <system:String x:Key="CommonUINone"   >Nenhum</system:String>
+    <system:String x:Key="CommonUIIgnore" >Ignorar</system:String>
     <system:String x:Key="CommonUIWarning">AVISO</system:String>
+    <system:String x:Key="CommonUIError"  >ERRO</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Mods</system:String>
@@ -85,7 +86,9 @@
     <system:String x:Key="MainUIRuntimeMissingTitle" >Runtime Em Falta Detetada!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requer que {1} esteja instalado/a para que os mods funcionem corretamente. Quer que o HMM instale essa runtime?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Um ou mais mods ativados requerem o redirecionamento do ficheiro de gravação para funcionarem corretamente. Ativar esta funcionalidade?&#x0a;Clique "não" apenas se souber o que está fazendo.</system:String>
-
+    <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Falha resolvendo dependências de mods</system:String>
+    <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >Os seguintes mods têm dependências em falta:</system:String>
+    
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Por favor selecione uma opção!</system:String>
 
@@ -101,11 +104,16 @@
     <system:String x:Key="ProfileWindowUICreateTitle">Criar Perfil</system:String>
     <system:String x:Key="ProfileWindowUIName"       >Nome do Perfil</system:String>
     <system:String x:Key="ProfileWindowUIFile"       >Nome do Ficheiro do Perfil</system:String>
-    <system:String x:Key="ProfileWindowUIAdd"        >Adicionar um Perfil</system:String>
-    <system:String x:Key="ProfileWindowUIRename"     >Renomear Perfil</system:String>
-    <system:String x:Key="ProfileWindowUIClone"      >Clonar Perfil</system:String>
-    <system:String x:Key="ProfileWindowUIDelete"     >Eliminar Perfil</system:String>
-    <system:String x:Key="ProfileWindowUINameLabel"  >Nome do Perfil:</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >Criar</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >Renomear</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Clonar</system:String>
+    <system:String x:Key="ProfileWindowUIExport"     >Exportar</system:String>
+    <system:String x:Key="ProfileWindowUIImport"     >Importar</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >Deletar Perfil</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >Nome:</system:String>
+    <system:String x:Key="ProfileWindowUIImportFail" >Falha ao importar perfil de mods</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingMods"   >Os seguintes mods não foram encontrados:</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >Os seguintes códigos não foram encontrados:</system:String>
 
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Por favor preencha alguns detalhes sobre o seu mod.</system:String>
