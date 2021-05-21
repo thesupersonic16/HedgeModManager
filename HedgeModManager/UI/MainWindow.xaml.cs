@@ -72,6 +72,11 @@ namespace HedgeModManager
                 string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
                 if (File.Exists(profilePath))
                     HedgeApp.ModProfiles = JsonConvert.DeserializeObject<List<ModProfile>>(File.ReadAllText(profilePath));
+
+                // Remove profiles that don't exist
+                HedgeApp.ModProfiles.RemoveAll(profile =>
+                    !File.Exists(Path.Combine(HedgeApp.ModsDbPath, profile.ModDBPath)));
+                
                 // Create new profile set if needed
                 if (HedgeApp.ModProfiles.Count == 0)
                     HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDB.ini"));
@@ -173,7 +178,7 @@ namespace HedgeModManager
             // Re-arrange the mods
             for (int i = 0; i < ModsDatabase.ActiveMods.Count; i++)
             {
-                var mod = ModsDatabase.GetModFromID(ModsDatabase.ActiveMods[i]);
+                var mod = ModsDatabase.GetModFromActiveGUID(ModsDatabase.ActiveMods[i]);
 
                 if (mod != null)
                 {

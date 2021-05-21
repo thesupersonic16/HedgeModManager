@@ -35,8 +35,8 @@ namespace HedgeModManager
         public List<string> Codes = new List<string>();
 
         public string RootDirectory { get; set; }
+        public string FileName { get; set; } = "ModsDB.ini";
         public int ModCount => Mods.Count;
-        protected string FileName = "ModsDB.ini";
 
         public ModsDB()
         {
@@ -94,7 +94,7 @@ namespace HedgeModManager
         {
             for (int i = 0; i < ActiveMods.Count; i++)
             {
-                var mod = GetModFromID(ActiveMods[i]);
+                var mod = GetModFromActiveGUID(ActiveMods[i]);
                 if (mod != null)
                     mod.Enabled = true;
                 else
@@ -103,7 +103,7 @@ namespace HedgeModManager
 
             for (int i = 0; i < FavoriteMods.Count; i++)
             {
-                var mod = GetModFromID(FavoriteMods[i]);
+                var mod = GetModFromActiveGUID(FavoriteMods[i]);
                 if (mod != null)
                     mod.Favorite = true;
                 else
@@ -142,7 +142,12 @@ namespace HedgeModManager
             return report;
         }
 
-        public async Task SaveDB()
+        public void SaveDBSync(bool compileCodes = true)
+        {
+            SaveDB(compileCodes).GetAwaiter().GetResult();
+        }
+
+        public async Task SaveDB(bool compileCodes = true)
         {
             ActiveMods.Clear();
             FavoriteMods.Clear();
@@ -166,24 +171,27 @@ namespace HedgeModManager
                 IniSerializer.Serialize(this, stream);
             }
 
-            var codes = new List<Code>();
-
-            foreach (var code in CodesDatabase.Codes)
+            if (compileCodes)
             {
-                if(code.Enabled)
-                    codes.Add(code);
-            }
+                var codes = new List<Code>();
 
-            foreach (var mod in Mods)
-            {
-                if(mod.Enabled && mod.Codes != null)
-                    codes.AddRange(mod.Codes.Codes);
-            }
+                foreach (var code in CodesDatabase.Codes)
+                {
+                    if (code.Enabled)
+                        codes.Add(code);
+                }
 
-            await CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
+                foreach (var mod in Mods)
+                {
+                    if (mod.Enabled && mod.Codes != null)
+                        codes.AddRange(mod.Codes.Codes);
+                }
+
+                await CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
+            }
         }
 
-        public ModInfo GetModFromID(string id)
+        public ModInfo GetModFromActiveGUID(string id)
         {
             var modPair = mMods.FirstOrDefault(t => t.Key == id);
 

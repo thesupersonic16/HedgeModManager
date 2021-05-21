@@ -22,6 +22,7 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\Graphics\icon.ico</ApplicationIcon>
     <StartupObject></StartupObject>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlRenderer">

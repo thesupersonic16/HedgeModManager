@@ -336,19 +336,6 @@ namespace HedgeModManager
             Console.WriteLine("        Usage: filename [output]");
         }
 
-        public static string GenerateModDBFileName()
-        {
-            if (!ModProfiles.Any(t => t.ModDBPath == "ModsDB.ini"))
-                return "ModsDB.ini";
-            for (int i = 1; i < 999; ++i)
-            {
-                string fileName = $"ModsDB{i}.ini";
-                if (!ModProfiles.Any(t => t.ModDBPath == fileName) && !File.Exists(Path.Combine(ModsDbPath, fileName)))
-                    return fileName;
-            }
-            throw new Exception("Failed to generate file name for profiles!");
-        }
-
         public static SteamGame FindAndSetLocalGame()
         {
             foreach (var game in Games.GetSupportedGames())

@@ -15,6 +15,7 @@
     <system:String x:Key="CommonUINone"   >None</system:String>
     <system:String x:Key="CommonUIIgnore" >Ignore</system:String>
     <system:String x:Key="CommonUIWarning">WARNING</system:String>
+    <system:String x:Key="CommonUIError"  >ERROR</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Mods</system:String>
@@ -101,13 +102,17 @@
     <system:String x:Key="ProfileWindowUITitle"      >Manage Profiles</system:String>
     <system:String x:Key="ProfileWindowUIRenameTitle">Rename Profile</system:String>
     <system:String x:Key="ProfileWindowUICreateTitle">Create Profile</system:String>
-    <system:String x:Key="ProfileWindowUIName"       >Profile Name</system:String>
-    <system:String x:Key="ProfileWindowUIFile"       >Profile File Name</system:String>
-    <system:String x:Key="ProfileWindowUIAdd"        >Add Profile</system:String>
-    <system:String x:Key="ProfileWindowUIRename"     >Rename Profile</system:String>
-    <system:String x:Key="ProfileWindowUIClone"      >Clone Profile</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >Name</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >File Name</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >Create</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >Rename</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Clone </system:String>
+    <system:String x:Key="ProfileWindowUIExport"     >Export</system:String>
+    <system:String x:Key="ProfileWindowUIImport"     >Import</system:String>
     <system:String x:Key="ProfileWindowUIDelete"     >Delete Profile</system:String>
-    <system:String x:Key="ProfileWindowUINameLabel"  >Profile Name:</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >Name:</system:String>
+    <system:String x:Key="ProfileWindowUIImportFail" >Failed to import mod profile</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingModsBody"   >The following mods were not found:</system:String>
 
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Please fill out some details about your mod.</system:String>

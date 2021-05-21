@@ -7,14 +7,16 @@
         xmlns:local="clr-namespace:HedgeModManager.UI"
         mc:Ignorable="d"
         Title="{StaticResource ProfileWindowUITitle}" Height="441.778" Width="600"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}" PreviewKeyDown="Window_PreviewKeyDown">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ContextMenu x:Key="ProfileContextMenu">
             <MenuItem Header="{DynamicResource ProfileWindowUIRename}"    Click="UI_ProfileRename_Click" InputGestureText="(Space)"/>
-            <MenuItem Header="{DynamicResource ProfileWindowUIAdd}"       Click="UI_Add_Click" InputGestureText="(Ctrl+N)"/>
             <MenuItem Header="{DynamicResource ProfileWindowUIClone}" Click="UI_ProfileDuplicate_Click" InputGestureText="(Ctrl+D)"/>
             <MenuItem x:Name="ContextMenuItemDelete" Header="{DynamicResource ProfileWindowUIDelete}" Click="UI_ProfileDelete_Click" InputGestureText="(Delete)"/>
+            <Separator/>
+            <MenuItem Header="{DynamicResource ProfileWindowUIImport}" Click="UI_ProfileImport_Click" InputGestureText="(Ctrl+I)"/>
+            <MenuItem Header="{DynamicResource ProfileWindowUIExport}" Click="UI_ProfileExport_Click" InputGestureText="(Ctrl+E)"/>
         </ContextMenu>
     </Window.Resources>
     <Grid>
@@ -53,10 +55,11 @@
             </ListView.View>
         </ListView>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-4" Grid.Row="2" Grid.Column="0" Background="{StaticResource HMM.Window.DialogBottom}">
-            <Button Content="{StaticResource ProfileWindowUIAdd}" Margin="8,8,0,8" VerticalAlignment="Center" Width="117" Height="22" Click="UI_Add_Click" />
+            <Button Content="{StaticResource ProfileWindowUICreate}" Margin="8,8,0,8" VerticalAlignment="Center" Width="117" Height="22" Click="UI_Add_Click" />
+            <Button Content="{StaticResource ProfileWindowUIImport}" Margin="8,8,0,8" VerticalAlignment="Center" Width="117" Height="22" Click="UI_ProfileImport_Click" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-4" Grid.Row="2" Grid.Column="1" Background="{StaticResource HMM.Window.DialogBottom}">
-            <Button Content="{StaticResource CommonUIOK}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_OK_Click" />
+            <Button Content="{StaticResource CommonUIOK}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_OK_Click" IsCancel="True"/>
         </StackPanel>
 
     </Grid>
