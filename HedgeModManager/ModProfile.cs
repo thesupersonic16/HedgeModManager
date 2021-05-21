@@ -161,8 +161,18 @@ namespace HedgeModManager
             }
 
             foreach (var code in profile.ActiveCodes)
-                db.Codes.Add(code);
+            {
+                var dbCode = MainWindow.CodesDatabase.Codes.FirstOrDefault(c => c.Name == code);
+                if (dbCode == null)
+                {
+                    result.UnresolvedCodes.Add(code);
+                    continue;
+                }
 
+                db.Codes.Add(code);
+            }
+
+            result.UnresolvedMods = result.UnresolvedMods.DistinctBy(m => m.ID).ToList();
             return result;
         }
 
@@ -177,17 +187,28 @@ namespace HedgeModManager
             public ModProfile Profile { get; set; }
             public ModsDB Database { get; set; }
             public List<Mod> UnresolvedMods { get; set; } = new List<Mod>();
-            public bool HasErrors => UnresolvedMods.Count > 0;
+            public List<string> UnresolvedCodes { get; set; } = new List<string>();
+            public bool HasErrors => UnresolvedMods.Count > 0 || UnresolvedCodes.Count > 0;
             public bool IsInvalid => Database == null;
 
             public string BuildMarkdown()
             {
                 var builder = new StringBuilder();
-                builder.AppendLine(Lang.Localise("ProfileWindowUIImportMissingModsBody"));
+                builder.AppendLine(Lang.Localise("ProfileWindowUIImportMissingMods"));
 
                 foreach (var mod in UnresolvedMods)
                 {
                     builder.AppendLine($"- {mod.Name}");
+                }
+
+                builder.AppendLine();
+
+                if (UnresolvedCodes.Count > 0)
+                    builder.AppendLine(Lang.Localise("ProfileWindowUIImportMissingCodes"));
+
+                foreach (var code in UnresolvedCodes)
+                {
+                    builder.AppendLine($"- {code}");
                 }
 
                 return builder.ToString();

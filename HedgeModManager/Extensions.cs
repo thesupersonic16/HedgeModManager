@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HedgeModManager
 {
-    public static class Hash
+    public static class Extensions
     {
         public static int GetDeterministicHashCode(this string str)
         {
@@ -24,6 +24,19 @@ namespace HedgeModManager
                 }
 
                 return hash1 + (hash2 * 1566083941);
+            }
+        }
+
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>
+            (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
             }
         }
     }

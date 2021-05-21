@@ -112,7 +112,8 @@
     <system:String x:Key="ProfileWindowUIDelete"     >Delete Profile</system:String>
     <system:String x:Key="ProfileWindowUINameLabel"  >Name:</system:String>
     <system:String x:Key="ProfileWindowUIImportFail" >Failed to import mod profile</system:String>
-    <system:String x:Key="ProfileWindowUIImportMissingModsBody"   >The following mods were not found:</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingMods"   >The following mods were not found:</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >The following codes were not found:</system:String>
 
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Please fill out some details about your mod.</system:String>

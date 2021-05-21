@@ -85,7 +85,8 @@ namespace HedgeModManager.UI
             var sfd = new SaveFileDialog
             {
                 Filter = "Mod Profile | *.json",
-                DefaultExt = "json"
+                DefaultExt = "json",
+                FileName = Path.ChangeExtension(profile.ModDBPath, "json")
             };
 
             if (sfd.ShowDialog().Value)
