@@ -460,7 +460,7 @@ WriteProtected<uint>(0x167261C, 0x4448)
 WriteProtected<byte>(0x115B826, 0x2)
 WriteProtected<uint>(0x1A6B800, 0x003D10E5)
 
-Patch "Ice Pillars Replace Fire Pillars" by "N69 (fixed by RFunk195)"
+Patch "Ice Pillars Replace Fire Pillars" by "N69 & RFunk195"
 WriteProtected<byte>(0xE020EB, 0x1)
 WriteProtected<byte>(0x16617CB, 0x31)
 WriteProtected<byte>(0x16617D2, 0x31)
