@@ -685,6 +685,26 @@ namespace HedgeModManager
             });
         }
 
+        public bool CheckModDepends()
+        {
+            bool abort = false;
+            var report = ModsDatabase.ResolveDepends();
+
+            if (report.HasErrors)
+            {
+                var box = new HedgeMessageBox(Localise("MainUIMissingDependsHeader"), report.BuildMarkdown(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+                box.AddButton(Localise("CommonUIIgnore"), () => box.Close());
+                box.AddButton(Localise("CommonUICancel"), () =>
+                {
+                    box.Close();
+                    abort = true;
+                });
+                box.ShowDialog();
+            }
+
+            return !abort;
+        }
+
         public bool CheckDepends()
         {
             bool abort = false;
@@ -781,12 +801,13 @@ namespace HedgeModManager
 
         private void UI_Save_Click(object sender, RoutedEventArgs e)
         {
-            SaveConfig();
+            if (CheckModDepends())
+                SaveConfig();
         }
 
         private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
-            SaveConfig(CheckDepends());
+            SaveConfig(CheckDepends() && CheckModDepends());
         }
 
         private void UI_Play_Click(object sender, RoutedEventArgs e)

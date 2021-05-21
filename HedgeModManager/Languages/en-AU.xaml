@@ -85,6 +85,8 @@
     <system:String x:Key="MainUIRuntimeMissingTitle" >Missing Runtime Detected!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requires {1} to be installed for mods &#x0a;to function properly, would you like HMM to install this runtime?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">One or more enabled mods require save file redirection to work properly. Enable this feature?&#x0a;Click no only if you know what you are doing.</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Failed to resolve mod dependencies</system:String>
+    <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >The following mods have unmet dependencies</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Please select an option!</system:String>

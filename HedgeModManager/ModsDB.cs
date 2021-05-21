@@ -125,6 +125,38 @@ namespace HedgeModManager
                     FavoriteMods.RemoveAt(i--);
             }
         }
+
+        public DependencyReport ResolveDepends()
+        {
+            var report = new DependencyReport();
+            foreach (var mod in Mods)
+            {
+                if (mod.Enabled)
+                {
+                    DependencyReport.ErrorInfo info = null;
+                    foreach (var depend in mod.DependsOn)
+                    {
+                        var resolvedMod = Mods.FirstOrDefault(m => m.ID == depend.ID);
+                        if (resolvedMod == null)
+                        {
+                            if (info == null)
+                                info = new DependencyReport.ErrorInfo { Mod = mod };
+
+                            info.UnresolvedDepends.Add(depend);
+                            continue;
+                        }
+
+                        resolvedMod.Enabled = true;
+                    }
+
+                    if (info != null)
+                        report.Errors.Add(info);
+                }
+            }
+
+            return report;
+        }
+
         public async Task SaveDB()
         {
             ActiveMods.Clear();
@@ -452,6 +484,35 @@ namespace HedgeModManager
             }
 
             return invalid;
+        }
+    }
+
+    public class DependencyReport
+    {
+        public class ErrorInfo
+        {
+            public ModInfo Mod { get; set; }
+            public List<ModDepend> UnresolvedDepends { get; set; } = new List<ModDepend>();
+        }
+
+        public List<ErrorInfo> Errors { get; set; } = new List<ErrorInfo>();
+        public bool HasErrors => Errors.Count > 0;
+
+        public string BuildMarkdown()
+        {
+            var builder = new StringBuilder();
+            builder.AppendLine(Lang.Localise("MainUIMissingDepends"));
+
+            foreach (var error in Errors)
+            {
+                builder.AppendLine($"- {error.Mod.Title}");
+                foreach (var depend in error.UnresolvedDepends)
+                {
+                    builder.AppendLine($"  - {depend.Title}");
+                }
+            }
+
+            return builder.ToString();
         }
     }
 }
