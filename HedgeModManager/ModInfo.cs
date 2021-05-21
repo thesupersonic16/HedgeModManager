@@ -162,7 +162,7 @@ namespace HedgeModManager
             }
 
             if (string.IsNullOrEmpty(ID))
-                ID = Title?.GetHashCode().ToString("X") ?? modPath.GetHashCode().ToString("X");
+                ID = Title?.GetDeterministicHashCode().ToString("X") ?? modPath.GetHashCode().ToString("X");
 
             foreach (var dir in IncludeDirs)
                 IncludeDirsProperty.Add(new StringWrapper(dir));
