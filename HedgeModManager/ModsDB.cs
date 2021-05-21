@@ -508,7 +508,9 @@ namespace HedgeModManager
                 builder.AppendLine($"- {error.Mod.Title}");
                 foreach (var depend in error.UnresolvedDepends)
                 {
-                    builder.AppendLine($"  - {depend.Title}");
+                    builder.AppendLine(depend.HasLink
+                        ? $"  - [{depend.Title}]({depend.Link})"
+                        : $"  - {depend.Title}");
                 }
             }
 

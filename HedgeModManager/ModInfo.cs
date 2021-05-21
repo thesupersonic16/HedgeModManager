@@ -256,12 +256,16 @@ namespace HedgeModManager
     {
         public static IEnumerable<Column> Columns { get; } = new[]
         {
-            new Column(nameof(ID), "ID", null, "*", 'L'),
-            new Column(nameof(Title), "Title", null, "*", 'L'), 
+            new Column(nameof(ID),    "ID", null, "*", 'L'),
+            new Column(nameof(Title), "Title", null, "*", 'L'),
+            new Column(nameof(Link),  "Link", null, "*", 'L'),
         };
 
         public string ID { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
+        public string Link { get; set; } = string.Empty;
+
+        public bool HasLink => !string.IsNullOrEmpty(Link);
         private const char Delimiter = '|';
 
         public ModDepend()
@@ -292,6 +296,10 @@ namespace HedgeModManager
                     case 1:
                         Title = fields[i];
                         break;
+
+                    case 2:
+                        Link = fields[i];
+                        break;
                 }
             }
         }
@@ -310,7 +318,7 @@ namespace HedgeModManager
 
         public string ToIni(IniFile file)
         {
-            return $"{ID}{Delimiter}{Title}";
+            return $"{ID}{Delimiter}{Title}{(HasLink ? $"{Delimiter}{Link}" : string.Empty)}";
         }
     }
 }
