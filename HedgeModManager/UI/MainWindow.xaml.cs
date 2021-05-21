@@ -36,7 +36,13 @@ namespace HedgeModManager
     {
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
-        public static CodeFile CodesDatabase = new CodeFile();
+
+        public static CodeFile CodesDatabase
+        {
+            get => ModsDatabase?.CodesDatabase;
+            set => ModsDatabase.CodesDatabase = value;
+        }
+
         public static List<FileSystemWatcher> ModsWatchers = new List<FileSystemWatcher>();
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
         public List<string> CheckedModUpdates = new List<string>();
@@ -82,12 +88,33 @@ namespace HedgeModManager
             }
         }
 
+        public void LoadDatabase()
+        {
+            ModsDatabase = new ModsDB(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
+            if (!Directory.Exists(HedgeApp.ModsDbPath))
+            {
+                Application.Current?.MainWindow?.Hide();
+                var box = new HedgeMessageBox("No Mods Found", Properties.Resources.STR_UI_NO_MODS);
+
+                box.AddButton("Yes", () =>
+                {
+                    ModsDatabase.SetupFirstTime();
+                    box.Close();
+                });
+
+                box.AddButton("No", () => Environment.Exit(0));
+
+                box.ShowDialog();
+                Application.Current?.MainWindow?.Show();
+            }
+        }
+
         public void RefreshMods()
         {
             PauseModUpdates = true;
             CodesList.Items.Clear();
 
-            ModsDatabase = new ModsDB(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
+            LoadDatabase();
             ModsDatabase.DetectMods();
             ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.Sort((x, y) => x.Title.CompareTo(y.Title));
@@ -213,6 +240,9 @@ namespace HedgeModManager
 
         public async Task CheckForCodeUpdates()
         {
+            if (!File.Exists(CodeProvider.CodesTextPath))
+                return;
+
             try
             {
                 // Codes from disk.

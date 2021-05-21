@@ -16,6 +16,7 @@ namespace HedgeModManager
 {
     public class ModsDB
     {
+        public CodeFile CodesDatabase = new CodeFile();
         public List<ModInfo> Mods = new List<ModInfo>();
 
         [IniField("Main", "ActiveMod")]
@@ -58,23 +59,6 @@ namespace HedgeModManager
                     DetectMods();
                 }
             }
-            else if (!Directory.Exists(RootDirectory))
-            {
-                Application.Current?.MainWindow?.Hide();
-                var box = new HedgeMessageBox("No Mods Found", Properties.Resources.STR_UI_NO_MODS);
-
-                box.AddButton("Yes", () =>
-                {
-                    SetupFirstTime();
-                    box.Close();
-                });
-
-                box.AddButton("No", () => Environment.Exit(0));
-
-                box.ShowDialog();
-                Application.Current?.MainWindow?.Show();
-                return;
-            }
 
             DetectMods();
             GetEnabledMods();
@@ -83,13 +67,14 @@ namespace HedgeModManager
         public void SetupFirstTime()
         {
             Directory.CreateDirectory(RootDirectory);
-            MainWindow.CodesDatabase = new CodeFile();
             SaveDB();
         }
 
         public void DetectMods()
         {
             Mods.Clear();
+            if (!Directory.Exists(RootDirectory))
+                return;
 
             foreach (string folder in Directory.GetDirectories(RootDirectory))
             {
@@ -183,7 +168,7 @@ namespace HedgeModManager
 
             var codes = new List<Code>();
 
-            foreach (var code in MainWindow.CodesDatabase.Codes)
+            foreach (var code in CodesDatabase.Codes)
             {
                 if(code.Enabled)
                     codes.Add(code);
