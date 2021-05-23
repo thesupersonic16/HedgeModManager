@@ -108,7 +108,10 @@ namespace HedgeModManager
             var jObj = JObject.Load(jsReader);
             var type = jObj.GetValue(nameof(Type), StringComparison.InvariantCultureIgnoreCase)?.Value<string>();
 
-            if (!string.IsNullOrEmpty(type) && !type.Equals(ObjectType, StringComparison.InvariantCultureIgnoreCase))
+            if (string.IsNullOrEmpty(type))
+                return result;
+
+            if (!type.Equals(ObjectType, StringComparison.InvariantCultureIgnoreCase))
                 return result;
 
             ExportProfile profile;
