@@ -181,7 +181,11 @@ namespace HedgeModManager.Serialization
                 var valueType = property.PropertyType;
 
                 if (file.Groups.ContainsKey(group))
-                    property.SetValue(obj, ReadField(group, name, valueType));
+                {
+                    var value = ReadField(group, name, valueType);
+                    if (value != null)
+                        property.SetValue(obj, value);
+                }
             }
 
             foreach(var field in obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
@@ -195,7 +199,11 @@ namespace HedgeModManager.Serialization
                 var valueType = field.FieldType;
 
                 if (file.Groups.ContainsKey(group))
-                    field.SetValue(obj, ReadField(group, name, valueType));
+                {
+                    var value = ReadField(group, name, valueType);
+                    if (value != null)
+                        field.SetValue(obj, value);
+                }
             }
 
             object ReadField(string group, string name, Type valueType)
@@ -221,6 +229,9 @@ namespace HedgeModManager.Serialization
                 }
                 else if (valueType == typeof(string))
                 {
+                    if (!file.Groups.ContainsKey(group) || !file[group].Params.ContainsKey(name))
+                        return null;
+
                     return file[group][name];
                 }
                 else if (typeof(IEnumerable).IsAssignableFrom(valueType))

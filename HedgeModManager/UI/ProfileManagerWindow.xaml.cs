@@ -75,7 +75,10 @@ namespace HedgeModManager.UI
             {
                 // Add Profile
                 if (DataContext is MainWindowViewModel mainWindow)
+                {
+                    window.Profile.GeneratePath();
                     mainWindow.Profiles.Add(window.Profile);
+                }
             }
         }
 
@@ -107,6 +110,7 @@ namespace HedgeModManager.UI
                 return;
             if (!(DataContext is MainWindowViewModel mainWindow))
                 return;
+
             new ProfileManagerRenameWindow(profile).ShowDialog();
         }
 

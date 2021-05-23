@@ -487,7 +487,7 @@ namespace HedgeModManager
 
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
             Config = new CPKREDIRConfig(ConfigPath);
-            ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni));
+            ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
         }
 
         public static void InstallGBHandlers()
