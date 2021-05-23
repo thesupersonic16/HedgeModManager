@@ -15,6 +15,7 @@
     <system:String x:Key="CommonUINone"   >Нет</system:String>
     <system:String x:Key="CommonUIIgnore" >Игнорировать</system:String>
     <system:String x:Key="CommonUIWarning">ПРЕДУПРЕЖДЕНИЕ</system:String>
+    <system:String x:Key="CommonUIError"  >ОШИБКА</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Моды</system:String>
@@ -47,6 +48,7 @@
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Название</system:String>
     <system:String x:Key="CodesUIDownload">Загрузить пользовательские коды</system:String>
+    <system:String x:Key="CodesUIUpdate"  >Обновить коды от сообщества</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Установленные коды несовместимы с загрузчиком кодов.&#x0a;Пожалуйста, обновите коды, а также загрузчик кодов.&#x0a;ВНИМАНИЕ: Это приведет к удалению всех пользовательских кодов.</system:String>
 
     <!-- Settings UI Strings -->
@@ -84,7 +86,9 @@
     <system:String x:Key="MainUIRuntimeMissingTitle" >Не найден распространяемый пакет!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} необходим установленный {1} для корректной работы модов. Вы хотите, чтобы HMM установил данный распространяемый пакет?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Для одного или нескольких активированных модов требуется переадресация сохранения. Включить ее?&#x0a;Нажмите "нет" только если вы знаете, что делаете.</system:String>
-
+    
+    
+    
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Пожалуйста, выберите опцию!</system:String>
 
@@ -100,11 +104,16 @@
     <system:String x:Key="ProfileWindowUICreateTitle">Создание профиля</system:String>
     <system:String x:Key="ProfileWindowUIName"       >Имя профиля</system:String>
     <system:String x:Key="ProfileWindowUIFile"       >Имя файла у профиля</system:String>
-    <system:String x:Key="ProfileWindowUIAdd"        >Добавить профиль</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >Создать</system:String>
     <system:String x:Key="ProfileWindowUIRename"     >Переименовать профиль</system:String>
     <system:String x:Key="ProfileWindowUIClone"      >Скопировать профиль</system:String>
+    <system:String x:Key="ProfileWindowUIExport"     >Экспортировать</system:String>
+    <system:String x:Key="ProfileWindowUIImport"     >Импортировать</system:String>
     <system:String x:Key="ProfileWindowUIDelete"     >Удалить профиль</system:String>
     <system:String x:Key="ProfileWindowUINameLabel"  >Имя профиля:</system:String>
+    <system:String x:Key="ProfileWindowUIImportFail" >Невозможно импортировать профиль мода</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingMods"   >Следующие моды не были найдены:</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >Следующие коды не были найдены:</system:String>
 
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Добавьте немного информации о своем моде.</system:String>
@@ -133,7 +142,9 @@
     <system:String x:Key="StatusUIDownloadingCodes"       >Загрузка кодов для {0}</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >Загрузка завершена</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >Ошибка загрузки</system:String>
-    
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >Доступны обновления для кодов!</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >Не найдено обновлений к кодам</system:String>
+
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Вы действительно хотите удалить "{0}"?&#x0a;Это действие нельзя будет отменить!</system:String>
     
