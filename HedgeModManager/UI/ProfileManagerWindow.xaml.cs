@@ -11,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using GongSolutions.Wpf.DragDrop;
 using Microsoft.Win32;
 using static HedgeModManager.Lang;
 
@@ -19,12 +20,46 @@ namespace HedgeModManager.UI
     /// <summary>
     /// Interaction logic for ProfileManager.xaml
     /// </summary>
-    public partial class ProfileManagerWindow : Window
+    public partial class ProfileManagerWindow : Window, IDropTarget
     {
 
         public ProfileManagerWindow()
         {
             InitializeComponent();
+        }
+
+        public void ImportProfile(string path)
+        {
+            if (!(DataContext is MainWindowViewModel model))
+                return;
+
+            var result = ExportProfile.Import(path);
+            if (result.IsInvalid)
+            {
+                HedgeApp.CreateOKMessageBox(Localise("CommonUIError"), Localise("ProfileWindowUIImportFail")).ShowDialog();
+                return;
+            }
+
+            if (result.HasErrors)
+            {
+                bool abort = true;
+                var box = new HedgeMessageBox(Localise("ProfileWindowUIImportFail"),
+                    result.BuildMarkdown(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+
+                box.AddButton(Localise("CommonUIIgnore"), () =>
+                {
+                    abort = false;
+                    box.Close();
+                });
+                box.AddButton(Localise("CommonUICancel"), () => box.Close());
+
+                box.ShowDialog();
+                if (abort)
+                    return;
+            }
+
+            model.Profiles.Add(result.Profile);
+            result.Database.SaveDBSync(false);
         }
 
         private void UI_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -168,33 +203,35 @@ namespace HedgeModManager.UI
             if (!ofd.ShowDialog().Value)
                 return;
 
-            var result = ExportProfile.Import(ofd.FileName);
-            if (result.IsInvalid)
-            {
-                HedgeApp.CreateOKMessageBox(Localise("CommonUIError"), Localise("ProfileWindowUIImportFail")).ShowDialog();
-                return;
-            }
+            ImportProfile(ofd.FileName);
+        }
 
-            if (result.HasErrors)
-            {
-                bool abort = true;
-                var box = new HedgeMessageBox(Localise("ProfileWindowUIImportFail"),
-                    result.BuildMarkdown(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+        public void DragOver(IDropInfo dropInfo)
+        {
+            dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+            var dataObject = dropInfo.Data as IDataObject;
+            if (dataObject != null && dataObject.GetDataPresent(DataFormats.FileDrop))
+                dropInfo.Effects = DragDropEffects.Copy;
+            else
+                dropInfo.Effects = DragDropEffects.Move;
+        }
 
-                box.AddButton(Localise("CommonUIIgnore"), () =>
+        public void Drop(IDropInfo dropInfo)
+        {
+            var dataObject = dropInfo.Data as DataObject;
+            if (dataObject != null && dataObject.ContainsFileDropList())
+            {
+                foreach (var file in dataObject.GetFileDropList())
                 {
-                    abort = false; 
-                    box.Close();
-                });
-                box.AddButton(Localise("CommonUICancel"), () => box.Close());
-
-                box.ShowDialog();
-                if (abort)
-                    return;
+                    // Check if the file is a profile
+                    if (file.ToLower().EndsWith(".json"))
+                        ImportProfile(file);
+                }
             }
-
-            model.Profiles.Add(result.Profile);
-            result.Database.SaveDBSync(false);
+            else
+            {
+                GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.Drop(dropInfo);
+            }
         }
     }
 }

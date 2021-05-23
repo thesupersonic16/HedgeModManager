@@ -30,7 +30,7 @@
         </Grid.ColumnDefinitions>
         <ListView x:Name="ProfileListView" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" 
                   Margin="10,10,10,15" ItemsSource="{Binding Profiles}" PreviewKeyDown="ProfileListView_PreviewKeyDown"
-                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
+                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                     <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
