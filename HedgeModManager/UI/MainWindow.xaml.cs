@@ -851,26 +851,9 @@ namespace HedgeModManager
                 StartGame();
         }
 
-        private void UI_CPKREDIR_Click(object sender, RoutedEventArgs e)
-        {
-            HedgeApp.InstallCPKREDIR(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName), IsCPKREDIRInstalled);
-            RefreshUI();
-        }
-
         private void UI_About_Click(object sender, RoutedEventArgs e)
         {
             new AboutWindow().ShowDialog();
-        }
-
-        private void UI_ModsList_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                var files = e.Data.GetData(DataFormats.FileDrop) as string[];
-                // Try Install mods from all files
-                files.ToList().ForEach(t => ModsDatabase.InstallMod(t));
-                Refresh();
-            }
         }
 
         private void UI_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -1199,6 +1182,7 @@ namespace HedgeModManager
             // Ignore event when combobox is initalising 
             if (ComboBox_ModProfile.SelectedItem == null)
                 return;
+
             // Save profile
             Dispatcher.Invoke(async () =>
             {
@@ -1215,6 +1199,9 @@ namespace HedgeModManager
             SelectedModProfile = ComboBox_ModProfile.SelectedItem as ModProfile ?? HedgeApp.ModProfiles.First();
             SelectedModProfile.Enabled = true;
             HedgeApp.Config.ModProfile = SelectedModProfile.Name;
+            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            HedgeApp.Config.Save(HedgeApp.ConfigPath);
+            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             Refresh();
         }
 
