@@ -114,6 +114,7 @@ namespace HedgeModManager
         public DependencyReport ResolveDepends()
         {
             var report = new DependencyReport();
+
             foreach (var mod in Mods)
             {
                 if (mod.Enabled)
@@ -124,11 +125,19 @@ namespace HedgeModManager
                         var resolvedMod = Mods.FirstOrDefault(m => m.ID == depend.ID);
                         if (resolvedMod == null)
                         {
-                            if (info == null)
-                                info = new DependencyReport.ErrorInfo { Mod = mod };
-
+                            info ??= new DependencyReport.ErrorInfo {Mod = mod};
                             info.UnresolvedDepends.Add(depend);
                             continue;
+                        }
+
+                        if (depend.ModVersion != null)
+                        {
+                            if (!Version.TryParse(resolvedMod.Version, out var modVersion) || modVersion < depend.ModVersion)
+                            {
+                                info ??= new DependencyReport.ErrorInfo { Mod = mod };
+                                info.UnresolvedDepends.Add(depend);
+                                continue;
+                            }
                         }
 
                         resolvedMod.Enabled = true;
@@ -502,8 +511,13 @@ namespace HedgeModManager
                 foreach (var depend in error.UnresolvedDepends)
                 {
                     builder.AppendLine(depend.HasLink
-                        ? $"  - [{depend.Title}]({depend.Link})"
-                        : $"  - {depend.Title}");
+                        ? $"  - [{BuildName()}]({depend.Link})"
+                        : $"  - {BuildName()}");
+
+                    string BuildName()
+                    {
+                        return $"{depend.Title}{(depend.ModVersion != null ? $" ({Lang.Localise("ModsUIVersion")}: {depend.VersionString})" : "")}";
+                    }
                 }
             }
 

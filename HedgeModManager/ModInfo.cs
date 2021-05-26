@@ -32,7 +32,7 @@ namespace HedgeModManager
 
         [PropertyTools.DataAnnotations.Browsable(false)]
         public CodeFile Codes { get; set; }
-        
+
         [PropertyTools.DataAnnotations.Browsable(false)]
         public bool HasUpdates => !string.IsNullOrEmpty(UpdateServer);
 
@@ -41,7 +41,7 @@ namespace HedgeModManager
 
         [PropertyTools.DataAnnotations.Browsable(false)]
         public bool HasSchema => ConfigSchema != null;
-        
+
         [PropertyTools.DataAnnotations.Browsable(false)]
         public bool Favorite { get; set; }
 
@@ -125,7 +125,7 @@ namespace HedgeModManager
                         IncludeDirs.Add(".");
                         Title = Path.GetFileName(RootDirectory);
                         Version = "0.0";
-                        Date ="Unknown";
+                        Date = "Unknown";
                         Author = "Unknown";
                         Description = "None";
                         Save();
@@ -228,7 +228,7 @@ namespace HedgeModManager
                 catch { }
             }
 
-            if(validDirs.Count == 0)
+            if (validDirs.Count == 0)
                 validDirs.Add(".");
 
             IncludeDirs = validDirs;
@@ -258,15 +258,27 @@ namespace HedgeModManager
         {
             new Column(nameof(ID),    "ID", null, "*", 'L'),
             new Column(nameof(Title), "Title", null, "*", 'L'),
+            new Column(nameof(VersionString),  "Version", null, "*", 'L'),
             new Column(nameof(Link),  "Link", null, "*", 'L'),
         };
 
         public string ID { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string Link { get; set; } = string.Empty;
+        public Version ModVersion { get; set; }
+
+        public string VersionString
+        {
+            get => ModVersion?.ToString();
+            set
+            {
+                if (Version.TryParse(value, out var result))
+                    ModVersion = result;
+            }
+        }
 
         public bool HasLink => !string.IsNullOrEmpty(Link);
-        private const char Delimiter = '|';
+        private const string Delimiter = "|";
 
         public ModDepend()
         {
@@ -284,7 +296,7 @@ namespace HedgeModManager
             if (string.IsNullOrEmpty(input))
                 return;
 
-            var fields = input.Split(Delimiter);
+            var fields = input.Split(Delimiter[0]);
             for (int i = 0; i < fields.Length; i++)
             {
                 switch (i)
@@ -298,8 +310,23 @@ namespace HedgeModManager
                         break;
 
                     case 2:
-                        Link = fields[i];
-                        break;
+                        {
+                            if (Version.TryParse(fields[i], out var version))
+                                ModVersion = version;
+                            else
+                                Link = fields[i];
+
+                            break;
+                        }
+
+
+                    case 3:
+                        {
+                            if (Version.TryParse(fields[i], out var version))
+                                ModVersion = version;
+
+                            break;
+                        }
                 }
             }
         }
@@ -318,7 +345,7 @@ namespace HedgeModManager
 
         public string ToIni(IniFile file)
         {
-            return $"{ID}{Delimiter}{Title}{(HasLink ? $"{Delimiter}{Link}" : string.Empty)}";
+            return string.Join(Delimiter, ID, Title, Link, VersionString);
         }
     }
 }
