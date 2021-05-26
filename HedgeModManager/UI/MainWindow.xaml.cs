@@ -697,27 +697,24 @@ namespace HedgeModManager
             });
         }
 
-        public void SaveConfig(bool startGame = false)
+        public async Task SaveConfig(bool startGame = false)
         {
             string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
             File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             ShowMissingOtherLoaderWarning();
             EnableSaveRedirIfUsed();
-            Dispatcher.Invoke(async () =>
+            try
             {
-                try
-                {
-                    await SaveModsDB();
-                    Refresh();
-                    UpdateStatus(Localise("StatusUIModsDBSaved"));
-                    if (startGame)
-                        await StartGame();
-                }
-                catch (Exception ex)
-                {
-                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
-                }
-            });
+                await SaveModsDB();
+                Refresh();
+                UpdateStatus(Localise("StatusUIModsDBSaved"));
+                if (startGame)
+                    await StartGame();
+            }
+            catch (Exception ex)
+            {
+                Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
+            }
         }
 
         public bool CheckModDepends()
@@ -834,15 +831,15 @@ namespace HedgeModManager
             Refresh();
         }
 
-        private void UI_Save_Click(object sender, RoutedEventArgs e)
+        private async void UI_Save_Click(object sender, RoutedEventArgs e)
         {
             if (CheckModDepends())
-                SaveConfig();
+                await SaveConfig();
         }
 
-        private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
+        private async void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
-            SaveConfig(CheckDepends() && CheckModDepends());
+            await SaveConfig(CheckDepends() && CheckModDepends());
         }
 
         private void UI_Play_Click(object sender, RoutedEventArgs e)
@@ -1177,24 +1174,21 @@ namespace HedgeModManager
             }
         }
 
-        private void ComboBox_ModProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ComboBox_ModProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Ignore event when combobox is initalising 
-            if (ComboBox_ModProfile.SelectedItem == null)
+            if (ComboBox_ModProfile.SelectedItem == null || ComboBox_ModProfile.SelectedItem == SelectedModProfile)
                 return;
 
             // Save profile
-            Dispatcher.Invoke(async () =>
+            try
             {
-                try
-                {
-                    await SaveModsDB();
-                }
-                catch (Exception ex)
-                {
-                    new ExceptionWindow(ex).ShowDialog();
-                }
-            });
+                await SaveModsDB();
+            }
+            catch (Exception ex)
+            {
+                new ExceptionWindow(ex).ShowDialog();
+            }
             SelectedModProfile.Enabled = false;
             SelectedModProfile = ComboBox_ModProfile.SelectedItem as ModProfile ?? HedgeApp.ModProfiles.First();
             SelectedModProfile.Enabled = true;
