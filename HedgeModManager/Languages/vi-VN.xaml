@@ -9,13 +9,13 @@
     <system:String x:Key="CommonUICancel" >Huỷ</system:String>
     <system:String x:Key="CommonUIYes"    >Có</system:String>
     <system:String x:Key="CommonUINo"     >Không</system:String>
-	<system:String x:Key="CommonUIRetry"  >Thử lại</system:String>															
+    <system:String x:Key="CommonUIRetry"  >Thử lại</system:String>															
     <system:String x:Key="CommonUIUpdate" >Cập nhật</system:String>
     <system:String x:Key="CommonUIDelete" >Xoá</system:String>
     <system:String x:Key="CommonUINone"   >Không</system:String>
     <system:String x:Key="CommonUIIgnore" >Không quan tâm</system:String>
     <system:String x:Key="CommonUIWarning">CẢNH BÁO</system:String>
-	<system:String x:Key="CommonUIError"  >LỖI</system:String>
+    <system:String x:Key="CommonUIError"  >LỖI</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Mod</system:String>
@@ -48,7 +48,7 @@
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Tên</system:String>
     <system:String x:Key="CodesUIDownload">Tải xuống mã từ cộng đồng</system:String>
-	<system:String x:Key="CodesUIUpdate"  >Cập nhật mã từ cộng đồng</system:String>
+    <system:String x:Key="CodesUIUpdate"  >Cập nhật mã từ cộng đồng</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Các mã đã cài đặt không tương thích với trình chứa mã.&#x0a;Vui lòng cập nhật mã và trình chứa mã.&#x0a;CẢNH BÁO: Thao tác này sẽ xóa mọi mã tùy chỉnh.</system:String>
 
     <!-- Settings UI Strings -->
@@ -63,7 +63,7 @@
     <system:String x:Key="SettingsUILoadTopBottom"  >Tải từ trên xuống dưới</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Trình chứa mã:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Trò chơi:</system:String>
-	<system:String x:Key="SettingsUILabelProfile"   >Hồ sơ:</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >Hồ sơ:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Thư mục mod:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
@@ -73,7 +73,7 @@
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Giữ Hedge Mod Manager mở sau khi bắt đầu trò chơi</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >Về Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Ngôn ngữ:</system:String>
-	<system:String x:Key="SettingsUITheme"          >Giao diện:</system:String>
+    <system:String x:Key="SettingsUITheme"          >Giao diện:</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >Cài đặt bản mod bằng...</system:String>
@@ -86,7 +86,7 @@
     <system:String x:Key="MainUIRuntimeMissingTitle" >Phát hiện Runtime bị thiếu!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} yêu cầu {1} được cài đặt để các mod &#x0a;hoạt động chính xác, bạn có muốn HMM cài đặt runtime này không?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Một hoặc nhiều mod được bật yêu cầu chuyển hướng tệp lưu để hoạt động chính xác. Bật chức năng này?&#x0a;Nhấp vào không chỉ khi bạn biết bạn đang làm gì.</system:String>
-	<system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Không giải quyết được các phụ thuộc của mod</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Không giải quyết được các phụ thuộc của mod</system:String>
     <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >Các mod sau bị thiếu các phụ thuộc:</system:String>
 
     <!-- OptionsWindow UI Strings -->
@@ -97,8 +97,8 @@
     <system:String x:Key="AboutWindowUILine1"  >Được thiết kế để giúp dễ dàng tải các bản mod của game chạy Hedgehog Engine.</system:String>
     <system:String x:Key="AboutWindowUILine2"  >Yêu cầu sở hữu hợp pháp của một trong những trò chơi được hỗ trợ.</system:String>
     <system:String x:Key="AboutWindowUICredits">Nguồn:</system:String>
-	
-	<!-- ProfileWindow UI Strings -->
+    
+    <!-- ProfileWindow UI Strings -->
     <system:String x:Key="ProfileWindowUITitle"      >Quản lý hồ sơ</system:String>
     <system:String x:Key="ProfileWindowUIRenameTitle">Đổi tên hồ sơ</system:String>
     <system:String x:Key="ProfileWindowUICreateTitle">Tạo hồ sơ</system:String>
@@ -142,7 +142,7 @@
     <system:String x:Key="StatusUIDownloadingCodes"       >Đang tải xuống mã cho {0}</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >Tải xuống hoàn tất</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >Tải xuống thất bại</system:String>
-	<system:String x:Key="StatusUICodeUpdatesAvailable"   >Cập nhật mã có sẵn!</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >Cập nhật mã có sẵn!</system:String>
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Không tìm thấy cập nhật mã</system:String>
     
     <!-- Dialog UI Strings -->
@@ -156,8 +156,8 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Cấu hình {0}</system:String>
-	
-	<!-- Mod Downloader Strings -->
+    
+    <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Tải mod thất bại</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Đã xảy ra lỗi trong quá trình tải xuống. Máy chủ có thể ngừng hoạt động hoặc quá tải. Vui lòng thử lại sau. &#x0a;&#x0a;Chi tiết: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Không tìm thấy trò chơi</system:String>
