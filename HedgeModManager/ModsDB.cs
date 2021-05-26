@@ -115,40 +115,57 @@ namespace HedgeModManager
         {
             var report = new DependencyReport();
 
-            foreach (var mod in Mods)
-            {
-                if (mod.Enabled)
-                {
-                    DependencyReport.ErrorInfo info = null;
-                    foreach (var depend in mod.DependsOn)
-                    {
-                        var resolvedMod = Mods.FirstOrDefault(m => m.ID == depend.ID);
-                        if (resolvedMod == null)
-                        {
-                            info ??= new DependencyReport.ErrorInfo {Mod = mod};
-                            info.UnresolvedDepends.Add(depend);
-                            continue;
-                        }
+            var enabledMods = new List<ModInfo>();
+            var newMods = CheckDepends(Mods, enabledMods);
+            while (newMods != null)
+                newMods = CheckDepends(newMods, enabledMods);
 
-                        if (depend.ModVersion != null)
+            return report;
+
+            List<ModInfo> CheckDepends(IEnumerable<ModInfo> mods, List<ModInfo> enabledMods)
+            {
+                List<ModInfo> result = null;
+                foreach (var mod in mods)
+                {
+                    if (mod.Enabled)
+                    {
+                        DependencyReport.ErrorInfo info = null;
+                        foreach (var depend in mod.DependsOn)
                         {
-                            if (!Version.TryParse(resolvedMod.Version, out var modVersion) || modVersion < depend.ModVersion)
+                            var resolvedMod = Mods.FirstOrDefault(m => m.ID == depend.ID);
+                            if (resolvedMod == null)
                             {
                                 info ??= new DependencyReport.ErrorInfo { Mod = mod };
                                 info.UnresolvedDepends.Add(depend);
                                 continue;
                             }
+
+                            if (depend.ModVersion != null)
+                            {
+                                if (!Version.TryParse(resolvedMod.Version, out var modVersion) || modVersion < depend.ModVersion)
+                                {
+                                    info ??= new DependencyReport.ErrorInfo { Mod = mod };
+                                    info.UnresolvedDepends.Add(depend);
+                                    continue;
+                                }
+                            }
+
+                            resolvedMod.Enabled = true;
+                            if (resolvedMod.DependsOn.Count > 0 && !enabledMods.Contains(resolvedMod))
+                            {
+                                result ??= new List<ModInfo>();
+                                result.Add(resolvedMod);
+                                enabledMods.Add(resolvedMod);
+                            }
                         }
 
-                        resolvedMod.Enabled = true;
+                        if (info != null)
+                            report.Errors.Add(info);
                     }
-
-                    if (info != null)
-                        report.Errors.Add(info);
                 }
-            }
 
-            return report;
+                return result;
+            }
         }
 
         public void SaveDBSync(bool compileCodes = true)
