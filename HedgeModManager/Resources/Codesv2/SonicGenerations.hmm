@@ -698,3 +698,29 @@ WriteNop(0x11246D9, 5);
 
 Patch "Disable FPS Limit" by "Skyth"
 WriteProtected<byte>(0xE7B580, 0xEB);
+
+Patch "Disable Character Action Voices" by "Hyper"
+WriteProtected<uint>(0xDFC993, 0xFFFFFF); /* 3002_action01 (used for bouncing off physics objects) */
+WriteProtected<uint>(0xE4B684, 0xFFFFFF); /* 3002_action01 (used for tricks) */
+WriteProtected<uint>(0xE4B8E0, 0xFFFFFF); /* 3002_action01 (used for trick finish) */
+WriteProtected<uint>(0xE57E6F, 0xFFFFFF); /* 3002_action01 (used for jumping) */
+WriteProtected<uint>(0x11D7B8C, 0xFFFFFF); /* 3002_action01 (used for grinding) */
+WriteProtected<uint>(0x1117EF4, 0xFFFFFF); /* 3002_stumble */
+WriteProtected<uint>(0xE0248C, 0xFFFFFF); /* 3002_damage01 */
+WriteProtected<uint>(0xE02496, 0xFFFFFF); /* 3002_damage02 */
+WriteProtected<uint>(0xE024A0, 0xFFFFFF); /* 3002_damage03 */
+WriteProtected<uint>(0xE024AA, 0xFFFFFF); /* 3002_damage04 */
+WriteProtected<uint>(0xDF0B63, 0xFFFFFF); /* 3002_damage06 */
+WriteProtected<uint>(0xE023E3, 0xFFFFFF); /* 3002_dead (used for dying from enemies) */
+WriteProtected<uint>(0xE55D3D, 0xFFFFFF); /* 3002_dead (used for dying from falling) */
+WriteProtected<uint>(0x1118512, 0xFFFFFF); /* 3002_action03 (used for drift) */
+WriteProtected<uint>(0x1254E04, 0xFFFFFF); /* 3002_action03 (used for stomping) */
+WriteProtected<uint>(0xDF3710, 0xFFFFFF); /* 3002_action04 (used for homing success) */
+WriteProtected<uint>(0x1117CEB, 0xFFFFFF); /* 3002_action04 (used for boost) */
+WriteProtected<uint>(0x1117D09, 0xFFFFFF); /* 3002_action04 (used for boost) */
+WriteProtected<uint>(0x1117D27, 0xFFFFFF); /* 3002_action04 (used for boost) */
+WriteProtected<uint>(0x11184E4, 0xFFFFFF); /* 3002_action04 (used for homing success) */
+WriteProtected<uint>(0xE4466E, 0xFFFFFF); /* 3002_strain (used for pushing) */
+WriteProtected<uint>(0xE3DADD, 0xFFFFFF); /* 3002_success01 (used for blast off) */
+WriteProtected<uint>(0xE462AA, 0xFFFFFF); /* 3002_success01 (used for pulleys) */
+WriteProtected<uint>(0x11D72DC, 0xFFFFFF); /* 3002_action06 */
