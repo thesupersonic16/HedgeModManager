@@ -731,3 +731,11 @@ WriteProtected<uint>(0x1117D27, 0xFFFFFF); /* 3002_action05 (used for boost) */
 WriteProtected<uint>(0x1231971, 0xFFFFFF); /* 3002_action05 (used for light dash) */
 WriteProtected<uint>(0xDF0B63, 0xFFFFFF); /* 3002_damage06 */
 WriteProtected<uint>(0x11D72DC, 0xFFFFFF); /* 3002_action06 */
+
+Patch "Disable Boost Audio Filter" by "Hyper"
+WriteProtected<byte>(0xE2E26B, 0xEB); /* Sonic::Player::CPlayerSpeedPosturePluginAisacGhz */
+WriteProtected<byte>(0xE2E409, 0xEB); /* Sonic::Player::CPlayerSpeedPosturePluginAisac */
+
+Patch "Disable Water Audio Filter" by "Hyper"
+WriteProtected<byte>(0xD6F084, 0xC7, 0x06, 0xFC, 0xD2, 0x6D, 0x01); /* replace WaterToGround with Nop */
+WriteProtected<byte>(0xD6F53A, 0xE9, 0xC7, 0x00, 0x00, 0x00); /* Sonic::CSoundBgmAisacController::GroundToWater */
