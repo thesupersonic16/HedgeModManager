@@ -733,4 +733,5 @@ WriteProtected<uint>(0xDF0B63, 0xFFFFFF); /* 3002_damage06 */
 WriteProtected<uint>(0x11D72DC, 0xFFFFFF); /* 3002_action06 */
 
 Patch "Disable Boost Audio Filter" by "Hyper"
-WriteProtected<byte>(0xE2E3F3, 0xE9, 0xDA, 0x00, 0x00, 0x00);
+WriteProtected<byte>(0xE2E26B, 0xEB); /* Sonic::Player::CPlayerSpeedPosturePluginAisacGhz */
+WriteProtected<byte>(0xE2E409, 0xEB); /* Sonic::Player::CPlayerSpeedPosturePluginAisac */
