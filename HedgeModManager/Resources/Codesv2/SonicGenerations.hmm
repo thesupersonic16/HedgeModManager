@@ -739,3 +739,6 @@ WriteProtected<byte>(0xE2E409, 0xEB); /* Sonic::Player::CPlayerSpeedPosturePlugi
 Patch "Disable Water Audio Filter" by "Hyper"
 WriteProtected<byte>(0xD6F084, 0xC7, 0x06, 0xFC, 0xD2, 0x6D, 0x01); /* replace WaterToGround with Nop */
 WriteProtected<byte>(0xD6F53A, 0xE9, 0xC7, 0x00, 0x00, 0x00); /* Sonic::CSoundBgmAisacController::GroundToWater */
+
+Patch "Classic Sonic Homing Attack" by "Sajid"
+WriteNop(0x00DC50DF, 6)
