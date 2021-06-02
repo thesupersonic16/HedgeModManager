@@ -73,6 +73,8 @@ namespace HedgeModManager
                 if (File.Exists(profilePath))
                     HedgeApp.ModProfiles = JsonConvert.DeserializeObject<List<ModProfile>>(File.ReadAllText(profilePath));
 
+                HedgeApp.ModProfiles ??= new List<ModProfile>();
+
                 // Remove profiles that don't exist
                 HedgeApp.ModProfiles.RemoveAll(profile =>
                     !File.Exists(Path.Combine(HedgeApp.ModsDbPath, profile.ModDBPath)));
@@ -87,6 +89,7 @@ namespace HedgeModManager
             catch (Exception e)
             {
                 new ExceptionWindow(e).ShowDialog();
+                HedgeApp.ModProfiles ??= new List<ModProfile>();
                 if (HedgeApp.ModProfiles.Count == 0)
                     HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDB.ini"));
                 SelectedModProfile = HedgeApp.ModProfiles.First();
@@ -973,7 +976,7 @@ namespace HedgeModManager
 
         private async void Game_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBox_GameStatus.SelectedItem != null)
+            if (ComboBox_GameStatus.SelectedItem != null && ComboBox_GameStatus.SelectedItem != HedgeApp.CurrentSteamGame)
             {
                 HedgeApp.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
 
