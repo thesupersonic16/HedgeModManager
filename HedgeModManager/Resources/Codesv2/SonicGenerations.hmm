@@ -395,37 +395,42 @@ WriteProtected<float>(0x14AF8CC, 1.0f / 60.0f)
 Code "60 FPS Cutscenes (experimental, requires Locked 60 FPS)"
 WriteProtected<float>(0x13E08A0, 1.0f / 60.0f)
 
-Patch "Fix Input Delay with Arbitrary Framerates (experimental)" by "Skyth"
-WriteProtected<byte>(0xD6CBCA, 0xF3, 0x0F, 0x10, 0x44, 0x24, 0x24);
-WriteNop(0xD6CBD0, 14);
+Code "Locked 72 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 72.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 72.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 72.0f)
 
 Code "Locked 75 FPS (experimental)" by "Skyth & M&M"
 Write<float>(0x19FD2C, 75.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 75.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 75.0f)
-WriteProtected<float>(0x13E08A0, 1.0f / 75.0f) /* Cutscene Playback */
 
 Code "Locked 120 FPS (experimental)" by "Skyth & M&M"
 Write<float>(0x19FD2C, 120.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 120.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 120.0f)
-WriteProtected<float>(0x13E08A0, 1.0f / 120.0f) /* Cutscene Playback */
 
 Code "Locked 144 FPS (experimental)" by "Skyth & M&M"
 Write<float>(0x19FD2C, 144.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 144.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 144.0f)
-WriteProtected<float>(0x13E08A0, 1.0f / 144.0f) /* Cutscene Playback */
 
 Code "Locked 165 FPS (experimental)" by "Skyth & M&M"
 Write<float>(0x19FD2C, 165.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 165.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 165.0f)
-WriteProtected<float>(0x13E08A0, 1.0f / 165.0f) /* Cutscene Playback */
+
+Patch "Disable FPS Limit" by "Skyth"
+WriteProtected<byte>(0xE7B580, 0xEB);
+
+Patch "Fix Input Delay with Arbitrary Framerates (experimental)" by "Skyth"
+WriteProtected<byte>(0xD6CBCA, 0xF3, 0x0F, 0x10, 0x44, 0x24, 0x24);
+WriteNop(0xD6CBD0, 14);
 
 Patch "Longer Blue Trail" by "N69 & Nekit"
 WriteProtected<ushort>(0xE5FB17, 0x9090)
@@ -696,40 +701,37 @@ Patch "Never Receive Boost From Enemies" by "Hyper"
 WriteProtected<byte>(0x112435C, 0xE9, 0xAB, 0x00, 0x00, 0x00);
 WriteNop(0x11246D9, 5);
 
-Patch "Disable FPS Limit" by "Skyth"
-WriteProtected<byte>(0xE7B580, 0xEB);
-
 Patch "Disable Character Action Voices" by "Hyper"
-WriteProtected<uint>(0xDF0B96, 0xFFFFFF); /* 3002_action01 (used for Unleashed jump selector) */
-WriteProtected<uint>(0xDF0C08, 0xFFFFFF); /* 3002_action01 (used for Unleashed jump selector) */
-WriteProtected<uint>(0xDFC993, 0xFFFFFF); /* 3002_action01 (used for bouncing off physics objects) */
-WriteProtected<uint>(0xE4B684, 0xFFFFFF); /* 3002_action01 (used for tricks) */
-WriteProtected<uint>(0xE4B8E0, 0xFFFFFF); /* 3002_action01 (used for trick finish) */
-WriteProtected<uint>(0xE57E6F, 0xFFFFFF); /* 3002_action01 (used for jumping) */
+WriteProtected<uint>(0xDF0B96, 0xFFFFFF);  /* 3002_action01 (used for Unleashed jump selector) */
+WriteProtected<uint>(0xDF0C08, 0xFFFFFF);  /* 3002_action01 (used for Unleashed jump selector) */
+WriteProtected<uint>(0xDFC993, 0xFFFFFF);  /* 3002_action01 (used for bouncing off physics objects) */
+WriteProtected<uint>(0xE4B684, 0xFFFFFF);  /* 3002_action01 (used for tricks) */
+WriteProtected<uint>(0xE4B8E0, 0xFFFFFF);  /* 3002_action01 (used for trick finish) */
+WriteProtected<uint>(0xE57E6F, 0xFFFFFF);  /* 3002_action01 (used for jumping) */
 WriteProtected<uint>(0x11D7B8C, 0xFFFFFF); /* 3002_action01 (used for grinding) */
 WriteProtected<uint>(0x123B475, 0xFFFFFF); /* 3002_action01 (used for cannons) */
 WriteProtected<uint>(0x1252740, 0xFFFFFF); /* 3002_action01 (used for squat kick) */
 WriteProtected<uint>(0x1117EF4, 0xFFFFFF); /* 3002_stumble */
-WriteProtected<uint>(0xE0248C, 0xFFFFFF); /* 3002_damage01 */
-WriteProtected<uint>(0xE02496, 0xFFFFFF); /* 3002_damage02 */
-WriteProtected<uint>(0xE024A0, 0xFFFFFF); /* 3002_damage03 */
-WriteProtected<uint>(0xE024AA, 0xFFFFFF); /* 3002_damage04 */
-WriteProtected<uint>(0xDF0B63, 0xFFFFFF); /* 3002_damage05 (used for Unleashed jump selector) */
-WriteProtected<uint>(0xE4466E, 0xFFFFFF); /* 3002_strain (used for pushing) */
-WriteProtected<uint>(0xE023E3, 0xFFFFFF); /* 3002_dead (used for dying from enemies) */
-WriteProtected<uint>(0xE55D3D, 0xFFFFFF); /* 3002_dead (used for dying from falling) */
+WriteProtected<uint>(0xE0248C, 0xFFFFFF);  /* 3002_damage01 */
+WriteProtected<uint>(0xE02496, 0xFFFFFF);  /* 3002_damage02 */
+WriteProtected<uint>(0xE024A0, 0xFFFFFF);  /* 3002_damage03 */
+WriteProtected<uint>(0xE024AA, 0xFFFFFF);  /* 3002_damage04 */
+WriteProtected<uint>(0xDF0B63, 0xFFFFFF);  /* 3002_damage05 (used for Unleashed jump selector) */
+WriteProtected<uint>(0xE4466E, 0xFFFFFF);  /* 3002_strain (used for pushing) */
+WriteProtected<uint>(0xE023E3, 0xFFFFFF);  /* 3002_dead (used for dying from enemies) */
+WriteProtected<uint>(0xE55D3D, 0xFFFFFF);  /* 3002_dead (used for dying from falling) */
 WriteProtected<uint>(0x1117CEB, 0xFFFFFF); /* 3002_action03 (used for boost) */
 WriteProtected<uint>(0x1118512, 0xFFFFFF); /* 3002_action03 (used for drift) */
 WriteProtected<uint>(0x1254E04, 0xFFFFFF); /* 3002_action03 (used for stomping) */
-WriteProtected<uint>(0xDF3710, 0xFFFFFF); /* 3002_action04 (used for homing success) */
+WriteProtected<uint>(0xDF3710, 0xFFFFFF);  /* 3002_action04 (used for homing success) */
 WriteProtected<uint>(0x1117D09, 0xFFFFFF); /* 3002_action04 (used for boost) */
 WriteProtected<uint>(0x11184E4, 0xFFFFFF); /* 3002_action04 (used for homing success) */
 WriteProtected<uint>(0x1119B1F, 0xFFFFFF); /* 3002_action04 (used for board drift) */
-WriteProtected<uint>(0xE3DADD, 0xFFFFFF); /* 3002_success01 (used for blast off) */
-WriteProtected<uint>(0xE462AA, 0xFFFFFF); /* 3002_success01 (used for pulleys) */
+WriteProtected<uint>(0xE3DADD, 0xFFFFFF);  /* 3002_success01 (used for blast off) */
+WriteProtected<uint>(0xE462AA, 0xFFFFFF);  /* 3002_success01 (used for pulleys) */
 WriteProtected<uint>(0x1117D27, 0xFFFFFF); /* 3002_action05 (used for boost) */
 WriteProtected<uint>(0x1231971, 0xFFFFFF); /* 3002_action05 (used for light dash) */
-WriteProtected<uint>(0xDF0B63, 0xFFFFFF); /* 3002_damage06 */
+WriteProtected<uint>(0xDF0B63, 0xFFFFFF);  /* 3002_damage06 */
 WriteProtected<uint>(0x11D72DC, 0xFFFFFF); /* 3002_action06 */
 
 Patch "Disable Boost Audio Filter" by "Hyper"
