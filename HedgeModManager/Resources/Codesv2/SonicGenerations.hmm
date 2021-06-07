@@ -634,3 +634,6 @@ WriteNop(0xEE51E5, 2);
 
 Patch "Use Original Stage Text Colours" by "Hyper"
 WriteProtected<byte>(0xEE3F90, 0xEB, 0x2A);
+
+Patch "Red Rings Appear On New Game" by "brianuuu"
+WriteNop(0x11A9ECB, 2);
