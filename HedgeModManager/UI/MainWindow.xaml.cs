@@ -36,7 +36,13 @@ namespace HedgeModManager
     {
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
-        public static CodeFile CodesDatabase = new CodeFile();
+
+        public static CodeFile CodesDatabase
+        {
+            get => ModsDatabase?.CodesDatabase;
+            set => ModsDatabase.CodesDatabase = value;
+        }
+
         public static List<FileSystemWatcher> ModsWatchers = new List<FileSystemWatcher>();
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
         public List<string> CheckedModUpdates = new List<string>();
@@ -66,6 +72,13 @@ namespace HedgeModManager
                 string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
                 if (File.Exists(profilePath))
                     HedgeApp.ModProfiles = JsonConvert.DeserializeObject<List<ModProfile>>(File.ReadAllText(profilePath));
+
+                HedgeApp.ModProfiles ??= new List<ModProfile>();
+
+                // Remove profiles that don't exist
+                HedgeApp.ModProfiles.RemoveAll(profile =>
+                    !File.Exists(Path.Combine(HedgeApp.ModsDbPath, profile.ModDBPath)));
+                
                 // Create new profile set if needed
                 if (HedgeApp.ModProfiles.Count == 0)
                     HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDB.ini"));
@@ -76,9 +89,31 @@ namespace HedgeModManager
             catch (Exception e)
             {
                 new ExceptionWindow(e).ShowDialog();
+                HedgeApp.ModProfiles ??= new List<ModProfile>();
                 if (HedgeApp.ModProfiles.Count == 0)
                     HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDB.ini"));
                 SelectedModProfile = HedgeApp.ModProfiles.First();
+            }
+        }
+
+        public void LoadDatabase()
+        {
+            ModsDatabase = new ModsDB(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
+            if (!Directory.Exists(HedgeApp.ModsDbPath))
+            {
+                Application.Current?.MainWindow?.Hide();
+                var box = new HedgeMessageBox("No Mods Found", Properties.Resources.STR_UI_NO_MODS);
+
+                box.AddButton("Yes", () =>
+                {
+                    ModsDatabase.SetupFirstTime();
+                    box.Close();
+                });
+
+                box.AddButton("No", () => Environment.Exit(0));
+
+                box.ShowDialog();
+                Application.Current?.MainWindow?.Show();
             }
         }
 
@@ -87,7 +122,7 @@ namespace HedgeModManager
             PauseModUpdates = true;
             CodesList.Items.Clear();
 
-            ModsDatabase = new ModsDB(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
+            LoadDatabase();
             ModsDatabase.DetectMods();
             ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.Sort((x, y) => x.Title.CompareTo(y.Title));
@@ -146,7 +181,7 @@ namespace HedgeModManager
             // Re-arrange the mods
             for (int i = 0; i < ModsDatabase.ActiveMods.Count; i++)
             {
-                var mod = ModsDatabase.GetModFromID(ModsDatabase.ActiveMods[i]);
+                var mod = ModsDatabase.GetModFromActiveGUID(ModsDatabase.ActiveMods[i]);
 
                 if (mod != null)
                 {
@@ -213,6 +248,9 @@ namespace HedgeModManager
 
         public async Task CheckForCodeUpdates()
         {
+            if (!File.Exists(CodeProvider.CodesTextPath))
+                return;
+
             try
             {
                 // Codes from disk.
@@ -662,16 +700,58 @@ namespace HedgeModManager
             });
         }
 
+        public async Task SaveConfig(bool startGame = false)
+        {
+            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
+            ShowMissingOtherLoaderWarning();
+            EnableSaveRedirIfUsed();
+            try
+            {
+                await SaveModsDB();
+                Refresh();
+                UpdateStatus(Localise("StatusUIModsDBSaved"));
+                if (startGame)
+                    await StartGame();
+            }
+            catch (Exception ex)
+            {
+                Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
+            }
+        }
+
+        public bool CheckModDepends()
+        {
+            bool abort = false;
+            var report = ModsDatabase.ResolveDepends();
+
+            if (report.HasErrors)
+            {
+                var box = new HedgeMessageBox(Localise("MainUIMissingDependsHeader"), report.BuildMarkdown(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+                box.AddButton(Localise("CommonUIIgnore"), () => box.Close());
+                box.AddButton(Localise("CommonUICancel"), () =>
+                {
+                    box.Close();
+                    abort = true;
+                });
+                box.ShowDialog();
+            }
+
+            return !abort;
+        }
+
         public bool CheckDepends()
         {
             bool abort = false;
 
             if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.SonicForces.AppID, DependTypes.VS2019x64);
-            if (!abort)
                 abort = DependsHandler.AskToInstallRuntime(Games.SonicGenerations.AppID, DependTypes.VS2019x86);
             if (!abort)
                 abort = DependsHandler.AskToInstallRuntime(Games.SonicLostWorld.AppID, DependTypes.VS2019x86);
+            if (!abort)
+                abort = DependsHandler.AskToInstallRuntime(Games.SonicForces.AppID, DependTypes.VS2019x64);
+            if (!abort)
+                abort = DependsHandler.AskToInstallRuntime(Games.PuyoPuyoTetris2.AppID, DependTypes.VS2019x64);
             return !abort;
         }
  
@@ -754,50 +834,15 @@ namespace HedgeModManager
             Refresh();
         }
 
-        private void UI_Save_Click(object sender, RoutedEventArgs e)
+        private async void UI_Save_Click(object sender, RoutedEventArgs e)
         {
-            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
-            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
-            ShowMissingOtherLoaderWarning();
-            EnableSaveRedirIfUsed();
-            Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    await SaveModsDB();
-                    Dispatcher.Invoke(Refresh);
-                    UpdateStatus(Localise("StatusUIModsDBSaved"));
-                }
-                catch (Exception ex)
-                {
-                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
-                }
-            });
+            if (CheckModDepends())
+                await SaveConfig();
         }
 
-        private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
+        private async void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
-            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
-            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
-            ShowMissingOtherLoaderWarning();
-            EnableSaveRedirIfUsed();
-
-            bool startGame = CheckDepends();
-            Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    await SaveModsDB();
-                    Dispatcher.Invoke(Refresh);
-                    UpdateStatus(Localise("StatusUIModsDBSaved"));
-                    if (startGame)
-                        await StartGame();
-                }
-                catch(Exception ex)
-                {
-                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
-                }
-            });
+            await SaveConfig(CheckDepends() && CheckModDepends());
         }
 
         private void UI_Play_Click(object sender, RoutedEventArgs e)
@@ -806,26 +851,9 @@ namespace HedgeModManager
                 StartGame();
         }
 
-        private void UI_CPKREDIR_Click(object sender, RoutedEventArgs e)
-        {
-            HedgeApp.InstallCPKREDIR(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName), IsCPKREDIRInstalled);
-            RefreshUI();
-        }
-
         private void UI_About_Click(object sender, RoutedEventArgs e)
         {
             new AboutWindow().ShowDialog();
-        }
-
-        private void UI_ModsList_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                var files = e.Data.GetData(DataFormats.FileDrop) as string[];
-                // Try Install mods from all files
-                files.ToList().ForEach(t => ModsDatabase.InstallMod(t));
-                Refresh();
-            }
         }
 
         private void UI_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -919,7 +947,7 @@ namespace HedgeModManager
                 var editor = new EditModWindow(mod);
                 if (editor.ShowDialog().Value)
                 {
-                    var modDir = HedgeApp.CurrentGame == Games.Tenpex ? "raw" : "disk";
+                    var modDir = HedgeApp.CurrentGame == Games.PuyoPuyoTetris2 ? "raw" : "disk";
                     ModsDatabase.CreateMod(mod, modDir, true);
                     RefreshMods();
                 }
@@ -948,7 +976,7 @@ namespace HedgeModManager
 
         private async void Game_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBox_GameStatus.SelectedItem != null)
+            if (ComboBox_GameStatus.SelectedItem != null && ComboBox_GameStatus.SelectedItem != HedgeApp.CurrentSteamGame)
             {
                 HedgeApp.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
 
@@ -1149,24 +1177,28 @@ namespace HedgeModManager
             }
         }
 
-        private void ComboBox_ModProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ComboBox_ModProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Ignore event when combobox is initalising 
+            if (ComboBox_ModProfile.SelectedItem == null || ComboBox_ModProfile.SelectedItem == SelectedModProfile)
+                return;
+
             // Save profile
-            Task.Factory.StartNew(async () =>
+            try
             {
-                try
-                {
-                    await SaveModsDB();
-                }
-                catch (Exception ex)
-                {
-                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
-                }
-            });
+                await SaveModsDB();
+            }
+            catch (Exception ex)
+            {
+                new ExceptionWindow(ex).ShowDialog();
+            }
             SelectedModProfile.Enabled = false;
             SelectedModProfile = ComboBox_ModProfile.SelectedItem as ModProfile ?? HedgeApp.ModProfiles.First();
             SelectedModProfile.Enabled = true;
             HedgeApp.Config.ModProfile = SelectedModProfile.Name;
+            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            HedgeApp.Config.Save(HedgeApp.ConfigPath);
+            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             Refresh();
         }
 

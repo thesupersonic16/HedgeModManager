@@ -373,21 +373,64 @@ Patch "1920x1080 Media Player" by "N69"
 WriteProtected<ushort>(0xB210A1, 1920)
 WriteProtected<ushort>(0xB210B1, 1080)
 
-Code "29.97 FPS Lock" by "PTKickass"
+Code "29.97 FPS Cap" by "PTKickass"
 Write<float>(0x19FD2C, 29.97f)
 
-Code "30 FPS Speed Lock" by "Skyth"
-Write<float>(0x19FD2C, 30)
-WriteNop(0xE7B5D7, 2)
-WriteProtected<float>(0x1704258, 0.0333333333333334f)
-
-Code "59.94 FPS Lock" by "PTKickass"
+Code "59.94 FPS Cap" by "PTKickass"
 Write<float>(0x19FD2C, 59.94f)
 
-Code "60 FPS Speed Lock" by "Skyth"
-Write<float>(0x19FD2C, 60)
+Code "Locked 30 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 30.0f)
 WriteNop(0xE7B5D7, 2)
-WriteProtected<float>(0x1704258, 0.0166666666666667f)
+WriteProtected<float>(0x1704258, 1.0f / 30.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 30.0f)
+WriteProtected<float>(0x13E08A0, 1.0f / 30.0f) /* Cutscene Playback */
+
+Code "Locked 60 FPS" by "Skyth & M&M"
+Write<float>(0x19FD2C, 60.0f)
+WriteNop(0xE7B5D7, 2)
+WriteProtected<float>(0x1704258, 1.0f / 60.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 60.0f)
+
+Code "60 FPS Cutscenes (experimental, requires Locked 60 FPS)"
+WriteProtected<float>(0x13E08A0, 1.0f / 60.0f)
+
+Code "Locked 72 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 72.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 72.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 72.0f)
+
+Code "Locked 75 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 75.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 75.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 75.0f)
+
+Code "Locked 120 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 120.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 120.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 120.0f)
+
+Code "Locked 144 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 144.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 144.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 144.0f)
+
+Code "Locked 165 FPS (experimental)" by "Skyth & M&M"
+Write<float>(0x19FD2C, 165.0f);
+WriteNop(0xE7B5D7, 2);
+WriteProtected<float>(0x1704258, 1.0f / 165.0f)
+WriteProtected<float>(0x14AF8CC, 1.0f / 165.0f)
+
+Patch "Disable FPS Limit" by "Skyth"
+WriteProtected<byte>(0xE7B580, 0xEB);
+
+Patch "Fix Input Delay with Arbitrary Framerates (experimental)" by "Skyth"
+WriteProtected<byte>(0xD6CBCA, 0xF3, 0x0F, 0x10, 0x44, 0x24, 0x24);
+WriteNop(0xD6CBD0, 14);
 
 Patch "Longer Blue Trail" by "N69 & Nekit"
 WriteProtected<ushort>(0xE5FB17, 0x9090)
@@ -422,13 +465,13 @@ WriteProtected<uint>(0x167261C, 0x4448)
 WriteProtected<byte>(0x115B826, 0x2)
 WriteProtected<uint>(0x1A6B800, 0x003D10E5)
 
-Patch "Ice Pillars Replace Fire Pillars" by "N69"
+Patch "Ice Pillars Replace Fire Pillars" by "N69 & RFunk195"
 WriteProtected<byte>(0xE020EB, 0x1)
-WriteProtected<byte>(0x16613CB, 0x31)
-WriteProtected<byte>(0x16613D2, 0x31)
-WriteProtected<uint>(0x166149E, 0x63697065)
-WriteProtected<uint>(0x16614A2, 0x6E616C65)
-WriteProtected<ushort>(0x16614A6, 0x5F5F)
+WriteProtected<byte>(0x16617CB, 0x31)
+WriteProtected<byte>(0x16617D2, 0x31)
+WriteProtected<byte>(0x1661882, 0x69, 0x63, 0x65, 0x70, 0x61, 0x6E, 0x65, 0x6C, 0x5F)
+WriteProtected<byte>(0x166189E, 0x69, 0x63, 0x65, 0x70, 0x61, 0x6E, 0x65, 0x6C, 0x5F)
+WriteProtected<byte>(0x16618BA, 0x69, 0x63, 0x65, 0x70, 0x61, 0x6E, 0x65, 0x6C, 0x5F)
 
 Patch "Fix Skydive Collision Detection" by "N69"
 WriteNop(0x119822E, 18)
@@ -586,7 +629,8 @@ WriteProtected<byte>(0x10538EB, 0xE9, 0x8F, 0x00, 0x00, 0x00, 0x90);
 Patch "Disable Lap Time Display" by "Hyper"
 WriteProtected<byte>(0x10976EF, 0x90, 0xE9);
 
-Patch "Disable Homing Reticle" by "Hyper"
+Patch "Disable Homing Reticles" by "Hyper"
+WriteProtected<byte>(0xB6AB8C, 0xE9, 0xF7, 0x01, 0x00, 0x00);
 WriteProtected<byte>(0xDEBC36, 0x00);
 
 Patch "Disable Spin Dash on Dash Panels" by "Hyper"
@@ -622,6 +666,7 @@ WriteNop(0x1205D44, 8);
 WriteProtected<byte>(0x15FA49C, 0x00);
 
 Patch "Disable Lives" by "Hyper"
+WriteNop(0xD59A67, 6);
 WriteNop(0xE68562, 5);
 WriteProtected<byte>(0x1098C82, 0xEB);
 WriteProtected<byte>(0x109B1A4, 0xE9, 0xDC, 0x02, 0x00, 0x00);
@@ -634,6 +679,71 @@ WriteNop(0xEE51E5, 2);
 
 Patch "Use Original Stage Text Colours" by "Hyper"
 WriteProtected<byte>(0xEE3F90, 0xEB, 0x2A);
+
+Code "Full Resolution Distortion Effects" by "Luig"
+Write<float>(0x01B22E6C, 1f)
+
+Code "2x Shadowmap Draw Distance but Lower Quality Shadows" by "Luig"
+Write<float>(0x01A57310, 50f)
+Write<float>(0x01A57314, 50f)
+Write<float>(0x01A57318, 60f)
+
+Patch "Remove SEGA from Title Bar" by "Hyper"
+WriteProtected<byte>(0xE7A99D, 0x3C);
+
+Patch "Start Stages Standing Still" by "Hyper"
+WriteProtected<byte>(0xD944D4, 0x85);
+
+Patch "Disable Checkpoints" by "Hyper"
+WriteNop(0x1033338, 2);
+
+Patch "Never Receive Boost From Enemies" by "Hyper"
+WriteProtected<byte>(0x112435C, 0xE9, 0xAB, 0x00, 0x00, 0x00);
+WriteNop(0x11246D9, 5);
+
+Patch "Disable Character Action Voices" by "Hyper"
+WriteProtected<uint>(0xDF0B96, 0xFFFFFF);  /* 3002_action01 (used for Unleashed jump selector) */
+WriteProtected<uint>(0xDF0C08, 0xFFFFFF);  /* 3002_action01 (used for Unleashed jump selector) */
+WriteProtected<uint>(0xDFC993, 0xFFFFFF);  /* 3002_action01 (used for bouncing off physics objects) */
+WriteProtected<uint>(0xE4B684, 0xFFFFFF);  /* 3002_action01 (used for tricks) */
+WriteProtected<uint>(0xE4B8E0, 0xFFFFFF);  /* 3002_action01 (used for trick finish) */
+WriteProtected<uint>(0xE57E6F, 0xFFFFFF);  /* 3002_action01 (used for jumping) */
+WriteProtected<uint>(0x11D7B8C, 0xFFFFFF); /* 3002_action01 (used for grinding) */
+WriteProtected<uint>(0x123B475, 0xFFFFFF); /* 3002_action01 (used for cannons) */
+WriteProtected<uint>(0x1252740, 0xFFFFFF); /* 3002_action01 (used for squat kick) */
+WriteProtected<uint>(0x1117EF4, 0xFFFFFF); /* 3002_stumble */
+WriteProtected<uint>(0xE0248C, 0xFFFFFF);  /* 3002_damage01 */
+WriteProtected<uint>(0xE02496, 0xFFFFFF);  /* 3002_damage02 */
+WriteProtected<uint>(0xE024A0, 0xFFFFFF);  /* 3002_damage03 */
+WriteProtected<uint>(0xE024AA, 0xFFFFFF);  /* 3002_damage04 */
+WriteProtected<uint>(0xDF0B63, 0xFFFFFF);  /* 3002_damage05 (used for Unleashed jump selector) */
+WriteProtected<uint>(0xE4466E, 0xFFFFFF);  /* 3002_strain (used for pushing) */
+WriteProtected<uint>(0xE023E3, 0xFFFFFF);  /* 3002_dead (used for dying from enemies) */
+WriteProtected<uint>(0xE55D3D, 0xFFFFFF);  /* 3002_dead (used for dying from falling) */
+WriteProtected<uint>(0x1117CEB, 0xFFFFFF); /* 3002_action03 (used for boost) */
+WriteProtected<uint>(0x1118512, 0xFFFFFF); /* 3002_action03 (used for drift) */
+WriteProtected<uint>(0x1254E04, 0xFFFFFF); /* 3002_action03 (used for stomping) */
+WriteProtected<uint>(0xDF3710, 0xFFFFFF);  /* 3002_action04 (used for homing success) */
+WriteProtected<uint>(0x1117D09, 0xFFFFFF); /* 3002_action04 (used for boost) */
+WriteProtected<uint>(0x11184E4, 0xFFFFFF); /* 3002_action04 (used for homing success) */
+WriteProtected<uint>(0x1119B1F, 0xFFFFFF); /* 3002_action04 (used for board drift) */
+WriteProtected<uint>(0xE3DADD, 0xFFFFFF);  /* 3002_success01 (used for blast off) */
+WriteProtected<uint>(0xE462AA, 0xFFFFFF);  /* 3002_success01 (used for pulleys) */
+WriteProtected<uint>(0x1117D27, 0xFFFFFF); /* 3002_action05 (used for boost) */
+WriteProtected<uint>(0x1231971, 0xFFFFFF); /* 3002_action05 (used for light dash) */
+WriteProtected<uint>(0xDF0B63, 0xFFFFFF);  /* 3002_damage06 */
+WriteProtected<uint>(0x11D72DC, 0xFFFFFF); /* 3002_action06 */
+
+Patch "Disable Boost Audio Filter" by "Hyper"
+WriteProtected<byte>(0xE2E26B, 0xEB); /* Sonic::Player::CPlayerSpeedPosturePluginAisacGhz */
+WriteProtected<byte>(0xE2E409, 0xEB); /* Sonic::Player::CPlayerSpeedPosturePluginAisac */
+
+Patch "Disable Water Audio Filter" by "Hyper"
+WriteProtected<byte>(0xD6F084, 0xC7, 0x06, 0xFC, 0xD2, 0x6D, 0x01); /* replace WaterToGround with Nop */
+WriteProtected<byte>(0xD6F53A, 0xE9, 0xC7, 0x00, 0x00, 0x00); /* Sonic::CSoundBgmAisacController::GroundToWater */
+
+Patch "Classic Sonic Always Has Homing Attack" by "Sajid"
+WriteNop(0x00DC50DF, 6)
 
 Patch "Red Rings Appear On New Game" by "brianuuu"
 WriteNop(0x11A9ECB, 2);

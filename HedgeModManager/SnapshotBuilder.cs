@@ -55,9 +55,24 @@ namespace HedgeModManager
 
                 try
                 {
+                    archive.CreateEntryFromFile(Path.Combine(HedgeApp.StartDirectory, "profiles.json"), "profiles.json");
+                }
+                catch { }
+
+                try
+                {
                     foreach (var file in Directory.GetFiles(HedgeApp.ModsDbPath, "mod.ini", SearchOption.AllDirectories))
                     {
                         archive.CreateEntryFromFile(file, $"Mods{Path.DirectorySeparatorChar}{GetRelativePath(file, HedgeApp.ModsDbPath)}");
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    foreach (var file in Directory.GetFiles(HedgeApp.ModsDbPath, "*.ini", SearchOption.TopDirectoryOnly))
+                    {
+                        archive.CreateEntryFromFile(file, $"Profiles{Path.DirectorySeparatorChar}{GetRelativePath(file, HedgeApp.ModsDbPath)}");
                     }
                 }
                 catch { }

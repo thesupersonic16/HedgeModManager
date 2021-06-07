@@ -68,7 +68,7 @@ namespace HedgeModManager
             CodesURL = Resources.URL_FML_CODES
         };
 
-        public static Game Tenpex = new Game()
+        public static Game PuyoPuyoTetris2 = new Game()
         {
             GameName = "Puyo Puyo Tetris 2",
             ExecuteableName = "PuyoPuyoTetris2.exe",
@@ -90,15 +90,15 @@ namespace HedgeModManager
             yield return SonicGenerations;
             yield return SonicLostWorld;
             yield return SonicForces;
-            yield return Tenpex;
+            yield return PuyoPuyoTetris2;
         }
     }
 
     internal static class EmbeddedLoaders
     {
         public static byte[] GenerationsCodeLoader;
-        public static byte[] ForcesModLoader;
         public static byte[] LostCodeLoader;
+        public static byte[] ForcesModLoader;
 
         static EmbeddedLoaders()
         {
@@ -106,8 +106,8 @@ namespace HedgeModManager
             using (var zip = new ZipArchive(stream))
             {
                 GenerationsCodeLoader = GetFile("SonicGenerationsCodeLoader.dll");
-                ForcesModLoader = GetFile("ForcesModLoader.dll");
                 LostCodeLoader = GetFile("LostCodeLoader.dll");
+                ForcesModLoader = GetFile("ForcesModLoader.dll");
 
                 byte[] GetFile(string name)
                 {

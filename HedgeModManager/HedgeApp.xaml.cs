@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Uncomment the line below if you want to quickly figure out which language keys are missing
+// #define THROW_MISSING_LANG
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -336,19 +340,6 @@ namespace HedgeModManager
             Console.WriteLine("        Usage: filename [output]");
         }
 
-        public static string GenerateModDBFileName()
-        {
-            if (!ModProfiles.Any(t => t.ModDBPath == "ModsDB.ini"))
-                return "ModsDB.ini";
-            for (int i = 1; i < 999; ++i)
-            {
-                string fileName = $"ModsDB{i}.ini";
-                if (!ModProfiles.Any(t => t.ModDBPath == fileName) && !File.Exists(Path.Combine(ModsDbPath, fileName)))
-                    return fileName;
-            }
-            throw new Exception("Failed to generate file name for profiles!");
-        }
-
         public static SteamGame FindAndSetLocalGame()
         {
             foreach (var game in Games.GetSupportedGames())
@@ -376,14 +367,39 @@ namespace HedgeModManager
 
         public static void CountLanguages()
         {
+            // Just to make sure this somehow doesn't get shipped accidentally
+#if THROW_MISSING_LANG && DEBUG
+            var baseDict = new ResourceDictionary {Source = new Uri("Languages/en-AU.xaml", UriKind.Relative)};
+            var builder = new StringBuilder();
+            builder.AppendLine();
+#endif
+
             foreach (var entry in SupportedCultures)
             {
                 var langDict = new ResourceDictionary();
                 langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
                 entry.Lines = langDict.Count;
+
+#if THROW_MISSING_LANG && DEBUG
+                builder.AppendLine(entry.FileName);
+                foreach (DictionaryEntry baseEntry in baseDict)
+                {
+                    if (!langDict.Contains(baseEntry.Key))
+                    {
+                        builder.AppendLine(baseEntry.Key.ToString());
+                    }
+                }
+
+                builder.AppendLine();
+#endif
+
                 if (entry.Lines > LanguageList.TotalLines)
                     LanguageList.TotalLines = entry.Lines;
             }
+
+#if THROW_MISSING_LANG && DEBUG
+            new ExceptionWindow(new Exception(builder.ToString())).ShowDialog();
+#endif
         }
 
         public static void LoadLanguage(string culture)
@@ -471,7 +487,7 @@ namespace HedgeModManager
 
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
             Config = new CPKREDIRConfig(ConfigPath);
-            ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni));
+            ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
         }
 
         public static void InstallGBHandlers()

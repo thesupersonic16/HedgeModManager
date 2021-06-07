@@ -90,7 +90,12 @@ namespace HedgeModManager.Serialization
 
             void WriteValue(string name, string group, object value, Type valueType)
             {
-                if (typeof(IDictionary).IsAssignableFrom(valueType))
+                if (typeof(IIniConvertible).IsAssignableFrom(valueType))
+                {
+                    var convertible = (IIniConvertible)value;
+                    file[group][name] = convertible.ToIni(file);
+                }
+                else if (typeof(IDictionary).IsAssignableFrom(valueType))
                 {
                     var dic = (IDictionary)value;
                     var keyEnum = dic.Keys.GetEnumerator();
@@ -109,13 +114,23 @@ namespace HedgeModManager.Serialization
                         valueEnum.MoveNext();
                     }
                 }
-                else if (typeof(IEnumerable).IsAssignableFrom(valueType) && valueType != typeof(string))
+                else if (valueType == typeof(string))
                 {
-                    var enumrable = (IEnumerable)value;
+                    file[group][name] = value as string;
+                }
+                else if (typeof(IEnumerable).IsAssignableFrom(valueType))
+                {
+                    var items = (IEnumerable)value;
                     int count = 0;
-                    foreach (var item in enumrable)
+                    foreach (var item in items)
                     {
-                        file[group][$"{name}{count}"] = item.ToString();
+                        string val;
+                        if (item is IIniConvertible convertible)
+                            val = convertible.ToIni(file);
+                        else
+                            val = item.ToString();
+
+                        file[group][$"{name}{count}"] = val;
                         count++;
                     }
                     file[group][$"{name}Count"] = count.ToString();
@@ -150,7 +165,12 @@ namespace HedgeModManager.Serialization
 
         public static void Deserialize(object obj, IniFile file)
         {
-            foreach(var property in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
+            var meta = new IniConvertMeta
+            {
+                File = file
+            };
+
+            foreach (var property in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
             {
                 IniField fieldAttribute = property.GetCustomAttribute<IniField>();
                 if (fieldAttribute == null)
@@ -161,7 +181,11 @@ namespace HedgeModManager.Serialization
                 var valueType = property.PropertyType;
 
                 if (file.Groups.ContainsKey(group))
-                    property.SetValue(obj, ReadField(group, name, valueType));
+                {
+                    var value = ReadField(group, name, valueType);
+                    if (value != null)
+                        property.SetValue(obj, value);
+                }
             }
 
             foreach(var field in obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
@@ -175,12 +199,24 @@ namespace HedgeModManager.Serialization
                 var valueType = field.FieldType;
 
                 if (file.Groups.ContainsKey(group))
-                    field.SetValue(obj, ReadField(group, name, valueType));
+                {
+                    var value = ReadField(group, name, valueType);
+                    if (value != null)
+                        field.SetValue(obj, value);
+                }
             }
 
             object ReadField(string group, string name, Type valueType)
             {
-                if(typeof(IDictionary).IsAssignableFrom(valueType))
+                if (typeof(IIniConvertible).IsAssignableFrom(valueType))
+                {
+                    var field = (IIniConvertible)Activator.CreateInstance(valueType);
+                    meta.Group = group;
+                    meta.Field = name;
+                    field.FromIni(file[group][name], meta);
+                    return field;
+                }
+                else if(typeof(IDictionary).IsAssignableFrom(valueType))
                 {
                     var dic = (IDictionary)Activator.CreateInstance(valueType);
                     
@@ -191,7 +227,14 @@ namespace HedgeModManager.Serialization
 
                     return dic;
                 }
-                else if (typeof(IEnumerable).IsAssignableFrom(valueType) && valueType != typeof(string))
+                else if (valueType == typeof(string))
+                {
+                    if (!file.Groups.ContainsKey(group) || !file[group].Params.ContainsKey(name))
+                        return null;
+
+                    return file[group][name];
+                }
+                else if (typeof(IEnumerable).IsAssignableFrom(valueType))
                 {
                     return ReadArray(group, name, valueType);
                 }
@@ -219,13 +262,18 @@ namespace HedgeModManager.Serialization
             IEnumerable ReadArray(string group, string field, Type t)
             {
                 var list = (IList)Activator.CreateInstance(t);
+                var genericType = t.GenericTypeArguments.FirstOrDefault();
+                var isGenericString = genericType == typeof(string);
                 var count = string.IsNullOrEmpty(file[group][$"{field}Count"]) ? int.MaxValue : Convert.ToInt32(file[group][$"{field}Count"]);
                 for(int i = 0; i < count; i++)
                 {
-                    if (file[group].Params.ContainsKey($"{field}{i}"))
-                        list.Add(file[group][$"{field}{i}"]);
-                    else
+                    if (!file[group].Params.ContainsKey($"{field}{i}"))
                         break;
+                    
+                    if (isGenericString)
+                        list.Add(file[group][$"{field}{i}"]);
+                    else if (genericType != null)
+                        list.Add(ReadField(group, $"{field}{i}", genericType));
                 }
                 return list;
             }
@@ -253,5 +301,18 @@ namespace HedgeModManager.Serialization
             Group = group;
             Name = name;
         }
+    }
+
+    public struct IniConvertMeta
+    {
+        public string Group { get; set; }
+        public string Field { get; set; }
+        public IniFile File { get; set; }
+    }
+
+    public interface IIniConvertible
+    {
+        void FromIni(string value, IniConvertMeta data);
+        string ToIni(IniFile file);
     }
 }

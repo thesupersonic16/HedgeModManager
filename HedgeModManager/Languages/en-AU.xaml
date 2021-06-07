@@ -15,6 +15,7 @@
     <system:String x:Key="CommonUINone"   >None</system:String>
     <system:String x:Key="CommonUIIgnore" >Ignore</system:String>
     <system:String x:Key="CommonUIWarning">WARNING</system:String>
+    <system:String x:Key="CommonUIError"  >ERROR</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Mods</system:String>
@@ -85,6 +86,8 @@
     <system:String x:Key="MainUIRuntimeMissingTitle" >Missing Runtime Detected!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requires {1} to be installed for mods &#x0a;to function properly, would you like HMM to install this runtime?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">One or more enabled mods require save file redirection to work properly. Enable this feature?&#x0a;Click no only if you know what you are doing.</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Failed to resolve mod dependencies</system:String>
+    <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >The following mods have missing dependencies:</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Please select an option!</system:String>
@@ -99,13 +102,18 @@
     <system:String x:Key="ProfileWindowUITitle"      >Manage Profiles</system:String>
     <system:String x:Key="ProfileWindowUIRenameTitle">Rename Profile</system:String>
     <system:String x:Key="ProfileWindowUICreateTitle">Create Profile</system:String>
-    <system:String x:Key="ProfileWindowUIName"       >Profile Name</system:String>
-    <system:String x:Key="ProfileWindowUIFile"       >Profile File Name</system:String>
-    <system:String x:Key="ProfileWindowUIAdd"        >Add Profile</system:String>
-    <system:String x:Key="ProfileWindowUIRename"     >Rename Profile</system:String>
-    <system:String x:Key="ProfileWindowUIClone"      >Clone Profile</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >Name</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >File Name</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >Create</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >Rename</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Clone </system:String>
+    <system:String x:Key="ProfileWindowUIExport"     >Export</system:String>
+    <system:String x:Key="ProfileWindowUIImport"     >Import</system:String>
     <system:String x:Key="ProfileWindowUIDelete"     >Delete Profile</system:String>
-    <system:String x:Key="ProfileWindowUINameLabel"  >Profile Name:</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >Name:</system:String>
+    <system:String x:Key="ProfileWindowUIImportFail" >Failed to import mod profile</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingMods"   >The following mods were not found:</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >The following codes were not found:</system:String>
 
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Please fill out some details about your mod.</system:String>

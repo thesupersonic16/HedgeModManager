@@ -15,6 +15,7 @@
     <system:String x:Key="CommonUINone"   >Geen</system:String>
     <system:String x:Key="CommonUIIgnore" >Negeren</system:String>
     <system:String x:Key="CommonUIWarning">WAARSCHUWING</system:String>
+    <system:String x:Key="CommonUIError"  >FOUT</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Mods</system:String>
@@ -47,6 +48,7 @@
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Naam</system:String>
     <system:String x:Key="CodesUIDownload" >Gemeenschap Codes Downloaden</system:String>
+    <system:String x:Key="CodesUIUpdate"   >Community Codes Bijwerken</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">De geïnstalleerde codes zijn niet compatibel met de codelader,&#x0a;Update de CodeLader en Codes A.U.B.&#x0a;WAARSCHUWING : Hiermee worden alle aangepaste codes gewist.</system:String>
     
     <!-- Settings UI Strings -->
@@ -84,6 +86,8 @@
     <system:String x:Key="MainUIRuntimeMissingTitle">Een Runtime Ontbreekt!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} vereist dat {1} is geïnstalleerd om mods&#x0a; correct te laten functioneren. Wilt u dat HMM deze runtime installeert?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Een of meer ingeschakelde mods vereisen omleiding van het opslagbestand om correct te werken. Wilt u deze functie inschakelen?&#x0a;Klik alleen op nee als u weet wat u doet.</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Kan mod-afhankelijkheden niet oplossen</system:String>
+    <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >De volgende mods hebben ontbrekende afhankelijkheden:</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Selecteer An Optie A.U.B!</system:String>
@@ -93,6 +97,23 @@
     <system:String x:Key="AboutWindowUILine1"  >Een Programa Gemaakt Voor Het Makkelijk Laden Van Hedgehog Engine Moddificaties.</system:String>
     <system:String x:Key="AboutWindowUILine2"  >Vereist Een Legale Versie Van Een Van De ondersteunde Spellen.</system:String>
     <system:String x:Key="AboutWindowUICredits">Credits:</system:String>
+
+    <!-- ProfileWindow UI Strings -->
+    <system:String x:Key="ProfileWindowUITitle"      >Profielen beheren</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">Profiel namm wijzigen</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">Profiel aanmaken</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >Naam</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >Bestandsnaam</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >Creëer</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >Hernoemen</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Kloon</system:String>
+    <system:String x:Key="ProfileWindowUIExport"     >Exporteren</system:String>
+    <system:String x:Key="ProfileWindowUIImport"     >Importeren</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >Profiel verwijderen</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >Naam:</system:String>
+    <system:String x:Key="ProfileWindowUIImportFail" >Importeren van mod-profiel is mislukt</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingMods"   >De volgende mods zijn niet gevonden:</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >De Volegende codes zijn niet gevonden:</system:String>
 
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Vul De Details Over Je Mod Hier In A.U.B.</system:String>
@@ -121,7 +142,9 @@
     <system:String x:Key="StatusUIDownloadingCodes"       >Codes Worden Gedownload for {0}</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >Downloaden Voltooid</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >Downloaden Mislukt</system:String>
-    
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >Code-updates beschikbaar!</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >Geen code-updates gevonden</system:String>
+
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Ben Je Zeker Dat Je De Mod Wilt Verwijderen? "{0}"?&#x0a;Dit Kan Niet Ongedaan Worden!</system:String>
     

@@ -1210,7 +1210,7 @@
                                         </Grid>
                                     </ScrollViewer>
                                     <ScrollViewer x:Name="PART_ColumnScrollViewer" Grid.Column="1" HorizontalScrollBarVisibility="Hidden" Grid.Row="0" VerticalScrollBarVisibility="Hidden">
-                                        <Grid x:Name="PART_ColumnGrid" Background="#FFDFE3E8">
+                                        <Grid x:Name="PART_ColumnGrid" Background="{DynamicResource HMM.Menu.DisabledColor}">
                                             <Border x:Name="PART_ColumnSelectionBackground" Background="{DynamicResource HMM.Window.BackgroundBrush2}"/>
                                         </Grid>
                                     </ScrollViewer>
