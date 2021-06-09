@@ -755,3 +755,21 @@ WriteProtected<byte>(0x15E9060, 0x00);
 Patch "Disable Air Boost" by "Sajid"
 WriteProtected<byte>(0x00DFDFC4, 0xEB, 0x27)
 WriteProtected<byte>(0x00DFE046, 0xEB, 0x9E)
+
+Patch "Closer Super Sonic FOV" by "brianuuu"
+WriteProtected<byte>(0x11D9F32, 0xC7, 0x80, 0x70, 0x01, 0x00, 0x00)
+WriteProtected<float>(0x11D9F38, (float)1.3089969288525)
+WriteNop(0x11D9F3C, 2)
+WriteProtected<byte>(0x11D9EFB, 0x8B, 0x16, 0xC7, 0x82, 0x6C, 0x01, 0x00, 0x00)
+WriteProtected<float>(0x11D9F03, (float)0.8)
+WriteNop(0x11D9F07, 8)
+WriteProtected<byte>(0x10E7B96, 0xEB, 0x0A)
+
+Patch "Decrease Super Sonic Rings Every Second" by "brianuuu"
+WriteProtected<byte>(0x11D6807, 0xC7, 0x47, 0x64)
+WriteProtected<float>(0x11D680A, 1)
+WriteProtected<byte>(0x11D680E, 0xEB, 0x1D)
+
+Patch "Disable Super Sonic Floating Boost" by "Skyth"
+WriteProtected<byte>(0xDFF34C, 0xEB);
+WriteProtected<byte>(0xDFE04C, 0xEB);
