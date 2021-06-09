@@ -770,6 +770,8 @@ WriteProtected<byte>(0x11D6807, 0xC7, 0x47, 0x64)
 WriteProtected<float>(0x11D680A, 1)
 WriteProtected<byte>(0x11D680E, 0xEB, 0x1D)
 
-Patch "Disable Super Sonic Floating Boost" by "Skyth"
+Patch "Disable Super Sonic Floating Boost (Ground Boost)" by "Skyth"
 WriteProtected<byte>(0xDFF34C, 0xEB);
+
+Patch "Disable Super Sonic Floating Boost (Air Boost)" by "Skyth"
 WriteProtected<byte>(0xDFE04C, 0xEB);
