@@ -751,3 +751,7 @@ WriteNop(0x11A9ECB, 2);
 Patch "Disable Boost Particles" by "Hyper"
 WriteProtected<byte>(0x15E9048, 0x00);
 WriteProtected<byte>(0x15E9060, 0x00);
+
+Patch "Disable Air Boost" by "Sajid"
+WriteProtected<byte>(0x00DFDFC4, 0xEB, 0x27)
+WriteProtected<byte>(0x00DFE046, 0xEB, 0x9E)
