@@ -621,6 +621,7 @@ WriteProtected<uint>(0x10C65CB, 0x85);
 WriteProtected<uint>(0x10C65F5, 0x85);
 
 Patch "Disable Spin Jump Particles" by "Hyper"
+WriteProtected<byte>(0x15F99DC, 0x00);
 WriteProtected<byte>(0x15E902C, 0x00);
 
 Patch "Disable Light Dash Particles" by "Hyper"
@@ -751,6 +752,8 @@ WriteNop(0x11A9ECB, 2);
 Patch "Disable Boost Particles" by "Hyper"
 WriteProtected<byte>(0x15E9048, 0x00);
 WriteProtected<byte>(0x15E9060, 0x00);
+WriteProtected<byte>(0x15F99F8, 0x00);
+WriteProtected<byte>(0x15F9A10, 0x00);
 
 Patch "Disable Air Boost" by "Sajid"
 WriteProtected<byte>(0x00DFDFC4, 0xEB, 0x27)
