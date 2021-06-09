@@ -775,3 +775,6 @@ WriteProtected<byte>(0xDFF34C, 0xEB);
 
 Patch "Disable Super Sonic Floating Boost (Air Boost)" by "Skyth"
 WriteProtected<byte>(0xDFE04C, 0xEB);
+
+Patch "Disable Rail Boosters" by "Hyper"
+WriteProtected<byte>(0x166F238, 0x00);
