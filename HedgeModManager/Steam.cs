@@ -55,9 +55,13 @@ namespace HedgeModManager
             paths.Add(Path.Combine(SteamLocation, "steamapps\\common"));
 
             // Adds all the custom libraries
-            foreach (var library in SteamVDF.GetContainer(vdf, "LibraryFolders"))
-                if (int.TryParse(library.Key, out int index))
-                    paths.Add(Path.Combine(library.Value as string, "steamapps\\common"));
+            var container = SteamVDF.GetContainer(vdf, "LibraryFolders");
+            if (container != null)
+            {
+                foreach (var library in container)
+                    if (int.TryParse(library.Key, out int index))
+                        paths.Add(Path.Combine(library.Value as string ?? string.Empty, "steamapps\\common"));
+            }
 
             foreach (string path in paths)
             {
@@ -122,7 +126,7 @@ namespace HedgeModManager
         {
             foreach (var value in containers)
             {
-                if (value.Key == name)
+                if (string.Compare(value.Key, name, StringComparison.InvariantCultureIgnoreCase) == 0)
                 {
                     return value.Value as Dictionary<string, object>;
                 }
