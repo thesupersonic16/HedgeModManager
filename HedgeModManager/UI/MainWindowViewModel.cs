@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
+using Newtonsoft.Json;
+using static HedgeModManager.Lang;
 
 namespace HedgeModManager.UI
 {
@@ -17,8 +20,10 @@ namespace HedgeModManager.UI
         public ModsDB ModsDB { get; set; }
         public IEnumerable<SteamGame> Games { get; set; }
         public ObservableCollection<ModInfo> Mods { get; set; } = new ObservableCollection<ModInfo>();
+        public ObservableCollection<ModProfile> Profiles { get; set; } = new ObservableCollection<ModProfile>();
 
         public ModInfo SelectedMod { get; set; }
+        public ModProfile SelectedModProfile { get; set; }
         public Code SelectedCode { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -40,8 +45,47 @@ namespace HedgeModManager.UI
             if (dataObject != null && dataObject.ContainsFileDropList())
             {
                 // Try Install mods from all files
-                foreach (string path in dataObject.GetFileDropList())
-                    ModsDB.InstallMod(path);
+                foreach (var file in dataObject.GetFileDropList())
+                {
+                    // Check if the file is a profile
+                    if (file.ToLower().EndsWith(".json"))
+                    {
+                        var result = ExportProfile.Import(file);
+                        if (result.IsInvalid)
+                        {
+                            HedgeApp.CreateOKMessageBox(Localise("CommonUIError"), Localise("ProfileWindowUIImportFail")).ShowDialog();
+                            continue;
+                        }
+
+                        if (result.HasErrors)
+                        {
+                            bool abort = true;
+                            var box = new HedgeMessageBox(Localise("ProfileWindowUIImportFail"),
+                                result.BuildMarkdown(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+
+                            box.AddButton(Localise("CommonUIIgnore"), () =>
+                            {
+                                abort = false;
+                                box.Close();
+                            });
+                            box.AddButton(Localise("CommonUICancel"), () => box.Close());
+
+                            box.ShowDialog();
+                            if (abort)
+                                continue;
+                        }
+
+                        HedgeApp.ModProfiles.Add(result.Profile);
+                        Profiles.Add(result.Profile);
+                        result.Database.SaveDBSync(false);
+                        // Save profiles
+                        string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+                        File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
+
+                    }
+                    else
+                        ModsDB.InstallMod(file);
+                }
             }
             else
             {

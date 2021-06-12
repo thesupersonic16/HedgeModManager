@@ -15,7 +15,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <controls:Sidebar x:Name="Imagebar" HorizontalAlignment="Left" SidebarWidth="120" OpenOnClick="True" Background="#2D2D2D" Panel.ZIndex="1"/>
+        <controls:Sidebar x:Name="Imagebar" HorizontalAlignment="Left" SidebarWidth="120" OpenOnClick="True" Background="{DynamicResource HMM.Window.BackgroundBrush}" Panel.ZIndex="1"/>
         <Grid Margin="10,10,0,0" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -35,7 +35,7 @@
                 </ScrollViewer>
             </Grid>
             <Grid Grid.Column="1">
-                <Rectangle Width="2" HorizontalAlignment="Left" Fill="Gray"/>
+                <Rectangle Width="2" HorizontalAlignment="Left" Fill="{DynamicResource HMM.Window.DialogBottom}"/>
                 <Grid Margin="5,0,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>

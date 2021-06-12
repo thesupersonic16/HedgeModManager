@@ -57,11 +57,6 @@ namespace HedgeModManager
             {
                 var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGame.GameName, dependName));
 
-                dialog.AddButton(Localise("CommonUINo"), () =>
-                {
-                    abort = true;
-                    dialog.Close();
-                });
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     dialog.Visibility = Visibility.Hidden;
@@ -89,6 +84,12 @@ namespace HedgeModManager
                     dialog.Close();
                 });
 
+                dialog.AddButton(Localise("CommonUINo"), () =>
+                {
+                    abort = true;
+                    dialog.Close();
+                });
+
                 dialog.ShowDialog();
             }
             return abort;
@@ -97,6 +98,10 @@ namespace HedgeModManager
         private static bool CheckVCRuntime(string platform)
         {
             var reg = Registry.LocalMachine.OpenSubKey($"Software\\WOW6432Node\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\{platform}");
+            // If null then try get it from the 32-bit Registry
+            if (reg == null)
+                reg = Registry.LocalMachine.OpenSubKey($"Software\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\{platform}");
+
             if (reg == null || !((int)reg.GetValue("Installed", 0) != 0 && (int)reg.GetValue("Bld", 0) >= 28508))
             {
                 reg?.Close();

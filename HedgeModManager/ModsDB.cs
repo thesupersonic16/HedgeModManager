@@ -16,6 +16,7 @@ namespace HedgeModManager
 {
     public class ModsDB
     {
+        public CodeFile CodesDatabase = new CodeFile();
         public List<ModInfo> Mods = new List<ModInfo>();
 
         [IniField("Main", "ActiveMod")]
@@ -34,16 +35,18 @@ namespace HedgeModManager
         public List<string> Codes = new List<string>();
 
         public string RootDirectory { get; set; }
+        public string FileName { get; set; } = "ModsDB.ini";
         public int ModCount => Mods.Count;
 
         public ModsDB()
         {
         }
 
-        public ModsDB(string modsDirectiory)
+        public ModsDB(string modsDirectiory, string fileName = "ModsDB.ini")
         {
             RootDirectory = modsDirectiory;
-            string iniPath = Path.Combine(RootDirectory, "ModsDb.ini");
+            FileName = fileName;
+            string iniPath = Path.Combine(RootDirectory, fileName);
             if (File.Exists(iniPath))
             {
                 try
@@ -56,23 +59,6 @@ namespace HedgeModManager
                     DetectMods();
                 }
             }
-            else if (!Directory.Exists(RootDirectory))
-            {
-                Application.Current?.MainWindow?.Hide();
-                var box = new HedgeMessageBox("No Mods Found", Properties.Resources.STR_UI_NO_MODS);
-
-                box.AddButton("Yes", () =>
-                {
-                    SetupFirstTime();
-                    box.Close();
-                });
-
-                box.AddButton("No", () => Environment.Exit(0));
-
-                box.ShowDialog();
-                Application.Current?.MainWindow?.Show();
-                return;
-            }
 
             DetectMods();
             GetEnabledMods();
@@ -81,13 +67,14 @@ namespace HedgeModManager
         public void SetupFirstTime()
         {
             Directory.CreateDirectory(RootDirectory);
-            MainWindow.CodesDatabase = new CodeFile();
             SaveDB();
         }
 
         public void DetectMods()
         {
             Mods.Clear();
+            if (!Directory.Exists(RootDirectory))
+                return;
 
             foreach (string folder in Directory.GetDirectories(RootDirectory))
             {
@@ -107,7 +94,7 @@ namespace HedgeModManager
         {
             for (int i = 0; i < ActiveMods.Count; i++)
             {
-                var mod = GetModFromID(ActiveMods[i]);
+                var mod = GetModFromActiveGUID(ActiveMods[i]);
                 if (mod != null)
                     mod.Enabled = true;
                 else
@@ -116,14 +103,77 @@ namespace HedgeModManager
 
             for (int i = 0; i < FavoriteMods.Count; i++)
             {
-                var mod = GetModFromID(FavoriteMods[i]);
+                var mod = GetModFromActiveGUID(FavoriteMods[i]);
                 if (mod != null)
                     mod.Favorite = true;
                 else
                     FavoriteMods.RemoveAt(i--);
             }
         }
-        public async Task SaveDB()
+
+        public DependencyReport ResolveDepends()
+        {
+            var report = new DependencyReport();
+
+            var enabledMods = new List<ModInfo>();
+            var newMods = CheckDepends(Mods, enabledMods);
+            while (newMods != null)
+                newMods = CheckDepends(newMods, enabledMods);
+
+            return report;
+
+            List<ModInfo> CheckDepends(IEnumerable<ModInfo> mods, List<ModInfo> enabledMods)
+            {
+                List<ModInfo> result = null;
+                foreach (var mod in mods)
+                {
+                    if (mod.Enabled)
+                    {
+                        DependencyReport.ErrorInfo info = null;
+                        foreach (var depend in mod.DependsOn)
+                        {
+                            var resolvedMod = Mods.FirstOrDefault(m => m.ID == depend.ID);
+                            if (resolvedMod == null)
+                            {
+                                info ??= new DependencyReport.ErrorInfo { Mod = mod };
+                                info.UnresolvedDepends.Add(depend);
+                                continue;
+                            }
+
+                            if (depend.ModVersion != null)
+                            {
+                                if (!Version.TryParse(resolvedMod.Version, out var modVersion) || modVersion < depend.ModVersion)
+                                {
+                                    info ??= new DependencyReport.ErrorInfo { Mod = mod };
+                                    info.UnresolvedDepends.Add(depend);
+                                    continue;
+                                }
+                            }
+
+                            resolvedMod.Enabled = true;
+                            if (resolvedMod.DependsOn.Count > 0 && !enabledMods.Contains(resolvedMod))
+                            {
+                                result ??= new List<ModInfo>();
+                                result.Add(resolvedMod);
+                                enabledMods.Add(resolvedMod);
+                            }
+                        }
+
+                        if (info != null)
+                            report.Errors.Add(info);
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        public void SaveDBSync(bool compileCodes = true)
+        {
+            SaveDB(compileCodes).GetAwaiter().GetResult();
+        }
+
+        public async Task SaveDB(bool compileCodes = true)
         {
             ActiveMods.Clear();
             FavoriteMods.Clear();
@@ -142,29 +192,32 @@ namespace HedgeModManager
                 // ReSharper disable once AssignNullToNotNullAttribute
                 mMods.Add(id, $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini");
             }
-            using (var stream = File.Create(Path.Combine(RootDirectory, "ModsDB.ini")))
+            using (var stream = File.Create(Path.Combine(RootDirectory, FileName)))
             {
                 IniSerializer.Serialize(this, stream);
             }
 
-            var codes = new List<Code>();
-
-            foreach (var code in MainWindow.CodesDatabase.Codes)
+            if (compileCodes)
             {
-                if(code.Enabled)
-                    codes.Add(code);
-            }
+                var codes = new List<Code>();
 
-            foreach (var mod in Mods)
-            {
-                if(mod.Enabled && mod.Codes != null)
-                    codes.AddRange(mod.Codes.Codes);
-            }
+                foreach (var code in CodesDatabase.Codes)
+                {
+                    if (code.Enabled)
+                        codes.Add(code);
+                }
 
-            await CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
+                foreach (var mod in Mods)
+                {
+                    if (mod.Enabled && mod.Codes != null)
+                        codes.AddRange(mod.Codes.Codes);
+                }
+
+                await CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
+            }
         }
 
-        public ModInfo GetModFromID(string id)
+        public ModInfo GetModFromActiveGUID(string id)
         {
             var modPair = mMods.FirstOrDefault(t => t.Key == id);
 
@@ -450,6 +503,42 @@ namespace HedgeModManager
             }
 
             return invalid;
+        }
+    }
+
+    public class DependencyReport
+    {
+        public class ErrorInfo
+        {
+            public ModInfo Mod { get; set; }
+            public List<ModDepend> UnresolvedDepends { get; set; } = new List<ModDepend>();
+        }
+
+        public List<ErrorInfo> Errors { get; set; } = new List<ErrorInfo>();
+        public bool HasErrors => Errors.Count > 0;
+
+        public string BuildMarkdown()
+        {
+            var builder = new StringBuilder();
+            builder.AppendLine(Lang.Localise("MainUIMissingDepends"));
+
+            foreach (var error in Errors)
+            {
+                builder.AppendLine($"- {error.Mod.Title}");
+                foreach (var depend in error.UnresolvedDepends)
+                {
+                    builder.AppendLine(depend.HasLink
+                        ? $"  - [{BuildName()}]({depend.Link})"
+                        : $"  - {BuildName()}");
+
+                    string BuildName()
+                    {
+                        return $"{depend.Title}{(depend.ModVersion != null ? $" ({Lang.Localise("ModsUIVersion")}: {depend.VersionString})" : "")}";
+                    }
+                }
+            }
+
+            return builder.ToString();
         }
     }
 }

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Uncomment the line below if you want to quickly figure out which language keys are missing
+// #define THROW_MISSING_LANG
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -31,6 +35,7 @@ using HedgeModManager.Languages;
 using HedgeModManager.Misc;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
+using HedgeModManager.Themes;
 
 namespace HedgeModManager
 {
@@ -58,6 +63,7 @@ namespace HedgeModManager
         public static bool Restart = false;
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration;
+        public static List<ModProfile> ModProfiles = new List<ModProfile>();
 
         public static HttpClient HttpClient { get; private set; }
         public static string UserAgent { get; }
@@ -71,8 +77,10 @@ namespace HedgeModManager
         public static byte[] IMAGEHLP = new byte[] { 0x69, 0x6D, 0x61, 0x67, 0x65, 0x68, 0x6C, 0x70 };
 
         public static LanguageList SupportedCultures { get; set; }
+        public static ThemeList InstalledThemes { get; set; }
 
         public static LangEntry CurrentCulture { get; set; }
+        public static ThemeEntry CurrentTheme { get; set; }
 
 
         [STAThread]
@@ -125,6 +133,7 @@ namespace HedgeModManager
             application.InitializeComponent();
             application.ShutdownMode = ShutdownMode.OnMainWindowClose;
             application.MainWindow = new MainWindow();
+
             Args = args;
 #if !DEBUG
             // Enable our Crash Window if Compiled in Release
@@ -141,6 +150,9 @@ namespace HedgeModManager
             Steam.Init();
             InstallGBHandlers();
             SetupLanguages();
+            SetupThemes();
+            CurrentTheme = InstalledThemes.FirstOrDefault(t => t.FileName == RegistryConfig.UITheme);
+            LoadTheme(CurrentTheme?.FileName ?? InstalledThemes.First().FileName);
             CurrentCulture = GetClosestCulture(RegistryConfig.UILanguage);
             if (CurrentCulture != null)
                 LoadLanguage(CurrentCulture.FileName);
@@ -191,6 +203,7 @@ namespace HedgeModManager
             }
 
 #endif
+
             if (string.IsNullOrEmpty(ModsDbPath))
                 ModsDbPath = Path.Combine(StartDirectory, "Mods");
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
@@ -293,6 +306,17 @@ namespace HedgeModManager
             }
             catch { }
 
+            if (DateTime.Now.Day == 1 && DateTime.Now.Month == 4)
+            {
+                var random = new Random();
+                if (random.Next(10) < 4)
+                {
+                    var langDict = new ResourceDictionary {Source = new Uri("Languages/en-UW.xaml", UriKind.Relative)};
+                    Current.Resources.MergedDictionaries.RemoveAt(2);
+                    Current.Resources.MergedDictionaries.Insert(2, langDict);
+                }
+            }
+
             CodeProvider.TryLoadRoslyn();
             do
             {
@@ -364,22 +388,47 @@ namespace HedgeModManager
 
         public static void CountLanguages()
         {
+            // Just to make sure this somehow doesn't get shipped accidentally
+#if THROW_MISSING_LANG && DEBUG
+            var baseDict = new ResourceDictionary {Source = new Uri("Languages/en-AU.xaml", UriKind.Relative)};
+            var builder = new StringBuilder();
+            builder.AppendLine();
+#endif
+
             foreach (var entry in SupportedCultures)
             {
                 var langDict = new ResourceDictionary();
                 langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
                 entry.Lines = langDict.Count;
+
+#if THROW_MISSING_LANG && DEBUG
+                builder.AppendLine(entry.FileName);
+                foreach (DictionaryEntry baseEntry in baseDict)
+                {
+                    if (!langDict.Contains(baseEntry.Key))
+                    {
+                        builder.AppendLine(baseEntry.Key.ToString());
+                    }
+                }
+
+                builder.AppendLine();
+#endif
+
                 if (entry.Lines > LanguageList.TotalLines)
                     LanguageList.TotalLines = entry.Lines;
             }
+
+#if THROW_MISSING_LANG && DEBUG
+            new ExceptionWindow(new Exception(builder.ToString())).ShowDialog();
+#endif
         }
 
         public static void LoadLanguage(string culture)
         {
             var langDict = new ResourceDictionary();
             langDict.Source = new Uri($"Languages/{culture}.xaml", UriKind.Relative);
-            while (Current.Resources.MergedDictionaries.Count > 2)
-                Current.Resources.MergedDictionaries.RemoveAt(2);
+            while (Current.Resources.MergedDictionaries.Count > 4)
+                Current.Resources.MergedDictionaries.RemoveAt(4);
             // No need to load the fallback language on top
             if (culture == "en-AU")
                 return;
@@ -413,6 +462,29 @@ namespace HedgeModManager
             LoadLanguage(CurrentCulture.FileName);
         }
 
+        public static void SetupThemes()
+        {
+            var resource = Current.TryFindResource("Themes");
+            if (resource is ThemeList langs)
+                InstalledThemes = langs;
+        }
+
+        public static void UpdateTheme()
+        {
+            RegistryConfig.UITheme = CurrentTheme.FileName;
+            RegistryConfig.Save();
+            LoadTheme(CurrentTheme.FileName);
+        }
+
+        public static void LoadTheme(string themeName)
+        {
+            var themeDict = new ResourceDictionary();
+            themeDict.Source = new Uri($"Themes/{themeName}.xaml", UriKind.Relative);
+
+            Current.Resources.MergedDictionaries.RemoveAt(1);
+            Current.Resources.MergedDictionaries.Insert(1, themeDict);
+        }
+
         /// <summary>
         /// Sets the Current Game to the passed Steam Game
         /// </summary>
@@ -436,7 +508,7 @@ namespace HedgeModManager
 
             ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
             Config = new CPKREDIRConfig(ConfigPath);
-            ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni));
+            ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
         }
 
         public static void InstallGBHandlers()
@@ -771,6 +843,25 @@ namespace HedgeModManager
 
             random.NextBytes(guid);
             return new Guid(guid);
+        }
+
+        public static Color GetThemeColor(string key)
+        {
+            var resource = Current.TryFindResource(key);
+            if (resource is null)
+                return Colors.Black;
+
+            if (resource is SolidColorBrush brush)
+                return brush.Color;
+            else if (resource is Color color)
+                return color;
+
+            return Colors.Black;
+        }
+
+        public static Brush GetThemeBrush(string key)
+        {
+            return Current.TryFindResource(key) as Brush;
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)

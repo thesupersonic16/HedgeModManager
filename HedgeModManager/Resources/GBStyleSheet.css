@@ -1,6 +1,7 @@
 body {
     background-color: transparent;
-    color: #e2e2e2;
+    /*color: #e2e2e2;*/
+    color: $FORECOLOR;
     font-family: 'Open Sans', sans-serif;
 }
 

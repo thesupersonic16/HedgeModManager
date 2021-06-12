@@ -59,6 +59,9 @@ namespace HedgeModManager
         [IniField("HedgeModManager", nameof(EnableFallbackSaveRedirection))]
         public bool EnableFallbackSaveRedirection { get; set; } = true;
 
+        [IniField("HedgeModManager", "ModProfile")]
+        public string ModProfile { get; set; } = "Default";
+
         public bool EnableDebugConsole 
         { 
             get => LogType == "console"; 

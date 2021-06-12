@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:HedgeModManager.Themes">
+
+    <local:ThemeList x:Key="Themes">
+        <local:ThemeEntry FileName="DarkTheme" Name="Dark"/>
+        <local:ThemeEntry FileName="OLEDTheme" Name="OLED"/>
+        <local:ThemeEntry FileName="LightTheme" Name="Light"/>
+    </local:ThemeList>
+
+</ResourceDictionary>

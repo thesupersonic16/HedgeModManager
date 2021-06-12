@@ -76,7 +76,11 @@ namespace HedgeModManager
                         tagValue = line.Substring(separatorIndex + 1).Trim();
                     }
 
-                    Tags.Add(tagName, tagValue);
+                    if (!Tags.ContainsKey(tagName))
+                        Tags.Add(tagName, tagValue);
+                    else
+                        Tags[tagName] = tagValue;
+
                     line = reader.ReadLine();
                 }
 

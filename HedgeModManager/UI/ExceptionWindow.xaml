@@ -7,81 +7,11 @@
              mc:Ignorable="d" 
              MinHeight="600" MinWidth="1000"
              Height="600" Width="1000" Title="HedgeModManager Crash"
-             WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Background="#FF2D2D30" Style="{StaticResource HedgeWindow}">
-    <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="SnapsToDevicePixels"   Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="MinHeight"             Value="10px" />
-            <Setter Property="MinWidth"              Value="30px" />
-            <Setter Property="Foreground"            Value="#FFFFFFFF" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border TextBlock.Foreground="White"
-                    x:Name="Border"
-                    BorderBrush="White"
-                    BorderThickness=".2"
-                    CornerRadius="4,4,4,4" >
-                            <Border.Background>
-                                <SolidColorBrush Color="#FF3F3F46" />
-                            </Border.Background>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualStateGroup.Transitions>
-                                        <VisualTransition GeneratedDuration="0:0:0.1" />
-                                        <VisualTransition GeneratedDuration="0" To="Pressed" />
-                                    </VisualStateGroup.Transitions>
-                                    <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="MouseOver">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                          Storyboard.TargetName="Border">
-                                                <EasingColorKeyFrame KeyTime="0" Value="#FF686868" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                          Storyboard.TargetName="Border">
-                                                <EasingColorKeyFrame KeyTime="0" Value="#FFAFABAF" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled" />
-                                    <VisualState x:Name="Focus">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                          Storyboard.TargetName="Border">
-                                                <EasingColorKeyFrame KeyTime="0" Value="#FF333337" />
-                                            </ColorAnimationUsingKeyFrames>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
-                          Storyboard.TargetName="Border">
-                                                <EasingColorKeyFrame KeyTime="0" Value="White" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <ContentPresenter Margin="2"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Center"
-              RecognizesAccessKey="True" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Background" Value="#FF333337"/>
-            <Setter Property="Foreground" Value="#A4A4A4"/>
-            <Setter Property="BorderBrush" Value="#FF434346" />
-        </Style>
-    </Window.Resources>
+             WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Style="{StaticResource HedgeWindow}">
     <Grid>
         <Label x:Name="Header" Content="Hedge Mod Manager has thrown an Exception!" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="62" Width="780" FontSize="36" Foreground="#0066CC"/>
-        <TextBox x:Name="TextBox_ExceptionInfo" Margin="10,77,10,70" Text="Exception Info goes here" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+        <TextBox x:Name="TextBox_ExceptionInfo" Margin="10,77,10,70" Text="Exception Info goes here" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
+                 IsReadOnly="True" Foreground="{DynamicResource HMM.Menu.DisabledTextColor}" />
         <Grid Margin="10,0,10,10" VerticalAlignment="Bottom" Height="44">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

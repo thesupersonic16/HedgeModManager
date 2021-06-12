@@ -9,6 +9,7 @@
     <system:String x:Key="CommonUICancel">取消</system:String>
     <system:String x:Key="CommonUIYes"   >是</system:String>
     <system:String x:Key="CommonUINo"    >否</system:String>
+    <system:String x:Key="CommonUIRetry">重試</system:String>
     <system:String x:Key="CommonUIUpdate">更新</system:String>
     <system:String x:Key="CommonUIDelete">刪除</system:String>
     <system:String x:Key="CommonUINone"  >没有</system:String>
@@ -25,6 +26,7 @@
     <system:String x:Key="MainUISave"          >保存</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >保存並運行</system:String>
     <system:String x:Key="MainUIPlay"          >運行</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">無法下載MOD加載器</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >名稱</system:String>
@@ -59,6 +61,7 @@
     <system:String x:Key="SettingsUILoadTopBottom"  >由上到下排列載入</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >載入器：</system:String>
     <system:String x:Key="SettingsUILabelGame"      >遊戲：</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >設定檔：</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >MOD目錄：</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
@@ -68,6 +71,7 @@
     <system:String x:Key="SettingsUIKeepHMMOpen"    >運行後並保持程式開啟</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >關於Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >語言：</system:String>
+    <system:String x:Key="SettingsUITheme"          >主題：</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >MOD安裝方法</system:String>
@@ -89,6 +93,18 @@
     <system:String x:Key="AboutWindowUILine1"  >Hedgehog Engine Mod的程式是幫助人們更容易地載入MOD。</system:String>
     <system:String x:Key="AboutWindowUILine2"  >需要合法擁有的遊戲來支持。</system:String>
     <system:String x:Key="AboutWindowUICredits">來源：</system:String>
+
+    <!-- ProfileWindow UI Strings -->
+    <system:String x:Key="ProfileWindowUITitle"      >管理設定檔</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">更改設定檔</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">創建設定檔</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >設定檔名稱</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >配置設定檔名稱</system:String>
+    <system:String x:Key="ProfileWindowUIAdd"        >新增設定檔</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >更改設定檔</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >複製設定檔</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >刪除設定檔</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >設定檔名稱：</system:String>
 
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">請填寫有關一些MOD資料</system:String>
@@ -129,5 +145,11 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">{0} 配置</system:String>
+
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">無法下載MOD</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">下載期間發生錯誤。 服務器可能已關閉或超載。 請稍後再嘗試。 &#x0a;&#x0a;詳情: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">找不到遊戲</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager無法找到{0}安裝程序</system:String>
 
 </ResourceDictionary>

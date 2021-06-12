@@ -16,7 +16,7 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="Header" Text="HEADER" Foreground="#0066CC" TextWrapping="Wrap" FontSize="30"
+        <TextBlock x:Name="Header" Text="HEADER" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}" TextWrapping="Wrap" FontSize="30"
                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextAlignment="Center" Margin="20,0,20,0"/>
         <ProgressBar x:Name="TotalProgress" Grid.Row="1" Margin="15"/>
         <ProgressBar x:Name="FileProgress" Grid.Row="2" Margin="15"/>

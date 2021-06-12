@@ -245,3 +245,75 @@ WriteProtected<uint>(ASLR(0x0058FDC1), 0x1003)
 
 Patch "Disable Voice Option Completely" by "M&M"
 WriteNop(ASLR(0x4A3D82), 5)
+
+Patch "Enable DLC Music in Battle Mode" by "ĐeäTh"
+WriteNop(ASLR(0x0095B570), 6)
+
+Patch "Sideways Wall Jump Fix" by "Sajid"
+WriteNop(ASLR(0x008C142C), 2)
+
+Patch "DLC Stages Always Replayable" by "ĐeäTh"
+WriteNop(ASLR(0x0090D2BC), 2);
+String code = $@"mov eax, {ASLR(0x0090D210)}
+push 0
+push 0
+push 0
+mov ecx, esi
+call eax
+mov eax, {ASLR(0x0090D210)}
+push 0
+push 0
+push 1
+mov ecx, esi
+call eax
+mov eax, {ASLR(0x0090D210)}
+push 0
+push 0
+push 2
+mov ecx, esi
+call eax
+mov ecx, [ebp+0xC]
+mov eax, [ecx]
+cmp eax, -4";
+WriteAsmHook
+(
+	ASLR(0x00911F2D),
+	HookBehavior.Replace,
+	code
+)
+
+WriteAsmHook
+(
+	ASLR(0x00912332),
+	HookBehavior.After,
+	"mov edi, 1"
+)
+WriteProtected<byte>(ASLR(0x00912338), 0x57);
+WriteProtected<byte>(ASLR(0x00912326), 0x6A, 0x00);
+WriteNop(ASLR(0x0094594F), 12);
+
+Patch "Disable DLC Prizes" by "ĐeäTh"
+WriteNop(ASLR(0x0094595B), 12);
+WriteNop(ASLR(0x00945630), 5);
+
+Patch "Fix Depth Of Field Draw Order" by "Sajid"
+static int p_DofRes = (int)ASLR(0x00FEFC7C);
+static int p_GrassRes = (int)ASLR(0x00FB6D1C);
+static int p_ShadowRes = (int)ASLR(0x00FB6D1D);
+static int p_RetAddress = (int)ASLR(0x00904E94);
+
+WriteAsmHook
+(
+    $@"mov BYTE PTR [edi+28Ch], 0
+    movzx eax,byte ptr [{p_DofRes}]
+    mov [edi+28Ch], al
+    cmp byte ptr [{p_GrassRes}], 0
+    sete cl
+    mov [edi+49Ch], cl
+    mov al, [{p_ShadowRes}]
+    mov [edi+4F4h], al
+
+    mov eax, {p_RetAddress}
+    jmp eax",
+    ASLR(0x00904E64), HookBehavior.Replace
+)

@@ -9,6 +9,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/Themes.xaml" />
+                <ResourceDictionary Source="Themes/DarkTheme.xaml" />
                 <ResourceDictionary Source="Languages/Languages.xaml" />
                 <ResourceDictionary Source="Languages/en-AU.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -29,20 +31,17 @@
             <SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="#CDCDCD"/>
             <Geometry x:Key="StarGeometry">F0 M15,15z M0,0z M12.121,14.994L7.491,11.64 2.845,14.992 4.462,9.322 0,5.723 5.629,5.573 7.521,0 9.383,5.574 15.011,5.726 10.533,9.326z</Geometry>
 
-            <!-- TODO: Complete this -->
-            <!-- HedgeModManager Theme -->
-            <SolidColorBrush x:Key="HMM.Window.DialogBottom" Color="#FF353536"/>
-
-            <DropShadowEffect x:Key="HoverEffect" BlurRadius="5" Color="#FF8ED0F9" Opacity="0" Direction="0" ShadowDepth="0"/>
+            <local:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter"/>
+            <local:InverseEmptyStringToVisibilityConverter x:Key="InverseEmptyStringToVisibilityConverter"/>
 
             <Style TargetType="{x:Type ContextMenu}">
                 <Setter Property="HasDropShadow" Value="True"/>
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ContextMenu}">
                             <Border
-                                Background="#3F3F3F"
+                                Background="{DynamicResource HMM.Window.BackgroundBrush2}"
                                 CornerRadius="4" 
                                 BorderThickness="2"
                                 Padding="0,5,0,5">
@@ -78,20 +77,20 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Background" Value="#FF323232"/>
-                        <Setter Property="Foreground" Value="#FFC9C9C9"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Menu.DisabledColor}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource HMM.Menu.DisabledTextColor}"/>
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="True">
-                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
                     </Trigger>
                     <Trigger Property="IsHighlighted" Value="True">
-                        <Setter Property="Background" Value="#575757"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Menu.HoverColor}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
 
             <Style TargetType="{x:Type ToolTip}">
-                <Setter Property="Background" Value="#3F3F3F"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush1}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ToolTip}">
@@ -107,11 +106,11 @@
             </Style>
         
             <Style TargetType="{x:Type RadioButton}">
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
             </Style>
         
             <Style x:Key="HedgeWindow" TargetType="{x:Type Window}">
-                <Setter Property="Background" Value="#FF2D2D30"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
                 <Setter Property="AllowsTransparency" Value="False"/>
                 <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
                 <Setter Property="WindowChrome.WindowChrome">
@@ -129,7 +128,7 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Window}">
                             <Grid>
-                                <Border x:Name="OutlineBorder" BorderThickness="1" Background="Transparent" IsHitTestVisible="False" BorderBrush="#017ACC" Panel.ZIndex="2"/>
+                                <Border x:Name="OutlineBorder" BorderThickness="1" Background="Transparent" IsHitTestVisible="False" BorderBrush="{DynamicResource HMM.Window.AccentBrush2}" Panel.ZIndex="2"/>
                                 <Grid x:Name="WindowGrid" Margin="1" Background="{TemplateBinding Background}" Loaded="Window_Loaded" Panel.ZIndex="1">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="22"/>
@@ -139,16 +138,35 @@
                                     <Label Content="{TemplateBinding Title}" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,0,0" Foreground="#E9E9E9"/>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Button x:Name="MinBtn" Style="{DynamicResource WindowFrameButton}" Click="Minimize_Click">
-                                            <Image Width="25" Height="25" Source="Resources/Graphics/IMG_FRAME_M.png"/>
+                                            <Grid Width="25" Height="25">
+                                                <Image x:Name="MinBtnImage" Source="Resources/Graphics/IMG_FRAME_M.png"/>
+                                                <Rectangle Fill="{DynamicResource HMM.Button.ForegroundBrush}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="{Binding ElementName=MinBtnImage, Path=Source}"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
+                                            </Grid>
                                         </Button>
                                         <Button x:Name="MaxBtn" Style="{DynamicResource WindowFrameButton}" Click="MaxBtn_Click">
-                                            <Image Width="25" Height="25" Source="Resources/Graphics/IMG_FRAME_MM.png"/>
+                                            <Grid Width="25" Height="25">
+                                                <Image x:Name="MaxBtnImage" Source="Resources/Graphics/IMG_FRAME_MM.png"/>
+                                                <Rectangle Fill="{DynamicResource HMM.Button.ForegroundBrush}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="{Binding ElementName=MaxBtnImage, Path=Source}"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
+                                            </Grid>
                                         </Button>
                                         <Button x:Name="CloseBtn" Style="{DynamicResource WindowFrameButton}" Click="Close_Click">
-                                            <Image Width="35" Height="25" Source="Resources/Graphics/IMG_FRAME_C.png"/>
+                                            <Border Background="{DynamicResource HMM.Button.ForegroundBrush}" Width="30" Height="25">
+                                                <Image x:Name="CloseBtnImage" Source="Resources/Graphics/IMG_FRAME_C.png" Opacity="0"/>
+                                                <Border.OpacityMask>
+                                                    <ImageBrush ImageSource="{Binding ElementName=CloseBtnImage, Path=Source}"/>
+                                                </Border.OpacityMask>
+                                            </Border>
                                         </Button>
                                     </StackPanel>
-                                    <Grid Margin="4" Grid.Row="1" Background="#FF2D2D30" Panel.ZIndex="1">
+                                    <Grid Margin="4" Grid.Row="1" Background="{DynamicResource HMM.Window.BackgroundBrush}" Panel.ZIndex="1">
                                         <AdornerDecorator>
                                             <ContentPresenter/>
                                         </AdornerDecorator>
@@ -171,8 +189,8 @@
                 </Setter>
             </Style>
             <Style TargetType="{x:Type Border}" x:Key="WindowFrame">
-                <Setter Property="BorderBrush" Value="#FF0066CC"/>
-                <Setter Property="Background" Value="#FF2D2D30"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.AccentBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
                 <Setter Property="BorderThickness" Value="1"/>
             </Style>
             <Style TargetType="{x:Type Button}" x:Key="WindowFrameButton">
@@ -192,11 +210,11 @@
                                     <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="#FF3F3F41"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource HMM.Button.BackgroundBrush}"/>
                                     <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="#FF3F3F41"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource HMM.Button.BackgroundBrush}"/>
                                     <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="false">
@@ -208,10 +226,10 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#FF3F3F41" />
+                        <Setter Property="Background" Value="{DynamicResource HMM.Button.BackgroundBrush}" />
                     </Trigger>
                     <Trigger Property="IsPressed" Value="True">
-                        <Setter Property="Background" Value="#FF3F3F41" />
+                        <Setter Property="Background" Value="{DynamicResource HMM.Button.BackgroundBrush}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -222,26 +240,26 @@
             </Style>
 
             <Style TargetType="{x:Type ProgressBar}">
-                <Setter Property="Background" Value="#FF2D2D30"/>
-                <Setter Property="Foreground" Value="#0066CC"/>
-                <Setter Property="BorderBrush" Value="#0066CC"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.AccentBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.AccentBrush}"/>
             </Style>
 
             <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="Background" Value="#FF333337"/>
-                <Setter Property="BorderBrush" Value="#FF434346" />
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush1}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.BorderBrush}" />
             </Style>
 
             <Style TargetType="{x:Type pt:TextBoxEx}">
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="Background" Value="#FF333337"/>
-                <Setter Property="BorderBrush" Value="#FF434346" />
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush1}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.BorderBrush}" />
             </Style>
 
             <!-- Tabs -->
             <Style TargetType="{x:Type TabControl}">
-                <Setter Property="BorderBrush" Value="#FF3F3F46" />
+                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.BorderBrush}" />
                 <EventSetter Event="Selector.SelectionChanged" Handler="TabControl_SelectionChanged"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -252,7 +270,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <TabPanel IsItemsHost="True"/>
-                                <Border BorderThickness="0,2,0,0" BorderBrush="#017ACC" Grid.Row="1">
+                                <Border BorderThickness="0,2,0,0" BorderBrush="{DynamicResource HMM.Window.AccentBrush2}" Grid.Row="1">
                                     <Grid Margin="0,5,0,0">
                                         <ContentPresenter x:Name="PART_Presenter" ContentSource="SelectedContent" HorizontalAlignment="Stretch"/>
                                         <Rectangle x:Name="PART_TempArea"/>
@@ -264,25 +282,25 @@
                 </Setter>
             </Style>
             <Style TargetType="{x:Type GroupBox}">
-                <Setter Property="Background" Value="#FF007ACC"/>
-                <Setter Property="Foreground" Value="#FFFFFFFF"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.AccentBrush1}"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
                 <Setter Property="MinHeight"             Value="20px" />
                 <Setter Property="MinWidth"              Value="20px" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type GroupBox}">
                             <Grid>
-                                <Border x:Name="EffectBorder" Background="#2D2D30" CornerRadius="8,8,8,8" Effect="{StaticResource HoverEffect}"/>
+                                <Border x:Name="EffectBorder" Background="{DynamicResource HMM.Window.BackgroundBrush}" CornerRadius="8,8,8,8" Effect="{DynamicResource HoverEffect}"/>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <Border Grid.Row="0" CornerRadius="8,8,0,0" BorderBrush="#FF3F3F46" Background="#FF333337" BorderThickness="1">
+                                    <Border Grid.Row="0" CornerRadius="8,8,0,0" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Header.BackgroundBrush}" BorderThickness="1">
                                         <ContentPresenter Margin="8,4,0,4" ContentSource="Header" RecognizesAccessKey="True" />
                                     </Border>
 
-                                    <Border Grid.Row="1" BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" BorderBrush="#FF3F3F46">
+                                    <Border Grid.Row="1" BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" BorderBrush="{DynamicResource HMM.Window.BorderBrush}">
                                         <ContentPresenter Margin="4" />
                                     </Border>
                                 </Grid>
@@ -318,8 +336,8 @@
                 </Setter>
             </Style>
             <Style TargetType="{x:Type TabItem}">
-                <Setter Property="Background" Value="#FF007ACC"/>
-                <Setter Property="Foreground" Value="#FFFFFFFF"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.AccentBrush1}"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
                 <Setter Property="MinHeight"             Value="20" />
                 <Setter Property="MinWidth"              Value="50" />
                 <Setter Property="Padding" Value="10,0,10,0"/>
@@ -333,14 +351,15 @@
                         <ControlTemplate TargetType="{x:Type TabItem}">
                             <Border BorderBrush="Transparent" Width="{TemplateBinding Width}" 
                                     Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" ContentSource="Header" />
+                                <TextBlock Text="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="#FF007ACC" />
+                                    <Setter Property="Background" Value="{DynamicResource HMM.Window.AccentBrush1}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource HMM.Window.AccentForegroundBrush}" />
                                 </Trigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#FF1C97EA"/>
+                                <Trigger Property="IsMouseDirectlyOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource HMM.Window.AccentBrush3}"/>
                                 </Trigger>
                                 <MultiTrigger>
                                     <MultiTrigger.Conditions>
@@ -358,12 +377,12 @@
             <Style TargetType="{x:Type Button}">
                 <Setter Property="SnapsToDevicePixels"   Value="true" />
                 <Setter Property="OverridesDefaultStyle" Value="true" />
-                <Setter Property="Foreground"            Value="#FFFFFFFF" />
-                <Setter Property="Background"            Value="#FF3F3F46" />
+                <Setter Property="Foreground"            Value="{DynamicResource HMM.Button.ForegroundBrush}" />
+                <Setter Property="Background"            Value="{DynamicResource HMM.Button.BackgroundBrush}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
-                            <Border TextBlock.Foreground="White"
+                            <Border TextBlock.Foreground="{DynamicResource HMM.window.Fo}"
                         x:Name="Border"
                         BorderBrush="{TemplateBinding Foreground}"
                         BorderThickness=".2"
@@ -381,7 +400,7 @@
                                             <Storyboard>
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
                               Storyboard.TargetName="Border">
-                                                    <EasingColorKeyFrame KeyTime="0" Value="#FF686868" />
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.HoverColor}" />
                                                 </ColorAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </VisualState>
@@ -389,7 +408,7 @@
                                             <Storyboard>
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
                               Storyboard.TargetName="Border">
-                                                    <EasingColorKeyFrame KeyTime="0" Value="#FFAFABAF" />
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.PressedColor}" />
                                                 </ColorAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </VisualState>
@@ -397,11 +416,11 @@
                                             <Storyboard>
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
                               Storyboard.TargetName="Border">
-                                                    <EasingColorKeyFrame KeyTime="0" Value="#FF303030" />
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledColor}" />
                                                 </ColorAnimationUsingKeyFrames>
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
                               Storyboard.TargetName="Border">
-                                                    <EasingColorKeyFrame KeyTime="0" Value="#FF656565" />
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledTextColor}" />
                                                 </ColorAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </VisualState>
@@ -409,11 +428,11 @@
                                             <Storyboard>
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
                               Storyboard.TargetName="Border">
-                                                    <EasingColorKeyFrame KeyTime="0" Value="#FF333337" />
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Window.BackgroundColor1}" />
                                                 </ColorAnimationUsingKeyFrames>
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
                               Storyboard.TargetName="Border">
-                                                    <EasingColorKeyFrame KeyTime="0" Value="White" />
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.FocusColor}" />
                                                 </ColorAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </VisualState>
@@ -430,21 +449,21 @@
             </Style>
             <!-- Others -->
             <Style TargetType="{x:Type Label}">
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
             </Style>
 
             <Style TargetType="{x:Type GridViewColumnHeader}">
-                <Setter Property="Background" Value="#FF333337"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush1}"/>
                 <Setter Property="Height" Value="22"/>
                 <Setter Property="MinWidth" Value="30"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
-                            <Border BorderThickness="0,0,0,1" BorderBrush="#3F3F46">
-                                <Grid Background="{TemplateBinding Background}" Margin="-2,0,0,0" MinWidth="{TemplateBinding MinWidth}">
+                            <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource HMM.Window.BorderBrush}">
+                                <Grid Background="{TemplateBinding Background}" MinWidth="{TemplateBinding MinWidth}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="2"/>
@@ -455,7 +474,7 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#FF686868"/>
+                                    <Setter Property="Background" Value="{DynamicResource HMM.Button.HoverBrush}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -466,7 +485,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="GridViewColumnHeader">
-                                    <Border Background="{TemplateBinding Background}" Margin="0,0,-2,0" BorderThickness="0,0,0,1" BorderBrush="#3F3F46"/>
+                                    <Border Background="{TemplateBinding Background}" Margin="0,0,-2,0" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource HMM.Window.BorderBrush}"/>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -489,10 +508,10 @@
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="innerBorder" Property="Background" Value="#FF686868"/>
+                                    <Setter TargetName="innerBorder" Property="Background" Value="{DynamicResource HMM.Button.HoverBrush}"/>
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter TargetName="innerBorder" Property="Background" Value="#FF686868"/>
+                                    <Setter TargetName="innerBorder" Property="Background" Value="{DynamicResource HMM.Button.HoverBrush}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -502,7 +521,7 @@
             <Style TargetType="{x:Type Thumb}">
                 <Setter Property="Width"
                       Value="2" />
-                <Setter Property="Background" Value="Gray"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BorderBrush}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Thumb}">
@@ -660,9 +679,9 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ToggleButton}">
-                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FF2D2D30">
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource HMM.Window.BackgroundBrush}">
                                 <Border BorderThickness="0.5" CornerRadius="2" BorderBrush="Gray">
-                                    <Path Data="M 0 0 L 4 4 L 8 0 Z" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" Fill="White"/>
+                                    <Path Data="M 0 0 L 4 4 L 8 0 Z" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" Fill="{DynamicResource HMM.Window.ForegroundBrush}"/>
                                 </Border>
                             </Grid>
                         </ControlTemplate>
@@ -714,8 +733,8 @@
 
             <Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
                 <Setter Property="OverridesDefaultStyle" Value="true"/>
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="Background" Value="#FF333337"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush1}"/>
                 <Setter Property="BorderBrush" Value="#FF434346" />
                 <Setter Property="AllowDrop" Value="true"/>
                 <Setter Property="MinWidth" Value="0"/>
@@ -747,7 +766,7 @@
                                          Margin="2,0,25,0" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>-->
                                 <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Fade">
                                     <Border BorderThickness="1" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                            Background="#FF2D2D30" BorderBrush="Gray" CornerRadius="2">
+                                            Background="{DynamicResource HMM.Window.BackgroundBrush}" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" CornerRadius="2">
                                         <ScrollViewer>
                                             <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0,5,0,5"/>
                                         </ScrollViewer>
@@ -772,17 +791,17 @@
 
                 <Style.Triggers>
                     <Trigger Property="IsHighlighted" Value="True">
-                        <Setter Property="Background" Value="#575757"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Menu.HoverColor}"/>
                     </Trigger>
                     <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="#575757"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Menu.HoverColor}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
 
             <Style TargetType="{x:Type ListView}">
-                <Setter Property="Background" Value="#2D2D30"/>
-                <Setter Property="BorderBrush" Value="#3F3F46"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.BorderBrush}"/>
                 <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="Foreground" Value="#FF042271"/>
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
@@ -1080,7 +1099,7 @@
                 <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
                 <Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>
                 <Setter Property="BorderBrush" Value="{StaticResource OptionMark.Static.Border}"/>
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
                 <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -1134,6 +1153,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
             <Style TargetType="{x:Type pt:DataGrid}">
                 <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                 <Setter Property="Focusable" Value="True"/>
@@ -1183,20 +1203,20 @@
                                     <ScrollViewer x:Name="PART_SheetScrollViewer" Grid.Column="1" Focusable="False" HorizontalScrollBarVisibility="Auto" Grid.Row="1" VerticalScrollBarVisibility="Auto">
                                         <Grid x:Name="PART_SheetGrid" Background="Transparent">
                                             <Border x:Name="PART_SelectionBackground" Background="Transparent"/>
-                                            <Border x:Name="PART_CurrentBackground" Background="#FF3F3F46"/>
+                                            <Border x:Name="PART_CurrentBackground" Background="{DynamicResource HMM.Window.BackgroundBrush2}"/>
                                             <Border x:Name="PART_Selection" BorderBrush="Black" BorderThickness="3" Margin="-1,-1,-2,-2"/>
                                             <Border x:Name="PART_AutoFillSelection" BorderBrush="Gray" BorderThickness="3" Margin="-1,-1,-2,-2" Visibility="Hidden"/>
                                             <Border x:Name="PART_AutoFillBox" BorderBrush="Gray" BorderThickness="1" Background="Black" HorizontalAlignment="Right" Height="7" Margin="0,0,-4,-4" SnapsToDevicePixels="True" VerticalAlignment="Bottom" Width="7"/>
                                         </Grid>
                                     </ScrollViewer>
                                     <ScrollViewer x:Name="PART_ColumnScrollViewer" Grid.Column="1" HorizontalScrollBarVisibility="Hidden" Grid.Row="0" VerticalScrollBarVisibility="Hidden">
-                                        <Grid x:Name="PART_ColumnGrid" Background="#FFDFE3E8">
-                                            <Border x:Name="PART_ColumnSelectionBackground" Background="#FF3F3F46"/>
+                                        <Grid x:Name="PART_ColumnGrid" Background="{DynamicResource HMM.Menu.DisabledColor}">
+                                            <Border x:Name="PART_ColumnSelectionBackground" Background="{DynamicResource HMM.Window.BackgroundBrush2}"/>
                                         </Grid>
                                     </ScrollViewer>
                                     <ScrollViewer x:Name="PART_RowScrollViewer" Grid.Column="0" HorizontalScrollBarVisibility="Hidden" Grid.Row="1" VerticalScrollBarVisibility="Hidden">
                                         <Grid x:Name="PART_RowGrid" Background="Transparent">
-                                            <Border x:Name="PART_RowSelectionBackground" Background="#FF3F3F46"/>
+                                            <Border x:Name="PART_RowSelectionBackground" Background="{DynamicResource HMM.Window.BackgroundBrush2}"/>
                                         </Grid>
                                     </ScrollViewer>
                                     <Grid Grid.Column="0" Grid.Row="0">
@@ -1210,6 +1230,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
             <Style TargetType="{x:Type pt:PropertyGrid}">
                 <Setter Property="Focusable" Value="False"/>
                 <Setter Property="ValidationErrorStyle">

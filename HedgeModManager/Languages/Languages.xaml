@@ -13,7 +13,8 @@
         <local:LangEntry FileName="zh-TW" Name="中文繁體 (Chinese Traditional)"/>
         <local:LangEntry FileName="zh-CN" Name="中文简体 (Chinese Simplified)"/>
         <local:LangEntry FileName="ru-RU" Name="Русский (Russian)"/>
-        <local:LangEntry FileName="es-MX" Name="Spanish (Mexico)"/>
+        <local:LangEntry FileName="es-MX" Name="Espanõl (Mexico)"/>
+        <local:LangEntry FileName="vi-VN" Name="Tiếng Việt (Vietnamese)"/>
     </local:LanguageList>
     
 </ResourceDictionary>

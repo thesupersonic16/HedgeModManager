@@ -17,7 +17,9 @@ using System.Windows.Controls.Primitives;
 using HedgeModManager.Controls;
 using System.Net.Cache;
 using System.Net.Http;
-using HedgeModManager.Misc;
+using PropertyTools.Wpf;
+using static HedgeModManager.Lang;
+using PopupBox = HedgeModManager.Controls.PopupBox;
 
 namespace HedgeModManager.UI
 {
@@ -49,7 +51,7 @@ namespace HedgeModManager.UI
             popup.Children.Add(new Border()
             {
                 BorderThickness = new Thickness(2),
-                BorderBrush = Brushes.White,
+                BorderBrush = HedgeApp.GetThemeBrush("HMM.Window.ForegroundBrush"),
                 Child = new Image()
                 {
                     Source = image,
@@ -76,40 +78,55 @@ namespace HedgeModManager.UI
 
         private async void Download_Click(object sender, RoutedEventArgs e)
         {
-            DownloadButton.Visibility = Visibility.Collapsed;
-            Progress.Visibility = Visibility.Visible;
-
             try
             {
                 var game = HedgeApp.GetSteamGame(Game);
+                if (game == null)
+                {
+                    var dialog = new HedgeMessageBox(Localise("ModDownloaderNoGame"),
+                        string.Format(Localise("ModDownloaderNoGameMes"), Game.GameName));
+
+                    dialog.AddButton("Exit", () =>
+                    {
+                        dialog.Close();
+                    });
+                    dialog.ShowDialog();
+                    Close();
+                    return;
+                }
+
                 HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
                 var mod = (GBAPIItemDataBasic)DataContext;
-
-                using (var resp = await HedgeApp.HttpClient.GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
+                var request = (HttpWebRequest)WebRequest.Create(DownloadURL);
+                var response = request.GetResponse();
+                var URI = response.ResponseUri.ToString();
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
+                var downloader = new DownloadWindow($"Downloading {mod.ModName}", URI, Path.GetFileName(URI));
+                downloader.DownloadCompleted = () =>
                 {
-                    resp.EnsureSuccessStatusCode();
-
-                    Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
-                    var destinationPath = Path.GetFileName(resp.RequestMessage.RequestUri.AbsoluteUri);
-                    using (var destinationFile = File.Create(destinationPath, 8192, FileOptions.Asynchronous))
-                        await resp.Content.CopyToAsync(destinationFile);
-
-                    await Dispatcher.InvokeAsync(() => Progress.Value = 50);
-                    ModsDB.InstallMod(destinationPath, Path.Combine(game.RootDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
-                    File.Delete(destinationPath);
-
-                    // a dialog would be nice here but i ain't adding strings
-                    await Dispatcher.InvokeAsync(() => Close());
-                }
-            }
-            catch (Exception ex)
+                    ModsDB.InstallMod(Path.GetFileName(URI), Path.Combine(game.RootDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
+                    File.Delete(Path.GetFileName(URI));
+                    Close();
+                };
+                downloader.Start();
+            }catch(WebException ex)
             {
-                await Dispatcher.InvokeAsync(() =>
+                var dialog = new HedgeMessageBox(Localise("ModDownloaderFailed"),
+                    string.Format(Localise("ModDownloaderWebError"), ex.Message),
+                    HorizontalAlignment.Right, TextAlignment.Center, InputType.MarkDown);
+                
+                dialog.AddButton(Localise("CommonUICancel"), () =>
                 {
-                    ExceptionWindow.UnhandledExceptionEventHandler(ex);
-                    DownloadButton.Visibility = Visibility.Visible;
-                    Progress.Visibility = Visibility.Collapsed;
+                    dialog.Close();
                 });
+
+                dialog.AddButton(Localise("CommonUIRetry"), () =>
+                {
+                    dialog.Close();
+                    Download_Click(sender, e);
+                });
+                dialog.ShowDialog();
+                Close();
             }
         }
 
@@ -152,11 +169,12 @@ namespace HedgeModManager.UI
                 button.Click += Audio_Click;
                 Imagebar.Children.Add(button);
             }
+
             Description.Text = $@"
 <html>
     <body>
         <style>
-            {Properties.Resources.GBStyleSheet}
+            {HedgeMessageBox.GetHtmlStyleSheet()}
         </style>
         {mod.Body}
     </body>
@@ -172,7 +190,7 @@ namespace HedgeModManager.UI
                     FontSize = 12,
                     TextWrapping = TextWrapping.WrapWithOverflow,
                     FontStyle = FontStyles.Italic,
-                    Foreground = Brushes.LightGray,
+                    Foreground = HedgeApp.GetThemeBrush("HMM.Window.LightForegroundBrush"),
                     Padding = new Thickness(0, 2, 0, 2)
                 });
 

@@ -19,10 +19,10 @@ namespace HedgeModManager
     public class ModInfo : INotifyPropertyChanged
     {
         [PropertyTools.DataAnnotations.Browsable(false)]
-        public IEnumerable<Column> IncludeDirColumns { get; } = new[]
-        {
-            new Column("Value", "Directory", null, "*", 'L'),
-        };
+        public IEnumerable<Column> IncludeDirColumns => StringWrapper.Columns;
+
+        [PropertyTools.DataAnnotations.Browsable(false)]
+        public IEnumerable<Column> ModDependsColumns => ModDepend.Columns;
 
         public string RootDirectory;
         public FormSchema ConfigSchema;
@@ -32,7 +32,7 @@ namespace HedgeModManager
 
         [PropertyTools.DataAnnotations.Browsable(false)]
         public CodeFile Codes { get; set; }
-        
+
         [PropertyTools.DataAnnotations.Browsable(false)]
         public bool HasUpdates => !string.IsNullOrEmpty(UpdateServer);
 
@@ -41,36 +41,9 @@ namespace HedgeModManager
 
         [PropertyTools.DataAnnotations.Browsable(false)]
         public bool HasSchema => ConfigSchema != null;
-        
+
         [PropertyTools.DataAnnotations.Browsable(false)]
         public bool Favorite { get; set; }
-
-        // Main
-        [PropertyTools.DataAnnotations.Category("Main")]
-        [IniField("Main")]
-        public string UpdateServer { get; set; }
-
-        [IniField("Main")]
-        public string SaveFile { get; set; }
-
-        [PropertyTools.DataAnnotations.DisplayName("Include Directories")]
-        [ColumnsProperty(nameof(IncludeDirColumns))]
-        public ObservableCollection<StringWrapper> IncludeDirsProperty { get; set; } = new ObservableCollection<StringWrapper>();
-
-        [PropertyTools.DataAnnotations.Browsable(false)]
-        [IniField("Main", "IncludeDir")]
-        public List<string> IncludeDirs { get; set; } = new List<string>();
-
-        [PropertyTools.DataAnnotations.DisplayName("DLL File")]
-        [IniField("Main")]
-        public string DLLFile { get; set; } = string.Empty;
-
-        [PropertyTools.DataAnnotations.DisplayName("Code File")]
-        [IniField("Main")]
-        public string CodeFile { get; set; } = string.Empty;
-
-        [IniField("Main")]
-        public string ConfigSchemaFile { get; set; } = string.Empty;
 
         // Desc
         [PropertyTools.DataAnnotations.Category("Description")]
@@ -92,6 +65,41 @@ namespace HedgeModManager
 
         [IniField("Desc")]
         public string AuthorURL { get; set; } = string.Empty;
+
+        // Main
+        [PropertyTools.DataAnnotations.Category("Main")]
+        [IniField("Main")]
+        public string UpdateServer { get; set; }
+
+        [IniField("Main")]
+        public string SaveFile { get; set; }
+
+        [IniField("Main")]
+        public string ID { get; set; }
+
+        [PropertyTools.DataAnnotations.DisplayName("Include Directories")]
+        [ColumnsProperty(nameof(IncludeDirColumns))]
+        public ObservableCollection<StringWrapper> IncludeDirsProperty { get; set; } = new ObservableCollection<StringWrapper>();
+
+        [PropertyTools.DataAnnotations.Browsable(false)]
+        [IniField("Main", "IncludeDir")]
+        public List<string> IncludeDirs { get; set; } = new List<string>();
+
+        [PropertyTools.DataAnnotations.DisplayName("Dependencies")]
+        [ColumnsProperty(nameof(ModDependsColumns))]
+        [IniField("Main", "Depends")]
+        public ObservableCollection<ModDepend> DependsOn { get; set; } = new ObservableCollection<ModDepend>();
+
+        [PropertyTools.DataAnnotations.DisplayName("DLL File")]
+        [IniField("Main")]
+        public string DLLFile { get; set; } = string.Empty;
+
+        [PropertyTools.DataAnnotations.DisplayName("Code File")]
+        [IniField("Main")]
+        public string CodeFile { get; set; } = string.Empty;
+
+        [IniField("Main")]
+        public string ConfigSchemaFile { get; set; } = string.Empty;
 
         [PropertyTools.DataAnnotations.Browsable(false)]
         [IniField("CPKs")]
@@ -117,7 +125,7 @@ namespace HedgeModManager
                         IncludeDirs.Add(".");
                         Title = Path.GetFileName(RootDirectory);
                         Version = "0.0";
-                        Date ="Unknown";
+                        Date = "Unknown";
                         Author = "Unknown";
                         Description = "None";
                         Save();
@@ -153,10 +161,11 @@ namespace HedgeModManager
                 Title = Path.GetFileName(RootDirectory);
             }
 
+            if (string.IsNullOrEmpty(ID))
+                ID = Title?.GetDeterministicHashCode().ToString("X") ?? modPath.GetHashCode().ToString("X");
+
             foreach (var dir in IncludeDirs)
-            {
                 IncludeDirsProperty.Add(new StringWrapper(dir));
-            }
         }
 
         public bool Read(Stream stream)
@@ -165,7 +174,7 @@ namespace HedgeModManager
             {
                 IniSerializer.Deserialize(this, stream);
             }
-            catch
+            catch (Exception e)
             {
                 return false;
             }
@@ -176,6 +185,7 @@ namespace HedgeModManager
 
         public void Save()
         {
+            Description = Description.Replace("\r", "").Replace("\n", "\\n");
             using (var stream = File.Create(Path.Combine(RootDirectory, "mod.ini")))
             {
                 IniSerializer.Serialize(this, stream);
@@ -218,7 +228,7 @@ namespace HedgeModManager
                 catch { }
             }
 
-            if(validDirs.Count == 0)
+            if (validDirs.Count == 0)
                 validDirs.Add(".");
 
             IncludeDirs = validDirs;
@@ -229,11 +239,113 @@ namespace HedgeModManager
 
     public class StringWrapper
     {
+        public static IEnumerable<Column> Columns { get; } = new[]
+        {
+            new Column("Value", "Directory", null, "*", 'L'),
+        };
+
         public string Value { get; set; }
 
         public StringWrapper() { }
 
         public StringWrapper(string str)
             => Value = str;
+    }
+
+    public class ModDepend : IIniConvertible
+    {
+        public static IEnumerable<Column> Columns { get; } = new[]
+        {
+            new Column(nameof(ID),    "ID", null, "*", 'L'),
+            new Column(nameof(Title), "Title", null, "*", 'L'),
+            new Column(nameof(VersionString),  "Version", null, "*", 'L'),
+            new Column(nameof(Link),  "Link", null, "*", 'L'),
+        };
+
+        public string ID { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Link { get; set; } = string.Empty;
+        public Version ModVersion { get; set; }
+
+        public string VersionString
+        {
+            get => ModVersion?.ToString();
+            set
+            {
+                if (Version.TryParse(value, out var result))
+                    ModVersion = result;
+            }
+        }
+
+        public bool HasLink => !string.IsNullOrEmpty(Link);
+        private const string Delimiter = "|";
+
+        public ModDepend()
+        {
+
+        }
+
+        public ModDepend(string id, string title)
+        {
+            ID = id;
+            Title = title;
+        }
+
+        public void ParseString(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return;
+
+            var fields = input.Split(Delimiter[0]);
+            for (int i = 0; i < fields.Length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        ID = fields[i];
+                        break;
+
+                    case 1:
+                        Title = fields[i];
+                        break;
+
+                    case 2:
+                        {
+                            if (Version.TryParse(fields[i], out var version))
+                                ModVersion = version;
+                            else
+                                Link = fields[i];
+
+                            break;
+                        }
+
+
+                    case 3:
+                        {
+                            if (Version.TryParse(fields[i], out var version))
+                                ModVersion = version;
+
+                            break;
+                        }
+                }
+            }
+        }
+
+        public static ModDepend FromString(string str)
+        {
+            var depend = new ModDepend();
+            depend.ParseString(str);
+            return depend;
+        }
+
+        public void FromIni(string value, IniConvertMeta data)
+        {
+            ParseString(value);
+        }
+
+        public string ToIni(IniFile file)
+        {
+            return string.Join(Delimiter, ID, Title, Link, VersionString);
+        }
     }
 }

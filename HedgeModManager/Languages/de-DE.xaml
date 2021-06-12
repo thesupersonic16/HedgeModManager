@@ -9,6 +9,7 @@
     <system:String x:Key="CommonUICancel" >Abbrechen</system:String>
     <system:String x:Key="CommonUIYes"    >Ja</system:String>
     <system:String x:Key="CommonUINo"     >Nein</system:String>
+    <system:String x:Key="CommonUIRetry"  >Wiederholen</system:String>
     <system:String x:Key="CommonUIUpdate" >Aktualisieren</system:String>
     <system:String x:Key="CommonUIDelete" >Löschen</system:String>
     <system:String x:Key="CommonUINone"   >Nichts</system:String>
@@ -25,6 +26,7 @@
     <system:String x:Key="MainUISave"          >Speichern</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Speichern und Spielen</system:String>
     <system:String x:Key="MainUIPlay"          >Spielen</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">Download des Mod Loaders ist fehlgeschlagen.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Name</system:String>
@@ -129,5 +131,9 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Konfiguriere {0}</system:String>
+
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">Download der Mod ist fehlgeschlagen.</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Ein Fehler ist während des Downloads aufgetreten. Die Server sind möglicherweise momentan offline. Bitte versuchen Sie es später noch einmal. &#x0a;&#x0a;Details: {0}</system:String>
 
 </ResourceDictionary>

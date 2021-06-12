@@ -14,7 +14,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="Header" Text="HEADER" TextAlignment="Center" FontSize="30" Foreground="#0066CC" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20,0" TextWrapping="Wrap"/>
+        <TextBlock x:Name="Header" Text="HEADER" TextAlignment="Center" FontSize="30" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20,0" TextWrapping="Wrap"/>
         <Border x:Name="Message" Width="Auto" Margin="5,0" Grid.Row="1" Padding="10,0"/>
         <StackPanel x:Name="Stack" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Stretch">
             <!--<Button Width="Auto" Height="23" Margin="0" Content="OK"/>

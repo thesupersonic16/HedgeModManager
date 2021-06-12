@@ -25,6 +25,7 @@ using Timer = System.Threading.Timer;
 using HMMResources = HedgeModManager.Properties.Resources;
 using static HedgeModManager.Lang;
 using HedgeModManager.Languages;
+using Newtonsoft.Json;
 
 namespace HedgeModManager
 {
@@ -35,13 +36,22 @@ namespace HedgeModManager
     {
         public static bool IsCPKREDIRInstalled = false;
         public static ModsDB ModsDatabase;
-        public static CodeFile CodesDatabase = new CodeFile();
+
+        public static CodeFile CodesDatabase
+        {
+            get => ModsDatabase?.CodesDatabase;
+            set => ModsDatabase.CodesDatabase = value;
+        }
+
         public static List<FileSystemWatcher> ModsWatchers = new List<FileSystemWatcher>();
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
         public List<string> CheckedModUpdates = new List<string>();
         public bool PauseModUpdates = false;
+        public ModProfile SelectedModProfile = null;
 
         protected Timer StatusTimer;
+
+        private bool CodesOutdated = false;
 
         public MainWindow()
         {
@@ -54,12 +64,65 @@ namespace HedgeModManager
             RefreshUI();
         }
 
+        public void RefreshProfiles()
+        {
+            HedgeApp.ModProfiles.Clear();
+            try
+            {
+                string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+                if (File.Exists(profilePath))
+                    HedgeApp.ModProfiles = JsonConvert.DeserializeObject<List<ModProfile>>(File.ReadAllText(profilePath));
+
+                HedgeApp.ModProfiles ??= new List<ModProfile>();
+
+                // Remove profiles that don't exist
+                HedgeApp.ModProfiles.RemoveAll(profile =>
+                    !File.Exists(Path.Combine(HedgeApp.ModsDbPath, profile.ModDBPath)));
+                
+                // Create new profile set if needed
+                if (HedgeApp.ModProfiles.Count == 0)
+                    HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDB.ini"));
+
+                SelectedModProfile = HedgeApp.ModProfiles.FirstOrDefault(t => t.Name == HedgeApp.Config.ModProfile)
+                    ?? HedgeApp.ModProfiles.First();
+            }
+            catch (Exception e)
+            {
+                new ExceptionWindow(e).ShowDialog();
+                HedgeApp.ModProfiles ??= new List<ModProfile>();
+                if (HedgeApp.ModProfiles.Count == 0)
+                    HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDB.ini"));
+                SelectedModProfile = HedgeApp.ModProfiles.First();
+            }
+        }
+
+        public void LoadDatabase()
+        {
+            ModsDatabase = new ModsDB(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
+            if (!Directory.Exists(HedgeApp.ModsDbPath))
+            {
+                Application.Current?.MainWindow?.Hide();
+                var box = new HedgeMessageBox("No Mods Found", Properties.Resources.STR_UI_NO_MODS);
+
+                box.AddButton("Yes", () =>
+                {
+                    ModsDatabase.SetupFirstTime();
+                    box.Close();
+                });
+
+                box.AddButton("No", () => Environment.Exit(0));
+
+                box.ShowDialog();
+                Application.Current?.MainWindow?.Show();
+            }
+        }
+
         public void RefreshMods()
         {
             PauseModUpdates = true;
             CodesList.Items.Clear();
 
-            ModsDatabase = new ModsDB(HedgeApp.ModsDbPath);
+            LoadDatabase();
             ModsDatabase.DetectMods();
             ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.Sort((x, y) => x.Title.CompareTo(y.Title));
@@ -118,7 +181,7 @@ namespace HedgeModManager
             // Re-arrange the mods
             for (int i = 0; i < ModsDatabase.ActiveMods.Count; i++)
             {
-                var mod = ModsDatabase.GetModFromID(ModsDatabase.ActiveMods[i]);
+                var mod = ModsDatabase.GetModFromActiveGUID(ModsDatabase.ActiveMods[i]);
 
                 if (mod != null)
                 {
@@ -143,15 +206,16 @@ namespace HedgeModManager
                 CPKREDIR = HedgeApp.Config,
                 ModsDB = ModsDatabase,
                 Games = HedgeApp.SteamGames,
-                Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods)
+                Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods),
+                Profiles = new ObservableCollection<ModProfile>(HedgeApp.ModProfiles),
+                SelectedModProfile = SelectedModProfile
             };
             DataContext = ViewModel;
 
-            Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {HedgeApp.CurrentGame.GameName}";
+            Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {HedgeApp.CurrentGame.GameName} ({SelectedModProfile?.Name})";
 
             if (HedgeApp.CurrentGame.HasCustomLoader)
             {
-                //Button_CPKREDIR.IsEnabled = HedgeApp.CurrentGame.SupportsCPKREDIR;
                 Button_OtherLoader.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader;
                 Button_DownloadCodes.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader && !string.IsNullOrEmpty(HedgeApp.CurrentGame.CodesURL);
             }
@@ -173,9 +237,48 @@ namespace HedgeModManager
                 loaders = Localise("CommonUINone");
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentSteamGame;
-            Label_MLVersion.Content = $"{Localise("SettingsUILabelLoaders")} {loaders}";
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
-            Button_CPKREDIR.Content = Localise(IsCPKREDIRInstalled ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
+        }
+
+        private void UI_CodesTab_Click(object sender, RoutedEventArgs e)
+        {
+            // Display update alert.
+            UpdateStatus(Localise(CodesOutdated ? "StatusUICodeUpdatesAvailable" : "StatusUINoCodeUpdatesFound"));
+        }
+
+        public async Task CheckForCodeUpdates()
+        {
+            if (!File.Exists(CodeProvider.CodesTextPath))
+                return;
+
+            try
+            {
+                // Codes from disk.
+                string localCodes = File.ReadAllText(CodeProvider.CodesTextPath);
+
+                // Codes from the GitHub repository.
+                string repoCodes = await new WebClient()
+                {
+                    Encoding = Encoding.UTF8 // Use UTF-8 encoding so accented characters don't die.
+                }
+                .DownloadStringTaskAsync(new Uri(HedgeApp.CurrentGame.CodesURL));
+
+                if (localCodes == repoCodes)
+                {
+                    CodesOutdated = false;
+
+                    // Codes are the same, so use default text.
+                    Button_DownloadCodes.Content = Localise("CodesUIDownload");
+                }
+                else
+                {
+                    CodesOutdated = true;
+
+                    // Codes are different, report update possibility.
+                    Button_DownloadCodes.Content = Localise("CodesUIUpdate");
+                }
+            }
+            catch (WebException) { /* do nothing for web exceptions */ }
         }
 
         public async Task<bool> CheckForModUpdatesAsync(ModInfo mod, bool showUpdatedDialog = true)
@@ -233,8 +336,6 @@ namespace HedgeModManager
                     var dialog = new HedgeMessageBox(string.Format(HMMResources.STR_UI_MOD_UPDATE, mod.Title, update.VersionString)
                         , update.ChangeLog, type: InputType.MarkDown);
 
-                    dialog.AddButton(Localise("CommonUIClose"), () => dialog.Close());
-
                     dialog.AddButton(Localise("CommonUIUpdate"), () =>
                     {
                         var updater = new ModUpdateWindow(update);
@@ -243,6 +344,8 @@ namespace HedgeModManager
                         updater.DownloadCompleted = Refresh;
                         updater.Start();
                     });
+
+                    dialog.AddButton(Localise("CommonUIClose"), () => dialog.Close());
 
                     dialog.ShowDialog();
                 }
@@ -292,6 +395,7 @@ namespace HedgeModManager
 
         public async Task SaveModsDB()
         {
+            HedgeApp.Config.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
             HedgeApp.Config.Save(HedgeApp.ConfigPath);
             ModsDatabase.Mods.Clear();
             ModsDatabase.Codes.Clear();
@@ -396,7 +500,8 @@ namespace HedgeModManager
         {
             await CheckForManagerUpdatesAsync();
             if (HedgeApp.Config.CheckForModUpdates)
-                CheckAllModsUpdatesAsync();
+                await CheckAllModsUpdatesAsync();
+            await CheckForCodeUpdates();
         }
 
         public async Task CheckForManagerUpdatesAsync()
@@ -508,9 +613,21 @@ namespace HedgeModManager
 
                         dialog.AddButton(Localise("CommonUIUpdate"), () =>
                         {
-                            dialog.Close();
-                            HedgeApp.InstallOtherLoader(false);
-                            UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                            var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
+
+                            dialog.AddButton(Localise("CommonUIUpdate"), () =>
+                            {
+                                dialog.Close();
+                                HedgeApp.InstallOtherLoader(false);
+                                UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                            });
+
+                            dialog.AddButton(Localise("CommonUIIgnore"), () =>
+                            {
+                                dialog.Close();
+                            });
+
+                            dialog.ShowDialog();
                         });
 
                         dialog.ShowDialog();
@@ -574,11 +691,6 @@ namespace HedgeModManager
             {
                 var dialog = new HedgeMessageBox(Localise("MainUIMissingLoaderHeader"), string.Format(Localise("MainUIMissingLoaderDesc"), HedgeApp.CurrentGame.GameName));
 
-                dialog.AddButton(Localise("CommonUINo"), () =>
-                {
-                    dialog.Close();
-                });
-
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     dialog.Close();
@@ -586,8 +698,53 @@ namespace HedgeModManager
                     UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.CustomLoaderName));
                 });
 
+                dialog.AddButton(Localise("CommonUINo"), () =>
+                {
+                    dialog.Close();
+                });
+
                 dialog.ShowDialog();
             });
+        }
+
+        public async Task SaveConfig(bool startGame = false)
+        {
+            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
+            ShowMissingOtherLoaderWarning();
+            EnableSaveRedirIfUsed();
+            try
+            {
+                await SaveModsDB();
+                Refresh();
+                UpdateStatus(Localise("StatusUIModsDBSaved"));
+                if (startGame)
+                    await StartGame();
+            }
+            catch (Exception ex)
+            {
+                Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
+            }
+        }
+
+        public bool CheckModDepends()
+        {
+            bool abort = false;
+            var report = ModsDatabase.ResolveDepends();
+
+            if (report.HasErrors)
+            {
+                var box = new HedgeMessageBox(Localise("MainUIMissingDependsHeader"), report.BuildMarkdown(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+                box.AddButton(Localise("CommonUIIgnore"), () => box.Close());
+                box.AddButton(Localise("CommonUICancel"), () =>
+                {
+                    box.Close();
+                    abort = true;
+                });
+                box.ShowDialog();
+            }
+
+            return !abort;
         }
 
         public bool CheckDepends()
@@ -595,11 +752,13 @@ namespace HedgeModManager
             bool abort = false;
 
             if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.SonicForces.AppID, DependTypes.VS2019x64);
-            if (!abort)
                 abort = DependsHandler.AskToInstallRuntime(Games.SonicGenerations.AppID, DependTypes.VS2019x86);
             if (!abort)
                 abort = DependsHandler.AskToInstallRuntime(Games.SonicLostWorld.AppID, DependTypes.VS2019x86);
+            if (!abort)
+                abort = DependsHandler.AskToInstallRuntime(Games.SonicForces.AppID, DependTypes.VS2019x64);
+            if (!abort)
+                abort = DependsHandler.AskToInstallRuntime(Games.PuyoPuyoTetris2.AppID, DependTypes.VS2019x64);
             return !abort;
         }
 
@@ -610,11 +769,6 @@ namespace HedgeModManager
             {
                 var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGame.GameName, dependName));
 
-                dialog.AddButton(Localise("CommonUINo"), () =>
-                {
-                    abort = true;
-                    dialog.Close();
-                });
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     DownloadWindow window = new DownloadWindow($"Downloading {dependName}...", downloadURL, fileName);
@@ -625,6 +779,12 @@ namespace HedgeModManager
                         Process.Start(fileName, "/passive /norestart").WaitForExit(30000);
                         File.Delete(fileName);
                     }
+                    dialog.Close();
+                });
+
+                dialog.AddButton(Localise("CommonUINo"), () =>
+                {
+                    abort = true;
                     dialog.Close();
                 });
 
@@ -641,6 +801,7 @@ namespace HedgeModManager
             if (HedgeApp.CurrentGame.SupportsCPKREDIR)
                 HedgeApp.UpdateCPKREDIR();
 
+            RefreshProfiles();
             Refresh();
             await CheckForUpdatesAsync();
         }
@@ -652,11 +813,6 @@ namespace HedgeModManager
                 return;
 
             var box = new HedgeMessageBox(Localise("CommonUIWarning"), string.Format(Localise("DialogUIDeleteMod"), mod.Title));
-
-            box.AddButton(Localise("CommonUICancel"), () =>
-            {
-                box.Close();
-            });
 
             box.AddButton(Localise("CommonUIDelete"), () =>
             {
@@ -672,6 +828,11 @@ namespace HedgeModManager
                 box.Close();
             });
 
+            box.AddButton(Localise("CommonUICancel"), () =>
+            {
+                box.Close();
+            });
+
             box.ShowDialog();
         }
 
@@ -680,46 +841,15 @@ namespace HedgeModManager
             Refresh();
         }
 
-        private void UI_Save_Click(object sender, RoutedEventArgs e)
+        private async void UI_Save_Click(object sender, RoutedEventArgs e)
         {
-            ShowMissingOtherLoaderWarning();
-            EnableSaveRedirIfUsed();
-            Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    await SaveModsDB();
-                    Dispatcher.Invoke(Refresh);
-                    UpdateStatus(Localise("StatusUIModsDBSaved"));
-                }
-                catch (Exception ex)
-                {
-                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
-                }
-            });
+            if (CheckModDepends())
+                await SaveConfig();
         }
 
-        private void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
+        private async void UI_SaveAndPlay_Click(object sender, RoutedEventArgs e)
         {
-            ShowMissingOtherLoaderWarning();
-            EnableSaveRedirIfUsed();
-
-            bool startGame = CheckDepends();
-            Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    await SaveModsDB();
-                    Dispatcher.Invoke(Refresh);
-                    UpdateStatus(Localise("StatusUIModsDBSaved"));
-                    if (startGame)
-                        await StartGame();
-                }
-                catch (Exception ex)
-                {
-                    Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
-                }
-            });
+            await SaveConfig(CheckDepends() && CheckModDepends());
         }
 
         private void UI_Play_Click(object sender, RoutedEventArgs e)
@@ -728,26 +858,9 @@ namespace HedgeModManager
                 StartGame();
         }
 
-        private void UI_CPKREDIR_Click(object sender, RoutedEventArgs e)
-        {
-            HedgeApp.InstallCPKREDIR(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName), IsCPKREDIRInstalled);
-            RefreshUI();
-        }
-
         private void UI_About_Click(object sender, RoutedEventArgs e)
         {
             new AboutWindow().ShowDialog();
-        }
-
-        private void UI_ModsList_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                var files = e.Data.GetData(DataFormats.FileDrop) as string[];
-                // Try Install mods from all files
-                files.ToList().ForEach(t => ModsDatabase.InstallMod(t));
-                Refresh();
-            }
         }
 
         private void UI_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -838,7 +951,7 @@ namespace HedgeModManager
                 var editor = new EditModWindow(mod);
                 if (editor.ShowDialog().Value)
                 {
-                    var modDir = HedgeApp.CurrentGame == Games.Tenpex ? "raw" : "disk";
+                    var modDir = HedgeApp.CurrentGame == Games.PuyoPuyoTetris2 ? "raw" : "disk";
                     ModsDatabase.CreateMod(mod, modDir, true);
                     RefreshMods();
                 }
@@ -862,9 +975,9 @@ namespace HedgeModManager
             StatusTimer.Change(4000, Timeout.Infinite);
         }
 
-        private void Game_Changed(object sender, SelectionChangedEventArgs e)
+        private async void Game_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBox_GameStatus.SelectedItem != null)
+            if (ComboBox_GameStatus.SelectedItem != null && ComboBox_GameStatus.SelectedItem != HedgeApp.CurrentSteamGame)
             {
                 HedgeApp.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
 
@@ -880,9 +993,14 @@ namespace HedgeModManager
                 }
 
                 ResetWatchers();
+                RefreshProfiles();
                 Refresh();
                 UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGame.GameName));
                 CheckForLoaderUpdateAsync();
+
+                // Schedule checking for code updates if available.
+                if (Button_DownloadCodes.IsEnabled)
+                    await CheckForCodeUpdates();
             }
         }
 
@@ -897,6 +1015,14 @@ namespace HedgeModManager
                     {
                         Refresh();
                         UpdateStatus(Localise("StatusUIDownloadFinished"));
+
+                        // Update button visual.
+                        {
+                            CodesOutdated = false;
+
+                            // Reset button text if there was an update that was just downloaded.
+                            Button_DownloadCodes.Content = Localise("CodesUIDownload");
+                        }
                     }
                 };
                 downloader.Start();
@@ -922,7 +1048,7 @@ namespace HedgeModManager
             if (dialog.ShowDialog())
             {
                 HedgeApp.ModsDbPath = dialog.SelectedFolder;
-                ViewModel.CPKREDIR.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, "ModsDB.ini");
+                ViewModel.CPKREDIR.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
                 if (ViewModel.CPKREDIR.ModsDbIni.StartsWith(HedgeApp.StartDirectory))
                     ViewModel.CPKREDIR.ModsDbIni = ViewModel.CPKREDIR.ModsDbIni.Substring(HedgeApp.StartDirectory.Length + 1);
                 ViewModel.CPKREDIR.Save(Path.Combine(HedgeApp.StartDirectory, "cpkredir.ini"));
@@ -941,6 +1067,18 @@ namespace HedgeModManager
         {
             ComboBox_Languages.GetBindingExpression(ComboBox.ItemsSourceProperty).UpdateTarget();
             ComboBox_Languages.GetBindingExpression(ComboBox.SelectedItemProperty).UpdateTarget();
+        }
+
+        private void ComboBox_Themes_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            HedgeApp.UpdateTheme();
+            RefreshUI();
+        }
+
+        private void ComboBox_Themes_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboBox_Themes.GetBindingExpression(ComboBox.ItemsSourceProperty).UpdateTarget();
+            ComboBox_Themes.GetBindingExpression(ComboBox.SelectedItemProperty).UpdateTarget();
         }
 
         private void UI_ConfigureMod_Click(object sender, RoutedEventArgs e)
@@ -1038,6 +1176,45 @@ namespace HedgeModManager
                 catch { }
 
             }
+        }
+
+        private async void ComboBox_ModProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Ignore event when combobox is initalising 
+            if (ComboBox_ModProfile.SelectedItem == null || ComboBox_ModProfile.SelectedItem == SelectedModProfile)
+                return;
+
+            // Save profile
+            try
+            {
+                await SaveModsDB();
+            }
+            catch (Exception ex)
+            {
+                new ExceptionWindow(ex).ShowDialog();
+            }
+            SelectedModProfile.Enabled = false;
+            SelectedModProfile = ComboBox_ModProfile.SelectedItem as ModProfile ?? HedgeApp.ModProfiles.First();
+            SelectedModProfile.Enabled = true;
+            HedgeApp.Config.ModProfile = SelectedModProfile.Name;
+            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            HedgeApp.Config.Save(HedgeApp.ConfigPath);
+            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
+            Refresh();
+        }
+
+        private void UI_ManageProfile_Click(object sender, RoutedEventArgs e)
+        {
+            var manager = new ProfileManagerWindow();
+            manager.DataContext = DataContext;
+            manager.ShowDialog();
+            // Update profiles
+            HedgeApp.ModProfiles.Clear();
+            HedgeApp.ModProfiles.AddRange(ViewModel.Profiles);
+            // Save profiles
+            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
+            Refresh();
         }
     }
 }

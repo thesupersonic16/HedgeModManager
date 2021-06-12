@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="{StaticResource AboutWindowUITitle}" Height="490" Width="684"
+        Title="{StaticResource AboutWindowUITitle}" Height="520" Width="700"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="64"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="36"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -24,7 +24,7 @@
         </StackPanel>
         <Label Content="{StaticResource AboutWindowUILine1}" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
         <Label Content="{StaticResource AboutWindowUILine2}" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Grid.Row="1"/>
-        <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="0" Margin="8,8,5,8">
+        <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="0" Margin="8,8,5,16">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*"/>
@@ -38,6 +38,7 @@
                     <Label Content="Skyth"/>
                     <Label Content="PTKickass"/>
                     <Label Content="M&amp;M"/>
+                    <Label Content="Hyper"/>
                     <Label Content="MainMemory"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
@@ -46,13 +47,14 @@
                     <Label Content="Base Design"/>
                     <Label Content="CPKREDIR"/>
                     <Label Content="Contributing to Forces Mod Loader"/>
-                    <Label Content="Cheat codes"/>
+                    <Label Content="Contributing to the project"/>
+                    <Label Content="Contributing to the project"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="mod-loader-common"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="1" Margin="5,8,8,8">
+        <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="1" Margin="5,8,8,16">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*"/>
@@ -69,6 +71,7 @@
                     <Label Content="Lady Luna"/>
                     <Label Content="KyRuS"/>
                     <Label Content="Kitzu"/>
+                    <Label Content="TuanPingas"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Portuguese translations"/>
@@ -81,6 +84,7 @@
                     <Label Content="Dutch translation reviewing"/>
                     <Label Content="German translation"/>
                     <Label Content="German translation"/>
+                    <Label Content="Vietnamese translation"/>
                 </StackPanel>
             </Grid>
         </GroupBox>

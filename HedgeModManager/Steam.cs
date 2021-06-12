@@ -55,18 +55,22 @@ namespace HedgeModManager
             paths.Add(Path.Combine(SteamLocation, "steamapps\\common"));
 
             // Adds all the custom libraries
-            foreach (var library in SteamVDF.GetContainer(vdf, "LibraryFolders"))
-                if (int.TryParse(library.Key, out int index))
-                    paths.Add(Path.Combine(library.Value as string, "steamapps\\common"));
+            var container = SteamVDF.GetContainer(vdf, "LibraryFolders");
+            if (container != null)
+            {
+                foreach (var library in container)
+                    if (int.TryParse(library.Key, out int index))
+                        paths.Add(Path.Combine(library.Value as string ?? string.Empty, "steamapps\\common"));
+            }
 
             foreach (string path in paths)
             {
                 if (Directory.Exists(path))
                 {
-                    string lwPath = Path.Combine(path, "Sonic Lost World\\slw.exe");
                     string gensPath = Path.Combine(path, "Sonic Generations\\SonicGenerations.exe");
+                    string lwPath = Path.Combine(path, "Sonic Lost World\\slw.exe");
                     string forcesPath = Path.Combine(path, "SonicForces\\build\\main\\projects\\exec\\Sonic Forces.exe");
-                    string tenpexPath = Path.Combine(path, "PuyoPuyoTetris2\\PuyoPuyoTetris2.exe");
+                    string ppt2Path = Path.Combine(path, "PuyoPuyoTetris2\\PuyoPuyoTetris2.exe");
 
                     if (File.Exists(gensPath))
                         games.Add(new SteamGame(Games.SonicGenerations.GameName, gensPath, Games.SonicGenerations.AppID));
@@ -74,8 +78,8 @@ namespace HedgeModManager
                         games.Add(new SteamGame(Games.SonicLostWorld.GameName, lwPath, Games.SonicLostWorld.AppID));
                     if (File.Exists(forcesPath))
                         games.Add(new SteamGame(Games.SonicForces.GameName, forcesPath, Games.SonicForces.AppID));
-                    if (File.Exists(tenpexPath))
-                        games.Add(new SteamGame(Games.Tenpex.GameName, tenpexPath, Games.Tenpex.AppID));
+                    if (File.Exists(ppt2Path))
+                        games.Add(new SteamGame(Games.PuyoPuyoTetris2.GameName, ppt2Path, Games.PuyoPuyoTetris2.AppID));
                 }
             }
 
@@ -122,7 +126,7 @@ namespace HedgeModManager
         {
             foreach (var value in containers)
             {
-                if (value.Key == name)
+                if (string.Compare(value.Key, name, StringComparison.InvariantCultureIgnoreCase) == 0)
                 {
                     return value.Value as Dictionary<string, object>;
                 }
