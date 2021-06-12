@@ -449,21 +449,8 @@ WriteAsmHook(code, 0x01254D4C, HookBehavior.Replace)
 Patch "Unleashed Sweepkick" by "N69"
 WriteProtected<ushort>(0xDFF8D6, 0x5608)
 
-Patch "No Trick Rainbow Rings" by "PTKickass & brianuuu"
-WriteProtected<uint>(0x1672364, 0x5F6E6D63)
-WriteProtected<uint>(0x1672368, 0x5F6A626F)
-WriteProtected<uint>(0x167236C, 0x6E696172)
-WriteProtected<uint>(0x1672370, 0x72776F62)
-WriteProtected<uint>(0x1672374, 0x5F676E69)
-WriteProtected<uint>(0x1672378, 0x4448)
-WriteProtected<uint>(0x1672608, 0x5F6E6D63)
-WriteProtected<uint>(0x167260C, 0x5F6A626F)
-WriteProtected<uint>(0x1672610, 0x6E696172)
-WriteProtected<uint>(0x1672614, 0x72776F62)
-WriteProtected<uint>(0x1672618, 0x5F676E69)
-WriteProtected<uint>(0x167261C, 0x4448)
-WriteProtected<byte>(0x115B826, 0x2)
-WriteProtected<uint>(0x1A6B800, 0x003D10E5)
+Patch "No Trick Rainbow Rings" by "Hyper"
+WriteNop(0x115A6AF, 2);
 
 Patch "Ice Pillars Replace Fire Pillars" by "N69 & RFunk195"
 WriteProtected<byte>(0xE020EB, 0x1)
@@ -781,3 +768,10 @@ WriteProtected<byte>(0xDFE04C, 0xEB);
 
 Patch "Disable Rail Boosters" by "Hyper"
 WriteProtected<byte>(0x166F238, 0x00);
+
+Patch "Disable Spike Wisp Music" by "Hyper"
+WriteProtected<byte>(0xE3DD80, 0xEB, 0x33); /* Spike - on contact with wisp active */
+WriteProtected<byte>(0xE3E00A, 0xEB, 0x33); /* Spike - on contact without wisp active */
+
+Patch "Disable Rocket Wisp Music" by "Hyper"
+WriteProtected<byte>(0xE3E0AA, 0xEB, 0x33); /* Rocket */
