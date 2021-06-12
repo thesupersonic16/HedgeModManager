@@ -774,4 +774,4 @@ WriteProtected<byte>(0xE3DD80, 0xEB, 0x33); /* Spike - on contact with wisp acti
 WriteProtected<byte>(0xE3E00A, 0xEB, 0x33); /* Spike - on contact without wisp active */
 
 Patch "Disable Rocket Wisp Music" by "Hyper"
-WriteProtected<byte>(0xE3E0AA, 0xEB, 0x33); /* Rocket */
+WriteProtected<byte>(0xE3E0AA, 0xEB, 0x33);
