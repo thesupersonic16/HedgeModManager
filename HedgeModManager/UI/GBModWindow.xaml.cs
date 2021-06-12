@@ -20,6 +20,8 @@ using System.Net.Http;
 using PropertyTools.Wpf;
 using static HedgeModManager.Lang;
 using PopupBox = HedgeModManager.Controls.PopupBox;
+using System.Diagnostics;
+using System.Windows.Shell;
 
 namespace HedgeModManager.UI
 {
@@ -88,7 +90,6 @@ namespace HedgeModManager.UI
         {
             DownloadButton.Visibility = Visibility.Collapsed;
             Progress.Visibility = Visibility.Visible;
-            Progress.IsIndeterminate = true;
 
             try
             {
@@ -96,12 +97,15 @@ namespace HedgeModManager.UI
                 {
                     if (v.HasValue)
                     {
+                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                         Progress.IsIndeterminate = false;
+                        TaskbarItemInfo.ProgressValue = v.Value;
                         Progress.Value = v.Value;
                     }
                     else
                     {
                         Progress.IsIndeterminate = true;
+                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Indeterminate;
                     }
                 });
 
@@ -122,7 +126,11 @@ namespace HedgeModManager.UI
                     File.Delete(destinationPath);
 
                     // a dialog would be nice here but i ain't adding strings
-                    await Dispatcher.InvokeAsync(() => Close());
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        DialogResult = true;
+                        Close();
+                    });
                 }
             }
             catch (Exception ex)
@@ -137,6 +145,7 @@ namespace HedgeModManager.UI
                     dialog.AddButton(Localise("CommonUICancel"), () =>
                     {
                         dialog.Close();
+                        DialogResult = false;
                         Close();
                     });
 
@@ -179,6 +188,7 @@ namespace HedgeModManager.UI
                     if (game == Games.Unknown || item.ModName == null)
                     {
                         HedgeApp.CreateOKMessageBox("Error", $"Invalid GameBanana item!").ShowDialog();
+                        DialogResult = false;
                         Close();
                         return;
                     }

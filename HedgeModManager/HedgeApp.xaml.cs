@@ -311,7 +311,7 @@ namespace HedgeModManager
                 var random = new Random();
                 if (random.Next(10) < 4)
                 {
-                    var langDict = new ResourceDictionary {Source = new Uri("Languages/en-UW.xaml", UriKind.Relative)};
+                    var langDict = new ResourceDictionary { Source = new Uri("Languages/en-UW.xaml", UriKind.Relative) };
                     Current.Resources.MergedDictionaries.RemoveAt(2);
                     Current.Resources.MergedDictionaries.Insert(2, langDict);
                 }
@@ -327,19 +327,17 @@ namespace HedgeModManager
             while (Restart);
         }
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             // GB Integration shows UI, and therfore should be done *after* Application.Run
             if (e.Args.Length > 1 && e.Args[0].ToLowerInvariant() == "-gb")
             {
-                await GBAPI.ParseCommandLineAsync(e.Args[1]);
-                Shutdown();
+                if (GBAPI.ParseCommandLine(e.Args[1]) != true)
+                    Shutdown();
             }
-            else
-            {
-                base.OnStartup(e);
-                MainWindow.Show();
-            }
+
+            base.OnStartup(e);
+            MainWindow.Show();
         }
 
         private static async Task LoadNetworkConfigAsync()

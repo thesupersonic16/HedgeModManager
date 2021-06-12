@@ -10,6 +10,9 @@
         Title="{Binding ModName, FallbackValue=Name}" Height="600" Width="900"
         MinHeight="600" MinWidth="900"
         Style="{DynamicResource HedgeWindow}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo />
+    </Window.TaskbarItemInfo>
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>

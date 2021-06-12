@@ -155,11 +155,11 @@ namespace GameBananaAPI
             }
         }
 
-        public static async Task ParseCommandLineAsync(string line)
+        public static bool? ParseCommandLine(string line)
         {
             string[] split = line.Split(',');
             if (split.Length < 3) // help, I ddont know math
-                return;
+                return false;
 
             try
             {
@@ -170,16 +170,15 @@ namespace GameBananaAPI
                 if (!int.TryParse(split[2], out int itemID))
                 {
                     HedgeApp.CreateOKMessageBox("Error", $"Invalid GameBanana item id {split[2]}").ShowDialog();
-                    return;
+                    return false;
                 }
 
-                new GBModWindow(itemType, itemID, itemDLURL, protocol).ShowDialog();
-                return;
+                return new GBModWindow(itemType, itemID, itemDLURL, protocol).ShowDialog();
             }
             catch (Exception ex)
             {
                 HedgeApp.CreateOKMessageBox("Error", ex.Message).ShowDialog();
-                return;
+                return false;
             }
         }
 

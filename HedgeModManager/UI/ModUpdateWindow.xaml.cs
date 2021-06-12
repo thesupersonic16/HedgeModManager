@@ -68,7 +68,11 @@ namespace HedgeModManager.UI
 
                 try
                 {
-                    await Dispatcher.InvokeAsync(() => TotalProgress.Value = CurrentFile + 1);
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        TotalProgress.Value = CurrentFile + 1;
+                        TaskbarItemInfo.ProgressValue = (CurrentFile + 1) / (double)UpdateInfo.Files.Count;
+                    });
                     var file = UpdateInfo.Files[CurrentFile];
 
                     switch (file.Command)

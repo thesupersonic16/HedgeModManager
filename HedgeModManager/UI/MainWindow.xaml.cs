@@ -759,7 +759,7 @@ namespace HedgeModManager
         public bool CheckDepend(string id, string filePath, string dependName, string downloadURL, string fileName)
         {
             bool abort = false;
-            if (HedgeApp.CurrentGame.AppID == id && !File.Exists(Path.Combine(Environment.GetEnvironmentVariable("windir"), filePath)))
+            if (HedgeApp.CurrentGame.AppID == id && !File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), filePath)))
             {
                 var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGame.GameName, dependName));
 

@@ -45,12 +45,15 @@ namespace HedgeModManager
             {
                 if (v.HasValue)
                 {
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                     Progress.IsIndeterminate = false;
+                    TaskbarItemInfo.ProgressValue = v.Value;
                     Progress.Value = v.Value;
                 }
                 else
                 {
                     Progress.IsIndeterminate = true;
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Indeterminate;
                 }
             });
         }
