@@ -29,7 +29,7 @@ namespace HedgeModManager
         public string DestinationPath;
         public Action DownloadCompleted;
         public Action<Exception> DownloadFailed;
-
+        private IProgress<double?> _progress; 
 
         public DownloadWindow(string header, string url, string destinationFile)
         {
@@ -38,6 +38,21 @@ namespace HedgeModManager
             Header.Text = header;
             URL = url;
             DestinationPath = destinationFile;
+
+            // this is here because it captures the current SynchronizationContext
+            // for threading purposes
+            _progress = new Progress<double?>((v) =>
+            {
+                if (v.HasValue)
+                {
+                    Progress.IsIndeterminate = false;
+                    Progress.Value = v.Value;
+                }
+                else
+                {
+                    Progress.IsIndeterminate = true;
+                }
+            });
         }
 
         public void Start()
@@ -52,7 +67,7 @@ namespace HedgeModManager
         {
             try
             {
-                await HedgeApp.HttpClient.DownloadFileAsync(URL, DestinationPath).ConfigureAwait(false);
+                await HedgeApp.HttpClient.DownloadFileAsync(URL, DestinationPath, _progress).ConfigureAwait(false);
                 await Dispatcher.InvokeAsync(() =>
                 {
                     Close();

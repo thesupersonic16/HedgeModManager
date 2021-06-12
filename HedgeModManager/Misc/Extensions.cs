@@ -25,14 +25,14 @@ namespace HedgeModManager.Misc
             }
         }
 
-        public static async Task DownloadFileAsync(this HttpClient client, string url, string filePath)
+        public static async Task DownloadFileAsync(this HttpClient client, string url, string filePath, IProgress<double?> progress = null)
         {
             using (var httpResponse = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
             {
                 httpResponse.EnsureSuccessStatusCode();
 
                 using (var outputFile = File.Create(filePath, 8192, FileOptions.Asynchronous))
-                    await httpResponse.Content.CopyToAsync(outputFile).ConfigureAwait(false);
+                    await httpResponse.Content.CopyToAsync(outputFile, progress).ConfigureAwait(false);
             }
         }
     }

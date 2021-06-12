@@ -255,13 +255,7 @@ namespace HedgeModManager
             {
                 // Codes from disk.
                 string localCodes = File.ReadAllText(CodeProvider.CodesTextPath);
-
-                // Codes from the GitHub repository.
-                string repoCodes = await new WebClient()
-                {
-                    Encoding = Encoding.UTF8 // Use UTF-8 encoding so accented characters don't die.
-                }
-                .DownloadStringTaskAsync(new Uri(HedgeApp.CurrentGame.CodesURL));
+                string repoCodes = await HedgeApp.HttpClient.GetStringAsync(HedgeApp.CurrentGame.CodesURL);
 
                 if (localCodes == repoCodes)
                 {

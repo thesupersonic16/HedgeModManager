@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -29,6 +30,7 @@ namespace HedgeModManager.UI
         protected HedgeMessageBox WarningDialog;
         protected int CurrentFile = 0;
         private bool Cancelled = false;
+        private IProgress<double?> _progress;
 
         public ModUpdateWindow(ModUpdate.ModUpdateInfo info)
         {
@@ -36,6 +38,19 @@ namespace HedgeModManager.UI
             UpdateInfo = info;
             Title = $"Downloading update for {info.Mod.Title}";
             TotalProgress.Maximum = info.Files.Count;
+
+            _progress = new Progress<double?>((v) =>
+            {
+                if (v.HasValue)
+                {
+                    FileProgress.IsIndeterminate = false;
+                    FileProgress.Value = v.Value;
+                }
+                else
+                {
+                    FileProgress.IsIndeterminate = true;
+                }
+            });
         }
 
         public void Start()
@@ -64,7 +79,7 @@ namespace HedgeModManager.UI
                             if (!fileInfo.Directory.Exists)
                                 Directory.CreateDirectory(fileInfo.Directory.FullName);
 
-                            await HedgeApp.HttpClient.DownloadFileAsync(file.URL, fileInfo.FullName).ConfigureAwait(false);
+                            await HedgeApp.HttpClient.DownloadFileAsync(file.URL, fileInfo.FullName, _progress).ConfigureAwait(false);
                             await Dispatcher.InvokeAsync(() =>
                             {
                                 Header.Text = $"Downloading {file.FileName}";
@@ -126,7 +141,7 @@ namespace HedgeModManager.UI
             e.Cancel = true;
             WarningDialog = new HedgeMessageBox("Hedge Mod Manager", string.Format(HMMResources.STR_CANCEL_WARNING, UpdateInfo.Mod.Title));
 
-            WarningDialog.AddButton("Yes", () => 
+            WarningDialog.AddButton("Yes", () =>
             {
                 Close();
                 Cancelled = true;

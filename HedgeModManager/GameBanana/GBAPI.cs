@@ -164,8 +164,8 @@ namespace GameBananaAPI
             try
             {
                 string itemType = split[1];
-                var protocal = split[0].Substring(0, split[0].IndexOf(':'));
-                string itemDLURL = split[0].Substring(protocal.Length + 1, split[0].Length - (protocal.Length + 1));
+                var protocol = split[0].Substring(0, split[0].IndexOf(':'));
+                string itemDLURL = split[0].Substring(protocol.Length + 1, split[0].Length - (protocol.Length + 1));
 
                 if (!int.TryParse(split[2], out int itemID))
                 {
@@ -173,22 +173,7 @@ namespace GameBananaAPI
                     return;
                 }
 
-                var item = new GBAPIItemDataBasic(itemType, itemID);
-                item = await PopulateItemDataAsync(item);
-
-                var game = Games.Unknown;
-                foreach (var gam in Games.GetSupportedGames())
-                {
-                    if (gam.GBProtocol == protocal)
-                    {
-                        game = gam;
-                        break;
-                    }
-                }
-                if (game == Games.Unknown)
-                    return;
-
-                new GBModWindow(item, itemDLURL, game).ShowDialog();
+                new GBModWindow(itemType, itemID, itemDLURL, protocol).ShowDialog();
                 return;
             }
             catch (Exception ex)
