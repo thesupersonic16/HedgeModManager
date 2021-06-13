@@ -775,3 +775,10 @@ WriteProtected<byte>(0xE3E00A, 0xEB, 0x33); /* Spike - on contact without wisp a
 
 Patch "Disable Rocket Wisp Music" by "Hyper"
 WriteProtected<byte>(0xE3E0AA, 0xEB, 0x33);
+
+Patch "Disable Skill Set Limiters" by "Hyper"
+WriteProtected<byte>(0x421CD7, 0xE9, 0xC6, 0x04, 0x00, 0x00, 0x90); /* disable point limit progress bar */
+WriteProtected<byte>(0x4235F4, 0xE9, 0x9A, 0x00, 0x00, 0x00, 0x90); /* disable greyed out selection animation */
+WriteProtected<byte>(0x4237D0, 0xE9, 0x9A, 0x00, 0x00, 0x00, 0x90); /* disable greyed out animation */
+WriteProtected<byte>(0x424410, 0xEB, 0x0E);
+WriteProtected<byte>(0x42445B, 0xEB, 0x6F);
