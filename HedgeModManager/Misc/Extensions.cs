@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +22,17 @@ namespace HedgeModManager.Misc
                 {
                     ptr[i] = c;
                 }
+            }
+        }
+
+        public static async Task DownloadFileAsync(this HttpClient client, string url, string filePath, IProgress<double?> progress = null)
+        {
+            using (var httpResponse = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
+            {
+                httpResponse.EnsureSuccessStatusCode();
+
+                using (var outputFile = File.Create(filePath, 8192, FileOptions.Asynchronous))
+                    await httpResponse.Content.CopyToAsync(outputFile, progress).ConfigureAwait(false);
             }
         }
     }

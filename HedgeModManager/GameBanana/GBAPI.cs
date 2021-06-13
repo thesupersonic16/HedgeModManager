@@ -13,6 +13,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
+using System.Windows;
 
 namespace GameBananaAPI
 {
@@ -36,16 +37,16 @@ namespace GameBananaAPI
             ///      Calls Core/Item/Data with the specified item type, id and fields
             /// </summary>
             /// <returns>Request URL</returns>
-            public string Build(GBAPIItemData item)
+            public async Task<string> BuildAsync(GBAPIItemData item)
             {
                 if (APIType == GBAPIRequestType.COREITEMDATA)
                 {
-                    var supportedFields = GetSupportedFields(item.ItemType);
+                    var supportedFields = await GetSupportedFieldsAsync(item.ItemType);
                     string URL = $"https://api.gamebanana.com/Core/Item/Data?itemtype={item.ItemType}&itemid={item.ItemID}&fields=";
-                    foreach(var property in item.GetType().GetProperties())
+                    foreach (var property in item.GetType().GetProperties())
                     {
                         var prop = (JsonPropertyAttribute)property.GetCustomAttribute(typeof(JsonPropertyAttribute));
-                        if(prop != null && supportedFields.Contains(prop.PropertyName))
+                        if (prop != null && supportedFields.Contains(prop.PropertyName))
                         {
                             if (URL.Last() != '=')
                                 URL += ',';
@@ -63,7 +64,7 @@ namespace GameBananaAPI
             /// <param name="response">The Response data from GameBanana API in XML string format</param>
             /// <param name="item">Reference to a GBAPIItemData to write the data to</param>
             /// <returns>If Parse completed with no errors</returns>
-            public bool ParseResponse(string response,ref GBAPIItemDataBasic item)
+            public bool ParseResponse(string response, ref GBAPIItemDataBasic item)
             {
                 try
                 {
@@ -102,34 +103,33 @@ namespace GameBananaAPI
             }
         }
 
-        public static List<string> GetSupportedFields(string itemType)
+        public static async Task<List<string>> GetSupportedFieldsAsync(string itemType)
         {
             var url = $"https://api.gamebanana.com/Core/Item/Data/AllowedFields?itemtype={itemType}";
-            using(var client = new WebClient())
+            try
             {
-                try
-                {
-                    return JsonConvert.DeserializeObject<List<string>>(client.DownloadString(url));
-                }
-                catch
-                {
-                    return new List<string>();
-                }
+                return JsonConvert.DeserializeObject<List<string>>(await HedgeApp.HttpClient.GetStringAsync(url));
+            }
+            catch
+            {
+                return new List<string>();
             }
         }
 
-        public static bool RequestItemData(ref GBAPIItemDataBasic item)
+        public static async Task<GBAPIItemDataBasic> PopulateItemDataAsync(GBAPIItemDataBasic item)
         {
             var type = item.ItemType;
             var id = item.ItemID;
             var handler = new GBAPIRequestHandler();
-            string request = handler.Build(item);
-            string response = new WebClient() { Encoding = Encoding.ASCII }.DownloadString(request);
+            var request = await handler.BuildAsync(item);
+            var response = await HedgeApp.HttpClient.GetStringAsync(request);
             response = Uri.UnescapeDataString(response);
-            var result = handler.ParseResponse(response, ref item);
+            if (!handler.ParseResponse(response, ref item))
+                throw new Exception("Failed to parse GameBannna Item");
+
             item.ItemType = type;
             item.ItemID = id;
-            return result;
+            return item;
         }
 
         /// <summary>
@@ -149,48 +149,37 @@ namespace GameBananaAPI
                 reg.Close();
                 return true;
             }
-            catch 
+            catch
             {
                 return false;
             }
         }
 
-        public static void ParseCommandLine(string line)
+        public static bool? ParseCommandLine(string line)
         {
             string[] split = line.Split(',');
             if (split.Length < 3) // help, I ddont know math
-                return;
+                return false;
 
-            string itemType = split[1];
-            var protocal = split[0].Substring(0, split[0].IndexOf(':'));
-            string itemDLURL = split[0].Substring(protocal.Length + 1, split[0].Length - (protocal.Length + 1));
+            try
+            {
+                string itemType = split[1];
+                var protocol = split[0].Substring(0, split[0].IndexOf(':'));
+                string itemDLURL = split[0].Substring(protocol.Length + 1, split[0].Length - (protocol.Length + 1));
 
-            if (!int.TryParse(split[2], out int itemID))
-            {
-                HedgeApp.CreateOKMessageBox("Error", $"Invalid GameBanana item id {itemID}").ShowDialog();
-                return;
-            }
-
-            var item = new GBAPIItemDataBasic(itemType, itemID);
-            if (!RequestItemData(ref item))
-            {
-                HedgeApp.CreateOKMessageBox("Error", "Invalid GameBanana item").ShowDialog();
-                return;
-            }
-            var game = Games.Unknown;
-            foreach(var gam in Games.GetSupportedGames())
-            {
-                if(gam.GBProtocol == protocal)
+                if (!int.TryParse(split[2], out int itemID))
                 {
-                    game = gam;
-                    break;
+                    HedgeApp.CreateOKMessageBox("Error", $"Invalid GameBanana item id {split[2]}").ShowDialog();
+                    return false;
                 }
-            }
-            if (game == Games.Unknown)
-                return;
 
-            new GBModWindow(item,itemDLURL, game).ShowDialog();
-            return;
+                return new GBModWindow(itemType, itemID, itemDLURL, protocol).ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                HedgeApp.CreateOKMessageBox("Error", ex.Message).ShowDialog();
+                return false;
+            }
         }
 
     }
@@ -224,10 +213,10 @@ namespace GameBananaAPI
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            foreach(var credit in CreditsData)
+            foreach (var credit in CreditsData)
             {
                 var credits = new List<GBAPICredit>();
-                foreach(var cred in credit.Value)
+                foreach (var cred in credit.Value)
                 {
                     credits.Add(new GBAPICredit()
                     {
@@ -343,7 +332,6 @@ namespace GameBananaAPI
         public GBAPIItemDataBasic(string itemType, int itemID) : base(itemType, itemID)
         {
         }
-
     }
 
     public class GBAPIScreenshotData

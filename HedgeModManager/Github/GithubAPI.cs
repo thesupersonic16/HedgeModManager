@@ -15,20 +15,16 @@ namespace HedgeModManager.Github
         private const string GithubAPIUrl = "https://api.github.com";
         private const string GithubReposDirectory = "repos";
 
-        public static ReleaseInfo GetLatestRelease(string username, string repo)
+        public static Task<ReleaseInfo> GetLatestRelease(string username, string repo)
         {
             return GetObject<ReleaseInfo>(CombinePathURL(GithubAPIUrl, GithubReposDirectory, username, repo, "releases", "latest"));
         }
 
-        public static T GetObject<T>(string url)
+        public static async Task<T> GetObject<T>(string url)
         {
             try
             {
-                using (var client = new WebClient())
-                {
-                    client.Headers.Add("user-agent", HedgeApp.WebRequestUserAgent);
-                    return JsonConvert.DeserializeObject<T>(client.DownloadString(url));
-                }
+                return JsonConvert.DeserializeObject<T>(await HedgeApp.HttpClient.GetStringAsync(url));
             }
             catch
             {
