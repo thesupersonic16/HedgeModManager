@@ -83,13 +83,13 @@ namespace HedgeModManager.UI
                             if (!fileInfo.Directory.Exists)
                                 Directory.CreateDirectory(fileInfo.Directory.FullName);
 
-                            await HedgeApp.HttpClient.DownloadFileAsync(file.URL, fileInfo.FullName, _progress).ConfigureAwait(false);
                             await Dispatcher.InvokeAsync(() =>
                             {
                                 Header.Text = $"Downloading {file.FileName}";
                                 AddLogLine($"Adding {file.FileName}");
                             });
 
+                            await HedgeApp.HttpClient.DownloadFileAsync(file.URL, fileInfo.FullName, _progress).ConfigureAwait(false);
                             break;
 
                         case "delete":
