@@ -77,6 +77,9 @@ namespace HedgeModManager.Controls
 
         public void Stop()
         {
+            if (AudioReader == null)
+                return;
+
             IsPlaying = false;
             AudioReader.Position = 0;
             Slider.Value = 0;
