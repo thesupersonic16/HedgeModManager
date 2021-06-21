@@ -26,14 +26,13 @@ namespace HedgeModManager
                 if (!update && File.Exists(configPath))
                 {
                     config = JsonConvert.DeserializeObject<NetworkConfig>(File.ReadAllText(configPath));
-                    if (DateTime.Now > config.LastUpdated.AddDays(7))
+                    if (config == null || DateTime.Now > config.LastUpdated.AddDays(7))
                         update = true;
                 }
 
                 if (update)
                 {
-                    string json = await HedgeApp.HttpClient.GetStringAsync(updateURL);
-                    config = JsonConvert.DeserializeObject<NetworkConfig>(json);
+                    config = await HedgeApp.HttpClient.GetAsJsonAsync<NetworkConfig>(updateURL);
                     config.LastUpdated = DateTime.Now;
                     string dir = Path.GetDirectoryName(configPath) ?? "HedgeModManager";
                     if (!Directory.Exists(dir))

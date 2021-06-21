@@ -12,6 +12,7 @@ using HedgeModManager.UI;
 using System.Collections.ObjectModel;
 using System.Net;
 using System.IO.Compression;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Application = System.Windows.Application;
@@ -272,7 +273,7 @@ namespace HedgeModManager
                     Button_DownloadCodes.Content = Localise("CodesUIUpdate");
                 }
             }
-            catch (WebException) { /* do nothing for web exceptions */ }
+            catch (HttpRequestException) { /* do nothing for http exceptions */ }
         }
 
         public async Task<bool> CheckForModUpdatesAsync(ModInfo mod, bool showUpdatedDialog = true)

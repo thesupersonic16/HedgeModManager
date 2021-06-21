@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace HedgeModManager
 {
@@ -41,6 +42,19 @@ namespace HedgeModManager
                 {
                     yield return element;
                 }
+            }
+        }
+
+        public static async Task<T> GetAsJsonAsync<T>(this HttpClient client, string uri)
+        {
+            try
+            {
+                string result = await client.GetStringAsync(uri);
+                return JsonConvert.DeserializeObject<T>(result);
+            }
+            catch
+            {
+                return default;
             }
         }
 
