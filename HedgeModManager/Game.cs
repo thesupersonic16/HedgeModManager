@@ -103,7 +103,7 @@ namespace HedgeModManager
             DirectXVersion = 11,
             GBProtocol = "hedgemmmusashi",
             Is64Bit = true,
-            CodesURL = Resources.URL_TML_CODES,
+            CodesURL = Resources.URL_MML_CODES,
             SteamGamePath = Path.Combine("Tokyo2020", "musashi.exe")
         };
 
