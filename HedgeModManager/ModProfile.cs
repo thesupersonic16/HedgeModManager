@@ -60,8 +60,9 @@ namespace HedgeModManager
     public class ExportProfile
     {
         public const string ObjectType = "profile";
-        public string Type { get; } = ObjectType;
-        public int Version { get; } = 1;
+        public string Type => ObjectType;
+        public int Version => 1;
+
         public string Name { get; set; }
         public List<Mod> ActiveMods { get; set; } = new List<Mod>();
         public List<Mod> FavoriteMods { get; set; } = new List<Mod>();

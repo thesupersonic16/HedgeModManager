@@ -93,7 +93,8 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized string similar to body {
         ///    background-color: transparent;
-        ///    color: #e2e2e2;
+        ///    /*color: #e2e2e2;*/
+        ///    color: $FORECOLOR;
         ///    font-family: &apos;Open Sans&apos;, sans-serif;
         ///}
         ///
@@ -364,6 +365,24 @@ namespace HedgeModManager.Properties {
         internal static string URL_LOADERS_INI {
             get {
                 return ResourceManager.GetString("URL_LOADERS_INI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/TokyoOlympics2020.hmm.
+        /// </summary>
+        internal static string URL_MML_CODES {
+            get {
+                return ResourceManager.GetString("URL_MML_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/MusashiModLoader.dll.
+        /// </summary>
+        internal static string URL_MML_DL {
+            get {
+                return ResourceManager.GetString("URL_MML_DL", resourceCulture);
             }
         }
         
