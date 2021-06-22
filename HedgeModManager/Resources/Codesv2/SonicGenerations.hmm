@@ -789,12 +789,3 @@ WriteProtected<byte>(0x11DD879, 0xEB, 0x2F);
 
 Patch "Disable FxPipeline Radial Blur" by "Hyper"
 WriteProtected<byte>(0x15CE9B0, 0x00);
-
-Code "Force Directional Eye Light" by "Hyper"
-Write<uint>(0x1E0BE60, 0);
-
-Code "Force Point Eye Light" by "Hyper"
-Write<uint>(0x1E0BE60, 1);
-
-Code "Force Spot Eye Light" by "Hyper"
-Write<uint>(0x1E0BE60, 2);
