@@ -31,7 +31,8 @@ namespace HedgeModManager
             DirectXVersion = 9,
             GBProtocol = "hedgemmgens",
             Is64Bit = false,
-            CodesURL = Resources.URL_GCL_CODES
+            CodesURL = Resources.URL_GCL_CODES,
+            SteamGamePath = Path.Combine("Sonic Generations", "SonicGenerations.exe")
         };
 
         public static Game SonicLostWorld = new Game()
@@ -48,7 +49,8 @@ namespace HedgeModManager
             DirectXVersion = 9,
             GBProtocol = "hedgemmlw",
             Is64Bit = false,
-            CodesURL = Resources.URL_LCL_CODES
+            CodesURL = Resources.URL_LCL_CODES,
+            SteamGamePath = Path.Combine("Sonic Lost World", "slw.exe")
         };
 
         public static Game SonicForces = new Game()
@@ -65,7 +67,8 @@ namespace HedgeModManager
             DirectXVersion = 11,
             GBProtocol = "hedgemmforces",
             Is64Bit = true,
-            CodesURL = Resources.URL_FML_CODES
+            CodesURL = Resources.URL_FML_CODES,
+            SteamGamePath = Path.Combine("SonicForces", "build", "main", "projects", "exec", "Sonic Forces.exe")
         };
 
         public static Game PuyoPuyoTetris2 = new Game()
@@ -82,7 +85,26 @@ namespace HedgeModManager
             DirectXVersion = 11,
             GBProtocol = "hedgemmtenpex",
             Is64Bit = true,
-            CodesURL = Resources.URL_TML_CODES
+            CodesURL = Resources.URL_TML_CODES,
+            SteamGamePath = Path.Combine("PuyoPuyoTetris2", "PuyoPuyoTetris2.exe")
+        };
+
+        public static Game Tokyo2020 = new Game()
+        {
+            GameName = "Olympic Games Tokyo 2020",
+            ExecuteableName = "musashi.exe",
+            HasCustomLoader = true,
+            SupportsCPKREDIR = false,
+            ModLoaderDownloadURL = Resources.URL_MML_DL,
+            ModLoaderData = null,
+            CustomLoaderName = "Musashi Mod Loader",
+            CustomLoaderFileName = "d3d11.dll",
+            AppID = "981890",
+            DirectXVersion = 11,
+            GBProtocol = "hedgemmmusashi",
+            Is64Bit = true,
+            CodesURL = Resources.URL_MML_CODES,
+            SteamGamePath = Path.Combine("Tokyo2020", "musashi.exe")
         };
 
         public static IEnumerable<Game> GetSupportedGames()
@@ -91,6 +113,7 @@ namespace HedgeModManager
             yield return SonicLostWorld;
             yield return SonicForces;
             yield return PuyoPuyoTetris2;
+            yield return Tokyo2020;
         }
     }
 
@@ -138,6 +161,7 @@ namespace HedgeModManager
         public string GBProtocol;
         public bool Is64Bit = false;
         public string CodesURL;
+        public string SteamGamePath = string.Empty;
 
         public override string ToString()
         {

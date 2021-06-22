@@ -22,6 +22,7 @@ using static HedgeModManager.Lang;
 using PopupBox = HedgeModManager.Controls.PopupBox;
 using System.Diagnostics;
 using System.Windows.Shell;
+using HedgeModManager.Misc;
 
 namespace HedgeModManager.UI
 {
