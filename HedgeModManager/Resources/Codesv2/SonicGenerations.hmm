@@ -601,7 +601,7 @@ Write<float>(0x01B22e84, 1f)
 Patch "Disable Brightness Adjustment" by "Skyth"
 WriteProtected<byte>(0xD68183, 0x83, 0xC4, 0x08, 0x90, 0x90);
 
-Patch "Force Every Object to Cast Shadows (Requires FxPipeline)" by "Skyth"
+Patch "Force Every Object to Cast Shadows (requires FxPipeline)" by "Skyth"
 WriteProtected<uint>(0x10C63F2, 0x85);
 WriteProtected<uint>(0x10C641C, 0x85);
 WriteProtected<uint>(0x10C65CB, 0x85);
@@ -741,6 +741,7 @@ WriteProtected<byte>(0x15E9048, 0x00);
 WriteProtected<byte>(0x15E9060, 0x00);
 WriteProtected<byte>(0x15F99F8, 0x00);
 WriteProtected<byte>(0x15F9A10, 0x00);
+WriteProtected<byte>(0x164330C, 0x00);
 
 Patch "Disable Air Boost" by "Sajid"
 WriteProtected<byte>(0x00DFDFC4, 0xEB, 0x27)
@@ -785,3 +786,15 @@ WriteProtected<byte>(0x42445B, 0xEB, 0x6F);
 
 Patch "Disable Invincibility Music" by "Hyper"
 WriteProtected<byte>(0x11DD879, 0xEB, 0x2F);
+
+Patch "Disable FxPipeline Radial Blur" by "Hyper"
+WriteProtected<byte>(0x15CE9B0, 0x00);
+
+Code "Force Directional Eye Light" by "Hyper"
+Write<uint>(0x1E0BE60, 0);
+
+Code "Force Point Eye Light" by "Hyper"
+Write<uint>(0x1E0BE60, 1);
+
+Code "Force Spot Eye Light" by "Hyper"
+Write<uint>(0x1E0BE60, 2);
