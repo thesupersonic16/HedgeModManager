@@ -95,7 +95,7 @@ namespace HedgeModManager
             ExecuteableName = "musashi.exe",
             HasCustomLoader = true,
             SupportsCPKREDIR = false,
-            ModLoaderDownloadURL = Resources.URL_TML_DL,
+            ModLoaderDownloadURL = Resources.URL_MML_DL,
             ModLoaderData = null,
             CustomLoaderName = "Musashi Mod Loader",
             CustomLoaderFileName = "d3d11.dll",
