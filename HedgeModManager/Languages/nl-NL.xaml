@@ -96,7 +96,7 @@
     <system:String x:Key="AboutWindowUITitle"  >Over Hedge Mod Manager</system:String>
     <system:String x:Key="AboutWindowUILine1"  >Een Programa Gemaakt Voor Het Makkelijk Laden Van Hedgehog Engine Moddificaties.</system:String>
     <system:String x:Key="AboutWindowUILine2"  >Vereist Een Legale Versie Van Een Van De ondersteunde Spellen.</system:String>
-    <system:String x:Key="AboutWindowUICredits">Credits:</system:String>
+    <system:String x:Key="AboutWindowUICredits">Credits</system:String>
 
     <!-- ProfileWindow UI Strings -->
     <system:String x:Key="ProfileWindowUITitle"      >Profielen beheren</system:String>

@@ -96,7 +96,7 @@
     <system:String x:Key="AboutWindowUITitle">Sobre o Hedge Mod Manager</system:String>
     <system:String x:Key="AboutWindowUILine1">Um programa desenhado para facilitar o carregamento de mods para a Hedgehog Engine.</system:String>
     <system:String x:Key="AboutWindowUILine2">Requer uma cópia legal de um dos jogos suportados.</system:String>
-    <system:String x:Key="AboutWindowUICredits">Créditos:</system:String>
+    <system:String x:Key="AboutWindowUICredits">Créditos</system:String>
 
     <!-- ProfileWindow UI Strings -->
     <system:String x:Key="ProfileWindowUITitle"      >Gerir Perfis</system:String>

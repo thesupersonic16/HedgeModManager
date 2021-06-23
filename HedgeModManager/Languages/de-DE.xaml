@@ -90,7 +90,7 @@
     <system:String x:Key="AboutWindowUITitle"  >Über den Hedge Mod Manager</system:String>
     <system:String x:Key="AboutWindowUILine1"  >Ein Programm, welches das Laden von Hedgehog Engine Mods vereinfacht.</system:String>
     <system:String x:Key="AboutWindowUILine2"  >Eine legal erworbene Version eines der unterstützen Spiele wird benötigt.</system:String>
-    <system:String x:Key="AboutWindowUICredits">Credits:</system:String>
+    <system:String x:Key="AboutWindowUICredits">Credits</system:String>
 
     <!-- EditModWindow UI Strings -->
     <system:String x:Key="EditModWindowUIHeader">Bitte füge deiner Mod ein paar Details hinzu.</system:String>
