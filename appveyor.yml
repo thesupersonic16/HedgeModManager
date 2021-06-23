@@ -1,10 +1,10 @@
-version: '7.3-dev_r{build}'
+version: '7.4-dev_r{build}'
 
 assembly_info:
   patch: true
   file: AssemblyInfo.*
-  assembly_version: "7.3.0.{build}"
-  assembly_file_version: "7.3.0.{build}"
+  assembly_version: "7.4.0.{build}"
+  assembly_file_version: "7.4.0.{build}"
   assembly_informational_version: "{version}"
 
 environment:
