@@ -741,6 +741,7 @@ WriteProtected<byte>(0x15E9048, 0x00);
 WriteProtected<byte>(0x15E9060, 0x00);
 WriteProtected<byte>(0x15F99F8, 0x00);
 WriteProtected<byte>(0x15F9A10, 0x00);
+WriteProtected<byte>(0x164330C, 0x00);
 
 Patch "Disable Air Boost" by "Sajid"
 WriteProtected<byte>(0x00DFDFC4, 0xEB, 0x27)
@@ -785,3 +786,6 @@ WriteProtected<byte>(0x42445B, 0xEB, 0x6F);
 
 Patch "Disable Invincibility Music" by "Hyper"
 WriteProtected<byte>(0x11DD879, 0xEB, 0x2F);
+
+Patch "Disable FxPipeline Radial Blur" by "Hyper"
+WriteProtected<byte>(0x15CE9B0, 0x00);
