@@ -601,7 +601,7 @@ Write<float>(0x01B22e84, 1f)
 Patch "Disable Brightness Adjustment" by "Skyth"
 WriteProtected<byte>(0xD68183, 0x83, 0xC4, 0x08, 0x90, 0x90);
 
-Patch "Force Every Object to Cast Shadows (requires FxPipeline)" by "Skyth"
+Patch "Force Every Object to Cast Shadows (Requires FxPipeline)" by "Skyth"
 WriteProtected<uint>(0x10C63F2, 0x85);
 WriteProtected<uint>(0x10C641C, 0x85);
 WriteProtected<uint>(0x10C65CB, 0x85);
