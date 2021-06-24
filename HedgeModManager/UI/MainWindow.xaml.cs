@@ -937,7 +937,7 @@ namespace HedgeModManager
                 var mod = new ModInfo
                 {
                     Title = GenerateModTitle(),
-                    Date = DateTime.Now.ToString(),
+                    Date = DateTime.Today.ToString("yyyy-MM-dd"),
                     Version = "1.0",
                     Author = Environment.UserName
                 };
