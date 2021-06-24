@@ -789,3 +789,6 @@ WriteProtected<byte>(0x11DD879, 0xEB, 0x2F);
 
 Patch "Disable FxPipeline Radial Blur" by "Hyper"
 WriteProtected<byte>(0x15CE9B0, 0x00);
+
+Patch "Disable Fast Fall Animation" by "Skyth"
+WriteProtected<byte>(0x111913A, 0xEB);
