@@ -36,6 +36,7 @@ using HedgeModManager.Misc;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
 using HedgeModManager.Themes;
+using HedgeModManager.Updates;
 
 namespace HedgeModManager
 {
@@ -62,7 +63,7 @@ namespace HedgeModManager
         public static List<SteamGame> SteamGames = null;
         public static bool Restart = false;
         public static string PCCulture = "";
-        public static NetworkConfig NetworkConfiguration;
+        public static NetworkConfig NetworkConfiguration = new NetworkConfig();
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
 
         public static HttpClient HttpClient { get; private set; }
@@ -81,7 +82,6 @@ namespace HedgeModManager
 
         public static LangEntry CurrentCulture { get; set; }
         public static ThemeEntry CurrentTheme { get; set; }
-
 
         [STAThread]
         public static void Main(string[] args)
@@ -804,18 +804,17 @@ namespace HedgeModManager
 
         public static string ComputeMD5Hash(string path)
         {
-            using (var md5 = MD5.Create())
-            using (var stream = File.OpenRead(path))
-            {
-                var hash = md5.ComputeHash(stream);
-                var builder = new StringBuilder();
-                foreach (var b in hash)
-                {
-                    builder.Append($"{b:X2}");
-                }
+            using var md5 = MD5.Create();
+            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 12000);
 
-                return builder.ToString();
+            byte[] hash = md5.ComputeHash(stream);
+            var builder = new StringBuilder();
+            foreach (var b in hash)
+            {
+                builder.Append($"{b:X2}");
             }
+
+            return builder.ToString();
         }
 
         public static string ComputeSHA1Hash(string path)

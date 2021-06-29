@@ -16,6 +16,14 @@ namespace HedgeModManager
 
         public List<string> URLBlockList { get; set; } = new List<string>();
 
+        public bool IsServerBlocked(string url)
+        {
+            if (URLBlockList == null || URLBlockList.Count == 0)
+                return false;
+
+            return URLBlockList.Any(u => url.ToLowerInvariant().Contains(u));
+        }
+
         public static async Task<NetworkConfig> LoadConfig(string updateURL, bool force = false)
         {
             try
@@ -48,6 +56,5 @@ namespace HedgeModManager
                 return new NetworkConfig();
             }
         }
-
     }
 }

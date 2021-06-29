@@ -17,7 +17,8 @@ namespace HedgeModManager
             var server = (string)value;
             if (string.IsNullOrEmpty(server))
                 return "No";
-            return HedgeApp.NetworkConfiguration.URLBlockList.Any(t => server.ToLowerInvariant().Contains(t)) ? "Blocked" : "Yes";
+
+            return HedgeApp.NetworkConfiguration.IsServerBlocked(server) ? "Blocked" : "Yes";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

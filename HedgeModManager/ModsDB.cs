@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace HedgeModManager
 {
-    public class ModsDB
+    public class ModsDB : IEnumerable<ModInfo>
     {
         public CodeFile CodesDatabase = new CodeFile();
         public List<ModInfo> Mods = new List<ModInfo>();
@@ -503,6 +504,16 @@ namespace HedgeModManager
             }
 
             return invalid;
+        }
+
+        public IEnumerator<ModInfo> GetEnumerator()
+        {
+            return Mods.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 

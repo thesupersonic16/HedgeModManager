@@ -26,6 +26,7 @@ using Timer = System.Threading.Timer;
 using HMMResources = HedgeModManager.Properties.Resources;
 using static HedgeModManager.Lang;
 using HedgeModManager.Languages;
+using HedgeModManager.Updates;
 using Newtonsoft.Json;
 
 namespace HedgeModManager
@@ -279,7 +280,7 @@ namespace HedgeModManager
         public async Task<bool> CheckForModUpdatesAsync(ModInfo mod, bool showUpdatedDialog = true)
         {
             // Cancel update check if URL is blocked
-            if (HedgeApp.NetworkConfiguration.URLBlockList.Any(t => mod.UpdateServer.ToLowerInvariant().Contains(t)))
+            if (HedgeApp.NetworkConfiguration.IsServerBlocked(mod.UpdateServer))
                 return false;
 
             UpdateStatus(string.Format(Localise("StatusUICheckingModUpdates"), mod.Title));
@@ -493,6 +494,8 @@ namespace HedgeModManager
 
         public async Task CheckForUpdatesAsync()
         {
+            // var updates = await ModUpdateFetcher.FetchUpdates(ModsDatabase, HedgeApp.NetworkConfiguration);
+
             await CheckForManagerUpdatesAsync();
             if (HedgeApp.Config.CheckForModUpdates)
                 await CheckAllModsUpdatesAsync();
