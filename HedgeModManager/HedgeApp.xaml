@@ -137,35 +137,23 @@
                                     <Image Width="22" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0" Source="Resources/Graphics/icon256.png"/>
                                     <Label Content="{TemplateBinding Title}" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,0,0" Foreground="#E9E9E9"/>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
-                                        <Button x:Name="MinBtn" Style="{DynamicResource WindowFrameButton}" Click="Minimize_Click">
-                                            <Grid Width="25" Height="25">
-                                                <Image x:Name="MinBtnImage" Source="Resources/Graphics/IMG_FRAME_M.png"/>
-                                                <Rectangle Fill="{DynamicResource HMM.Button.ForegroundBrush}">
-                                                    <Rectangle.OpacityMask>
-                                                        <ImageBrush ImageSource="{Binding ElementName=MinBtnImage, Path=Source}"/>
-                                                    </Rectangle.OpacityMask>
-                                                </Rectangle>
-                                            </Grid>
+                                        <Button x:Name="MinBtn" Style="{DynamicResource WindowFrameButton}" Click="Minimize_Click"
+                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch">
+                                            <Border BorderThickness="0,0,0,4" Padding="2" Margin="12,6,12,0" 
+                                                    BorderBrush="{DynamicResource HMM.Button.ForegroundBrush}" Background="Transparent"/>
                                         </Button>
-                                        <Button x:Name="MaxBtn" Style="{DynamicResource WindowFrameButton}" Click="MaxBtn_Click">
-                                            <Grid Width="25" Height="25">
-                                                <Image x:Name="MaxBtnImage" Source="Resources/Graphics/IMG_FRAME_MM.png"/>
-                                                <Rectangle Fill="{DynamicResource HMM.Button.ForegroundBrush}">
-                                                    <Rectangle.OpacityMask>
-                                                        <ImageBrush ImageSource="{Binding ElementName=MaxBtnImage, Path=Source}"/>
-                                                    </Rectangle.OpacityMask>
-                                                </Rectangle>
-                                            </Grid>
+
+                                        <Button x:Name="MaxBtn" Style="{DynamicResource WindowFrameButton}" Click="MaxBtn_Click"
+                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                            <Border BorderThickness="3.5" Padding="2" Margin="0,6,0,2" 
+                                                    BorderBrush="{DynamicResource HMM.Button.ForegroundBrush}" Background="Transparent"/>
                                         </Button>
-                                        <Button x:Name="CloseBtn" Style="{DynamicResource WindowFrameButton}" Click="Close_Click">
-                                            <Border Background="{DynamicResource HMM.Button.ForegroundBrush}" Width="30" Height="25">
-                                                <Image x:Name="CloseBtnImage" Source="Resources/Graphics/IMG_FRAME_C.png" Opacity="0"/>
-                                                <Border.OpacityMask>
-                                                    <ImageBrush ImageSource="{Binding ElementName=CloseBtnImage, Path=Source}"/>
-                                                </Border.OpacityMask>
-                                            </Border>
-                                        </Button>
+
+                                        <Button x:Name="CloseBtn" Style="{DynamicResource WindowFrameButton}" Click="Close_Click" 
+                                                FontWeight="ExtraBold" Foreground="{DynamicResource HMM.Button.ForegroundBrush}" 
+                                                FontSize="18" Content="×"/>
                                     </StackPanel>
+
                                     <Grid Margin="4" Grid.Row="1" Background="{DynamicResource HMM.Window.BackgroundBrush}" Panel.ZIndex="1">
                                         <AdornerDecorator>
                                             <ContentPresenter/>
@@ -218,7 +206,7 @@
                                     <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="false">
-                                    <Setter Property="Opacity" Value="0.57"/>
+                                    <Setter Property="Opacity" Value="0"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
