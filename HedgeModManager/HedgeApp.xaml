@@ -118,7 +118,7 @@
                         <WindowChrome 
                             CaptionHeight="22"
                             CornerRadius="0" 
-                            GlassFrameThickness="0,0,0,1"
+                            GlassFrameThickness="0"
                             NonClientFrameEdges="None"
                             ResizeBorderThickness="5"
                             UseAeroCaptionButtons="False"/>
