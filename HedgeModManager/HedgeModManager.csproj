@@ -23,6 +23,9 @@
     <ApplicationIcon>Resources\Graphics\icon.ico</ApplicationIcon>
     <StartupObject></StartupObject>
     <LangVersion>latest</LangVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>NeverFinishAnything-Testing.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlRenderer">
