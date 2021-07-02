@@ -23,7 +23,7 @@
     <ApplicationIcon>Resources\Graphics\icon.ico</ApplicationIcon>
     <StartupObject></StartupObject>
     <LangVersion>latest</LangVersion>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>NeverFinishAnything-Testing.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
