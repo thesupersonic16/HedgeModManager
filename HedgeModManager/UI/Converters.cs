@@ -16,9 +16,9 @@ namespace HedgeModManager
         {
             var server = (string)value;
             if (string.IsNullOrEmpty(server))
-                return "No";
+                return Lang.Localise("CommonUINo");
 
-            return HedgeApp.NetworkConfiguration.IsServerBlocked(server) ? "Blocked" : "Yes";
+            return HedgeApp.NetworkConfiguration.IsServerBlocked(server) ? Lang.Localise("CommonUIBlocked") : Lang.Localise("CommonUIYes");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

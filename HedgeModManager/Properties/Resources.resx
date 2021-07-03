@@ -142,25 +142,11 @@
   <data name="MemoryService" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MemoryService.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="STR_CANCEL_WARNING" xml:space="preserve">
-    <value>Are you sure you want to cancel updating?
-This may corrupt {0}</value>
-  </data>
-  <data name="STR_MOD_NEWEST" xml:space="preserve">
-    <value>{0} is already up to date.</value>
-  </data>
   <data name="STR_MSG_NOGAME" xml:space="preserve">
     <value>HedgeModManager could not detect any supported games
 in the current directory!
 
 Do you want run the HMM Auto Installer?</value>
-  </data>
-  <data name="STR_UI_MOD_UPDATE" xml:space="preserve">
-    <value>A newer version of {0} available! ({1})</value>
-  </data>
-  <data name="STR_UI_NO_MODS" xml:space="preserve">
-    <value>Hedge Mod Manager did not detect any mods folder.
-Would you like create a mods folder?</value>
   </data>
   <data name="URL_FML_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicForces.hmm</value>

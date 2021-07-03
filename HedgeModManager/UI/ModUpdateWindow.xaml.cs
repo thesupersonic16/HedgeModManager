@@ -143,7 +143,7 @@ namespace HedgeModManager.UI
             }
 
             e.Cancel = true;
-            WarningDialog = new HedgeMessageBox("Hedge Mod Manager", string.Format(HMMResources.STR_CANCEL_WARNING, UpdateInfo.Mod.Title));
+            WarningDialog = new HedgeMessageBox("Hedge Mod Manager", string.Format(Lang.Localise("DialogUIModCancelUpdate"), UpdateInfo.Mod.Title));
 
             WarningDialog.AddButton("Yes", () =>
             {
