@@ -9,6 +9,7 @@
     <system:String x:Key="CommonUICancel" >Cancelar</system:String>
     <system:String x:Key="CommonUIYes"    >Sim</system:String>
     <system:String x:Key="CommonUINo"     >Não</system:String>
+    <system:String x:Key="CommonUIBlocked"    >Bloqueado</system:String>
     <system:String x:Key="CommonUIRetry"  >Tentar Novamente</system:String>
     <system:String x:Key="CommonUIUpdate" >Atualizar</system:String>
     <system:String x:Key="CommonUIDelete" >Apagar</system:String>
@@ -67,9 +68,9 @@
     <system:String x:Key="SettingsUILabelMDir"      >Diretoria de Mods:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"  >Verificar por atualizações do carregador de mods</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"  >Verificar por atualizações do carregador de códigos</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates">Verificar por atualizações de mods</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"  >Buscar atualizações do carregador de mods</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"  >Buscar atualizações do carregador de códigos</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates">Buscar atualizações de mods</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Manter o Hedge Mod Manager aberto após iniciar um jogo</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >Sobre o Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Idioma:</system:String>
@@ -81,7 +82,7 @@
     <system:String x:Key="MainUIInstallFormOptionArc">Instalar de um arquivo</system:String>
     <system:String x:Key="MainUIInstallFormOptionNew">Criar um (para desenvolvedores!)</system:String>
     <system:String x:Key="MainUIMissingLoaderHeader" >Carregador de Mods Não Instalado!</system:String>
-    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc"   >Para que {0} possa carregar mods, o carregador de mods precisa de estar instalado.&#x0a;Quer instalar agora?</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc"   >Para que {0} possa carregar mods, o carregador de mods precisa de estar instalado.&#x0a;Quer instala-lo agora?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"   >Selecione de onde pretende carregar mods...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >Runtime Em Falta Detetada!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requer que {1} esteja instalado/a para que os mods funcionem corretamente. Quer que o HMM instale essa runtime?</system:String>
@@ -124,16 +125,16 @@
 
     <!-- Status UI Strings -->
     <system:String x:Key="StatusUILoadedMods"             >{0} mods carregados</system:String>
-    <system:String x:Key="StatusUICheckingModUpdates"     >Verificando por atualizações de {0}</system:String>
+    <system:String x:Key="StatusUICheckingModUpdates"     >Buscando atualizações de {0}</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >Falha ao atualizar {0}! {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Verificação de atualizações de mods terminada: {0} {2}, {1} {3}.</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Busca de atualizações de mods terminada: {0} {2}, {1} {3}.</system:String>
     <system:String x:Key="StatusUIStartingGame"           >Iniciando {0}</system:String>
-    <system:String x:Key="StatusUICheckingForUpdates"     >Verificando por atualizações</system:String>
+    <system:String x:Key="StatusUICheckingForUpdates"     >Buscando atualizações</system:String>
     <system:String x:Key="StatusUINoUpdatesFound"         >Nenhuma atualização encontrada</system:String>
-    <system:String x:Key="StatusUIFailedToCheckUpdates"   >Falha ao verificar por atualizações</system:String>
-    <system:String x:Key="StatusUICheckingForLoaderUpdate">Verificando por atualizações de {0}</system:String>
+    <system:String x:Key="StatusUIFailedToCheckUpdates"   >Falha ao buscar atualizações</system:String>
+    <system:String x:Key="StatusUICheckingForLoaderUpdate">Buscando atualizações de {0}</system:String>
     <system:String x:Key="StatusUILoaderUpToDate"         >{0} está atualizado</system:String>
-    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Falha ao verificar por atualizações de {0}</system:String>
+    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Falha ao buscar atualizações de {0}</system:String>
     <system:String x:Key="StatusUIInstalledLoader"        >{0} instalado</system:String>
     <system:String x:Key="StatusUIDeletedMod"             >{0} apagado</system:String>
     <system:String x:Key="StatusUIModsDBSaved"            >Base de dados de mods guardada</system:String>
@@ -146,7 +147,11 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Nenhuma atualização de códigos encontrada</system:String>
 
     <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">O Hedge Mod Manager não detetou uma pasta para mods.&#x0a;Quer que esta seja criada?</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Tem a certeza de que pretende apagar "{0}"?&#x0a;Esta ação não pode ser desfeita!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} já está atualizado.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Uma versão mais recente de {0} está disponível! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Tem a certeza de que pretende cancelar a atualização?&#x0a;Esta ação pode corrumper {0}</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >concluída</system:String>
@@ -156,6 +161,11 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Configurar {0}</system:String>
+
+    <!-- Mod Description UI Strings -->
+    <system:String x:Key="ModDescriptionUIAbout">Acerca de {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">Feito por</system:String>
+    <system:String x:Key="ModDescriptionUIDate">a</system:String>
 
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Falha ao Baixar Mod</system:String>

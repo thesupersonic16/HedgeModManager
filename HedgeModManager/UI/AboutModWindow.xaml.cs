@@ -25,7 +25,7 @@ namespace HedgeModManager
         {
             DataContext = mod;
             InitializeComponent();
-            Title = $"About {mod.Title}";
+            Title = string.Format(Lang.Localise("ModDescriptionUIAbout"), mod.Title);
             TitleLbl.Text = $"{mod.Title}";
             if (!string.IsNullOrEmpty(mod.Version))
             {

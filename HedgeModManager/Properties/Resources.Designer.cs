@@ -130,12 +130,7 @@ namespace HedgeModManager.Properties {
         ///}
         ///
         ///th, td {
-        ///    padding: 2px;
-        ///}
-        ///
-        ///th {
-        ///    text-align: left;
-        ///}.
+        ///    padding:  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GBStyleSheet {
             get {
@@ -218,25 +213,6 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to cancel updating?
-        ///This may corrupt {0}.
-        /// </summary>
-        internal static string STR_CANCEL_WARNING {
-            get {
-                return ResourceManager.GetString("STR_CANCEL_WARNING", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} is already up to date..
-        /// </summary>
-        internal static string STR_MOD_NEWEST {
-            get {
-                return ResourceManager.GetString("STR_MOD_NEWEST", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to HedgeModManager could not detect any supported games
         ///in the current directory!
         ///
@@ -245,25 +221,6 @@ namespace HedgeModManager.Properties {
         internal static string STR_MSG_NOGAME {
             get {
                 return ResourceManager.GetString("STR_MSG_NOGAME", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A newer version of {0} available! ({1}).
-        /// </summary>
-        internal static string STR_UI_MOD_UPDATE {
-            get {
-                return ResourceManager.GetString("STR_UI_MOD_UPDATE", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hedge Mod Manager did not detect any mods folder.
-        ///Would you like create a mods folder?.
-        /// </summary>
-        internal static string STR_UI_NO_MODS {
-            get {
-                return ResourceManager.GetString("STR_UI_NO_MODS", resourceCulture);
             }
         }
         

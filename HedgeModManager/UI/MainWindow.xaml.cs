@@ -104,7 +104,7 @@ namespace HedgeModManager
             if (!Directory.Exists(HedgeApp.ModsDbPath))
             {
                 Application.Current?.MainWindow?.Hide();
-                var box = new HedgeMessageBox("No Mods Found", Properties.Resources.STR_UI_NO_MODS);
+                var box = new HedgeMessageBox("No Mods Found", Localise("DialogUINoModsFolder"));
 
                 box.AddButton("Yes", () =>
                 {
@@ -322,14 +322,14 @@ namespace HedgeModManager
                     {
                         if (showUpdatedDialog)
                         {
-                            var box = new HedgeMessageBox(string.Empty, string.Format(HMMResources.STR_MOD_NEWEST, mod.Title));
+                            var box = new HedgeMessageBox(string.Empty, string.Format(Localise("DialogUIModNewest"), mod.Title));
                             box.AddButton(Localise("CommonUIOK"), () => box.Close());
                             box.ShowDialog();
                         }
                         return;
                     }
 
-                    var dialog = new HedgeMessageBox(string.Format(HMMResources.STR_UI_MOD_UPDATE, mod.Title, update.VersionString)
+                    var dialog = new HedgeMessageBox(string.Format(Localise("DialogUIModUpdate"), mod.Title, update.VersionString)
                         , update.ChangeLog, type: InputType.MarkDown);
 
                     dialog.AddButton(Localise("CommonUIUpdate"), () =>
