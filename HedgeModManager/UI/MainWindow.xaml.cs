@@ -12,6 +12,7 @@ using HedgeModManager.UI;
 using System.Collections.ObjectModel;
 using System.Net;
 using System.IO.Compression;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Application = System.Windows.Application;
@@ -25,6 +26,7 @@ using Timer = System.Threading.Timer;
 using HMMResources = HedgeModManager.Properties.Resources;
 using static HedgeModManager.Lang;
 using HedgeModManager.Languages;
+using HedgeModManager.Updates;
 using Newtonsoft.Json;
 
 namespace HedgeModManager
@@ -102,7 +104,7 @@ namespace HedgeModManager
             if (!Directory.Exists(HedgeApp.ModsDbPath))
             {
                 Application.Current?.MainWindow?.Hide();
-                var box = new HedgeMessageBox("No Mods Found", Properties.Resources.STR_UI_NO_MODS);
+                var box = new HedgeMessageBox("No Mods Found", Localise("DialogUINoModsFolder"));
 
                 box.AddButton("Yes", () =>
                 {
@@ -131,7 +133,7 @@ namespace HedgeModManager
             ModsDatabase.Codes.ForEach((x) =>
             {
                 var code = CodesDatabase.Codes.Find((y) => { return y.Name == x; });
-                if(code != null)
+                if (code != null)
                     code.Enabled = true;
             });
 
@@ -255,13 +257,7 @@ namespace HedgeModManager
             {
                 // Codes from disk.
                 string localCodes = File.ReadAllText(CodeProvider.CodesTextPath);
-
-                // Codes from the GitHub repository.
-                string repoCodes = await new WebClient()
-                {
-                    Encoding = Encoding.UTF8 // Use UTF-8 encoding so accented characters don't die.
-                }
-                .DownloadStringTaskAsync(new Uri(HedgeApp.CurrentGame.CodesURL));
+                string repoCodes = await HedgeApp.HttpClient.GetStringAsync(HedgeApp.CurrentGame.CodesURL);
 
                 if (localCodes == repoCodes)
                 {
@@ -278,13 +274,13 @@ namespace HedgeModManager
                     Button_DownloadCodes.Content = Localise("CodesUIUpdate");
                 }
             }
-            catch (WebException) { /* do nothing for web exceptions */ }
+            catch (HttpRequestException) { /* do nothing for http exceptions */ }
         }
 
-        public bool CheckForModUpdates(ModInfo mod, bool showUpdatedDialog = true)
+        public async Task<bool> CheckForModUpdatesAsync(ModInfo mod, bool showUpdatedDialog = true)
         {
             // Cancel update check if URL is blocked
-            if (HedgeApp.NetworkConfiguration.URLBlockList.Any(t => mod.UpdateServer.ToLowerInvariant().Contains(t)))
+            if (HedgeApp.NetworkConfiguration.IsServerBlocked(mod.UpdateServer))
                 return false;
 
             UpdateStatus(string.Format(Localise("StatusUICheckingModUpdates"), mod.Title));
@@ -293,7 +289,7 @@ namespace HedgeModManager
             {
                 // Downloads the mod update information
                 Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
-                update = ModUpdate.GetUpdateFromINI(mod);
+                update = await ModUpdate.GetUpdateFromINIAsync(mod);
                 if (update == null)
                 {
                     Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
@@ -314,9 +310,8 @@ namespace HedgeModManager
                 return false;
             }
 
-
             bool status = true;
-            Dispatcher.Invoke(() => 
+            await Dispatcher.InvokeAsync(() =>
             {
                 try
                 {
@@ -325,16 +320,16 @@ namespace HedgeModManager
 
                     if (update.VersionString == mod.Version)
                     {
-                        if(showUpdatedDialog)
+                        if (showUpdatedDialog)
                         {
-                            var box = new HedgeMessageBox(string.Empty, string.Format(HMMResources.STR_MOD_NEWEST, mod.Title));
+                            var box = new HedgeMessageBox(string.Empty, string.Format(Localise("DialogUIModNewest"), mod.Title));
                             box.AddButton(Localise("CommonUIOK"), () => box.Close());
                             box.ShowDialog();
                         }
                         return;
                     }
 
-                    var dialog = new HedgeMessageBox(string.Format(HMMResources.STR_UI_MOD_UPDATE, mod.Title, update.VersionString)
+                    var dialog = new HedgeMessageBox(string.Format(Localise("DialogUIModUpdate"), mod.Title, update.VersionString)
                         , update.ChangeLog, type: InputType.MarkDown);
 
                     dialog.AddButton(Localise("CommonUIUpdate"), () =>
@@ -360,7 +355,7 @@ namespace HedgeModManager
             return status;
         }
 
-        public void CheckAllModsUpdates()
+        public async Task CheckAllModsUpdatesAsync()
         {
             PauseModUpdates = false;
             int completedCount = 0;
@@ -371,7 +366,7 @@ namespace HedgeModManager
             {
                 if (CheckedModUpdates.Any(t => t == mod.RootDirectory))
                     continue;
-                bool status = CheckForModUpdates(mod, false);
+                bool status = await CheckForModUpdatesAsync(mod, false);
                 if (status)
                     ++completedCount;
                 else
@@ -380,8 +375,8 @@ namespace HedgeModManager
                 if (PauseModUpdates)
                 {
                     while (PauseModUpdates)
-                        Thread.Sleep(200);
-                    CheckAllModsUpdates();
+                        await Task.Delay(200);
+                    await CheckAllModsUpdatesAsync();
                     return;
                 }
             }
@@ -446,7 +441,7 @@ namespace HedgeModManager
             watcher.EnableRaisingEvents = true;
             ModsWatchers.Add(watcher);
 
-            foreach(var directory in Directory.GetDirectories(HedgeApp.ModsDbPath))
+            foreach (var directory in Directory.GetDirectories(HedgeApp.ModsDbPath))
             {
                 var watch = new FileSystemWatcher(directory);
                 watch.Changed += WatcherModEvent;
@@ -459,7 +454,7 @@ namespace HedgeModManager
 
             void WatcherModEvent(object sender, FileSystemEventArgs e)
             {
-                if(e.Name == "mod.ini")
+                if (e.Name == "mod.ini")
                 {
                     Dispatcher.Invoke(() =>
                     {
@@ -470,7 +465,7 @@ namespace HedgeModManager
 
             void WatcherEvent(object sender, FileSystemEventArgs e)
             {
-                if(Directory.Exists(e.FullPath))
+                if (Directory.Exists(e.FullPath))
                 {
                     var watch = new FileSystemWatcher(e.FullPath);
                     watch.Changed += WatcherModEvent;
@@ -497,116 +492,124 @@ namespace HedgeModManager
             SetupWatcher();
         }
 
-        public void CheckForUpdates()
+        public async Task CheckForUpdatesAsync()
         {
-            new Thread(() =>
-            {
-                CheckForManagerUpdates();
+            // var updates = await ModUpdateFetcher.FetchUpdates(ModsDatabase, HedgeApp.NetworkConfiguration);
 
-                if (HedgeApp.Config.CheckForModUpdates)
-                    CheckAllModsUpdates();
-
-                _ = CheckForCodeUpdates();
-            }).Start();
+            await CheckForManagerUpdatesAsync();
+            if (HedgeApp.Config.CheckForModUpdates)
+                await CheckAllModsUpdatesAsync();
+            await CheckForCodeUpdates();
         }
 
-        public void CheckForManagerUpdates()
+        public async Task CheckForManagerUpdatesAsync()
         {
-            if (HedgeApp.Config.CheckForUpdates)
+            if (!HedgeApp.Config.CheckForUpdates)
+                return;
+
+            UpdateStatus(Localise("StatusUICheckingForUpdates"));
+            try
             {
-                UpdateStatus(Localise("StatusUICheckingForUpdates"));
-                try
+                var update = await HedgeApp.CheckForUpdatesAsync();
+
+                if (!update.Item1)
                 {
-                    var update = HedgeApp.CheckForUpdates();
+                    UpdateStatus(Localise("StatusUINoUpdatesFound"));
+                    return;
+                }
 
-                    if (!update.Item1)
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    // http://wasteaguid.info/
+                    var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+
+                    var info = update.Item2;
+                    var dialog = new HedgeMessageBox(info.Name, info.Body, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
+
+                    dialog.AddButton(Localise("CommonUIUpdate"), () =>
                     {
-                        UpdateStatus(Localise("StatusUINoUpdatesFound"));
-                        return;
-                    }
-
-                    Dispatcher.Invoke(() => 
-                    {
-                        // http://wasteaguid.info/
-                        var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
-
-                        var info = update.Item2;
-                        var dialog = new HedgeMessageBox(info.Name, info.Body, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
-
-                        dialog.AddButton(Localise("CommonUIUpdate"), () => 
+                        if (info.Assets.Count > 0)
                         {
-                            if (info.Assets.Count > 0)
+                            var asset = info.Assets[0];
+                            dialog.Close();
+                            var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({info.TagName})", asset.BrowserDownloadUrl.ToString(), path)
                             {
-                                var asset = info.Assets[0];
-                                dialog.Close();
-                                var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({info.TagName})", asset.BrowserDownloadUrl.ToString(), path)
+                                DownloadCompleted = () =>
                                 {
-                                    DownloadCompleted = () =>
+                                    // TODO: literally extracting a ZIP on the UI thread I couldn't make this up if I *tried*
+
+                                    // Extract zip for compatibility for 6.x
+                                    if (asset.ContentType == "application/x-zip-compressed" || asset.ContentType == "application/zip")
                                     {
-                                        // Extract zip for compatibility for 6.x
-                                        if (asset.ContentType == "application/x-zip-compressed" || asset.ContentType == "application/zip")
+                                        // Stre old path pointing to the zip
+                                        string oldPath = path;
+                                        // Generate new path
+                                        path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+                                        using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
                                         {
-                                            // Stre old path pointing to the zip
-                                            string oldPath = path;
-                                            // Generate new path
-                                            path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
-                                            using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
-                                            {
-                                                var entry = zip.Entries.FirstOrDefault(t => t.Name.Contains(".exe"));
-                                                entry.ExtractToFile(path);
-                                            }
-                                            File.Delete(oldPath);
+                                            var entry = zip.Entries.FirstOrDefault(t => t.Name.Contains(".exe"));
+                                            entry.ExtractToFile(path);
                                         }
-
-                                        Process.Start(path, $"-update \"{HedgeApp.AppPath}\" {Process.GetCurrentProcess().Id}");
-                                        Application.Current.Shutdown();
+                                        File.Delete(oldPath);
                                     }
-                                };
 
-                                downloader.Start();
-                            }
-                        });
-                        
-                        dialog.ShowDialog();
+                                    Process.Start(path, $"-update \"{HedgeApp.AppPath}\" {Process.GetCurrentProcess().Id}");
+                                    Application.Current.Shutdown();
+                                }
+                            };
+
+                            downloader.Start();
+                        }
                     });
 
-                    UpdateStatus(string.Empty);
-                }
-                catch
-                {
-                    UpdateStatus(Localise("StatusUIFailedToCheckUpdates"));
-                }
+                    dialog.ShowDialog();
+                });
+
+                UpdateStatus(string.Empty);
+            }
+            catch
+            {
+                UpdateStatus(Localise("StatusUIFailedToCheckUpdates"));
             }
         }
 
-        protected void CheckForLoaderUpdate()
+        protected async Task CheckForLoaderUpdateAsync()
         {
             if (!HedgeApp.Config.CheckLoaderUpdates)
                 return;
 
-            new Thread(() => 
+            await Task.Yield();
+
+            UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), HedgeApp.CurrentGame.CustomLoaderName));
+            try
             {
-                UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), HedgeApp.CurrentGame.CustomLoaderName));
-                try
+                using (var stream = await HedgeApp.HttpClient.GetStreamAsync(HMMResources.URL_LOADERS_INI))
                 {
-                    using (var stream = WebRequest.Create(HMMResources.URL_LOADERS_INI).GetResponse().GetResponseStream())
+                    var loaderInfo = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
+                    // Check if there is a loader version, if not return
+                    if (loaderInfo.LoaderVersion == null)
+                        return;
+
+                    var ini = new IniFile(stream);
+                    var info = ini[HedgeApp.CurrentGame.GameName];
+                    var newVersion = new Version(info["LoaderVersion"]);
+
+                    if (newVersion <= loaderInfo.LoaderVersion)
                     {
-                        var loaderInfo = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
-                        // Check if there is a loader version, if not return
-                        if (loaderInfo.LoaderVersion == null)
-                            return;
+                        UpdateStatus(string.Format(Localise("StatusUILoaderUpToDate"), HedgeApp.CurrentGame.CustomLoaderName));
+                        return;
+                    }
 
-                        var ini = new IniFile(stream);
-                        var info = ini[HedgeApp.CurrentGame.GameName];
-                        var newVersion = new Version(info["LoaderVersion"]);
+                    Dispatcher.Invoke(() =>
+                    {
+                        var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
 
-                        if (newVersion <= loaderInfo.LoaderVersion)
+                        dialog.AddButton(Localise("CommonUIIgnore"), () =>
                         {
-                            UpdateStatus(string.Format(Localise("StatusUILoaderUpToDate"), HedgeApp.CurrentGame.CustomLoaderName));
-                            return;
-                        }
+                            dialog.Close();
+                        });
 
-                        Dispatcher.Invoke(() =>
+                        dialog.AddButton(Localise("CommonUIUpdate"), () =>
                         {
                             var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
 
@@ -624,13 +627,15 @@ namespace HedgeModManager
 
                             dialog.ShowDialog();
                         });
-                    }
+
+                        dialog.ShowDialog();
+                    });
                 }
-                catch
-                {
-                    UpdateStatus(string.Format(Localise("StatusUIFailedLoaderUpdateCheck"), HedgeApp.CurrentGame.CustomLoaderName));
-                }
-            }).Start();
+            }
+            catch
+            {
+                UpdateStatus(string.Format(Localise("StatusUIFailedLoaderUpdateCheck"), HedgeApp.CurrentGame.CustomLoaderName));
+            }
         }
 
         protected void CheckCodeCompatibility()
@@ -639,7 +644,7 @@ namespace HedgeModManager
             if (CodesDatabase.Codes.Count == 0)
                 return;
 
-            if(CodesDatabase.FileVersion >= info.MinCodeVersion && CodesDatabase.FileVersion <= info.MaxCodeVersion)
+            if (CodesDatabase.FileVersion >= info.MinCodeVersion && CodesDatabase.FileVersion <= info.MaxCodeVersion)
                 return;
 
             var dialog = new HedgeMessageBox(Localise("CommonUIWarning"), Localise("CodesUIVersionIncompatible"));
@@ -754,11 +759,11 @@ namespace HedgeModManager
                 abort = DependsHandler.AskToInstallRuntime(Games.PuyoPuyoTetris2.AppID, DependTypes.VS2019x64);
             return !abort;
         }
- 
+
         public bool CheckDepend(string id, string filePath, string dependName, string downloadURL, string fileName)
         {
             bool abort = false;
-            if (HedgeApp.CurrentGame.AppID == id && !File.Exists(Path.Combine(Environment.GetEnvironmentVariable("windir"), filePath)))
+            if (HedgeApp.CurrentGame.AppID == id && !File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), filePath)))
             {
                 var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGame.GameName, dependName));
 
@@ -786,7 +791,7 @@ namespace HedgeModManager
             return abort;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
 
@@ -796,7 +801,7 @@ namespace HedgeModManager
 
             RefreshProfiles();
             Refresh();
-            CheckForUpdates();
+            await CheckForUpdatesAsync();
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
@@ -869,14 +874,11 @@ namespace HedgeModManager
             RefreshUI();
         }
 
-        private void UI_Update_Mod(object sender, RoutedEventArgs e)
+        private async void UI_Update_Mod(object sender, RoutedEventArgs e)
         {
             PauseModUpdates = false;
-            new Thread(() =>
-            {
-                CheckForModUpdates(ViewModel.SelectedMod);
+            if (await CheckForModUpdatesAsync(ViewModel.SelectedMod).ConfigureAwait(false))
                 Dispatcher.Invoke(RefreshMods);
-            }).Start();
         }
 
         private void UI_Edit_Mod(object sender, RoutedEventArgs e)
@@ -938,7 +940,7 @@ namespace HedgeModManager
                 var mod = new ModInfo
                 {
                     Title = GenerateModTitle(),
-                    Date = DateTime.Now.ToString(),
+                    Date = DateTime.Today.ToString("yyyy-MM-dd"),
                     Version = "1.0",
                     Author = Environment.UserName
                 };
@@ -967,10 +969,7 @@ namespace HedgeModManager
 
         public void UpdateStatus(string str)
         {
-            Dispatcher.Invoke(() => 
-            {
-                StatusLbl.Content = str;
-            });
+            Dispatcher.Invoke(() => StatusLbl.Text = str);
             StatusTimer.Change(4000, Timeout.Infinite);
         }
 
@@ -995,7 +994,7 @@ namespace HedgeModManager
                 RefreshProfiles();
                 Refresh();
                 UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGame.GameName));
-                CheckForLoaderUpdate();
+                CheckForLoaderUpdateAsync();
 
                 // Schedule checking for code updates if available.
                 if (Button_DownloadCodes.IsEnabled)
@@ -1082,7 +1081,7 @@ namespace HedgeModManager
 
         private void UI_ConfigureMod_Click(object sender, RoutedEventArgs e)
         {
-            if(!ViewModel.SelectedMod.HasSchema)
+            if (!ViewModel.SelectedMod.HasSchema)
                 return;
 
             var window = new ModConfigWindow(ViewModel.SelectedMod);
@@ -1103,7 +1102,7 @@ namespace HedgeModManager
 
         private void ModsList_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(ViewModel.SelectedMod == null)
+            if (ViewModel.SelectedMod == null)
                 return;
 
             var mod = ViewModel.SelectedMod;

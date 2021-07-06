@@ -11,6 +11,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
@@ -35,6 +36,7 @@ using HedgeModManager.Misc;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
 using HedgeModManager.Themes;
+using HedgeModManager.Updates;
 
 namespace HedgeModManager
 {
@@ -61,12 +63,13 @@ namespace HedgeModManager
         public static List<SteamGame> SteamGames = null;
         public static bool Restart = false;
         public static string PCCulture = "";
-        public static NetworkConfig NetworkConfiguration;
+        public static NetworkConfig NetworkConfiguration = new NetworkConfig();
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
 
-        public const string WebRequestUserAgent =
-            "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)";
-        
+        public static HttpClient HttpClient { get; private set; }
+        public static string UserAgent { get; }
+            = $"Mozilla/5.0 (compatible; HedgeModManager/{VersionString})";
+
         public const string RepoOwner = "thesupersonic16";
         public const string RepoName = "hedgemodmanager";
         public const string RepoBranch = "rewrite";
@@ -79,7 +82,6 @@ namespace HedgeModManager
 
         public static LangEntry CurrentCulture { get; set; }
         public static ThemeEntry CurrentTheme { get; set; }
-
 
         [STAThread]
         public static void Main(string[] args)
@@ -95,18 +97,21 @@ namespace HedgeModManager
             // Use TLSv1.2
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            if(args.Length > 2 && string.Compare(args[0], "-update", StringComparison.OrdinalIgnoreCase) >= 0)
+            HttpClient = new HttpClient();
+            HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
+
+            if (args.Length > 2 && string.Compare(args[0], "-update", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 try
                 {
                     // The old pid gets passed in the CLI arguments and we use that to make sure the process is terminated before replacing it
                     int.TryParse(args[2], out int pid);
                     var process = Process.GetProcessById(pid);
-                    
+
                     process.WaitForExit();
                 }
                 catch { }
-                
+
                 File.Copy(AppPath, args[1], true);
 
                 // Start a process that deletes our updater
@@ -140,7 +145,7 @@ namespace HedgeModManager
             // Gets the embeded version
             CPKREDIRVersion = GetCPKREDIRFileVersion(true);
             RegistryConfig.Load();
-            NetworkConfiguration = NetworkConfig.LoadConfig($"https://raw.githubusercontent.com/{RepoOwner}/{RepoName}/{RepoBranch}/HMMNetworkConfig.json");
+            _ = LoadNetworkConfigAsync();
 
             Steam.Init();
             InstallGBHandlers();
@@ -163,7 +168,7 @@ namespace HedgeModManager
                 using (var stream = File.OpenRead("key.priv.xml"))
                 {
                     var serializer = new XmlSerializer(typeof(RSAParameters));
-                    CryptoProvider.ImportParameters((RSAParameters) serializer.Deserialize(stream));
+                    CryptoProvider.ImportParameters((RSAParameters)serializer.Deserialize(stream));
                 }
             }
 #else
@@ -205,19 +210,15 @@ namespace HedgeModManager
 
             if (args.Length > 0)
             {
-                if (args[0].ToLower() == "-h")
+                string arg = args[0].ToLower();
+
+                if (arg == "-h")
                 {
                     ShowHelp();
                     return;
                 }
 
-                if (args[0].ToLower() == "-gb" && args.Length > 1)
-                {
-                    GBAPI.ParseCommandLine(args[1]);
-                    return;
-                }
-                
-                if (args[0].ToLower() == "-encrypt")
+                if (arg == "-encrypt")
                 {
                     if (args.Length < 2)
                     {
@@ -238,7 +239,7 @@ namespace HedgeModManager
                     return;
                 }
 
-                if (args[0].ToLower() == "-decrypt")
+                if (arg == "-decrypt")
                 {
                     if (args.Length < 2)
                     {
@@ -259,7 +260,7 @@ namespace HedgeModManager
                     return;
                 }
 
-                if (args[0].ToLower() == "-decrypt64")
+                if (arg == "-decrypt64")
                 {
                     if (args.Length < 2)
                     {
@@ -303,14 +304,14 @@ namespace HedgeModManager
                         InstallCPKREDIR(exePath, false);
                 }
             }
-            catch{ }
+            catch { }
 
             if (DateTime.Now.Day == 1 && DateTime.Now.Month == 4)
             {
                 var random = new Random();
                 if (random.Next(10) < 4)
                 {
-                    var langDict = new ResourceDictionary {Source = new Uri("Languages/en-UW.xaml", UriKind.Relative)};
+                    var langDict = new ResourceDictionary { Source = new Uri("Languages/en-UW.xaml", UriKind.Relative) };
                     Current.Resources.MergedDictionaries.RemoveAt(2);
                     Current.Resources.MergedDictionaries.Insert(2, langDict);
                 }
@@ -321,16 +322,34 @@ namespace HedgeModManager
             {
                 Config = new CPKREDIRConfig(ConfigPath);
                 Restart = false;
-                application.Run(application.MainWindow);
+                application.Run();
             }
             while (Restart);
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            // GB Integration shows UI, and therfore should be done *after* Application.Run
+            if (e.Args.Length > 1 && e.Args[0].ToLowerInvariant() == "-gb")
+            {
+                if (GBAPI.ParseCommandLine(e.Args[1]) != true)
+                    Shutdown();
+            }
+
+            base.OnStartup(e);
+            MainWindow.Show();
+        }
+
+        private static async Task LoadNetworkConfigAsync()
+        {
+            NetworkConfiguration = await NetworkConfig.LoadConfig($"https://raw.githubusercontent.com/{RepoOwner}/{RepoName}/{RepoBranch}/HMMNetworkConfig.json");
         }
 
         public static void ShowHelp()
         {
             Console.WriteLine();
             Console.WriteLine($"HedgeModManager {VersionString}\n");
-            
+
             Console.WriteLine("Commands:");
 
             Console.WriteLine("    -encrypt");
@@ -473,7 +492,7 @@ namespace HedgeModManager
             if (steamGame == null)
                 return;
 
-            foreach(var game in Games.GetSupportedGames())
+            foreach (var game in Games.GetSupportedGames())
             {
                 if (game.AppID == steamGame.GameID)
                 {
@@ -492,7 +511,7 @@ namespace HedgeModManager
 
         public static void InstallGBHandlers()
         {
-            foreach(var game in Games.GetSupportedGames())
+            foreach (var game in Games.GetSupportedGames())
             {
                 GBAPI.InstallGBHandler(game);
             }
@@ -552,7 +571,7 @@ namespace HedgeModManager
             // Read Segment Entry Data
             int size = BitConverter.ToInt32(data, offset + 0x10);
             int offset_ = BitConverter.ToInt32(data, offset + 0x14);
-            
+
             // Read Segment
             buff = new byte[size];
             Array.Copy(data, offset_, buff, 0, buff.Length);
@@ -607,7 +626,7 @@ namespace HedgeModManager
             // Downloads the loader
             var downloader = new DownloadWindow($"Downloading {CurrentGame.CustomLoaderName}",
                 CurrentGame.ModLoaderDownloadURL, DLLFileName);
-           
+
             downloader.DownloadFailed += (ex) =>
             {
                 var loader = CurrentGame.ModLoaderData;
@@ -621,7 +640,8 @@ namespace HedgeModManager
                         try
                         {
                             File.Delete(DLLFileName);
-                        }catch{}
+                        }
+                        catch { }
                     }
                 }
             };
@@ -675,9 +695,9 @@ namespace HedgeModManager
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static (bool, ReleaseInfo) CheckForUpdates()
+        public static async Task<(bool, ReleaseInfo)> CheckForUpdatesAsync()
         {
-            var info = GithubAPI.GetLatestRelease(RepoOwner, RepoName);
+            var info = await GithubAPI.GetLatestRelease(RepoOwner, RepoName);
             var version = info == null ? Version : info.GetVersion();
             bool hasUpdate = version > Version;
 
@@ -688,7 +708,7 @@ namespace HedgeModManager
         {
             var temp = Path.Combine(StartDirectory, "cpkredir.dll");
             FileVersionInfo info = null;
-            if(!File.Exists(temp))
+            if (!File.Exists(temp))
             {
                 temp = Path.GetTempFileName();
                 File.WriteAllBytes(temp, HMMResources.DAT_CPKREDIR_DLL);
@@ -706,7 +726,7 @@ namespace HedgeModManager
             var temp = Path.Combine(StartDirectory, "cpkredir.dll");
             if (File.Exists(temp) && packed != true)
                 version = FileVersionInfo.GetVersionInfo(temp).FileVersion;
-            
+
             if (version == null && packed != false)
             {
                 version = Games.EmbeddedCPKREDIRVersion;
@@ -784,18 +804,17 @@ namespace HedgeModManager
 
         public static string ComputeMD5Hash(string path)
         {
-            using (var md5 = MD5.Create())
-            using (var stream = File.OpenRead(path))
-            {
-                var hash = md5.ComputeHash(stream);
-                var builder = new StringBuilder();
-                foreach (var b in hash)
-                {
-                    builder.Append($"{b:X2}");
-                }
+            using var md5 = MD5.Create();
+            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 12000);
 
-                return builder.ToString();
+            byte[] hash = md5.ComputeHash(stream);
+            var builder = new StringBuilder();
+            foreach (var b in hash)
+            {
+                builder.Append($"{b:X2}");
             }
+
+            return builder.ToString();
         }
 
         public static string ComputeSHA1Hash(string path)
@@ -887,7 +906,7 @@ namespace HedgeModManager
             presenter.RenderTransform.BeginAnimation(TranslateTransform.XProperty, CreateAnimation(control.ActualWidth, 0));
             tempArea.RenderTransform.BeginAnimation(TranslateTransform.XProperty, CreateAnimation(0, -control.ActualWidth, (x, y) => { tempArea.HorizontalAlignment = HorizontalAlignment.Left; }));
             tempArea.Fill.BeginAnimation(Brush.OpacityProperty, CreateAnimation(1, 0));
-            
+
 
             AnimationTimeline CreateAnimation(double from, double to,
                           EventHandler whenDone = null)

@@ -8,6 +8,7 @@
     <system:String x:Key="CommonUIOK"     >OK</system:String>
     <system:String x:Key="CommonUICancel" >Cancel</system:String>
     <system:String x:Key="CommonUIYes"    >Yes</system:String>
+    <system:String x:Key="CommonUIBlocked"    >Blocked</system:String>
     <system:String x:Key="CommonUINo"     >No</system:String>
     <system:String x:Key="CommonUIRetry"  >Retry</system:String>
     <system:String x:Key="CommonUIUpdate" >Update</system:String>
@@ -96,7 +97,7 @@
     <system:String x:Key="AboutWindowUITitle"  >About Hedge Mod Manager</system:String>
     <system:String x:Key="AboutWindowUILine1"  >A program designed to help people easily load Hedgehog Engine mods.</system:String>
     <system:String x:Key="AboutWindowUILine2"  >Requires a legally owned version of one of the supported games.</system:String>
-    <system:String x:Key="AboutWindowUICredits">Credits:</system:String>
+    <system:String x:Key="AboutWindowUICredits">Credits</system:String>
 
     <!-- ProfileWindow UI Strings -->
     <system:String x:Key="ProfileWindowUITitle"      >Manage Profiles</system:String>
@@ -146,8 +147,12 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >No code updates found</system:String>
     
     <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager did not detect any mods folder.&#x0a;Would you like create a mods folder?</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Are you sure you want to delete "{0}"?&#x0a;This action cannot be undone!</system:String>
-    
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} is already up to date.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate">A newer version of {0} available! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Are you sure you want to cancel updating?&#x0a;This may corrupt {0}</system:String>
+
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >completed</system:String>
     <system:String x:Key="StatusUIUpdateCompletedPlural"        >completed</system:String>
@@ -156,6 +161,11 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Configure {0}</system:String>
+
+    <!-- Mod Description UI Strings -->
+    <system:String x:Key="ModDescriptionUIAbout">About {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">Made by</system:String>
+    <system:String x:Key="ModDescriptionUIDate">on</system:String>
 
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Failed to Download Mod</system:String>

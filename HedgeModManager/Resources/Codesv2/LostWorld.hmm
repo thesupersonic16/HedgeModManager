@@ -317,3 +317,157 @@ WriteAsmHook
     jmp eax",
     ASLR(0x00904E64), HookBehavior.Replace
 )
+
+Patch "1280x720 Movie Player" by "ĐeäTh"
+static float ms_RenderTextureMultiplier = 1.0f;
+fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
+{
+	WriteAsmHook
+	(
+		ASLR(0x0049C398),
+		HookBehavior.Replace,
+		$"mulss xmm5, [{(uint)multiplierPtr}]"
+	)
+
+	WriteAsmHook
+	(
+		ASLR(0x0049C3C2),
+		HookBehavior.Replace,
+		$"mulss xmm7, [{(uint)multiplierPtr}]"
+	)
+}
+
+WriteProtected<float>(ASLR(0x00D61CE8), 1280);
+WriteProtected<float>(ASLR(0x00D593B0), 720);
+
+Patch "1920x1080 Movie Player" by "ĐeäTh"
+static float ms_RenderTextureMultiplier = 1.0f;
+fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
+{
+	WriteAsmHook
+	(
+		ASLR(0x0049C398),
+		HookBehavior.Replace,
+		$"mulss xmm5, [{(uint)multiplierPtr}]"
+	)
+
+	WriteAsmHook
+	(
+		ASLR(0x0049C3C2),
+		HookBehavior.Replace,
+		$"mulss xmm7, [{(uint)multiplierPtr}]"
+	)
+}
+
+WriteProtected<float>(ASLR(0x00D61CE8), 1920);
+WriteProtected<float>(ASLR(0x00D593B0), 1080);
+
+Patch "2560x1440 Movie Player" by "ĐeäTh"
+static float ms_RenderTextureMultiplier = 1.0f;
+fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
+{
+	WriteAsmHook
+	(
+		ASLR(0x0049C398),
+		HookBehavior.Replace,
+		$"mulss xmm5, [{(uint)multiplierPtr}]"
+	)
+
+	WriteAsmHook
+	(
+		ASLR(0x0049C3C2),
+		HookBehavior.Replace,
+		$"mulss xmm7, [{(uint)multiplierPtr}]"
+	)
+}
+
+WriteProtected<float>(ASLR(0x00D61CE8), 2560);
+WriteProtected<float>(ASLR(0x00D593B0), 1440);
+
+Patch "3840x2160 Movie Player" by "ĐeäTh"
+static float ms_RenderTextureMultiplier = 1.0f;
+fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
+{
+	WriteAsmHook
+	(
+		ASLR(0x0049C398),
+		HookBehavior.Replace,
+		$"mulss xmm5, [{(uint)multiplierPtr}]"
+	)
+
+	WriteAsmHook
+	(
+		ASLR(0x0049C3C2),
+		HookBehavior.Replace,
+		$"mulss xmm7, [{(uint)multiplierPtr}]"
+	)
+}
+
+WriteProtected<float>(ASLR(0x00D61CE8), 3840);
+WriteProtected<float>(ASLR(0x00D593B0), 2160);
+
+Patch "2560x1080 Movie Player" by "ĐeäTh"
+static float ms_RenderTextureMultiplier = 1.0f;
+fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
+{
+	WriteAsmHook
+	(
+		ASLR(0x0049C398),
+		HookBehavior.Replace,
+		$"mulss xmm5, [{(uint)multiplierPtr}]"
+	)
+
+	WriteAsmHook
+	(
+		ASLR(0x0049C3C2),
+		HookBehavior.Replace,
+		$"mulss xmm7, [{(uint)multiplierPtr}]"
+	)
+}
+
+WriteProtected<float>(ASLR(0x00D61CE8), 2560);
+WriteProtected<float>(ASLR(0x00D593B0), 1080);
+
+Patch "3440x1440 Movie Player" by "ĐeäTh"
+static float ms_RenderTextureMultiplier = 1.0f;
+fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
+{
+	WriteAsmHook
+	(
+		ASLR(0x0049C398),
+		HookBehavior.Replace,
+		$"mulss xmm5, [{(uint)multiplierPtr}]"
+	)
+
+	WriteAsmHook
+	(
+		ASLR(0x0049C3C2),
+		HookBehavior.Replace,
+		$"mulss xmm7, [{(uint)multiplierPtr}]"
+	)
+}
+
+WriteProtected<float>(ASLR(0x00D61CE8), 3440);
+WriteProtected<float>(ASLR(0x00D593B0), 1440);
+
+Patch "5120x2160 Movie Player" by "ĐeäTh"
+static float ms_RenderTextureMultiplier = 1.0f;
+fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
+{
+	WriteAsmHook
+	(
+		ASLR(0x0049C398),
+		HookBehavior.Replace,
+		$"mulss xmm5, [{(uint)multiplierPtr}]"
+	)
+
+	WriteAsmHook
+	(
+		ASLR(0x0049C3C2),
+		HookBehavior.Replace,
+		$"mulss xmm7, [{(uint)multiplierPtr}]"
+	)
+}
+
+WriteProtected<float>(ASLR(0x00D61CE8), 5120);
+WriteProtected<float>(ASLR(0x00D593B0), 2160);

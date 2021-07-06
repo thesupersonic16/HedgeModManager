@@ -16,9 +16,13 @@ using System.Net;
 using System.Windows.Controls.Primitives;
 using HedgeModManager.Controls;
 using System.Net.Cache;
+using System.Net.Http;
 using PropertyTools.Wpf;
 using static HedgeModManager.Lang;
 using PopupBox = HedgeModManager.Controls.PopupBox;
+using System.Diagnostics;
+using System.Windows.Shell;
+using HedgeModManager.Misc;
 
 namespace HedgeModManager.UI
 {
@@ -28,11 +32,20 @@ namespace HedgeModManager.UI
     public partial class GBModWindow : Window
     {
         public Game Game;
+        public string ItemType;
+        public int ItemId;
         public string DownloadURL;
-        public GBModWindow(GBAPIItemDataBasic mod, string dl, Game game)
+        public string Protocol;
+
+        public GBModWindow(string itemType, int itemId, string dl, string protocol)
         {
-            DataContext = mod;
-            Game = game;
+            //DataContext = mod;
+            //Game = game;
+
+            Game = Games.Unknown;
+            ItemType = itemType;
+            ItemId = itemId;
+            Protocol = protocol;
             DownloadURL = dl;
             InitializeComponent();
         }
@@ -74,63 +87,124 @@ namespace HedgeModManager.UI
             popup.Show(this);
         }
 
-        private void Download_Click(object sender, RoutedEventArgs e)
+        private async void Download_Click(object sender, RoutedEventArgs e)
         {
+            DownloadButton.Visibility = Visibility.Collapsed;
+            Progress.Visibility = Visibility.Visible;
+
             try
             {
-                var game = HedgeApp.GetSteamGame(Game);
-                if (game == null)
+                var progress = new Progress<double?>((v) =>
                 {
-                    var dialog = new HedgeMessageBox(Localise("ModDownloaderNoGame"),
-                        string.Format(Localise("ModDownloaderNoGameMes"), Game.GameName));
-
-                    dialog.AddButton("Exit", () =>
+                    if (v.HasValue)
                     {
-                        dialog.Close();
-                    });
-                    dialog.ShowDialog();
-                    Close();
-                    return;
-                }
+                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                        Progress.IsIndeterminate = false;
+                        TaskbarItemInfo.ProgressValue = v.Value;
+                        Progress.Value = v.Value;
+                    }
+                    else
+                    {
+                        Progress.IsIndeterminate = true;
+                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Indeterminate;
+                    }
+                });
 
+                var game = HedgeApp.GetSteamGame(Game);
                 HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
                 var mod = (GBAPIItemDataBasic)DataContext;
-                var request = (HttpWebRequest)WebRequest.Create(DownloadURL);
-                var response = request.GetResponse();
-                var URI = response.ResponseUri.ToString();
-                Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
-                var downloader = new DownloadWindow($"Downloading {mod.ModName}", URI, Path.GetFileName(URI));
-                downloader.DownloadCompleted = () =>
-                {
-                    ModsDB.InstallMod(Path.GetFileName(URI), Path.Combine(game.RootDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
-                    File.Delete(Path.GetFileName(URI));
-                    Close();
-                };
-                downloader.Start();
-            }catch(WebException ex)
-            {
-                var dialog = new HedgeMessageBox(Localise("ModDownloaderFailed"),
-                    string.Format(Localise("ModDownloaderWebError"), ex.Message),
-                    HorizontalAlignment.Right, TextAlignment.Center, InputType.MarkDown);
-                
-                dialog.AddButton(Localise("CommonUICancel"), () =>
-                {
-                    dialog.Close();
-                });
 
-                dialog.AddButton(Localise("CommonUIRetry"), () =>
+                using (var resp = await HedgeApp.HttpClient.GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
                 {
-                    dialog.Close();
-                    Download_Click(sender, e);
+                    resp.EnsureSuccessStatusCode();
+                    Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
+
+                    var destinationPath = Path.GetFileName(resp.RequestMessage.RequestUri.AbsoluteUri);
+                    using (var destinationFile = File.Create(destinationPath, 8192, FileOptions.Asynchronous))
+                        await resp.Content.CopyToAsync(destinationFile, progress);
+
+                    ModsDB.InstallMod(destinationPath, Path.Combine(game.RootDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
+                    File.Delete(destinationPath);
+
+                    // a dialog would be nice here but i ain't adding strings
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        DialogResult = true;
+                        Close();
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    var dialog = new HedgeMessageBox(Localise("ModDownloaderFailed"),
+                        string.Format(Localise("ModDownloaderWebError"), ex.Message),
+                        HorizontalAlignment.Right, TextAlignment.Center, InputType.MarkDown);
+                    dialog.Owner = this;
+
+                    dialog.AddButton(Localise("CommonUICancel"), () =>
+                    {
+                        dialog.Close();
+                        DialogResult = false;
+                        Close();
+                    });
+
+                    dialog.AddButton(Localise("CommonUIRetry"), () =>
+                    {
+                        dialog.Close();
+                        Download_Click(sender, e);
+                    });
+
+                    dialog.ShowDialog();
                 });
-                dialog.ShowDialog();
-                Close();
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var mod = (GBAPIItemDataBasic)DataContext;
+            if (DataContext is GBAPIItemDataBasic mod)
+            {
+                PopulateUI(mod);
+            }
+            else
+            {
+                LoadingGrid.Visibility = Visibility.Visible;
+
+                var item = new GBAPIItemDataBasic(ItemType, ItemId);
+                item = await GBAPI.PopulateItemDataAsync(item).ConfigureAwait(false);
+
+                var game = Games.Unknown;
+                foreach (var gam in Games.GetSupportedGames())
+                {
+                    if (gam.GBProtocol == Protocol)
+                    {
+                        game = gam;
+                        break;
+                    }
+                }
+
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    if (game == Games.Unknown || item.ModName == null)
+                    {
+                        HedgeApp.CreateOKMessageBox("Error", $"Invalid GameBanana item!").ShowDialog();
+                        DialogResult = false;
+                        Close();
+                        return;
+                    }
+
+                    Game = game;
+                    DataContext = item;
+                    PopulateUI(item);
+                });
+            }
+        }
+
+        private void PopulateUI(GBAPIItemDataBasic mod)
+        {
+            LoadingGrid.Visibility = Visibility.Collapsed;
+
             foreach (var screenshot in mod.Screenshots)
             {
                 var button = new Button()
@@ -150,7 +224,7 @@ namespace HedgeModManager.UI
                 Imagebar.Children.Add(button);
             }
 
-            if(!string.IsNullOrEmpty(mod.SoundURL?.AbsoluteUri))
+            if (!string.IsNullOrEmpty(mod.SoundURL?.AbsoluteUri))
             {
                 var button = new Button()
                 {

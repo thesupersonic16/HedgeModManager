@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using HedgeModManager.Misc;
 using Newtonsoft.Json;
 
 namespace HedgeModManager
@@ -15,7 +16,15 @@ namespace HedgeModManager
 
         public List<string> URLBlockList { get; set; } = new List<string>();
 
-        public static NetworkConfig LoadConfig(string updateURL, bool force = false)
+        public bool IsServerBlocked(string url)
+        {
+            if (URLBlockList == null || URLBlockList.Count == 0)
+                return false;
+
+            return URLBlockList.Any(u => url.ToLowerInvariant().Contains(u));
+        }
+
+        public static async Task<NetworkConfig> LoadConfig(string updateURL, bool force = false)
         {
             try
             {
@@ -26,22 +35,18 @@ namespace HedgeModManager
                 if (!update && File.Exists(configPath))
                 {
                     config = JsonConvert.DeserializeObject<NetworkConfig>(File.ReadAllText(configPath));
-                    if (DateTime.Now > config.LastUpdated.AddDays(7))
+                    if (config == null || DateTime.Now > config.LastUpdated.AddDays(7))
                         update = true;
                 }
 
                 if (update)
                 {
-                    using (var client = new WebClient())
-                    {
-                        client.Headers.Add("user-agent", HedgeApp.WebRequestUserAgent);
-                        config = JsonConvert.DeserializeObject<NetworkConfig>(client.DownloadString(updateURL));
-                        config.LastUpdated = DateTime.Now;
-                        string dir = Path.GetDirectoryName(configPath) ?? "HedgeModManager";
-                        if (!Directory.Exists(dir))
-                            Directory.CreateDirectory(dir);
-                        File.WriteAllText(configPath, JsonConvert.SerializeObject(config));
-                    }
+                    config = await HedgeApp.HttpClient.GetAsJsonAsync<NetworkConfig>(updateURL);
+                    config.LastUpdated = DateTime.Now;
+                    string dir = Path.GetDirectoryName(configPath) ?? "HedgeModManager";
+                    if (!Directory.Exists(dir))
+                        Directory.CreateDirectory(dir);
+                    File.WriteAllText(configPath, JsonConvert.SerializeObject(config));
                 }
 
                 return config;
@@ -51,6 +56,5 @@ namespace HedgeModManager
                 return new NetworkConfig();
             }
         }
-
     }
 }

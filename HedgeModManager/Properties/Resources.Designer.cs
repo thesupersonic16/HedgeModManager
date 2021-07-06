@@ -93,7 +93,8 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized string similar to body {
         ///    background-color: transparent;
-        ///    color: #e2e2e2;
+        ///    /*color: #e2e2e2;*/
+        ///    color: $FORECOLOR;
         ///    font-family: &apos;Open Sans&apos;, sans-serif;
         ///}
         ///
@@ -129,12 +130,7 @@ namespace HedgeModManager.Properties {
         ///}
         ///
         ///th, td {
-        ///    padding: 2px;
-        ///}
-        ///
-        ///th {
-        ///    text-align: left;
-        ///}.
+        ///    padding:  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GBStyleSheet {
             get {
@@ -149,26 +145,6 @@ namespace HedgeModManager.Properties {
             get {
                 object obj = ResourceManager.GetObject("ICO_HedgeModManager", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap IMG_FRAME_C {
-            get {
-                object obj = ResourceManager.GetObject("IMG_FRAME_C", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap IMG_FRAME_M {
-            get {
-                object obj = ResourceManager.GetObject("IMG_FRAME_M", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -237,25 +213,6 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to cancel updating?
-        ///This may corrupt {0}.
-        /// </summary>
-        internal static string STR_CANCEL_WARNING {
-            get {
-                return ResourceManager.GetString("STR_CANCEL_WARNING", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} is already up to date..
-        /// </summary>
-        internal static string STR_MOD_NEWEST {
-            get {
-                return ResourceManager.GetString("STR_MOD_NEWEST", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to HedgeModManager could not detect any supported games
         ///in the current directory!
         ///
@@ -264,25 +221,6 @@ namespace HedgeModManager.Properties {
         internal static string STR_MSG_NOGAME {
             get {
                 return ResourceManager.GetString("STR_MSG_NOGAME", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A newer version of {0} available! ({1}).
-        /// </summary>
-        internal static string STR_UI_MOD_UPDATE {
-            get {
-                return ResourceManager.GetString("STR_UI_MOD_UPDATE", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hedge Mod Manager did not detect any mods folder.
-        ///Would you like create a mods folder?.
-        /// </summary>
-        internal static string STR_UI_NO_MODS {
-            get {
-                return ResourceManager.GetString("STR_UI_NO_MODS", resourceCulture);
             }
         }
         
@@ -364,6 +302,24 @@ namespace HedgeModManager.Properties {
         internal static string URL_LOADERS_INI {
             get {
                 return ResourceManager.GetString("URL_LOADERS_INI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/TokyoOlympics2020.hmm.
+        /// </summary>
+        internal static string URL_MML_CODES {
+            get {
+                return ResourceManager.GetString("URL_MML_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/MusashiModLoader.dll.
+        /// </summary>
+        internal static string URL_MML_DL {
+            get {
+                return ResourceManager.GetString("URL_MML_DL", resourceCulture);
             }
         }
         

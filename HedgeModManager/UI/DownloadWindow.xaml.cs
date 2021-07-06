@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Shell;
+using HedgeModManager.Misc;
 
 namespace HedgeModManager
 {
@@ -24,9 +27,9 @@ namespace HedgeModManager
     {
         public string URL;
         public string DestinationPath;
-        public WebClient DownloadClient;
         public Action DownloadCompleted;
         public Action<Exception> DownloadFailed;
+        private IProgress<double?> _progress; 
 
         public DownloadWindow(string header, string url, string destinationFile)
         {
@@ -35,40 +38,53 @@ namespace HedgeModManager
             Header.Text = header;
             URL = url;
             DestinationPath = destinationFile;
+
+            // this is here because it captures the current SynchronizationContext
+            // for threading purposes
+            _progress = new Progress<double?>((v) =>
+            {
+                if (v.HasValue)
+                {
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                    Progress.IsIndeterminate = false;
+                    TaskbarItemInfo.ProgressValue = v.Value;
+                    Progress.Value = v.Value;
+                }
+                else
+                {
+                    Progress.IsIndeterminate = true;
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Indeterminate;
+                }
+            });
         }
 
         public void Start()
         {
-            DownloadClient = new WebClient();
-            DownloadClient.Headers.Add("user-agent", HedgeApp.WebRequestUserAgent);
-            DownloadClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-            DownloadClient.DownloadFileCompleted += WebClient_DownloadCompleted;
-            DownloadClient.DownloadFileAsync(new Uri(URL), DestinationPath);
+            _ = Task.Run(() => DoDownloadAsync());
+
             BringIntoView();
             ShowDialog();
         }
 
-        protected void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs args)
+        private async Task DoDownloadAsync()
         {
-            Dispatcher.Invoke(() =>
+            try
             {
-                Progress.Maximum = args.TotalBytesToReceive;
-                Progress.Value = args.BytesReceived;
-                TaskbarItemInfo.ProgressValue = (float)args.BytesReceived / (float)args.TotalBytesToReceive;
-            });
-        }
-
-        protected void WebClient_DownloadCompleted(object sender, AsyncCompletedEventArgs args)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                Close();
-
-                if(args.Error == null)
+                await HedgeApp.HttpClient.DownloadFileAsync(URL, DestinationPath, _progress).ConfigureAwait(false);
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    Close();
                     DownloadCompleted?.Invoke();
-                else
-                    DownloadFailed?.Invoke(args.Error);
-            });
+                });
+            }
+            catch (Exception ex)
+            {
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    Close();
+                    DownloadFailed?.Invoke(ex);
+                });
+            }
         }
     }
 }
