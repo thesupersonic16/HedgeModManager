@@ -792,3 +792,28 @@ WriteProtected<byte>(0x15CE9B0, 0x00);
 
 Patch "Disable Fast Fall Animation" by "Skyth"
 WriteProtected<byte>(0x111913A, 0xEB);
+
+Patch "Force S-Rank Animation" by "brianuuu"
+WriteNop(0xDEA672, 0x2)
+WriteNop(0xE27BC2, 0x2)
+WriteNop(0xE693A6, 0x2)
+
+Patch "Force A-Rank Animation" by "brianuuu"
+WriteProtected<byte>(0xDEA672, 0xEB, 0x16)
+WriteProtected<byte>(0xE27BC2, 0xEB, 0x16)
+WriteProtected<byte>(0xE693A6, 0xEB, 0xC)
+
+Patch "Force B-Rank Animation" by "brianuuu"
+WriteProtected<byte>(0xDEA672, 0xEB, 0x2C)
+WriteProtected<byte>(0xE27BC2, 0xEB, 0x2C)
+WriteProtected<byte>(0xE693A6, 0xEB, 0x18)
+
+Patch "Force C-Rank Animation" by "brianuuu"
+WriteProtected<byte>(0xDEA672, 0xEB, 0x42)
+WriteProtected<byte>(0xE27BC2, 0xEB, 0x42)
+WriteProtected<byte>(0xE693A6, 0xEB, 0x24)
+
+Patch "Force D-Rank Animation" by "brianuuu"
+WriteProtected<byte>(0xDEA672, 0xEB, 0x53)
+WriteProtected<byte>(0xE27BC2, 0xEB, 0x53)
+WriteProtected<byte>(0xE693A6, 0xEB, 0x2B)
