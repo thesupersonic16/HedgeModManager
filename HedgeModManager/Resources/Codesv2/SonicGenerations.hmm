@@ -817,3 +817,6 @@ Patch "Force D-Rank Animation" by "brianuuu"
 WriteProtected<byte>(0xDEA672, 0xEB, 0x53)
 WriteProtected<byte>(0xE27BC2, 0xEB, 0x53)
 WriteProtected<byte>(0xE693A6, 0xEB, 0x2B)
+
+Code "3D Spindash Doesn't Crash" by "Chimera"
+WriteProtected<uint>(0x16D8CD4, 0x11D6140) /* Replaces the vftable entry for classic's 3D spindash update with his slide. */
