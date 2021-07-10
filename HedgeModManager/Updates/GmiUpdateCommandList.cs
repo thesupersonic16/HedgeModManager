@@ -61,7 +61,7 @@ namespace HedgeModManager.Updates
         public async Task ExecuteAsync(ModInfo mod, ExecuteConfig config = default, CancellationToken cancellationToken = default)
         {
             foreach (var command in this)
-                await command.PrepareExecute(mod, config?.Logger);
+                await command.PrepareExecute(mod, config?.Logger).ConfigureAwait(false);
 
             for (int i = 0; i < Count; i++)
             {
@@ -78,7 +78,7 @@ namespace HedgeModManager.Updates
             for (int i = 0; i < Count; i++)
             {
                 var command = this[i];
-                await command.FinalizeExecute(mod, config?.Logger);
+                await command.FinalizeExecute(mod, config?.Logger).ConfigureAwait(false);
             }
             
             DeleteTemp();

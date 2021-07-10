@@ -6,7 +6,7 @@
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="Hedge Mod Manager (7.0)"
+        Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
         MinHeight="600" MinWidth="560" Height="600" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
@@ -18,7 +18,6 @@
             <MenuItem x:Name="ContextMenuItemConfigure" Header="{DynamicResource ModsUIModConfigure}" Click="UI_ConfigureMod_Click" InputGestureText="(Ctrl+C)"/>
             <MenuItem Header="{DynamicResource ModsUIModOpenFolder}" Click="UI_Open_Folder" InputGestureText="(Ctrl+O)"/>
             <MenuItem x:Name="ContextMenuItemCheckUpdate" Header="{DynamicResource ModsUIModCheckUpdates}" Click="UI_Update_Mod" InputGestureText="(Ctrl+U)"/>
-            <MenuItem Header="{DynamicResource ModsUIModCheckUpdates}" Click="UI_Update_Mod" InputGestureText="(Ctrl+U)"/>
             <MenuItem Header="{DynamicResource ModsUIModEdit}" Click="UI_Edit_Mod" InputGestureText="(Ctrl+E)"/>
             <MenuItem Header="{DynamicResource ModsUIModDelete}" Click="UI_RemoveMod_Click" InputGestureText="(Delete)"/>
             <MenuItem x:Name="ContextMenuItemCheckUpdateAll" Header="{DynamicResource ModsUICheckUpdatesAll}" Click="UI_CheckUpdates_AllMods"/>

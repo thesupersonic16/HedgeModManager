@@ -50,6 +50,7 @@ namespace HedgeModManager
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
         public bool CheckingForUpdates = false;
         public ModProfile SelectedModProfile = null;
+        public CancellationTokenSource ModUpdateCheckCancelSource { get; set; }
 
         protected Timer StatusTimer;
 
@@ -263,14 +264,14 @@ namespace HedgeModManager
             catch (HttpRequestException) { /* do nothing for http exceptions */ }
         }
 
-        public async Task<bool> CheckForModUpdatesAsync(ModInfo mod, bool showUpdatedDialog = true)
+        public async Task<bool> CheckForModUpdatesAsync(ModInfo mod, CancellationToken cancellationToken = default)
         {
             if (!mod.HasUpdates)
                 return false;
 
             CheckingForUpdates = true;
             UpdateStatus(string.Format(Localise("StatusUICheckingModUpdates"), mod.Title));
-            var result = await ModUpdateFetcher.FetchUpdate(mod, Singleton.GetInstance<NetworkConfig>());
+            var result = await ModUpdateFetcher.FetchUpdate(mod, Singleton.GetInstance<NetworkConfig>(), cancellationToken);
 
             CheckingForUpdates = false;
             bool doUpdate = result.UpdateInfo != null;
@@ -294,7 +295,7 @@ namespace HedgeModManager
             return model.Mods.Count != 0;
         }
 
-        public async Task CheckAllModsUpdatesAsync()
+        public async Task CheckAllModsUpdatesAsync(CancellationToken cancellationToken = default)
         {
             var updateMods = ModsDatabase.Where(x => x.HasUpdates).ToList();
             int completedCount = 0;
@@ -319,7 +320,7 @@ namespace HedgeModManager
                             failedCount++;
                             break;
                     }
-                });
+                }, cancellationToken);
 
             // Language Workaround
             string completedText = completedCount == 1 ? Localise("StatusUIUpdateCompletedSingular") : Localise("StatusUIUpdateCompletedPlural");
@@ -444,7 +445,13 @@ namespace HedgeModManager
             await CheckForManagerUpdatesAsync();
 
             if (HedgeApp.Config.CheckForModUpdates)
-                await CheckAllModsUpdatesAsync();
+            {
+                ModUpdateCheckCancelSource = new CancellationTokenSource();
+                try
+                {
+                    await CheckAllModsUpdatesAsync(ModUpdateCheckCancelSource.Token);
+                }catch(OperationCanceledException){}
+            }
 
             await CheckForCodeUpdates();
         }
@@ -786,7 +793,11 @@ namespace HedgeModManager
             if (CheckingForUpdates)
                 return;
 
-            await CheckAllModsUpdatesAsync();
+            ModUpdateCheckCancelSource = new CancellationTokenSource();
+            try
+            {
+                await CheckAllModsUpdatesAsync(ModUpdateCheckCancelSource.Token);
+            }catch(OperationCanceledException){}
         }
 
         private void UI_Refresh_Click(object sender, RoutedEventArgs e)
@@ -831,8 +842,17 @@ namespace HedgeModManager
 
         private async void UI_Update_Mod(object sender, RoutedEventArgs e)
         {
-            if (await CheckForModUpdatesAsync(ViewModel.SelectedMod).ConfigureAwait(false))
-                Dispatcher.Invoke(RefreshMods);
+            ModUpdateCheckCancelSource = new CancellationTokenSource();
+            try
+            {
+                if (await CheckForModUpdatesAsync(ViewModel.SelectedMod, ModUpdateCheckCancelSource.Token)
+                    .ConfigureAwait(false))
+                    Dispatcher.Invoke(RefreshMods);
+            }
+            catch(OperationCanceledException)
+            {
+
+            }
         }
 
         private void UI_Edit_Mod(object sender, RoutedEventArgs e)
@@ -931,6 +951,9 @@ namespace HedgeModManager
         {
             if (ComboBox_GameStatus.SelectedItem != null && ComboBox_GameStatus.SelectedItem != HedgeApp.CurrentSteamGame)
             {
+                ModUpdateCheckCancelSource?.Cancel();
+                CheckingForUpdates = false;
+
                 HedgeApp.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
 
                 if (HedgeApp.CurrentGame.SupportsCPKREDIR)
@@ -1189,6 +1212,12 @@ namespace HedgeModManager
             string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
             File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             Refresh();
+        }
+
+        private void MainWindow_OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            ModUpdateCheckCancelSource?.Cancel();
+            CheckingForUpdates = false;
         }
 
         class StatusLogger : ILogger
