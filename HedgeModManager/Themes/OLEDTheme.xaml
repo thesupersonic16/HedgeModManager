@@ -22,13 +22,14 @@
     <Color           x:Key="HMM.Button.HoverColor"   A="255" R="102" G="102" B="102"/>
     <Color           x:Key="HMM.Button.PressedColor" A="255" R="175" G="171" B="175"/>
     <SolidColorBrush x:Key="HMM.Button.HoverBrush" Color="{DynamicResource HMM.Button.HoverColor}"/>
-    <Color           x:Key="HMM.Button.DisabledColor" A="255" R="255" G="255" B="255"/>
+    <Color           x:Key="HMM.Button.DisabledColor" A="255" R="187" G="187" B="187"/>
     <Color           x:Key="HMM.Button.FocusColor" A="255" R="255" G="255" B="255"/>
     <Color           x:Key="HMM.Button.DisabledTextColor" A="255" R="101" G="101" B="101"/>
     <SolidColorBrush x:Key="HMM.Menu.DisabledColor" Color="#FF222222"/>
     <SolidColorBrush x:Key="HMM.Menu.HoverColor" Color="#FF373737"/>
     <SolidColorBrush x:Key="HMM.Menu.DisabledTextColor" Color="#FFC9C9C9"/>
 
+    <SolidColorBrush  x:Key="HMM.PressedBrush" Color="{DynamicResource HMM.Button.PressedColor}"/>
     <DropShadowEffect x:Key="HoverEffect" BlurRadius="5" Color="#FF8ED0F9" Opacity="0" Direction="0" ShadowDepth="0"/>
 
 </ResourceDictionary>

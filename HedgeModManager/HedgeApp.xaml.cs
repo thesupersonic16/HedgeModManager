@@ -30,13 +30,14 @@ using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Windows.Interop;
 using System.Xml.Serialization;
 using HedgeModManager.Languages;
 using HedgeModManager.Misc;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
 using HedgeModManager.Themes;
-using HedgeModManager.Updates;
+using HedgeModManager.UI.Models;
 
 namespace HedgeModManager
 {
@@ -63,7 +64,7 @@ namespace HedgeModManager
         public static List<SteamGame> SteamGames = null;
         public static bool Restart = false;
         public static string PCCulture = "";
-        public static NetworkConfig NetworkConfiguration = new NetworkConfig();
+        public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
 
         public static HttpClient HttpClient { get; private set; }
@@ -99,6 +100,9 @@ namespace HedgeModManager
 
             HttpClient = new HttpClient();
             HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
+
+            Singleton.SetInstance(HttpClient);
+            Singleton.SetInstance<IWindowService>(new WindowServiceImplWindows());
 
             if (args.Length > 2 && string.Compare(args[0], "-update", StringComparison.OrdinalIgnoreCase) >= 0)
             {
@@ -312,8 +316,8 @@ namespace HedgeModManager
                 if (random.Next(10) < 4)
                 {
                     var langDict = new ResourceDictionary { Source = new Uri("Languages/en-UW.xaml", UriKind.Relative) };
-                    Current.Resources.MergedDictionaries.RemoveAt(2);
-                    Current.Resources.MergedDictionaries.Insert(2, langDict);
+                    Current.Resources.MergedDictionaries.RemoveAt(3);
+                    Current.Resources.MergedDictionaries.Insert(3, langDict);
                 }
             }
 
@@ -342,7 +346,8 @@ namespace HedgeModManager
 
         private static async Task LoadNetworkConfigAsync()
         {
-            NetworkConfiguration = await NetworkConfig.LoadConfig($"https://raw.githubusercontent.com/{RepoOwner}/{RepoName}/{RepoBranch}/HMMNetworkConfig.json");
+            Singleton.SetInstance(await NetworkConfig.LoadConfig(
+                $"https://raw.githubusercontent.com/{RepoOwner}/{RepoName}/{RepoBranch}/HMMNetworkConfig.json"));
         }
 
         public static void ShowHelp()
@@ -425,8 +430,8 @@ namespace HedgeModManager
         {
             var langDict = new ResourceDictionary();
             langDict.Source = new Uri($"Languages/{culture}.xaml", UriKind.Relative);
-            while (Current.Resources.MergedDictionaries.Count > 4)
-                Current.Resources.MergedDictionaries.RemoveAt(4);
+            while (Current.Resources.MergedDictionaries.Count > 5)
+                Current.Resources.MergedDictionaries.RemoveAt(5);
             // No need to load the fallback language on top
             if (culture == "en-AU")
                 return;
@@ -479,8 +484,8 @@ namespace HedgeModManager
             var themeDict = new ResourceDictionary();
             themeDict.Source = new Uri($"Themes/{themeName}.xaml", UriKind.Relative);
 
-            Current.Resources.MergedDictionaries.RemoveAt(1);
-            Current.Resources.MergedDictionaries.Insert(1, themeDict);
+            Current.Resources.MergedDictionaries.RemoveAt(2);
+            Current.Resources.MergedDictionaries.Insert(2, themeDict);
         }
 
         /// <summary>
@@ -881,11 +886,11 @@ namespace HedgeModManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var window = Window.GetWindow((DependencyObject)sender);
+            var window = sender as Window;
             var minbtn = (Button)window.Template.FindName("MinBtn", window);
             var maxbtn = (Button)window.Template.FindName("MaxBtn", window);
-            maxbtn.IsEnabled = window.ResizeMode == ResizeMode.CanResizeWithGrip || window.ResizeMode == ResizeMode.CanResize;
-            minbtn.IsEnabled = window.ResizeMode != ResizeMode.NoResize;
+            maxbtn.IsEnabled = window.ResizeMode is ResizeMode.CanResizeWithGrip or ResizeMode.CanResize;
+            minbtn.IsEnabled = window.ResizeMode is not ResizeMode.NoResize;
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

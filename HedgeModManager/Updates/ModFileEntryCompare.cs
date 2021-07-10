@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace HedgeModManager.Updates
 {
-    public partial class ModUpdateEntry
+    public partial class ModFileEntry
     {
-        public CompareResult Compare(ModUpdateEntry item)
+        public CompareResult Compare(ModFileEntry item)
         {
             var result = new CompareResult();
-            var entries = new Queue<KeyValuePair<ModUpdateEntry, ModUpdateEntry>>(128);
-            var addedEntries = new Queue<ModUpdateEntry>(128);
+            var entries = new Queue<KeyValuePair<ModFileEntry, ModFileEntry>>(128);
+            var addedEntries = new Queue<ModFileEntry>(128);
 
-            entries.Enqueue(new KeyValuePair<ModUpdateEntry, ModUpdateEntry>(this, item));
+            entries.Enqueue(new KeyValuePair<ModFileEntry, ModFileEntry>(this, item));
 
             while (entries.Count != 0)
             {
@@ -35,7 +35,7 @@ namespace HedgeModManager.Updates
 
                     if (!otherChild.IsFile)
                     {
-                        entries.Enqueue(new KeyValuePair<ModUpdateEntry, ModUpdateEntry>(selfChild, otherChild));
+                        entries.Enqueue(new KeyValuePair<ModFileEntry, ModFileEntry>(selfChild, otherChild));
                     }
                 }
 
@@ -91,7 +91,7 @@ namespace HedgeModManager.Updates
         public long AddedSize { get; set; }
         public long RemovedSize { get; set; }
 
-        public List<ModUpdateEntry> AddedEntries { get; set; } = new List<ModUpdateEntry>(64);
-        public List<ModUpdateEntry> RemovedEntries { get; set; } = new List<ModUpdateEntry>(64);
+        public List<ModFileEntry> AddedEntries { get; set; } = new List<ModFileEntry>(64);
+        public List<ModFileEntry> RemovedEntries { get; set; } = new List<ModFileEntry>(64);
     }
 }

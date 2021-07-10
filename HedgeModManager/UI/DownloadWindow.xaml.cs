@@ -70,7 +70,7 @@ namespace HedgeModManager
         {
             try
             {
-                await HedgeApp.HttpClient.DownloadFileAsync(URL, DestinationPath, _progress).ConfigureAwait(false);
+                await Singleton.GetInstance<HttpClient>().DownloadFileAsync(URL, DestinationPath, _progress).ConfigureAwait(false);
                 await Dispatcher.InvokeAsync(() =>
                 {
                     Close();

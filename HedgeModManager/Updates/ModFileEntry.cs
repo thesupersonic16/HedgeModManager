@@ -12,12 +12,12 @@ using Newtonsoft.Json;
 namespace HedgeModManager.Updates
 {
     [JsonObject]
-    public partial class ModUpdateEntry : IList<ModUpdateEntry>
+    public partial class ModFileEntry : IList<ModFileEntry>
     {
         public const string DirectorySeparatorCharAsString = "/";
 
         [JsonIgnore]
-        public ModUpdateEntry Parent { get; internal set; }
+        public ModFileEntry Parent { get; internal set; }
         
         [JsonIgnore]
         public string Name { get; set; }
@@ -29,7 +29,7 @@ namespace HedgeModManager.Updates
         public long? Size { get; set; }
 
         [JsonProperty("items", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public List<ModUpdateEntry> Children { get; set; } = new List<ModUpdateEntry>();
+        public List<ModFileEntry> Children { get; set; } = new List<ModFileEntry>();
 
         [JsonIgnore]
         public bool IsFile => Size != null;
@@ -56,7 +56,7 @@ namespace HedgeModManager.Updates
             var tasks = new List<Task>(16);
             foreach (string dir in Directory.EnumerateDirectories(path))
             {
-                var entry = new ModUpdateEntry
+                var entry = new ModFileEntry
                 {
                     Name = Path.GetFileName(dir),
                 };
@@ -71,7 +71,7 @@ namespace HedgeModManager.Updates
 
             foreach (string file in Directory.EnumerateFiles(path))
             {
-                var entry = new ModUpdateEntry();
+                var entry = new ModFileEntry();
 
                 entry.ImportFile(file);
                 Add(entry);
@@ -81,7 +81,7 @@ namespace HedgeModManager.Updates
 
             //Parallel.ForEach(Directory.EnumerateFiles(path), file =>
             //{
-            //    var entry = new ModUpdateEntry
+            //    var entry = new ModFileEntry
             //    {
             //        Name = Path.GetFileName(file),
             //        Hash = HedgeApp.ComputeMD5Hash(file)
@@ -106,7 +106,7 @@ namespace HedgeModManager.Updates
             return IsFile ? path : $"{path}{DirectorySeparatorCharAsString}";
         }
 
-        public ModUpdateEntry Find(string path)
+        public ModFileEntry Find(string path)
         {
             if (string.IsNullOrEmpty(path))
                 return null;
@@ -146,7 +146,7 @@ namespace HedgeModManager.Updates
             return null;
         }
 
-        internal ModUpdateEntry FindItem(string name, bool folder = false)
+        internal ModFileEntry FindItem(string name, bool folder = false)
         {
             return this.FirstOrDefault(e => e.Name == name && e.IsFile == !folder);
         }
@@ -178,14 +178,14 @@ namespace HedgeModManager.Updates
 
         internal void FixChildren()
         {
-            var items = new Queue<KeyValuePair<ModUpdateEntry, ModUpdateEntry>>(512);
+            var items = new Queue<KeyValuePair<ModFileEntry, ModFileEntry>>(512);
 
             foreach (var child in this)
             {
                 child.Parent = this;
                 foreach (var deepChild in child)
                 {
-                    items.Enqueue(new KeyValuePair<ModUpdateEntry, ModUpdateEntry>(child, deepChild));
+                    items.Enqueue(new KeyValuePair<ModFileEntry, ModFileEntry>(child, deepChild));
                 }
             }
 
@@ -196,12 +196,12 @@ namespace HedgeModManager.Updates
 
                 foreach (var child in item.Value)
                 {
-                    items.Enqueue(new KeyValuePair<ModUpdateEntry, ModUpdateEntry>(item.Value, child));
+                    items.Enqueue(new KeyValuePair<ModFileEntry, ModFileEntry>(item.Value, child));
                 }
             }
         }
 
-        public IEnumerator<ModUpdateEntry> GetEnumerator()
+        public IEnumerator<ModFileEntry> GetEnumerator()
         {
             return Children.GetEnumerator();
         }
@@ -211,7 +211,7 @@ namespace HedgeModManager.Updates
             return GetEnumerator();
         }
 
-        public void Add(ModUpdateEntry item)
+        public void Add(ModFileEntry item)
         {
             if (item == null) return;
             
@@ -227,12 +227,12 @@ namespace HedgeModManager.Updates
             Children.Clear();
         }
 
-        public bool Contains(ModUpdateEntry item)
+        public bool Contains(ModFileEntry item)
         {
             return Contains(item, out _);
         }
 
-        public bool Contains(ModUpdateEntry item, out ModUpdateEntry foundEntry)
+        public bool Contains(ModFileEntry item, out ModFileEntry foundEntry)
         {
             if (item == null)
             {
@@ -246,12 +246,12 @@ namespace HedgeModManager.Updates
             return foundEntry != null;
         }
 
-        public void CopyTo(ModUpdateEntry[] array, int arrayIndex)
+        public void CopyTo(ModFileEntry[] array, int arrayIndex)
         {
             Children.CopyTo(array, arrayIndex);
         }
 
-        public bool Remove(ModUpdateEntry item)
+        public bool Remove(ModFileEntry item)
         {
             if (item == null) return false;
 
@@ -262,12 +262,12 @@ namespace HedgeModManager.Updates
             return removed;
         }
 
-        public int IndexOf(ModUpdateEntry item)
+        public int IndexOf(ModFileEntry item)
         {
             return Children.IndexOf(item);
         }
 
-        public void Insert(int index, ModUpdateEntry item)
+        public void Insert(int index, ModFileEntry item)
         {
             if (item != null)
             {
@@ -283,7 +283,7 @@ namespace HedgeModManager.Updates
             Children.RemoveAt(index);
         }
 
-        public ModUpdateEntry this[int index]
+        public ModFileEntry this[int index]
         {
             get => Children[index];
             set
@@ -301,12 +301,12 @@ namespace HedgeModManager.Updates
             return IsFile ? Name : $"{Name}{DirectorySeparatorCharAsString}";
         }
 
-        public ModUpdateEntry Clone()
+        public ModFileEntry Clone()
         {
             var cloned = CloneOne(this);
 
-            var items = new Queue<KeyValuePair<ModUpdateEntry, ModUpdateEntry>>(128);
-            items.Enqueue(new KeyValuePair<ModUpdateEntry, ModUpdateEntry>(this, cloned));
+            var items = new Queue<KeyValuePair<ModFileEntry, ModFileEntry>>(128);
+            items.Enqueue(new KeyValuePair<ModFileEntry, ModFileEntry>(this, cloned));
 
             while (items.Count != 0)
             {
@@ -317,16 +317,16 @@ namespace HedgeModManager.Updates
                     item.Value.Add(childClone);
 
                     if (item.Key.Count > 0)
-                        items.Enqueue(new KeyValuePair<ModUpdateEntry, ModUpdateEntry>(child, childClone));
+                        items.Enqueue(new KeyValuePair<ModFileEntry, ModFileEntry>(child, childClone));
                 }
             }
 
             return cloned;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            ModUpdateEntry CloneOne(ModUpdateEntry entry)
+            ModFileEntry CloneOne(ModFileEntry entry)
             {
-                return new ModUpdateEntry
+                return new ModFileEntry
                 {
                     Name = entry.Name,
                     Hash = entry.Hash,

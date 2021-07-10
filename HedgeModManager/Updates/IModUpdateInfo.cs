@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HedgeModManager.Updates
@@ -11,5 +12,6 @@ namespace HedgeModManager.Updates
         public ModInfo Mod { get; }
         public string Version { get; }
         public Task<string> GetChangelog();
+        public Task ExecuteAsync(ExecuteConfig config = default, CancellationToken cancellationToken = default);
     }
 }

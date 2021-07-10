@@ -114,7 +114,7 @@ namespace HedgeModManager.UI
                 HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
                 var mod = (GBAPIItemDataBasic)DataContext;
 
-                using (var resp = await HedgeApp.HttpClient.GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
+                using (var resp = await Singleton.GetInstance<HttpClient>().GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
                 {
                     resp.EnsureSuccessStatusCode();
                     Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));

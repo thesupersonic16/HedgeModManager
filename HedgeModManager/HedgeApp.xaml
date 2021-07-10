@@ -4,16 +4,20 @@
              xmlns:local="clr-namespace:HedgeModManager" 
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
              xmlns:pt="http://propertytools.org/wpf"
+             xmlns:models="clr-namespace:HedgeModManager.UI.Models"
+             xmlns:ui="clr-namespace:HedgeModManager.UI"
              x:Class="HedgeModManager.HedgeApp">
     
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="UI/ModelBinds.xaml" />
                 <ResourceDictionary Source="Themes/Themes.xaml" />
                 <ResourceDictionary Source="Themes/DarkTheme.xaml" />
                 <ResourceDictionary Source="Languages/Languages.xaml" />
                 <ResourceDictionary Source="Languages/en-AU.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
             <SolidColorBrush x:Key="ScrollBar.Static.Background" Color="Transparent"/>
             <SolidColorBrush x:Key="ScrollBar.Static.Border" Color="Transparent"/>
             <SolidColorBrush x:Key="ScrollBar.Pressed.Glyph" Color="White"/>
@@ -31,8 +35,15 @@
             <SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="#CDCDCD"/>
             <Geometry x:Key="StarGeometry">F0 M15,15z M0,0z M12.121,14.994L7.491,11.64 2.845,14.992 4.462,9.322 0,5.723 5.629,5.573 7.521,0 9.383,5.574 15.011,5.726 10.533,9.326z</Geometry>
 
+            <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <local:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter"/>
             <local:InverseEmptyStringToVisibilityConverter x:Key="InverseEmptyStringToVisibilityConverter"/>
+            <local:NullToBoolConverter x:Key="NullToBoolConverter"/>
+            <local:MarkdownToHtmlConverter x:Key="MarkdownToHtmlConverter"/>
+
+            <Style TargetType="{x:Type UserControl}" x:Key="DesignTimeStyle">
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
+            </Style>
 
             <Style TargetType="{x:Type ContextMenu}">
                 <Setter Property="HasDropShadow" Value="True"/>
@@ -111,25 +122,26 @@
         
             <Style x:Key="HedgeWindow" TargetType="{x:Type Window}">
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
-                <Setter Property="AllowsTransparency" Value="False"/>
                 <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
+                <EventSetter Event="Loaded" Handler="Window_Loaded"/>
                 <Setter Property="WindowChrome.WindowChrome">
                     <Setter.Value>
                         <WindowChrome 
                             CaptionHeight="22"
-                            CornerRadius="0" 
+                            CornerRadius="0"
                             GlassFrameThickness="0"
                             NonClientFrameEdges="None"
                             ResizeBorderThickness="5"
                             UseAeroCaptionButtons="False"/>
                     </Setter.Value>
                 </Setter>
+
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Window}">
                             <Grid>
                                 <Border x:Name="OutlineBorder" BorderThickness="1" Background="Transparent" IsHitTestVisible="False" BorderBrush="{DynamicResource HMM.Window.AccentBrush2}" Panel.ZIndex="2"/>
-                                <Grid x:Name="WindowGrid" Margin="1" Background="{TemplateBinding Background}" Loaded="Window_Loaded" Panel.ZIndex="1">
+                                <Grid x:Name="WindowGrid" Margin="1" Background="{TemplateBinding Background}" Panel.ZIndex="1">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="22"/>
                                         <RowDefinition Height="*"/>
@@ -370,7 +382,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
-                            <Border TextBlock.Foreground="{DynamicResource HMM.window.Fo}"
+                            <Border TextBlock.Foreground="{DynamicResource HMM.Window.ForegroundBrush}"
                         x:Name="Border"
                         BorderBrush="{TemplateBinding Foreground}"
                         BorderThickness=".2"
@@ -435,6 +447,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
             <!-- Others -->
             <Style TargetType="{x:Type Label}">
                 <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
@@ -480,7 +493,9 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+
             <Style TargetType="{x:Type ListViewItem}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="Padding" Value="2,0" />
                 <Setter Property="Template">
@@ -506,6 +521,29 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+            <Style TargetType="{x:Type ListBoxItem}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Border x:Name="innerBorder" Padding="2">
+                                <ContentPresenter/>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="innerBorder" Property="Background" Value="{DynamicResource HMM.Button.HoverBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="innerBorder" Property="Background" Value="{DynamicResource HMM.Button.HoverBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <Style TargetType="{x:Type Thumb}">
                 <Setter Property="Width"
                       Value="2" />
@@ -550,6 +588,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
             <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
                 <Setter Property="OverridesDefaultStyle" Value="true"/>
                 <Setter Property="Background" Value="Transparent"/>
@@ -563,6 +602,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
             <Style x:Key="ScrollBarThumbVertical" TargetType="{x:Type Thumb}">
                 <Setter Property="OverridesDefaultStyle" Value="true"/>
                 <Setter Property="IsTabStop" Value="false"/>
@@ -582,13 +622,16 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
             <Style x:Key="ScrollBarThumbHorizontal" TargetType="{x:Type Thumb}">
                 <Setter Property="OverridesDefaultStyle" Value="true"/>
                 <Setter Property="IsTabStop" Value="false"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Thumb}">
-                            <Border x:Name="rectangle" Background="{StaticResource ScrollBar.Static.Thumb}" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}" CornerRadius="5"/>
+                            <Border x:Name="rectangle" Background="{StaticResource ScrollBar.Static.Thumb}" 
+                                    Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" 
+                                    SnapsToDevicePixels="True" CornerRadius="5"/>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
                                     <Setter Property="Background" TargetName="rectangle" Value="{StaticResource ScrollBar.MouseOver.Thumb}"/>
@@ -601,7 +644,9 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
             <Style TargetType="{x:Type ScrollBar}">
+                <Setter Property="Background" Value="{DynamicResource HMM.Button.BackgroundBrush}"/>
                 <Style.Triggers>
                     <Trigger Property="Orientation" Value="Horizontal">
                         <Setter Property="Width" Value="Auto"/>
@@ -613,13 +658,17 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ScrollBar}">
-                                    <Grid x:Name="Bg" SnapsToDevicePixels="true">
-                                        <Track x:Name="PART_Track" Grid.Column="1" IsEnabled="{TemplateBinding IsMouseOver}">
+                                    <Grid x:Name="Bg" SnapsToDevicePixels="true" Background="{TemplateBinding Background}">
+                                        <Track x:Name="PART_Track" IsEnabled="{TemplateBinding IsMouseOver}">
                                             <Track.DecreaseRepeatButton>
-                                                <RepeatButton Command="{x:Static ScrollBar.PageLeftCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                                <RepeatButton Background="{TemplateBinding Background}"
+                                                              Command="{x:Static ScrollBar.PageLeftCommand}" 
+                                                              Style="{StaticResource RepeatButtonTransparent}"/>
                                             </Track.DecreaseRepeatButton>
                                             <Track.IncreaseRepeatButton>
-                                                <RepeatButton Command="{x:Static ScrollBar.PageRightCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                                <RepeatButton Background="{TemplateBinding Background}"
+                                                              Command="{x:Static ScrollBar.PageRightCommand}"
+                                                              Style="{StaticResource RepeatButtonTransparent}"/>
                                             </Track.IncreaseRepeatButton>
                                             <Track.Thumb>
                                                 <Thumb Style="{StaticResource ScrollBarThumbHorizontal}"/>
@@ -630,10 +679,10 @@
                             </Setter.Value>
                         </Setter>
                     </Trigger>
+
                     <Trigger Property="Orientation" Value="Vertical">
                         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
                         <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
-                        <Setter Property="Background" Value="{StaticResource ScrollBar.Static.Background}"/>
                         <Setter Property="BorderBrush" Value="{StaticResource ScrollBar.Static.Border}"/>
                         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
                         <Setter Property="BorderThickness" Value="1,0"/>
@@ -643,19 +692,26 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ScrollBar}">
-                                    <Grid x:Name="Bg" SnapsToDevicePixels="true">
-                                        <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}">
+                                    <Border x:Name="Bg" SnapsToDevicePixels="true">
+                                        <Track x:Name="PART_Track" IsDirectionReversed="true"
+                                               IsEnabled="{TemplateBinding IsMouseOver}">
                                             <Track.DecreaseRepeatButton>
-                                                <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                                <RepeatButton Background="{TemplateBinding Background}"
+                                                              Command="{x:Static ScrollBar.PageUpCommand}" 
+                                                              Style="{StaticResource RepeatButtonTransparent}"/>
                                             </Track.DecreaseRepeatButton>
+
                                             <Track.IncreaseRepeatButton>
-                                                <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                                <RepeatButton Background="{TemplateBinding Background}"
+                                                              Command="{x:Static ScrollBar.PageDownCommand}" 
+                                                              Style="{StaticResource RepeatButtonTransparent}"/>
                                             </Track.IncreaseRepeatButton>
+
                                             <Track.Thumb>
                                                 <Thumb Style="{StaticResource ScrollBarThumbVertical}"/>
                                             </Track.Thumb>
                                         </Track>
-                                    </Grid>
+                                    </Border>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -697,13 +753,16 @@
                                     </Border.BorderBrush>
                                     <ScrollContentPresenter CanContentScroll="{TemplateBinding CanContentScroll}" />
                                 </Border>
+
                                 <ScrollBar x:Name="PART_VerticalScrollBar"
+                         Grid.Row="0"
                          Grid.Column="1"
                          Value="{TemplateBinding VerticalOffset}"
                          Maximum="{TemplateBinding ScrollableHeight}"
                          ViewportSize="{TemplateBinding ViewportHeight}"
                          Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                          HorizontalAlignment="Right"/>
+
                                 <ScrollBar x:Name="PART_HorizontalScrollBar"
                          Orientation="Horizontal"
                          Grid.Row="1"
@@ -822,6 +881,24 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+            <Style TargetType="{x:Type ListBox}">
+                <Setter Property="Background" Value="Transparent"/>
+            </Style>
+
+            <Style x:Key="{x:Static SystemParameters.FocusVisualStyleKey}">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Rectangle StrokeThickness="1"  
+                                       Stroke="Red"  
+                                       StrokeDashArray="1 2"  
+                                       SnapsToDevicePixels="true"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <SolidColorBrush x:Key="SliderThumb.Static.Foreground" Color="#FFE5E5E5"/>
             <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="#FFDCECFC"/>
             <SolidColorBrush x:Key="SliderThumb.MouseOver.Border" Color="#FF7Eb4EA"/>
@@ -1083,6 +1160,7 @@
             <SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="#FF3C77DD"/>
             <SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="#FF000000"/>
             <SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="#FF000000"/>
+
             <Style TargetType="{x:Type CheckBox}">
                 <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
                 <Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>

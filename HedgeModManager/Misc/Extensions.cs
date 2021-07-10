@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using HedgeModManager.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -35,6 +36,69 @@ namespace HedgeModManager.Misc
                 return hash1 + (hash2 * 1566083941);
             }
         }
+
+        #region https://stackoverflow.com/a/31941159
+
+        /// <summary>
+        /// Returns true if <paramref name="path"/> starts with the path <paramref name="baseDirPath"/>.
+        /// The comparison is case-insensitive, handles / and \ slashes as folder separators and
+        /// only matches if the base dir folder name is matched exactly ("c:\foobar\file.txt" is not a sub path of "c:\foo").
+        /// </summary>
+        public static bool IsSubPathOf(this string path, string baseDirPath)
+        {
+            string normalizedPath = Path.GetFullPath(path.Replace('/', '\\')
+                .WithEnding("\\"));
+
+            string normalizedBaseDirPath = Path.GetFullPath(baseDirPath.Replace('/', '\\')
+                .WithEnding("\\"));
+
+            return normalizedPath.StartsWith(normalizedBaseDirPath, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Returns <paramref name="str"/> with the minimal concatenation of <paramref name="ending"/> (starting from end) that
+        /// results in satisfying .EndsWith(ending).
+        /// </summary>
+        /// <example>"hel".WithEnding("llo") returns "hello", which is the result of "hel" + "lo".</example>
+        public static string WithEnding([CanBeNull] this string str, string ending)
+        {
+            if (str == null)
+                return ending;
+
+            string result = str;
+
+            // Right() is 1-indexed, so include these cases
+            // * Append no characters
+            // * Append up to N characters, where N is ending length
+            for (int i = 0; i <= ending.Length; i++)
+            {
+                string tmp = result + ending.Right(i);
+                if (tmp.EndsWith(ending))
+                    return tmp;
+            }
+
+            return result;
+        }
+
+        /// <summary>Gets the rightmost <paramref name="length" /> characters from a string.</summary>
+        /// <param name="value">The string to retrieve the substring from.</param>
+        /// <param name="length">The number of characters to retrieve.</param>
+        /// <returns>The substring.</returns>
+        public static string Right([NotNull] this string value, int length)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+            if (length < 0)
+            {
+                throw new ArgumentOutOfRangeException("length", length, "Length is less than zero");
+            }
+
+            return (length < value.Length) ? value.Substring(value.Length - length) : value;
+        }
+
+        #endregion
 
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>
             (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -104,15 +168,34 @@ namespace HedgeModManager.Misc
             }
         }
 
-        public static async Task DownloadFileAsync(this HttpClient client, string url, string filePath, IProgress<double?> progress = null)
+        public static async Task DownloadFileAsync(this HttpClient client, string url, string filePath, IProgress<double?> progress = null, CancellationToken cancellationToken = default)
         {
-            using (var httpResponse = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
-            {
-                httpResponse.EnsureSuccessStatusCode();
+            using var httpResponse = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            httpResponse.EnsureSuccessStatusCode();
 
-                using (var outputFile = File.Create(filePath, 8192, FileOptions.Asynchronous))
-                    await httpResponse.Content.CopyToAsync(outputFile, progress).ConfigureAwait(false);
-            }
+            using var outputFile = File.Create(filePath, 8192, FileOptions.Asynchronous);
+            await httpResponse.Content.CopyToAsync(outputFile, progress, cancellationToken).ConfigureAwait(false);
+        }
+
+        public static int Clamp(this int value, int min, int max)
+        {
+            if (value > max) return max;
+            if (value < min) return min;
+            else return value;
+        }
+
+        public static float Clamp(this float value, float min, float max)
+        {
+            if (value > max) return max;
+            if (value < min) return min;
+            else return value;
+        }
+
+        public static double Clamp(this double value, double min, double max)
+        {
+            if (value > max) return max;
+            if (value < min) return min;
+            else return value;
         }
     }
 
