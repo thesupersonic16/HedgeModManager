@@ -333,7 +333,11 @@ namespace HedgeModManager
                 return;
 
             // Only update mods that weren't deleted
-            var model = new ModUpdatesWindowViewModel(updates.Where(u => Directory.Exists(u.Mod.RootDirectory)));
+            var existingMods = updates.Where(u => Directory.Exists(u.Mod.RootDirectory)).ToList();
+            if (existingMods.Count == 0)
+                return;
+
+            var model = new ModUpdatesWindowViewModel(existingMods);
             Dispatcher.Invoke(model.ShowDialog);
         }
 
