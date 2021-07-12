@@ -609,49 +609,61 @@ namespace HedgeModManager
             return box;
         }
 
-        public static void InstallOtherLoader(bool toggle = true)
+        public static bool InstallOtherLoader(bool toggle = true)
         {
-            if (CurrentGame.SupportsCPKREDIR)
+            bool installed = false;
+            try
             {
-                if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))
+                if (CurrentGame.SupportsCPKREDIR)
                 {
-                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
-                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
-                }
-            }
-
-            string DLLFileName = Path.Combine(StartDirectory, CurrentGame.CustomLoaderFileName);
-
-            if (File.Exists(DLLFileName) && toggle)
-            {
-                File.Delete(DLLFileName);
-                return;
-            }
-
-            // Downloads the loader
-            var downloader = new DownloadWindow($"Downloading {CurrentGame.CustomLoaderName}",
-                CurrentGame.ModLoaderDownloadURL, DLLFileName);
-
-            downloader.DownloadFailed += (ex) =>
-            {
-                var loader = CurrentGame.ModLoaderData;
-                if (loader != null)
-                    File.WriteAllBytes(DLLFileName, loader);
-                else
-                {
-                    CreateOKMessageBox("Hedge Mod Manager", Lang.Localise("MainUIMLDownloadFail")).ShowDialog();
-                    if (File.Exists(DLLFileName))
+                    if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))
                     {
-                        try
-                        {
-                            File.Delete(DLLFileName);
-                        }
-                        catch { }
+                        File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
+                        File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
                     }
                 }
-            };
 
-            downloader.Start();
+                string DLLFileName = Path.Combine(StartDirectory, CurrentGame.CustomLoaderFileName);
+
+                if (File.Exists(DLLFileName) && toggle)
+                {
+                    installed = true;
+                    File.Delete(DLLFileName);
+                    return true;
+                }
+
+                // Downloads the loader
+                var downloader = new DownloadWindow($"Downloading {CurrentGame.CustomLoaderName}",
+                    CurrentGame.ModLoaderDownloadURL, DLLFileName);
+
+                downloader.DownloadFailed += (ex) =>
+                {
+                    var loader = CurrentGame.ModLoaderData;
+                    if (loader != null)
+                        File.WriteAllBytes(DLLFileName, loader);
+                    else
+                    {
+                        CreateOKMessageBox("Hedge Mod Manager", Lang.Localise("MainUIMLDownloadFail")).ShowDialog();
+                        if (File.Exists(DLLFileName))
+                        {
+                            try
+                            {
+                                File.Delete(DLLFileName);
+                            }
+                            catch { }
+                        }
+                    }
+                };
+
+                downloader.Start();
+            }
+            catch (Exception e)
+            {
+                CreateOKMessageBox("Hedge Mod Manager", 
+                    installed ? Lang.Localise("MainUIMLInstallFail") : Lang.Localise("MainUIMLUninstallFail")).ShowDialog();
+                return false;
+            }
+            return true;
         }
 
         public static int BoyerMooreSearch(byte[] haystack, byte[] needle)

@@ -574,8 +574,10 @@ namespace HedgeModManager
                             dialog.AddButton(Localise("CommonUIUpdate"), () =>
                             {
                                 dialog.Close();
-                                HedgeApp.InstallOtherLoader(false);
-                                UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                                if (HedgeApp.InstallOtherLoader(false))
+                                    UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                                else
+                                    UpdateStatus($"Failed to update {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
                             });
 
                             dialog.AddButton(Localise("CommonUIIgnore"), () =>
@@ -650,8 +652,8 @@ namespace HedgeModManager
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     dialog.Close();
-                    HedgeApp.InstallOtherLoader(false);
-                    UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.CustomLoaderName));
+                    if (HedgeApp.InstallOtherLoader(false))
+                        UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.CustomLoaderName));
                 });
 
                 dialog.AddButton(Localise("CommonUINo"), () =>
@@ -975,12 +977,12 @@ namespace HedgeModManager
                 RefreshProfiles();
                 Refresh();
                 UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGame.GameName));
-                await CheckForLoaderUpdateAsync();
 
                 // Schedule checking for code updates if available.
                 if (Button_DownloadCodes.IsEnabled)
                     await CheckForCodeUpdates();
             }
+            await CheckForLoaderUpdateAsync();
         }
 
         private void UI_Download_Codes(object sender, RoutedEventArgs e)
