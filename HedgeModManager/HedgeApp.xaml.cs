@@ -660,7 +660,7 @@ namespace HedgeModManager
             catch (Exception e)
             {
                 CreateOKMessageBox("Hedge Mod Manager", 
-                    installed ? Lang.Localise("MainUIMLInstallFail") : Lang.Localise("MainUIMLUninstallFail")).ShowDialog();
+                    installed ? Lang.Localise("MainUIMLUninstallFail") : Lang.Localise("MainUIMLInstallFail")).ShowDialog();
                 return false;
             }
             return true;
