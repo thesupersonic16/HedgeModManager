@@ -606,8 +606,8 @@ WriteProtected<uint>(0x10C65CB, 0x85);
 WriteProtected<uint>(0x10C65F5, 0x85);
 
 Patch "Disable Spin Jump Particles" by "Hyper"
-WriteProtected<byte>(0x15F99DC, 0x00);
 WriteProtected<byte>(0x15E902C, 0x00);
+WriteProtected<byte>(0x15F99DC, 0x00);
 
 Patch "Disable Light Dash Particles" by "Hyper"
 WriteProtected<byte>(0x10538EB, 0xE9, 0x8F, 0x00, 0x00, 0x00, 0x90);
