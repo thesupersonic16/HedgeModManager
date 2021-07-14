@@ -351,7 +351,7 @@
                         <ControlTemplate TargetType="{x:Type TabItem}">
                             <Border BorderBrush="Transparent" Width="{TemplateBinding Width}" 
                                     Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                                <TextBlock Text="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}"/>
+                                <TextBlock Text="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
