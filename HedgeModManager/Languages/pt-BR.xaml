@@ -8,8 +8,8 @@
     <system:String x:Key="CommonUIOK"     >OK</system:String>
     <system:String x:Key="CommonUICancel" >Cancelar</system:String>
     <system:String x:Key="CommonUIYes"    >Sim</system:String>
+    <system:String x:Key="CommonUIBlocked">Bloqueado</system:String>
     <system:String x:Key="CommonUINo"     >Não</system:String>
-    <system:String x:Key="CommonUIBlocked"    >Bloqueado</system:String>
     <system:String x:Key="CommonUIRetry"  >Tentar Novamente</system:String>
     <system:String x:Key="CommonUIUpdate" >Atualizar</system:String>
     <system:String x:Key="CommonUIDelete" >Apagar</system:String>
@@ -29,7 +29,9 @@
     <system:String x:Key="MainUISaveAndPlay"   >Guardar e Jogar</system:String>
     <system:String x:Key="MainUIPlay"          >Jogar</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Falha ao baixar o carregador de mods.</system:String>
-
+    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Falha ao instalar o carregador de mods.&#x0a;Por favor verifique que tem permissões para escrever ficheiros do jogo.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Falha ao desinstalar o carregador de mods.&#x0a;Por favor verifique que não tem nenhum jogo em execução.</system:String>
+    
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nome</system:String>
     <system:String x:Key="ModsUIVersion"        >Versão</system:String>
@@ -40,7 +42,8 @@
     <system:String x:Key="ModsUIModFavorite"    >Favorito</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Abrir pasta de conteúdo</system:String>
-    <system:String x:Key="ModsUIModCheckUpdates">Verificar por atualizações</system:String>
+    <system:String x:Key="ModsUIModCheckUpdates">Buscar atualizações</system:String>
+    <system:String x:Key="ModsUICheckUpdatesAll">Buscar atualizações para todos os mods</system:String>
     <system:String x:Key="ModsUIModEdit"        >Editar mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Remover mod</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Arraste items para alterar a ordem de carregamento de mods.</system:String>
@@ -172,5 +175,8 @@
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Ocorreu um erro durante a transferência. Os servidores poderão estar em baixo ou sobrecarregados. Por favor tente novamente mais tarde. &#x0a;&#x0a;Detalhes: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Falha ao Encontrar Jogo</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">O Hedge Mod Manager foi incapaz de encontrar uma instalação de {0}</system:String>
+    
+    <!-- Mod Updates Window Strings -->
+    <system:String x:Key="ModUpdatesChangelog">Changelog</system:String>
 
 </ResourceDictionary>
