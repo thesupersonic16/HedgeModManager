@@ -31,7 +31,7 @@ namespace HedgeModManager
     }
 
     [ValueConversion(typeof(bool), typeof(string))]
-    public class ModSupportsSaveConverter : IValueConverter
+    public class BoolToYesNoConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
