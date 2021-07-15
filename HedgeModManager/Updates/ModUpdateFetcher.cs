@@ -9,6 +9,27 @@ namespace HedgeModManager.Updates
 {
     public class ModUpdateFetcher
     {
+        private static async Task<IModUpdateInfo> GetInfo(ModInfo mod, CancellationToken cancellationToken = default)
+        {
+            IModUpdateInfo info = null;
+
+            var versionInfo = await ModVersionInfo.ParseFromServerAsync(mod.UpdateServer, cancellationToken)
+                .ConfigureAwait(false);
+
+            if (versionInfo == null)
+            {
+                return null;
+            }
+
+            info = await ModUpdateModern.GetUpdateAsync(versionInfo, mod, cancellationToken)
+                .ConfigureAwait(false);
+
+            if (info == null)
+                info = await ModUpdateGmi.GetUpdateAsync(versionInfo, mod, cancellationToken).ConfigureAwait(false);
+
+            return info;
+        }
+
         public static async Task<IReadOnlyList<IModUpdateInfo>> FetchUpdates(IEnumerable<ModInfo> mods, NetworkConfig config = null, 
             Action<ModInfo, Status, Exception> statusCallback = null, CancellationToken cancellationToken = default)
         {
@@ -31,7 +52,7 @@ namespace HedgeModManager.Updates
 
                 try
                 {
-                    info = await ModUpdateGmi.GetUpdateAsync(mod, cancellationToken);
+                    info = await GetInfo(mod, cancellationToken);
                 }
                 catch(Exception e)
                 {
@@ -67,7 +88,7 @@ namespace HedgeModManager.Updates
             IModUpdateInfo info = null;
             try
             {
-                info = await ModUpdateGmi.GetUpdateAsync(mod, cancellationToken);
+                info = await GetInfo(mod, cancellationToken);
             }
             catch (Exception e)
             {

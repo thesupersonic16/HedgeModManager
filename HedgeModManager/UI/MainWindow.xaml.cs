@@ -339,6 +339,12 @@ namespace HedgeModManager
 
             var model = new ModUpdatesWindowViewModel(existingMods);
             Dispatcher.Invoke(model.ShowDialog);
+
+            if (model.Mods.Count == 0)
+                return;
+
+            Dispatcher.Invoke(RefreshMods);
+            Dispatcher.Invoke(RefreshUI);
         }
 
         public async Task SaveModsDB()
@@ -853,7 +859,10 @@ namespace HedgeModManager
             {
                 if (await CheckForModUpdatesAsync(ViewModel.SelectedMod, ModUpdateCheckCancelSource.Token)
                     .ConfigureAwait(false))
+                {
                     Dispatcher.Invoke(RefreshMods);
+                    Dispatcher.Invoke(RefreshUI);
+                }
             }
             catch(OperationCanceledException)
             {

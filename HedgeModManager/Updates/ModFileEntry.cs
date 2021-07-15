@@ -148,7 +148,8 @@ namespace HedgeModManager.Updates
 
         internal ModFileEntry FindItem(string name, bool folder = false)
         {
-            return this.FirstOrDefault(e => e.Name == name && e.IsFile == !folder);
+            return this.FirstOrDefault(e =>
+                e.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && e.IsFile == !folder);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -241,7 +242,9 @@ namespace HedgeModManager.Updates
             }
 
             foundEntry =
-                this.FirstOrDefault(x => x.IsFile == item.IsFile && x.Hash == item.Hash && x.Name == item.Name);
+                this.FirstOrDefault(x =>
+                    x.IsFile == item.IsFile && x.Hash == item.Hash &&
+                    x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase));
 
             return foundEntry != null;
         }

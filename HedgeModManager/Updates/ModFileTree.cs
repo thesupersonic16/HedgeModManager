@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -52,9 +53,11 @@ namespace HedgeModManager.Updates
             return item;
         }
 
-        public static async Task<ModFileTree> LoadFromUrl(string url)
+        public static async Task<ModFileTree> LoadFromUrl(string url, CancellationToken cancellationToken = default)
         {
-            var response = await Singleton.GetInstance<HttpClient>().GetAsync(url);
+            var response = await Singleton.GetInstance<HttpClient>().GetAsync(url, cancellationToken)
+                .ConfigureAwait(false);
+
             if (!response.IsSuccessStatusCode)
                 return null;
 

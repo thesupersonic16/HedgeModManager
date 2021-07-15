@@ -15,7 +15,7 @@ namespace HedgeModManager.Updates
         public string Version { get; internal set; }
 
         protected ModVersionInfo VersionInfo { get; set; }
-        protected GmiUpdateCommandList Commands { get; set; } = new GmiUpdateCommandList();
+        protected UpdateCommandList Commands { get; set; } = new UpdateCommandList();
         private string ChangelogCache { get; set; }
 
         public async Task<string> GetChangelog()
@@ -48,24 +48,18 @@ namespace HedgeModManager.Updates
             await Commands.ExecuteAsync(Mod, config, cancellationToken);
         }
 
-        public static async Task<ModUpdateGmi> GetUpdateAsync(ModInfo mod, CancellationToken cancellationToken = default)
+        public static async Task<ModUpdateGmi> GetUpdateAsync(ModVersionInfo info, ModInfo mod, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(mod.UpdateServer))
                 return null;
-
-            string modVersionPath = Path.Combine(mod.UpdateServer, "mod_version.ini");
+            
             string modFilesPath = Path.Combine(mod.UpdateServer, "mod_files.txt");
-
-            var versionInfo = await ModVersionInfo.ParseFromWebAsync(modVersionPath, cancellationToken)
-                .ConfigureAwait(false);
-
-            if (versionInfo == null)
-                return null;
 
             cancellationToken.ThrowIfCancellationRequested();
 
             var filesResult = await Singleton.GetInstance<HttpClient>().GetAsync(modFilesPath, cancellationToken)
                 .ConfigureAwait(false);
+            
             if (!filesResult.IsSuccessStatusCode)
                 return null;
 
@@ -74,8 +68,8 @@ namespace HedgeModManager.Updates
             var update = new ModUpdateGmi
             {
                 Mod = mod,
-                VersionInfo = versionInfo,
-                Version = versionInfo.Version
+                VersionInfo = info,
+                Version = info.Version
             };
             update.Commands.Parse(await filesResult.Content.ReadAsStringAsync());
 

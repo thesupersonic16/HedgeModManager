@@ -38,6 +38,7 @@ using HedgeModManager.UI;
 using Newtonsoft.Json;
 using HedgeModManager.Themes;
 using HedgeModManager.UI.Models;
+using HedgeModManager.Updates;
 
 namespace HedgeModManager
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,14 +85,61 @@ namespace HedgeModManager.Updates
 
             return result;
         }
-    }
 
-    public class CompareResult
-    {
-        public long AddedSize { get; set; }
-        public long RemovedSize { get; set; }
+        public FileSystemResult ResolveFileSystem(string dir)
+        {
+            var result = new FileSystemResult();
 
-        public List<ModFileEntry> AddedEntries { get; set; } = new List<ModFileEntry>(64);
-        public List<ModFileEntry> RemovedEntries { get; set; } = new List<ModFileEntry>(64);
+            if (string.IsNullOrEmpty(dir))
+            {
+                result.MissingEntries.Add(this);
+                return result;
+            }
+
+            if (IsFile)
+            {
+                if (!File.Exists(Path.Combine(dir, FullPath)))
+                    result.MissingEntries.Add(this);
+
+                return result;
+            }
+
+            var checks = new Queue<ModFileEntry>(32);
+            checks.Enqueue(this);
+
+            while (checks.Count != 0)
+            {
+                var entry = checks.Dequeue();
+                foreach (var child in entry)
+                {
+                    if (!child.IsFile)
+                    {
+                        checks.Enqueue(child);
+                        continue;
+                    }
+
+                    if (File.Exists(Path.Combine(dir, child.FullPath)))
+                        continue;
+                    
+                    result.MissingEntries.Add(child);
+                }
+            }
+
+            return result;
+        }
+
+        public class FileSystemResult
+        {
+            public List<ModFileEntry> MissingEntries { get; set; } = new List<ModFileEntry>(32);
+        }
+
+        public class CompareResult
+        {
+            public long AddedSize { get; set; }
+            public long RemovedSize { get; set; }
+
+            public List<ModFileEntry> AddedEntries { get; set; } = new List<ModFileEntry>(64);
+            public List<ModFileEntry> RemovedEntries { get; set; } = new List<ModFileEntry>(64);
+        }
     }
 }

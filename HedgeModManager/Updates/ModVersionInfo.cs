@@ -11,13 +11,20 @@ namespace HedgeModManager.Updates
 {
     public class ModVersionInfo
     {
+        public const string FileName = "mod_version.ini";
         public string Version { get; set; }
         public string Changelog { get; set; }
         public string ChangeLogPath { get; set; }
+        public string BaseFileTreePath { get; set; }
 
         public string DownloadSize { get; set; }
-
         public UpdateType Type { get; set; } = UpdateType.Gmi;
+
+        public static Task<ModVersionInfo> ParseFromServerAsync(string server, CancellationToken cancellationToken = default, string fileName = FileName)
+        {
+            string path = Path.Combine(server, fileName);
+            return ParseFromWebAsync(path, cancellationToken);
+        }
 
         public static async Task<ModVersionInfo> ParseFromWebAsync(string url, CancellationToken cancellationToken = default)
         {
@@ -53,13 +60,14 @@ namespace HedgeModManager.Updates
 
             if (!ini["Main"].Params.ContainsKey("VersionString"))
                 return false;
-
+            
             if (int.TryParse(ini["Main"]["UpdaterType"], out int updateType))
                 Type = (UpdateType)updateType;
 
             Version = ini["Main"]["VersionString"];
             ChangeLogPath = ini["Main"]["Markdown"];
             DownloadSize = ini["Main"]["DownloadSizeString"];
+            BaseFileTreePath = ini["Main"]["BaseFileTree"];
 
             if (int.TryParse(ini["Changelog"]["StringCount"], out int modChangeLogLineCount))
             {
@@ -68,6 +76,25 @@ namespace HedgeModManager.Updates
             }
 
             return true;
+        }
+
+        public async Task<ModFileTree> GetBaseFileTree(string server, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(server))
+                return null;
+
+            if (string.IsNullOrEmpty(BaseFileTreePath))
+                return null;
+
+            try
+            {
+                return await ModFileTree.LoadFromUrl(Path.Combine(server, BaseFileTreePath), cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (HttpRequestException)
+            {
+                return null;
+            }
         }
     }
 
