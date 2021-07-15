@@ -19,6 +19,9 @@ namespace HedgeModManager
             if (string.IsNullOrEmpty(server))
                 return Lang.Localise("CommonUINo");
 
+            if (Singleton.GetInstance<NetworkConfig>() == null)
+                return Lang.Localise("CommonUIYes");
+
             return Singleton.GetInstance<NetworkConfig>().IsServerBlocked(server)
                 ? Lang.Localise("CommonUIBlocked")
                 : Lang.Localise("CommonUIYes");
