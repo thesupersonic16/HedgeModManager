@@ -713,17 +713,8 @@ namespace HedgeModManager
 
         public bool CheckDepends()
         {
-            bool abort = false;
-
-            if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.SonicGenerations.AppID, DependTypes.VS2019x86);
-            if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.SonicLostWorld.AppID, DependTypes.VS2019x86);
-            if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.SonicForces.AppID, DependTypes.VS2019x64);
-            if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.PuyoPuyoTetris2.AppID, DependTypes.VS2019x64);
-            return !abort;
+            return !DependsHandler.AskToInstallRuntime(HedgeApp.CurrentGame.AppID,
+                HedgeApp.CurrentGame.Is64Bit ? DependTypes.VS2019x64 : DependTypes.VS2019x86);
         }
 
         public bool CheckDepend(string id, string filePath, string dependName, string downloadURL, string fileName)
