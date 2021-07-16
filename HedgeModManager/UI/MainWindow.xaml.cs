@@ -52,6 +52,7 @@ namespace HedgeModManager
         public ModProfile SelectedModProfile = null;
         public CancellationTokenSource ModUpdateCheckCancelSource { get; set; }
 
+        protected List<Task> Tasks { get; set; } = new List<Task>(4);
         protected Timer StatusTimer;
 
         private bool CodesOutdated = false;
@@ -62,6 +63,23 @@ namespace HedgeModManager
         {
             StatusLog = new StatusLogger(this);
             InitializeComponent();
+        }
+
+        public async Task RunTask(Task task)
+        {
+            lock (Tasks)
+                Tasks.Add(task);
+
+            await task;
+
+            lock (Tasks)
+                Tasks.Remove(task);
+        }
+
+        public Task WaitTasks()
+        {
+            lock(Tasks)
+                return Task.WhenAll(Tasks);
         }
 
         public void Refresh()
@@ -337,6 +355,7 @@ namespace HedgeModManager
             if (existingMods.Count == 0)
                 return;
 
+            await WaitTasks();
             var model = new ModUpdatesWindowViewModel(existingMods);
             Dispatcher.Invoke(model.ShowDialog);
 
@@ -568,30 +587,18 @@ namespace HedgeModManager
                     {
                         var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
 
+                        dialog.AddButton(Localise("CommonUIUpdate"), () =>
+                        {
+                            dialog.Close();
+                            if (HedgeApp.InstallOtherLoader(false))
+                                UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                            else
+                                UpdateStatus($"Failed to update {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                        });
+
                         dialog.AddButton(Localise("CommonUIIgnore"), () =>
                         {
                             dialog.Close();
-                        });
-
-                        dialog.AddButton(Localise("CommonUIUpdate"), () =>
-                        {
-                            var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
-
-                            dialog.AddButton(Localise("CommonUIUpdate"), () =>
-                            {
-                                dialog.Close();
-                                if (HedgeApp.InstallOtherLoader(false))
-                                    UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
-                                else
-                                    UpdateStatus($"Failed to update {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
-                            });
-
-                            dialog.AddButton(Localise("CommonUIIgnore"), () =>
-                            {
-                                dialog.Close();
-                            });
-
-                            dialog.ShowDialog();
                         });
 
                         dialog.ShowDialog();
@@ -982,7 +989,8 @@ namespace HedgeModManager
                 if (Button_DownloadCodes.IsEnabled)
                     await CheckForCodeUpdates();
             }
-            await CheckForLoaderUpdateAsync();
+
+            await RunTask(CheckForLoaderUpdateAsync());
         }
 
         private void UI_Download_Codes(object sender, RoutedEventArgs e)

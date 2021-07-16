@@ -26,7 +26,7 @@ namespace HedgeModManager.UI.Models
 
         public bool CanExecute(object parameter)
         {
-            return ExecuteFunc != null || CanExecuteFunc == null || CanExecuteFunc();
+            return ExecuteFunc != null && (CanExecuteFunc == null || CanExecuteFunc());
         }
 
         public void Execute(object parameter)
