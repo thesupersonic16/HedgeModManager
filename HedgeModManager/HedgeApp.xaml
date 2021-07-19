@@ -143,27 +143,29 @@
                                 <Border x:Name="OutlineBorder" BorderThickness="1" Background="Transparent" IsHitTestVisible="False" BorderBrush="{DynamicResource HMM.Window.AccentBrush2}" Panel.ZIndex="2"/>
                                 <Grid x:Name="WindowGrid" Margin="1" Background="{TemplateBinding Background}" Panel.ZIndex="1">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="22"/>
+                                        <RowDefinition Height="24"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
-                                    <Image Width="22" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0" Source="Resources/Graphics/icon256.png"/>
+                                    <Image Width="24" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0" Source="Resources/Graphics/icon256.png"/>
                                     <Label Content="{TemplateBinding Title}" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,0,0" Foreground="#E9E9E9"/>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Button x:Name="MinBtn" Style="{DynamicResource WindowFrameButton}" Click="Minimize_Click"
-                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch">
-                                            <Border BorderThickness="0,0,0,4" Padding="2" Margin="12,6,12,0" 
+                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                            <Border BorderThickness="0,0,0,3" Padding="0,0,10,0" Margin="12,6,12,0" 
                                                     BorderBrush="{DynamicResource HMM.Button.ForegroundBrush}" Background="Transparent"/>
                                         </Button>
 
                                         <Button x:Name="MaxBtn" Style="{DynamicResource WindowFrameButton}" Click="MaxBtn_Click"
                                                 VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                                            <Border BorderThickness="3.5" Padding="2" Margin="0,6,0,2" 
+                                            <Border BorderThickness="2.5" Padding="3" Margin="0,6,0,2"
                                                     BorderBrush="{DynamicResource HMM.Button.ForegroundBrush}" Background="Transparent"/>
                                         </Button>
 
-                                        <Button x:Name="CloseBtn" Style="{DynamicResource WindowFrameButton}" Click="Close_Click" 
-                                                FontWeight="ExtraBold" Foreground="{DynamicResource HMM.Button.ForegroundBrush}" 
-                                                FontSize="18" Content="×"/>
+                                        <Button x:Name="CloseBtn" Style="{DynamicResource WindowFrameButtonClose}" Click="Close_Click" 
+                                                FontWeight="Bold" Foreground="{DynamicResource HMM.Button.ForegroundBrush}" 
+                                                FontSize="24" Content="×" Margin="0,0,0,0" Height="32"
+                                                Padding="0,-8,0,0" SnapsToDevicePixels="True">
+                                        </Button>
                                     </StackPanel>
 
                                     <Grid Margin="4" Grid.Row="1" Background="{DynamicResource HMM.Window.BackgroundBrush}" Panel.ZIndex="1">
@@ -194,8 +196,8 @@
                 <Setter Property="BorderThickness" Value="1"/>
             </Style>
             <Style TargetType="{x:Type Button}" x:Key="WindowFrameButton">
-                <Setter Property="Width" Value="35"/>
-                <Setter Property="Height" Value="25"/>
+                <Setter Property="Width" Value="40"/>
+                <Setter Property="Height" Value="24"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderBrush" Value="Transparent"/>
@@ -218,7 +220,47 @@
                                     <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="false">
-                                    <Setter Property="Opacity" Value="0"/>
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource HMM.Button.BackgroundBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource HMM.Button.BackgroundBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="{x:Type Button}" x:Key="WindowFrameButtonClose">
+                <Setter Property="Width" Value="40"/>
+                <Setter Property="Height" Value="24"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                <ContentPresenter x:Name="contentPresenter" Focusable="False" Opacity="{TemplateBinding Opacity}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsDefaulted" Value="true">
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource HMM.Button.WarningBrush}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="true">
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource HMM.Button.BackgroundBrush}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
