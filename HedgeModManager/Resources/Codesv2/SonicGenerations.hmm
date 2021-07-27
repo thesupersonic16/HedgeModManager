@@ -838,3 +838,8 @@ WriteProtected<byte>(0xCFD4CA, 0x00, 0x39)
 
 Patch "Always Play S-Rank Results Music" by "M&M"
 WriteProtected<byte>(0xCFD4E8, 0xF8, 0x38)
+
+Patch "Only Play Results Intro" by "M&M"
+WriteProtected<byte>(0xCFD47F, 0xE9, 0x95, 0x00, 0x00, 0x00)
+WriteProtected<byte>(0xCFD484, 0xC3)
+WriteNop(0xCFD485, 3)
