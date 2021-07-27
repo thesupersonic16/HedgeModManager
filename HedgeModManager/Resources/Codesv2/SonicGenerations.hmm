@@ -832,3 +832,9 @@ WriteProtected<byte>(0x121EDA4, 0xE9, 0xAD, 0x00, 0x00, 0x00)
 
 Patch "Disable Blue Trail" by "Hyper"
 WriteProtected<byte>(0xE5FDE5, 0xE9, 0x19, 0x01, 0x00, 0x00);
+
+Patch "Always Use Regular Results Music" by "M&M"
+WriteProtected<byte>(0xCFD4CA, 0x00, 0x39)
+
+Patch "Always Use S-Rank Results Music" by "M&M"
+WriteProtected<byte>(0xCFD4E8, 0xF8, 0x38)
