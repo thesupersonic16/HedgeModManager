@@ -13,7 +13,7 @@ using HedgeModManager.Updates;
 
 namespace HedgeModManager.UI.Models
 {
-    [ViewInfo("Mod Updates", 800, 450)]
+    [ViewInfo("ModUpdatesTitle", 800, 450)]
     public class ModUpdatesWindowViewModel : IViewModel, INotifyPropertyChanged
     {
         public IView View { get; set; }
