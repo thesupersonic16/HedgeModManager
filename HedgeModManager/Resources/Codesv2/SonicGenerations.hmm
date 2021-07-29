@@ -433,9 +433,7 @@ WriteProtected<byte>(0xD6CBCA, 0xF3, 0x0F, 0x10, 0x44, 0x24, 0x24);
 WriteNop(0xD6CBD0, 14);
 
 Patch "Longer Blue Trail" by "N69 & Nekit"
-WriteProtected<ushort>(0xE5FB17, 0x9090)
-WriteProtected<ushort>(0xE5FB19, 0x9090)
-WriteProtected<ushort>(0xE5FB1B, 0x9090)
+WriteNop(0xE5FB17, 6)
 WriteProtected<byte>(0xE5FE10, 0x48)
 WriteProtected<byte>(0xE5FE70, 0x48)
 
@@ -608,8 +606,8 @@ WriteProtected<uint>(0x10C65CB, 0x85);
 WriteProtected<uint>(0x10C65F5, 0x85);
 
 Patch "Disable Spin Jump Particles" by "Hyper"
-WriteProtected<byte>(0x15F99DC, 0x00);
 WriteProtected<byte>(0x15E902C, 0x00);
+WriteProtected<byte>(0x15F99DC, 0x00);
 
 Patch "Disable Light Dash Particles" by "Hyper"
 WriteProtected<byte>(0x10538EB, 0xE9, 0x8F, 0x00, 0x00, 0x00, 0x90);
@@ -831,3 +829,17 @@ WriteProtected<byte>(0x1096804,0x4A,0x18,0xE9,0xDD,0x00,0x00,0x00)
 
 Patch "Disable Grind Rail Lock-on" by "brianuuu"
 WriteProtected<byte>(0x121EDA4, 0xE9, 0xAD, 0x00, 0x00, 0x00)
+
+Patch "Disable Blue Trail" by "Hyper"
+WriteProtected<byte>(0xE5FDE5, 0xE9, 0x19, 0x01, 0x00, 0x00);
+
+Patch "Always Play Regular Results Music" by "M&M"
+WriteProtected<byte>(0xCFD4CA, 0x00, 0x39)
+
+Patch "Always Play S-Rank Results Music" by "M&M"
+WriteProtected<byte>(0xCFD4E8, 0xF8, 0x38)
+
+Patch "Only Play Results Intro" by "M&M"
+WriteProtected<byte>(0xCFD47F, 0xE9, 0x95, 0x00, 0x00, 0x00)
+WriteProtected<byte>(0xCFD484, 0xC3)
+WriteNop(0xCFD485, 3)
