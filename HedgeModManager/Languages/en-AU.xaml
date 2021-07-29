@@ -8,7 +8,7 @@
     <system:String x:Key="CommonUIOK"     >OK</system:String>
     <system:String x:Key="CommonUICancel" >Cancel</system:String>
     <system:String x:Key="CommonUIYes"    >Yes</system:String>
-    <system:String x:Key="CommonUIBlocked"    >Blocked</system:String>
+    <system:String x:Key="CommonUIBlocked">Blocked</system:String>
     <system:String x:Key="CommonUINo"     >No</system:String>
     <system:String x:Key="CommonUIRetry"  >Retry</system:String>
     <system:String x:Key="CommonUIUpdate" >Update</system:String>
@@ -29,6 +29,8 @@
     <system:String x:Key="MainUISaveAndPlay"   >Save and Play</system:String>
     <system:String x:Key="MainUIPlay"          >Play</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Failed to download mod loader.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Failed to install mod loader.&#x0a;Please make sure you have permissions to write game files.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Failed to uninstall mod loader.&#x0a;Please make sure no games are currently running.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Name</system:String>
@@ -41,6 +43,7 @@
     <system:String x:Key="ModsUIModConfigure"   >Configure mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Open containing folder</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Check for updates</system:String>
+    <system:String x:Key="ModsUICheckUpdatesAll">Check all mods for updates</system:String>
     <system:String x:Key="ModsUIModEdit"        >Edit mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Delete mod</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Drag and drop items to change the load order of mods.</system:String>
@@ -172,5 +175,9 @@
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">An error has occurred during the download. Servers might be down or overloaded. Please try again later. &#x0a;&#x0a;Details: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Failed to Find Game</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager was unable to find an installation of {0}</system:String>
+
+    <!-- Mod Updates Window Strings -->
+    <system:String x:Key="ModUpdatesChangelog">Changelog</system:String>
+    <system:String x:Key="ModUpdatesTitle"    >Mod Updates</system:String>
 
 </ResourceDictionary>

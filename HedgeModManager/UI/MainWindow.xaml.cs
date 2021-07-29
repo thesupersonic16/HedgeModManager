@@ -26,6 +26,7 @@ using Timer = System.Threading.Timer;
 using HMMResources = HedgeModManager.Properties.Resources;
 using static HedgeModManager.Lang;
 using HedgeModManager.Languages;
+using HedgeModManager.UI.Models;
 using HedgeModManager.Updates;
 using Newtonsoft.Json;
 
@@ -47,17 +48,38 @@ namespace HedgeModManager
 
         public static List<FileSystemWatcher> ModsWatchers = new List<FileSystemWatcher>();
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
-        public List<string> CheckedModUpdates = new List<string>();
-        public bool PauseModUpdates = false;
+        public bool CheckingForUpdates = false;
         public ModProfile SelectedModProfile = null;
+        public CancellationTokenSource ModUpdateCheckCancelSource { get; set; }
 
+        protected List<Task> Tasks { get; set; } = new List<Task>(4);
         protected Timer StatusTimer;
 
         private bool CodesOutdated = false;
 
+        public ILogger StatusLog { get; }
+
         public MainWindow()
         {
+            StatusLog = new StatusLogger(this);
             InitializeComponent();
+        }
+
+        public async Task RunTask(Task task)
+        {
+            lock (Tasks)
+                Tasks.Add(task);
+
+            await task;
+
+            lock (Tasks)
+                Tasks.Remove(task);
+        }
+
+        public Task WaitTasks()
+        {
+            lock(Tasks)
+                return Task.WhenAll(Tasks);
         }
 
         public void Refresh()
@@ -80,7 +102,7 @@ namespace HedgeModManager
                 // Remove profiles that don't exist
                 HedgeApp.ModProfiles.RemoveAll(profile =>
                     !File.Exists(Path.Combine(HedgeApp.ModsDbPath, profile.ModDBPath)));
-                
+
                 // Create new profile set if needed
                 if (HedgeApp.ModProfiles.Count == 0)
                     HedgeApp.ModProfiles.Add(new ModProfile("Default", "ModsDB.ini"));
@@ -121,12 +143,9 @@ namespace HedgeModManager
 
         public void RefreshMods()
         {
-            PauseModUpdates = true;
             CodesList.Items.Clear();
 
             LoadDatabase();
-            ModsDatabase.DetectMods();
-            ModsDatabase.GetEnabledMods();
             ModsDatabase.Mods.Sort((x, y) => x.Title.CompareTo(y.Title));
 
             CodesDatabase = CodeFile.FromFiles(CodeProvider.CodesTextPath, CodeProvider.ExtraCodesTextPath);
@@ -174,8 +193,6 @@ namespace HedgeModManager
                 box.AddButton(Localise("CommonUICancel"), box.Close);
                 box.ShowDialog();
             }
-
-            PauseModUpdates = false;
         }
 
         public void RefreshUI()
@@ -225,18 +242,6 @@ namespace HedgeModManager
             var exeDir = HedgeApp.StartDirectory;
             bool hasOtherModLoader = File.Exists(Path.Combine(exeDir, HedgeApp.CurrentGame.CustomLoaderFileName));
             IsCPKREDIRInstalled = HedgeApp.CurrentGame.SupportsCPKREDIR ? HedgeApp.IsCPKREDIRInstalled(Path.Combine(exeDir, HedgeApp.CurrentGame.ExecuteableName)) : hasOtherModLoader;
-            string loaders = (IsCPKREDIRInstalled && HedgeApp.CurrentGame.SupportsCPKREDIR ? HedgeApp.GetCPKREDIRVersionString() : "");
-
-            if (hasOtherModLoader)
-            {
-                if (string.IsNullOrEmpty(loaders))
-                    loaders = $"{HedgeApp.CurrentGame.CustomLoaderName}";
-                else
-                    loaders += $" & {HedgeApp.CurrentGame.CustomLoaderName}";
-            }
-
-            if (string.IsNullOrEmpty(loaders))
-                loaders = Localise("CommonUINone");
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentSteamGame;
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
@@ -257,7 +262,7 @@ namespace HedgeModManager
             {
                 // Codes from disk.
                 string localCodes = File.ReadAllText(CodeProvider.CodesTextPath);
-                string repoCodes = await HedgeApp.HttpClient.GetStringAsync(HedgeApp.CurrentGame.CodesURL);
+                string repoCodes = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGame.CodesURL);
 
                 if (localCodes == repoCodes)
                 {
@@ -277,116 +282,88 @@ namespace HedgeModManager
             catch (HttpRequestException) { /* do nothing for http exceptions */ }
         }
 
-        public async Task<bool> CheckForModUpdatesAsync(ModInfo mod, bool showUpdatedDialog = true)
+        public async Task<bool> CheckForModUpdatesAsync(ModInfo mod, CancellationToken cancellationToken = default)
         {
-            // Cancel update check if URL is blocked
-            if (HedgeApp.NetworkConfiguration.IsServerBlocked(mod.UpdateServer))
+            if (!mod.HasUpdates)
                 return false;
 
+            CheckingForUpdates = true;
             UpdateStatus(string.Format(Localise("StatusUICheckingModUpdates"), mod.Title));
-            ModUpdate.ModUpdateInfo update;
-            try
+            var result = await ModUpdateFetcher.FetchUpdate(mod, Singleton.GetInstance<NetworkConfig>(), cancellationToken);
+
+            CheckingForUpdates = false;
+            bool doUpdate = result.UpdateInfo != null;
+
+            switch (result.Status)
             {
-                // Downloads the mod update information
-                Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
-                update = await ModUpdate.GetUpdateFromINIAsync(mod);
-                if (update == null)
-                {
-                    Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
-                    UpdateStatus(string.Empty);
-                    return true;
-                }
+                case ModUpdateFetcher.Status.Failed:
+                    UpdateStatus(Localise("StatusUIFailedToUpdate", mod.Title, result.FailException?.Message));
+                    break;
+
+                case ModUpdateFetcher.Status.UpToDate:
+                    UpdateStatus(Localise("DialogUIModNewest", mod.Title));
+                    break;
             }
-            catch (Exception e)
-            {
-                Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
-                UpdateStatus(Localise("StatusUIFailedToUpdate", mod.Title, e.Message));
+
+            if (!doUpdate)
                 return false;
-            }
 
-            if (PauseModUpdates)
-            {
-                Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
-                return false;
-            }
-
-            bool status = true;
-            await Dispatcher.InvokeAsync(() =>
-            {
-                try
-                {
-                    UpdateStatus(string.Empty);
-                    Mouse.OverrideCursor = Cursors.Arrow;
-
-                    if (update.VersionString == mod.Version)
-                    {
-                        if (showUpdatedDialog)
-                        {
-                            var box = new HedgeMessageBox(string.Empty, string.Format(Localise("DialogUIModNewest"), mod.Title));
-                            box.AddButton(Localise("CommonUIOK"), () => box.Close());
-                            box.ShowDialog();
-                        }
-                        return;
-                    }
-
-                    var dialog = new HedgeMessageBox(string.Format(Localise("DialogUIModUpdate"), mod.Title, update.VersionString)
-                        , update.ChangeLog, type: InputType.MarkDown);
-
-                    dialog.AddButton(Localise("CommonUIUpdate"), () =>
-                    {
-                        var updater = new ModUpdateWindow(update);
-                        dialog.Close();
-
-                        updater.DownloadCompleted = Refresh;
-                        updater.Start();
-                    });
-
-                    dialog.AddButton(Localise("CommonUIClose"), () => dialog.Close());
-
-                    dialog.ShowDialog();
-                }
-                catch (Exception)
-                {
-                    // Mark as failed
-                    status = false;
-                }
-
-            });
-            return status;
+            var model = new ModUpdatesWindowViewModel(new[] { result.UpdateInfo });
+            Dispatcher.Invoke(model.ShowDialog);
+            return model.Mods.Count != 0;
         }
 
-        public async Task CheckAllModsUpdatesAsync()
+        public async Task CheckAllModsUpdatesAsync(CancellationToken cancellationToken = default)
         {
-            PauseModUpdates = false;
+            var updateMods = ModsDatabase.Where(x => x.HasUpdates).ToList();
             int completedCount = 0;
             int failedCount = 0;
-            var mods = ModsDatabase.Mods.Where(t => t.HasUpdates).ToList();
-            // Filter all mods with updates
-            foreach (var mod in mods)
-            {
-                if (CheckedModUpdates.Any(t => t == mod.RootDirectory))
-                    continue;
-                bool status = await CheckForModUpdatesAsync(mod, false);
-                if (status)
-                    ++completedCount;
-                else
-                    ++failedCount;
-                CheckedModUpdates.Add(mod.RootDirectory);
-                if (PauseModUpdates)
+
+            CheckingForUpdates = true;
+            var updates = await ModUpdateFetcher.FetchUpdates(updateMods, Singleton.GetInstance<NetworkConfig>(),
+                (mod, status, exception) =>
                 {
-                    while (PauseModUpdates)
-                        await Task.Delay(200);
-                    await CheckAllModsUpdatesAsync();
-                    return;
-                }
-            }
-            CheckedModUpdates.Clear();
+                    switch (status)
+                    {
+                        case ModUpdateFetcher.Status.BeginCheck:
+                            UpdateStatus(Localise("StatusUICheckingModUpdates", mod.Title));
+                            break;
+
+                        case ModUpdateFetcher.Status.Success:
+                            completedCount++;
+                            break;
+
+                        case ModUpdateFetcher.Status.Failed:
+                            UpdateStatus(Localise("StatusUIFailedToUpdate", mod.Title, exception?.Message));
+                            failedCount++;
+                            break;
+                    }
+                }, cancellationToken);
 
             // Language Workaround
-            string g_completed = completedCount == 1 ? Localise("StatusUIUpdateCompletedSingular") : Localise("StatusUIUpdateCompletedPlural");
-            string g_failed = failedCount == 1 ? Localise("StatusUIUpdateFailedSingular") : Localise("StatusUIUpdateFailedPlural");
-            string text = string.Format(Localise("StatusUIModUpdateCheckFinish"), completedCount, failedCount, g_completed, g_failed);
+            string completedText = completedCount == 1 ? Localise("StatusUIUpdateCompletedSingular") : Localise("StatusUIUpdateCompletedPlural");
+            string failedText = failedCount == 1 ? Localise("StatusUIUpdateFailedSingular") : Localise("StatusUIUpdateFailedPlural");
+            string text = string.Format(Localise("StatusUIModUpdateCheckFinish"), completedCount, failedCount, completedText, failedText);
             UpdateStatus(text);
+            CheckingForUpdates = false;
+
+            if (updates.Count == 0)
+                return;
+
+            // Only update mods that weren't deleted
+            var existingMods = updates.Where(u => Directory.Exists(u.Mod.RootDirectory)).ToList();
+            if (existingMods.Count == 0)
+                return;
+
+            await WaitTasks();
+            var model = new ModUpdatesWindowViewModel(existingMods);
+            Dispatcher.Invoke(model.ShowDialog);
+
+            if (model.Mods.Count == 0)
+                return;
+
+            Dispatcher.Invoke(RefreshMods);
+            Dispatcher.Invoke(RefreshUI);
         }
 
         public async Task SaveModsDB()
@@ -494,11 +471,17 @@ namespace HedgeModManager
 
         public async Task CheckForUpdatesAsync()
         {
-            // var updates = await ModUpdateFetcher.FetchUpdates(ModsDatabase, HedgeApp.NetworkConfiguration);
-
             await CheckForManagerUpdatesAsync();
+
             if (HedgeApp.Config.CheckForModUpdates)
-                await CheckAllModsUpdatesAsync();
+            {
+                ModUpdateCheckCancelSource = new CancellationTokenSource();
+                try
+                {
+                    await CheckAllModsUpdatesAsync(ModUpdateCheckCancelSource.Token);
+                }catch(OperationCanceledException){}
+            }
+
             await CheckForCodeUpdates();
         }
 
@@ -583,7 +566,7 @@ namespace HedgeModManager
             UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), HedgeApp.CurrentGame.CustomLoaderName));
             try
             {
-                using (var stream = await HedgeApp.HttpClient.GetStreamAsync(HMMResources.URL_LOADERS_INI))
+                using (var stream = await Singleton.GetInstance<HttpClient>().GetStreamAsync(HMMResources.URL_LOADERS_INI))
                 {
                     var loaderInfo = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
                     // Check if there is a loader version, if not return
@@ -604,28 +587,18 @@ namespace HedgeModManager
                     {
                         var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
 
+                        dialog.AddButton(Localise("CommonUIUpdate"), () =>
+                        {
+                            dialog.Close();
+                            if (HedgeApp.InstallOtherLoader(false))
+                                UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                            else
+                                UpdateStatus($"Failed to update {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                        });
+
                         dialog.AddButton(Localise("CommonUIIgnore"), () =>
                         {
                             dialog.Close();
-                        });
-
-                        dialog.AddButton(Localise("CommonUIUpdate"), () =>
-                        {
-                            var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
-
-                            dialog.AddButton(Localise("CommonUIUpdate"), () =>
-                            {
-                                dialog.Close();
-                                HedgeApp.InstallOtherLoader(false);
-                                UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
-                            });
-
-                            dialog.AddButton(Localise("CommonUIIgnore"), () =>
-                            {
-                                dialog.Close();
-                            });
-
-                            dialog.ShowDialog();
                         });
 
                         dialog.ShowDialog();
@@ -692,8 +665,8 @@ namespace HedgeModManager
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     dialog.Close();
-                    HedgeApp.InstallOtherLoader(false);
-                    UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.CustomLoaderName));
+                    if (HedgeApp.InstallOtherLoader(false))
+                        UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.CustomLoaderName));
                 });
 
                 dialog.AddButton(Localise("CommonUINo"), () =>
@@ -747,17 +720,8 @@ namespace HedgeModManager
 
         public bool CheckDepends()
         {
-            bool abort = false;
-
-            if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.SonicGenerations.AppID, DependTypes.VS2019x86);
-            if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.SonicLostWorld.AppID, DependTypes.VS2019x86);
-            if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.SonicForces.AppID, DependTypes.VS2019x64);
-            if (!abort)
-                abort = DependsHandler.AskToInstallRuntime(Games.PuyoPuyoTetris2.AppID, DependTypes.VS2019x64);
-            return !abort;
+            return !DependsHandler.AskToInstallRuntime(HedgeApp.CurrentGame.AppID,
+                HedgeApp.CurrentGame.Is64Bit ? DependTypes.VS2019x64 : DependTypes.VS2019x86);
         }
 
         public bool CheckDepend(string id, string filePath, string dependName, string downloadURL, string fileName)
@@ -834,6 +798,18 @@ namespace HedgeModManager
             box.ShowDialog();
         }
 
+        private async void UI_CheckUpdates_AllMods(object sender, RoutedEventArgs e)
+        {
+            if (CheckingForUpdates)
+                return;
+
+            ModUpdateCheckCancelSource = new CancellationTokenSource();
+            try
+            {
+                await CheckAllModsUpdatesAsync(ModUpdateCheckCancelSource.Token);
+            }catch(OperationCanceledException){}
+        }
+
         private void UI_Refresh_Click(object sender, RoutedEventArgs e)
         {
             Refresh();
@@ -876,9 +852,20 @@ namespace HedgeModManager
 
         private async void UI_Update_Mod(object sender, RoutedEventArgs e)
         {
-            PauseModUpdates = false;
-            if (await CheckForModUpdatesAsync(ViewModel.SelectedMod).ConfigureAwait(false))
-                Dispatcher.Invoke(RefreshMods);
+            ModUpdateCheckCancelSource = new CancellationTokenSource();
+            try
+            {
+                if (await CheckForModUpdatesAsync(ViewModel.SelectedMod, ModUpdateCheckCancelSource.Token)
+                    .ConfigureAwait(false))
+                {
+                    Dispatcher.Invoke(RefreshMods);
+                    Dispatcher.Invoke(RefreshUI);
+                }
+            }
+            catch(OperationCanceledException)
+            {
+
+            }
         }
 
         private void UI_Edit_Mod(object sender, RoutedEventArgs e)
@@ -977,6 +964,9 @@ namespace HedgeModManager
         {
             if (ComboBox_GameStatus.SelectedItem != null && ComboBox_GameStatus.SelectedItem != HedgeApp.CurrentSteamGame)
             {
+                ModUpdateCheckCancelSource?.Cancel();
+                CheckingForUpdates = false;
+
                 HedgeApp.SelectSteamGame((SteamGame)ComboBox_GameStatus.SelectedItem);
 
                 if (HedgeApp.CurrentGame.SupportsCPKREDIR)
@@ -994,12 +984,13 @@ namespace HedgeModManager
                 RefreshProfiles();
                 Refresh();
                 UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGame.GameName));
-                CheckForLoaderUpdateAsync();
 
                 // Schedule checking for code updates if available.
                 if (Button_DownloadCodes.IsEnabled)
                     await CheckForCodeUpdates();
             }
+
+            await RunTask(CheckForLoaderUpdateAsync());
         }
 
         private void UI_Download_Codes(object sender, RoutedEventArgs e)
@@ -1090,14 +1081,36 @@ namespace HedgeModManager
 
         private void UI_ContextMenu_Opening(object sender, ContextMenuEventArgs e)
         {
+            var mod = ViewModel.SelectedMod;
+            if (mod == null)
+                return;
+
             if (!(sender is ListViewItem listItem))
                 return;
 
-            var item = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemConfigure");
-            if (item == null)
-                return;
+            var itemConfigure = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemConfigure");
+            var itemCheckUpdate = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemCheckUpdate");
+            var itemCheckUpdateAll = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemCheckUpdateAll");
+            
+            if (itemConfigure != null)
+                itemConfigure.IsEnabled = mod.HasSchema;
 
-            item.IsEnabled = ViewModel.SelectedMod.HasSchema;
+            if (itemCheckUpdateAll != null)
+                itemCheckUpdateAll.IsEnabled = !CheckingForUpdates;
+
+            if (itemCheckUpdate != null)
+            {
+                if (CheckingForUpdates)
+                {
+                    itemCheckUpdate.IsEnabled = false;
+                    return;
+                }
+
+                itemCheckUpdate.IsEnabled = mod.HasUpdates;
+                if (mod.HasUpdates)
+                    itemCheckUpdate.IsEnabled = !Singleton.GetInstance<NetworkConfig>()
+                        .IsServerBlocked(ViewModel.SelectedMod.UpdateServer);
+            }
         }
 
         private void ModsList_OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -1168,7 +1181,7 @@ namespace HedgeModManager
                         $"HMM_Snapshot_{time.Date:00}{time.Month:00}{time.Year:0000}{time.Hour:00}{time.Minute:00}{time.Second:00}.txt";
 
                     File.WriteAllText(path, Convert.ToBase64String(SnapshotBuilder.Build()));
-                    Process.Start($"explorer.exe", $"/select,\"{System.IO.Path.GetFullPath(path)}\"");
+                    Process.Start($"explorer.exe", $"/select,\"{Path.GetFullPath(path)}\"");
                     HedgeApp.CreateOKMessageBox("Hedge Mod Manager", $"Please attach the file\n{path}\nto the issue.").ShowDialog();
                 }
                 catch { }
@@ -1213,6 +1226,20 @@ namespace HedgeModManager
             string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
             File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             Refresh();
+        }
+
+        private void MainWindow_OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            ModUpdateCheckCancelSource?.Cancel();
+            CheckingForUpdates = false;
+        }
+
+        class StatusLogger : ILogger
+        {
+            private MainWindow Window { get; }
+            public StatusLogger(MainWindow window) => Window = window;
+            public void Write(string str) => Window.UpdateStatus(str);
+            public void WriteLine(string str) => Window.UpdateStatus(str);
         }
     }
 }

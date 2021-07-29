@@ -1,0 +1,120 @@
+﻿<UserControl x:Class="HedgeModManager.UI.ModUpdatesInfoView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HedgeModManager.UI"
+        xmlns:models="clr-namespace:HedgeModManager.UI.Models"
+        xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+        xmlns:controls="clr-namespace:HedgeModManager.Controls" d:DesignStyle="{StaticResource DesignTimeStyle}"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance models:ModUpdatesWindowViewModel, IsDesignTimeCreatable=True}"
+        d:DesignHeight="450" d:DesignWidth="800"
+        x:Name="VisualRoot">
+
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type models:ModUpdateInfoModel}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <ProgressBar Grid.Row="0" Margin="15" Maximum="100" Value="{Binding OverallProgress.Value}"/>
+                <ProgressBar Grid.Row="1" Margin="15" Maximum="1" IsIndeterminate="{Binding CurrentFileProgress.Value, Converter={StaticResource NullToBoolConverter}}"
+                             Value="{Binding CurrentFileProgress.Value, TargetNullValue=0}"/>
+
+                <ContentControl Grid.Row="2" Content="{Binding Logger}" Margin="15"/>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".4*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="45"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Grid.Column="0" BorderThickness="0,0,2,0"
+                    BorderBrush="{DynamicResource HMM.Window.DialogBottom}">
+                <ListBox ItemsSource="{Binding Mods}" 
+                         Margin="4,2" BorderBrush="Transparent" SelectedItem="{Binding SelectedInfo}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel Margin="10,2,15,2">
+                                <CheckBox IsTabStop="True" IsChecked="{Binding DoUpdate}"
+                                          Visibility="{Binding ElementName=VisualRoot, Converter={StaticResource BoolToVisibilityConverter}, Path=DataContext.IsIdle}"
+                                          Margin="0,3,10,0" DockPanel.Dock="Left"/>
+
+                                <TextBlock DockPanel.Dock="Top" FontSize="14"
+                                           Text="{Binding Title}"/>
+
+                                <TextBlock DockPanel.Dock="Top"
+                                           FontSize="10" Foreground="{DynamicResource HMM.Window.LightForegroundBrush}">
+                                    <Run Text="{Binding OldVersion, Mode=OneTime}"/>
+                                    <Run Text="->"/>
+                                    <Run Text="{Binding NewVersion, Mode=OneTime}"/>
+                                </TextBlock>
+
+                                <ProgressBar DockPanel.Dock="Bottom" Maximum="100" Margin="0,5"
+                                             Visibility="{Binding ElementName=VisualRoot, Converter={StaticResource BoolToVisibilityConverter}, Path=DataContext.IsUpdating}"
+                                             Height="20" Value="{Binding OverallProgress.Value}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+
+            <Grid Grid.Row="0" Grid.Column="1" Margin="0,2">
+                 <Grid Visibility="{Binding IsIdle, Converter={StaticResource BoolToVisibilityConverter}}">
+                     <Grid.RowDefinitions>
+                         <RowDefinition Height="Auto"/>
+                         <RowDefinition/>
+                     </Grid.RowDefinitions>
+
+                     <Border Grid.Row="0" Margin="0,2"
+                             BorderBrush="{DynamicResource HMM.Window.DialogBottom}" BorderThickness="0,0,0,2">
+                         <TextBlock Margin="4,0,4,4" Text="{DynamicResource ModUpdatesChangelog}" FontSize="18"/>
+                     </Border>
+
+                     <Grid Grid.Row="1">
+                         <Grid x:Name="LoadingGrid" Background="#80000000" 
+                               Visibility="{Binding SelectedInfo.Changelog.IsNotCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
+                             <Grid.ColumnDefinitions>
+                                 <ColumnDefinition Width=".75*"/>
+                                 <ColumnDefinition Width="*"/>
+                                 <ColumnDefinition Width=".75*"/>
+                             </Grid.ColumnDefinitions>
+
+                             <ProgressBar Grid.Column="1" Height="4" IsIndeterminate="True"/>
+                         </Grid>
+
+                         <wpf:HtmlPanel Background="Transparent" Width="Auto" Height="Auto" Visibility="{Binding SelectedInfo.Changelog.IsCompleted, Converter={StaticResource BoolToVisibilityConverter}}"
+                                        Text="{Binding SelectedInfo.Changelog.Result, Converter={StaticResource MarkdownToHtmlConverter}}"/>
+                     </Grid>
+                </Grid>
+
+                <ContentControl Content="{Binding SelectedInfo}"
+                    Visibility="{Binding IsUpdating, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="{DynamicResource HMM.Window.DialogBottom}">
+                <DockPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,8">
+                        <Button Content="{DynamicResource CommonUIUpdate}" Padding="8,0" Margin="0,0,8,0" IsDefault="True"
+                                Command="{Binding UpdateCommand}"/>
+
+                        <Button Content="{DynamicResource CommonUICancel}" Padding="8,0" IsCancel="True" 
+                                Command="{Binding CancelCommand}"/>
+                    </StackPanel>
+                </DockPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

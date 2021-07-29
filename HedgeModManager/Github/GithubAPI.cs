@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -24,7 +25,7 @@ namespace HedgeModManager.Github
         {
             try
             {
-                return JsonConvert.DeserializeObject<T>(await HedgeApp.HttpClient.GetStringAsync(url));
+                return JsonConvert.DeserializeObject<T>(await Singleton.GetInstance<HttpClient>().GetStringAsync(url));
             }
             catch
             {

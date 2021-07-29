@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using HedgeModManager.Misc;
@@ -41,7 +42,7 @@ namespace HedgeModManager
 
                 if (update)
                 {
-                    config = await HedgeApp.HttpClient.GetAsJsonAsync<NetworkConfig>(updateURL);
+                    config = await Singleton.GetInstance<HttpClient>().GetAsJsonAsync<NetworkConfig>(updateURL);
                     config.LastUpdated = DateTime.Now;
                     string dir = Path.GetDirectoryName(configPath) ?? "HedgeModManager";
                     if (!Directory.Exists(dir))
@@ -49,7 +50,7 @@ namespace HedgeModManager
                     File.WriteAllText(configPath, JsonConvert.SerializeObject(config));
                 }
 
-                return config;
+                return config ?? new NetworkConfig();
             }
             catch
             {

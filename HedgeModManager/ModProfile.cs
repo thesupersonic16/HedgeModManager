@@ -106,19 +106,20 @@ namespace HedgeModManager
         {
             var result = new ImportResult();
             using var reader = new StreamReader(file);
-            var jsReader = new JsonTextReader(reader);
-            var jObj = JObject.Load(jsReader);
-            var type = jObj.GetValue(nameof(Type), StringComparison.InvariantCultureIgnoreCase)?.Value<string>();
-
-            if (string.IsNullOrEmpty(type))
-                return result;
-
-            if (!type.Equals(ObjectType, StringComparison.InvariantCultureIgnoreCase))
-                return result;
 
             ExportProfile profile;
             try
             {
+                var jsReader = new JsonTextReader(reader);
+                var jObj = JObject.Load(jsReader);
+                var type = jObj.GetValue(nameof(Type), StringComparison.InvariantCultureIgnoreCase)?.Value<string>();
+
+                if (string.IsNullOrEmpty(type))
+                    return result;
+
+                if (!type.Equals(ObjectType, StringComparison.InvariantCultureIgnoreCase))
+                    return result;
+
                 profile = jObj.ToObject<ExportProfile>(new JsonSerializer
                 {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()

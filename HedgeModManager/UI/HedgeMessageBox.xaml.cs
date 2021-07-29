@@ -51,7 +51,6 @@ namespace HedgeModManager
                 {
                     Content = new TextBlock()
                     {
-                        IsEnabled = false,
                         Text = message,
                         TextAlignment = textAlignment,
                         FontSize = 25,

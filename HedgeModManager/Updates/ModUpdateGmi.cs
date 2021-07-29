@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HedgeModManager.Updates
@@ -12,42 +14,66 @@ namespace HedgeModManager.Updates
         public ModInfo Mod { get; internal set; }
         public string Version { get; internal set; }
 
-        protected List<string> Commands { get; set; }
+        protected ModVersionInfo VersionInfo { get; set; }
+        protected UpdateCommandList Commands { get; set; } = new UpdateCommandList();
+        private string ChangelogCache { get; set; }
 
         public async Task<string> GetChangelog()
         {
-            return string.Empty;
-        }
+            if (!string.IsNullOrEmpty(ChangelogCache))
+                return ChangelogCache;
 
-        public static async Task<ModUpdateGmi> GetUpdate(ModInfo mod)
-        {
-            if (string.IsNullOrEmpty(mod.UpdateServer))
-                return null;
-
+            if (string.IsNullOrEmpty(VersionInfo.ChangeLogPath))
+                return VersionInfo.Changelog;
+            
             try
             {
-                string modVersionPath = Path.Combine(mod.UpdateServer, "mod_version.ini");
-                string modFilesPath = Path.Combine(mod.UpdateServer, "mod_files.txt");
-                
-                var versionResult = await HedgeApp.HttpClient.GetAsync(modVersionPath);
-                if (!versionResult.IsSuccessStatusCode)
-                    return null;
+                var response = await Singleton.GetInstance<HttpClient>()
+                    .GetAsync(Path.Combine(Mod.UpdateServer, VersionInfo.ChangeLogPath)).ConfigureAwait(false);
 
-                var filesResult = await HedgeApp.HttpClient.GetAsync(modFilesPath);
-                if (!filesResult.IsSuccessStatusCode)
-                    return null;
+                if (!response.IsSuccessStatusCode)
+                    return VersionInfo.Changelog;
 
-                var update = new ModUpdateGmi
-                {
-                    Mod = mod
-                };
-
-                return update;
+                ChangelogCache = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                return ChangelogCache;
             }
             catch
             {
-                return null;
+                return VersionInfo.Changelog;
             }
+        }
+
+        public async Task ExecuteAsync(ExecuteConfig config, CancellationToken cancellationToken = default)
+        {
+            await Commands.ExecuteAsync(Mod, config, cancellationToken);
+        }
+
+        public static async Task<ModUpdateGmi> GetUpdateAsync(ModVersionInfo info, ModInfo mod, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(mod.UpdateServer))
+                return null;
+            
+            string modFilesPath = Path.Combine(mod.UpdateServer, "mod_files.txt");
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var filesResult = await Singleton.GetInstance<HttpClient>().GetAsync(modFilesPath, cancellationToken)
+                .ConfigureAwait(false);
+            
+            if (!filesResult.IsSuccessStatusCode)
+                return null;
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var update = new ModUpdateGmi
+            {
+                Mod = mod,
+                VersionInfo = info,
+                Version = info.Version
+            };
+            update.Commands.Parse(await filesResult.Content.ReadAsStringAsync());
+
+            return update;
         }
     }
 }

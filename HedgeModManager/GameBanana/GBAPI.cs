@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using HedgeModManager.UI;
 using System.IO;
+using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
@@ -108,7 +109,7 @@ namespace GameBananaAPI
             var url = $"https://api.gamebanana.com/Core/Item/Data/AllowedFields?itemtype={itemType}";
             try
             {
-                return JsonConvert.DeserializeObject<List<string>>(await HedgeApp.HttpClient.GetStringAsync(url));
+                return JsonConvert.DeserializeObject<List<string>>(await Singleton.GetInstance<HttpClient>().GetStringAsync(url));
             }
             catch
             {
@@ -122,7 +123,7 @@ namespace GameBananaAPI
             var id = item.ItemID;
             var handler = new GBAPIRequestHandler();
             var request = await handler.BuildAsync(item);
-            var response = await HedgeApp.HttpClient.GetStringAsync(request);
+            var response = await Singleton.GetInstance<HttpClient>().GetStringAsync(request);
             response = Uri.UnescapeDataString(response);
             if (!handler.ParseResponse(response, ref item))
                 throw new Exception("Failed to parse GameBannna Item");

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using HedgeModManager.Misc;
 using HedgeModManager.Serialization;
 using HedgeModManager.UI;
+using HedgeModManager.Updates;
 using Newtonsoft.Json;
 using PropertyTools.DataAnnotations;
 
@@ -106,6 +107,9 @@ namespace HedgeModManager
         [IniField("CPKs")]
         public Dictionary<string, string> CPKs { get; set; } = new Dictionary<string, string>();
 
+        [PropertyTools.DataAnnotations.Browsable(false)]
+        public ModFileTree FileTree { get; set; }
+
         public ModInfo()
         {
 
@@ -114,6 +118,7 @@ namespace HedgeModManager
         public ModInfo(string modPath)
         {
             RootDirectory = modPath;
+
             try
             {
                 using (var stream = File.OpenRead(Path.Combine(modPath, "mod.ini")))
@@ -167,6 +172,9 @@ namespace HedgeModManager
 
             foreach (var dir in IncludeDirs)
                 IncludeDirsProperty.Add(new StringWrapper(dir));
+
+            var fileTreePath = Path.Combine(modPath, ModFileTree.FixedFileName);
+            FileTree = ModFileTree.Load(fileTreePath);
         }
 
         public bool Read(Stream stream)
@@ -233,6 +241,13 @@ namespace HedgeModManager
                 validDirs.Add(".");
 
             IncludeDirs = validDirs;
+        }
+
+        public void GenerateFileTree()
+        {
+            FileTree = new ModFileTree();
+            FileTree.ImportDirectory(RootDirectory);
+            FileTree.Save(Path.Combine(RootDirectory, ModFileTree.FixedFileName));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

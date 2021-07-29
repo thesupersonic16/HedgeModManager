@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace HedgeModManager.Updates
 {
     [JsonObject]
-    public class ModUpdateTree : ModUpdateEntry
+    public class ModFileTree : ModFileEntry
     {
+        public const string FixedFileName = ".hmmtree";
+
         private static JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
             ContractResolver = IgnoreEmptyEnumerableResolver.Instance
@@ -19,7 +23,7 @@ namespace HedgeModManager.Updates
         [JsonIgnore]
         public new string Name { get; }
 
-        public ModUpdateTree()
+        public ModFileTree()
         {
             Name = DirectorySeparatorCharAsString;
         }
@@ -29,20 +33,31 @@ namespace HedgeModManager.Updates
             File.WriteAllText(path, JsonConvert.SerializeObject(this, Formatting.Indented, JsonSettings));
         }
 
-        public static ModUpdateTree Load(Stream input)
+        public static ModFileTree Load(string path)
+        {
+            if (!File.Exists(path))
+                return null;
+
+            using var stream = File.OpenRead(path);
+            return Load(path);
+        }
+
+        public static ModFileTree Load(Stream input)
         {
             using var reader = new StreamReader(input);
             using var jsReader = new JsonTextReader(reader);
             var serializer = new JsonSerializer();
-            var item = serializer.Deserialize<ModUpdateTree>(jsReader);
+            var item = serializer.Deserialize<ModFileTree>(jsReader);
             item?.FixChildren();
 
             return item;
         }
 
-        public static async Task<ModUpdateTree> LoadFromUrl(string url)
+        public static async Task<ModFileTree> LoadFromUrl(string url, CancellationToken cancellationToken = default)
         {
-            var response = await HedgeApp.HttpClient.GetAsync(url);
+            var response = await Singleton.GetInstance<HttpClient>().GetAsync(url, cancellationToken)
+                .ConfigureAwait(false);
+
             if (!response.IsSuccessStatusCode)
                 return null;
 

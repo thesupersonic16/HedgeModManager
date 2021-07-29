@@ -2,27 +2,27 @@
 
 Patch "Locked 30 FPS" by "M&M"
 WriteNop(ASLR(0x140A5A896), 5)
-WriteProtected<float>(ASLR(0xA9B8945C), 30.0f)
+Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 30.0f)
 
 Patch "Locked 60 FPS" by "M&M"
 WriteNop(ASLR(0x140A5A896), 5)
 
 Patch "Locked 72 FPS" by "M&M"
 WriteNop(ASLR(0x140A5A896), 5)
-WriteProtected<float>(ASLR(0xA9B8945C), 72.0f)
+Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 72.0f)
 
 Patch "Locked 75 FPS" by "M&M"
 WriteNop(ASLR(0x140A5A896), 5)
-WriteProtected<float>(ASLR(0xA9B8945C), 75.0f)
+Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 75.0f)
 
 Patch "Locked 120 FPS" by "M&M"
 WriteNop(ASLR(0x140A5A896), 5)
-WriteProtected<float>(ASLR(0xA9B8945C), 120.0f)
+Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 120.0f)
 
 Patch "Locked 144 FPS" by "M&M"
 WriteNop(ASLR(0x140A5A896), 5)
-WriteProtected<float>(ASLR(0xA9B8945C), 144.0f)
+Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 144.0f)
 
 Patch "Locked 165 FPS" by "M&M"
 WriteNop(ASLR(0x140A5A896), 5)
-WriteProtected<float>(ASLR(0xA9B8945C), 165.0f)
+Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 165.0f)
