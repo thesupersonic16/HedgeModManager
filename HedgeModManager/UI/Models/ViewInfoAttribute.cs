@@ -16,7 +16,7 @@ namespace HedgeModManager.UI.Models
 
         public ViewInfoAttribute(string title)
         {
-            Title = title;
+            Title = HedgeApp.Current.Resources[title] as string ?? title;
         }
 
         public ViewInfoAttribute(string title, double minWidth) : this(title) => MinWidth = minWidth;

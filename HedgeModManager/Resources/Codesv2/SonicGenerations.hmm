@@ -707,11 +707,11 @@ WriteProtected<uint>(0xE4466E, 0xFFFFFF);  /* 3002_strain (used for pushing) */
 WriteProtected<uint>(0xE023E3, 0xFFFFFF);  /* 3002_dead (used for dying from enemies) */
 WriteProtected<uint>(0xE55D3D, 0xFFFFFF);  /* 3002_dead (used for dying from falling) */
 WriteProtected<uint>(0x1117CEB, 0xFFFFFF); /* 3002_action03 (used for boost) */
-WriteProtected<uint>(0x1118512, 0xFFFFFF); /* 3002_action03 (used for drift) */
 WriteProtected<uint>(0x1254E04, 0xFFFFFF); /* 3002_action03 (used for stomping) */
-WriteProtected<uint>(0xDF3710, 0xFFFFFF);  /* 3002_action04 (used for homing success) */
+WriteProtected<uint>(0xDF3710, 0xFFFFFF);  /* 3002_action04 (used for drift) */
 WriteProtected<uint>(0x1117D09, 0xFFFFFF); /* 3002_action04 (used for boost) */
 WriteProtected<uint>(0x11184E4, 0xFFFFFF); /* 3002_action04 (used for homing success) */
+WriteProtected<uint>(0x1118512, 0xFFFFFF); /* 3002_action03 (used for homing success) */
 WriteProtected<uint>(0x1119B1F, 0xFFFFFF); /* 3002_action04 (used for board drift) */
 WriteProtected<uint>(0xE3DADD, 0xFFFFFF);  /* 3002_success01 (used for blast off) */
 WriteProtected<uint>(0xE462AA, 0xFFFFFF);  /* 3002_success01 (used for pulleys) */

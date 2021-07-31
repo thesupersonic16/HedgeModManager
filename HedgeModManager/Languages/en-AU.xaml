@@ -178,5 +178,6 @@
 
     <!-- Mod Updates Window Strings -->
     <system:String x:Key="ModUpdatesChangelog">Changelog</system:String>
+    <system:String x:Key="ModUpdatesTitle"    >Mod Updates</system:String>
 
 </ResourceDictionary>
