@@ -855,6 +855,8 @@ namespace HedgeModManager
             ModUpdateCheckCancelSource = new CancellationTokenSource();
             try
             {
+                //new ModUpdateGeneratorModel(ViewModel.SelectedMod).ShowDialog();
+
                 if (await CheckForModUpdatesAsync(ViewModel.SelectedMod, ModUpdateCheckCancelSource.Token)
                     .ConfigureAwait(false))
                 {
@@ -881,6 +883,9 @@ namespace HedgeModManager
 
         private void UI_Description_Click(object sender, RoutedEventArgs e)
         {
+            if (ViewModel.SelectedMod == null)
+                return;
+
             var dialog = new AboutModWindow(ViewModel.SelectedMod);
             dialog.ShowDialog();
         }

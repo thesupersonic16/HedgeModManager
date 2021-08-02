@@ -9,6 +9,10 @@
         <ui:ModUpdatesInfoView/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type models:ModUpdateGeneratorModel}">
+        <ui:ModUpdateGeneratorView/>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type hmm:StringLogger}">
         <TextBox IsReadOnly="True" Foreground="{DynamicResource HMM.Menu.DisabledTextColor}" 
                  Text="{Binding Text, Mode=OneWay}" TextChanged="LogBox_TextChanged"

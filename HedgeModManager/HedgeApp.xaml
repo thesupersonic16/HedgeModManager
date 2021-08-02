@@ -6,6 +6,7 @@
              xmlns:pt="http://propertytools.org/wpf"
              xmlns:models="clr-namespace:HedgeModManager.UI.Models"
              xmlns:ui="clr-namespace:HedgeModManager.UI"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              x:Class="HedgeModManager.HedgeApp">
     
     <Application.Resources>
@@ -40,6 +41,7 @@
             <local:InverseEmptyStringToVisibilityConverter x:Key="InverseEmptyStringToVisibilityConverter"/>
             <local:NullToBoolConverter x:Key="NullToBoolConverter"/>
             <local:MarkdownToHtmlConverter x:Key="MarkdownToHtmlConverter"/>
+            <system:Double x:Key="HMM.Window.DialogBottomHeight">45</system:Double>
 
             <Style TargetType="{x:Type UserControl}" x:Key="DesignTimeStyle">
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>

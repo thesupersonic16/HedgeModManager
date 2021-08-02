@@ -243,11 +243,21 @@ namespace HedgeModManager
             IncludeDirs = validDirs;
         }
 
-        public void GenerateFileTree()
+        public ModFileTree GenerateFileTreeSync(bool save)
         {
-            FileTree = new ModFileTree();
-            FileTree.ImportDirectory(RootDirectory);
-            FileTree.Save(Path.Combine(RootDirectory, ModFileTree.FixedFileName));
+            return GenerateFileTree(save).GetAwaiter().GetResult();
+        }
+
+        public Task<ModFileTree> GenerateFileTree(bool save)
+        {
+            return Task.Run(() =>
+            {
+                FileTree = new ModFileTree();
+                FileTree.ImportDirectory(RootDirectory);
+                if (save) FileTree.Save(Path.Combine(RootDirectory, ModFileTree.FixedFileName));
+                
+                return FileTree;
+            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

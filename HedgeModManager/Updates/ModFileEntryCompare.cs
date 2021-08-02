@@ -110,6 +110,12 @@ namespace HedgeModManager.Updates
             while (checks.Count != 0)
             {
                 var entry = checks.Dequeue();
+
+                if (!entry.IsFile && !Directory.Exists(Path.Combine(dir, entry.FullPath)))
+                {
+                    result.MissingEntries.Add(entry);
+                }
+
                 foreach (var child in entry)
                 {
                     if (!child.IsFile)
