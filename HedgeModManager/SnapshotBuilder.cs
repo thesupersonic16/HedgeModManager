@@ -96,14 +96,14 @@ namespace HedgeModManager
         public static string CreateReport()
         {
             StringBuilder body = new StringBuilder();
-            var loaderPath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.CustomLoaderFileName);
+            var loaderPath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ModLoader?.ModLoaderFileName);
             var cpkredirPath = Path.Combine(HedgeApp.StartDirectory, "cpkredir.dll");
             var gamePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecuteableName);
 
             body.AppendLine($"Start Directory: {HedgeApp.StartDirectory}");
             body.AppendLine(File.Exists(loaderPath)
                 ? $"Loader Hash: {HedgeApp.ComputeMD5Hash(loaderPath)}"
-                : $"{HedgeApp.CurrentGame.CustomLoaderName} does not exist!");
+                : $"{HedgeApp.CurrentGame.ModLoader?.ModLoaderName} does not exist!");
 
             if (HedgeApp.CurrentGame.SupportsCPKREDIR)
             {

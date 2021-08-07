@@ -151,14 +151,14 @@ Do you want run the HMM Auto Installer?</value>
   <data name="URL_FML_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicForces.hmm</value>
   </data>
-  <data name="URL_FML_DL" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/ForcesModLoader.dll</value>
-  </data>
   <data name="URL_GCL_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicGenerations.hmm</value>
   </data>
   <data name="URL_GCL_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/SonicGenerationsCodeLoader.dll</value>
+  </data>
+  <data name="URL_HE2ML_DL" xml:space="preserve">
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HE2ModLoader.dll</value>
   </data>
   <data name="URL_HMM_GITHUB" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager</value>
@@ -178,13 +178,7 @@ Do you want run the HMM Auto Installer?</value>
   <data name="URL_MML_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/TokyoOlympics2020.hmm</value>
   </data>
-  <data name="URL_MML_DL" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/MusashiModLoader.dll</value>
-  </data>
   <data name="URL_TML_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/PuyoPuyoTetris2.hmm</value>
-  </data>
-  <data name="URL_TML_DL" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/TenpexModLoader.dll</value>
   </data>
 </root>

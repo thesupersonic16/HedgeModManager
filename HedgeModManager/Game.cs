@@ -21,16 +21,12 @@ namespace HedgeModManager
         {
             GameName = "Sonic Generations",
             ExecuteableName = "SonicGenerations.exe",
-            HasCustomLoader = true,
             SupportsCPKREDIR = true,
-            ModLoaderDownloadURL = Resources.URL_GCL_DL,
-            ModLoaderData = EmbeddedLoaders.GenerationsCodeLoader,
-            CustomLoaderName = "Generations Code Loader",
-            CustomLoaderFileName = "d3d9.dll",
+            SupportsSaveRedirection = true,
             AppID = "71340",
-            DirectXVersion = 9,
             GBProtocol = "hedgemmgens",
             Is64Bit = false,
+            ModLoader = ModLoaders.GenerationsCodeLoader,
             CodesURL = Resources.URL_GCL_CODES,
             SteamGamePath = Path.Combine("Sonic Generations", "SonicGenerations.exe")
         };
@@ -39,16 +35,12 @@ namespace HedgeModManager
         {
             GameName = "Sonic Lost World",
             ExecuteableName = "slw.exe",
-            HasCustomLoader = true,
             SupportsCPKREDIR = true,
-            ModLoaderDownloadURL = Resources.URL_LCL_DL,
-            ModLoaderData = EmbeddedLoaders.LostCodeLoader,
-            CustomLoaderName = "Lost Code Loader",
-            CustomLoaderFileName = "d3d9.dll",
+            SupportsSaveRedirection = true,
             AppID = "329440",
-            DirectXVersion = 9,
             GBProtocol = "hedgemmlw",
             Is64Bit = false,
+            ModLoader = ModLoaders.LostCodeLoader,
             CodesURL = Resources.URL_LCL_CODES,
             SteamGamePath = Path.Combine("Sonic Lost World", "slw.exe")
         };
@@ -57,16 +49,12 @@ namespace HedgeModManager
         {
             GameName = "Sonic Forces",
             ExecuteableName = "Sonic Forces.exe",
-            HasCustomLoader = true,
             SupportsCPKREDIR = false,
-            ModLoaderDownloadURL = Resources.URL_FML_DL,
-            ModLoaderData = EmbeddedLoaders.ForcesModLoader,
-            CustomLoaderName = "Forces Mod Loader",
-            CustomLoaderFileName = "d3d11.dll",
+            SupportsSaveRedirection = true,
             AppID = "637100",
-            DirectXVersion = 11,
             GBProtocol = "hedgemmforces",
             Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_FML_CODES,
             SteamGamePath = Path.Combine("SonicForces", "build", "main", "projects", "exec", "Sonic Forces.exe")
         };
@@ -75,16 +63,12 @@ namespace HedgeModManager
         {
             GameName = "Puyo Puyo Tetris 2",
             ExecuteableName = "PuyoPuyoTetris2.exe",
-            HasCustomLoader = true,
             SupportsCPKREDIR = false,
-            ModLoaderDownloadURL = Resources.URL_TML_DL,
-            ModLoaderData = null,
-            CustomLoaderName = "Tenpex Mod Loader",
-            CustomLoaderFileName = "d3d11.dll",
+            SupportsSaveRedirection = false,
             AppID = "1259790",
-            DirectXVersion = 11,
             GBProtocol = "hedgemmtenpex",
             Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_TML_CODES,
             SteamGamePath = Path.Combine("PuyoPuyoTetris2", "PuyoPuyoTetris2.exe")
         };
@@ -93,16 +77,12 @@ namespace HedgeModManager
         {
             GameName = "Olympic Games Tokyo 2020",
             ExecuteableName = "musashi.exe",
-            HasCustomLoader = true,
             SupportsCPKREDIR = false,
-            ModLoaderDownloadURL = Resources.URL_TML_DL,
-            ModLoaderData = null,
-            CustomLoaderName = "Tenpex Mod Loader",
-            CustomLoaderFileName = "d3d11.dll",
+            SupportsSaveRedirection = false,
             AppID = "981890",
-            DirectXVersion = 11,
             GBProtocol = "hedgemmmusashi",
             Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_MML_CODES,
             SteamGamePath = Path.Combine("Tokyo2020", "musashi.exe")
         };
@@ -121,7 +101,7 @@ namespace HedgeModManager
     {
         public static byte[] GenerationsCodeLoader;
         public static byte[] LostCodeLoader;
-        public static byte[] ForcesModLoader;
+        public static byte[] HE2ModLoader;
 
         static EmbeddedLoaders()
         {
@@ -130,7 +110,7 @@ namespace HedgeModManager
             {
                 GenerationsCodeLoader = GetFile("SonicGenerationsCodeLoader.dll");
                 LostCodeLoader = GetFile("LostCodeLoader.dll");
-                ForcesModLoader = GetFile("ForcesModLoader.dll");
+                HE2ModLoader = GetFile("HE2ModLoader.dll");
 
                 byte[] GetFile(string name)
                 {
@@ -150,13 +130,9 @@ namespace HedgeModManager
     {
         public string GameName = "Unnamed Game";
         public string ExecuteableName = string.Empty;
-        public string ModLoaderDownloadURL = string.Empty;
-        public byte[] ModLoaderData = null;
-        public uint DirectXVersion = uint.MaxValue;
-        public bool HasCustomLoader = false;
+        public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
-        public string CustomLoaderName = "None";
-        public string CustomLoaderFileName = string.Empty;
+        public bool SupportsSaveRedirection = false;
         public string AppID = "0";
         public string GBProtocol;
         public bool Is64Bit = false;

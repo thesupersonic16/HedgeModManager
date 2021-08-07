@@ -233,14 +233,15 @@ namespace HedgeModManager
 
             Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {HedgeApp.CurrentGame.GameName} ({SelectedModProfile?.Name})";
 
-            if (HedgeApp.CurrentGame.HasCustomLoader)
+            if (HedgeApp.CurrentGame.ModLoader != null)
             {
-                Button_OtherLoader.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader;
-                Button_DownloadCodes.IsEnabled = HedgeApp.CurrentGame.HasCustomLoader && !string.IsNullOrEmpty(HedgeApp.CurrentGame.CodesURL);
+                Button_OtherLoader.IsEnabled = true;
+                Button_DownloadCodes.IsEnabled = !string.IsNullOrEmpty(HedgeApp.CurrentGame.CodesURL);
             }
 
             var exeDir = HedgeApp.StartDirectory;
-            bool hasOtherModLoader = File.Exists(Path.Combine(exeDir, HedgeApp.CurrentGame.CustomLoaderFileName));
+            var modloader = HedgeApp.CurrentGame.ModLoader;
+            bool hasOtherModLoader = modloader != null && File.Exists(Path.Combine(exeDir, modloader.ModLoaderFileName));
             IsCPKREDIRInstalled = HedgeApp.CurrentGame.SupportsCPKREDIR ? HedgeApp.IsCPKREDIRInstalled(Path.Combine(exeDir, HedgeApp.CurrentGame.ExecuteableName)) : hasOtherModLoader;
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentSteamGame;
@@ -561,9 +562,12 @@ namespace HedgeModManager
             if (!HedgeApp.Config.CheckLoaderUpdates)
                 return;
 
+            if (HedgeApp.CurrentGame.ModLoader == null)
+                return;
+
             await Task.Yield();
 
-            UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), HedgeApp.CurrentGame.CustomLoaderName));
+            UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), HedgeApp.CurrentGame.ModLoader.ModLoaderName));
             try
             {
                 using (var stream = await Singleton.GetInstance<HttpClient>().GetStreamAsync(HMMResources.URL_LOADERS_INI))
@@ -574,26 +578,28 @@ namespace HedgeModManager
                         return;
 
                     var ini = new IniFile(stream);
-                    var info = ini[HedgeApp.CurrentGame.GameName];
+                    var name = HedgeApp.GetCodeLoaderName(HedgeApp.CurrentGame);
+                    var mlID = HedgeApp.CurrentGame.ModLoader.ModLoaderID ?? HedgeApp.CurrentGame.GameName;
+                    var info = ini[mlID];
                     var newVersion = new Version(info["LoaderVersion"]);
 
-                    if (newVersion <= loaderInfo.LoaderVersion)
+                    if (HedgeApp.ExpandVersion(newVersion) == loaderInfo.LoaderVersion)
                     {
-                        UpdateStatus(string.Format(Localise("StatusUILoaderUpToDate"), HedgeApp.CurrentGame.CustomLoaderName));
+                        UpdateStatus(string.Format(Localise("StatusUILoaderUpToDate"), HedgeApp.CurrentGame.ModLoader.ModLoaderName));
                         return;
                     }
 
                     Dispatcher.Invoke(() =>
                     {
-                        var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.CustomLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
+                        var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.ModLoader.ModLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
 
                         dialog.AddButton(Localise("CommonUIUpdate"), () =>
                         {
                             dialog.Close();
                             if (HedgeApp.InstallOtherLoader(false))
-                                UpdateStatus($"Updated {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                                UpdateStatus($"Updated {HedgeApp.CurrentGame.ModLoader.ModLoaderName} to {info["LoaderVersion"]}");
                             else
-                                UpdateStatus($"Failed to update {HedgeApp.CurrentGame.CustomLoaderName} to {info["LoaderVersion"]}");
+                                UpdateStatus($"Failed to update {HedgeApp.CurrentGame.ModLoader.ModLoaderName} to {info["LoaderVersion"]}");
                         });
 
                         dialog.AddButton(Localise("CommonUIIgnore"), () =>
@@ -607,7 +613,7 @@ namespace HedgeModManager
             }
             catch
             {
-                UpdateStatus(string.Format(Localise("StatusUIFailedLoaderUpdateCheck"), HedgeApp.CurrentGame.CustomLoaderName));
+                UpdateStatus(string.Format(Localise("StatusUIFailedLoaderUpdateCheck"), HedgeApp.CurrentGame.ModLoader.ModLoaderName));
             }
         }
 
@@ -652,9 +658,9 @@ namespace HedgeModManager
 
         public void ShowMissingOtherLoaderWarning()
         {
-            if (!HedgeApp.CurrentGame.HasCustomLoader)
+            if (HedgeApp.CurrentGame.ModLoader == null)
                 return;
-            bool loaderInstalled = File.Exists(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.CustomLoaderFileName));
+            bool loaderInstalled = File.Exists(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ModLoader.ModLoaderFileName));
             if (loaderInstalled)
                 return;
 
@@ -666,7 +672,7 @@ namespace HedgeModManager
                 {
                     dialog.Close();
                     if (HedgeApp.InstallOtherLoader(false))
-                        UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.CustomLoaderName));
+                        UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.ModLoader.ModLoaderName));
                 });
 
                 dialog.AddButton(Localise("CommonUINo"), () =>

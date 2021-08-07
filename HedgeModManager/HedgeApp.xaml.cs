@@ -624,7 +624,11 @@ namespace HedgeModManager
                     }
                 }
 
-                string DLLFileName = Path.Combine(StartDirectory, CurrentGame.CustomLoaderFileName);
+                // Do not attempt if no loader exists
+                if (CurrentGame.ModLoader == null)
+                    return false;
+
+                string DLLFileName = Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderFileName);
 
                 if (File.Exists(DLLFileName) && toggle)
                 {
@@ -634,12 +638,12 @@ namespace HedgeModManager
                 }
 
                 // Downloads the loader
-                var downloader = new DownloadWindow($"Downloading {CurrentGame.CustomLoaderName}",
-                    CurrentGame.ModLoaderDownloadURL, DLLFileName);
+                var downloader = new DownloadWindow($"Downloading {CurrentGame.ModLoader.ModLoaderName}",
+                    CurrentGame.ModLoader.ModLoaderDownloadURL, DLLFileName);
 
                 downloader.DownloadFailed += (ex) =>
                 {
-                    var loader = CurrentGame.ModLoaderData;
+                    var loader = CurrentGame.ModLoader.ModLoaderData;
                     if (loader != null)
                         File.WriteAllBytes(DLLFileName, loader);
                     else
@@ -771,14 +775,22 @@ namespace HedgeModManager
             }
         }
 
+        public static Version ExpandVersion(Version version)
+        {
+            var build = version.Build;
+            var revision = version.Revision;
+
+            return new Version(version.Major, version.Minor, build == -1 ? 0 : 0, revision == -1 ? 0 : 0);
+        }
+
         public static string GetCodeLoaderVersion(Game game)
         {
             try
             {
-                var loaderPath = Path.Combine(StartDirectory, game.CustomLoaderFileName);
-
-                if (!game.HasCustomLoader)
+                if (game.ModLoader == null)
                     return null;
+
+                var loaderPath = Path.Combine(StartDirectory, game.ModLoader.ModLoaderFileName);
 
                 if (!File.Exists(loaderPath))
                     return null;
@@ -792,6 +804,27 @@ namespace HedgeModManager
             }
         }
 
+        public static string GetCodeLoaderName(Game game)
+        {
+            try
+            {
+                if (game.ModLoader == null)
+                    return null;
+
+                var loaderPath = Path.Combine(StartDirectory, game.ModLoader.ModLoaderFileName);
+
+                if (!File.Exists(loaderPath))
+                    return null;
+
+                var info = FileVersionInfo.GetVersionInfo(loaderPath);
+                return info.ProductName;
+            }
+            catch
+            {
+                return "null";
+            }
+        }
+
         public static CodeLoaderInfo GetCodeLoaderInfo(Game game)
         {
             try
@@ -802,7 +835,7 @@ namespace HedgeModManager
 
                 if (loaderVersion != minCodeVersion)
                 {
-                    using (var res = new DllResource(Path.Combine(StartDirectory, game.CustomLoaderFileName)))
+                    using (var res = new DllResource(Path.Combine(StartDirectory, game.ModLoader.ModLoaderFileName)))
                     {
                         minCodeVersion = res.GetString(Games.CodeLoaderMinCodeVersionStringId);
                         maxCodeVersion = res.GetString(Games.CodeLoaderMaxCodeVersionStringId);
