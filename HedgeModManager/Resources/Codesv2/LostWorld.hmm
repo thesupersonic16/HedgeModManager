@@ -46,34 +46,14 @@ WriteProtected<uint>(ASLR(0x00C2B016), (uint)ASLR(0x01082E00))
 Patch "21:9 (2560x1080) In-Game Resolution" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x4017B426)
 
-float aspectRatio = Read<float>(ASLR(0x00D56D30));
-uint widthRatio = (uint)(aspectRatio * 9);
-uint width = (720 * widthRatio) / 9;
-WriteProtected<uint>(ASLR(0x0050EBC5), width);
-
 Patch "21:9 (3440x1440) In-Game Resolution" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x4018E38E)
-
-float aspectRatio = Read<float>(ASLR(0x00D56D30));
-uint widthRatio = (uint)(aspectRatio * 9);
-uint width = (720 * widthRatio) / 9;
-WriteProtected<uint>(ASLR(0x0050EBC5), width);
 
 Patch "21:9 (3840x1600) In-Game Resolution" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x4019999A)
 
-float aspectRatio = Read<float>(ASLR(0x00D56D30));
-uint widthRatio = (uint)(aspectRatio * 9);
-uint width = (720 * widthRatio) / 9;
-WriteProtected<uint>(ASLR(0x0050EBC5), width);
-
 Patch "32:9 In-Game Resolution" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x40638E39)
-
-float aspectRatio = Read<float>(ASLR(0x00D56D30));
-uint widthRatio = (uint)(aspectRatio * 9);
-uint width = (720 * widthRatio) / 9;
-WriteProtected<uint>(ASLR(0x0050EBC5), width);
 
 Code "Automatic In-Game Resolution" by "Muzzarino"
 var ptr = GetPointer(ASLR(0xFD3CA8))
