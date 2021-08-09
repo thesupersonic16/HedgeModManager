@@ -37,11 +37,6 @@ WriteProtected<float>(ASLR(0xFB6AF0), 2f * (float)Math.Atan((float)Math.Tan(60f 
 WriteProtected<float>(ASLR(0xD6F364), 720f / (Read<float>(ASLR(0xD56D30)) < 16f / 9f ? Read<float>(ASLR(0xD56D30)) : 16f / 9f) * (16f / 9f)))
 WriteProtected<float>(ASLR(0xD6F360), Read<float>(ASLR(0xD6F364)) * Read<float>(ASLR(0xD56D30)))
 
-float aspectRatio = Read<float>(ASLR(0x00D56D30));
-uint widthRatio = (uint)(aspectRatio * 9);
-uint width = (720 * widthRatio) / 9;
-WriteProtected<uint>(ASLR(0x0050EBC5), width);
-
 string code = $@"mulss xmm0,[{ASLR(0xE737E4)}]
 cvtps2pd xmm0,xmm0
 pushad
