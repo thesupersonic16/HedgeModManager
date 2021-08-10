@@ -445,3 +445,21 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 
 WriteProtected<float>(ASLR(0x00D61CE8), 5120);
 WriteProtected<float>(ASLR(0x00D593B0), 2160);
+
+Patch "Force Language to Japanese" by "M&M & ĐeäTh"
+WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 0");
+
+Patch "Force Language to English" by "M&M & ĐeäTh"
+WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 1");
+
+Patch "Force Language to French" by "M&M & ĐeäTh"
+WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 2");
+
+Patch "Force Language to German" by "M&M & ĐeäTh"
+WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 3");
+
+Patch "Force Language to Italian" by "M&M & ĐeäTh"
+WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 4");
+
+Patch "Force Language to Spanish" by "M&M & ĐeäTh"
+WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 5");
