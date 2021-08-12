@@ -463,3 +463,6 @@ WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 4");
 
 Patch "Force Language to Spanish" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 5");
+
+Patch "Disable Wisp Hints" by "Sajid"
+WriteNop(ASLR(0x0091AAF8), 6)
