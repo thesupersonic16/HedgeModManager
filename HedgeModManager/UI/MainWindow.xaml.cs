@@ -1093,11 +1093,11 @@ namespace HedgeModManager
         private void UI_ContextMenu_Opening(object sender, ContextMenuEventArgs e)
         {
             var mod = ViewModel.SelectedMod;
-            if (mod == null)
+            if (mod == null || sender is not ListViewItem listItem)
+            {
+                e.Handled = true;
                 return;
-
-            if (!(sender is ListViewItem listItem))
-                return;
+            }
 
             var itemConfigure = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemConfigure");
             var itemCheckUpdate = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemCheckUpdate");
