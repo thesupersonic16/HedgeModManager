@@ -159,13 +159,13 @@
 
                                         <Button x:Name="MaxBtn" Style="{DynamicResource WindowFrameButton}" Click="MaxBtn_Click"
                                                 VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                                            <Border BorderThickness="2.5" Padding="3" Margin="0,6,0,2"
+                                            <Border BorderThickness="2.5" Padding="3" Margin="0,2,0,2"
                                                     BorderBrush="{DynamicResource HMM.Button.ForegroundBrush}" Background="Transparent"/>
                                         </Button>
 
                                         <Button x:Name="CloseBtn" Style="{DynamicResource WindowFrameButtonClose}" Click="Close_Click" 
                                                 FontWeight="Bold" Foreground="{DynamicResource HMM.Button.ForegroundBrush}" 
-                                                FontSize="24" Content="×" Margin="0,0,0,0" Height="32"
+                                                FontSize="24" Content="×" Margin="0,0,0,0" Height="26"
                                                 Padding="0,-8,0,0" SnapsToDevicePixels="True">
                                         </Button>
                                     </StackPanel>
