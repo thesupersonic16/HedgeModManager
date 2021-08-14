@@ -180,4 +180,9 @@
     <system:String x:Key="ModUpdatesChangelog">Changelog</system:String>
     <system:String x:Key="ModUpdatesTitle"    >Mod Updates</system:String>
 
+    <!-- Themes -->
+    <system:String x:Key="ThemeDark">Dark</system:String>
+    <system:String x:Key="ThemeOLED">OLED</system:String>
+    <system:String x:Key="ThemeLight">Light</system:String>
+
 </ResourceDictionary>

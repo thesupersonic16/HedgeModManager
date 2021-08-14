@@ -466,6 +466,24 @@ namespace HedgeModManager
             LoadLanguage(CurrentCulture.FileName);
         }
 
+        public static void FindMissingLanguageEntries(string culture)
+        {
+            var entry = GetClosestCulture(culture);
+            var baseDict = new ResourceDictionary {Source = new Uri("Languages/en-AU.xaml", UriKind.Relative)};
+            var builder = new StringBuilder();
+            builder.AppendLine();
+
+            var langDict = new ResourceDictionary();
+            langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
+
+            builder.AppendLine("Missing Entries:");
+            foreach (DictionaryEntry baseEntry in baseDict)
+                if (!langDict.Contains(baseEntry.Key))
+                    builder.AppendLine(baseEntry.Key.ToString());
+
+            builder.AppendLine();
+            new ExceptionWindow(new Exception(builder.ToString())).ShowDialog();
+        }
         public static void SetupThemes()
         {
             var resource = Current.TryFindResource("Themes");

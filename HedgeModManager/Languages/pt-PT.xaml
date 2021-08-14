@@ -178,5 +178,11 @@
 
     <!-- Mod Updates Window Strings -->
     <system:String x:Key="ModUpdatesChangelog">Changelog</system:String>
-  
+    <system:String x:Key="ModUpdatesTitle"    >Atualizações de Mods</system:String>
+
+    <!-- Themes -->
+    <system:String x:Key="ThemeDark">Escuro</system:String>
+    <system:String x:Key="ThemeOLED">OLED</system:String>
+    <system:String x:Key="ThemeLight">Claro</system:String>
+
 </ResourceDictionary>

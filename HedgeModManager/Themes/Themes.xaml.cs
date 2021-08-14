@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static HedgeModManager.Lang;
 
 namespace HedgeModManager.Themes
 {
@@ -14,7 +15,7 @@ namespace HedgeModManager.Themes
     {
         public string FileName { get; set; }
         public string Name { get; set; }
-  
-        public override string ToString() => Name;
+
+        public override string ToString() => Localise("Theme" + Name, Name);
     }
 }

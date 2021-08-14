@@ -166,7 +166,7 @@ namespace HedgeModManager
                     CodesList.Items.Add(x);
             });
 
-            UpdateStatus(Localise("StatusUILoadedMods", ModsDatabase.Mods.Count));
+            UpdateStatus(LocaliseFormat("StatusUILoadedMods", ModsDatabase.Mods.Count));
             CheckCodeCompatibility();
             var invalid = ModsDatabase.GetInvalidMods();
             if (invalid.Count > 0)
@@ -298,11 +298,11 @@ namespace HedgeModManager
             switch (result.Status)
             {
                 case ModUpdateFetcher.Status.Failed:
-                    UpdateStatus(Localise("StatusUIFailedToUpdate", mod.Title, result.FailException?.Message));
+                    UpdateStatus(LocaliseFormat("StatusUIFailedToUpdate", mod.Title, result.FailException?.Message));
                     break;
 
                 case ModUpdateFetcher.Status.UpToDate:
-                    UpdateStatus(Localise("DialogUIModNewest", mod.Title));
+                    UpdateStatus(LocaliseFormat("DialogUIModNewest", mod.Title));
                     break;
             }
 
@@ -327,7 +327,7 @@ namespace HedgeModManager
                     switch (status)
                     {
                         case ModUpdateFetcher.Status.BeginCheck:
-                            UpdateStatus(Localise("StatusUICheckingModUpdates", mod.Title));
+                            UpdateStatus(LocaliseFormat("StatusUICheckingModUpdates", mod.Title));
                             break;
 
                         case ModUpdateFetcher.Status.Success:
@@ -335,7 +335,7 @@ namespace HedgeModManager
                             break;
 
                         case ModUpdateFetcher.Status.Failed:
-                            UpdateStatus(Localise("StatusUIFailedToUpdate", mod.Title, exception?.Message));
+                            UpdateStatus(LocaliseFormat("StatusUIFailedToUpdate", mod.Title, exception?.Message));
                             failedCount++;
                             break;
                     }
@@ -1183,20 +1183,31 @@ namespace HedgeModManager
         {
             var shiftKey = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
 
-            if (shiftKey && Keyboard.IsKeyDown(Key.F1))
+            if (shiftKey)
             {
-                try
+                if (Keyboard.IsKeyDown(Key.F1))
                 {
-                    var time = DateTime.Now;
-                    var path =
-                        $"HMM_Snapshot_{time.Date:00}{time.Month:00}{time.Year:0000}{time.Hour:00}{time.Minute:00}{time.Second:00}.txt";
+                    try
+                    {
+                        var time = DateTime.Now;
+                        var path =
+                            $"HMM_Snapshot_{time.Date:00}{time.Month:00}{time.Year:0000}{time.Hour:00}{time.Minute:00}{time.Second:00}.txt";
 
-                    File.WriteAllText(path, Convert.ToBase64String(SnapshotBuilder.Build()));
-                    Process.Start($"explorer.exe", $"/select,\"{Path.GetFullPath(path)}\"");
-                    HedgeApp.CreateOKMessageBox("Hedge Mod Manager", $"Please attach the file\n{path}\nto the issue.").ShowDialog();
+                        File.WriteAllText(path, Convert.ToBase64String(SnapshotBuilder.Build()));
+                        Process.Start($"explorer.exe", $"/select,\"{Path.GetFullPath(path)}\"");
+                        HedgeApp.CreateOKMessageBox("Hedge Mod Manager", $"Please attach the file\n{path}\nto the issue.").ShowDialog();
+                    }
+                    catch { }
                 }
-                catch { }
+                if (Keyboard.IsKeyDown(Key.F2))
+                {
+                    try
+                    {
+                        HedgeApp.FindMissingLanguageEntries(HedgeApp.CurrentCulture.FileName);
+                    }
+                    catch { }
 
+                }
             }
         }
 
