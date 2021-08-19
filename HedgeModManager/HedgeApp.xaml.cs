@@ -798,7 +798,7 @@ namespace HedgeModManager
             var build = version.Build;
             var revision = version.Revision;
 
-            return new Version(version.Major, version.Minor, build == -1 ? 0 : 0, revision == -1 ? 0 : 0);
+            return new Version(version.Major, version.Minor, build == -1 ? 0 : build, revision == -1 ? 0 : revision);
         }
 
         public static string GetCodeLoaderVersion(Game game)
