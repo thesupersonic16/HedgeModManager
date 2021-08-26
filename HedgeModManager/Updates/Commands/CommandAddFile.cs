@@ -72,7 +72,7 @@ namespace HedgeModManager.Updates.Commands
             if (string.IsNullOrEmpty(FileName))
                 return;
 
-            string serverPath = Path.Combine(mod.UpdateServer, Uri.EscapeUriString(FileName));
+            string serverPath = Path.Combine(mod.UpdateServer, Uri.EscapeDataString(FileName));
             string fullPath = Path.Combine(mod.RootDirectory, UpdateCommandList.TempDirName, FileName);
 
             if (!fullPath.IsSubPathOf(mod.RootDirectory))
