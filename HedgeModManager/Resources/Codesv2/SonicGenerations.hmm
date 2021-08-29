@@ -843,3 +843,9 @@ Patch "Only Play Results Intro" by "M&M"
 WriteProtected<byte>(0xCFD47F, 0xE9, 0x95, 0x00, 0x00, 0x00)
 WriteProtected<byte>(0xCFD484, 0xC3)
 WriteNop(0xCFD485, 3)
+
+Code "Set Shadowmaps Distance to 120" by "Leroy"
+Write<float>(0x01A57310, 120f)
+Write<float>(0x01A57314, 120f)
+Write<float>(0x01A57318, 120f)
+Write<float>(0x01A5731C, 120f)
