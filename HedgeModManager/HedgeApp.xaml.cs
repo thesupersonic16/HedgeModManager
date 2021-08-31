@@ -966,15 +966,12 @@ namespace HedgeModManager
             var control = (TabControl)sender;
 
             var isLeft = control.Items.IndexOf(e.RemovedItems[0]) < control.Items.IndexOf(e.AddedItems[0]);
-
             var tempArea = (System.Windows.Shapes.Shape)control.Template.FindName("PART_TempArea", (FrameworkElement)sender);
             var presenter = (ContentPresenter)control.Template.FindName("PART_Presenter", (FrameworkElement)sender);
-
-            //control.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            //control.Arrange(new Rect(control.DesiredSize));
-
             var target = new RenderTargetBitmap((int)control.ActualWidth, (int)control.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+
             target.Render(oldControl);
+
             tempArea.HorizontalAlignment = HorizontalAlignment.Stretch;
             tempArea.VerticalAlignment = VerticalAlignment.Stretch;
             tempArea.Fill = new ImageBrush(target);
