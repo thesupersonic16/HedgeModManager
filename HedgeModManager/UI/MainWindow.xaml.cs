@@ -78,7 +78,7 @@ namespace HedgeModManager
 
         public Task WaitTasks()
         {
-            lock(Tasks)
+            lock (Tasks)
                 return Task.WhenAll(Tasks);
         }
 
@@ -480,7 +480,8 @@ namespace HedgeModManager
                 try
                 {
                     await CheckAllModsUpdatesAsync(ModUpdateCheckCancelSource.Token);
-                }catch(OperationCanceledException){}
+                }
+                catch (OperationCanceledException) { }
             }
 
             await CheckForCodeUpdates();
@@ -813,7 +814,8 @@ namespace HedgeModManager
             try
             {
                 await CheckAllModsUpdatesAsync(ModUpdateCheckCancelSource.Token);
-            }catch(OperationCanceledException){}
+            }
+            catch (OperationCanceledException) { }
         }
 
         private void UI_Refresh_Click(object sender, RoutedEventArgs e)
@@ -846,8 +848,17 @@ namespace HedgeModManager
         private void UI_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var item = (ListViewItem)sender;
-            var dialog = new AboutModWindow((ModInfo)item.Content);
-            dialog.ShowDialog();
+            var modInfo = (ModInfo)item.Content;
+            if (ViewModel.SelectedMod.HasSchema)
+            {
+                var window = new ModConfigWindow(modInfo) { Owner = this };
+                window.ShowDialog();
+            }
+            else
+            {
+                var dialog = new AboutModWindow(modInfo) { Owner = this };
+                dialog.ShowDialog();
+            }
         }
 
         private void UI_OtherLoader_Click(object sender, RoutedEventArgs e)
@@ -870,7 +881,7 @@ namespace HedgeModManager
                     Dispatcher.Invoke(RefreshUI);
                 }
             }
-            catch(OperationCanceledException)
+            catch (OperationCanceledException)
             {
 
             }
@@ -879,7 +890,7 @@ namespace HedgeModManager
         private void UI_Edit_Mod(object sender, RoutedEventArgs e)
         {
             var mod = ViewModel.SelectedMod;
-            var window = new EditModWindow(mod);
+            var window = new EditModWindow(mod) { Owner = this };
             if (window.ShowDialog().Value)
             {
                 mod.Save();
@@ -892,7 +903,7 @@ namespace HedgeModManager
             if (ViewModel.SelectedMod == null)
                 return;
 
-            var dialog = new AboutModWindow(ViewModel.SelectedMod);
+            var dialog = new AboutModWindow(ViewModel.SelectedMod) { Owner = this };
             dialog.ShowDialog();
         }
 
@@ -944,7 +955,7 @@ namespace HedgeModManager
                 };
 
                 mod.IncludeDirs.Add(".");
-                var editor = new EditModWindow(mod);
+                var editor = new EditModWindow(mod) { Owner = this };
                 if (editor.ShowDialog().Value)
                 {
                     var modDir = HedgeApp.CurrentGame == Games.PuyoPuyoTetris2 ? "raw" : "disk";
@@ -1086,7 +1097,7 @@ namespace HedgeModManager
             if (!ViewModel.SelectedMod.HasSchema)
                 return;
 
-            var window = new ModConfigWindow(ViewModel.SelectedMod);
+            var window = new ModConfigWindow(ViewModel.SelectedMod) { Owner = this };
             window.ShowDialog();
         }
 
@@ -1102,7 +1113,7 @@ namespace HedgeModManager
             var itemConfigure = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemConfigure");
             var itemCheckUpdate = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemCheckUpdate");
             var itemCheckUpdateAll = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemCheckUpdateAll");
-            
+
             if (itemConfigure != null)
                 itemConfigure.IsEnabled = mod.HasSchema;
 
@@ -1238,7 +1249,7 @@ namespace HedgeModManager
 
         private void UI_ManageProfile_Click(object sender, RoutedEventArgs e)
         {
-            var manager = new ProfileManagerWindow();
+            var manager = new ProfileManagerWindow() { Owner = this };
             manager.DataContext = DataContext;
             manager.ShowDialog();
             // Update profiles
