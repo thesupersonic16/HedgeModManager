@@ -852,3 +852,8 @@ WriteProtected<byte>(0x11C96DB, 0x72)
 
 Patch "Disable Fast Music" by "Hyper"
 WriteNop(0xE2E30F, 2);
+
+Patch "Always Use Fast Music" by "Hyper"
+WriteProtected<byte>(0xE2E30F, 0xEB);
+WriteNop(0xE2E3A2, 2);
+WriteProtected<byte>(0xE2E3AC, 0xEB, 0x0E);
