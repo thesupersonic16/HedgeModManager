@@ -849,3 +849,6 @@ WriteProtected<byte>(0x11C965F, 0x72)
 WriteProtected<byte>(0x11C966B, 0x72)
 WriteProtected<byte>(0x11C96CB, 0x72)
 WriteProtected<byte>(0x11C96DB, 0x72)
+
+Patch "Disable Fast Music" by "Hyper"
+WriteNop(0xE2E30F, 2);
