@@ -469,7 +469,7 @@ namespace HedgeModManager
         public static void FindMissingLanguageEntries(string culture)
         {
             var entry = GetClosestCulture(culture);
-            var baseDict = new ResourceDictionary {Source = new Uri("Languages/en-AU.xaml", UriKind.Relative)};
+            var baseDict = new ResourceDictionary { Source = new Uri("Languages/en-AU.xaml", UriKind.Relative) };
             var builder = new StringBuilder();
             builder.AppendLine();
 
@@ -682,7 +682,7 @@ namespace HedgeModManager
             }
             catch (Exception e)
             {
-                CreateOKMessageBox("Hedge Mod Manager", 
+                CreateOKMessageBox("Hedge Mod Manager",
                     installed ? Lang.Localise("MainUIMLUninstallFail") : Lang.Localise("MainUIMLInstallFail")).ShowDialog();
                 return false;
             }
@@ -959,32 +959,41 @@ namespace HedgeModManager
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.RemovedItems.Count < 1 || !(e.RemovedItems[0] is FrameworkElement))
+            if (e.RemovedItems.Count < 1 || e.AddedItems.Count < 1 || !(e.RemovedItems[0] is FrameworkElement))
                 return;
 
             var oldControl = (FrameworkElement)((TabItem)e.RemovedItems[0]).Content;
             var control = (TabControl)sender;
+
+            var isLeft = control.Items.IndexOf(e.RemovedItems[0]) < control.Items.IndexOf(e.AddedItems[0]);
             var tempArea = (System.Windows.Shapes.Shape)control.Template.FindName("PART_TempArea", (FrameworkElement)sender);
             var presenter = (ContentPresenter)control.Template.FindName("PART_Presenter", (FrameworkElement)sender);
             var target = new RenderTargetBitmap((int)control.ActualWidth, (int)control.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+
             target.Render(oldControl);
+
             tempArea.HorizontalAlignment = HorizontalAlignment.Stretch;
+            tempArea.VerticalAlignment = VerticalAlignment.Stretch;
             tempArea.Fill = new ImageBrush(target);
+            tempArea.Width = target.Width;
+            tempArea.Height = target.Height;
             tempArea.RenderTransform = new TranslateTransform();
             presenter.RenderTransform = new TranslateTransform();
-            presenter.RenderTransform.BeginAnimation(TranslateTransform.XProperty, CreateAnimation(control.ActualWidth, 0));
-            tempArea.RenderTransform.BeginAnimation(TranslateTransform.XProperty, CreateAnimation(0, -control.ActualWidth, (x, y) => { tempArea.HorizontalAlignment = HorizontalAlignment.Left; }));
-            tempArea.Fill.BeginAnimation(Brush.OpacityProperty, CreateAnimation(1, 0));
+
+            presenter.RenderTransform.BeginAnimation(TranslateTransform.XProperty, isLeft ? CreateAnimation(control.ActualWidth, 0) : CreateAnimation(-control.ActualWidth, 0));
+            tempArea.RenderTransform.BeginAnimation(TranslateTransform.XProperty, isLeft ?
+                CreateAnimation(0, -control.ActualWidth, (x, y) => { tempArea.HorizontalAlignment = HorizontalAlignment.Left; }) :
+                CreateAnimation(0, control.ActualWidth, (x, y) => { tempArea.HorizontalAlignment = HorizontalAlignment.Left; })
+                );
+
+            tempArea.BeginAnimation(UIElement.OpacityProperty, CreateAnimation(1, 0));
 
 
-            AnimationTimeline CreateAnimation(double from, double to,
-                          EventHandler whenDone = null)
+            AnimationTimeline CreateAnimation(double from, double to, EventHandler whenDone = null)
             {
-                IEasingFunction ease = new BackEase
-                { Amplitude = 0.5, EasingMode = EasingMode.EaseOut };
-                var duration = new Duration(TimeSpan.FromSeconds(0.4));
-                var anim = new DoubleAnimation(from, to, duration)
-                { EasingFunction = ease };
+                var ease = new ExponentialEase { Exponent = 7, EasingMode = EasingMode.EaseOut };
+                var duration = new Duration(TimeSpan.FromSeconds(1.0 / 3.0));
+                var anim = new DoubleAnimation(from, to, duration) { EasingFunction = ease };
                 if (whenDone != null)
                     anim.Completed += whenDone;
                 anim.Freeze();
