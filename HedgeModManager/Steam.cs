@@ -32,13 +32,13 @@ namespace HedgeModManager
             return Path.Combine(SteamLocation, "config/avatarcache/", SID64 + ".png");
         }
 
-        public static List<SteamGame> SearchForGames(string preference = null)
+        public static List<GameInstall> SearchForGames(string preference = null)
         {
             var paths = new List<string>();
-            var games = new List<SteamGame>();
+            var games = new List<GameInstall>();
 
             if (string.IsNullOrEmpty(SteamLocation))
-                return new List<SteamGame>();
+                return new List<GameInstall>();
 
             string vdfLocation = Path.Combine(SteamLocation, "steamapps\\libraryfolders.vdf");
             Dictionary<string, object> vdf = null;
@@ -48,7 +48,7 @@ namespace HedgeModManager
             }
             catch (Exception ex)
             {
-                return new List<SteamGame>();
+                return new List<GameInstall>();
             }
 
             // Default Common Path
@@ -79,14 +79,14 @@ namespace HedgeModManager
                         var fullPath = Path.Combine(path, game.SteamGamePath);
                         if (File.Exists(fullPath))
                         {
-                            games.Add(new SteamGame(game.GameName, fullPath, game.AppID));
+                            games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath)));
                         }
                     }
                 }
             }
 
             if (preference != null)
-                return games.OrderBy(x => x.GameName != preference).ToList();
+                return games.OrderBy(x => x.BaseGame.GameName != preference).ToList();
             else return games;
         }
 
@@ -221,34 +221,6 @@ namespace HedgeModManager
                 }
                 return containers.FirstOrDefault();
             }
-        }
-    }
-
-    public class SteamGame
-    {
-        public string GameName { get; set; }
-        public string GameID { get; set; }
-        public string ExeName { get; set; }
-        public string RootDirectory { get; set; }
-        public string ExeDirectory { get { return Path.Combine(RootDirectory, ExeName); } }
-        public bool Status { get { return Steam.CheckGame(ExeDirectory); } }
-
-        public SteamGame(string gameName, string exe, string gameID)
-        {
-            GameName = gameName;
-            RootDirectory = Path.GetDirectoryName(exe);
-            ExeName = Path.GetFileName(exe);
-            GameID = gameID;
-        }
-
-        public void StartGame()
-        {
-            Process.Start($"steam://rungameid/{GameID}");
-        }
-
-        public override string ToString()
-        {
-            return GameName;
         }
     }
 }

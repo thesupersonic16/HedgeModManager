@@ -18,7 +18,7 @@ namespace HedgeModManager.UI
     {
         public CPKREDIRConfig CPKREDIR { get; set; }
         public ModsDB ModsDB { get; set; }
-        public IEnumerable<SteamGame> Games { get; set; }
+        public IEnumerable<GameInstall> Games { get; set; }
         public ObservableCollection<ModInfo> Mods { get; set; } = new ObservableCollection<ModInfo>();
         public ObservableCollection<ModProfile> Profiles { get; set; } = new ObservableCollection<ModProfile>();
 

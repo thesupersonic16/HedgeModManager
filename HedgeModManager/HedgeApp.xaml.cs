@@ -60,9 +60,9 @@ namespace HedgeModManager
         public static string CPKREDIRVersion;
         public static string[] Args;
         public static Game CurrentGame = Games.Unknown;
-        public static SteamGame CurrentSteamGame;
+        public static GameInstall CurrentGameInstall;
         public static CPKREDIRConfig Config;
-        public static List<SteamGame> SteamGames = null;
+        public static List<GameInstall> GameInstalls = null;
         public static bool Restart = false;
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
@@ -164,10 +164,10 @@ namespace HedgeModManager
             CountLanguages();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Generations");
-            var steamGame = SteamGames.FirstOrDefault();
-            SelectSteamGame(steamGame);
-            StartDirectory = steamGame.RootDirectory;
+            GameInstalls = Steam.SearchForGames("SonicGenerations");
+            var steamGame = GameInstalls.FirstOrDefault();
+            SelectGameInstall(steamGame);
+            StartDirectory = steamGame.GameDirectory;
             if (File.Exists("key.priv.xml"))
             {
                 using (var stream = File.OpenRead("key.priv.xml"))
@@ -177,7 +177,7 @@ namespace HedgeModManager
                 }
             }
 #else
-            SteamGames = Steam.SearchForGames();
+            GameInstalls = Steam.SearchForGames();
             if (FindAndSetLocalGame() == null)
             {
                 if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
@@ -189,8 +189,8 @@ namespace HedgeModManager
 
             if (CurrentGame == Games.Unknown)
             {
-                var game = SteamGames.FirstOrDefault();
-                SelectSteamGame(game);
+                var game = GameInstalls.FirstOrDefault();
+                SelectGameInstall(game);
                 StartDirectory = game?.RootDirectory;
             }
 
@@ -304,7 +304,7 @@ namespace HedgeModManager
             {
                 if (CurrentGame.SupportsCPKREDIR)
                 {
-                    string exePath = Path.Combine(StartDirectory, CurrentGame.ExecuteableName);
+                    string exePath = Path.Combine(StartDirectory, CurrentGame.ExecutableName);
                     if (IsCPKREDIRInstalled(exePath))
                         InstallCPKREDIR(exePath, false);
                 }
@@ -365,20 +365,20 @@ namespace HedgeModManager
             Console.WriteLine("        Usage: filename [output]");
         }
 
-        public static SteamGame FindAndSetLocalGame()
+        public static GameInstall FindAndSetLocalGame()
         {
             foreach (var game in Games.GetSupportedGames())
             {
-                if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
+                if (File.Exists(Path.Combine(StartDirectory, game.ExecutableName)))
                 {
-                    var steamGame = SteamGames.FirstOrDefault(x => x.GameID == game.AppID);
+                    var steamGame = GameInstalls.FirstOrDefault(x => x.BaseGame == game);
                     if (steamGame == null)
                     {
-                        steamGame = new SteamGame(game.GameName, Path.Combine(StartDirectory, game.ExecuteableName), game.AppID);
-                        SteamGames.Add(steamGame);
+                        steamGame = new GameInstall(game, StartDirectory);
+                        GameInstalls.Add(steamGame);
                     }
                     CurrentGame = game;
-                    CurrentSteamGame = steamGame;
+                    CurrentGameInstall = steamGame;
                     RegistryConfig.LastGameDirectory = StartDirectory;
                     RegistryConfig.Save();
                     ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
@@ -508,21 +508,21 @@ namespace HedgeModManager
         }
 
         /// <summary>
-        /// Sets the Current Game to the passed Steam Game
+        /// Sets the CurrentGame to the passed GameInstall
         /// </summary>
-        /// <param name="steamGame">Steam Game to select</param>
-        public static void SelectSteamGame(SteamGame steamGame)
+        /// <param name="gameinstall">Game to select</param>
+        public static void SelectGameInstall(GameInstall gameinstall)
         {
-            if (steamGame == null)
+            if (gameinstall == null)
                 return;
 
             foreach (var game in Games.GetSupportedGames())
             {
-                if (game.AppID == steamGame.GameID)
+                if (game == gameinstall.BaseGame)
                 {
                     CurrentGame = game;
-                    CurrentSteamGame = steamGame;
-                    StartDirectory = steamGame.RootDirectory;
+                    CurrentGameInstall = gameinstall;
+                    StartDirectory = gameinstall.GameDirectory;
                     RegistryConfig.LastGameDirectory = StartDirectory;
                     RegistryConfig.Save();
                 }
@@ -542,13 +542,13 @@ namespace HedgeModManager
         }
 
         /// <summary>
-        /// Finds and returns an instance of SteamGame from a HMM Game
+        /// Finds and returns an instance of GameInstall from a HMM Game
         /// </summary>
         /// <param name="game">HMM Game</param>
-        /// <returns>Steam Game</returns>
-        public static SteamGame GetSteamGame(Game game)
+        /// <returns>GameInstall thats linked to the passed Game</returns>
+        public static GameInstall GetGameInstall(Game game)
         {
-            return SteamGames.FirstOrDefault(t => t.GameName == game.GameName);
+            return GameInstalls.FirstOrDefault(t => t.BaseGame == game);
         }
 
         /// <summary>

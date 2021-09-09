@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static HedgeModManager.Lang;
 
 namespace HedgeModManager
 {
@@ -19,8 +20,8 @@ namespace HedgeModManager
         public static Game Unknown = new Game();
         public static Game SonicGenerations = new Game()
         {
-            GameName = "Sonic Generations",
-            ExecuteableName = "SonicGenerations.exe",
+            GameName = "SonicGenerations",
+            ExecutableName = "SonicGenerations.exe",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
             AppID = "71340",
@@ -33,8 +34,8 @@ namespace HedgeModManager
 
         public static Game SonicLostWorld = new Game()
         {
-            GameName = "Sonic Lost World",
-            ExecuteableName = "slw.exe",
+            GameName = "SonicLostWorld",
+            ExecutableName = "slw.exe",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
             AppID = "329440",
@@ -47,8 +48,8 @@ namespace HedgeModManager
 
         public static Game SonicForces = new Game()
         {
-            GameName = "Sonic Forces",
-            ExecuteableName = "Sonic Forces.exe",
+            GameName = "SonicForces",
+            ExecutableName = "Sonic Forces.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
             AppID = "637100",
@@ -61,8 +62,8 @@ namespace HedgeModManager
 
         public static Game PuyoPuyoTetris2 = new Game()
         {
-            GameName = "Puyo Puyo Tetris 2",
-            ExecuteableName = "PuyoPuyoTetris2.exe",
+            GameName = "PuyoPuyoTetris2",
+            ExecutableName = "PuyoPuyoTetris2.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
             AppID = "1259790",
@@ -75,8 +76,8 @@ namespace HedgeModManager
 
         public static Game Tokyo2020 = new Game()
         {
-            GameName = "Olympic Games Tokyo 2020",
-            ExecuteableName = "musashi.exe",
+            GameName = "Tokyo2020",
+            ExecutableName = "musashi.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
             AppID = "981890",
@@ -129,7 +130,7 @@ namespace HedgeModManager
     public class Game
     {
         public string GameName = "Unnamed Game";
-        public string ExecuteableName = string.Empty;
+        public string ExecutableName = string.Empty;
         public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
         public bool SupportsSaveRedirection = false;
@@ -139,10 +140,21 @@ namespace HedgeModManager
         public string CodesURL;
         public string SteamGamePath = string.Empty;
 
-        public override string ToString()
+        public override string ToString() => Localise("Game" + GameName, GameName);
+    }
+
+    public class GameInstall
+    {
+        public Game BaseGame;
+        public string GameDirectory;
+
+        public GameInstall(Game game, string directory)
         {
-            return GameName;
+            BaseGame = game;
+            GameDirectory = directory;
         }
+
+        public override string ToString() => Localise("Game" + BaseGame.GameName, BaseGame.GameName);
     }
 
     public class CodeLoaderInfo
