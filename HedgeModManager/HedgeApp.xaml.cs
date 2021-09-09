@@ -191,7 +191,7 @@ namespace HedgeModManager
             {
                 var game = GameInstalls.FirstOrDefault();
                 SelectGameInstall(game);
-                StartDirectory = game?.RootDirectory;
+                StartDirectory = game?.GameDirectory;
             }
 
             if (CurrentGame == Games.Unknown)
