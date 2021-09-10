@@ -21,7 +21,7 @@ Its simple, just grab the [latest version from GitHub](https://github.com/thesup
 ## How do I install mods?
 There are multiple ways of installing mods, one of the easy ways of installing mods is by dragging its zip/7z/rar/folder into the mod list along with also being able to drag and drop multiple files and/or folders.
 
-You can also install mods using [GameBanana's](https://gamebanana.com/games/6059) 1-Click Install button. 
+You can also install mods using [GameBanana](https://gamebanana.com)'s 1-Click Install button. 
 
 Once your done, you can start checking the checkbox(es) of the mods and codes you want to play and click "Save and Play".
 
