@@ -178,6 +178,12 @@ Do you want run the HMM Auto Installer?</value>
   <data name="URL_MML_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/TokyoOlympics2020.hmm</value>
   </data>
+  <data name="URL_RML_CODES" xml:space="preserve">
+    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicColorsUltimate.hmm</value>
+  </data>
+  <data name="URL_RML_DL" xml:space="preserve">
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/RainbowModLoader.dll</value>
+  </data>
   <data name="URL_TML_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/PuyoPuyoTetris2.hmm</value>
   </data>

@@ -191,5 +191,6 @@
     <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
     <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
 
 </ResourceDictionary>

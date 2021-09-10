@@ -29,7 +29,7 @@ namespace HedgeModManager
             Is64Bit = false,
             ModLoader = ModLoaders.GenerationsCodeLoader,
             CodesURL = Resources.URL_GCL_CODES,
-            SteamGamePath = Path.Combine("Sonic Generations", "SonicGenerations.exe")
+            GamePath = Path.Combine("Sonic Generations", "SonicGenerations.exe")
         };
 
         public static Game SonicLostWorld = new Game()
@@ -43,7 +43,7 @@ namespace HedgeModManager
             Is64Bit = false,
             ModLoader = ModLoaders.LostCodeLoader,
             CodesURL = Resources.URL_LCL_CODES,
-            SteamGamePath = Path.Combine("Sonic Lost World", "slw.exe")
+            GamePath = Path.Combine("Sonic Lost World", "slw.exe")
         };
 
         public static Game SonicForces = new Game()
@@ -57,7 +57,7 @@ namespace HedgeModManager
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_FML_CODES,
-            SteamGamePath = Path.Combine("SonicForces", "build", "main", "projects", "exec", "Sonic Forces.exe")
+            GamePath = Path.Combine("SonicForces", "build", "main", "projects", "exec", "Sonic Forces.exe")
         };
 
         public static Game PuyoPuyoTetris2 = new Game()
@@ -71,7 +71,7 @@ namespace HedgeModManager
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_TML_CODES,
-            SteamGamePath = Path.Combine("PuyoPuyoTetris2", "PuyoPuyoTetris2.exe")
+            GamePath = Path.Combine("PuyoPuyoTetris2", "PuyoPuyoTetris2.exe")
         };
 
         public static Game Tokyo2020 = new Game()
@@ -85,7 +85,21 @@ namespace HedgeModManager
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_MML_CODES,
-            SteamGamePath = Path.Combine("Tokyo2020", "musashi.exe")
+            GamePath = Path.Combine("Tokyo2020", "musashi.exe")
+        };
+
+        public static Game SonicColorsUltimate = new Game()
+        {
+            GameName = "SonicColorsUltimate",
+            ExecutableName = "Sonic Colors - Ultimate.exe",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = false,
+            AppID = "e5071e19d08c45a6bdda5d92fbd0a03e",
+            GBProtocol = "hedgemmrainbow",
+            Is64Bit = true,
+            ModLoader = ModLoaders.RainbowModLoader,
+            CodesURL = Resources.URL_RML_CODES,
+            GamePath = Path.Combine("rainbow Shipping", "Sonic Colors - Ultimate.exe")
         };
 
         public static IEnumerable<Game> GetSupportedGames()
@@ -95,6 +109,7 @@ namespace HedgeModManager
             yield return SonicForces;
             yield return PuyoPuyoTetris2;
             yield return Tokyo2020;
+            yield return SonicColorsUltimate;
         }
     }
 
@@ -103,6 +118,7 @@ namespace HedgeModManager
         public static byte[] GenerationsCodeLoader;
         public static byte[] LostCodeLoader;
         public static byte[] HE2ModLoader;
+        public static byte[] RainbowModLoader;
 
         static EmbeddedLoaders()
         {
@@ -112,6 +128,7 @@ namespace HedgeModManager
                 GenerationsCodeLoader = GetFile("SonicGenerationsCodeLoader.dll");
                 LostCodeLoader = GetFile("LostCodeLoader.dll");
                 HE2ModLoader = GetFile("HE2ModLoader.dll");
+                RainbowModLoader = GetFile("RainbowModLoader.dll");
 
                 byte[] GetFile(string name)
                 {
@@ -138,7 +155,7 @@ namespace HedgeModManager
         public string GBProtocol;
         public bool Is64Bit = false;
         public string CodesURL;
-        public string SteamGamePath = string.Empty;
+        public string GamePath = string.Empty;
 
         public override string ToString() => Localise("Game" + GameName, GameName);
     }
@@ -152,6 +169,24 @@ namespace HedgeModManager
         {
             BaseGame = game;
             GameDirectory = directory;
+        }
+
+        public static List<GameInstall> SearchForGames(string preference = null)
+        {
+            var steamGames = Steam.SearchForGames();
+            var epicGames = Epic.SearchForGames();
+
+            var games = new List<GameInstall>();
+
+            if (steamGames != null)
+                games.AddRange(steamGames);
+
+            if (epicGames != null)
+                games.AddRange(epicGames);
+
+            return !string.IsNullOrEmpty(preference)
+                ? games.OrderBy(x => x.BaseGame.GameName != preference).ToList()
+                : games;
         }
 
         public override string ToString() => Localise("Game" + BaseGame.GameName, BaseGame.GameName);

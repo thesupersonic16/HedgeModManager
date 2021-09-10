@@ -164,7 +164,7 @@ namespace HedgeModManager
             CountLanguages();
 #if DEBUG
             // Find a Steam Game
-            GameInstalls = Steam.SearchForGames("SonicGenerations");
+            GameInstalls = GameInstall.SearchForGames("SonicGenerations");
             var steamGame = GameInstalls.FirstOrDefault();
             SelectGameInstall(steamGame);
             StartDirectory = steamGame.GameDirectory;
@@ -177,7 +177,7 @@ namespace HedgeModManager
                 }
             }
 #else
-            GameInstalls = Steam.SearchForGames();
+            GameInstalls = GameInstall.SearchForGames();
             if (FindAndSetLocalGame() == null)
             {
                 if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)

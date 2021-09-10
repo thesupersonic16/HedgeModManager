@@ -32,13 +32,13 @@ namespace HedgeModManager
             return Path.Combine(SteamLocation, "config/avatarcache/", SID64 + ".png");
         }
 
-        public static List<GameInstall> SearchForGames(string preference = null)
+        public static List<GameInstall> SearchForGames()
         {
             var paths = new List<string>();
             var games = new List<GameInstall>();
 
             if (string.IsNullOrEmpty(SteamLocation))
-                return new List<GameInstall>();
+                return null;
 
             string vdfLocation = Path.Combine(SteamLocation, "steamapps\\libraryfolders.vdf");
             Dictionary<string, object> vdf = null;
@@ -48,7 +48,7 @@ namespace HedgeModManager
             }
             catch (Exception ex)
             {
-                return new List<GameInstall>();
+                return null;
             }
 
             // Default Common Path
@@ -76,7 +76,7 @@ namespace HedgeModManager
                 {
                     foreach (var game in Games.GetSupportedGames())
                     {
-                        var fullPath = Path.Combine(path, game.SteamGamePath);
+                        var fullPath = Path.Combine(path, game.GamePath);
                         if (File.Exists(fullPath))
                         {
                             games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath)));
@@ -85,9 +85,7 @@ namespace HedgeModManager
                 }
             }
 
-            if (preference != null)
-                return games.OrderBy(x => x.BaseGame.GameName != preference).ToList();
-            else return games;
+            return games;
         }
 
         public static bool CheckGame(string path)

@@ -36,6 +36,16 @@ namespace HedgeModManager
             ModLoaderFileName = "d3d11.dll",
             DirectXVersion = 11,
         };
+
+        public static ModLoader RainbowModLoader = new ModLoader()
+        {
+            ModLoaderDownloadURL = Resources.URL_RML_DL,
+            ModLoaderData = EmbeddedLoaders.RainbowModLoader,
+            ModLoaderName = "Rainbow Mod Loader",
+            ModLoaderID = "RainbowModLoader",
+            ModLoaderFileName = "d3d11.dll",
+            DirectXVersion = 11
+        };
     }
 
     public class ModLoader
