@@ -248,6 +248,17 @@ namespace HedgeModManager
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
         }
 
+        public void FilterCodes(string text)
+        {
+            CodesList.Items.Clear();
+            foreach (Code code in CodesDatabase.Codes)
+                if (code.Name.ToLowerInvariant().Contains(text))
+                    if (code.Enabled)
+                        CodesList.Items.Insert(0, code);
+                    else
+                        CodesList.Items.Add(code);
+        }
+
         private void UI_CodesTab_Click(object sender, RoutedEventArgs e)
         {
             // Display update alert.
@@ -1193,6 +1204,7 @@ namespace HedgeModManager
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var shiftKey = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+            var ctrlkey  = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
 
             if (shiftKey)
             {
@@ -1218,6 +1230,26 @@ namespace HedgeModManager
                     }
                     catch { }
 
+                }
+            }
+            if (ctrlkey)
+            {
+                if (Keyboard.IsKeyDown(Key.F))
+                {
+                    if (MainTabControl.SelectedItem == CodesTab)
+                    {
+                        if (CodesFind.Visibility == Visibility.Visible)
+                        {
+                            CodesFind.Visibility = Visibility.Collapsed;
+                            FilterCodes("");
+                        }
+                        else
+                        {
+                            CodesFind.Visibility = Visibility.Visible;
+                            FilterCodes(TextBox_CodeSearch.Text.ToLowerInvariant());
+                            TextBox_CodeSearch.Focus();
+                        }
+                    }
                 }
             }
         }
@@ -1265,6 +1297,11 @@ namespace HedgeModManager
         {
             ModUpdateCheckCancelSource?.Cancel();
             CheckingForUpdates = false;
+        }
+
+        private void TextBox_CodeSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            FilterCodes(TextBox_CodeSearch.Text.ToLowerInvariant());
         }
 
         class StatusLogger : ILogger

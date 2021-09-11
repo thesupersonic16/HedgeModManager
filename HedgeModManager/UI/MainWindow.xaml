@@ -32,7 +32,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="StatusLbl" Margin="175,2,4,4" FontSize="12" TextAlignment="Right" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-                <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+                <TabControl x:Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem Header="{DynamicResource MainUIMods}">
                         <Grid>
                             <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown"
@@ -78,26 +78,39 @@
                     <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}" Selector.Selected="UI_CodesTab_Click" Margin="1,0,-1,0">
                         <Grid>
                             <GroupBox Margin="10,5,10,5">
-                                <Button   x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}"      Click="UI_Download_Codes"                       Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30"/>
+                                <Button x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}" Click="UI_Download_Codes" Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30" Grid.Row="1" />
                             </GroupBox>
-                            <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}"
-                                     Margin="10,5,10,45" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
-                                <ListView.View>
-                                    <GridView AllowsColumnReorder="True">
-                                        <GridViewColumn Header="{DynamicResource CodesUIName}" Width="370">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <CheckBox IsChecked="{Binding Enabled}" Margin="0,0,4,0"/>
-                                                        <TextBlock Text="{Binding Name}"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="152"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
+                            <Grid>
+                                <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}"
+                                      Margin="10,5,10,45" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
+                                    <ListView.View>
+                                        <GridView AllowsColumnReorder="True">
+                                            <GridViewColumn Header="{DynamicResource CodesUIName}" Width="370">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <CheckBox IsChecked="{Binding Enabled}" Margin="0,0,4,0"/>
+                                                            <TextBlock Text="{Binding Name}"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="152"/>
+                                        </GridView>
+                                    </ListView.View>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                            <Setter Property="Visibility" Value="{Binding Path=Visible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                </ListView>
+                                <Border x:Name="CodesFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,45" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
+                                        <Label Content="{DynamicResource CodesUISearch}" Margin="0,-3,0,0"/>
+                                        <TextBox x:Name="TextBox_CodeSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_CodeSearch_TextChanged"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
                         </Grid>
                     </TabItem>
 
