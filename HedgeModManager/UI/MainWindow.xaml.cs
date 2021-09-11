@@ -259,6 +259,17 @@ namespace HedgeModManager
                         CodesList.Items.Add(code);
         }
 
+        public void FilterMods(string text)
+        {
+            ViewModel.Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods);
+            for (int i = 0; i < ViewModel.Mods.Count; ++i)
+            {
+                if (!(ViewModel.Mods[i].Title.ToLowerInvariant().Contains(text) ||
+                    ViewModel.Mods[i].Author.ToLowerInvariant().Contains(text)))
+                    ViewModel.Mods.RemoveAt(i--);
+            }
+        }
+
         private void UI_CodesTab_Click(object sender, RoutedEventArgs e)
         {
             // Display update alert.
@@ -698,6 +709,7 @@ namespace HedgeModManager
 
         public async Task SaveConfig(bool startGame = false)
         {
+            Dispatcher.Invoke(() => FilterMods(""));
             string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
             File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             ShowMissingOtherLoaderWarning();
@@ -714,6 +726,7 @@ namespace HedgeModManager
             {
                 Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
             }
+            Dispatcher.Invoke(() => FilterMods(TextBox_ModsSearch.Text.ToLowerInvariant()));
         }
 
         public bool CheckModDepends()
@@ -1236,7 +1249,21 @@ namespace HedgeModManager
             {
                 if (Keyboard.IsKeyDown(Key.F))
                 {
-                    if (MainTabControl.SelectedItem == CodesTab)
+                    if (MainTabControl.SelectedItem == ModsTab)
+                    {
+                        if (ModsFind.Visibility == Visibility.Visible)
+                        {
+                            ModsFind.Visibility = Visibility.Collapsed;
+                            FilterMods("");
+                        }
+                        else
+                        {
+                            ModsFind.Visibility = Visibility.Visible;
+                            FilterMods(TextBox_ModsSearch.Text.ToLowerInvariant());
+                            TextBox_ModsSearch.Focus();
+                        }
+                    }
+                    else if (MainTabControl.SelectedItem == CodesTab)
                     {
                         if (CodesFind.Visibility == Visibility.Visible)
                         {
@@ -1304,6 +1331,11 @@ namespace HedgeModManager
             FilterCodes(TextBox_CodeSearch.Text.ToLowerInvariant());
         }
 
+        private void TextBox_ModsSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            FilterMods(TextBox_ModsSearch.Text.ToLowerInvariant());
+        }
+
         class StatusLogger : ILogger
         {
             private MainWindow Window { get; }
@@ -1311,5 +1343,6 @@ namespace HedgeModManager
             public void Write(string str) => Window.UpdateStatus(str);
             public void WriteLine(string str) => Window.UpdateStatus(str);
         }
+
     }
 }

@@ -33,7 +33,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="StatusLbl" Margin="175,2,4,4" FontSize="12" TextAlignment="Right" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
                 <TabControl x:Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
-                    <TabItem Header="{DynamicResource MainUIMods}">
+                    <TabItem x:Name="ModsTab" Header="{DynamicResource MainUIMods}">
                         <Grid>
                             <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
@@ -73,6 +73,12 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+                            <Border x:Name="ModsFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,5" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
+                                    <Label Content="{DynamicResource ModsUISearch}" Margin="0,-3,0,0"/>
+                                    <TextBox x:Name="TextBox_ModsSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_ModsSearch_TextChanged"/>
+                                </StackPanel>
+                            </Border>
                         </Grid>
                     </TabItem>
                     <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}" Selector.Selected="UI_CodesTab_Click" Margin="1,0,-1,0">
