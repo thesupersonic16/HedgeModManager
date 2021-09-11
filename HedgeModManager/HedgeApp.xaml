@@ -8,7 +8,7 @@
              xmlns:ui="clr-namespace:HedgeModManager.UI"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              x:Class="HedgeModManager.HedgeApp">
-    
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -117,11 +117,11 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-        
+
             <Style TargetType="{x:Type RadioButton}">
                 <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
             </Style>
-        
+
             <Style x:Key="HedgeWindow" TargetType="{x:Type Window}">
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
                 <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
@@ -641,7 +641,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
+
             <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
                 <Setter Property="OverridesDefaultStyle" Value="true"/>
                 <Setter Property="Background" Value="Transparent"/>
@@ -675,7 +675,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
+
             <Style x:Key="ScrollBarThumbHorizontal" TargetType="{x:Type Thumb}">
                 <Setter Property="OverridesDefaultStyle" Value="true"/>
                 <Setter Property="IsTabStop" Value="false"/>
@@ -819,7 +819,7 @@
                                 <ScrollBar x:Name="PART_HorizontalScrollBar"
                          Orientation="Horizontal"
                          Grid.Row="1"
-                         Grid.Column="1"
+                         Grid.Column="0"
                          Value="{TemplateBinding HorizontalOffset}"
                          Maximum="{TemplateBinding ScrollableWidth}"
                          ViewportSize="{TemplateBinding ViewportWidth}"
@@ -897,6 +897,81 @@
                         <Setter Property="Background" Value="{DynamicResource HMM.Menu.HoverColor}"/>
                     </Trigger>
                 </Style.Triggers>
+            </Style>
+
+            <Style x:Key="{x:Static GridView.GridViewScrollViewerStyleKey}"
+       TargetType="ScrollViewer">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ScrollViewer">
+                            <Grid Background="{TemplateBinding Background}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <DockPanel Margin="{TemplateBinding Padding}">
+                                    <ScrollViewer DockPanel.Dock="Top"
+                          HorizontalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Hidden"
+                          Focusable="false">
+                                        <GridViewHeaderRowPresenter Margin="2,0,2,0"
+                                          Columns="{Binding Path=TemplatedParent.View.Columns,
+                RelativeSource={RelativeSource TemplatedParent}}"
+                                          ColumnHeaderContainerStyle="{Binding
+                Path=TemplatedParent.View.ColumnHeaderContainerStyle,
+                RelativeSource={RelativeSource TemplatedParent}}"
+                                          ColumnHeaderTemplate="{Binding
+                Path=TemplatedParent.View.ColumnHeaderTemplate,
+                RelativeSource={RelativeSource TemplatedParent}}"
+                                          ColumnHeaderTemplateSelector="{Binding 
+                Path=TemplatedParent.View.ColumnHeaderTemplateSelector,
+                RelativeSource={RelativeSource TemplatedParent}}"
+                                          AllowsColumnReorder="{Binding
+                Path=TemplatedParent.View.AllowsColumnReorder,
+                RelativeSource={RelativeSource TemplatedParent}}"
+                                          ColumnHeaderContextMenu="{Binding
+                Path=TemplatedParent.View.ColumnHeaderContextMenu,
+                RelativeSource={RelativeSource TemplatedParent}}"
+                                          ColumnHeaderToolTip="{Binding
+                Path=TemplatedParent.View.ColumnHeaderToolTip,
+                RelativeSource={RelativeSource TemplatedParent}}"
+                                          SnapsToDevicePixels="{TemplateBinding
+                SnapsToDevicePixels}" />
+                                    </ScrollViewer>
+
+                                    <ScrollContentPresenter Name="PART_ScrollContentPresenter"
+                                    KeyboardNavigation.DirectionalNavigation="Local"
+                                    CanContentScroll="True"
+                                    CanHorizontallyScroll="False"
+                                    CanVerticallyScroll="False" />
+                                </DockPanel>
+
+                                <Border Grid.Column="1" Grid.Row="1" Background="{DynamicResource HMM.Button.BackgroundBrush}"/>
+
+                                <ScrollBar Name="PART_HorizontalScrollBar"
+                                     Orientation="Horizontal"
+                                     Grid.Row="1"
+                                     Maximum="{TemplateBinding ScrollableWidth}"
+                                     ViewportSize="{TemplateBinding ViewportWidth}"
+                                     Value="{TemplateBinding HorizontalOffset}"
+                                     Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />
+
+                                <ScrollBar Name="PART_VerticalScrollBar"
+                                     Grid.Column="1"
+                                     Maximum="{TemplateBinding ScrollableHeight}"
+                                     ViewportSize="{TemplateBinding ViewportHeight}"
+                                     Value="{TemplateBinding VerticalOffset}"
+                                     Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
+
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
             <Style TargetType="{x:Type ListView}">
@@ -1020,7 +1095,7 @@
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
-        
+
             <ControlTemplate x:Key="SliderHorizontal" TargetType="{x:Type Slider}">
                 <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                     <Grid>
