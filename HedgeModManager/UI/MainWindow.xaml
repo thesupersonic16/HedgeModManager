@@ -76,7 +76,7 @@
                             <Border x:Name="ModsFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,5" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
                                     <Label Content="{DynamicResource ModsUISearch}" Margin="0,-3,0,0"/>
-                                    <TextBox x:Name="TextBox_ModsSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_ModsSearch_TextChanged"/>
+                                    <TextBox x:Name="TextBox_ModsSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_ModsSearch_TextChanged" LostFocus="TextBox_ModsSearch_LostFocus"/>
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -113,7 +113,7 @@
                                 <Border x:Name="CodesFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,45" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
                                         <Label Content="{DynamicResource CodesUISearch}" Margin="0,-3,0,0"/>
-                                        <TextBox x:Name="TextBox_CodeSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_CodeSearch_TextChanged"/>
+                                        <TextBox x:Name="TextBox_CodesSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_CodeSearch_TextChanged" LostFocus="TextBox_CodeSearch_LostFocus"/>
                                     </StackPanel>
                                 </Border>
                             </Grid>

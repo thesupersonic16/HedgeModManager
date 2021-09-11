@@ -1236,7 +1236,7 @@ namespace HedgeModManager
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var shiftKey = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-            var ctrlkey  = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            var ctrlkey = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
 
             if (shiftKey)
             {
@@ -1292,10 +1292,23 @@ namespace HedgeModManager
                         else
                         {
                             CodesFind.Visibility = Visibility.Visible;
-                            FilterCodes(TextBox_CodeSearch.Text.ToLowerInvariant());
-                            TextBox_CodeSearch.Focus();
+                            FilterCodes(TextBox_CodesSearch.Text.ToLowerInvariant());
+                            TextBox_CodesSearch.Focus();
                         }
                     }
+                }
+            }
+            if (Keyboard.IsKeyDown(Key.Escape))
+            {
+                if (MainTabControl.SelectedItem == ModsTab)
+                {
+                    ModsFind.Visibility = Visibility.Collapsed;
+                    FilterMods("");
+                }
+                else if (MainTabControl.SelectedItem == CodesTab)
+                {
+                    CodesFind.Visibility = Visibility.Collapsed;
+                    FilterCodes("");
                 }
             }
         }
@@ -1345,14 +1358,28 @@ namespace HedgeModManager
             CheckingForUpdates = false;
         }
 
+        private void TextBox_CodeSearch_LostFocus(object sender, RoutedEventArgs e)
+        {
+            // Close if focus is lost with no text
+            if (TextBox_CodesSearch.Text.Length == 0)
+                CodesFind.Visibility = Visibility.Collapsed;
+        }
+
         private void TextBox_CodeSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            FilterCodes(TextBox_CodeSearch.Text.ToLowerInvariant());
+            FilterCodes(TextBox_CodesSearch.Text.ToLowerInvariant());
         }
 
         private void TextBox_ModsSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             FilterMods(TextBox_ModsSearch.Text.ToLowerInvariant());
+        }
+
+        private void TextBox_ModsSearch_LostFocus(object sender, RoutedEventArgs e)
+        {
+            // Close if focus is lost with no text
+            if (TextBox_ModsSearch.Text.Length == 0)
+                ModsFind.Visibility = Visibility.Collapsed;
         }
 
         class StatusLogger : ILogger
