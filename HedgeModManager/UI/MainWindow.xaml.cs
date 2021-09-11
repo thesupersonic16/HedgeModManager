@@ -29,6 +29,7 @@ using HedgeModManager.Languages;
 using HedgeModManager.UI.Models;
 using HedgeModManager.Updates;
 using Newtonsoft.Json;
+using System.Windows.Data;
 
 namespace HedgeModManager
 {
@@ -229,6 +230,11 @@ namespace HedgeModManager
                 Profiles = new ObservableCollection<ModProfile>(HedgeApp.ModProfiles),
                 SelectedModProfile = SelectedModProfile
             };
+            if (ModsFind.Visibility == Visibility.Visible)
+            {
+                FilterMods(TextBox_ModsSearch.Text.ToLowerInvariant());
+            }
+
             DataContext = ViewModel;
 
             Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {HedgeApp.CurrentGame} ({SelectedModProfile?.Name})";
@@ -261,12 +267,22 @@ namespace HedgeModManager
 
         public void FilterMods(string text)
         {
-            ViewModel.Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods);
-            for (int i = 0; i < ViewModel.Mods.Count; ++i)
+            ViewModel.ModsSearch = new ObservableCollection<ModInfo>(ViewModel.Mods);
+            for (int i = 0; i < ViewModel.ModsSearch.Count; ++i)
             {
-                if (!(ViewModel.Mods[i].Title.ToLowerInvariant().Contains(text) ||
-                    ViewModel.Mods[i].Author.ToLowerInvariant().Contains(text)))
-                    ViewModel.Mods.RemoveAt(i--);
+                if (!(ViewModel.ModsSearch[i].Title.ToLowerInvariant().Contains(text) ||
+                    ViewModel.ModsSearch[i].Author.ToLowerInvariant().Contains(text)))
+                    ViewModel.ModsSearch.RemoveAt(i--);
+            }
+            string path = BindingOperations.GetBinding(ModsList, ListView.ItemsSourceProperty).Path.Path;
+            string newPath = text.Length == 0 ? "Mods" : "ModsSearch";
+            if (path != newPath)
+            {
+                Binding binding = new Binding();
+                binding.Path = new PropertyPath(newPath);
+                ModsList.SetBinding(ListView.ItemsSourceProperty, binding);
+                ModsList.SetValue(GongSolutions.Wpf.DragDrop.DragDrop.IsDragSourceProperty, text.Length == 0 ? true : false);
+                ModsList.SetValue(GongSolutions.Wpf.DragDrop.DragDrop.IsDropTargetProperty, text.Length == 0 ? true : false);
             }
         }
 
@@ -709,7 +725,6 @@ namespace HedgeModManager
 
         public async Task SaveConfig(bool startGame = false)
         {
-            Dispatcher.Invoke(() => FilterMods(""));
             string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
             File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             ShowMissingOtherLoaderWarning();
@@ -726,7 +741,6 @@ namespace HedgeModManager
             {
                 Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
             }
-            Dispatcher.Invoke(() => FilterMods(TextBox_ModsSearch.Text.ToLowerInvariant()));
         }
 
         public bool CheckModDepends()
@@ -982,7 +996,11 @@ namespace HedgeModManager
                 var editor = new EditModWindow(mod) { Owner = this };
                 if (editor.ShowDialog().Value)
                 {
-                    var modDir = HedgeApp.CurrentGame == Games.PuyoPuyoTetris2 ? "raw" : "disk";
+                    var modDir = "disk";
+                    if (HedgeApp.CurrentGame == Games.PuyoPuyoTetris2)
+                        modDir = "raw";
+                    else if (HedgeApp.CurrentGame == Games.SonicColorsUltimate)
+                        modDir = "";
                     ModsDatabase.CreateMod(mod, modDir, true);
                     RefreshMods();
                 }
@@ -994,6 +1012,7 @@ namespace HedgeModManager
             for (int i = 1; i < int.MaxValue; i++)
             {
                 var title = $"{HedgeApp.CurrentGame} Mod {i}";
+                title = string.Concat(title.Split(Path.GetInvalidFileNameChars()));
                 if (!Directory.Exists(Path.Combine(ModsDatabase.RootDirectory, title)))
                     return title;
             }

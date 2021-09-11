@@ -20,6 +20,7 @@ namespace HedgeModManager.UI
         public ModsDB ModsDB { get; set; }
         public IEnumerable<GameInstall> Games { get; set; }
         public ObservableCollection<ModInfo> Mods { get; set; } = new ObservableCollection<ModInfo>();
+        public ObservableCollection<ModInfo> ModsSearch { get; set; } = new ObservableCollection<ModInfo>();
         public ObservableCollection<ModProfile> Profiles { get; set; } = new ObservableCollection<ModProfile>();
 
         public ModInfo SelectedMod { get; set; }
