@@ -465,8 +465,11 @@ Patch "All Rings Can Be Light Dashed" by "Skyth"
 WriteProtected<uint>(0x105334D, 0x10C47C6)
 WriteNop(0x1053351, 16)
 
-Patch "Object Collision Debug View" by "Aruki"
+Patch "Triggers Debug View" by "Aruki"
 Write<byte>(0x1E5E39B, 1)
+
+Patch "Object Collision Debug View" by "Aruki"
+Write<byte>(0x1E5E3A0, 1)
 
 Patch "Borderless Fullscreen" by "Sajid"
 string code = @"mov eax,[ebp+18]
