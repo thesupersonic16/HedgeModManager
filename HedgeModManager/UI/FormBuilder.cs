@@ -142,7 +142,9 @@ namespace HedgeModManager.UI
                         file[group.Name][element.Name] = element.Value?.ToString() ?? element.DefaultValue.ToString();
                 }
             }
-            using (var stream = File.Create(Path.Combine(path)))
+
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            using (var stream = File.Create(path))
             {
                 file.Write(stream);
             }
