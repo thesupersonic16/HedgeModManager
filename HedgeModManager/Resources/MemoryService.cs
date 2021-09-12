@@ -114,6 +114,9 @@ namespace HMMCodes
         public static void WriteAsmHook(long address, HookBehavior behavior, params string[] instructions)
             => WriteAsmHook(string.Join("\r\n", instructions), address, behavior, HookParameter.Jump);
 
+        public static IntPtr ScanSignature(byte[] pattern, string mask)
+            => MemoryProvider.ScanSignature(pattern, mask);
+
         public static uint NopInstructions(long address, uint count)
             => MemoryProvider.NopInstructions((IntPtr)address, count);
 
@@ -123,10 +126,21 @@ namespace HMMCodes
         public static void WriteNop(long address, long count)
         {
             for (long i = 0; i < count; i++)
-            {
                 WriteProtected<byte>(address + i, 0x90);
-            }
         }
+
+        public static byte[] MakePatternFromString(string pattern)
+        {
+            byte[] patBytes = new byte[pattern.Length];
+
+            for (int i = 0; i < patBytes.Length; i++)
+                patBytes[i] = (byte)pattern[i];
+
+            return patBytes;
+        }
+
+        public static IntPtr ScanSignature(string pattern, string mask)
+            => ScanSignature(MakePatternFromString(pattern), mask);
 
         public static bool IsKeyDown(Keys key)
             => GetAsyncKeyState(key) > 0;
