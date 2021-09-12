@@ -5,11 +5,12 @@
 
     <!-- uwu'd with https://github.com/Daniel-Liu-c0deb0t/uwu -->
 
-    <!-- common ui stwings -->
+    <!-- c-common ui stwings -->
     <system:String x:Key="CommonUIClose"  >cwose</system:String>
     <system:String x:Key="CommonUIOK"     >ok</system:String>
     <system:String x:Key="CommonUICancel" >cancew</system:String>
     <system:String x:Key="CommonUIYes"    >yes</system:String>
+    <system:String x:Key="CommonUIBlocked">bwocked</system:String>
     <system:String x:Key="CommonUINo"     >no</system:String>
     <system:String x:Key="CommonUIRetry"  >wetwy</system:String>
     <system:String x:Key="CommonUIUpdate" >update</system:String>
@@ -17,127 +18,183 @@
     <system:String x:Key="CommonUINone"   >none</system:String>
     <system:String x:Key="CommonUIIgnore" >ignowe</system:String>
     <system:String x:Key="CommonUIWarning">wawning</system:String>
+    <system:String x:Key="CommonUIError"  >ewwow</system:String>
 
-    <!-- m-main ui stwings -->
+    <!-- main u-ui stwings -->
     <system:String x:Key="MainUIMods"          >mods</system:String>
     <system:String x:Key="MainUICodes"         >codes</system:String>
     <system:String x:Key="MainUISettings"      >settings</system:String>
     <system:String x:Key="MainUIRemoveMod"     >wemove mod</system:String>
     <system:String x:Key="MainUIAddMod"        >add m-mod</system:String>
-    <system:String x:Key="MainUIRefreshModList">wefwesh mod wist</system:String>
+    <system:String x:Key="MainUIRefreshModList">wefwesh m-mod wist</system:String>
     <system:String x:Key="MainUISave"          >save</system:String>
-    <system:String x:Key="MainUISaveAndPlay"   >save and p-pway</system:String>
+    <system:String x:Key="MainUISaveAndPlay"   >save and pway</system:String>
     <system:String x:Key="MainUIPlay"          >pway</system:String>
     <system:String x:Key="MainUIMLDownloadFail">faiwed t-to downwoad mod woadew.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">faiwed to instaww m-mod woadew.&#x0a;pwease make suwe y-you have pewmissions t-to wwite g-game fiwes.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">faiwed to uninstaww m-mod woadew.&#x0a;pwease make suwe nyo games awe cuwwentwy w-wunning.</system:String>
 
     <!-- mods ui stwings -->
     <system:String x:Key="ModsUIName"           >name</system:String>
     <system:String x:Key="ModsUIVersion"        >vewsion</system:String>
     <system:String x:Key="ModsUIAuthor"         >authow</system:String>
-    <system:String x:Key="ModsUISupportSave"    >suppowts s-save</system:String>
+    <system:String x:Key="ModsUISupportSave"    >suppowts save</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >updates</system:String>
     <system:String x:Key="ModsUIModDescription" >descwiption</system:String>
     <system:String x:Key="ModsUIModFavorite"    >favouwite</system:String>
-    <system:String x:Key="ModsUIModConfigure"   >configuwe mod</system:String>
-    <system:String x:Key="ModsUIModOpenFolder"  >open c-containing fowdew</system:String>
+    <system:String x:Key="ModsUIModConfigure"   >configuwe m-mod</system:String>
+    <system:String x:Key="ModsUIModOpenFolder"  >open containing fowdew</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">check fow updates</system:String>
+    <system:String x:Key="ModsUICheckUpdatesAll">check a-aww mods fow updates</system:String>
     <system:String x:Key="ModsUIModEdit"        >edit m-mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >dewete m-mod</system:String>
-    <system:String x:Key="ModsUIModDragDrop"    >dwag and dwop items to change the woad owdew o-of mods.</system:String>
-    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">hedge m-mod managew has detected that one ow mowe m-mods have invawid i-incwude diwectowies.&#x0a;do y-you want hedge mod managew to attempt to fix this?</system:String>
+    <system:String x:Key="ModsUIModDragDrop"    >dwag a-and dwop items to change the woad owdew of mods.</system:String>
+    <system:String x:Key="ModsUISearch"         >seawch: </system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">hedge mod m-managew has detected t-that one ow mowe mods have invawid incwude diwectowies.&#x0a;do you want hedge mod managew to attempt to fix t-this?</system:String>
 
-    <!-- codes ui stwings -->
+    <!-- c-codes ui stwings -->
     <system:String x:Key="CodesUIName"    >name</system:String>
-    <system:String x:Key="CodesUIDownload">downwoad community c-codes</system:String>
-    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">the i-instawwed c-codes awe i-incompatibwe with the code woadew.&#x0a;pwease update the codes a-and the code woadew.&#x0a;wawning: this wiww ewase a-any custom codes.</system:String>
+    <system:String x:Key="CodesUIDownload">downwoad c-community codes</system:String>
+    <system:String x:Key="CodesUIUpdate"  >update c-community codes</system:String>
+    <system:String x:Key="CodesUISearch"  >seawch: </system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">the i-instawwed codes awe incompatibwe with the code woadew.&#x0a;pwease update t-the codes and the code woadew.&#x0a;wawning: this w-wiww ewase any c-custom codes.</system:String>
 
-    <!-- settings ui stwings -->
-    <!--   g-game & mod w-woadew -->
-    <system:String x:Key="SettingsUIGMLHeader"      >game &amp; mod woadew</system:String>
-    <system:String x:Key="SettingsUIInstallLoader"  >instaww m-mod woadew</system:String>
-    <system:String x:Key="SettingsUIUninstallLoader">uninstaww mod woadew</system:String>
+    <!-- s-settings ui stwings -->
+    <!--   g-game & mod woadew -->
+    <system:String x:Key="SettingsUIGMLHeader"      >game &amp; m-mod woadew</system:String>
+    <system:String x:Key="SettingsUIInstallLoader"  >instaww mod woadew</system:String>
+    <system:String x:Key="SettingsUIUninstallLoader">uninstaww m-mod w-woadew</system:String>
     <system:String x:Key="SettingsUIOpenMods"       >open m-mods diwectowy</system:String>
     <system:String x:Key="SettingsUIEnableML"       >enabwe mod woadew</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >enabwe d-debug consowe</system:String>
-    <system:String x:Key="SettingsUIEnableSRedir"   >enabwe s-save fiwe wediwection</system:String>
-    <system:String x:Key="SettingsUILoadTopBottom"  >woad t-top to bottom</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >enabwe save fiwe wediwection</system:String>
+    <system:String x:Key="SettingsUILoadTopBottom"  >woad top to bottom</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >woadews:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >game:</system:String>
-    <system:String x:Key="SettingsUILabelMDir"      >mods d-diwectowy:</system:String>
-    <!--   h-hedge mod managew -->
+    <system:String x:Key="SettingsUILabelProfile"   >pwofiwe:</system:String>
+    <system:String x:Key="SettingsUILabelMDir"      >mods diwectowy:</system:String>
+    <!--   hedge m-mod managew -->
     <system:String x:Key="SettingsUIHMMHeader"      >hedge m-mod managew</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"  >check fow mod w-woadew updates</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"  >check fow c-code woadew updates</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates">check f-fow mod updates</system:String>
-    <system:String x:Key="SettingsUIKeepHMMOpen"    >keep hedge m-mod managew open a-aftew stawting a-a game</system:String>
-    <system:String x:Key="SettingsUIAboutHMM"       >about h-hedge mod managew</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"  >check fow mod woadew u-updates</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"  >check fow code woadew updates</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates">check fow mod updates</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"    >keep hedge mod m-managew open aftew stawting a g-game</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"       >about hedge mod managew</system:String>
     <system:String x:Key="SettingsUILanguage"       >wanguage:</system:String>
+    <system:String x:Key="SettingsUITheme"          >theme:</system:String>
 
-    <!-- m-mainwindow ui s-stwings -->
-    <system:String x:Key="MainUIInstallFormHeader"   >instaww a-a mod b-by...</system:String>
-    <system:String x:Key="MainUIInstallFormOptionDir">instawwing f-fwom a-a fowdew</system:String>
-    <system:String x:Key="MainUIInstallFormOptionArc">instawwing f-fwom a-an awchive</system:String>
-    <system:String x:Key="MainUIInstallFormOptionNew">making one (fow devewopews!)</system:String>
-    <system:String x:Key="MainUIMissingLoaderHeader" >mod woadew n-nyot yet instawwed!</system:String>
-    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">in owdew fow {0} to stawt woading mods, σωσ the mod woadew nyeeds to be i-instawwed.&#x0a;wouwd y-you wike to instaww it nyow?</system:String>
-    <system:String x:Key="MainUISelectModsDBTitle"   >sewect w-whewe to woad m-mods fwom...</system:String>
+    <!-- m-mainwindow ui stwings -->
+    <system:String x:Key="MainUIInstallFormHeader"   >instaww a-a mod by...</system:String>
+    <system:String x:Key="MainUIInstallFormOptionDir">instawwing fwom a fowdew</system:String>
+    <system:String x:Key="MainUIInstallFormOptionArc">instawwing fwom an awchive</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew">making o-one (fow devewopews!)</system:String>
+    <system:String x:Key="MainUIMissingLoaderHeader" >mod woadew nyot yet i-instawwed!</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">in o-owdew fow {0} to stawt woading mods, ʘwʘ the mod woadew nyeeds to be instawwed.&#x0a;wouwd y-you wike to instaww i-it nyow?</system:String>
+    <system:String x:Key="MainUISelectModsDBTitle"   >sewect whewe t-to woad mods fwom...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >missing wuntime detected!</system:String>
-    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} w-wequiwes {1} t-to be instawwed fow mods &#x0a;to f-function p-pwopewwy, wouwd y-you wike hmm to instaww this wuntime?</system:String>
-    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">one o-ow mowe enabwed mods wequiwe save f-fiwe wediwection t-to wowk pwopewwy. enabwe this featuwe?&#x0a;cwick n-nyo onwy if y-you know nyani you awe doing.</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} w-wequiwes {1} to be instawwed fow mods &#x0a;to function pwopewwy, :3 wouwd you w-wike hmm to instaww this wuntime?</system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">one o-ow mowe enabwed mods wequiwe save fiwe wediwection to wowk p-pwopewwy. (˘ω˘) enabwe t-this featuwe?&#x0a;cwick nyo onwy if you know nyani you awe d-doing.</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">faiwed t-to wesowve mod dependencies</system:String>
+    <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >the f-fowwowing mods have missing d-dependencies:</system:String>
 
-    <!-- optionswindow u-ui stwings -->
-    <system:String x:Key="OptionsWindowUIError"      >pwease sewect an option!</system:String>
+    <!-- o-optionswindow ui stwings -->
+    <system:String x:Key="OptionsWindowUIError"      >pwease sewect an o-option!</system:String>
 
-    <!-- a-aboutwindow ui stwings -->
+    <!-- a-aboutwindow u-ui stwings -->
     <system:String x:Key="AboutWindowUITitle"  >about h-hedge mod m-managew</system:String>
-    <system:String x:Key="AboutWindowUILine1"  >a pwogwam d-designed to h-hewp peopwe easiwy woad hedgehog e-engine mods.</system:String>
-    <system:String x:Key="AboutWindowUILine2"  >wequiwes a wegawwy owned vewsion o-of one of the suppowted games.</system:String>
-    <system:String x:Key="AboutWindowUICredits">cwedits:</system:String>
+    <system:String x:Key="AboutWindowUILine1"  >a pwogwam d-designed to h-hewp peopwe easiwy w-woad hedgehog engine mods.</system:String>
+    <system:String x:Key="AboutWindowUILine2"  >wequiwes a-a wegawwy owned vewsion o-of one of the suppowted g-games.</system:String>
+    <system:String x:Key="AboutWindowUICredits">cwedits</system:String>
+
+    <!-- pwofiwewindow ui stwings -->
+    <system:String x:Key="ProfileWindowUITitle"      >manage p-pwofiwes</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">wename p-pwofiwe</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">cweate p-pwofiwe</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >name</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >fiwe nyame</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >cweate</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >wename</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >cwone </system:String>
+    <system:String x:Key="ProfileWindowUIExport"     >expowt</system:String>
+    <system:String x:Key="ProfileWindowUIImport"     >impowt</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >dewete pwofiwe</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >name:</system:String>
+    <system:String x:Key="ProfileWindowUIImportFail" >faiwed t-to impowt mod pwofiwe</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingMods"   >the f-fowwowing mods w-wewe nyot found:</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >the f-fowwowing codes wewe nyot found:</system:String>
 
     <!-- editmodwindow ui stwings -->
-    <system:String x:Key="EditModWindowUIHeader">pwease f-fiww out some detaiws about youw mod.</system:String>
+    <system:String x:Key="EditModWindowUIHeader">pwease fiww o-out some detaiws a-about youw mod.</system:String>
 
-    <!-- pwopewtyeditow ui stwings -->
+    <!-- p-pwopewtyeditow ui stwings -->
     <system:String x:Key="PropertyEditorUIName" >name</system:String>
     <system:String x:Key="PropertyEditorUIValue">vawue</system:String>
 
-    <!-- s-status ui s-stwings -->
+    <!-- status ui stwings -->
     <system:String x:Key="StatusUILoadedMods"             >woaded {0} m-mods</system:String>
-    <system:String x:Key="StatusUICheckingModUpdates"     >checking f-fow {0} u-updates</system:String>
-    <system:String x:Key="StatusUIFailedToUpdate"         >faiwed to update {0}! o.O {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckFinish"   >finished c-checking f-fow mod updates: {0} compweted, {1} f-faiwed</system:String>
+    <system:String x:Key="StatusUICheckingModUpdates"     >checking fow {0} u-updates</system:String>
+    <system:String x:Key="StatusUIFailedToUpdate"         >faiwed to update {0}! 😳😳😳 {1}</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >finished c-checking fow mod updates: {0} c-compweted, rawr x3 {1} f-faiwed</system:String>
     <system:String x:Key="StatusUIStartingGame"           >stawting {0}</system:String>
     <system:String x:Key="StatusUICheckingForUpdates"     >checking fow updates</system:String>
-    <system:String x:Key="StatusUINoUpdatesFound"         >no updates found</system:String>
-    <system:String x:Key="StatusUIFailedToCheckUpdates"   >faiwed t-to check fow updates</system:String>
+    <system:String x:Key="StatusUINoUpdatesFound"         >no u-updates found</system:String>
+    <system:String x:Key="StatusUIFailedToCheckUpdates"   >faiwed t-to check fow u-updates</system:String>
     <system:String x:Key="StatusUICheckingForLoaderUpdate">checking f-fow {0} updates</system:String>
-    <system:String x:Key="StatusUILoaderUpToDate"         >{0} is up to date</system:String>
-    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">faiwed to check fow {0} updates</system:String>
+    <system:String x:Key="StatusUILoaderUpToDate"         >{0} i-is up to date</system:String>
+    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">faiwed to check fow {0} u-updates</system:String>
     <system:String x:Key="StatusUIInstalledLoader"        >instawwed {0}</system:String>
     <system:String x:Key="StatusUIDeletedMod"             >deweted {0}</system:String>
-    <system:String x:Key="StatusUIModsDBSaved"            >saved mods d-database</system:String>
+    <system:String x:Key="StatusUIModsDBSaved"            >saved mods database</system:String>
     <system:String x:Key="StatusUIModsDBLocationChanged"  >updated database wocation</system:String>
-    <system:String x:Key="StatusUIGameChange"             >changed game to {0}</system:String>
-    <system:String x:Key="StatusUIDownloadingCodes"       >downwoading codes fow {0}</system:String>
-    <system:String x:Key="StatusUIDownloadFinished"       >downwoad finished</system:String>
+    <system:String x:Key="StatusUIGameChange"             >changed g-game to {0}</system:String>
+    <system:String x:Key="StatusUIDownloadingCodes"       >downwoading c-codes fow {0}</system:String>
+    <system:String x:Key="StatusUIDownloadFinished"       >downwoad f-finished</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >downwoad f-faiwed</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >code updates avaiwabwe!</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >no c-code updates found</system:String>
     
-    <!-- diawog ui stwings -->
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">awe you suwe you want t-to dewete "{0}"?&#x0a;this action c-cannot be undone!</system:String>
-    
-    <!-- status ui wang s-stuff stwings -->
+    <!-- diawog ui s-stwings -->
+    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">hedge m-mod managew did nyot detect a-any mods fowdew.&#x0a;wouwd y-you wike cweate a mods fowdew?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">awe you suwe you want to dewete "{0}"?&#x0a;this a-action cannot b-be undone!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} is awweady u-up to date.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate">a nyewew vewsion of {0} avaiwabwe! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">awe you suwe you want to cancew updating?&#x0a;this may cowwupt {0}</system:String>
+
+    <!-- status ui wang stuff stwings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >compweted</system:String>
     <system:String x:Key="StatusUIUpdateCompletedPlural"        >compweted</system:String>
     <system:String x:Key="StatusUIUpdateFailedSingular"         >faiwed</system:String>
     <system:String x:Key="StatusUIUpdateFailedPlural"           >faiwed</system:String>
 
-    <!-- m-mod c-config ui stwings -->
+    <!-- mod config ui stwings -->
     <system:String x:Key="ModConfigUITitle">configuwe {0}</system:String>
 
-    <!-- m-mod d-downwoadew stwings -->
-    <system:String x:Key="ModDownloaderFailed">faiwed to downwoad mod</system:String>
-    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">an e-ewwow has o-occuwwed duwing the downwoad. sewvews might be down ow ovewwoaded. p-pwease twy a-again watew. &#x0a;&#x0a;detaiws: {0}</system:String>
-    <system:String x:Key="ModDownloaderNoGame">faiwed to find game</system:String>
-    <system:String x:Key="ModDownloaderNoGameMes">hedge mod managew w-was unabwe to find a-an instawwation of {0}</system:String>
+    <!-- m-mod descwiption u-ui stwings -->
+    <system:String x:Key="ModDescriptionUIAbout">about {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">made by</system:String>
+    <system:String x:Key="ModDescriptionUIDate">on</system:String>
+
+    <!-- mod d-downwoadew stwings -->
+    <system:String x:Key="ModDownloaderFailed">faiwed t-to downwoad mod</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">an e-ewwow has occuwwed duwing the downwoad. (✿oωo) s-sewvews might b-be down ow ovewwoaded. p-pwease twy a-again watew. (ˆ ﻌ ˆ)♡ &#x0a;&#x0a;detaiws: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">faiwed t-to find game</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">hedge m-mod managew w-was unabwe to find an instawwation o-of {0}</system:String>
+
+    <!-- m-mod updates w-window stwings -->
+    <system:String x:Key="ModUpdatesChangelog">changewog</system:String>
+    <system:String x:Key="ModUpdatesTitle"    >mod updates</system:String>
+
+    <!-- themes -->
+    <system:String x:Key="ThemeDark">dawk</system:String>
+    <system:String x:Key="ThemeOLED">owed</system:String>
+    <system:String x:Key="ThemeLight">wight</system:String>
+
+    <!-- g-games -->
+    <system:String x:Key="GameSonicGenerations">sonic genewations</system:String>
+    <system:String x:Key="GameSonicLostWorld">sonic wost wowwd</system:String>
+    <system:String x:Key="GameSonicForces">sonic fowces</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">puyo puyo t-tetwis 2</system:String>
+    <system:String x:Key="GameTokyo2020">owympic games tokyo 2020</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">sonic c-cowouws: uwtimate</system:String>
 
 </ResourceDictionary>
