@@ -258,7 +258,8 @@ namespace HedgeModManager
         {
             CodesList.Items.Clear();
             foreach (Code code in CodesDatabase.Codes)
-                if (code.Name.ToLowerInvariant().Contains(text))
+                if (code.Name.ToLowerInvariant().Contains(text) ||
+                    (code.Author != null && code.Author.ToLowerInvariant().Contains(text)))
                     if (code.Enabled)
                         CodesList.Items.Insert(0, code);
                     else
