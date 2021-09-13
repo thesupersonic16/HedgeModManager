@@ -139,8 +139,8 @@ namespace HMMCodes
             return patBytes;
         }
 
-        public static IntPtr ScanSignature(string pattern, string mask)
-            => ScanSignature(MakePatternFromString(pattern), mask);
+        public static long ScanSignature(string pattern, string mask)
+            => ScanSignature(MakePatternFromString(pattern), mask).ToInt64();
 
         public static bool IsKeyDown(Keys key)
             => GetAsyncKeyState(key) > 0;
