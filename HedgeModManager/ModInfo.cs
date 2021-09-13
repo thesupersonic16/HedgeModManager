@@ -141,7 +141,7 @@ namespace HedgeModManager
                     if (File.Exists(schemaPath))
                     {
                         ConfigSchema = JsonConvert.DeserializeObject<FormSchema>(File.ReadAllText(schemaPath));
-                        ConfigSchema.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
+                        ConfigSchema?.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
                     }
 
                     var codesPath = Path.Combine(RootDirectory, CodeFile);

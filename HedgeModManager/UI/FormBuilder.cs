@@ -102,6 +102,9 @@ namespace HedgeModManager.UI
 
         public void LoadValuesFromIni(string path)
         {
+            if (!File.Exists(path))
+                return;
+
             var file = new IniFile(path);
             foreach (var group in Groups)
             {
