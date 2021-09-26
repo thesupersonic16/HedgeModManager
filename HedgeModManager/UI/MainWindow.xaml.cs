@@ -1057,6 +1057,8 @@ namespace HedgeModManager
                 // Schedule checking for code updates if available.
                 if (Button_DownloadCodes.IsEnabled)
                     await CheckForCodeUpdates();
+
+                await CheckForUpdatesAsync();
             }
 
             await RunTask(CheckForLoaderUpdateAsync());
