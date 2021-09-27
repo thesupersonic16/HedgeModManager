@@ -141,7 +141,7 @@ namespace HedgeModManager
                     if (File.Exists(schemaPath))
                     {
                         ConfigSchema = JsonConvert.DeserializeObject<FormSchema>(File.ReadAllText(schemaPath));
-                        ConfigSchema.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
+                        ConfigSchema?.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
                     }
 
                     var codesPath = Path.Combine(RootDirectory, CodeFile);
@@ -194,11 +194,11 @@ namespace HedgeModManager
 
         public void Save()
         {
-            Description = Description.Replace("\r", "").Replace("\n", "\\n");
+            string oldDescription = Description;
+            Description = oldDescription.Replace("\r", "").Replace("\n", "\\n");
             using (var stream = File.Create(Path.Combine(RootDirectory, "mod.ini")))
-            {
                 IniSerializer.Serialize(this, stream);
-            }
+            Description = oldDescription;
         }
 
         public bool ValidateIncludeDirectories()
@@ -243,11 +243,21 @@ namespace HedgeModManager
             IncludeDirs = validDirs;
         }
 
-        public void GenerateFileTree()
+        public ModFileTree GenerateFileTreeSync(bool save)
         {
-            FileTree = new ModFileTree();
-            FileTree.ImportDirectory(RootDirectory);
-            FileTree.Save(Path.Combine(RootDirectory, ModFileTree.FixedFileName));
+            return GenerateFileTree(save).GetAwaiter().GetResult();
+        }
+
+        public Task<ModFileTree> GenerateFileTree(bool save)
+        {
+            return Task.Run(() =>
+            {
+                FileTree = new ModFileTree();
+                FileTree.ImportDirectory(RootDirectory);
+                if (save) FileTree.Save(Path.Combine(RootDirectory, ModFileTree.FixedFileName));
+                
+                return FileTree;
+            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

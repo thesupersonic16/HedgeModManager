@@ -139,7 +139,7 @@ namespace GameBananaAPI
         /// <returns></returns>
         public static bool InstallGBHandler(Game game)
         {
-            string protocolName = $"HedgeModManager for {game.GameName}";
+            string protocolName = $"HedgeModManager for {game}";
             try
             {
                 var reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\{game.GBProtocol}");

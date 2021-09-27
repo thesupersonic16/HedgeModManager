@@ -110,8 +110,8 @@ namespace HedgeModManager.UI
                     }
                 });
 
-                var game = HedgeApp.GetSteamGame(Game);
-                HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.RootDirectory, "cpkredir.ini"));
+                var game = HedgeApp.GetGameInstall(Game);
+                HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.GameDirectory, "cpkredir.ini"));
                 var mod = (GBAPIItemDataBasic)DataContext;
 
                 using (var resp = await Singleton.GetInstance<HttpClient>().GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
@@ -123,7 +123,7 @@ namespace HedgeModManager.UI
                     using (var destinationFile = File.Create(destinationPath, 8192, FileOptions.Asynchronous))
                         await resp.Content.CopyToAsync(destinationFile, progress);
 
-                    ModsDB.InstallMod(destinationPath, Path.Combine(game.RootDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
+                    ModsDB.InstallMod(destinationPath, Path.Combine(game.GameDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
                     File.Delete(destinationPath);
 
                     // a dialog would be nice here but i ain't adding strings

@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static HedgeModManager.Lang;
 
 namespace HedgeModManager
 {
@@ -19,92 +20,86 @@ namespace HedgeModManager
         public static Game Unknown = new Game();
         public static Game SonicGenerations = new Game()
         {
-            GameName = "Sonic Generations",
-            ExecuteableName = "SonicGenerations.exe",
-            HasCustomLoader = true,
+            GameName = "SonicGenerations",
+            ExecutableName = "SonicGenerations.exe",
             SupportsCPKREDIR = true,
-            ModLoaderDownloadURL = Resources.URL_GCL_DL,
-            ModLoaderData = EmbeddedLoaders.GenerationsCodeLoader,
-            CustomLoaderName = "Generations Code Loader",
-            CustomLoaderFileName = "d3d9.dll",
+            SupportsSaveRedirection = true,
             AppID = "71340",
-            DirectXVersion = 9,
             GBProtocol = "hedgemmgens",
             Is64Bit = false,
+            ModLoader = ModLoaders.GenerationsCodeLoader,
             CodesURL = Resources.URL_GCL_CODES,
-            SteamGamePath = Path.Combine("Sonic Generations", "SonicGenerations.exe")
+            GamePath = Path.Combine("Sonic Generations", "SonicGenerations.exe")
         };
 
         public static Game SonicLostWorld = new Game()
         {
-            GameName = "Sonic Lost World",
-            ExecuteableName = "slw.exe",
-            HasCustomLoader = true,
+            GameName = "SonicLostWorld",
+            ExecutableName = "slw.exe",
             SupportsCPKREDIR = true,
-            ModLoaderDownloadURL = Resources.URL_LCL_DL,
-            ModLoaderData = EmbeddedLoaders.LostCodeLoader,
-            CustomLoaderName = "Lost Code Loader",
-            CustomLoaderFileName = "d3d9.dll",
+            SupportsSaveRedirection = true,
             AppID = "329440",
-            DirectXVersion = 9,
             GBProtocol = "hedgemmlw",
             Is64Bit = false,
+            ModLoader = ModLoaders.LostCodeLoader,
             CodesURL = Resources.URL_LCL_CODES,
-            SteamGamePath = Path.Combine("Sonic Lost World", "slw.exe")
+            GamePath = Path.Combine("Sonic Lost World", "slw.exe")
         };
 
         public static Game SonicForces = new Game()
         {
-            GameName = "Sonic Forces",
-            ExecuteableName = "Sonic Forces.exe",
-            HasCustomLoader = true,
+            GameName = "SonicForces",
+            ExecutableName = "Sonic Forces.exe",
             SupportsCPKREDIR = false,
-            ModLoaderDownloadURL = Resources.URL_FML_DL,
-            ModLoaderData = EmbeddedLoaders.ForcesModLoader,
-            CustomLoaderName = "Forces Mod Loader",
-            CustomLoaderFileName = "d3d11.dll",
+            SupportsSaveRedirection = true,
             AppID = "637100",
-            DirectXVersion = 11,
             GBProtocol = "hedgemmforces",
             Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_FML_CODES,
-            SteamGamePath = Path.Combine("SonicForces", "build", "main", "projects", "exec", "Sonic Forces.exe")
+            GamePath = Path.Combine("SonicForces", "build", "main", "projects", "exec", "Sonic Forces.exe")
         };
 
         public static Game PuyoPuyoTetris2 = new Game()
         {
-            GameName = "Puyo Puyo Tetris 2",
-            ExecuteableName = "PuyoPuyoTetris2.exe",
-            HasCustomLoader = true,
+            GameName = "PuyoPuyoTetris2",
+            ExecutableName = "PuyoPuyoTetris2.exe",
             SupportsCPKREDIR = false,
-            ModLoaderDownloadURL = Resources.URL_TML_DL,
-            ModLoaderData = null,
-            CustomLoaderName = "Tenpex Mod Loader",
-            CustomLoaderFileName = "d3d11.dll",
+            SupportsSaveRedirection = false,
             AppID = "1259790",
-            DirectXVersion = 11,
             GBProtocol = "hedgemmtenpex",
             Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_TML_CODES,
-            SteamGamePath = Path.Combine("PuyoPuyoTetris2", "PuyoPuyoTetris2.exe")
+            GamePath = Path.Combine("PuyoPuyoTetris2", "PuyoPuyoTetris2.exe")
         };
 
         public static Game Tokyo2020 = new Game()
         {
-            GameName = "Olympic Games Tokyo 2020",
-            ExecuteableName = "musashi.exe",
-            HasCustomLoader = true,
+            GameName = "Tokyo2020",
+            ExecutableName = "musashi.exe",
             SupportsCPKREDIR = false,
-            ModLoaderDownloadURL = Resources.URL_TML_DL,
-            ModLoaderData = null,
-            CustomLoaderName = "Tenpex Mod Loader",
-            CustomLoaderFileName = "d3d11.dll",
+            SupportsSaveRedirection = false,
             AppID = "981890",
-            DirectXVersion = 11,
             GBProtocol = "hedgemmmusashi",
             Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_MML_CODES,
-            SteamGamePath = Path.Combine("Tokyo2020", "musashi.exe")
+            GamePath = Path.Combine("Tokyo2020", "musashi.exe")
+        };
+
+        public static Game SonicColorsUltimate = new Game()
+        {
+            GameName = "SonicColorsUltimate",
+            ExecutableName = "Sonic Colors - Ultimate.exe",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = false,
+            AppID = "e5071e19d08c45a6bdda5d92fbd0a03e",
+            GBProtocol = "hedgemmrainbow",
+            Is64Bit = true,
+            ModLoader = ModLoaders.RainbowModLoader,
+            CodesURL = Resources.URL_RML_CODES,
+            GamePath = Path.Combine("rainbow Shipping", "Sonic Colors - Ultimate.exe")
         };
 
         public static IEnumerable<Game> GetSupportedGames()
@@ -114,6 +109,7 @@ namespace HedgeModManager
             yield return SonicForces;
             yield return PuyoPuyoTetris2;
             yield return Tokyo2020;
+            yield return SonicColorsUltimate;
         }
     }
 
@@ -121,7 +117,8 @@ namespace HedgeModManager
     {
         public static byte[] GenerationsCodeLoader;
         public static byte[] LostCodeLoader;
-        public static byte[] ForcesModLoader;
+        public static byte[] HE2ModLoader;
+        public static byte[] RainbowModLoader;
 
         static EmbeddedLoaders()
         {
@@ -130,7 +127,8 @@ namespace HedgeModManager
             {
                 GenerationsCodeLoader = GetFile("SonicGenerationsCodeLoader.dll");
                 LostCodeLoader = GetFile("LostCodeLoader.dll");
-                ForcesModLoader = GetFile("ForcesModLoader.dll");
+                HE2ModLoader = GetFile("HE2ModLoader.dll");
+                RainbowModLoader = GetFile("RainbowModLoader.dll");
 
                 byte[] GetFile(string name)
                 {
@@ -149,24 +147,49 @@ namespace HedgeModManager
     public class Game
     {
         public string GameName = "Unnamed Game";
-        public string ExecuteableName = string.Empty;
-        public string ModLoaderDownloadURL = string.Empty;
-        public byte[] ModLoaderData = null;
-        public uint DirectXVersion = uint.MaxValue;
-        public bool HasCustomLoader = false;
+        public string ExecutableName = string.Empty;
+        public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
-        public string CustomLoaderName = "None";
-        public string CustomLoaderFileName = string.Empty;
+        public bool SupportsSaveRedirection = false;
         public string AppID = "0";
         public string GBProtocol;
         public bool Is64Bit = false;
         public string CodesURL;
-        public string SteamGamePath = string.Empty;
+        public string GamePath = string.Empty;
 
-        public override string ToString()
+        public override string ToString() => Localise("Game" + GameName, GameName);
+    }
+
+    public class GameInstall
+    {
+        public Game BaseGame;
+        public string GameDirectory;
+
+        public GameInstall(Game game, string directory)
         {
-            return GameName;
+            BaseGame = game;
+            GameDirectory = directory;
         }
+
+        public static List<GameInstall> SearchForGames(string preference = null)
+        {
+            var steamGames = Steam.SearchForGames();
+            var epicGames = Epic.SearchForGames();
+
+            var games = new List<GameInstall>();
+
+            if (steamGames != null)
+                games.AddRange(steamGames);
+
+            if (epicGames != null)
+                games.AddRange(epicGames);
+
+            return !string.IsNullOrEmpty(preference)
+                ? games.OrderBy(x => x.BaseGame.GameName != preference).ToList()
+                : games;
+        }
+
+        public override string ToString() => Localise("Game" + BaseGame.GameName, BaseGame.GameName);
     }
 
     public class CodeLoaderInfo

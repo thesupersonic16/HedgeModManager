@@ -16,10 +16,18 @@ namespace HedgeModManager
             var resource = Application.Current.TryFindResource(key);
             if (resource is string str)
                 return str;
-            return "UNLOCALISED";
+            return key;
         }
 
-        public static string Localise(string key, params object[] args)
+        public static string Localise(string key, string def)
+        {
+            var resource = Application.Current.TryFindResource(key);
+            if (resource is string str)
+                return str;
+            return def;
+        }
+
+        public static string LocaliseFormat(string key, params object[] args)
         {
             return string.Format(Localise(key), args);
         }

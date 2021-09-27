@@ -53,7 +53,7 @@ namespace HedgeModManager
             try
             {
                 body.AppendLine($"    Game: {HedgeApp.CurrentGame}");
-                body.AppendLine($"    SteamGame: {HedgeApp.GetSteamGame(HedgeApp.CurrentGame)}");
+                body.AppendLine($"    SteamGame: {HedgeApp.GetGameInstall(HedgeApp.CurrentGame)}");
             } catch { }
             if (useMarkdown) body.AppendLine("```");
 

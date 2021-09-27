@@ -39,7 +39,7 @@
     <system:String x:Key="ModsUISupportSave"    >Supports Save</system:String>
     <system:String x:Key="ModsUIHasUpdate"      >Updates</system:String>
     <system:String x:Key="ModsUIModDescription" >Description</system:String>
-    <system:String x:Key="ModsUIModFavorite"    >Favourite</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Favorite</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configure mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Open containing folder</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Check for updates</system:String>
@@ -193,6 +193,6 @@
     <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
     <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
-    <system:String x:Key="GameSonicColorsUltimate">Sonic Colours: Ultimate</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
 
 </ResourceDictionary>

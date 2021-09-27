@@ -465,8 +465,11 @@ Patch "All Rings Can Be Light Dashed" by "Skyth"
 WriteProtected<uint>(0x105334D, 0x10C47C6)
 WriteNop(0x1053351, 16)
 
-Patch "Object Collision Debug View" by "Aruki"
+Patch "Triggers Debug View" by "Aruki"
 Write<byte>(0x1E5E39B, 1)
+
+Patch "Object Collision Debug View" by "Aruki"
+Write<byte>(0x1E5E3A0, 1)
 
 Patch "Borderless Fullscreen" by "Sajid"
 string code = @"mov eax,[ebp+18]
@@ -843,3 +846,17 @@ Patch "Only Play Results Intro" by "M&M"
 WriteProtected<byte>(0xCFD47F, 0xE9, 0x95, 0x00, 0x00, 0x00)
 WriteProtected<byte>(0xCFD484, 0xC3)
 WriteNop(0xCFD485, 3)
+
+Patch "Use Regular Shaders in 3D Mode" by "M&M"
+WriteProtected<byte>(0x11C965F, 0x72)
+WriteProtected<byte>(0x11C966B, 0x72)
+WriteProtected<byte>(0x11C96CB, 0x72)
+WriteProtected<byte>(0x11C96DB, 0x72)
+
+Patch "Disable Fast Music" by "Hyper"
+WriteNop(0xE2E30F, 2);
+
+Patch "Always Use Fast Music" by "Hyper"
+WriteProtected<byte>(0xE2E30F, 0xEB);
+WriteNop(0xE2E3A2, 2);
+WriteProtected<byte>(0xE2E3AC, 0xEB, 0x0E);

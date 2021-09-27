@@ -440,9 +440,11 @@ namespace HedgeModManager
 
         public void CreateMod(ModInfo mod, string rootDir = "disk", bool openFolder = false)
         {
-            var path = Path.Combine(RootDirectory, mod.Title);
+            string path = string.Concat(mod.Title.Split(Path.GetInvalidFileNameChars()));
+            path = Path.Combine(RootDirectory, path);
             Directory.CreateDirectory(path);
-            Directory.CreateDirectory(Path.Combine(path, rootDir));
+            if (!string.IsNullOrEmpty(rootDir))
+                Directory.CreateDirectory(Path.Combine(path, rootDir));
             mod.RootDirectory = path;
             mod.Save();
 

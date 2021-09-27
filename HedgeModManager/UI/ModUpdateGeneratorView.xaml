@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="HedgeModManager.UI.ModUpdateGeneratorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HedgeModManager.UI"
+             xmlns:models="clr-namespace:HedgeModManager.UI.Models"
+             xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+             xmlns:updates="clr-namespace:HedgeModManager.Updates"
+             x:Name="Root"
+             mc:Ignorable="d" d:DesignStyle="{StaticResource DesignTimeStyle}"
+             d:DataContext="{d:DesignInstance models:ModUpdateGeneratorModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ContextMenu x:Key="FileContextMenu">
+            <MenuItem Header="Ignore" Command="{Binding DataContext.DeleteCommand, ElementName=Root}"/>
+        </ContextMenu>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition MinHeight="{StaticResource HMM.Window.DialogBottomHeight}" Height="0"/>
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0">
+            <TabItem Header="Description">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Title" DockPanel.Dock="Left"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" DockPanel.Dock="Right" VerticalAlignment="Top" Text="{Binding Mod.Title}"
+                     IsReadOnly="True" Foreground="{DynamicResource HMM.Menu.DisabledTextColor}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Old Version" DockPanel.Dock="Left"/>
+                    <TextBox Grid.Row="2" Grid.Column="2" DockPanel.Dock="Right" VerticalAlignment="Top" Text="{Binding Mod.Version}"
+                     IsReadOnly="True" Foreground="{DynamicResource HMM.Menu.DisabledTextColor}"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="New Version" DockPanel.Dock="Left"/>
+                    <TextBox Grid.Row="4" Grid.Column="2" DockPanel.Dock="Right" VerticalAlignment="Top" Text="{Binding NewVersion}"/>
+
+                    <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width=".5*"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width=".5*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Changelog"/>
+
+                        <TextBox Grid.Row="2" Grid.Column="0" AcceptsReturn="True" AcceptsTab="True"
+                         Text="{Binding NewChangelog, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Border Grid.Row="2" Grid.Column="2" BorderThickness="2,0,0,0" Background="#40000000">
+                            <wpf:HtmlPanel Background="Transparent" Width="Auto" Height="Auto"
+                                   Text="{Binding NewChangelog, Converter={StaticResource MarkdownToHtmlConverter}}"/>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Files">
+                <Border Margin="20">
+                    <TreeView ItemsSource="{Binding GeneratedTree}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type updates:ModFileTree}" 
+                                                      ItemsSource="{Binding}">
+                                <Border ContextMenu="{StaticResource FileContextMenu}">
+                                    <TextBlock Text="{Binding}"/>
+                                </Border>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Border>
+            </TabItem>
+        </TabControl>
+
+        <Border Grid.Row="1" Background="{DynamicResource HMM.Window.DialogBottom}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,10">
+                <Button Content="Configure" Padding="15,0" Margin="0,0,10,0" Command="{Binding ConfigureCommand}"/>
+                <Button Content="Cancel" Padding="15,0" IsCancel="True"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

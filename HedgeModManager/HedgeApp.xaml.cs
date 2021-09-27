@@ -60,9 +60,9 @@ namespace HedgeModManager
         public static string CPKREDIRVersion;
         public static string[] Args;
         public static Game CurrentGame = Games.Unknown;
-        public static SteamGame CurrentSteamGame;
+        public static GameInstall CurrentGameInstall;
         public static CPKREDIRConfig Config;
-        public static List<SteamGame> SteamGames = null;
+        public static List<GameInstall> GameInstalls = null;
         public static bool Restart = false;
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
@@ -164,10 +164,10 @@ namespace HedgeModManager
             CountLanguages();
 #if DEBUG
             // Find a Steam Game
-            SteamGames = Steam.SearchForGames("Sonic Generations");
-            var steamGame = SteamGames.FirstOrDefault();
-            SelectSteamGame(steamGame);
-            StartDirectory = steamGame.RootDirectory;
+            GameInstalls = GameInstall.SearchForGames("SonicGenerations");
+            var steamGame = GameInstalls.FirstOrDefault();
+            SelectGameInstall(steamGame);
+            StartDirectory = steamGame.GameDirectory;
             if (File.Exists("key.priv.xml"))
             {
                 using (var stream = File.OpenRead("key.priv.xml"))
@@ -177,7 +177,7 @@ namespace HedgeModManager
                 }
             }
 #else
-            SteamGames = Steam.SearchForGames();
+            GameInstalls = GameInstall.SearchForGames();
             if (FindAndSetLocalGame() == null)
             {
                 if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
@@ -189,9 +189,9 @@ namespace HedgeModManager
 
             if (CurrentGame == Games.Unknown)
             {
-                var game = SteamGames.FirstOrDefault();
-                SelectSteamGame(game);
-                StartDirectory = game?.RootDirectory;
+                var game = GameInstalls.FirstOrDefault();
+                SelectGameInstall(game);
+                StartDirectory = game?.GameDirectory;
             }
 
             if (CurrentGame == Games.Unknown)
@@ -304,7 +304,7 @@ namespace HedgeModManager
             {
                 if (CurrentGame.SupportsCPKREDIR)
                 {
-                    string exePath = Path.Combine(StartDirectory, CurrentGame.ExecuteableName);
+                    string exePath = Path.Combine(StartDirectory, CurrentGame.ExecutableName);
                     if (IsCPKREDIRInstalled(exePath))
                         InstallCPKREDIR(exePath, false);
                 }
@@ -365,20 +365,20 @@ namespace HedgeModManager
             Console.WriteLine("        Usage: filename [output]");
         }
 
-        public static SteamGame FindAndSetLocalGame()
+        public static GameInstall FindAndSetLocalGame()
         {
             foreach (var game in Games.GetSupportedGames())
             {
-                if (File.Exists(Path.Combine(StartDirectory, game.ExecuteableName)))
+                if (File.Exists(Path.Combine(StartDirectory, game.ExecutableName)))
                 {
-                    var steamGame = SteamGames.FirstOrDefault(x => x.GameID == game.AppID);
+                    var steamGame = GameInstalls.FirstOrDefault(x => x.BaseGame == game);
                     if (steamGame == null)
                     {
-                        steamGame = new SteamGame(game.GameName, Path.Combine(StartDirectory, game.ExecuteableName), game.AppID);
-                        SteamGames.Add(steamGame);
+                        steamGame = new GameInstall(game, StartDirectory);
+                        GameInstalls.Add(steamGame);
                     }
                     CurrentGame = game;
-                    CurrentSteamGame = steamGame;
+                    CurrentGameInstall = steamGame;
                     RegistryConfig.LastGameDirectory = StartDirectory;
                     RegistryConfig.Save();
                     ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
@@ -466,6 +466,24 @@ namespace HedgeModManager
             LoadLanguage(CurrentCulture.FileName);
         }
 
+        public static void FindMissingLanguageEntries(string culture)
+        {
+            var entry = GetClosestCulture(culture);
+            var baseDict = new ResourceDictionary { Source = new Uri("Languages/en-AU.xaml", UriKind.Relative) };
+            var builder = new StringBuilder();
+            builder.AppendLine();
+
+            var langDict = new ResourceDictionary();
+            langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
+
+            builder.AppendLine("Missing Entries:");
+            foreach (DictionaryEntry baseEntry in baseDict)
+                if (!langDict.Contains(baseEntry.Key))
+                    builder.AppendLine(baseEntry.Key.ToString());
+
+            builder.AppendLine();
+            new ExceptionWindow(new Exception(builder.ToString())).ShowDialog();
+        }
         public static void SetupThemes()
         {
             var resource = Current.TryFindResource("Themes");
@@ -490,21 +508,21 @@ namespace HedgeModManager
         }
 
         /// <summary>
-        /// Sets the Current Game to the passed Steam Game
+        /// Sets the CurrentGame to the passed GameInstall
         /// </summary>
-        /// <param name="steamGame">Steam Game to select</param>
-        public static void SelectSteamGame(SteamGame steamGame)
+        /// <param name="gameinstall">Game to select</param>
+        public static void SelectGameInstall(GameInstall gameinstall)
         {
-            if (steamGame == null)
+            if (gameinstall == null)
                 return;
 
             foreach (var game in Games.GetSupportedGames())
             {
-                if (game.AppID == steamGame.GameID)
+                if (game == gameinstall.BaseGame)
                 {
                     CurrentGame = game;
-                    CurrentSteamGame = steamGame;
-                    StartDirectory = steamGame.RootDirectory;
+                    CurrentGameInstall = gameinstall;
+                    StartDirectory = gameinstall.GameDirectory;
                     RegistryConfig.LastGameDirectory = StartDirectory;
                     RegistryConfig.Save();
                 }
@@ -524,13 +542,13 @@ namespace HedgeModManager
         }
 
         /// <summary>
-        /// Finds and returns an instance of SteamGame from a HMM Game
+        /// Finds and returns an instance of GameInstall from a HMM Game
         /// </summary>
         /// <param name="game">HMM Game</param>
-        /// <returns>Steam Game</returns>
-        public static SteamGame GetSteamGame(Game game)
+        /// <returns>GameInstall thats linked to the passed Game</returns>
+        public static GameInstall GetGameInstall(Game game)
         {
-            return SteamGames.FirstOrDefault(t => t.GameName == game.GameName);
+            return GameInstalls.FirstOrDefault(t => t.BaseGame == game);
         }
 
         /// <summary>
@@ -624,7 +642,11 @@ namespace HedgeModManager
                     }
                 }
 
-                string DLLFileName = Path.Combine(StartDirectory, CurrentGame.CustomLoaderFileName);
+                // Do not attempt if no loader exists
+                if (CurrentGame.ModLoader == null)
+                    return false;
+
+                string DLLFileName = Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderFileName);
 
                 if (File.Exists(DLLFileName) && toggle)
                 {
@@ -634,12 +656,12 @@ namespace HedgeModManager
                 }
 
                 // Downloads the loader
-                var downloader = new DownloadWindow($"Downloading {CurrentGame.CustomLoaderName}",
-                    CurrentGame.ModLoaderDownloadURL, DLLFileName);
+                var downloader = new DownloadWindow($"Downloading {CurrentGame.ModLoader.ModLoaderName}",
+                    CurrentGame.ModLoader.ModLoaderDownloadURL, DLLFileName);
 
                 downloader.DownloadFailed += (ex) =>
                 {
-                    var loader = CurrentGame.ModLoaderData;
+                    var loader = CurrentGame.ModLoader.ModLoaderData;
                     if (loader != null)
                         File.WriteAllBytes(DLLFileName, loader);
                     else
@@ -660,7 +682,7 @@ namespace HedgeModManager
             }
             catch (Exception e)
             {
-                CreateOKMessageBox("Hedge Mod Manager", 
+                CreateOKMessageBox("Hedge Mod Manager",
                     installed ? Lang.Localise("MainUIMLUninstallFail") : Lang.Localise("MainUIMLInstallFail")).ShowDialog();
                 return false;
             }
@@ -771,14 +793,22 @@ namespace HedgeModManager
             }
         }
 
+        public static Version ExpandVersion(Version version)
+        {
+            var build = version.Build;
+            var revision = version.Revision;
+
+            return new Version(version.Major, version.Minor, build == -1 ? 0 : build, revision == -1 ? 0 : revision);
+        }
+
         public static string GetCodeLoaderVersion(Game game)
         {
             try
             {
-                var loaderPath = Path.Combine(StartDirectory, game.CustomLoaderFileName);
-
-                if (!game.HasCustomLoader)
+                if (game.ModLoader == null)
                     return null;
+
+                var loaderPath = Path.Combine(StartDirectory, game.ModLoader.ModLoaderFileName);
 
                 if (!File.Exists(loaderPath))
                     return null;
@@ -792,6 +822,27 @@ namespace HedgeModManager
             }
         }
 
+        public static string GetCodeLoaderName(Game game)
+        {
+            try
+            {
+                if (game.ModLoader == null)
+                    return null;
+
+                var loaderPath = Path.Combine(StartDirectory, game.ModLoader.ModLoaderFileName);
+
+                if (!File.Exists(loaderPath))
+                    return null;
+
+                var info = FileVersionInfo.GetVersionInfo(loaderPath);
+                return info.ProductName;
+            }
+            catch
+            {
+                return "null";
+            }
+        }
+
         public static CodeLoaderInfo GetCodeLoaderInfo(Game game)
         {
             try
@@ -802,7 +853,7 @@ namespace HedgeModManager
 
                 if (loaderVersion != minCodeVersion)
                 {
-                    using (var res = new DllResource(Path.Combine(StartDirectory, game.CustomLoaderFileName)))
+                    using (var res = new DllResource(Path.Combine(StartDirectory, game.ModLoader.ModLoaderFileName)))
                     {
                         minCodeVersion = res.GetString(Games.CodeLoaderMinCodeVersionStringId);
                         maxCodeVersion = res.GetString(Games.CodeLoaderMaxCodeVersionStringId);
@@ -908,32 +959,41 @@ namespace HedgeModManager
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.RemovedItems.Count < 1 || !(e.RemovedItems[0] is FrameworkElement))
+            if (e.RemovedItems.Count < 1 || e.AddedItems.Count < 1 || !(e.RemovedItems[0] is FrameworkElement))
                 return;
 
             var oldControl = (FrameworkElement)((TabItem)e.RemovedItems[0]).Content;
             var control = (TabControl)sender;
+
+            var isLeft = control.Items.IndexOf(e.RemovedItems[0]) < control.Items.IndexOf(e.AddedItems[0]);
             var tempArea = (System.Windows.Shapes.Shape)control.Template.FindName("PART_TempArea", (FrameworkElement)sender);
             var presenter = (ContentPresenter)control.Template.FindName("PART_Presenter", (FrameworkElement)sender);
             var target = new RenderTargetBitmap((int)control.ActualWidth, (int)control.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+
             target.Render(oldControl);
+
             tempArea.HorizontalAlignment = HorizontalAlignment.Stretch;
+            tempArea.VerticalAlignment = VerticalAlignment.Stretch;
             tempArea.Fill = new ImageBrush(target);
+            tempArea.Width = target.Width;
+            tempArea.Height = target.Height;
             tempArea.RenderTransform = new TranslateTransform();
             presenter.RenderTransform = new TranslateTransform();
-            presenter.RenderTransform.BeginAnimation(TranslateTransform.XProperty, CreateAnimation(control.ActualWidth, 0));
-            tempArea.RenderTransform.BeginAnimation(TranslateTransform.XProperty, CreateAnimation(0, -control.ActualWidth, (x, y) => { tempArea.HorizontalAlignment = HorizontalAlignment.Left; }));
-            tempArea.Fill.BeginAnimation(Brush.OpacityProperty, CreateAnimation(1, 0));
+
+            presenter.RenderTransform.BeginAnimation(TranslateTransform.XProperty, isLeft ? CreateAnimation(control.ActualWidth, 0) : CreateAnimation(-control.ActualWidth, 0));
+            tempArea.RenderTransform.BeginAnimation(TranslateTransform.XProperty, isLeft ?
+                CreateAnimation(0, -control.ActualWidth, (x, y) => { tempArea.HorizontalAlignment = HorizontalAlignment.Left; }) :
+                CreateAnimation(0, control.ActualWidth, (x, y) => { tempArea.HorizontalAlignment = HorizontalAlignment.Left; })
+                );
+
+            tempArea.BeginAnimation(UIElement.OpacityProperty, CreateAnimation(1, 0));
 
 
-            AnimationTimeline CreateAnimation(double from, double to,
-                          EventHandler whenDone = null)
+            AnimationTimeline CreateAnimation(double from, double to, EventHandler whenDone = null)
             {
-                IEasingFunction ease = new BackEase
-                { Amplitude = 0.5, EasingMode = EasingMode.EaseOut };
-                var duration = new Duration(TimeSpan.FromSeconds(0.4));
-                var anim = new DoubleAnimation(from, to, duration)
-                { EasingFunction = ease };
+                var ease = new ExponentialEase { Exponent = 7, EasingMode = EasingMode.EaseOut };
+                var duration = new Duration(TimeSpan.FromSeconds(1.0 / 3.0));
+                var anim = new DoubleAnimation(from, to, duration) { EasingFunction = ease };
                 if (whenDone != null)
                     anim.Completed += whenDone;
                 anim.Freeze();

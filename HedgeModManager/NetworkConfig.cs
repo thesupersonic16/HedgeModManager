@@ -43,6 +43,9 @@ namespace HedgeModManager
                 if (update)
                 {
                     config = await Singleton.GetInstance<HttpClient>().GetAsJsonAsync<NetworkConfig>(updateURL);
+                    if (config == null)
+                        return new NetworkConfig();
+
                     config.LastUpdated = DateTime.Now;
                     string dir = Path.GetDirectoryName(configPath) ?? "HedgeModManager";
                     if (!Directory.Exists(dir))

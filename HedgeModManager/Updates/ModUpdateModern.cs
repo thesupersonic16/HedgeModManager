@@ -58,7 +58,10 @@ namespace HedgeModManager.Updates
 
             foreach (var entry in UpdateTree.ResolveFileSystem(Mod.RootDirectory).MissingEntries)
             {
-                Commands.Add(new CommandAddFile(entry.FullPath));
+                if (entry.IsFile)
+                    Commands.Add(new CommandAddFile(entry.FullPath));
+                else
+                    Commands.Add(new CommandMakeDirectory(entry.FullPath));
             }
 
             foreach (var entry in result.AddedEntries)

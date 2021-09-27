@@ -102,6 +102,9 @@ namespace HedgeModManager.UI
 
         public void LoadValuesFromIni(string path)
         {
+            if (!File.Exists(path))
+                return;
+
             var file = new IniFile(path);
             foreach (var group in Groups)
             {
@@ -142,7 +145,9 @@ namespace HedgeModManager.UI
                         file[group.Name][element.Name] = element.Value?.ToString() ?? element.DefaultValue.ToString();
                 }
             }
-            using (var stream = File.Create(Path.Combine(path)))
+
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            using (var stream = File.Create(path))
             {
                 file.Write(stream);
             }

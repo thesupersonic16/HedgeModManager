@@ -39,7 +39,7 @@ namespace HedgeModManager.Updates
                 return null;
 
             using var stream = File.OpenRead(path);
-            return Load(path);
+            return Load(stream);
         }
 
         public static ModFileTree Load(Stream input)

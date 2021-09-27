@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -12,14 +14,14 @@ using Newtonsoft.Json;
 namespace HedgeModManager.Updates
 {
     [JsonObject]
-    public partial class ModFileEntry : IList<ModFileEntry>
+    public partial class ModFileEntry : IList<ModFileEntry>, INotifyCollectionChanged
     {
         public const string DirectorySeparatorCharAsString = "/";
 
         [JsonIgnore]
         public ModFileEntry Parent { get; internal set; }
         
-        [JsonIgnore]
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
 
         [JsonProperty("hash", NullValueHandling = NullValueHandling.Ignore)]
@@ -29,7 +31,7 @@ namespace HedgeModManager.Updates
         public long? Size { get; set; }
 
         [JsonProperty("items", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public List<ModFileEntry> Children { get; set; } = new List<ModFileEntry>();
+        public ObservableCollection<ModFileEntry> Children { get; set; } = new ObservableCollection<ModFileEntry>();
 
         [JsonIgnore]
         public bool IsFile => Size != null;
@@ -42,6 +44,11 @@ namespace HedgeModManager.Updates
 
         [JsonIgnore]
         public string FullPath => BuildPath();
+
+        public ModFileEntry()
+        {
+            Children.CollectionChanged += OnChildrenChanged;
+        }
 
         public void ImportDirectory(string path)
         {
@@ -78,17 +85,6 @@ namespace HedgeModManager.Updates
             }
 
             Task.WaitAll(tasks.ToArray());
-
-            //Parallel.ForEach(Directory.EnumerateFiles(path), file =>
-            //{
-            //    var entry = new ModFileEntry
-            //    {
-            //        Name = Path.GetFileName(file),
-            //        Hash = HedgeApp.ComputeMD5Hash(file)
-            //    };
-
-            //    Add(entry);
-            //});
         }
 
         public string BuildPath()
@@ -337,6 +333,13 @@ namespace HedgeModManager.Updates
                     Parent = entry.Parent
                 };
             }
+        }
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        private void OnChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            CollectionChanged?.Invoke(sender, e);
         }
     }
 }

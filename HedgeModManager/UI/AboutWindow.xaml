@@ -35,7 +35,6 @@
                     <Label Content="Sajid"/>
                     <Label Content="Radfordhound"/>
                     <Label Content="Korama"/>
-                    <Label Content="MainMemory"/>
                     <Label Content="Skyth"/>
                     <Label Content="PTKickass"/>
                     <Label Content="M&amp;M"/>
@@ -47,8 +46,7 @@
                     <Label Content="Writing 7.0"/>
                     <Label Content="Base Design"/>
                     <Label Content="CPKREDIR"/>
-                    <Label Content="mod-loader-common"/>
-                    <Label Content="Contributing to Forces Mod Loader"/>
+                    <Label Content="RainbowModLoader"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="Contributing to the project"/>
