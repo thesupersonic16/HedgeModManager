@@ -549,8 +549,15 @@ Write<byte>(0x1A43103, 0)
 Code "Set Shadow Bias to 0.0002" by "Skyth"
 Write<float>(0x1A4356C, 0.0002f)
 
-Patch "Disable HUD in Stages" by "Sajid"
-WriteProtected<uint>(0x586C94, 0x13EADA4)
+Patch "Disable HUD in Stages" by "brianuuu"
+WriteNop(0x108AB3F, 2)
+WriteProtected<byte>(0x108ABFE, 0xE9, 0xED, 0x00, 0x00, 0x00, 0x90)
+WriteNop(0x108D563, 6)
+WriteProtected<byte>(0x108D5D5, 0xE9, 0xED, 0x00, 0x00, 0x00, 0x90)
+WriteNop(0x1098AFB, 6)
+WriteProtected<byte>(0x1098B6D, 0xE9, 0xF6, 0x00, 0x00, 0x00, 0x90)
+WriteNop(0x117DE55, 2)
+WriteProtected<byte>(0x117DE67, 0xEB)
 
 Patch "Disable Sonic Smoke Trail" by "Sajid"
 Write<byte>(0x1A44AE2, 0)
