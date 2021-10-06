@@ -887,8 +887,11 @@ namespace HedgeModManager
         private void UI_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var item = (ListViewItem)sender;
+            if (item == null || item.Content == null)
+                return;
+
             var modInfo = (ModInfo)item.Content;
-            if (ViewModel.SelectedMod.HasSchema)
+            if (modInfo.HasSchema)
             {
                 var window = new ModConfigWindow(modInfo) { Owner = this };
                 window.ShowDialog();
@@ -1054,6 +1057,8 @@ namespace HedgeModManager
                 // Schedule checking for code updates if available.
                 if (Button_DownloadCodes.IsEnabled)
                     await CheckForCodeUpdates();
+
+                await CheckForUpdatesAsync();
             }
 
             await RunTask(CheckForLoaderUpdateAsync());
