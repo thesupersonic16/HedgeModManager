@@ -56,6 +56,9 @@ namespace HedgeModManager
                 {
                     using (var stream = File.OpenRead(iniPath))
                         IniSerializer.Deserialize(this, stream);
+
+                    // Force load order to bottom to top
+                    ReverseLoadOrder = false;
                 }
                 catch
                 {
