@@ -1338,6 +1338,11 @@ namespace HedgeModManager
                     catch { }
 
                 }
+                if (Keyboard.IsKeyDown(Key.F3))
+                {
+                    ViewModel.HiddenMode = !ViewModel.HiddenMode;
+                }
+
             }
             if (ctrlkey)
             {

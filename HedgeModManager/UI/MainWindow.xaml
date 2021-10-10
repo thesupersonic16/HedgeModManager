@@ -131,11 +131,11 @@
                                     <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod Loader"                 Click="UI_OtherLoader_Click" Margin="10,7,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193" IsEnabled="False"/>
                                     <Button   x:Name="Button_OpenMods"      Content="{DynamicResource SettingsUIOpenMods}" Click="UI_OpenMods_Click"    Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193"/>
 
-                                    <StackPanel Margin="10,0,0,8" VerticalAlignment="Bottom">
+                                    <StackPanel Margin="10,96,0,8">
                                         <CheckBox Content="{DynamicResource SettingsUIEnableML}"      IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="-1,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />
                                         <CheckBox Content="{DynamicResource SettingsUIEnableDebug}"   IsChecked="{Binding CPKREDIR.EnableDebugConsole}"         Margin="-1,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                         <CheckBox Content="{DynamicResource SettingsUIEnableSRedir}"  IsChecked="{Binding CPKREDIR.EnableFallbackSaveRedirection}"  Margin="-1,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                        <CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="-1,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        <CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="-1,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding HiddenMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                     </StackPanel>
 
                                     <Label                                   Content="{DynamicResource SettingsUILabelGame}" VerticalAlignment="Top" Margin="0,7,253,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />

@@ -26,6 +26,7 @@ namespace HedgeModManager.UI
         public ModInfo SelectedMod { get; set; }
         public ModProfile SelectedModProfile { get; set; }
         public Code SelectedCode { get; set; }
+        public bool HiddenMode { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
