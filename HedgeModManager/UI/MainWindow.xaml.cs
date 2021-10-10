@@ -802,8 +802,8 @@ namespace HedgeModManager
                         model.ShowDialog();
                         await SaveConfig();
                         // Reset watchers
+                        Refresh();
                         SetupWatcher();
-                        RefreshMods();
 
                         abort = CheckModDepends();
                     });
