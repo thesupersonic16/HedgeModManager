@@ -11,9 +11,10 @@ namespace HedgeModManager.UI
     {
         public IView CreateView(IViewModel model)
         {
-            model.View = new ViewImplWindows(model);
-            model.View.ApplyInfo(model.GetViewInfo());
-            return model.View;
+            var view = new ViewImplWindows(model);
+            view.ApplyInfo(model.GetViewInfo());
+            model.View = view;
+            return view;
         }
     }
 }
