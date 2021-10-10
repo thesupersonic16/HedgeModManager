@@ -8,6 +8,7 @@
     <system:String x:Key="CommonUIOK"     >OK</system:String>
     <system:String x:Key="CommonUICancel" >Отмена</system:String>
     <system:String x:Key="CommonUIYes"    >Да</system:String>
+    <system:String x:Key="CommonUIBlocked">Заблокировано</system:String>
     <system:String x:Key="CommonUINo"     >Нет</system:String>
     <system:String x:Key="CommonUIRetry"  >Повторить</system:String>
     <system:String x:Key="CommonUIUpdate" >Обновить</system:String>
@@ -28,6 +29,8 @@
     <system:String x:Key="MainUISaveAndPlay"   >Сохранить и запустить игру</system:String>
     <system:String x:Key="MainUIPlay"          >Запустить игру</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Невозможно скачать загрузчик модов</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Невозможно установить загрузчик модов.&#x0a;Убедитесь, что у вас есть разрешения на запись файлов игры.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Невозможно удалить загрузчик модов.&#x0a;Убедитесь, что игра сейчас не запущена.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Название</system:String>
@@ -40,15 +43,18 @@
     <system:String x:Key="ModsUIModConfigure"   >Настройки мода</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Открыть папку с модом</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Проверить наличие обновления</system:String>
+    <system:String x:Key="ModsUICheckUpdatesAll">Проверить все моды на наличие обновлений</system:String>
     <system:String x:Key="ModsUIModEdit"        >Изменить мод</system:String>
     <system:String x:Key="ModsUIModDelete"      >Удалить мод</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Перемещайте строки для изменения порядка загрузки модов.</system:String>
+    <system:String x:Key="ModsUISearch"         >Search: </system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager обнаружил, что один или&#x0a;несколько модов имеют ошибку в "IncludeDir".&#x0a;Вы хотите, чтобы Hedge Mod Manager попытался исправить ее?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Название</system:String>
     <system:String x:Key="CodesUIDownload">Загрузить пользовательские коды</system:String>
     <system:String x:Key="CodesUIUpdate"  >Обновить коды от сообщества</system:String>
+    <system:String x:Key="CodesUISearch"  >Search: </system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Установленные коды несовместимы с загрузчиком кодов.&#x0a;Пожалуйста, обновите коды, а также загрузчик кодов.&#x0a;ВНИМАНИЕ: Это приведет к удалению всех пользовательских кодов.</system:String>
 
     <!-- Settings UI Strings -->
@@ -86,8 +92,8 @@
     <system:String x:Key="MainUIRuntimeMissingTitle" >Не найден распространяемый пакет!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} необходим установленный {1} для корректной работы модов. Вы хотите, чтобы HMM установил данный распространяемый пакет?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Для одного или нескольких активированных модов требуется переадресация сохранения. Включить ее?&#x0a;Нажмите "нет" только если вы знаете, что делаете.</system:String>
-    
-    
+    <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Failed to resolve mod dependencies</system:String>
+    <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >The following mods have missing dependencies:</system:String>
     
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Пожалуйста, выберите опцию!</system:String>
@@ -146,7 +152,11 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Не найдено обновлений к кодам</system:String>
 
     <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager не смог найти папки с модами.&#x0a;Вы хотите создать папку с модами?</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Вы действительно хотите удалить "{0}"?&#x0a;Это действие нельзя будет отменить!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} обновлен до последней версии.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Доступна новая версия {0}! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Вы действительно хотите прервать обновление?&#x0a;Это может привести к повреждению файлов {0}</system:String>    
     
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >завершена</system:String>
@@ -156,11 +166,33 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Настроить {0}</system:String>
+    
+    <!-- Mod Description UI Strings -->
+    <system:String x:Key="ModDescriptionUIAbout">Об авторах {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">Создал</system:String>
+    <system:String x:Key="ModDescriptionUIDate">в</system:String>
 
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Невозможно загрузить мод</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Во время загрузки произошла ошибка. Сервера могут быть недоступны или перегружены. Пожалуйста, повторите позднее. &#x0a;&#x0a;Подробности: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Не удалось обнаружить игру</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager не смог обнаружить {0} установленным</system:String>
+    
+    <!-- Mod Updates Window Strings -->
+    <system:String x:Key="ModUpdatesChangelog">Список изменений</system:String>
+    <system:String x:Key="ModUpdatesTitle"    >Обновления для модов</system:String>
+
+    <!-- Themes -->
+    <system:String x:Key="ThemeDark">Темная</system:String>
+    <system:String x:Key="ThemeOLED">OLED</system:String>
+    <system:String x:Key="ThemeLight">Светлая</system:String>
+
+    <!-- Games -->
+    <system:String x:Key="GameSonicGenerations">Sonic Generations</system:String>
+    <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
+    <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
+    <system:String x:Key="GameTokyo2020">Олимпийские игры Tokyo 2020</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colours: Ultimate</system:String>
     
 </ResourceDictionary>

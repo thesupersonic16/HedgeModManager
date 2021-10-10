@@ -4,29 +4,33 @@
   xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <!-- Common UI Strings -->
-    <system:String x:Key="CommonUIClose" >关闭</system:String>
-    <system:String x:Key="CommonUIOK"    >确定</system:String>
-    <system:String x:Key="CommonUICancel">取消</system:String>
-    <system:String x:Key="CommonUIYes"   >是</system:String>
-    <system:String x:Key="CommonUINo"    >否</system:String>
-    <system:String x:Key="CommonUIRetry">重试</system:String>
-    <system:String x:Key="CommonUIUpdate">更新</system:String>
-    <system:String x:Key="CommonUIDelete">移除</system:String>
-    <system:String x:Key="CommonUINone"  >没有</system:String>
-    <system:String x:Key="CommonUIIgnore">忽略</system:String>
-    <system:String x:Key="CommonUIWarning">警告</system:String>
+    <system:String x:Key="CommonUIClose"    >关闭</system:String>
+    <system:String x:Key="CommonUIOK"       >确定</system:String>
+    <system:String x:Key="CommonUICancel"   >取消</system:String>
+    <system:String x:Key="CommonUIYes"      >是</system:String>
+    <system:String x:Key="CommonUIBlocked"  >封锁</system:String>
+    <system:String x:Key="CommonUINo"       >否</system:String>
+    <system:String x:Key="CommonUIRetry"    >重试</system:String>
+    <system:String x:Key="CommonUIUpdate"   >更新</system:String>
+    <system:String x:Key="CommonUIDelete"   >删除</system:String>
+    <system:String x:Key="CommonUINone"     >没有</system:String>
+    <system:String x:Key="CommonUIIgnore"   >忽略</system:String>
+    <system:String x:Key="CommonUIWarning"  >警告</system:String>
+    <system:String x:Key="CommonUIError"    >错误</system:String>
 
     <!-- Main UI Strings -->
-    <system:String x:Key="MainUIMods"          >名称</system:String>
-    <system:String x:Key="MainUICodes"         >代码</system:String>
-    <system:String x:Key="MainUISettings"      >设定</system:String>
-    <system:String x:Key="MainUIRemoveMod"     >移除MOD</system:String>
-    <system:String x:Key="MainUIAddMod"        >新增MOD</system:String>
-    <system:String x:Key="MainUIRefreshModList">刷新MOD列表</system:String>
-    <system:String x:Key="MainUISave"          >保存</system:String>
-    <system:String x:Key="MainUISaveAndPlay"   >保存并开始游戏</system:String>
-    <system:String x:Key="MainUIPlay"          >开始游戏</system:String>
-    <system:String x:Key="MainUIMLDownloadFail">无法下载MOD加载器</system:String>
+    <system:String x:Key="MainUIMods"               >名称</system:String>
+    <system:String x:Key="MainUICodes"              >代码</system:String>
+    <system:String x:Key="MainUISettings"           >设定</system:String>
+    <system:String x:Key="MainUIRemoveMod"          >删除 mod</system:String>
+    <system:String x:Key="MainUIAddMod"             >新增 mod</system:String>
+    <system:String x:Key="MainUIRefreshModList"     >刷新 mod列表</system:String>
+    <system:String x:Key="MainUISave"               >保存</system:String>
+    <system:String x:Key="MainUISaveAndPlay"        >保存并开始游戏</system:String>
+    <system:String x:Key="MainUIPlay"               >开始游戏</system:String>
+    <system:String x:Key="MainUIMLDownloadFail"     >无法下载 mod加载器</system:String>
+	<system:String xml:space="preserve" x:Key="MainUIMLInstallFail">无法安装 mod加载程序。&#x0a;请确保您有写入游戏文件的权限。</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">无法卸载 mod加载程序。&#x0a;请确保当前没有游戏正在运行。</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >名称</system:String>
@@ -36,61 +40,67 @@
     <system:String x:Key="ModsUIHasUpdate"      >更新</system:String>
     <system:String x:Key="ModsUIModDescription" >描述</system:String>
     <system:String x:Key="ModsUIModFavorite"    >最喜爱</system:String>
-    <system:String x:Key="ModsUIModConfigure"   >设置 MOD</system:String>
-    <system:String x:Key="ModsUIModOpenFolder"  >打开MOD目录</system:String>
+    <system:String x:Key="ModsUIModConfigure"   >设置 mod</system:String>
+    <system:String x:Key="ModsUIModOpenFolder"  >打开 mod目录</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">查询更新</system:String>
-    <system:String x:Key="ModsUIModEdit"        >更改MOD内客</system:String>
-    <system:String x:Key="ModsUIModDelete"      >移除MOD</system:String>
-    <system:String x:Key="ModsUIModDragDrop"    >拖放项目以更改MOD的加载顺序。</system:String>
-    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager已检测到一个或多个Mod包含无效的包含目录。&#x0a;您是否希望Hedge Mod Manager尝试解决此问题？</system:String>
+    <system:String x:Key="ModsUICheckUpdatesAll">查询所有 mod的更新</system:String>
+    <system:String x:Key="ModsUIModEdit"        >更改 mod内客</system:String>
+    <system:String x:Key="ModsUIModDelete"      >删除 mod</system:String>
+    <system:String x:Key="ModsUIModDragDrop"    >拖放项目以更改 mod的加载顺序。</system:String>
+	<system:String x:Key="ModsUISearch"         >搜寻： </system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager已检测到一个或多个 mod包含无效的包含目录。&#x0a;您是否希望Hedge Mod Manager尝试解决此问题？</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >名称</system:String>
     <system:String x:Key="CodesUIDownload">下载社区代码</system:String>
+    <system:String x:Key="CodesUIUpdate"  >更新社区代码</system:String>
+	<system:String x:Key="CodesUISearch"  >搜寻： </system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">安装的代码与代码加载器不相容。&#x0a;请更新代码和代码加载器。&#x0a;警告：这将删除所有自定义代码。</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
-    <system:String x:Key="SettingsUIGMLHeader"      >游戏 及 MOD加载器</system:String>
-    <system:String x:Key="SettingsUIInstallLoader"  >安装MOD加载器</system:String>
-    <system:String x:Key="SettingsUIUninstallLoader">移除MOD加载器</system:String>
-    <system:String x:Key="SettingsUIOpenMods"       >打开MOD目录</system:String>
-    <system:String x:Key="SettingsUIEnableML"       >启用MOD程序</system:String>
-    <system:String x:Key="SettingsUIEnableDebug"    >启用调试控制台</system:String>
-    <system:String x:Key="SettingsUIEnableSRedir"   >启用重新导向存档</system:String>
+    <system:String x:Key="SettingsUIGMLHeader"      >游戏 及 mod加载器</system:String>
+    <system:String x:Key="SettingsUIInstallLoader"  >安装 mod加载器</system:String>
+    <system:String x:Key="SettingsUIUninstallLoader">删除 mod加载器</system:String>
+    <system:String x:Key="SettingsUIOpenMods"       >打开 mod目录</system:String>
+    <system:String x:Key="SettingsUIEnableML"       >启用 mod程序</system:String>
+    <system:String x:Key="SettingsUIEnableDebug"    >启用 调试控制台</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >启用 重新导向存档</system:String>
     <system:String x:Key="SettingsUILoadTopBottom"  >从上到到下排列加载</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >加载器：</system:String>
     <system:String x:Key="SettingsUILabelGame"      >游戏：</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >设定档：</system:String>
-    <system:String x:Key="SettingsUILabelMDir"      >MOD目录：</system:String>
+    <system:String x:Key="SettingsUILabelMDir"      >mod目录：</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"  >查询MOD加载器是否有更新</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"  >查询 mod加载器是否有更新</system:String>
     <system:String x:Key="SettingsUICheckCLUpdate"  >查询代码是否有更新</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates">查询MOD是否有更新</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates">查询 mod是否有更新</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >开始游戏后并保持程序打开</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >关於Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >语言：</system:String>
     <system:String x:Key="SettingsUITheme"          >主题：</system:String>
 
     <!-- MainWindow UI Strings -->
-    <system:String x:Key="MainUIInstallFormHeader"   >MOD安装方式</system:String>
+    <system:String x:Key="MainUIInstallFormHeader"   >mod安装方式</system:String>
     <system:String x:Key="MainUIInstallFormOptionDir">从文件夹中加载</system:String>
     <system:String x:Key="MainUIInstallFormOptionArc">从封存档案中加载</system:String>
     <system:String x:Key="MainUIInstallFormOptionNew">制作一个复本（给开发人员！）</system:String>
-    <system:String x:Key="MainUIMissingLoaderHeader" >MOD加载器尚未完成安装！</system:String>
-    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">开始载入 {0} MOD之前，MOD载入器需要安装。&#x0a;是否现在安装？</system:String>
-    <system:String x:Key="MainUISelectModsDBTitle"   >选择從何处加载MOD…</system:String>
+    <system:String x:Key="MainUIMissingLoaderHeader" >mod加载器尚未完成安装！</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">开始载入 {0} mod之前，mod载入器需要安装。&#x0a;是否现在安装？</system:String>
+    <system:String x:Key="MainUISelectModsDBTitle"   >选择從何处加载 mod…</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >检测到缺少运行环境！</system:String>
-    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} 需要 {1} 安装在MOD上 &#x0a;来正常运行, 你想要使用HMM来安装这个运行环境吗？ </system:String>
-    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">使用一个或多个的MOD时需要启用「保存文件重新定向」才能正常工作。 需要启用此功能吗？＆＃x0a;（当您知道自己在做什么时候才单击否。）</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} 需要 {1} 安装在 mod上 &#x0a;来正常运行, 你想要使用HMM来安装这个运行环境吗？ </system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">使用一个或多个的 mod时需要启用「保存文件重新定向」才能正常工作。 需要启用此功能吗？＆＃x0a;（当您知道自己在做什么时候才单击否。）</system:String>
+	<system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">无法解决 mod依赖</system:String>
+    <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >以下 mod缺少依赖项：</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >请选择一个选项！</system:String>
 
     <!-- AboutWindow UI Strings -->
     <system:String x:Key="AboutWindowUITitle"  >关於Hedge Mod Manager</system:String>
-    <system:String x:Key="AboutWindowUILine1"  >Hedgehog Engine Mod的程序是帮助人们更容易地载入游戏MOD。</system:String>
+    <system:String x:Key="AboutWindowUILine1"  >设计Hedgehog Engine 程序是帮助人们更容易地载入 mod 。</system:String>
     <system:String x:Key="AboutWindowUILine2"  >需要合法拥有的游戏版本来支持。</system:String>
     <system:String x:Key="AboutWindowUICredits">来源：</system:String>
 
@@ -100,24 +110,29 @@
     <system:String x:Key="ProfileWindowUICreateTitle">创建设定档</system:String>
     <system:String x:Key="ProfileWindowUIName"       >设定档名称</system:String>
     <system:String x:Key="ProfileWindowUIFile"       >配置设定档名称</system:String>
-    <system:String x:Key="ProfileWindowUIAdd"        >新增设定档</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >新增设定档</system:String>
     <system:String x:Key="ProfileWindowUIRename"     >更改设定档</system:String>
     <system:String x:Key="ProfileWindowUIClone"      >克隆设定档</system:String>
     <system:String x:Key="ProfileWindowUIDelete"     >删除设定档</system:String>
+    <system:String x:Key="ProfileWindowUIExport"     >导出</system:String>
+    <system:String x:Key="ProfileWindowUIImport"     >导入</system:String>
     <system:String x:Key="ProfileWindowUINameLabel"  >设定档名称：</system:String>
+    <system:String x:Key="ProfileWindowUIImportFail" >导入 mod配置文件失败</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingMods"   >未找到以下 mod：</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >未找到以下代码：</system:String>
 
     <!-- EditModWindow UI Strings -->
-    <system:String x:Key="EditModWindowUIHeader">请填写有关您的MOD的一些详细信息</system:String>
+    <system:String x:Key="EditModWindowUIHeader">请填写有关您的 mod的一些详细信息</system:String>
 
     <!-- PropertyEditor UI Strings -->
     <system:String x:Key="PropertyEditorUIName" >名称</system:String>
     <system:String x:Key="PropertyEditorUIValue">数值</system:String>
 
     <!-- Status UI Strings -->
-    <system:String x:Key="StatusUILoadedMods"             >已载入 {0} MODS</system:String>
+    <system:String x:Key="StatusUILoadedMods"             >已载入 {0} mods</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >查询 {0} 项更新</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >更新失败 {0}！ {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckFinish"   >MOD已查询 {0} 项完成， {1} 项失败</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >mod已查询 {0} 项完成， {1} 项失败</system:String>
     <system:String x:Key="StatusUIStartingGame"           >运行中 {0}</system:String>
     <system:String x:Key="StatusUICheckingForUpdates"     >更新查询中</system:String>
     <system:String x:Key="StatusUINoUpdatesFound"         >找不到更新</system:String>
@@ -126,17 +141,23 @@
     <system:String x:Key="StatusUILoaderUpToDate"         >{0} 项已最新版本</system:String>
     <system:String x:Key="StatusUIFailedLoaderUpdateCheck">{0} 查询更新失败</system:String>
     <system:String x:Key="StatusUIInstalledLoader"        >已安装 {0}</system:String>
-    <system:String x:Key="StatusUIDeletedMod"             >已移除 {0}</system:String>
-    <system:String x:Key="StatusUIModsDBSaved"            >MOD数据库已保存</system:String>
+    <system:String x:Key="StatusUIDeletedMod"             >已删除 {0}</system:String>
+    <system:String x:Key="StatusUIModsDBSaved"            >mods数据库已保存</system:String>
     <system:String x:Key="StatusUIModsDBLocationChanged"  >数据库位置已更新</system:String>
     <system:String x:Key="StatusUIGameChange"             >游戏已更换 {0}</system:String>
     <system:String x:Key="StatusUIDownloadingCodes"       >下载代码中 {0}</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >已完成下载</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >下载失败</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >代码更新可用！</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >未找到代码更新</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">您确定要删除 "{0}"？&#x0a;此操作无法撤消！</system:String>
-
+    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager 未检测到任何 mods 文件夹。&#x0a;是否创建一个 mods 文件夹吗？</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">您确定要删除 "{0}"？&#x0a;此操作无法滚回！</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} 已经是最新的。</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate">({1}) 已找到可用的 {0} 的较新版本！</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">您确定要取消更新吗？&#x0a;这可能会损坏 {0}</system:String>
+	
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >项完成</system:String>
     <system:String x:Key="StatusUIUpdateCompletedPlural"        >项完成</system:String>
@@ -146,10 +167,32 @@
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">{0} 设置</system:String>
 
+    <!-- mod Description UI Strings -->
+    <system:String x:Key="ModDescriptionUIAbout">关于 {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">由製作</system:String>
+    <system:String x:Key="ModDescriptionUIDate">在</system:String>
+
     <!-- Mod Downloader Strings -->
-    <system:String x:Key="ModDownloaderFailed">无法下载MOD</system:String>
+    <system:String x:Key="ModDownloaderFailed">无法下载 mod</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">下载期间发生错误。 服务器可能已关闭或超载。请稍后再尝试。&#x0a;&#x0a;细节: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">找不到游戏</system:String>
-    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager无法找到{0}安装程序</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager无法找到 {0} 安装程序</system:String>
+
+    <!-- Mod Updates Window Strings -->
+    <system:String x:Key="ModUpdatesChangelog">变更日志</system:String>
+    <system:String x:Key="ModUpdatesTitle"    >mod 更新</system:String>
+
+    <!-- Themes -->
+    <system:String x:Key="ThemeDark">暗黑模式</system:String>
+    <system:String x:Key="ThemeOLED">OLED模式</system:String>
+    <system:String x:Key="ThemeLight">明亮模式</system:String>
+
+    <!-- Games -->
+    <system:String x:Key="GameSonicGenerations">Sonic Generations - 音速小子 世代</system:String>
+    <system:String x:Key="GameSonicLostWorld">Sonic Lost World - 音速小子 失落的世界</system:String>
+    <system:String x:Key="GameSonicForces">Sonic Forces - 音速小子 武力</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2"> Puyo Puyo Tetris 2 - 魔法气泡特趣思俄罗斯框</system:String>
+    <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020 - 2020年夏季奥运会</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colours Ultimate - 音速小子趣味色彩 究极版</system:String>
 
 </ResourceDictionary>
