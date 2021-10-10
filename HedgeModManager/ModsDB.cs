@@ -9,9 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using GameBananaAPI;
 using HedgeModManager.Serialization;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
+using static HedgeModManager.Lang;
 
 namespace HedgeModManager
 {
@@ -273,7 +275,7 @@ namespace HedgeModManager
         public static void InstallModArchiveUsingZipFile(string path, string root)
         {
             // Path to the install temp folder
-            string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
+            string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install", Guid.NewGuid().ToString());
 
             // Deletes the temp Directory if it exists
             if (Directory.Exists(tempDirectory))
@@ -533,7 +535,9 @@ namespace HedgeModManager
         public string BuildMarkdown()
         {
             var builder = new StringBuilder();
-            builder.AppendLine(Lang.Localise("MainUIMissingDepends"));
+            builder.AppendLine(Localise("MainUIMissingDepends"));
+
+            bool resolvable = false;
 
             foreach (var error in Errors)
             {
@@ -543,6 +547,8 @@ namespace HedgeModManager
                     builder.AppendLine(depend.HasLink
                         ? $"  - [{BuildName()}]({depend.Link})"
                         : $"  - {BuildName()}");
+                    if (!resolvable && GBAPI.GetGameBananaModID(depend.Link) != -1)
+                        resolvable = true;
 
                     string BuildName()
                     {
@@ -550,6 +556,9 @@ namespace HedgeModManager
                     }
                 }
             }
+
+            if (resolvable)
+                builder.AppendLine("\n" + Localise("MainUIResolvable"));
 
             return builder.ToString();
         }

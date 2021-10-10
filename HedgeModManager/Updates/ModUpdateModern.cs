@@ -14,6 +14,7 @@ namespace HedgeModManager.Updates
     {
         public ModInfo Mod { get; internal set; }
         public string Version { get; internal set; }
+        public bool SingleFileMode { get; }
 
         protected ModFileTree BaseTree { get; set; }
         protected ModFileTree UpdateTree { get; set; }

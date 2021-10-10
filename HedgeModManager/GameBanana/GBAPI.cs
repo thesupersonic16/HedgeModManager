@@ -27,6 +27,28 @@ namespace GameBananaAPI
             COREITEMDATA
         }
 
+        public static int GetGameBananaModID(string url)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(url) && url.Contains("gamebanana.com/mods/"))
+                {
+                    // Read ID from URL
+                    string id = url.Substring(url.IndexOf("mods/") + 5);
+                    // Remove anything else after the ID if any
+                    if (id.Contains("/"))
+                        id = id.Substring(id.IndexOf("/"));
+                    return int.Parse(id);
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return -1;
+        }
+
         public class GBAPIRequestHandler
         {
             public string Suffix = "&format=json&return_keys=1";
@@ -126,7 +148,7 @@ namespace GameBananaAPI
             var response = await Singleton.GetInstance<HttpClient>().GetStringAsync(request);
             response = Uri.UnescapeDataString(response);
             if (!handler.ParseResponse(response, ref item))
-                throw new Exception("Failed to parse GameBannna Item");
+                throw new Exception("Failed to parse GameBanana Item");
 
             item.ItemType = type;
             item.ItemID = id;
@@ -319,6 +341,8 @@ namespace GameBananaAPI
         public GBAPICreditGroups Credits { get; set; }
         [JsonProperty("Preview().sPreviewUrl()")]
         public Uri SoundURL { get; set; }
+        [JsonProperty("Files().aFiles()")]
+        public Dictionary<string, GBAPIFile> Files { get; set; }
 
         public List<GBAPIScreenshotData> Screenshots
         {

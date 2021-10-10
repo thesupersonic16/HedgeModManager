@@ -16,11 +16,13 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"/>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="{Binding MultiFileMode,
+                        Converter={StaticResource BoolToGridHeightConverter}, ConverterParameter=60}"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <ProgressBar Grid.Row="0" Margin="15" Maximum="100" Value="{Binding OverallProgress.Value}"/>
+                <ProgressBar Grid.Row="0" Margin="15" Maximum="1" IsIndeterminate="{Binding OverallProgress.Value, Converter={StaticResource NullToBoolConverter}}"
+                             Value="{Binding OverallProgress.Value, TargetNullValue=0}"/>
                 <ProgressBar Grid.Row="1" Margin="15" Maximum="1" IsIndeterminate="{Binding CurrentFileProgress.Value, Converter={StaticResource NullToBoolConverter}}"
                              Value="{Binding CurrentFileProgress.Value, TargetNullValue=0}"/>
 
@@ -57,14 +59,13 @@
 
                                 <TextBlock DockPanel.Dock="Top"
                                            FontSize="10" Foreground="{DynamicResource HMM.Window.LightForegroundBrush}">
-                                    <Run Text="{Binding OldVersion, Mode=OneTime}"/>
-                                    <Run Text="->"/>
-                                    <Run Text="{Binding NewVersion, Mode=OneTime}"/>
+                                    <Run Text="{Binding VersionText, Mode=OneTime}"/>
                                 </TextBlock>
 
-                                <ProgressBar DockPanel.Dock="Bottom" Maximum="100" Margin="0,5"
+                                <ProgressBar DockPanel.Dock="Bottom" Maximum="1" Margin="0,5"
                                              Visibility="{Binding ElementName=VisualRoot, Converter={StaticResource BoolToVisibilityConverter}, Path=DataContext.IsUpdating}"
-                                             Height="20" Value="{Binding OverallProgress.Value}"/>
+                                             Height="20" Value="{Binding OverallProgress.Value}"
+                                             IsIndeterminate="{Binding OverallProgress.Value, Converter={StaticResource NullToBoolConverter}}"/>
                             </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -80,7 +81,7 @@
 
                      <Border Grid.Row="0" Margin="0,2"
                              BorderBrush="{DynamicResource HMM.Window.DialogBottom}" BorderThickness="0,0,0,2">
-                         <TextBlock Margin="4,0,4,4" Text="{DynamicResource ModUpdatesChangelog}" FontSize="18"/>
+                         <TextBlock Margin="4,0,4,4" Text="{Binding ChangelogText}" FontSize="18"/>
                      </Border>
 
                      <Grid Grid.Row="1">
@@ -107,7 +108,7 @@
             <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="{DynamicResource HMM.Window.DialogBottom}">
                 <DockPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,8">
-                        <Button Content="{DynamicResource CommonUIUpdate}" Padding="8,0" Margin="0,0,8,0" IsDefault="True"
+                        <Button Content="{Binding UpdateText}" Padding="8,0" Margin="0,0,8,0" IsDefault="True"
                                 Command="{Binding UpdateCommand}"/>
 
                         <Button Content="{DynamicResource CommonUICancel}" Padding="8,0" IsCancel="True" 

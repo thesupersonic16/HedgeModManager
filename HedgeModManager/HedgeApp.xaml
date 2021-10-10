@@ -41,6 +41,7 @@
             <local:InverseEmptyStringToVisibilityConverter x:Key="InverseEmptyStringToVisibilityConverter"/>
             <local:NullToBoolConverter x:Key="NullToBoolConverter"/>
             <local:MarkdownToHtmlConverter x:Key="MarkdownToHtmlConverter"/>
+            <local:BoolToGridHeightConverter x:Key="BoolToGridHeightConverter"/>
             <system:Double x:Key="HMM.Window.DialogBottomHeight">45</system:Double>
 
             <Style TargetType="{x:Type UserControl}" x:Key="DesignTimeStyle">

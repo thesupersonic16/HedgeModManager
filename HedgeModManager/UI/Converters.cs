@@ -141,4 +141,24 @@ namespace HedgeModManager
             throw new NotSupportedException();
         }
     }
+
+    [ValueConversion(typeof(bool), typeof(bool))]
+    public class BoolToGridHeightConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (parameter == null)
+                parameter = 0;
+            if (parameter is string strParam)
+                parameter = double.Parse(strParam);
+            if (value is not bool)
+                value = true;
+            return (bool)value ? new GridLength((double)parameter) : new GridLength(0);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
 }

@@ -11,6 +11,7 @@ namespace HedgeModManager.Updates
     {
         public ModInfo Mod { get; }
         public string Version { get; }
+        public bool SingleFileMode { get; }
         public Task<string> GetChangelog();
         public Task ExecuteAsync(ExecuteConfig config = default, CancellationToken cancellationToken = default);
     }

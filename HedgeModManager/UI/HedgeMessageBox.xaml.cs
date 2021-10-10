@@ -92,7 +92,7 @@ namespace HedgeModManager
             Height = size.Height;
         }
 
-        public void AddButton(string text, Action onClick)
+        public Button AddButton(string text, Action onClick)
         {
             var btn = new Button()
             {
@@ -105,6 +105,7 @@ namespace HedgeModManager
 
             btn.Click += (caller, args) => { onClick.Invoke(); };
             Stack.Children.Add(btn);
+            return btn;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)

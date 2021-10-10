@@ -4,19 +4,20 @@
   xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <!-- Common UI Strings -->
-    <system:String x:Key="CommonUIClose"  >Close</system:String>
-    <system:String x:Key="CommonUIOK"     >OK</system:String>
-    <system:String x:Key="CommonUICancel" >Cancel</system:String>
-    <system:String x:Key="CommonUIYes"    >Yes</system:String>
-    <system:String x:Key="CommonUIBlocked">Blocked</system:String>
-    <system:String x:Key="CommonUINo"     >No</system:String>
-    <system:String x:Key="CommonUIRetry"  >Retry</system:String>
-    <system:String x:Key="CommonUIUpdate" >Update</system:String>
-    <system:String x:Key="CommonUIDelete" >Delete</system:String>
-    <system:String x:Key="CommonUINone"   >None</system:String>
-    <system:String x:Key="CommonUIIgnore" >Ignore</system:String>
-    <system:String x:Key="CommonUIWarning">WARNING</system:String>
-    <system:String x:Key="CommonUIError"  >ERROR</system:String>
+    <system:String x:Key="CommonUIClose"   >Close</system:String>
+    <system:String x:Key="CommonUIOK"      >OK</system:String>
+    <system:String x:Key="CommonUICancel"  >Cancel</system:String>
+    <system:String x:Key="CommonUIYes"     >Yes</system:String>
+    <system:String x:Key="CommonUIBlocked" >Blocked</system:String>
+    <system:String x:Key="CommonUINo"      >No</system:String>
+    <system:String x:Key="CommonUIRetry"   >Retry</system:String>
+    <system:String x:Key="CommonUIUpdate"  >Update</system:String>
+    <system:String x:Key="CommonUIDownload">Download</system:String>
+    <system:String x:Key="CommonUIDelete"  >Delete</system:String>
+    <system:String x:Key="CommonUINone"    >None</system:String>
+    <system:String x:Key="CommonUIIgnore"  >Ignore</system:String>
+    <system:String x:Key="CommonUIWarning" >WARNING</system:String>
+    <system:String x:Key="CommonUIError"   >ERROR</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Mods</system:String>
@@ -82,18 +83,20 @@
     <system:String x:Key="SettingsUITheme"          >Theme:</system:String>
 
     <!-- MainWindow UI Strings -->
-    <system:String x:Key="MainUIInstallFormHeader"   >Install a mod by...</system:String>
-    <system:String x:Key="MainUIInstallFormOptionDir">Installing from a folder</system:String>
-    <system:String x:Key="MainUIInstallFormOptionArc">Installing from an archive</system:String>
-    <system:String x:Key="MainUIInstallFormOptionNew">Making one (for developers!)</system:String>
-    <system:String x:Key="MainUIMissingLoaderHeader" >Mod Loader Not Yet Installed!</system:String>
+    <system:String x:Key="MainUIInstallFormHeader"    >Install a mod by...</system:String>
+    <system:String x:Key="MainUIInstallFormOptionDir" >Installing from a folder</system:String>
+    <system:String x:Key="MainUIInstallFormOptionArc" >Installing from an archive</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew" >Making one (for developers!)</system:String>
+    <system:String x:Key="MainUIMissingLoaderHeader"  >Mod Loader Not Yet Installed!</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">In order for {0} to start loading mods, the mod loader needs to be installed.&#x0a;Would you like to install it now?</system:String>
-    <system:String x:Key="MainUISelectModsDBTitle"   >Select where to load mods from...</system:String>
-    <system:String x:Key="MainUIRuntimeMissingTitle" >Missing Runtime Detected!</system:String>
+    <system:String x:Key="MainUISelectModsDBTitle"    >Select where to load mods from...</system:String>
+    <system:String x:Key="MainUIRuntimeMissingTitle"  >Missing Runtime Detected!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requires {1} to be installed for mods &#x0a;to function properly, would you like HMM to install this runtime?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">One or more enabled mods require save file redirection to work properly. Enable this feature?&#x0a;Click no only if you know what you are doing.</system:String>
-    <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Failed to resolve mod dependencies</system:String>
-    <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >The following mods have missing dependencies:</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" >Failed to resolve mod dependencies</system:String>
+    <system:String x:Key="MainUIMissingDepends"       >The following mods have missing dependencies:</system:String>
+    <system:String x:Key="MainUIMissingDependsResolve">Resolve GB Mods</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">One or more dependencies can be automatically resolved&#x0a;from GameBanana by clicking "Resolve GB Mods".</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Please select an option!</system:String>
@@ -179,8 +182,10 @@
     <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager was unable to find an installation of {0}</system:String>
 
     <!-- Mod Updates Window Strings -->
-    <system:String x:Key="ModUpdatesChangelog">Changelog</system:String>
-    <system:String x:Key="ModUpdatesTitle"    >Mod Updates</system:String>
+    <system:String x:Key="ModUpdatesChangelog"    >Changelog</system:String>
+    <system:String x:Key="ModDownloadsDescription">Description</system:String>
+    <system:String x:Key="ModUpdatesTitle"        >Mod Updates</system:String>
+    <system:String x:Key="ModDownloadsTitle"      >Mod Downloads</system:String>
 
     <!-- Themes -->
     <system:String x:Key="ThemeDark">Dark</system:String>

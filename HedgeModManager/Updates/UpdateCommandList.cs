@@ -107,7 +107,7 @@ namespace HedgeModManager.Updates
                 await command.Execute(mod, config, cancellationToken).ConfigureAwait(false);
                 CheckCancel();
 
-                config?.OverallCallback?.Report((((double)i / (double)Count) * 100));
+                config?.OverallCallback?.Report((((double)i / (double)Count)));
             }
 
             CheckCancel();
@@ -201,7 +201,7 @@ namespace HedgeModManager.Updates
 
     public class ExecuteConfig
     {
-        public IProgress<double> OverallCallback { get; set; }
+        public IProgress<double?> OverallCallback { get; set; }
         public IProgress<double?> CurrentCallback { get; set; }
         public ILogger Logger { get; set; } = DummyLogger.Instance;
     }

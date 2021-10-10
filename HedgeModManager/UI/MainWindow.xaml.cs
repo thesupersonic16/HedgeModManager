@@ -30,6 +30,7 @@ using HedgeModManager.UI.Models;
 using HedgeModManager.Updates;
 using Newtonsoft.Json;
 using System.Windows.Data;
+using GameBananaAPI;
 
 namespace HedgeModManager
 {
@@ -752,8 +753,63 @@ namespace HedgeModManager
             if (report.HasErrors)
             {
                 var box = new HedgeMessageBox(Localise("MainUIMissingDependsHeader"), report.BuildMarkdown(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
-                box.AddButton(Localise("CommonUIIgnore"), () => box.Close());
-                box.AddButton(Localise("CommonUICancel"), () =>
+                Button resolveButton = null;
+                Button ignoreButton = null;
+                Button cancelButton = null;
+                if (CheckReportForGBDepends(report))
+                {
+                    resolveButton = box.AddButton(Localise("MainUIMissingDependsResolve"), async () =>
+                    {
+                        resolveButton.IsEnabled = ignoreButton.IsEnabled = cancelButton.IsEnabled = false;
+                        var updateInfo = new List<IModUpdateInfo>();
+                        var processedIDs = new List<int>();
+                        foreach (var error in report.Errors)
+                        {
+                            foreach (var depend in error.UnresolvedDepends)
+                            {
+                                if (!depend.HasLink)
+                                    continue;
+
+                                int id = GBAPI.GetGameBananaModID(depend.Link);
+                                if (processedIDs.Contains(id))
+                                    continue;
+
+                                try
+                                {
+                                    var gbItem = await GBAPI.PopulateItemDataAsync(new GBAPIItemDataBasic("Mod", id));
+                                    var file = gbItem.Files.FirstOrDefault(t =>
+                                        t.Value.FileMetadata.Files.Any(s => s.Contains("mod.ini"))).Value;
+                                    if (file != null)
+                                        updateInfo.Add(
+                                            new ModUpdateGameBanana(depend.Title, gbItem, file, ModsDatabase));
+                                    processedIDs.Add(id);
+                                }
+                                catch
+                                {
+                                    // ignored
+                                }
+                            }
+                        }
+
+                        // Stop watching
+                        foreach (var watcher in ModsWatchers)
+                            watcher.Dispose();
+
+                        ModsWatchers.Clear();
+
+                        var model = new ModUpdatesWindowViewModel(updateInfo, true);
+                        box.Close();
+                        model.ShowDialog();
+                        await SaveConfig();
+                        // Reset watchers
+                        SetupWatcher();
+                        RefreshMods();
+
+                        abort = CheckModDepends();
+                    });
+                }
+                ignoreButton = box.AddButton(Localise("CommonUIIgnore"), () => box.Close());
+                cancelButton = box.AddButton(Localise("CommonUICancel"), () =>
                 {
                     box.Close();
                     abort = true;
@@ -762,6 +818,19 @@ namespace HedgeModManager
             }
 
             return !abort;
+        }
+
+        public bool CheckReportForGBDepends(DependencyReport report)
+        {
+            foreach (var error in report.Errors)
+            {
+                foreach (var depend in error.UnresolvedDepends)
+                {
+                    if (depend.HasLink && GBAPI.GetGameBananaModID(depend.Link) != -1)
+                        return true;
+                }
+            }
+            return false;
         }
 
         public bool CheckDepends()

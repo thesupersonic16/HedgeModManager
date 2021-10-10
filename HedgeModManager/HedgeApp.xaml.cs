@@ -332,13 +332,13 @@ namespace HedgeModManager
             while (Restart);
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
-            // GB Integration shows UI, and therfore should be done *after* Application.Run
+            // GB Integration shows UI, and therefore should be done *after* Application.Run
             if (e.Args.Length > 1 && e.Args[0].ToLowerInvariant() == "-gb")
             {
-                if (GBAPI.ParseCommandLine(e.Args[1]) != true)
-                    Shutdown();
+                GBAPI.ParseCommandLine(e.Args[1]);
+                Shutdown();
             }
 
             base.OnStartup(e);

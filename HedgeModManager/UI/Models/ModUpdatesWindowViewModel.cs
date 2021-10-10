@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using HedgeModManager.Annotations;
 using HedgeModManager.Updates;
+using static HedgeModManager.Lang;
 
 namespace HedgeModManager.UI.Models
 {
@@ -28,13 +29,21 @@ namespace HedgeModManager.UI.Models
         public RelayCommand UpdateCommand { get; }
         public RelayCommand CancelCommand { get; }
 
-        public ModUpdatesWindowViewModel()
+        public bool DownloadMode { get; set; }
+
+        public string TitleText => DownloadMode ? Localise("ModDownloadsTitle") : Localise("ModUpdatesTitle");
+        public string UpdateText => DownloadMode ? Localise("CommonUIDownload") : Localise("CommonUIUpdate");
+        public string ChangelogText => DownloadMode ? Localise("ModDownloadsDescription") : Localise("ModUpdatesChangelog");
+
+
+        public ModUpdatesWindowViewModel(bool downloadMode = false)
         {
+            DownloadMode = downloadMode;
             UpdateCommand = new RelayCommand(Execute, () => IsIdle);
             CancelCommand = new RelayCommand(CancelAll);
         }
 
-        public ModUpdatesWindowViewModel(IModUpdateInfo mod) : this()
+        public ModUpdatesWindowViewModel(IModUpdateInfo mod, bool downloadMode = false) : this(downloadMode)
         {
             if (mod == null)
                 return;
@@ -42,7 +51,7 @@ namespace HedgeModManager.UI.Models
             Mods.Add(new ModUpdateInfoModel(mod));
         }
 
-        public ModUpdatesWindowViewModel(IEnumerable<IModUpdateInfo> mods) : this()
+        public ModUpdatesWindowViewModel(IEnumerable<IModUpdateInfo> mods, bool downloadMode = false) : this(downloadMode)
         {
             Set(mods);
         }
@@ -114,22 +123,27 @@ namespace HedgeModManager.UI.Models
         }
     }
 
-    public class ModUpdateInfoModel
+    public class ModUpdateInfoModel : INotifyPropertyChanged
     {
         public IModUpdateInfo Info { get; set; }
         public string Title => Info.Mod.Title;
         public string OldVersion => Info.Mod.Version;
         public string NewVersion => Info.Version;
+        public string VersionText => OldVersion != null ? OldVersion + "->" + NewVersion : NewVersion;
         public NotifyTask<string> Changelog => new NotifyTask<string>(Info.GetChangelog());
         public bool DoUpdate { get; set; } = true;
+        public bool MultiFileMode => !Info.SingleFileMode;
         public ILogger Logger { get; set; } = new StringLogger();
-        public NotifyProgress<double> OverallProgress { get; set; } = new NotifyProgress<double>();
+        public NotifyProgress<double?> OverallProgress { get; set; } = new NotifyProgress<double?>();
         public NotifyProgress<double?> CurrentFileProgress { get; set; } = new NotifyProgress<double?>();
         public CancellationTokenSource CancelSource { get; set; }
+
 
         public ModUpdateInfoModel(IModUpdateInfo info)
         {
             Info = info;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

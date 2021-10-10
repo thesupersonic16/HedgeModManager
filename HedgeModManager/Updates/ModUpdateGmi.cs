@@ -13,6 +13,7 @@ namespace HedgeModManager.Updates
     {
         public ModInfo Mod { get; internal set; }
         public string Version { get; internal set; }
+        public bool SingleFileMode { get; }
 
         protected ModVersionInfo VersionInfo { get; set; }
         protected UpdateCommandList Commands { get; set; } = new UpdateCommandList();
