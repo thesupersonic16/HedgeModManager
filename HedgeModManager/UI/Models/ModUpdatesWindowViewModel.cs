@@ -17,7 +17,21 @@ namespace HedgeModManager.UI.Models
     [ViewInfo("ModUpdatesTitle", 800, 450)]
     public class ModUpdatesWindowViewModel : IViewModel, INotifyPropertyChanged
     {
-        public IView View { get; set; }
+        private IView mView;
+
+        public IView View
+        {
+            get => mView;
+            set
+            {
+                if (mView == value)
+                    return;
+
+                mView = value;
+                OnViewAssigned(mView);
+            }
+        }
+
         public ModUpdateInfoModel SelectedInfo { get; set; }
 
         public ObservableCollection<ModUpdateInfoModel> Mods { get; set; } =
@@ -120,6 +134,14 @@ namespace HedgeModManager.UI.Models
             IsUpdating = false;
             UpdateCommand.RaiseCanExecuteChanged();
             View?.Close();
+        }
+
+        private void OnViewAssigned(IView view)
+        {
+            if (view == null)
+                return;
+
+            view.Title = TitleText;
         }
     }
 
