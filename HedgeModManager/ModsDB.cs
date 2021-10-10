@@ -119,7 +119,8 @@ namespace HedgeModManager
             var report = new DependencyReport();
 
             var enabledMods = new List<ModInfo>();
-            var newMods = CheckDepends(Mods, enabledMods);
+            List<ModInfo> newMods = null;
+            newMods = CheckDepends(Mods, enabledMods);
             while (newMods != null)
                 newMods = CheckDepends(newMods, enabledMods);
 
@@ -130,6 +131,9 @@ namespace HedgeModManager
                 List<ModInfo> result = null;
                 foreach (var mod in mods)
                 {
+                    if (newMods != null && newMods.Contains(mod))
+                        continue;
+
                     if (mod.Enabled)
                     {
                         DependencyReport.ErrorInfo info = null;
