@@ -12,6 +12,7 @@
     <system:String x:Key="CommonUINo"       >否</system:String>
     <system:String x:Key="CommonUIRetry"    >重試</system:String>
     <system:String x:Key="CommonUIUpdate"   >更新</system:String>
+    <system:String x:Key="CommonUIDownload" >下載</system:String>
     <system:String x:Key="CommonUIDelete"   >刪除</system:String>
     <system:String x:Key="CommonUINone"     >没有</system:String>
     <system:String x:Key="CommonUIIgnore"   >忽略</system:String>
@@ -29,7 +30,7 @@
     <system:String x:Key="MainUISaveAndPlay"        >保存並運行</system:String>
     <system:String x:Key="MainUIPlay"               >運行</system:String>
     <system:String x:Key="MainUIMLDownloadFail"     >無法下載 mod加載器</system:String>
-	<system:String xml:space="preserve" x:Key="MainUIMLInstallFail">mod加載器安裝失敗&#x0a;請確定有足夠權限寫入遊戲目錄</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">mod加載器安裝失敗&#x0a;請確定有足夠權限寫入遊戲目錄</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">mod加載器無法删除&#x0a;請確定當前遊戲沒有正在運行</system:String>
 
     <!-- Mods UI Strings -->
@@ -54,7 +55,7 @@
     <system:String x:Key="CodesUIName"    >名稱</system:String>
     <system:String x:Key="CodesUIDownload">下載社區代碼</system:String>
     <system:String x:Key="CodesUIUpdate"  >更新社區代碼</system:String>
-	<system:String x:Key="CodesUISearch"  >尋找： </system:String>
+    <system:String x:Key="CodesUISearch"  >尋找： </system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">已載入的代碼與代碼加載器不相容。&#x0a;請更新代碼和代碼加載器。&#x0a; 警告：此動作會覆蓋所有自定義代碼。 </system:String>
 
     <!-- Settings UI Strings -->
@@ -92,8 +93,10 @@
     <system:String x:Key="MainUIRuntimeMissingTitle" >檢測到缺少運行環境！</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} 需要 {1} 安裝在 mod上 &#x0a;來正常運行, 你想要使用HMM來安裝這個運行環境嗎？ </system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">使用一個或多個 mod時需要啟用「重新保存文件定向」功能才能正常運作。 要啟用此功能嗎？＆＃x0a;（你要知道自己在做什麼才點擊否。）</system:String>
-	<system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">無法解決 mod依賴</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">無法解決 mod依賴</system:String>
     <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >以下 mod缺少依賴項：</system:String>
+    <system:String x:Key="MainUIMissingDependsResolve">修正 GameBanana mods</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">通過單擊 「解決 GB Mods」，可以從 GameBanana &#x0a; 自動修正一個或多個依賴項。</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >請選擇至少一項！</system:String>
@@ -153,7 +156,7 @@
 	
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager 沒有檢測到任何 mods 文件夾。&#x0a;是否創建一個 mods 文件夾嗎？</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">您確定要刪除 "{0}"？&#x0a;此操作無法撤消！</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">您確定要刪除 「{0}」？&#x0a;此操作無法撤消！</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} 已經是最新的。</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate">({1}) 已找到可用 {0} 的較新的版本！</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">您確定要取消更新嗎？&#x0a;取消更新可能會導致文件損壞 {0}</system:String>
@@ -179,9 +182,11 @@
     <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager無法找到 {0} 安裝程序</system:String>
 
     <!-- Mod Updates Window Strings -->
-    <system:String x:Key="ModUpdatesChangelog">變更日誌</system:String>
-    <system:String x:Key="ModUpdatesTitle"    >mod 更新</system:String>
-
+    <system:String x:Key="ModUpdatesChangelog"    >變更日誌</system:String>
+    <system:String x:Key="ModDownloadsDescription">描述</system:String>
+    <system:String x:Key="ModUpdatesTitle"        >mod 更新</system:String>
+    <system:String x:Key="ModDownloadsTitle"      >mod 下載</system:String>
+	
     <!-- Themes -->
     <system:String x:Key="ThemeDark">黑暗模式</system:String>
     <system:String x:Key="ThemeOLED">OLED模式</system:String>
