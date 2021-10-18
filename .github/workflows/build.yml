@@ -19,7 +19,7 @@ jobs:
 
     - name: Add Git hash to resources
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: echo ${{env.GITHUB_SHA}} > HedgeModManager/Resources/Version.txt
+      run: echo ${{github.sha}} > HedgeModManager/Resources/Version.txt
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
