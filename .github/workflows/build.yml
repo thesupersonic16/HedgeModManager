@@ -18,8 +18,8 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Add Git hash to resources
-      working-directory: ${{env.GITHUB_WORKSPACE}}/HedgeModManager/Resources
-      run: echo ${{env.GITHUB_SHA}} > Version.txt
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: echo ${{env.GITHUB_SHA}} > HedgeModManager/Resources/Version.txt
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
