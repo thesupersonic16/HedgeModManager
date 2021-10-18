@@ -229,7 +229,8 @@ namespace HedgeModManager
                 Games = HedgeApp.GameInstalls,
                 Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods),
                 Profiles = new ObservableCollection<ModProfile>(HedgeApp.ModProfiles),
-                SelectedModProfile = SelectedModProfile
+                SelectedModProfile = SelectedModProfile,
+                DevBuild = !string.IsNullOrEmpty(HedgeApp.RepoCommit)
             };
             if (ModsFind.Visibility == Visibility.Visible)
             {
@@ -529,7 +530,7 @@ namespace HedgeModManager
 
         public async Task CheckForManagerUpdatesAsync()
         {
-            if (!HedgeApp.Config.CheckForUpdates)
+            if (!HedgeApp.Config.CheckForUpdates && !ViewModel.DevBuild)
                 return;
 
             UpdateStatus(Localise("StatusUICheckingForUpdates"));
