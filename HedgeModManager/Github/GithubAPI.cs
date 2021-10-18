@@ -21,6 +21,11 @@ namespace HedgeModManager.Github
             return GetObject<ReleaseInfo>(CombinePathURL(GithubAPIUrl, GithubReposDirectory, username, repo, "releases", "latest"));
         }
 
+        public static Task<WorkflowRunInfo.WorkflowList> GetAllRuns(string username, string repo)
+        {
+            return GetObject<WorkflowRunInfo.WorkflowList>(CombinePathURL(GithubAPIUrl, GithubReposDirectory, username, repo, "actions", "runs"));
+        }
+
         public static async Task<T> GetObject<T>(string url)
         {
             try

@@ -31,6 +31,7 @@ using HedgeModManager.Updates;
 using Newtonsoft.Json;
 using System.Windows.Data;
 using GameBananaAPI;
+using HedgeModManager.Github;
 
 namespace HedgeModManager
 {
@@ -536,67 +537,120 @@ namespace HedgeModManager
             UpdateStatus(Localise("StatusUICheckingForUpdates"));
             try
             {
-                var update = await HedgeApp.CheckForUpdatesAsync();
-
-                if (!update.Item1)
+                if (ViewModel.DevBuild)
                 {
-                    UpdateStatus(Localise("StatusUINoUpdatesFound"));
-                    return;
-                }
+                    var update = await HedgeApp.CheckForUpdatesDevAsync();
 
-                await Dispatcher.InvokeAsync(() =>
-                {
-                    // http://wasteaguid.info/
-                    var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
-
-                    var info = update.Item2;
-                    var dialog = new HedgeMessageBox(info.Name, info.Body, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
-
-                    dialog.AddButton(Localise("CommonUIUpdate"), () =>
+                    if (!update.Item1)
                     {
-                        if (info.Assets.Count > 0)
-                        {
-                            var asset = info.Assets[0];
-                            dialog.Close();
-                            var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({info.TagName})", asset.BrowserDownloadUrl.ToString(), path)
-                            {
-                                DownloadCompleted = () =>
-                                {
-                                    // TODO: literally extracting a ZIP on the UI thread I couldn't make this up if I *tried*
+                        UpdateStatus(Localise("StatusUINoUpdatesFound"));
+                        return;
+                    }
 
-                                    // Extract zip for compatibility for 6.x
-                                    if (asset.ContentType == "application/x-zip-compressed" || asset.ContentType == "application/zip")
-                                    {
-                                        // Stre old path pointing to the zip
-                                        string oldPath = path;
-                                        // Generate new path
-                                        path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
-                                        using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
-                                        {
-                                            var entry = zip.Entries.FirstOrDefault(t => t.Name.Contains(".exe"));
-                                            entry.ExtractToFile(path);
-                                        }
-                                        File.Delete(oldPath);
-                                    }
+                    await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2, update.Item3));
+                }
+                else
+                {
+                    var update = await HedgeApp.CheckForUpdatesAsync();
 
-                                    Process.Start(path, $"-update \"{HedgeApp.AppPath}\" {Process.GetCurrentProcess().Id}");
-                                    Application.Current.Shutdown();
-                                }
-                            };
+                    if (!update.Item1)
+                    {
+                        UpdateStatus(Localise("StatusUINoUpdatesFound"));
+                        return;
+                    }
 
-                            downloader.Start();
-                        }
-                    });
-
-                    dialog.ShowDialog();
-                });
-
+                    await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2));
+                }
                 UpdateStatus(string.Empty);
             }
             catch
             {
                 UpdateStatus(Localise("StatusUIFailedToCheckUpdates"));
             }
+        }
+
+        public void ShowUpdate(ReleaseInfo release)
+        {
+            // http://wasteaguid.info/
+            var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+
+            var dialog = new HedgeMessageBox(release.Name, release.Body, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
+
+            dialog.AddButton(Localise("CommonUIUpdate"), () =>
+            {
+                if (release.Assets.Count > 0)
+                {
+                    var asset = release.Assets[0];
+                    dialog.Close();
+                    var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({release.TagName})", asset.BrowserDownloadUrl.ToString(), path)
+                    {
+                        DownloadCompleted = () =>
+                        {
+                            // TODO: literally extracting a ZIP on the UI thread I couldn't make this up if I *tried*
+
+                            // Extract zip for compatibility for 6.x
+                            if (asset.ContentType == "application/x-zip-compressed" || asset.ContentType == "application/zip")
+                            {
+                                // Store old path pointing to the zip
+                                string oldPath = path;
+                                // Generate new path
+                                path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+                                using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
+                                {
+                                    var entry = zip.Entries.FirstOrDefault(t => t.Name.EndsWith(".exe"));
+                                    entry.ExtractToFile(path);
+                                }
+                                File.Delete(oldPath);
+                            }
+
+                            Process.Start(path, $"-update \"{HedgeApp.AppPath}\" {Process.GetCurrentProcess().Id}");
+                            Application.Current.Shutdown();
+                        }
+                    };
+
+                    downloader.Start();
+                }
+            });
+
+            dialog.ShowDialog();
+        }
+
+        public void ShowUpdate(WorkflowRunInfo workflow, ArtifactInfo artifact)
+        {
+            // http://wasteaguid.info/
+            var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.zip");
+
+            var dialog = new HedgeMessageBox($"{artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})", workflow.HeadCommit.Message, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
+
+            dialog.AddButton(Localise("CommonUIUpdate"), () =>
+            {
+                dialog.Close();
+                var downloader = new DownloadWindow($"Downloading {artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})",
+                    string.Format(HMMResources.URL_HMM_DEV, workflow.CheckSuiteID, artifact.ID), path)
+                {
+                    DownloadCompleted = () =>
+                    {
+                        // TODO: literally extracting a ZIP on the UI thread I couldn't make this up if I *tried*
+                        // Store old path pointing to the zip
+                        string oldPath = path;
+                        // Generate new path
+                        path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+                        using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
+                        {
+                            var entry = zip.Entries.FirstOrDefault(t => t.Name.EndsWith(".exe"));
+                            entry.ExtractToFile(path);
+                        }
+                        File.Delete(oldPath);
+
+                        Process.Start(path, $"-update \"{HedgeApp.AppPath}\" {Process.GetCurrentProcess().Id}");
+                        Application.Current.Shutdown();
+                    }
+                };
+
+                downloader.Start();
+            });
+
+            dialog.ShowDialog();
         }
 
         protected async Task CheckForLoaderUpdateAsync()

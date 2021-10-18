@@ -267,6 +267,15 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://nightly.link/thesupersonic16/HedgeModManager/suites/{0}/artifacts/{1}.
+        /// </summary>
+        internal static string URL_HMM_DEV {
+            get {
+                return ResourceManager.GetString("URL_HMM_DEV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager.
         /// </summary>
         internal static string URL_HMM_GITHUB {
@@ -348,7 +357,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 962813e5383867d401d67b71f3fc0e28df34745d.
         /// </summary>
         internal static string Version {
             get {
