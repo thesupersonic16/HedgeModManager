@@ -36,6 +36,7 @@
             <SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="#CDCDCD"/>
             <Geometry x:Key="StarGeometry">F0 M15,15z M0,0z M12.121,14.994L7.491,11.64 2.845,14.992 4.462,9.322 0,5.723 5.629,5.573 7.521,0 9.383,5.574 15.011,5.726 10.533,9.326z</Geometry>
 
+            <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <local:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter"/>
             <local:InverseEmptyStringToVisibilityConverter x:Key="InverseEmptyStringToVisibilityConverter"/>

@@ -75,6 +75,7 @@ namespace HedgeModManager
         public const string RepoOwner = "thesupersonic16";
         public const string RepoName = "hedgemodmanager";
         public const string RepoBranch = "rewrite";
+        public static string RepoCommit = HMMResources.Version.Trim();
 
         public static byte[] CPKREDIR = new byte[] { 0x63, 0x70, 0x6B, 0x72, 0x65, 0x64, 0x69, 0x72 };
         public static byte[] IMAGEHLP = new byte[] { 0x69, 0x6D, 0x61, 0x67, 0x65, 0x68, 0x6C, 0x70 };
@@ -132,6 +133,12 @@ namespace HedgeModManager
                 Process.Start(args[1]);
                 Environment.Exit(0);
                 return;
+            }
+
+            if (!string.IsNullOrEmpty(RepoCommit))
+            {
+                VersionString += $"-{RepoCommit.Substring(0, 7)}";
+
             }
 
             var application = new HedgeApp();
@@ -742,6 +749,25 @@ namespace HedgeModManager
             bool hasUpdate = version > Version;
 
             return (hasUpdate, info);
+        }
+
+        public static async Task<(bool, WorkflowRunInfo, ArtifactInfo)> CheckForUpdatesDevAsync()
+        {
+            var runs = await GithubAPI.GetAllRuns(RepoOwner, RepoName);
+            var workflow = runs.Runs.FirstOrDefault();
+            if (workflow == null)
+                return (false, null, null);
+
+            bool hasUpdate = RepoCommit != workflow.HeadSHA;
+            ArtifactInfo info = null;
+            if (hasUpdate)
+            {
+                var list = await GithubAPI.GetObject<ArtifactInfo.ArtifactList>(workflow.ArtifactsURL.ToString());
+                info = list.Artifacts.FirstOrDefault(t => t.Expired == false && t.Name.Contains("Release"));
+                // Just in case there is a configuration issue
+                hasUpdate = info != null;
+            }
+            return (hasUpdate, workflow, info);
         }
 
         public static string GetCPKREDIRVersionString()

@@ -130,7 +130,12 @@ namespace HedgeModManager.Properties {
         ///}
         ///
         ///th, td {
-        ///    padding:  [rest of string was truncated]&quot;;.
+        ///    padding: 2px;
+        ///}
+        ///
+        ///th {
+        ///    text-align: left;
+        ///}.
         /// </summary>
         internal static string GBStyleSheet {
             get {
@@ -179,7 +184,8 @@ namespace HedgeModManager.Properties {
         ///        None = 0x00,
         ///
         ///        /// &lt;summary&gt;
-        ///        ///  The left mou [rest of string was truncated]&quot;;.
+        ///        ///  The left mouse button.
+        ///        / [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Keys {
             get {
@@ -204,7 +210,7 @@ namespace HedgeModManager.Properties {
         ///                IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
         ///
         ///        [DllImport(&quot;kernel32.dll&quot;, CharSet = CharSet.Auto)]
-        ///        public static extern  [rest of string was truncated]&quot;;.
+        ///        public static extern IntPtr GetModule [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MemoryService {
             get {
@@ -257,6 +263,15 @@ namespace HedgeModManager.Properties {
         internal static string URL_HE2ML_DL {
             get {
                 return ResourceManager.GetString("URL_HE2ML_DL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://nightly.link/thesupersonic16/HedgeModManager/suites/{0}/artifacts/{1}.
+        /// </summary>
+        internal static string URL_HMM_DEV {
+            get {
+                return ResourceManager.GetString("URL_HMM_DEV", resourceCulture);
             }
         }
         
@@ -338,6 +353,15 @@ namespace HedgeModManager.Properties {
         internal static string URL_TML_CODES {
             get {
                 return ResourceManager.GetString("URL_TML_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 962813e5383867d401d67b71f3fc0e28df34745d.
+        /// </summary>
+        internal static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
     }

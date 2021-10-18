@@ -160,6 +160,9 @@ Do you want run the HMM Auto Installer?</value>
   <data name="URL_HE2ML_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HE2ModLoader.dll</value>
   </data>
+  <data name="URL_HMM_DEV" xml:space="preserve">
+    <value>https://nightly.link/thesupersonic16/HedgeModManager/suites/{0}/artifacts/{1}</value>
+  </data>
   <data name="URL_HMM_GITHUB" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager</value>
   </data>
@@ -186,5 +189,8 @@ Do you want run the HMM Auto Installer?</value>
   </data>
   <data name="URL_TML_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/PuyoPuyoTetris2.hmm</value>
+  </data>
+  <data name="Version" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\version.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>
