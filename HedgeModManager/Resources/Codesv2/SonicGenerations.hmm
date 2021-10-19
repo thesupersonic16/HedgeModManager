@@ -19,6 +19,31 @@ WriteProtected<byte>(0xE7BF04, 0xEB)
 Patch "Never Lose Rings With Super Sonic" by "Muzzarino"
 WriteNop(0xE64E80, 6)
 
+Code "4x3 mode (experimental)" by "Muzzarino"
+byte HUDScreenChangeType = 0
+bool IsWidescreen = true
+WriteProtected<byte>(0xD674D6, 0xD9, 0x1C, 0x24, 0xD9, 0x5C, 0x24, 0x04)
+WriteProtected<uint>(0x16D0B94, 0x50A410)
+var ptr0 = GetPointer(0x1E66B34, 0x4)
+if (ptr0 != null)
+{
+	HUDScreenChangeType = Read<byte>(ptr0 + 0x1B1)
+	ptr0 = GetPointer(ptr0, 0x14)
+	if (ptr0 != null)
+	{
+		ptr0 = GetPointer(ptr0, 0x0)
+		if (ptr0 != null)
+		{
+			IsWidescreen = false
+			Write<byte>(ptr0 + 0x11, Convert.ToByte(IsWidescreen))
+		}
+	}
+}
+WriteProtected<double>(0x1703EA8, IsWidescreen ? 1280.0 : (double)(Read<int>(0x1DFE228)))
+WriteProtected<double>(0x1703EA0, IsWidescreen ? 720.0 : (double)(Read<int>(0x1DFE22C)))
+WriteProtected<float>(0x1A42254, 1.779999971f * (IsWidescreen ? 1f : 0.75f))
+WriteProtected<float>(0x1704474, 2f * (float)Math.Atan(Math.Tan(20f * (float)Math.PI / 360f) / (IsWidescreen ? 1f : 0.75f)))
+
 Patch "Custom Material Blend Modes" by "Muzzarino"
 /* Overrides the game's default blend parameter with user specified blend params.
 To use, hex edit the model's ".material" file with the blend flag set to mark the offset to be changed.
