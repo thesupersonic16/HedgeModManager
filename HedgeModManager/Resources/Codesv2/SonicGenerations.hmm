@@ -19,30 +19,137 @@ WriteProtected<byte>(0xE7BF04, 0xEB)
 Patch "Never Lose Rings With Super Sonic" by "Muzzarino"
 WriteNop(0xE64E80, 6)
 
-Code "4x3 mode (experimental)" by "Muzzarino"
-byte HUDScreenChangeType = 0
-bool IsWidescreen = true
-WriteProtected<byte>(0xD674D6, 0xD9, 0x1C, 0x24, 0xD9, 0x5C, 0x24, 0x04)
-WriteProtected<uint>(0x16D0B94, 0x50A410)
+Code "Scale Resolution by Screen for 4x3 mode" by "Muzzarino"
+bool IsWidescreen = false
 var ptr0 = GetPointer(0x1E66B34, 0x4)
 if (ptr0 != null)
 {
-	HUDScreenChangeType = Read<byte>(ptr0 + 0x1B1)
 	ptr0 = GetPointer(ptr0, 0x14)
 	if (ptr0 != null)
 	{
 		ptr0 = GetPointer(ptr0, 0x0)
 		if (ptr0 != null)
 		{
-			IsWidescreen = false
-			Write<byte>(ptr0 + 0x11, Convert.ToByte(IsWidescreen))
+			Read<byte>(ptr0 + 0x11)
 		}
 	}
 }
+
 WriteProtected<double>(0x1703EA8, IsWidescreen ? 1280.0 : (double)(Read<int>(0x1DFE228)))
 WriteProtected<double>(0x1703EA0, IsWidescreen ? 720.0 : (double)(Read<int>(0x1DFE22C)))
+
+Patch "4x3 mode (experimental)" by "Muzzarino"
+bool IsWidescreen = false
+WriteProtected<byte>(0xD674D6, 0xD9, 0x1C, 0x24, 0xD9, 0x5C, 0x24, 0x04)
+WriteProtected<int>(0x16D0B94, 0x50A410)
+WriteProtected<byte>(0xE7A9A5, Convert.ToByte(IsWidescreen))
 WriteProtected<float>(0x1A42254, 1.779999971f * (IsWidescreen ? 1f : 0.75f))
 WriteProtected<float>(0x1704474, 2f * (float)Math.Atan(Math.Tan(20f * (float)Math.PI / 360f) / (IsWidescreen ? 1f : 0.75f)))
+
+string HUD43 = @"xor eax,eax
+  movss xmm0,[esp]
+  addss xmm0,xmm0
+  addss xmm0,[0x1B23F00]
+  cmp eax,[esp]
+  jl zero
+  divss xmm0,xmm1
+  divss xmm0,xmm4
+  movss xmm1,[0x1B23F00]
+  movss xmm2,[0x1B23F04]
+  movss xmm3,xmm1
+  movss xmm4,xmm2
+  mulss xmm1,xmm0
+  mulss xmm2,xmm0
+  movss [0x1B23F00],xmm1
+  movss [0x1B23F04],xmm2
+  movss [0x1B23F1C],xmm1
+  movss [0x1B23F20],xmm2
+  divss xmm0,xmm0
+  divss xmm0,xmm1
+  movss [0x1B23F08],xmm0
+  movss [0x1B23F24],xmm0
+  divss xmm0,xmm0
+  divss xmm0,xmm2
+  movss [0x1B23F0C],xmm0
+  movss [0x1B23F28],xmm0
+  subss xmm1,xmm3
+  subss xmm2,xmm4
+  cvtss2sd xmm1,xmm1
+  cvtss2sd xmm2,xmm2
+  mulsd xmm1,[0x17038F8]
+  mulsd xmm2,[0x1703968]
+  cvtsd2ss xmm1,xmm1
+  cvtsd2ss xmm2,xmm2
+  movss [esp+4],xmm2
+  subss xmm1,[esp]
+  movss [esp],xmm1
+  zero:
+  mov eax,0x6754D0
+  call eax"
+  
+string HUD43Check = @"mov ecx,[esi+0x4]
+  mov ecx,[ecx+0x14]
+  mov cl,[ecx+0x11]
+  test cl,cl
+  jne zero
+  mov eax,[0x1DFE228]
+  cvtsi2ss xmm2,eax
+  movss xmm0,xmm2
+  subss xmm0,[0x1B23F00]
+  cvtss2sd xmm0,xmm0
+  mulsd xmm0,[0x17038F8]
+  cvtsd2ss xmm0,xmm0
+  comiss xmm0,[esp]
+  movss [esp],xmm0
+  jl zero
+  movss xmm0,xmm2
+  divss xmm0,xmm1
+  divss xmm0,xmm4
+  movss xmm1,[0x1B23F00]
+  movss xmm2,[0x1B23F04]
+  movss xmm3,xmm1
+  movss xmm4,xmm2
+  mulss xmm1,xmm0
+  mulss xmm2,xmm0
+  movss [0x1B23F00],xmm1
+  movss [0x1B23F04],xmm2
+  movss [0x1B23F1C],xmm1
+  movss [0x1B23F20],xmm2
+  divss xmm0,xmm0
+  divss xmm0,xmm1
+  movss [0x1B23F08],xmm0
+  movss [0x1B23F24],xmm0
+  divss xmm0,xmm0
+  divss xmm0,xmm2
+  movss [0x1B23F0C],xmm0
+  movss [0x1B23F28],xmm0
+  subss xmm1,xmm3
+  subss xmm2,xmm4
+  cvtss2sd xmm1,xmm1
+  cvtss2sd xmm2,xmm2
+  mulsd xmm1,[0x17038F8]
+  mulsd xmm2,[0x1703968]
+  cvtsd2ss xmm1,xmm1
+  cvtsd2ss xmm2,xmm2
+  movss [esp+4],xmm2
+  subss xmm1,[esp]
+  movss [esp],xmm1
+  zero:
+  mov eax,0x6754D0
+  call eax"
+  
+string Constrain169HUD = @"fld dword ptr [esp+0x4]
+  fmul qword ptr [0x1703B30]
+  fdiv qword ptr [0x1703B28]
+  fst dword ptr [esp]
+  fistp dword ptr [esp+0xC]
+  mov eax,0x675440
+  call eax"
+
+WriteAsmHook(HUD43, 0xD67459, HookBehavior.Replace)
+WriteAsmHook(HUD43, 0xD67507, HookBehavior.Replace)
+WriteAsmHook(Constrain169HUD, 0xD675BC, HookBehavior.Replace)
+WriteAsmHook(HUD43Check, 0xD675FA, HookBehavior.Replace)
 
 Patch "Custom Material Blend Modes" by "Muzzarino"
 /* Overrides the game's default blend parameter with user specified blend params.
