@@ -547,7 +547,8 @@ namespace HedgeModManager
                         return;
                     }
 
-                    await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2, update.Item3));
+                    string changelog = await HedgeApp.GetGitChangeLog(update.Item2.HeadSHA);
+                    await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2, update.Item3, changelog));
                 }
                 else
                 {
@@ -615,12 +616,12 @@ namespace HedgeModManager
             dialog.ShowDialog();
         }
 
-        public void ShowUpdate(WorkflowRunInfo workflow, ArtifactInfo artifact)
+        public void ShowUpdate(WorkflowRunInfo workflow, ArtifactInfo artifact, string changelog)
         {
             // http://wasteaguid.info/
             var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.zip");
 
-            var dialog = new HedgeMessageBox($"{artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})", workflow.HeadCommit.Message, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
+            var dialog = new HedgeMessageBox($"{artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})", changelog, HorizontalAlignment.Right, TextAlignment.Left, InputType.MarkDown);
 
             dialog.AddButton(Localise("CommonUIUpdate"), () =>
             {

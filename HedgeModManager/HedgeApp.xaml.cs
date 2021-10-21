@@ -770,6 +770,21 @@ namespace HedgeModManager
             return (hasUpdate, workflow, info);
         }
 
+        public static async Task<string> GetGitChangeLog(string hash)
+        {
+            var info = await GithubAPI.GetAllCommits(RepoOwner, RepoName, hash);
+            string text = "";
+            int limit = info.ToList().FindIndex(t => t.SHA == RepoCommit);
+            for (int i = 0; i < limit; ++i)
+            {
+                string message = info[i].Commit.Message.Replace("\r", "");
+                if (message.Contains("\n"))
+                    message = message.Substring(0, message.IndexOf("\n", StringComparison.Ordinal));
+                text += $" - {info[i].SHA.Substring(0, 7)} - {message}\n";
+            }
+            return text;
+        }
+
         public static string GetCPKREDIRVersionString()
         {
             var temp = Path.Combine(StartDirectory, "cpkredir.dll");

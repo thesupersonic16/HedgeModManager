@@ -26,6 +26,13 @@ namespace HedgeModManager.Github
             return GetObject<WorkflowRunInfo.WorkflowList>(CombinePathURL(GithubAPIUrl, GithubReposDirectory, username, repo, "actions", "runs"));
         }
 
+        public static Task<GHCommitInfo[]> GetAllCommits(string username, string repo, string hash = null)
+        {
+            if (hash == null)
+                return GetObject<GHCommitInfo[]>(CombinePathURL(GithubAPIUrl, GithubReposDirectory, username, repo, "actions", "runs"));
+            return GetObject<GHCommitInfo[]>(CombinePathURL(GithubAPIUrl, GithubReposDirectory, username, repo, "commits") + "?sha=" + hash);
+        }
+
         public static async Task<T> GetObject<T>(string url)
         {
             try
