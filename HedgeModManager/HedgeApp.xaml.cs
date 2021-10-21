@@ -31,6 +31,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Windows.Interop;
+using System.Windows.Markup;
+using System.Windows.Resources;
 using System.Xml.Serialization;
 using HedgeModManager.Languages;
 using HedgeModManager.Misc;
@@ -162,6 +164,7 @@ namespace HedgeModManager
             Steam.Init();
             InstallGBHandlers();
             SetupLanguages();
+            LoadLanguageFolder();
             SetupThemes();
             CurrentTheme = InstalledThemes.FirstOrDefault(t => t.FileName == RegistryConfig.UITheme);
             LoadTheme(CurrentTheme?.FileName ?? InstalledThemes.First().FileName);
@@ -397,6 +400,27 @@ namespace HedgeModManager
             return null;
         }
 
+        public static ResourceDictionary GetLanguageResource(string culture)
+        {
+            var entry = GetClosestCulture(culture);
+            if (entry == null)
+                return null;
+
+            if (entry.Local)
+            {
+                ResourceDictionary langDict;
+                using var stream = File.OpenRead($"Languages/{entry.FileName}.xaml");
+                langDict = XamlReader.Load(stream) as ResourceDictionary;
+                return langDict;
+            }
+            else
+            {
+                var langDict = new ResourceDictionary();
+                langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
+                return langDict;
+            }
+        }
+
         public static void CountLanguages()
         {
             // Just to make sure this somehow doesn't get shipped accidentally
@@ -408,8 +432,7 @@ namespace HedgeModManager
 
             foreach (var entry in SupportedCultures)
             {
-                var langDict = new ResourceDictionary();
-                langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
+                var langDict = GetLanguageResource(entry.FileName);
                 entry.Lines = langDict.Count;
 
 #if THROW_MISSING_LANG && DEBUG
@@ -436,8 +459,7 @@ namespace HedgeModManager
 
         public static void LoadLanguage(string culture)
         {
-            var langDict = new ResourceDictionary();
-            langDict.Source = new Uri($"Languages/{culture}.xaml", UriKind.Relative);
+            var langDict = GetLanguageResource(culture);
             while (Current.Resources.MergedDictionaries.Count > 5)
                 Current.Resources.MergedDictionaries.RemoveAt(5);
             // No need to load the fallback language on top
@@ -446,16 +468,40 @@ namespace HedgeModManager
             Current.Resources.MergedDictionaries.Add(langDict);
         }
 
+        public static void LoadLanguageFolder()
+        {
+            if (Directory.Exists("Languages"))
+            {
+                foreach (string path in Directory.EnumerateFiles("Languages"))
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(path);
+                    if (SupportedCultures.Any(t => t.FileName == fileName))
+                    {
+                        SupportedCultures.FirstOrDefault(t => t.FileName == fileName).Local = true;
+                    }
+                    else
+                    {
+                        SupportedCultures.Add(new LangEntry()
+                        {
+                            FileName = fileName,
+                            Name = fileName,
+                            Local = true
+                        });
+                    }
+                }
+            }
+        }
+
         public static LangEntry GetClosestCulture(string culture)
         {
             // Check if the culture exists
             var cultureEntry = SupportedCultures.FirstOrDefault(t => t.FileName == culture);
             if (cultureEntry != null)
                 return cultureEntry;
-            // Find anouther culture based off language
+            // Find another culture based off language
             string language = culture.Split('-')[0];
             cultureEntry = SupportedCultures.FirstOrDefault(t => t.FileName.Split('-')[0] == language);
-            cultureEntry = cultureEntry ?? SupportedCultures.First();
+            cultureEntry ??= SupportedCultures.First();
             return cultureEntry;
         }
 
@@ -480,8 +526,7 @@ namespace HedgeModManager
             var builder = new StringBuilder();
             builder.AppendLine();
 
-            var langDict = new ResourceDictionary();
-            langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
+            var langDict = GetLanguageResource(entry.FileName);
 
             builder.AppendLine("Missing Entries:");
             foreach (DictionaryEntry baseEntry in baseDict)

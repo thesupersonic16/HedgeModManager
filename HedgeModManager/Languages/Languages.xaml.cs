@@ -16,6 +16,7 @@ namespace HedgeModManager.Languages
         public string FileName { get; set; }
         public string Name { get; set; }
         public int Lines { get; set; }
+        public bool Local { get; set; } = false;
 
         public override string ToString()
         {
