@@ -801,30 +801,35 @@ WriteProtected<byte>(0x15CE9B0, 0x00);
 Patch "Disable Fast Fall Animation" by "Skyth"
 WriteProtected<byte>(0x111913A, 0xEB);
 
-Patch "Force S-Rank Animation" by "brianuuu"
-WriteNop(0xDEA672, 0x2)
-WriteNop(0xE27BC2, 0x2)
-WriteNop(0xE693A6, 0x2)
+Patch "Force S-Rank" by "brianuuu"
+string code = @"mov dword ptr [ebx+0x170],4
+mov dword ptr [ebx+0x174],4
+movq xmm0,qword ptr [eax+0x10]"
+WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
-Patch "Force A-Rank Animation" by "brianuuu"
-WriteProtected<byte>(0xDEA672, 0xEB, 0x16)
-WriteProtected<byte>(0xE27BC2, 0xEB, 0x16)
-WriteProtected<byte>(0xE693A6, 0xEB, 0xC)
+Patch "Force A-Rank" by "brianuuu"
+string code = @"mov dword ptr [ebx+0x170],3
+mov dword ptr [ebx+0x174],3
+movq xmm0,qword ptr [eax+0x10]"
+WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
-Patch "Force B-Rank Animation" by "brianuuu"
-WriteProtected<byte>(0xDEA672, 0xEB, 0x2C)
-WriteProtected<byte>(0xE27BC2, 0xEB, 0x2C)
-WriteProtected<byte>(0xE693A6, 0xEB, 0x18)
+Patch "Force B-Rank" by "brianuuu"
+string code = @"mov dword ptr [ebx+0x170],2
+mov dword ptr [ebx+0x174],2
+movq xmm0,qword ptr [eax+0x10]"
+WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
-Patch "Force C-Rank Animation" by "brianuuu"
-WriteProtected<byte>(0xDEA672, 0xEB, 0x42)
-WriteProtected<byte>(0xE27BC2, 0xEB, 0x42)
-WriteProtected<byte>(0xE693A6, 0xEB, 0x24)
+Patch "Force C-Rank" by "brianuuu"
+string code = @"mov dword ptr [ebx+0x170],1
+mov dword ptr [ebx+0x174],1
+movq xmm0,qword ptr [eax+0x10]"
+WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
-Patch "Force D-Rank Animation" by "brianuuu"
-WriteProtected<byte>(0xDEA672, 0xEB, 0x53)
-WriteProtected<byte>(0xE27BC2, 0xEB, 0x53)
-WriteProtected<byte>(0xE693A6, 0xEB, 0x2B)
+Patch "Force D-Rank" by "brianuuu"
+string code = @"mov dword ptr [ebx+0x170],0
+mov dword ptr [ebx+0x174],0
+movq xmm0,qword ptr [eax+0x10]"
+WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
 Code "3D Spindash Doesn't Crash" by "Chimera"
 WriteProtected<uint>(0x16D8CD4, 0x11D6140) /* Replaces the vftable entry for classic's 3D spindash update with his slide. */
