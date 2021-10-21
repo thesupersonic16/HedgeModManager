@@ -95,8 +95,8 @@
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">使用一個或多個 mod時需要啟用「重新保存文件定向」功能才能正常運作。 要啟用此功能嗎？＆＃x0a;（你要知道自己在做什麼才點擊否。）</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">無法解決 mod依賴</system:String>
     <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >以下 mod缺少依賴項：</system:String>
-    <system:String x:Key="MainUIMissingDependsResolve">修正 GameBanana mods</system:String>
-    <system:String x:Key="MainUIResolvable" xml:space="preserve">通過單擊 「解決 GB Mods」，可以從 GameBanana &#x0a; 自動修正一個或多個依賴項。</system:String>
+    <system:String x:Key="MainUIMissingDependsResolve">從 GameBanana 去解決 mods 問題</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">通過單擊 「從 GameBanana 去解決 mods 問題」，可以從 GameBanana &#x0a; 自動修正一個或多個依賴項。</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >請選擇至少一項！</system:String>
