@@ -32,6 +32,7 @@ using Newtonsoft.Json;
 using System.Windows.Data;
 using GameBananaAPI;
 using HedgeModManager.Github;
+using HedgeModManager.Misc;
 
 namespace HedgeModManager
 {
@@ -53,7 +54,7 @@ namespace HedgeModManager
         public MainWindowViewModel ViewModel = new MainWindowViewModel();
         public bool CheckingForUpdates = false;
         public ModProfile SelectedModProfile = null;
-        public CancellationTokenSource ModUpdateCheckCancelSource { get; set; }
+        public CancellationTokenSource ContextCancelSource { get; set; }
 
         protected List<Task> Tasks { get; set; } = new List<Task>(4);
         protected Timer StatusTimer;
@@ -292,8 +293,56 @@ namespace HedgeModManager
 
         private void UI_CodesTab_Click(object sender, RoutedEventArgs e)
         {
+            if (CodesDatabase == null || CodesDatabase.Codes.Count == 0)
+            {
+                CodesStatusLbl.Visibility = Visibility.Visible;
+                return;
+            }
+
             // Display update alert.
             UpdateStatus(Localise(CodesOutdated ? "StatusUICodeUpdatesAvailable" : "StatusUINoCodeUpdatesFound"));
+        }
+
+        private async void OnFetchStatusVisibilityChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (!CodesTab.IsSelected)
+                return;
+
+            if (CodesStatusLbl.Visibility != Visibility.Visible)
+                return;
+
+            ContextCancelSource ??= new CancellationTokenSource();
+            await RunTask(FetchCodesAsync(ContextCancelSource.Token));
+        }
+
+        public async Task FetchCodesAsync(CancellationToken token = default)
+        {
+            bool isFetching = false;
+            Dispatcher.Invoke(() => isFetching = !Button_DownloadCodes.IsEnabled);
+            if (isFetching)
+                return;
+
+            Dispatcher.Invoke(() => Button_DownloadCodes.IsEnabled = false);
+
+            try
+            {
+                await Singleton.GetInstance<HttpClient>().DownloadFileAsync(HedgeApp.CurrentGame.CodesURL,
+                    CodeProvider.CodesTextPath, null, token);
+
+                Dispatcher.Invoke(Refresh);
+            }
+            catch (Exception)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    CodesStatusLbl.Visibility = Visibility.Hidden;
+                    Button_DownloadCodes.IsEnabled = true;
+                });
+            }
+            finally
+            {
+                Dispatcher.Invoke(() => Button_DownloadCodes.IsEnabled = true);
+            }
         }
 
         public async Task CheckForCodeUpdates()
@@ -518,10 +567,10 @@ namespace HedgeModManager
 
             if (HedgeApp.Config.CheckForModUpdates)
             {
-                ModUpdateCheckCancelSource = new CancellationTokenSource();
+                ContextCancelSource = new CancellationTokenSource();
                 try
                 {
-                    await CheckAllModsUpdatesAsync(ModUpdateCheckCancelSource.Token);
+                    await CheckAllModsUpdatesAsync(ContextCancelSource.Token);
                 }
                 catch (OperationCanceledException) { }
             }
@@ -974,10 +1023,10 @@ namespace HedgeModManager
             if (CheckingForUpdates)
                 return;
 
-            ModUpdateCheckCancelSource = new CancellationTokenSource();
+            ContextCancelSource = new CancellationTokenSource();
             try
             {
-                await CheckAllModsUpdatesAsync(ModUpdateCheckCancelSource.Token);
+                await CheckAllModsUpdatesAsync(ContextCancelSource.Token);
             }
             catch (OperationCanceledException) { }
         }
@@ -1036,12 +1085,12 @@ namespace HedgeModManager
 
         private async void UI_Update_Mod(object sender, RoutedEventArgs e)
         {
-            ModUpdateCheckCancelSource = new CancellationTokenSource();
+            ContextCancelSource = new CancellationTokenSource();
             try
             {
                 //new ModUpdateGeneratorModel(ViewModel.SelectedMod).ShowDialog();
 
-                if (await CheckForModUpdatesAsync(ViewModel.SelectedMod, ModUpdateCheckCancelSource.Token)
+                if (await CheckForModUpdatesAsync(ViewModel.SelectedMod, ContextCancelSource.Token)
                     .ConfigureAwait(false))
                 {
                     Dispatcher.Invoke(RefreshMods);
@@ -1158,7 +1207,9 @@ namespace HedgeModManager
         {
             if (ComboBox_GameStatus.SelectedItem != null && ComboBox_GameStatus.SelectedItem != HedgeApp.CurrentGameInstall)
             {
-                ModUpdateCheckCancelSource?.Cancel();
+                ContextCancelSource?.Cancel();
+                ContextCancelSource = new CancellationTokenSource();
+
                 CheckingForUpdates = false;
 
                 HedgeApp.SelectGameInstall((GameInstall)ComboBox_GameStatus.SelectedItem);
@@ -1490,7 +1541,7 @@ namespace HedgeModManager
 
         private void MainWindow_OnUnloaded(object sender, RoutedEventArgs e)
         {
-            ModUpdateCheckCancelSource?.Cancel();
+            ContextCancelSource?.Cancel();
             CheckingForUpdates = false;
         }
 
@@ -1525,6 +1576,5 @@ namespace HedgeModManager
             public void Write(string str) => Window.UpdateStatus(str);
             public void WriteLine(string str) => Window.UpdateStatus(str);
         }
-
     }
 }

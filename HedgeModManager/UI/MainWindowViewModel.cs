@@ -29,9 +29,11 @@ namespace HedgeModManager.UI
         public bool HiddenMode { get; set; }
         public bool DevBuild { get; set; }
 
+        public bool HasNoMods => Mods.Count == 0;
+        public bool HasNoCodes => ModsDB.CodesDatabase.Codes.Count == 0;
+
         public event PropertyChangedEventHandler PropertyChanged;
-
-
+        
         public void DragOver(IDropInfo dropInfo)
         {
             dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;

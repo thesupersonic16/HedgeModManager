@@ -342,7 +342,7 @@ namespace HedgeModManager
             while (Restart);
         }
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             // GB Integration shows UI, and therefore should be done *after* Application.Run
             if (e.Args.Length > 1 && e.Args[0].ToLowerInvariant() == "-gb")

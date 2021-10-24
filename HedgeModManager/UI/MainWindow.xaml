@@ -73,6 +73,10 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+
+                            <TextBlock Text="{DynamicResource ModsUINoMods}" Visibility="{Binding HasNoMods, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
+
                             <Border x:Name="ModsFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,5" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
                                     <Label Content="{DynamicResource ModsUISearch}" Margin="0,-3,0,0"/>
@@ -87,29 +91,36 @@
                                 <Button x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}" Click="UI_Download_Codes" Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30" Grid.Row="1" />
                             </GroupBox>
                             <Grid>
-                                <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}"
-                                      Margin="10,5,10,45" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
-                                    <ListView.View>
-                                        <GridView AllowsColumnReorder="True">
-                                            <GridViewColumn Header="{DynamicResource CodesUIName}" Width="370">
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <CheckBox IsChecked="{Binding Enabled}" Margin="0,0,4,0"/>
-                                                            <TextBlock Text="{Binding Name}"/>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
-                                            <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="152"/>
-                                        </GridView>
-                                    </ListView.View>
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
-                                            <Setter Property="Visibility" Value="{Binding Path=Visible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                </ListView>
+                                <Grid Margin="10,5,10,45" >
+                                    <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}"
+                                          dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
+                                        <ListView.View>
+                                            <GridView AllowsColumnReorder="True">
+                                                <GridViewColumn Header="{DynamicResource CodesUIName}" Width="370">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <CheckBox IsChecked="{Binding Enabled}" Margin="0,0,4,0"/>
+                                                                <TextBlock Text="{Binding Name}"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="152"/>
+                                            </GridView>
+                                        </ListView.View>
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                                <Setter Property="Visibility" Value="{Binding Path=Visible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                    </ListView>
+
+                                    <StackPanel Visibility="{Binding HasNoCodes, Converter={StaticResource BoolToVisibilityConverter}}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock x:Name="CodesStatusLbl" Text="{DynamicResource CodesUIFetching}" IsVisibleChanged="OnFetchStatusVisibilityChanged"/>
+                                    </StackPanel>
+                                </Grid>
                                 <Border x:Name="CodesFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,45" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
                                         <Label Content="{DynamicResource CodesUISearch}" Margin="0,-3,0,0"/>
