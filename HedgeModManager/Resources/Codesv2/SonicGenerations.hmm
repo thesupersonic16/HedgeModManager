@@ -379,14 +379,14 @@ Write<float>(0x19FD2C, 29.97f)
 Code "59.94 FPS Cap" by "PTKickass"
 Write<float>(0x19FD2C, 59.94f)
 
-Code "Locked 30 FPS (experimental)" by "Skyth & M&M"
+Code "Locked 30 FPS (experimental)" by "Skyth and M&M"
 Write<float>(0x19FD2C, 30.0f)
 WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 1.0f / 30.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 30.0f)
 WriteProtected<float>(0x13E08A0, 1.0f / 30.0f) /* Cutscene Playback */
 
-Code "Locked 60 FPS" by "Skyth & M&M"
+Code "Locked 60 FPS" by "Skyth and M&M"
 Write<float>(0x19FD2C, 60.0f)
 WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 1.0f / 60.0f)
@@ -395,31 +395,31 @@ WriteProtected<float>(0x14AF8CC, 1.0f / 60.0f)
 Code "60 FPS Cutscenes (experimental, requires Locked 60 FPS)"
 WriteProtected<float>(0x13E08A0, 1.0f / 60.0f)
 
-Code "Locked 72 FPS (experimental)" by "Skyth & M&M"
+Code "Locked 72 FPS (experimental)" by "Skyth and M&M"
 Write<float>(0x19FD2C, 72.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 72.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 72.0f)
 
-Code "Locked 75 FPS (experimental)" by "Skyth & M&M"
+Code "Locked 75 FPS (experimental)" by "Skyth and M&M"
 Write<float>(0x19FD2C, 75.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 75.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 75.0f)
 
-Code "Locked 120 FPS (experimental)" by "Skyth & M&M"
+Code "Locked 120 FPS (experimental)" by "Skyth and M&M"
 Write<float>(0x19FD2C, 120.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 120.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 120.0f)
 
-Code "Locked 144 FPS (experimental)" by "Skyth & M&M"
+Code "Locked 144 FPS (experimental)" by "Skyth and M&M"
 Write<float>(0x19FD2C, 144.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 144.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 144.0f)
 
-Code "Locked 165 FPS (experimental)" by "Skyth & M&M"
+Code "Locked 165 FPS (experimental)" by "Skyth and M&M"
 Write<float>(0x19FD2C, 165.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 165.0f)
@@ -859,11 +859,11 @@ WriteProtected<byte>(0xCFD47F, 0xE9, 0x95, 0x00, 0x00, 0x00)
 WriteProtected<byte>(0xCFD484, 0xC3)
 WriteNop(0xCFD485, 3)
 
-Patch "Use Regular Shaders in 3D Mode" by "M&M"
-WriteProtected<byte>(0x11C965F, 0x72)
-WriteProtected<byte>(0x11C966B, 0x72)
-WriteProtected<byte>(0x11C96CB, 0x72)
-WriteProtected<byte>(0x11C96DB, 0x72)
+Patch "Use Regular Shaders in 3D Mode" by "M&M and Skyth"
+WriteProtected<byte>(0x15CA65F, 0x72)
+WriteProtected<byte>(0x15CA66B, 0x72)
+WriteProtected<byte>(0x15CA6CB, 0x72)
+WriteProtected<byte>(0x15CA6DB, 0x72)
 
 Patch "Disable Fast Music" by "Hyper"
 WriteNop(0xE2E30F, 2);
