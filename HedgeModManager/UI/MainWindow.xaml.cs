@@ -634,28 +634,7 @@ namespace HedgeModManager
                     dialog.Close();
                     var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({release.TagName})", asset.BrowserDownloadUrl.ToString(), path)
                     {
-                        DownloadCompleted = () =>
-                        {
-                            // TODO: literally extracting a ZIP on the UI thread I couldn't make this up if I *tried*
-
-                            // Extract zip for compatibility for 6.x
-                            if (asset.ContentType == "application/x-zip-compressed" || asset.ContentType == "application/zip")
-                            {
-                                // Store old path pointing to the zip
-                                string oldPath = path;
-                                // Generate new path
-                                path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
-                                using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
-                                {
-                                    var entry = zip.Entries.FirstOrDefault(t => t.Name.EndsWith(".exe"));
-                                    entry.ExtractToFile(path);
-                                }
-                                File.Delete(oldPath);
-                            }
-
-                            Process.Start(path, $"-update \"{HedgeApp.AppPath}\" {Process.GetCurrentProcess().Id}");
-                            Application.Current.Shutdown();
-                        }
+                        DownloadCompleted = () => PerformUpdate(path, asset.ContentType)
                     };
 
                     downloader.Start();
@@ -678,29 +657,36 @@ namespace HedgeModManager
                 var downloader = new DownloadWindow($"Downloading {artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})",
                     string.Format(HMMResources.URL_HMM_DEV, workflow.CheckSuiteID, artifact.ID), path)
                 {
-                    DownloadCompleted = () =>
-                    {
-                        // TODO: literally extracting a ZIP on the UI thread I couldn't make this up if I *tried*
-                        // Store old path pointing to the zip
-                        string oldPath = path;
-                        // Generate new path
-                        path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
-                        using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
-                        {
-                            var entry = zip.Entries.FirstOrDefault(t => t.Name.EndsWith(".exe"));
-                            entry.ExtractToFile(path);
-                        }
-                        File.Delete(oldPath);
-
-                        Process.Start(path, $"-update \"{HedgeApp.AppPath}\" {Process.GetCurrentProcess().Id}");
-                        Application.Current.Shutdown();
-                    }
+                    DownloadCompleted = () => PerformUpdate(path, "application/x-zip-compressed")
                 };
 
                 downloader.Start();
             });
 
             dialog.ShowDialog();
+        }
+
+        public void PerformUpdate(string path, string contentType)
+        {
+            // TODO: literally extracting a ZIP on the UI thread I couldn't make this up if I *tried*
+
+            // Extract zip for compatibility for 6.x
+            if (contentType == "application/x-zip-compressed" || contentType == "application/zip")
+            {
+                // Store old path pointing to the zip
+                string oldPath = path;
+                // Generate new path
+                path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+                using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
+                {
+                    var entry = zip.Entries.FirstOrDefault(t => t.Name.EndsWith(".exe"));
+                    entry.ExtractToFile(path);
+                }
+                File.Delete(oldPath);
+            }
+
+            Process.Start(path, $"-update \"{HedgeApp.AppPath}\" {Process.GetCurrentProcess().Id}");
+            Application.Current.Shutdown();
         }
 
         protected async Task CheckForLoaderUpdateAsync()
@@ -1567,6 +1553,61 @@ namespace HedgeModManager
             // Close if focus is lost with no text
             if (TextBox_ModsSearch.Text.Length == 0)
                 ModsFind.Visibility = Visibility.Collapsed;
+        }
+
+        private void ComboBox_Channel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string currentChannel = !string.IsNullOrEmpty(HedgeApp.RepoCommit) ? "Development" : "Release";
+            
+            if (ComboBox_Channel.SelectedItem == null)
+                return;
+
+            string message = ViewModel.DevBuild ? Localise("SettingsUIChangeChannelRel") : Localise("SettingsUIChangeChannelDev");
+            if (currentChannel != ComboBox_Channel.SelectedItem as string)
+            {
+                var box = new HedgeMessageBox("Changing Release Channels", message);
+                Button button = null;
+                button = box.AddButton(Localise("CommonUIYes"), async () =>
+                {
+                    button.IsEnabled = false;
+                    if (ViewModel.DevBuild)
+                    {
+                        var update = await HedgeApp.CheckForUpdatesAsync();
+                        box.Close();
+                        var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+                        var release = update.Item2;
+                        if (release.Assets.Count > 0)
+                        {
+                            var asset = release.Assets[0];
+                            var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({release.TagName})", asset.BrowserDownloadUrl.ToString(), path)
+                            {
+                                DownloadCompleted = () => PerformUpdate(path, asset.ContentType)
+                            };
+                            downloader.Start();
+                        }
+                    }
+                    else
+                    {
+                        var update = await HedgeApp.CheckForUpdatesDevAsync();
+                        box.Close();
+                        var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.zip");
+                        var artifact = update.Item3;
+                        var workflow = update.Item2;
+                        var downloader = new DownloadWindow($"Downloading {artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})",
+                            string.Format(HMMResources.URL_HMM_DEV, workflow.CheckSuiteID, artifact.ID), path)
+                        {
+                            DownloadCompleted = () => PerformUpdate(path, "application/x-zip-compressed")
+                        };
+                        downloader.Start();
+                    }
+                });
+                box.AddButton(Localise("CommonUINo"), () =>
+                {
+                    ComboBox_Channel.SelectedItem = currentChannel;
+                    box.Close();
+                });
+                box.ShowDialog();
+            }
         }
 
         class StatusLogger : ILogger

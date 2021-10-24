@@ -88,6 +88,9 @@ namespace HedgeModManager
         public static LangEntry CurrentCulture { get; set; }
         public static ThemeEntry CurrentTheme { get; set; }
 
+        public static List<string> UpdateChannels { get; set; } = new() { "Release", "Development" };
+        public static string CurrentChannel { get; set; } = string.IsNullOrEmpty(RepoCommit) ? "Release" : "Development";
+
         [STAThread]
         public static void Main(string[] args)
         {

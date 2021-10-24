@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
-        MinHeight="600" MinWidth="560" Height="600" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
+        MinHeight="620" MinWidth="560" Height="620" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:ModUpdateStatusConverter x:Key="ModUpdateStatusConverter"/>
@@ -137,7 +137,7 @@
                                 <RowDefinition Height="230"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <GroupBox Header="{DynamicResource SettingsUIGMLHeader}" HorizontalAlignment="Stretch" Margin="0,0,0,10" VerticalAlignment="Stretch">
+                            <GroupBox Header="{DynamicResource SettingsUIGMLHeader}" HorizontalAlignment="Stretch" Margin="0,0,0.333,30" VerticalAlignment="Stretch">
                                 <Grid>
                                     <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod Loader"                 Click="UI_OtherLoader_Click" Margin="10,7,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193" IsEnabled="False"/>
                                     <Button   x:Name="Button_OpenMods"      Content="{DynamicResource SettingsUIOpenMods}" Click="UI_OpenMods_Click"    Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193"/>
@@ -160,17 +160,19 @@
                                 </Grid>
                             </GroupBox>
 
-                            <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,5" Grid.Row="1">
+                            <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,209,0.333,5" Grid.RowSpan="2">
                                 <Grid>
                                     <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"   IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="9,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"   IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="9,28,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}" IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="9,48,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"     IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="9,68,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <Button   Content="{DynamicResource SettingsUIAboutHMM}"                                                          Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="61" Width="195" Click="UI_About_Click"/>
-                                    <Label    Content="{DynamicResource SettingsUITheme}"                                                           Margin="4,0,0,45" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
-                                    <ComboBox x:Name="ComboBox_Themes" ItemsSource="{Binding InstalledThemes, Source={x:Static Application.Current}}" SelectedItem="{Binding CurrentTheme, Source={x:Static Application.Current}}" Margin="71,0,0,44" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="236" Height="27" SelectionChanged="ComboBox_Themes_Changed" Loaded="ComboBox_Themes_Loaded" />
-                                    <Label    Content="{DynamicResource SettingsUILanguage}"                                                           Margin="4,0,0,12" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
-                                    <ComboBox x:Name="ComboBox_Languages" ItemsSource="{Binding SupportedCultures, Source={x:Static Application.Current}}" SelectedItem="{Binding CurrentCulture, Source={x:Static Application.Current}}" Margin="71,0,0,11" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="236" Height="27" SelectionChanged="ComboBox_Languages_Changed" Loaded="ComboBox_Languages_Loaded" />
+                                    <Label    Content="{DynamicResource SettingsUIReleaseChannel}"                                                           Margin="4,0,0,78" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
+                                    <ComboBox x:Name="ComboBox_Channel" ItemsSource="{Binding UpdateChannels, Source={x:Static Application.Current}}" SelectedItem="{Binding CurrentChannel, Source={x:Static Application.Current}}" Margin="107,0,0,77" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="200" Height="27" SelectionChanged="ComboBox_Channel_SelectionChanged" />
+                                    <Label    Content="{DynamicResource SettingsUILanguage}"                                                           Margin="4,0,0,45" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
+                                    <ComboBox x:Name="ComboBox_Languages" ItemsSource="{Binding SupportedCultures, Source={x:Static Application.Current}}" SelectedItem="{Binding CurrentCulture, Source={x:Static Application.Current}}" Margin="107,0,0,44" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="200" Height="27" SelectionChanged="ComboBox_Languages_Changed" Loaded="ComboBox_Languages_Loaded" />
+                                    <Label    Content="{DynamicResource SettingsUITheme}"                                                           Margin="4,0,0,12" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
+                                    <ComboBox x:Name="ComboBox_Themes" ItemsSource="{Binding InstalledThemes, Source={x:Static Application.Current}}" SelectedItem="{Binding CurrentTheme, Source={x:Static Application.Current}}" Margin="107,0,0,11" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="200" Height="27" SelectionChanged="ComboBox_Themes_Changed" Loaded="ComboBox_Themes_Loaded" />
                                 </Grid>
                             </GroupBox>
                         </Grid>
