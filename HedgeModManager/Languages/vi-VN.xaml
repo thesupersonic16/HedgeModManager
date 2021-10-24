@@ -8,6 +8,7 @@
     <system:String x:Key="CommonUIOK"     >OK</system:String>
     <system:String x:Key="CommonUICancel" >Huỷ</system:String>
     <system:String x:Key="CommonUIYes"    >Có</system:String>
+	<system:String x:Key="CommonUIBlocked">Bị khoá</system:String>
     <system:String x:Key="CommonUINo"     >Không</system:String>
     <system:String x:Key="CommonUIRetry"  >Thử lại</system:String>															
     <system:String x:Key="CommonUIUpdate" >Cập nhật</system:String>
@@ -28,6 +29,8 @@
     <system:String x:Key="MainUISaveAndPlay"   >Lưu và chơi</system:String>
     <system:String x:Key="MainUIPlay"          >Chơi</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Tải xuống trình chứa mod thất bại</system:String>
+	<system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Cài đặt trình chứa mod thất bại.&#x0a;Hãy đảm bảo bạn có quyền ghi tệp trò chơi.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Gỡ cài đặt trình chứa mod thất bại.&#x0a;Hãy đảm bảo không có trò chơi nào hiện đang chạy.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Tên</system:String>
@@ -39,16 +42,19 @@
     <system:String x:Key="ModsUIModFavorite"    >Yêu thích</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Cấu hình Mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Mở thư mục chứa</system:String>
-    <system:String x:Key="ModsUIModCheckUpdates">Kiểm tra cập nhật</system:String>
+    <system:String x:Key="ModsUIModCheckUpdates">Kiểm tra cập nhật cho mod</system:String>
+	<system:String x:Key="ModsUICheckUpdatesAll">Kiểm tra cập nhật cho tất cả các mod</system:String>
     <system:String x:Key="ModsUIModEdit"        >Chỉnh sửa Mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Xoá mod</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Kéo và thả các mục để thay đổi thứ tự tải của các mod</system:String>
+	<system:String x:Key="ModsUISearch"         >Tìm kiếm: </system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Đã phát hiện một hoặc nhiều mod có đường dẫn không hợp lệ.&#x0a;Bạn có muốn Hedge Mod Manager cố gắng sửa lỗi này không?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Tên</system:String>
     <system:String x:Key="CodesUIDownload">Tải xuống mã từ cộng đồng</system:String>
     <system:String x:Key="CodesUIUpdate"  >Cập nhật mã từ cộng đồng</system:String>
+	<system:String x:Key="CodesUISearch"  >Tìm kiếm: </system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Các mã đã cài đặt không tương thích với trình chứa mã.&#x0a;Vui lòng cập nhật mã và trình chứa mã.&#x0a;CẢNH BÁO: Thao tác này sẽ xóa mọi mã tùy chỉnh.</system:String>
 
     <!-- Settings UI Strings -->
@@ -81,11 +87,11 @@
     <system:String x:Key="MainUIInstallFormOptionArc">Cài đặt từ tệp nén</system:String>
     <system:String x:Key="MainUIInstallFormOptionNew">Tạo mod (dành cho nhà phát triển!)</system:String>
     <system:String x:Key="MainUIMissingLoaderHeader" >Trình chứa mod chưa được cài đặt!</system:String>
-    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Để {0} bắt đầu tải các mod, trình chứa mod cần được cài đặt.&#x0a;Bạn có muốn cài đặt nó bây giờ?</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Để {0} bắt đầu tải các mod, trình chứa mod cần được cài đặt.&#x0a;Bạn có muốn cài đặt nó ngay không?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"   >Chọn nơi tải mod từ...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >Phát hiện Runtime bị thiếu!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} yêu cầu {1} được cài đặt để các mod &#x0a;hoạt động chính xác, bạn có muốn HMM cài đặt runtime này không?</system:String>
-    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Một hoặc nhiều mod được bật yêu cầu chuyển hướng tệp lưu để hoạt động chính xác. Bật chức năng này?&#x0a;Nhấp vào không chỉ khi bạn biết bạn đang làm gì.</system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Một hoặc nhiều mod được bật yêu cầu chuyển hướng tệp lưu để hoạt động chính xác. Bật chức năng này?&#x0a;Nhấp vào không chỉ khi bạn biết mình đang làm gì.</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Không giải quyết được các phụ thuộc của mod</system:String>
     <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >Các mod sau bị thiếu các phụ thuộc:</system:String>
 
@@ -94,8 +100,8 @@
 
     <!-- AboutWindow UI Strings -->
     <system:String x:Key="AboutWindowUITitle"  >Về Hedge Mod Manager</system:String>
-    <system:String x:Key="AboutWindowUILine1"  >Được thiết kế để giúp dễ dàng tải các bản mod của game chạy Hedgehog Engine.</system:String>
-    <system:String x:Key="AboutWindowUILine2"  >Yêu cầu sở hữu hợp pháp của một trong những trò chơi được hỗ trợ.</system:String>
+    <system:String x:Key="AboutWindowUILine1"  >Phần mềm được thiết kế để giúp dễ dàng tải các bản mod của game chạy Hedgehog Engine.</system:String>
+    <system:String x:Key="AboutWindowUILine2"  >Yêu cầu sở hữu bản quyền của một trong những trò chơi được hỗ trợ.</system:String>
     <system:String x:Key="AboutWindowUICredits">Nguồn:</system:String>
     
     <!-- ProfileWindow UI Strings -->
@@ -146,7 +152,11 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Không tìm thấy cập nhật mã</system:String>
     
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Bạn có chắc chắn muốn xóa "{0}"?&#x0a;Hành động này không thể được hoàn tác!</system:String>
+	<system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager không phát hiện bất kỳ thư mục mod nào.&#x0a;Bạn có muốn tạo một thư mục mod không?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Bạn có chắc chắn muốn xóa "{0}"?&#x0a;Không thể hoàn tác hành động này!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} đã có bản mới nhất.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Có phiên bản mới hơn của {0}! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Bạn có chắc chắn muốn hủy cập nhật không?&#x0a;Điều này có thể làm hỏng {0}</system:String>
     
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >Hoàn thành</system:String>
@@ -156,11 +166,33 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Cấu hình {0}</system:String>
+	
+	<!-- Mod Description UI Strings -->
+    <system:String x:Key="ModDescriptionUIAbout">Về {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">Tạo bởi</system:String>
+    <system:String x:Key="ModDescriptionUIDate">lúc</system:String>
     
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Tải mod thất bại</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Đã xảy ra lỗi trong quá trình tải xuống. Máy chủ có thể ngừng hoạt động hoặc quá tải. Vui lòng thử lại sau. &#x0a;&#x0a;Chi tiết: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Không tìm thấy trò chơi</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager không thể tìm thấy bản cài đặt của {0}</system:String>
+	
+	<!-- Mod Updates Window Strings -->
+    <system:String x:Key="ModUpdatesChangelog">Các thay đổi</system:String>
+    <system:String x:Key="ModUpdatesTitle"    >Cập nhật bản mod</system:String>
+
+    <!-- Themes -->
+    <system:String x:Key="ThemeDark">Tối</system:String>
+    <system:String x:Key="ThemeOLED">OLED</system:String>
+    <system:String x:Key="ThemeLight">Sáng</system:String>
+
+    <!-- Games -->
+    <system:String x:Key="GameSonicGenerations">Sonic Generations</system:String>
+    <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
+    <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
+    <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
 
 </ResourceDictionary>
