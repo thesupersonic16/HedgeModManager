@@ -823,6 +823,8 @@ namespace HedgeModManager
             var info = await GithubAPI.GetAllCommits(RepoOwner, RepoName, hash);
             string text = "";
             int limit = info.ToList().FindIndex(t => t.SHA == RepoCommit);
+            if (limit == -1)
+                limit = info.Length;
             for (int i = 0; i < limit; ++i)
             {
                 string message = info[i].Commit.Message.Replace("\r", "");
