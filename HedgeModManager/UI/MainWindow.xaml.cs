@@ -666,7 +666,7 @@ namespace HedgeModManager
             dialog.ShowDialog();
         }
 
-        public void PerformUpdate(string path, string contentType)
+        public static void PerformUpdate(string path, string contentType)
         {
             // TODO: literally extracting a ZIP on the UI thread I couldn't make this up if I *tried*
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using IWshRuntimeLibrary;
 using File = System.IO.File;
 using Path = System.IO.Path;
 
@@ -22,16 +21,19 @@ namespace HedgeModManager
     /// <summary>
     /// Interaction logic for ExceptionWindow.xaml
     /// </summary>
-    public partial class ExceptionWindow : Window
+    public partial class ExceptionWindow : Window, INotifyPropertyChanged
     {
 
-        public Exception _Exception;
-        public string _ExtraInfo;
-        
+        private Exception _exception;
+        private string _extraInfo;
+        private Github.ReleaseInfo releaseInfo = null;
+        public string UpdateStatus { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ExceptionWindow(Exception exception, string extraInfo = "") : this()
         {
-            _Exception = exception;
-            _ExtraInfo = extraInfo;
+            _exception = exception;
+            _extraInfo = extraInfo;
         }
 
         public ExceptionWindow()
@@ -39,9 +41,29 @@ namespace HedgeModManager
             InitializeComponent();
         }
 
-        public string GetReport(bool useMarkdown = false)
+        public string GetReport(bool useMarkdown = false, bool showInstructions = false, string comment = null)
         {
             var body = new StringBuilder();
+
+            if (showInstructions)
+            {
+                body.AppendLine("<!-- DRAG THE SNAPSHOT FILE IN THE SPACE BELOW -->");
+                body.AppendLine();
+                body.AppendLine();
+                body.AppendLine();
+                body.AppendLine("<!-- DRAG THE SNAPSHOT FILE IN THE SPACE ABOVE -->");
+                body.AppendLine();
+            }
+
+            if (comment != null)
+            {
+                body.AppendLine("Comment:");
+                body.AppendLine("```");
+                body.AppendLine(comment);
+                body.AppendLine("```");
+                body.AppendLine();
+            }
+
 
             body.AppendLine($"HMM Info:");
 
@@ -53,30 +75,31 @@ namespace HedgeModManager
             try
             {
                 body.AppendLine($"    Game: {HedgeApp.CurrentGame}");
-                body.AppendLine($"    SteamGame: {HedgeApp.GetGameInstall(HedgeApp.CurrentGame)}");
+                body.AppendLine($"    GameInstall: {HedgeApp.GetGameInstall(HedgeApp.CurrentGame)}");
             } catch { }
+            if (UpdateStatus != null) body.AppendLine($"    Update Status: {UpdateStatus}");
             if (useMarkdown) body.AppendLine("```");
 
             body.AppendLine("");
 
-            if (!string.IsNullOrEmpty(_ExtraInfo))
+            if (!string.IsNullOrEmpty(_extraInfo))
             {
-                body.AppendLine($"Extra Information: {_ExtraInfo}");
+                body.AppendLine($"Extra Information: {_extraInfo}");
             }
 
-            if (_Exception != null)
+            if (_exception != null)
             {
                 body.AppendLine($"Exception:");
                 if (useMarkdown) body.AppendLine("```");
 
-                body.AppendLine($"    Type: {_Exception.GetType().Name}");
-                body.AppendLine($"    Message: {_Exception.Message}");
-                body.AppendLine($"    Source: {_Exception.Source}");
-                body.AppendLine($"    Function: {_Exception.TargetSite}");
-                if(_Exception.StackTrace != null)
-                    body.AppendLine($"    StackTrace: \n    {_Exception.StackTrace.Replace("\n", "\n    ")}");
+                body.AppendLine($"    Type: {_exception.GetType().Name}");
+                body.AppendLine($"    Message: {_exception.Message}");
+                body.AppendLine($"    Source: {_exception.Source}");
+                body.AppendLine($"    Function: {_exception.TargetSite}");
+                if(_exception.StackTrace != null)
+                    body.AppendLine($"    StackTrace: \n    {_exception.StackTrace.Replace("\n", "\n    ")}");
 
-                body.AppendLine($"    InnerException: {_Exception.InnerException}");
+                body.AppendLine($"    InnerException: {_exception.InnerException}");
 
                 if (useMarkdown) body.AppendLine("```");
                 body.AppendLine("");
@@ -85,11 +108,12 @@ namespace HedgeModManager
             return body.ToString();
         }
 
-        public static void UnhandledExceptionEventHandler(Exception e, bool fatal = false)
+        public static void UnhandledExceptionEventHandler(Exception e, bool unhandled = false)
         {
             var window = new ExceptionWindow(e);
-            if (fatal)
-                window.Header.Content = "HedgeModManager has ran into a Fatal Error!";
+            Application.Current.MainWindow = window;
+            if (unhandled)
+                window.Header.Content = "Hedge Mod Manager Has Ran Into an Error!";
             window.ShowDialog();
         }
 
@@ -107,7 +131,7 @@ namespace HedgeModManager
         {
             string url = "https://github.com/thesupersonic16/HedgeModManager/issues/new";
             url += $"?title=[{HedgeApp.CurrentGame?.GameName}] ";
-            url += $"&body={Uri.EscapeDataString(GetReport(true))}";
+            url += $"&body={Uri.EscapeDataString(GetReport(true, true))}";
             Process.Start(url);
 
             try
@@ -118,7 +142,7 @@ namespace HedgeModManager
 
                 File.WriteAllText(path,
                     Convert.ToBase64String(SnapshotBuilder.Build(true,
-                        new SnapshotFile("Exception.txt", Encoding.UTF8.GetBytes(_Exception.ToString())))));
+                        new SnapshotFile("Exception.txt", Encoding.UTF8.GetBytes(_exception.ToString())))));
 
                 Process.Start($"explorer.exe", $"/select,\"{Path.GetFullPath(path)}\"");
                 HedgeApp.CreateOKMessageBox("Hedge Mod Manager", $"Please attach the file\n{path}\nto the issue.").ShowDialog();
@@ -129,6 +153,77 @@ namespace HedgeModManager
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             TextBox_ExceptionInfo.Text = GetReport();
+            DataContext = this;
+            Dispatcher.InvokeAsync(async () =>
+            {
+                try
+                {
+                    UpdateStatus = "Checking For Updates";
+                    var update = await HedgeApp.CheckForUpdatesAsync();
+                    UpdateStatus = "Parsing";
+                    if (update.Item1)
+                        UpdateStatus = "Up To Date";
+                    else
+                    {
+                        UpdateStatus = "Update Required";
+                        releaseInfo = update.Item2;
+                        var window = new HedgeMessageBox("New Update Available!",
+                            "It appears this version of Hedge Mod Manager is out of date.\n" +
+                            "It is highly recommended to first update and see if the issue still occurs.\n" +
+                            "\nWould you like to update now?");
+                        window.AddButton("Update", () =>
+                        {
+                            window.Close();
+                            if (releaseInfo.Assets.Count > 0)
+                            {
+                                // http://wasteaguid.info/
+                                var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+
+                                var asset = releaseInfo.Assets[0];
+                                var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({releaseInfo.TagName})", asset.BrowserDownloadUrl.ToString(), path)
+                                {
+                                    DownloadCompleted = () =>
+                                    {
+                                        try
+                                        {
+                                            throw new Exception();
+                                            MainWindow.PerformUpdate(path, asset.ContentType);
+                                        }catch
+                                        {
+                                            // Try clean up
+                                            try { File.Delete(path); } catch { }
+                                            UpdateStatus = "Update Install Failed";
+                                            var dialog = new HedgeMessageBox("Update Error!",
+                                                "Hedge Mod Manager could not update!\n" +
+                                                "Please manually download the lastest release.\n");
+                                            dialog.AddButton("OK", () =>
+                                            {
+                                                Process.Start($"https://github.com/{HedgeApp.RepoOwner}/{HedgeApp.RepoName}/releases");
+                                                dialog.Close();
+                                            });
+                                            dialog.ShowDialog();
+                                        }
+                                    }
+                                };
+
+                                downloader.Start();
+                            }
+                        });
+
+                        window.AddButton("Ignore", () =>
+                        {
+                            UpdateStatus = "Update Ignored";
+                            window.Close();
+                        });
+
+                        window.ShowDialog();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    UpdateStatus = "Failed: " + ex.ToString();
+                }
+            });
         }
     }
 }
