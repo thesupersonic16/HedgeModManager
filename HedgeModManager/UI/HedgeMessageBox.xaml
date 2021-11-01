@@ -16,9 +16,11 @@
         </Grid.RowDefinitions>
         <TextBlock x:Name="Header" Text="HEADER" TextAlignment="Center" FontSize="30" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20,0" TextWrapping="Wrap"/>
         <Border x:Name="Message" Width="Auto" Margin="5,0" Grid.Row="1" Padding="10,0"/>
-        <StackPanel x:Name="Stack" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Stretch">
-            <!--<Button Width="Auto" Height="23" Margin="0" Content="OK"/>
+        <Grid HorizontalAlignment="Stretch" Grid.Row="2" Margin="-4,0,-4,-4" Background="{DynamicResource HMM.Window.DialogBottom}">
+            <StackPanel x:Name="Stack" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,0,5,0">
+                <!--<Button Width="Auto" Height="23" Margin="0" Content="OK"/>
             <Button Width="Auto" Height="23" Margin="0" Content="CANCEL"/>-->
-        </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

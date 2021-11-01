@@ -40,7 +40,7 @@ namespace HedgeModManager
         }
 
         public HedgeMessageBox(string header, string message,
-            HorizontalAlignment buttonAlignment = HorizontalAlignment.Right, TextAlignment textAlignment = TextAlignment.Center, InputType type = InputType.Basic)
+            HorizontalAlignment buttonAlignment = HorizontalAlignment.Right, TextAlignment textAlignment = TextAlignment.Left, InputType type = InputType.Basic)
         {
             InitializeComponent();
             Header.Text = header;
@@ -53,7 +53,7 @@ namespace HedgeModManager
                     {
                         Text = message,
                         TextAlignment = textAlignment,
-                        FontSize = 25,
+                        FontSize = 20,
                         TextWrapping = TextWrapping.Wrap,
                         VerticalAlignment = VerticalAlignment.Center
                     }
