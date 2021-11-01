@@ -210,14 +210,15 @@ namespace HedgeModManager
             if (CurrentGame == Games.Unknown)
             {
                 var dialog = new HedgeMessageBox($"No Games Found!", 
-                    "Please make sure your games are properly installed on Steam or\nRun Hedge Mod Manager inside of any of the supported game's directory.");
+                    "Please make sure your games are properly installed on Steam/Epic Games or\nrun Hedge Mod Manager inside of any of the supported game's directory.");
 
-                dialog.AddButton("Exit", () =>
-                {
-                    Environment.Exit(0);
-                });
+                // Seems to fix the crash.
+                application.MainWindow = dialog;
+                
+                dialog.AddButton("Exit", () => dialog.Close());
 
                 dialog.ShowDialog();
+                return;
             }
 
 #endif
