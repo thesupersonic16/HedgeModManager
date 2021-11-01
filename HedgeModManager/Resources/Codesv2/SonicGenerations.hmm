@@ -75,11 +75,13 @@ if (Read<int>(0x1DFE228) != (int)(Read<double>(0x1703EA8)) || Read<int>(0x1DFE22
 {
 	for (int HUDScaleCounter = 0; HUDScaleCounter <= 1; HUDScaleCounter++)
 	{
-		Write<float>(0x1B23F00 + (HUDScaleCounter * 0x1C), (float)(Read<int>(0x1DFE22C)) * 1.7777777777777777777778f)
+		Write<float>(0x1B23F00 + (HUDScaleCounter * 0x1C), (float)(Read<int>(0x1DFE228)))
 		Write<float>(0x1B23F04 + (HUDScaleCounter * 0x1C), (float)(Read<int>(0x1DFE22C)))
+		Write<float>(0x1804F8C, Read<float>(0x1B23F00))
+		Write<float>(0x1804F90, Read<float>(0x1B23F04))
 		Write<float>(0x1B23F08 + (HUDScaleCounter * 0x1C), 1f / Read<float>(0x1B23F00))
 		Write<float>(0x1B23F0C + (HUDScaleCounter * 0x1C), 1f / Read<float>(0x1B23F04))
-		Write<float>(0x1B23F10 + (HUDScaleCounter * 0x1C), HUDScaleCounter == 0 ? (((float)(Read<int>(0x1DFE228)) - Read<float>(0x1B23F00)) * 0.5f) * Read<float>(0x1B23F08) : 0f)
+		Write<float>(0x1B23F10 + (HUDScaleCounter * 0x1C), 0f)
 		Write<float>(0x1B23F14 + (HUDScaleCounter * 0x1C), 0f)
 		Write<float>(0x1B23F18 + (HUDScaleCounter * 0x1C), Read<float>(0x1B23F00) / Read<float>(0x1B23F04))
 	}
@@ -90,6 +92,7 @@ WriteProtected<double>(0x1703EA0, IsWidescreen ? 720.0 : (double)(Read<int>(0x1D
 WriteProtected<float>(0x1A42254, 1.779999971f * (IsWidescreen ? 1f : 0.75f))
 WriteProtected<float>(0x1704474, 2f * (float)Math.Atan((float)Math.Tan(20f * (float)Math.PI / 360f) / (IsWidescreen ? 1f : 0.85f)))
 WriteProtected<byte>(0xD674D6, 0xD9, 0x1C, 0x24, 0xD9, 0x5C, 0x24, 0x04)
+WriteProtected<byte>(0xD6740C, 0xE9, 0x2B, 0x01, 0x00, 0x00, 0x90)
 WriteProtected<int>(0xE7AD52, IsWidescreen ? 0x1703A08 : 0x16A14B0)
 WriteProtected<uint>(0xD5AF94, Read<uint>(0xE7AD52))
 
