@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HedgeModManager.Github
+namespace HedgeModManager.GitHub
 {
     public class UserInfo
     {

@@ -192,6 +192,18 @@
     <system:String x:Key="ModUpdatesTitle"        >Mod Updates</system:String>
     <system:String x:Key="ModDownloadsTitle"      >Mod Downloads</system:String>
 
+    <!-- Exception Window Strings -->
+    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Crash</system:String>
+    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager Has Thrown an Exception!</system:String>
+    <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager Has Ran Into an Error!</system:String>
+    <system:String x:Key="ExceptionWindowButtonCopyLog"   >Copy Log to Clipboard</system:String>
+    <system:String x:Key="ExceptionWindowButtonIgnore"    >Ignore and Close</system:String>
+    <system:String x:Key="ExceptionWindowButtonReport"    >Submit Report on GitHub</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >New Update Available!</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >It appears this version of Hedge Mod Manager is out of date.&#x0a;It is highly recommended to first update and see if the issue still occurs.&#x0a;Would you like to update now?</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorTitle">Update Error!</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager could not update!&#x0a;Please manually download the lastest release.</system:String>
+
     <!-- Themes -->
     <system:String x:Key="ThemeDark">Dark</system:String>
     <system:String x:Key="ThemeOLED">OLED</system:String>

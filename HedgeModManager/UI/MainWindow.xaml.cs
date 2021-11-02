@@ -11,14 +11,10 @@ using System.Windows.Interop;
 using HedgeModManager.UI;
 using System.Collections.ObjectModel;
 using System.Net;
-using System.IO.Compression;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Application = System.Windows.Application;
-using Cursors = System.Windows.Input.Cursors;
-using DataFormats = System.Windows.DataFormats;
-using DragEventArgs = System.Windows.DragEventArgs;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using ListViewItem = System.Windows.Controls.ListViewItem;
 using MenuItem = System.Windows.Controls.MenuItem;
@@ -31,7 +27,7 @@ using HedgeModManager.Updates;
 using Newtonsoft.Json;
 using System.Windows.Data;
 using GameBananaAPI;
-using HedgeModManager.Github;
+using HedgeModManager.GitHub;
 using HedgeModManager.Misc;
 
 namespace HedgeModManager
@@ -634,7 +630,7 @@ namespace HedgeModManager
                     dialog.Close();
                     var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({release.TagName})", asset.BrowserDownloadUrl.ToString(), path)
                     {
-                        DownloadCompleted = () => PerformUpdate(path, asset.ContentType)
+                        DownloadCompleted = () => HedgeApp.PerformUpdate(path, asset.ContentType)
                     };
 
                     downloader.Start();
@@ -657,36 +653,13 @@ namespace HedgeModManager
                 var downloader = new DownloadWindow($"Downloading {artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})",
                     string.Format(HMMResources.URL_HMM_DEV, workflow.CheckSuiteID, artifact.ID), path)
                 {
-                    DownloadCompleted = () => PerformUpdate(path, "application/x-zip-compressed")
+                    DownloadCompleted = () => HedgeApp.PerformUpdate(path, "application/x-zip-compressed")
                 };
 
                 downloader.Start();
             });
 
             dialog.ShowDialog();
-        }
-
-        public static void PerformUpdate(string path, string contentType)
-        {
-            // TODO: literally extracting a ZIP on the UI thread I couldn't make this up if I *tried*
-
-            // Extract zip for compatibility for 6.x
-            if (contentType == "application/x-zip-compressed" || contentType == "application/zip")
-            {
-                // Store old path pointing to the zip
-                string oldPath = path;
-                // Generate new path
-                path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
-                using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
-                {
-                    var entry = zip.Entries.FirstOrDefault(t => t.Name.EndsWith(".exe"));
-                    entry.ExtractToFile(path);
-                }
-                File.Delete(oldPath);
-            }
-
-            Process.Start(path, $"-update \"{HedgeApp.AppPath}\" {Process.GetCurrentProcess().Id}");
-            Application.Current.Shutdown();
         }
 
         protected async Task CheckForLoaderUpdateAsync()
@@ -1581,7 +1554,7 @@ namespace HedgeModManager
                             var asset = release.Assets[0];
                             var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({release.TagName})", asset.BrowserDownloadUrl.ToString(), path)
                             {
-                                DownloadCompleted = () => PerformUpdate(path, asset.ContentType)
+                                DownloadCompleted = () => HedgeApp.PerformUpdate(path, asset.ContentType)
                             };
                             downloader.Start();
                         }
@@ -1596,7 +1569,7 @@ namespace HedgeModManager
                         var downloader = new DownloadWindow($"Downloading {artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})",
                             string.Format(HMMResources.URL_HMM_DEV, workflow.CheckSuiteID, artifact.ID), path)
                         {
-                            DownloadCompleted = () => PerformUpdate(path, "application/x-zip-compressed")
+                            DownloadCompleted = () => HedgeApp.PerformUpdate(path, "application/x-zip-compressed")
                         };
                         downloader.Start();
                     }

@@ -23,21 +23,18 @@ using System.Windows.Media;
 
 using HMMResources = HedgeModManager.Properties.Resources;
 using System.Windows.Media.Animation;
-
 using GameBananaAPI;
-using HedgeModManager.Github;
-using System.Net.NetworkInformation;
+using System.IO.Compression;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Windows.Interop;
 using System.Windows.Markup;
 using System.Windows.Resources;
 using System.Xml.Serialization;
+using HedgeModManager.GitHub;
 using HedgeModManager.Languages;
 using HedgeModManager.Misc;
 using HedgeModManager.UI;
-using Newtonsoft.Json;
 using HedgeModManager.Themes;
 using HedgeModManager.UI.Models;
 using HedgeModManager.Updates;
@@ -793,7 +790,7 @@ namespace HedgeModManager
 
         public static async Task<(bool, ReleaseInfo)> CheckForUpdatesAsync()
         {
-            var info = await GithubAPI.GetLatestRelease(RepoOwner, RepoName);
+            var info = await GitHubAPI.GetLatestRelease(RepoOwner, RepoName);
             var version = info == null ? Version : info.GetVersion();
             bool hasUpdate = version > Version;
 
@@ -802,7 +799,7 @@ namespace HedgeModManager
 
         public static async Task<(bool, WorkflowRunInfo, ArtifactInfo)> CheckForUpdatesDevAsync()
         {
-            var runs = await GithubAPI.GetAllRuns(RepoOwner, RepoName);
+            var runs = await GitHubAPI.GetAllRuns(RepoOwner, RepoName);
             var workflow = runs.Runs.FirstOrDefault();
             if (workflow == null)
                 return (false, null, null);
@@ -811,7 +808,7 @@ namespace HedgeModManager
             ArtifactInfo info = null;
             if (hasUpdate)
             {
-                var list = await GithubAPI.GetObject<ArtifactInfo.ArtifactList>(workflow.ArtifactsURL.ToString());
+                var list = await GitHubAPI.GetObject<ArtifactInfo.ArtifactList>(workflow.ArtifactsURL.ToString());
                 info = list.Artifacts.FirstOrDefault(t => t.Expired == false && t.Name.Contains("Release"));
                 // Just in case there is a configuration issue
                 hasUpdate = info != null;
@@ -821,7 +818,7 @@ namespace HedgeModManager
 
         public static async Task<string> GetGitChangeLog(string hash)
         {
-            var info = await GithubAPI.GetAllCommits(RepoOwner, RepoName, hash);
+            var info = await GitHubAPI.GetAllCommits(RepoOwner, RepoName, hash);
             string text = "";
             int limit = info.ToList().FindIndex(t => t.SHA == RepoCommit);
             if (limit == -1)
@@ -834,6 +831,29 @@ namespace HedgeModManager
                 text += $" - {info[i].SHA.Substring(0, 7)} - {message}\n";
             }
             return text;
+        }
+
+        public static void PerformUpdate(string path, string contentType)
+        {
+            // TODO: literally extracting a ZIP on the UI thread I couldn't make this up if I *tried*
+
+            // Extract zip for compatibility for 6.x
+            if (contentType == "application/x-zip-compressed" || contentType == "application/zip")
+            {
+                // Store old path pointing to the zip
+                string oldPath = path;
+                // Generate new path
+                path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.exe");
+                using (var zip = ZipFile.Open(oldPath, ZipArchiveMode.Read))
+                {
+                    var entry = zip.Entries.FirstOrDefault(t => t.Name.EndsWith(".exe"));
+                    entry.ExtractToFile(path);
+                }
+                File.Delete(oldPath);
+            }
+
+            Process.Start(path, $"-update \"{AppPath}\" {Process.GetCurrentProcess().Id}");
+            Current.Shutdown();
         }
 
         public static string GetCPKREDIRVersionString()

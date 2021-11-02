@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace HedgeModManager.Github
+namespace HedgeModManager.GitHub
 {
     public class WorkflowRunInfo
     {
