@@ -32,7 +32,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="StatusLbl" Margin="175,2,4,4" FontSize="12" TextAlignment="Right" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-                <TabControl x:Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+                <TabControl x:Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Margin="-2,0,-2,0">
                     <TabItem x:Name="ModsTab" Header="{DynamicResource MainUIMods}">
                         <Grid>
                             <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown"
@@ -109,11 +109,6 @@
                                                 <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="152"/>
                                             </GridView>
                                         </ListView.View>
-                                        <ListView.ItemContainerStyle>
-                                            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
-                                                <Setter Property="Visibility" Value="{Binding Path=Visible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                                            </Style>
-                                        </ListView.ItemContainerStyle>
                                     </ListView>
 
                                     <StackPanel Visibility="{Binding HasNoCodes, Converter={StaticResource BoolToVisibilityConverter}}"

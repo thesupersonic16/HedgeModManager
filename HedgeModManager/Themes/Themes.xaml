@@ -4,6 +4,7 @@
 
     <local:ThemeList x:Key="Themes">
         <local:ThemeEntry FileName="DarkTheme" Name="Dark"/>
+        <local:ThemeEntry FileName="DarkerTheme" Name="Darker"/>
         <local:ThemeEntry FileName="OLEDTheme" Name="OLED"/>
         <local:ThemeEntry FileName="LightTheme" Name="Light"/>
     </local:ThemeList>
