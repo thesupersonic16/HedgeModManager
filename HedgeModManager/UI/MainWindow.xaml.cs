@@ -1538,7 +1538,7 @@ namespace HedgeModManager
             string message = ViewModel.DevBuild ? Localise("SettingsUIChangeChannelRel") : Localise("SettingsUIChangeChannelDev");
             if (currentChannel != ComboBox_Channel.SelectedItem as string)
             {
-                var box = new HedgeMessageBox("Changing Release Channels", message);
+                var box = new HedgeMessageBox(Localise("SettingsUIChangingChannelTitle"), message);
                 Button button = null;
                 button = box.AddButton(Localise("CommonUIYes"), async () =>
                 {

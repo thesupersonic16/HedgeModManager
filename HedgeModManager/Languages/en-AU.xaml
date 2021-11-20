@@ -84,6 +84,7 @@
     <system:String x:Key="SettingsUILanguage"       >Language:</system:String>
     <system:String x:Key="SettingsUITheme"          >Theme:</system:String>
     <system:String x:Key="SettingsUIReleaseChannel" >Update Channel:</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >Changing Release Channels</system:String>
     <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">You are about to change to the Release channel.&#x0a;&#x0a;Are you sure you want to continue? Hedge Mod Manager will need to restart to change channels.</system:String>
     <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">You are about to change to the Development channel. This channel may contain untested features and bugs.&#x0a;&#x0a;Are you sure you want to continue? Hedge Mod Manager will need to restart to change channels.</system:String>
 
