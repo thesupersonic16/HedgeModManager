@@ -205,9 +205,10 @@
     <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager could not update!&#x0a;Please manually download the lastest release.</system:String>
 
     <!-- Themes -->
-    <system:String x:Key="ThemeDark">Dark</system:String>
-    <system:String x:Key="ThemeOLED">OLED</system:String>
-    <system:String x:Key="ThemeLight">Light</system:String>
+    <system:String x:Key="ThemeDark"  >Dark</system:String>
+    <system:String x:Key="ThemeDarker">Darker</system:String>
+    <system:String x:Key="ThemeOLED"  >OLED</system:String>
+    <system:String x:Key="ThemeLight" >Light</system:String>
 
     <!-- Games -->
     <system:String x:Key="GameSonicGenerations">Sonic Generations</system:String>

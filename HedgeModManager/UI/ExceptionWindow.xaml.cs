@@ -43,29 +43,25 @@ namespace HedgeModManager
             InitializeComponent();
         }
 
-        public string GetReport(bool useMarkdown = false, bool showInstructions = false, string comment = null)
+        public string GetReport(bool useMarkdown = false, bool showInstructions = false)
         {
             var body = new StringBuilder();
 
             if (showInstructions)
             {
-                body.AppendLine("<!-- DRAG THE SNAPSHOT FILE IN THE SPACE BELOW -->");
+                body.AppendLine("<!-- Please explain below any relevant information which may have caused this crash like steps to reproduce the issue -->");
                 body.AppendLine();
                 body.AppendLine();
                 body.AppendLine();
-                body.AppendLine("<!-- DRAG THE SNAPSHOT FILE IN THE SPACE ABOVE -->");
+
+                body.AppendLine("<!-- Please drag the snapshot file (text file) below -->");
+                body.AppendLine();
+                body.AppendLine();
+                body.AppendLine();
+
+                body.AppendLine("<!-- Please do not modify the contents below -->");
                 body.AppendLine();
             }
-
-            if (comment != null)
-            {
-                body.AppendLine("Comment:");
-                body.AppendLine("```");
-                body.AppendLine(comment);
-                body.AppendLine("```");
-                body.AppendLine();
-            }
-
 
             body.AppendLine($"HMM Info:");
 
@@ -141,10 +137,14 @@ namespace HedgeModManager
                 var time = DateTime.Now;
                 var path =
                     $"HMM_Snapshot_{time.Date:00}{time.Month:00}{time.Year:0000}{time.Hour:00}{time.Minute:00}{time.Second:00}.txt";
-
+#if DEBUG
+                File.WriteAllBytes(path, SnapshotBuilder.Build(false,
+                        new SnapshotFile("Exception.txt", Encoding.UTF8.GetBytes(Exception.ToString()))));
+#else
                 File.WriteAllText(path,
                     Convert.ToBase64String(SnapshotBuilder.Build(true,
                         new SnapshotFile("Exception.txt", Encoding.UTF8.GetBytes(Exception.ToString())))));
+#endif
 
                 Process.Start($"explorer.exe", $"/select,\"{Path.GetFullPath(path)}\"");
                 HedgeApp.CreateOKMessageBox("Hedge Mod Manager", $"Please attach the file\n{path}\nto the issue.").ShowDialog();

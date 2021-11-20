@@ -136,7 +136,9 @@ namespace HedgeModManager
             body.AppendLine();
             body.AppendLine("Directory tree:");
             body.AppendLine(GetDirectoryTree(false));
-
+            
+            body.AppendLine(GetRegistryTree(Registry.CurrentUser, RegistryConfig.ConfigPath));
+            body.AppendLine(GetRegistryTree(Registry.LocalMachine, "SOFTWARE\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes"));
             body.AppendLine(GetRegistryTree(Registry.LocalMachine, "SOFTWARE\\7-Zip"));
             body.AppendLine(GetRegistryTree(Registry.LocalMachine, "SOFTWARE\\WinRAR"));
 

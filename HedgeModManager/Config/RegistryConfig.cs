@@ -9,9 +9,9 @@ namespace HedgeModManager
 {
     public static class RegistryConfig
     {
-        private const string ConfigPath = @"SOFTWARE\HEDGEMM";
         private const string PersonalizePath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
+        public static string ConfigPath { get; } = @"SOFTWARE\HEDGEMM";
         public static string LastGameDirectory;
         public static string UILanguage;
         public static string UITheme;
