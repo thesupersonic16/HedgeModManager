@@ -12,6 +12,7 @@
     <system:String x:Key="CommonUINo"     >Não</system:String>
     <system:String x:Key="CommonUIRetry"  >Tentar Novamente</system:String>
     <system:String x:Key="CommonUIUpdate" >Atualizar</system:String>
+    <system:String x:Key="CommonUIDownload">Baixar</system:String>
     <system:String x:Key="CommonUIDelete" >Apagar</system:String>
     <system:String x:Key="CommonUINone"   >Nenhum</system:String>
     <system:String x:Key="CommonUIIgnore" >Ignorar</system:String>
@@ -49,14 +50,16 @@
     <system:String x:Key="ModsUIModDragDrop"    >Arraste items para alterar a ordem de carregamento de mods.</system:String>
     <system:String x:Key="ModsUISearch"         >Buscar: </system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">O Hedge Mod Manager detetou que um ou mais mods têm diretorias inválidas.&#x0a;Quer que o Hedge Mod Manager tente corrigir isso?</system:String>
-
+    <system:String xml:space="preserve" x:Key="ModsUINoMods">...Não há nada aqui.&#x0a;Vá buscar mods!</system:String>
+    
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Nome</system:String>
     <system:String x:Key="CodesUIDownload">Baixar Códigos da Comunidade</system:String>
     <system:String x:Key="CodesUIUpdate"  >Atualizar Códigos da Comunidade</system:String>
     <system:String x:Key="CodesUISearch"  >Buscar: </system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Os códigos instalados são incompatíveis com o carregador de códigos.&#x0a;Por favor atualize os códigos e o carregador.&#x0a;AVISO: Isso irá apagar quaisquer códigos costumizados.</system:String>
-
+    <system:String xml:space="preserve" x:Key="CodesUIFetching">Obtendo códigos...</system:String>
+    
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
     <system:String x:Key="SettingsUIGMLHeader"      >Jogo &amp; Carregador de Mods</system:String>
@@ -80,6 +83,10 @@
     <system:String x:Key="SettingsUIAboutHMM"       >Sobre o Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Idioma:</system:String>
     <system:String x:Key="SettingsUITheme"          >Tema:</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel" >Canal de Updates:</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >Mudando de Canal de Updates</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Está prestes a mudar para o canal 'Release'.&#x0a;&#x0a;Tem a certeza de que pretende continuar? O Hedge Mod Manager tem de reiniciar para mudar de canal.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Está prestes a mudar para o canal 'Development'. Esse canal pode conter funcionalidades não testadas assim como outros problemas.&#x0a;&#x0a;Tem a certeza de que pretende continuar? O Hedge Mod Manager tem de reiniciar para mudar de canal.</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >Instalar um mod através de...</system:String>
@@ -94,7 +101,9 @@
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Um ou mais mods ativados requerem o redirecionamento do ficheiro de gravação para funcionarem corretamente. Ativar esta funcionalidade?&#x0a;Clique "não" apenas se souber o que está fazendo.</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Falha resolvendo dependências de mods</system:String>
     <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >Os seguintes mods têm dependências em falta:</system:String>
-    
+    <system:String x:Key="MainUIMissingDependsResolve">Resolver Mods do GameBanana</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">Uma ou mais dependências podem ser resolvidas automaticamente&#x0a;a partir do GameBanana clicando em "Resolver Mods do GameBanana".</system:String>
+
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Por favor selecione uma opção!</system:String>
 
@@ -180,10 +189,25 @@
 
     <!-- Mod Updates Window Strings -->
     <system:String x:Key="ModUpdatesChangelog">Changelog</system:String>
+    <system:String x:Key="ModDownloadsDescription">Descrição</system:String>
     <system:String x:Key="ModUpdatesTitle"    >Atualizações de Mods</system:String>
+    <system:String x:Key="ModDownloadsTitle"      >Tranferências de Mods</system:String>
+    
+    <!-- Exception Window Strings -->
+    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Crash</system:String>
+    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager Lançou uma Exceção!</system:String>
+    <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager Encontrou um Erro!</system:String>
+    <system:String x:Key="ExceptionWindowButtonCopyLog"   >Copiar Log para Área de Transferência</system:String>
+    <system:String x:Key="ExceptionWindowButtonIgnore"    >Ignorar and Fechar</system:String>
+    <system:String x:Key="ExceptionWindowButtonReport"    >Submeter Relatório no GitHub</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Nova Atualização Disponível!</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Parece que esta versão do Hedge Mod Manager encontra-se desatualizada.&#x0a;É altamente recomendado que atualize primeiro e verifique se esse problema ainda ocorre.&#x0a;Quer atualizar agora?</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorTitle">Erro na Atualização!</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Não foi possível atualizar o Hedge Mod Manager!&#x0a;Por favor transfira manualmente a última versão.</system:String>
 
     <!-- Themes -->
     <system:String x:Key="ThemeDark">Escuro</system:String>
+    <system:String x:Key="ThemeDarker">Mais Escuro</system:String>
     <system:String x:Key="ThemeOLED">OLED</system:String>
     <system:String x:Key="ThemeLight">Claro</system:String>
 
