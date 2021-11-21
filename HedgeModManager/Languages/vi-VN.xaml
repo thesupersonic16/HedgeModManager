@@ -8,11 +8,11 @@
     <system:String x:Key="CommonUIOK"     >OK</system:String>
     <system:String x:Key="CommonUICancel" >Huỷ</system:String>
     <system:String x:Key="CommonUIYes"    >Có</system:String>
-    <system:String x:Key="CommonUIBlocked">Bị khoá</system:String>
+	<system:String x:Key="CommonUIBlocked">Bị khoá</system:String>
     <system:String x:Key="CommonUINo"     >Không</system:String>
     <system:String x:Key="CommonUIRetry"  >Thử lại</system:String>
     <system:String x:Key="CommonUIUpdate" >Cập nhật</system:String>
-    <system:String x:Key="CommonUIDownload">Tải xuống</system:String>
+	<system:String x:Key="CommonUIDownload">Tải xuống</system:String>
     <system:String x:Key="CommonUIDelete" >Xoá</system:String>
     <system:String x:Key="CommonUINone"   >Không</system:String>
     <system:String x:Key="CommonUIIgnore" >Không quan tâm</system:String>
@@ -30,7 +30,7 @@
     <system:String x:Key="MainUISaveAndPlay"   >Lưu và chơi</system:String>
     <system:String x:Key="MainUIPlay"          >Chơi</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Tải xuống trình chứa mod thất bại</system:String>
-    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Cài đặt trình chứa mod thất bại.&#x0a;Hãy đảm bảo bạn có quyền ghi tệp trò chơi.</system:String>
+	<system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Cài đặt trình chứa mod thất bại.&#x0a;Hãy đảm bảo bạn có quyền ghi tệp trò chơi.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Gỡ cài đặt trình chứa mod thất bại.&#x0a;Hãy đảm bảo không có trò chơi nào hiện đang chạy.</system:String>
 
     <!-- Mods UI Strings -->
@@ -44,21 +44,21 @@
     <system:String x:Key="ModsUIModConfigure"   >Cấu hình Mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Mở thư mục chứa</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Kiểm tra cập nhật cho mod</system:String>
-    <system:String x:Key="ModsUICheckUpdatesAll">Kiểm tra cập nhật cho tất cả các mod</system:String>
+	<system:String x:Key="ModsUICheckUpdatesAll">Kiểm tra cập nhật cho tất cả các mod</system:String>
     <system:String x:Key="ModsUIModEdit"        >Chỉnh sửa Mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Xoá mod</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Kéo và thả các mục để thay đổi thứ tự tải của các mod</system:String>
-    <system:String x:Key="ModsUISearch"         >Tìm kiếm:</system:String>
+	<system:String x:Key="ModsUISearch"         >Tìm kiếm: </system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Đã phát hiện một hoặc nhiều mod có đường dẫn không hợp lệ.&#x0a;Bạn có muốn Hedge Mod Manager cố gắng sửa lỗi này không?</system:String>
-    <system:String xml:space="preserve" x:Key="ModsUINoMods">Chẳng có gì ở đây cả...&#x0a;Đi kiếm vài mod đi!</system:String>
+	<system:String xml:space="preserve" x:Key="ModsUINoMods">Chẳng có gì ở đây cả...&#x0a;Đi kiếm vài mod đi!</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Tên</system:String>
     <system:String x:Key="CodesUIDownload">Tải xuống mã từ cộng đồng</system:String>
     <system:String x:Key="CodesUIUpdate"  >Cập nhật mã từ cộng đồng</system:String>
-    <system:String x:Key="CodesUISearch"  >Tìm kiếm:</system:String>
+	<system:String x:Key="CodesUISearch"  >Tìm kiếm: </system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Các mã đã cài đặt không tương thích với trình chứa mã.&#x0a;Vui lòng cập nhật mã và trình chứa mã.&#x0a;CẢNH BÁO: Thao tác này sẽ xóa mọi mã tùy chỉnh.</system:String>
-    <system:String xml:space="preserve" x:Key="CodesUIFetching">Đang nhập mã...</system:String>
+	<system:String xml:space="preserve" x:Key="CodesUIFetching">Đang nhập mã...</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
@@ -74,7 +74,7 @@
     <system:String x:Key="SettingsUILabelGame"      >Trò chơi:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Hồ sơ:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Thư mục mod:</system:String>
-
+	
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUICheckMLUpdate"  >Kiểm tra cập nhật cho trình chứa Mod</system:String>
@@ -84,9 +84,10 @@
     <system:String x:Key="SettingsUIAboutHMM"       >Về Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Ngôn ngữ:</system:String>
     <system:String x:Key="SettingsUITheme"          >Giao diện:</system:String>
-    
-    
-    
+	<system:String x:Key="SettingsUIReleaseChannel" >Cập nhật kênh:</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >Đổi kênh</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Bạn chuẩn bị đổi sang kênh Phát hành.&#x0a;&#x0a;Bạn có muốn tiếp tục không? Hedge Mod Manager cần khởi động lại để đổi kênh.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Bạn chuẩn bị đổi sang kênh Phát triển. Kênh này có thể chứa lỗi và các tính năng chưa được thử nghiệm.&#x0a;&#x0a;Bạn có muốn tiếp tục không? Hedge Mod Manager cần khởi động lại để đổi kênh.</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >Cài đặt bản mod bằng...</system:String>
@@ -101,8 +102,8 @@
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Một hoặc nhiều mod được bật yêu cầu chuyển hướng tệp lưu để hoạt động chính xác. Bật chức năng này?&#x0a;Nhấp vào không chỉ khi bạn biết mình đang làm gì.</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Không giải quyết được các thành phần phụ thuộc của mod</system:String>
     <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >Các mod sau bị thiếu các thành phần phụ thuộc:</system:String>
-    <system:String x:Key="MainUIMissingDependsResolve">Xử lý mod từ GB</system:String>
-    <system:String x:Key="MainUIResolvable" xml:space="preserve">Một hoặc nhiều thành phần phụ thuộc có thể được xử lý tự động &#x0a;qua GameBanana bằng cách nhấp vào "Xử lý mod từ GB".</system:String>
+	<system:String x:Key="MainUIMissingDependsResolve">Xử lý mod từ GB</system:String>
+	<system:String x:Key="MainUIResolvable" xml:space="preserve">Một hoặc nhiều thành phần phụ thuộc có thể được xử lý tự động &#x0a;qua GameBanana bằng cách nhấp vào "Xử lý mod từ GB".</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Vui lòng chọn một tùy chọn!</system:String>
@@ -112,7 +113,7 @@
     <system:String x:Key="AboutWindowUILine1"  >Phần mềm được thiết kế để giúp dễ dàng tải các bản mod của game chạy Hedgehog Engine.</system:String>
     <system:String x:Key="AboutWindowUILine2"  >Yêu cầu sở hữu bản quyền của một trong những trò chơi được hỗ trợ.</system:String>
     <system:String x:Key="AboutWindowUICredits">Nguồn:</system:String>
-
+    
     <!-- ProfileWindow UI Strings -->
     <system:String x:Key="ProfileWindowUITitle"      >Quản lý hồ sơ</system:String>
     <system:String x:Key="ProfileWindowUIRenameTitle">Đổi tên hồ sơ</system:String>
@@ -159,14 +160,14 @@
     <system:String x:Key="StatusUIDownloadFailed"         >Tải xuống thất bại</system:String>
     <system:String x:Key="StatusUICodeUpdatesAvailable"   >Cập nhật mã có sẵn!</system:String>
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Không tìm thấy cập nhật mã</system:String>
-
+    
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager không phát hiện bất kỳ thư mục mod nào.&#x0a;Bạn có muốn tạo một thư mục mod không?</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Bạn có chắc chắn muốn xóa "{0}"?&#x0a;Không thể hoàn tác hành động này!</system:String>
+	<system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager không phát hiện bất kỳ thư mục mod nào.&#x0a;Bạn có muốn tạo một thư mục mod không?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Bạn chắc chắn muốn xóa "{0}"?&#x0a;Không thể hoàn tác hành động này!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} đã có bản mới nhất.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Có phiên bản mới hơn của {0}! ({1})</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Bạn có chắc chắn muốn hủy cập nhật không?&#x0a;Điều này có thể làm hỏng {0}</system:String>
-
+    
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >Hoàn thành</system:String>
     <system:String x:Key="StatusUIUpdateCompletedPlural"        >Hoàn thành</system:String>
@@ -175,23 +176,23 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Cấu hình {0}</system:String>
-
-    <!-- Mod Description UI Strings -->
+	
+	<!-- Mod Description UI Strings -->
     <system:String x:Key="ModDescriptionUIAbout">Về {0}</system:String>
     <system:String x:Key="ModDescriptionUIMadeBy">Tạo bởi</system:String>
     <system:String x:Key="ModDescriptionUIDate">lúc</system:String>
-
+    
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Tải mod thất bại</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Đã xảy ra lỗi trong quá trình tải xuống. Máy chủ có thể ngừng hoạt động hoặc quá tải. Vui lòng thử lại sau. &#x0a;&#x0a;Chi tiết: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Không tìm thấy trò chơi</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager không thể tìm thấy bản cài đặt của {0}</system:String>
-
-    <!-- Mod Updates Window Strings -->
+	
+	<!-- Mod Updates Window Strings -->
     <system:String x:Key="ModUpdatesChangelog">Các thay đổi</system:String>
-    <system:String x:Key="ModDownloadsDescription">Mô tả</system:String>
+	<system:String x:Key="ModDownloadsDescription">Mô tả</system:String>
     <system:String x:Key="ModUpdatesTitle"    >Các bản cập nhật</system:String>
-    <system:String x:Key="ModDownloadsTitle"  >Các bản tải xuống</system:String>
+	<system:String x:Key="ModDownloadsTitle"  >Các bản tải xuống</system:String>
 
     <!-- Exception Window Strings -->
     <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager bị hỏng</system:String>
@@ -203,11 +204,11 @@
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Có bản cập nhật mới!</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Phiên bản này của Hedge Mod Manager cũ rồi.&#x0a;Bạn nên cập nhật trước tiên để xem còn sự cố nữa hay không.&#x0a;Bạn có muốn cập nhật luôn không?</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">Cập nhật bị lỗi!</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Không thể cập nhật tự động!&#x0a;Please manually download the lastest release.</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Không thể cập nhật tự động!&#x0a;Bạn hãy tự tải bản mới nhất.</system:String>
 
     <!-- Themes -->
     <system:String x:Key="ThemeDark">Tối</system:String>
-    
+	<system:String x:Key="ThemeDarker">Tối hơn</system:String>
     <system:String x:Key="ThemeOLED">OLED</system:String>
     <system:String x:Key="ThemeLight">Sáng</system:String>
 
