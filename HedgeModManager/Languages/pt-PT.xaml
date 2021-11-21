@@ -83,8 +83,8 @@
     <system:String x:Key="SettingsUIAboutHMM"       >Acerca do Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Idioma:</system:String>
     <system:String x:Key="SettingsUITheme"          >Tema:</system:String>
-    <system:String x:Key="SettingsUIReleaseChannel" >Canal de Updates:</system:String>
-    <system:String x:Key="SettingsUIChangingChannelTitle" >A Mudar de Canal de Updates</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel" >Canal de Atualizações:</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >A Mudar de Canal de Atualizações</system:String>
     <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Estás prestes a mudar para o canal 'Release'.&#x0a;&#x0a;Tens a certeza de que pretendes continuar? O Hedge Mod Manager tem de reiniciar para mudar de canal.</system:String>
     <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Estás prestes a mudar para o canal 'Development'. Este canal pode conter funcionalidades não testadas assim como outros problemas.&#x0a;&#x0a;Tens a certeza de que pretendes continuar? O Hedge Mod Manager tem de reiniciar para mudar de canal.</system:String>
     
