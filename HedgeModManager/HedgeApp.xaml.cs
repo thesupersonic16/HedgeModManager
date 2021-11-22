@@ -62,7 +62,6 @@ namespace HedgeModManager
         public static GameInstall CurrentGameInstall;
         public static CPKREDIRConfig Config;
         public static List<GameInstall> GameInstalls = null;
-        public static bool Restart = false;
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
@@ -137,11 +136,9 @@ namespace HedgeModManager
                 return;
             }
 
+            // Include commit hash if defined
             if (!string.IsNullOrEmpty(RepoCommit))
-            {
                 VersionString += $"-{RepoCommit.Substring(0, 7)}";
-
-            }
 
             var application = new HedgeApp();
             application.InitializeComponent();
@@ -150,7 +147,7 @@ namespace HedgeModManager
 
             Args = args;
 #if !DEBUG
-            // Enable our Crash Window if Compiled in Release
+            // Add the exception handler when compiled in Release
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
                 ExceptionWindow.UnhandledExceptionEventHandler(e.ExceptionObject as Exception, e.IsTerminating);
@@ -276,7 +273,7 @@ namespace HedgeModManager
                     return;
                 }
 
-                if (arg == "-decrypt64")
+                if (arg == "-decryptzip")
                 {
                     if (args.Length < 2)
                     {
@@ -284,7 +281,7 @@ namespace HedgeModManager
                         return;
                     }
 
-                    var filename = Path.ChangeExtension(args[1], string.Empty);
+                    var filename = Path.ChangeExtension(args[1], ".zip");
                     if (args.Length > 2)
                         filename = args[2];
 
@@ -334,13 +331,8 @@ namespace HedgeModManager
             }
 
             CodeProvider.TryLoadRoslyn();
-            do
-            {
-                Config = new CPKREDIRConfig(ConfigPath);
-                Restart = false;
-                application.Run();
-            }
-            while (Restart);
+
+            application.Run();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -540,8 +532,8 @@ namespace HedgeModManager
         public static void SetupThemes()
         {
             var resource = Current.TryFindResource("Themes");
-            if (resource is ThemeList langs)
-                InstalledThemes = langs;
+            if (resource is ThemeList themes)
+                InstalledThemes = themes;
         }
 
         public static void UpdateTheme()

@@ -1065,12 +1065,13 @@ namespace HedgeModManager
         private void UI_Edit_Mod(object sender, RoutedEventArgs e)
         {
             var mod = ViewModel.SelectedMod;
-            var window = new EditModWindow(mod) { Owner = this };
+            var newMod = mod.Clone();
+            var window = new EditModWindow(newMod) { Owner = this };
             if (window.ShowDialog().Value)
             {
-                mod.Save();
+                newMod.Save();
+                ViewModel.SelectedMod = ViewModel.Mods[ViewModel.Mods.IndexOf(mod)] = newMod;
             }
-            RefreshMods();
         }
 
         private void UI_Description_Click(object sender, RoutedEventArgs e)
