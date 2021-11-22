@@ -47,7 +47,7 @@
     <system:String x:Key="ModsUICheckUpdatesAll">Kiểm tra cập nhật cho tất cả các mod</system:String>
     <system:String x:Key="ModsUIModEdit"        >Chỉnh sửa Mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Xoá mod</system:String>
-    <system:String x:Key="ModsUIModDragDrop"    >Kéo và thả các mục để thay đổi thứ tự tải của các mod</system:String>
+    <system:String x:Key="ModsUIModDragDrop"    >Kéo thả các mục để thay đổi thứ tự tải của các mod</system:String>
     <system:String x:Key="ModsUISearch"         >Tìm kiếm: </system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Đã phát hiện một hoặc nhiều mod có đường dẫn không hợp lệ.&#x0a;Bạn có muốn Hedge Mod Manager cố gắng sửa lỗi này không?</system:String>
     <system:String xml:space="preserve" x:Key="ModsUINoMods">Chẳng có gì ở đây cả...&#x0a;Đi kiếm vài mod đi!</system:String>
@@ -57,7 +57,7 @@
     <system:String x:Key="CodesUIDownload">Tải xuống mã từ cộng đồng</system:String>
     <system:String x:Key="CodesUIUpdate"  >Cập nhật mã từ cộng đồng</system:String>
     <system:String x:Key="CodesUISearch"  >Tìm kiếm: </system:String>
-    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Các mã đã cài đặt không tương thích với trình chứa mã.&#x0a;Vui lòng cập nhật mã và trình chứa mã.&#x0a;CẢNH BÁO: Thao tác này sẽ xóa mọi mã tùy chỉnh.</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Các mã đã cài đặt không tương thích với trình chứa mã.&#x0a;Vui lòng cập nhật mã và trình chứa mã.&#x0a;CẢNH BÁO: Thao tác này sẽ xóa hết mã tùy chỉnh.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">Đang nhập mã...</system:String>
 
     <!-- Settings UI Strings -->
@@ -132,7 +132,7 @@
     <system:String x:Key="ProfileWindowUIImportMissingCodes"  >Không tìm thấy các mã sau:</system:String>
 
     <!-- EditModWindow UI Strings -->
-    <system:String x:Key="EditModWindowUIHeader">Vui lòng điền một số chi tiết về mod của bạn</system:String>
+    <system:String x:Key="EditModWindowUIHeader">Hãy điền một số chi tiết về mod của bạn</system:String>
 
     <!-- PropertyEditor UI Strings -->
     <system:String x:Key="PropertyEditorUIName" >Tên</system:String>
@@ -149,7 +149,7 @@
     <system:String x:Key="StatusUIFailedToCheckUpdates"   >Kiểm tra cập nhật thất bại</system:String>
     <system:String x:Key="StatusUICheckingForLoaderUpdate">Đang kiểm tra cập nhật cho {0}</system:String>
     <system:String x:Key="StatusUILoaderUpToDate"         >{0} đã có bản mới nhất</system:String>
-    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Kiêmt tra cập nhật cho {0} thất bại</system:String>
+    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Kiểm tra cập nhật cho {0} thất bại</system:String>
     <system:String x:Key="StatusUIInstalledLoader"        >Đã cài đặt {0}</system:String>
     <system:String x:Key="StatusUIDeletedMod"             >Đã xoá {0}</system:String>
     <system:String x:Key="StatusUIModsDBSaved"            >Cơ sở dữ liệu mod đã lưu</system:String>
