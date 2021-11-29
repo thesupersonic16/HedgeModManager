@@ -875,3 +875,59 @@ WriteProtected<byte>(0xE2E3AC, 0xEB, 0x0E);
 
 Patch "Disable Dropped Rings" by "Hyper"
 WriteProtected<byte>(0x1055002, 0xE9, 0xBD, 0x03, 0x00, 0x00);
+
+Patch "Restore Right Stick Camera Controls" by "Skyth"
+//=====//
+// Pan //
+//=====//
+static double PanSmoothingRate = 0.65;
+fixed (double* pPanSmoothingRate = &PanSmoothingRate)
+	WriteProtected(0x10E723E, (uint)pPanSmoothingRate);
+
+// X
+WriteAsmHook(@"
+movss xmm0, ds:0x1E77B74
+shufps xmm0, xmm0, 0
+cvtps2pd xmm0, xmm0
+movapd xmm3, xmm0
+movsd xmm0, ds:0x1464F30
+subsd xmm3, xmm2
+", 0x10E7232, HookBehavior.Replace);
+
+// Y
+WriteAsmHook(@"
+movss xmm0, ds:0x1E77B78
+shufps xmm0, xmm0, 0
+cvtps2pd xmm0, xmm0
+movapd xmm4, xmm0
+movsd xmm0, ds:0x1703C98
+cvtps2pd xmm3, xmm1
+", 0x10E7265, HookBehavior.Replace);
+
+//========//
+// Orient //
+//========//
+
+// X
+WriteAsmHook(@"
+movss xmm1, ds:0x1E77B74
+mulss xmm1, ds:0x13E08A4
+shufps xmm1, xmm1, 0
+cvtps2pd xmm3, xmm1
+xorps xmm1, xmm1
+add esp, 8
+", 0x10EE053, HookBehavior.Replace);
+
+// Y
+WriteAsmHook(@"
+movss xmm1, ds:0x1E77B78
+mulss xmm1, ds:0x13E40B8
+xorps xmm1, ds:0x1703930
+shufps xmm1, xmm1, 0
+cvtps2pd xmm0, xmm1
+xorps xmm1, xmm1
+cvtps2pd xmm2, xmm2
+", 0x10EE030, HookBehavior.Replace);
+
+Patch "All Cameras are Controllable" by "Skyth"
+WriteNop(0x10E7515, 2);
