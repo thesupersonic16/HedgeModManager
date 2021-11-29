@@ -931,3 +931,19 @@ cvtps2pd xmm2, xmm2
 
 Patch "All Cameras are Controllable" by "Skyth"
 WriteNop(0x10E7515, 2);
+
+Code "Unleashed Style Camera" by "Skyth"
+static bool initialized = false;
+
+if (!initialized)
+{
+	WriteAsmHook("mulss xmm0, ds:0x14AF8CC", 0x10ED952, HookBehavior.After);
+	WriteAsmHook("mulss xmm3, ds:0x14AF8CC", 0x10EDB4C, HookBehavior.After);
+	WriteAsmHook("mulss xmm3, ds:0x14AF8CC", 0x10EDAC2, HookBehavior.After);
+
+	initialized = true;
+}
+
+Write(0x1A48BFC, 3.0f); // DRIFT_TARGET_SIDE_OFFSET_SCALE
+Write(0x1A48B60, 60.0f); // CAMERA_MAX_PITCH
+Write(0x1A48B6C, 20.0f); // CAMERA_PITCH_MOVE_VELOCITY_MIN
