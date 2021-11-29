@@ -876,7 +876,7 @@ WriteProtected<byte>(0xE2E3AC, 0xEB, 0x0E);
 Patch "Disable Dropped Rings" by "Hyper"
 WriteProtected<byte>(0x1055002, 0xE9, 0xBD, 0x03, 0x00, 0x00);
 
-Patch "Restore Right Stick Camera Controls" by "Skyth"
+Patch "Restore Right Stick Camera Controls" by "Skyth & Ahremic"
 //=====//
 // Pan //
 //=====//
