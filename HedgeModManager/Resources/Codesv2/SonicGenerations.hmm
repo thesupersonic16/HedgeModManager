@@ -597,12 +597,6 @@ Write<float>(0x01B22e84, 1f)
 Patch "Disable Brightness Adjustment" by "Skyth"
 WriteProtected<byte>(0xD68183, 0x83, 0xC4, 0x08, 0x90, 0x90);
 
-Patch "Force Every Object to Cast Shadows (Requires FxPipeline)" by "Skyth"
-WriteProtected<uint>(0x10C63F2, 0x85);
-WriteProtected<uint>(0x10C641C, 0x85);
-WriteProtected<uint>(0x10C65CB, 0x85);
-WriteProtected<uint>(0x10C65F5, 0x85);
-
 Patch "Disable Spin Jump Particles" by "Hyper"
 WriteProtected<byte>(0x15E902C, 0x00);
 WriteProtected<byte>(0x15F99DC, 0x00);
