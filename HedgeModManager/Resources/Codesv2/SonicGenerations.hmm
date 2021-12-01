@@ -296,7 +296,7 @@ WriteProtected<byte>(0xD58A93, 0xEB, 0x41, 0xEB, 0x3F)
 Patch "Replay Rescue Cutscenes" by "Muzzarino"
 WriteProtected<ushort>(0xD29532, 0x6EB)
 
-Patch "Color Dodge Trail Blending" by "Muzzarino"
+Patch "Colour Dodge Trail Blending" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0x9)
 
 Patch "Lighten Trail Blending" by "Muzzarino"
@@ -306,7 +306,7 @@ Patch "Screen Trail Blending" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0x2)
 WriteProtected<byte>(0xE8D3B7, 0x4)
 
-Patch "Color Burn Trail Blending" by "Muzzarino"
+Patch "Colour Burn Trail Blending" by "Muzzarino"
 WriteProtected<byte>(0xE8D3B7, 0x3)
 
 Patch "Opaque Trail Blending" by "Muzzarino"
@@ -321,7 +321,7 @@ WriteProtected<byte>(0xE8D3B7, 0x7)
 Patch "Subtractive Trail Blending" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0xB)
 
-Patch "Subtitles Appear Additive If Color Is Bright" by "Muzzarino"
+Patch "Subtitles Appear Additive If Colour Is Bright" by "Muzzarino"
 WriteProtected<byte>(0x40FED4, 0xE9)
 WriteProtected<uint>(0x40FED5, 0xFB1DBE)
 WriteNop(0x40FED9, 2)
