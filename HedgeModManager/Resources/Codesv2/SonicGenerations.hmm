@@ -933,3 +933,10 @@ Write(0x1A48B6C, 20.0f); // CAMERA_PITCH_MOVE_VELOCITY_MIN
 Patch "Use Object Blur On All Player Models" by "Skyth"
 WriteProtected<uint>(0x13E0000, 8); // MTFx
 WriteProtected<uint>(0x10CDE69, 1); // FxPipeline
+
+Patch "Collect Boost Particle Instantly" by "brianuuu"
+WriteNop(0x1124433, 6)
+WriteProtected<byte>(0x1124489, 0xEB)
+WriteNop(0x11244C1, 6)
+WriteNop(0x11244D0, 6)
+WriteProtected<uint>(0x112459B, 0xFFFFFFFF)
