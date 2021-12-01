@@ -353,18 +353,6 @@ Patch "Don't Allow Timer to Reduce Ranks on Challenges" by "Muzzarino"
 WriteProtected<uint>(0xD611B3, 0x90C0570F)
 WriteNop(0xD611B7, 4)
 
-Patch "Set Shadowmaps to 512x" by "Darío"
-WriteProtected<uint>(0x10C6039, 512)
-
-Patch "Set Shadowmaps to 2048x" by "Darío"
-WriteProtected<uint>(0x10C6039, 2048)
-
-Patch "Set Shadowmaps to 4096x" by "Darío"
-WriteProtected<uint>(0x10C6039, 4096)
-
-Patch "Set Shadowmaps to 8192x" by "Darío"
-WriteProtected<uint>(0x10C6039, 8192)
-
 Patch "1280x720 Media Player" by "N69"
 WriteProtected<ushort>(0xB210A1, 1280)
 WriteProtected<ushort>(0xB210B1, 720)
@@ -485,7 +473,7 @@ WriteProtected<uint>(0x11BEBAA, 0xB6E9)
 WriteProtected<byte>(0x11BEBAE, 0x0)
 WriteNop(0x11BEBAF, 2)
 
-Patch "No Out of Control Jump Springs" by ""
+Patch "No Out of Control Jump Springs"
 WriteProtected<uint>(0x11BEA91, 0x1CFE9)
 WriteProtected<ushort>(0x11BEA95, 0x8B00)
 WriteProtected<byte>(0x11BEA97, 0x83)
@@ -509,7 +497,7 @@ WriteNop(0xDF2385, 1)
 Code "All Walls Are Wall-Jumpable" by "SWS90"
 Write<byte>(GetPointer(0x1E5E2F0, 0x80C), 1)
 
-Patch "Tricks Don't Fill The Boost Gauge" by ""
+Patch "Tricks Don't Fill The Boost Gauge"
 WriteNop(0xE4B323, 8)
 WriteNop(0xE4B353, 8)
 
