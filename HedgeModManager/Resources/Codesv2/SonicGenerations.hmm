@@ -847,12 +847,6 @@ WriteProtected<byte>(0xCFD47F, 0xE9, 0x95, 0x00, 0x00, 0x00)
 WriteProtected<byte>(0xCFD484, 0xC3)
 WriteNop(0xCFD485, 3)
 
-Patch "Use Regular Shaders in 3D Mode" by "M&M and Skyth"
-WriteProtected<byte>(0x15CA65F, 0x72)
-WriteProtected<byte>(0x15CA66B, 0x72)
-WriteProtected<byte>(0x15CA6CB, 0x72)
-WriteProtected<byte>(0x15CA6DB, 0x72)
-
 Patch "Disable Fast Music" by "Hyper"
 WriteNop(0xE2E30F, 2);
 
