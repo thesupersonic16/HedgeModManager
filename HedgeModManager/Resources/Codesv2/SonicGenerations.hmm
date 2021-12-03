@@ -489,10 +489,22 @@ WriteProtected<uint>(0xDFCCA8, 0xCE1BA0F)
 WriteNop(0xDFCCAC, 7)
 WriteProtected<byte>(0xDFCCB3, 0x73)
 
-Patch "No Boosting Animation When Grinding" by "Skyth"
-WriteProtected<ushort>(0xDF2380, 0xA4E9)
-WriteProtected<byte>(0xDF2382, 0x0)
-WriteNop(0xDF2385, 1)
+Patch "Unleashed Style Grinding Animations" by "Skyth"
+WriteProtected<ushort>(0xDF2380, 0xA4E9);
+WriteProtected<byte>(0xDF2382, 0x0);
+WriteNop(0xDF2385, 1);
+WriteProtected<byte>(0xDF2356, 0xEB);
+WriteProtected<byte>(0xDF2485, 0xEB);
+
+// GrindStumbleLimit
+WriteAsmHook(@"
+add esp, 4
+movss xmm0, ds:0x13F9EDC
+", 0xDF21C5, HookBehavior.Replace);
+WriteAsmHook(@"
+add esp, 4
+movss xmm0, ds:0x13F9EDC
+", 0xDF225E, HookBehavior.Replace);
 
 Code "All Walls Are Wall-Jumpable" by "SWS90"
 Write<byte>(GetPointer(0x1E5E2F0, 0x80C), 1)
