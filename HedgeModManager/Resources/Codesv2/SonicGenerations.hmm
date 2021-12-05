@@ -924,12 +924,28 @@ WriteNop(0x10E7515, 2);
 
 Code "Unleashed Style Camera" by "Skyth"
 static bool initialized = false;
+static double _0 = 0.0;
+static double _50_60 = 50.0 / 60.0;
 
 if (!initialized)
 {
 	WriteAsmHook("mulss xmm0, ds:0x14AF8CC", 0x10ED952, HookBehavior.After);
 	WriteAsmHook("mulss xmm3, ds:0x14AF8CC", 0x10EDB4C, HookBehavior.After);
 	WriteAsmHook("mulss xmm3, ds:0x14AF8CC", 0x10EDAC2, HookBehavior.After);
+
+	WriteAsmHook("cvtps2pd xmm2, xmm1; mulsd xmm0, xmm2", 0x10ED123, HookBehavior.Replace);
+	WriteAsmHook("movss xmm1, ds:0x1559A98", 0x10ED12F, HookBehavior.After);
+	WriteAsmHook("xorpd xmm0, ds:0x1703930; addsd xmm0, ds:0x1703940", 0x10ED14A, HookBehavior.Before);
+
+	fixed (double* p0 = &_0)
+	fixed (double* p50_60 = &_50_60)
+	{
+		WriteProtected<uint>(0x10ED879, (uint)p0);
+		WriteProtected<uint>(0x10ED884, (uint)p50_60);
+	}
+	
+	WriteProtected<byte>(0x10EDEC4, 0xEB);
+	WriteProtected<byte>(0x10EE1AA, 0x0F, 0x57, 0xC0, 0x90, 0x90, 0x90, 0x90, 0x90);
 
 	initialized = true;
 }
