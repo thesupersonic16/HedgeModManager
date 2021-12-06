@@ -399,18 +399,25 @@ namespace HedgeModManager
             if (entry == null)
                 return null;
 
-            if (entry.Local)
+            try
             {
-                ResourceDictionary langDict;
-                using var stream = File.OpenRead($"Languages/{entry.FileName}.xaml");
-                langDict = XamlReader.Load(stream) as ResourceDictionary;
-                return langDict;
+                if (entry.Local)
+                {
+                    ResourceDictionary langDict;
+                        using var stream = File.OpenRead($"Languages/{entry.FileName}.xaml");
+                        langDict = XamlReader.Load(stream) as ResourceDictionary;
+                        return langDict;
+                }
+                else
+                {
+                    var langDict = new ResourceDictionary();
+                    langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
+                    return langDict;
+                }
             }
-            else
+            catch (Exception e)
             {
-                var langDict = new ResourceDictionary();
-                langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
-                return langDict;
+                throw new Exceptions.LanguageLoadException(entry.FileName, e);
             }
         }
 
@@ -453,6 +460,10 @@ namespace HedgeModManager
         public static void LoadLanguage(string culture)
         {
             var langDict = GetLanguageResource(culture);
+
+            // Fallback if language is not loaded
+            langDict ??= GetLanguageResource("en-AU");
+
             while (Current.Resources.MergedDictionaries.Count > 5)
                 Current.Resources.MergedDictionaries.RemoveAt(5);
             // No need to load the fallback language on top
@@ -465,7 +476,7 @@ namespace HedgeModManager
         {
             if (Directory.Exists("Languages"))
             {
-                foreach (string path in Directory.EnumerateFiles("Languages"))
+                foreach (string path in Directory.EnumerateFiles("Languages").Where(t => t.EndsWith(".xaml")))
                 {
                     string fileName = Path.GetFileNameWithoutExtension(path);
                     if (SupportedCultures.Any(t => t.FileName == fileName))
