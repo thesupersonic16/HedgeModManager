@@ -826,11 +826,15 @@ namespace HedgeModManager
             int limit = info.ToList().FindIndex(t => t.SHA == RepoCommit);
             if (limit == -1)
                 limit = info.Length;
+
             for (int i = 0; i < limit; ++i)
             {
+                if (info[i].Commit.IsSkipCI()) continue;
+
                 string message = info[i].Commit.Message.Replace("\r", "");
                 if (message.Contains("\n"))
                     message = message.Substring(0, message.IndexOf("\n", StringComparison.Ordinal));
+
                 text += $" - {info[i].SHA.Substring(0, 7)} - {message}\n";
             }
             return text;
