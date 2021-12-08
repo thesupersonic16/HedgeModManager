@@ -62,7 +62,6 @@ namespace HedgeModManager
         public static GameInstall CurrentGameInstall;
         public static CPKREDIRConfig Config;
         public static List<GameInstall> GameInstalls = null;
-        public static bool Restart = false;
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
@@ -137,11 +136,9 @@ namespace HedgeModManager
                 return;
             }
 
+            // Include commit hash if defined
             if (!string.IsNullOrEmpty(RepoCommit))
-            {
                 VersionString += $"-{RepoCommit.Substring(0, 7)}";
-
-            }
 
             var application = new HedgeApp();
             application.InitializeComponent();
@@ -150,7 +147,7 @@ namespace HedgeModManager
 
             Args = args;
 #if !DEBUG
-            // Enable our Crash Window if Compiled in Release
+            // Add the exception handler when compiled in Release
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
                 ExceptionWindow.UnhandledExceptionEventHandler(e.ExceptionObject as Exception, e.IsTerminating);
@@ -276,7 +273,7 @@ namespace HedgeModManager
                     return;
                 }
 
-                if (arg == "-decrypt64")
+                if (arg == "-decryptzip")
                 {
                     if (args.Length < 2)
                     {
@@ -284,7 +281,7 @@ namespace HedgeModManager
                         return;
                     }
 
-                    var filename = Path.ChangeExtension(args[1], string.Empty);
+                    var filename = Path.ChangeExtension(args[1], ".zip");
                     if (args.Length > 2)
                         filename = args[2];
 
@@ -334,13 +331,8 @@ namespace HedgeModManager
             }
 
             CodeProvider.TryLoadRoslyn();
-            do
-            {
-                Config = new CPKREDIRConfig(ConfigPath);
-                Restart = false;
-                application.Run();
-            }
-            while (Restart);
+
+            application.Run();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -407,18 +399,25 @@ namespace HedgeModManager
             if (entry == null)
                 return null;
 
-            if (entry.Local)
+            try
             {
-                ResourceDictionary langDict;
-                using var stream = File.OpenRead($"Languages/{entry.FileName}.xaml");
-                langDict = XamlReader.Load(stream) as ResourceDictionary;
-                return langDict;
+                if (entry.Local)
+                {
+                    ResourceDictionary langDict;
+                        using var stream = File.OpenRead($"Languages/{entry.FileName}.xaml");
+                        langDict = XamlReader.Load(stream) as ResourceDictionary;
+                        return langDict;
+                }
+                else
+                {
+                    var langDict = new ResourceDictionary();
+                    langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
+                    return langDict;
+                }
             }
-            else
+            catch (Exception e)
             {
-                var langDict = new ResourceDictionary();
-                langDict.Source = new Uri($"Languages/{entry.FileName}.xaml", UriKind.Relative);
-                return langDict;
+                throw new Exceptions.LanguageLoadException(entry.FileName, e);
             }
         }
 
@@ -461,6 +460,10 @@ namespace HedgeModManager
         public static void LoadLanguage(string culture)
         {
             var langDict = GetLanguageResource(culture);
+
+            // Fallback if language is not loaded
+            langDict ??= GetLanguageResource("en-AU");
+
             while (Current.Resources.MergedDictionaries.Count > 5)
                 Current.Resources.MergedDictionaries.RemoveAt(5);
             // No need to load the fallback language on top
@@ -473,7 +476,7 @@ namespace HedgeModManager
         {
             if (Directory.Exists("Languages"))
             {
-                foreach (string path in Directory.EnumerateFiles("Languages"))
+                foreach (string path in Directory.EnumerateFiles("Languages").Where(t => t.EndsWith(".xaml")))
                 {
                     string fileName = Path.GetFileNameWithoutExtension(path);
                     if (SupportedCultures.Any(t => t.FileName == fileName))
@@ -540,8 +543,8 @@ namespace HedgeModManager
         public static void SetupThemes()
         {
             var resource = Current.TryFindResource("Themes");
-            if (resource is ThemeList langs)
-                InstalledThemes = langs;
+            if (resource is ThemeList themes)
+                InstalledThemes = themes;
         }
 
         public static void UpdateTheme()

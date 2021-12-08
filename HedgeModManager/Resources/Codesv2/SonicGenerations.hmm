@@ -296,7 +296,7 @@ WriteProtected<byte>(0xD58A93, 0xEB, 0x41, 0xEB, 0x3F)
 Patch "Replay Rescue Cutscenes" by "Muzzarino"
 WriteProtected<ushort>(0xD29532, 0x6EB)
 
-Patch "Color Dodge Trail Blending" by "Muzzarino"
+Patch "Colour Dodge Trail Blending" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0x9)
 
 Patch "Lighten Trail Blending" by "Muzzarino"
@@ -306,7 +306,7 @@ Patch "Screen Trail Blending" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0x2)
 WriteProtected<byte>(0xE8D3B7, 0x4)
 
-Patch "Color Burn Trail Blending" by "Muzzarino"
+Patch "Colour Burn Trail Blending" by "Muzzarino"
 WriteProtected<byte>(0xE8D3B7, 0x3)
 
 Patch "Opaque Trail Blending" by "Muzzarino"
@@ -321,7 +321,7 @@ WriteProtected<byte>(0xE8D3B7, 0x7)
 Patch "Subtractive Trail Blending" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0xB)
 
-Patch "Subtitles Appear Additive If Color Is Bright" by "Muzzarino"
+Patch "Subtitles Appear Additive If Colour Is Bright" by "Muzzarino"
 WriteProtected<byte>(0x40FED4, 0xE9)
 WriteProtected<uint>(0x40FED5, 0xFB1DBE)
 WriteNop(0x40FED9, 2)
@@ -352,18 +352,6 @@ WriteNop(0xD0E7D5, 2)
 Patch "Don't Allow Timer to Reduce Ranks on Challenges" by "Muzzarino"
 WriteProtected<uint>(0xD611B3, 0x90C0570F)
 WriteNop(0xD611B7, 4)
-
-Patch "Set Shadowmaps to 512x" by "Darío"
-WriteProtected<uint>(0x10C6039, 512)
-
-Patch "Set Shadowmaps to 2048x" by "Darío"
-WriteProtected<uint>(0x10C6039, 2048)
-
-Patch "Set Shadowmaps to 4096x" by "Darío"
-WriteProtected<uint>(0x10C6039, 4096)
-
-Patch "Set Shadowmaps to 8192x" by "Darío"
-WriteProtected<uint>(0x10C6039, 8192)
 
 Patch "1280x720 Media Player" by "N69"
 WriteProtected<ushort>(0xB210A1, 1280)
@@ -485,31 +473,45 @@ WriteProtected<uint>(0x11BEBAA, 0xB6E9)
 WriteProtected<byte>(0x11BEBAE, 0x0)
 WriteNop(0x11BEBAF, 2)
 
-Patch "No Out of Control Jump Springs" by ""
+Patch "No Out of Control Jump Springs"
 WriteProtected<uint>(0x11BEA91, 0x1CFE9)
 WriteProtected<ushort>(0x11BEA95, 0x8B00)
 WriteProtected<byte>(0x11BEA97, 0x83)
 
-Patch "Use Bumpers to Switch Grind Rails" by "Skyth"
-WriteProtected<uint>(0xDFCC92, 0x10244C8B)
-WriteNop(0xDFCC96, 2)
-WriteProtected<ushort>(0xDFCC99, 0xE1BA)
-WriteProtected<byte>(0xDFCC9B, 0xD)
-WriteNop(0xDFCC9C, 3)
-WriteProtected<byte>(0xDFCC9F, 0x73)
-WriteProtected<uint>(0xDFCCA8, 0xCE1BA0F)
-WriteNop(0xDFCCAC, 7)
-WriteProtected<byte>(0xDFCCB3, 0x73)
+Patch "Use Bumpers to Switch Grind Rails" by "Skyth & brianuuu"
+WriteProtected<byte>(0xDFCC78, 0x8B, 0x83, 0x1C, 0x01, 0x00, 0x00)
+WriteProtected<byte>(0xDFCC80, 0xBF, 0x03, 0x00, 0x00, 0x00)
+WriteProtected<byte>(0xDFCC85, 0xE8, 0x76, 0xB1, 0xF9, 0xFF)
+WriteProtected<byte>(0xDFCC8A, 0x84, 0xC0)
+WriteProtected<byte>(0xDFCC8C, 0x75, 0x13)
+WriteProtected<byte>(0xDFCC8E, 0x8B, 0x83, 0x1C, 0x01, 0x00, 0x00)
+WriteProtected<byte>(0xDFCC94, 0xBF, 0x02, 0x00, 0x00, 0x00)
+WriteProtected<byte>(0xDFCC99, 0xEB, 0x0D, 0x90, 0x90, 0x90, 0x90)
+WriteProtected<byte>(0xDFCCA8, 0xE8, 0x53, 0xB1, 0xF9, 0xFF)
+WriteProtected<byte>(0xDFCCAD, 0x84, 0xC0)
+WriteProtected<byte>(0xDFCCAF, 0x90, 0x90, 0x90, 0x90, 0x74, 0x59)
 
-Patch "No Boosting Animation When Grinding" by "Skyth"
-WriteProtected<ushort>(0xDF2380, 0xA4E9)
-WriteProtected<byte>(0xDF2382, 0x0)
-WriteNop(0xDF2385, 1)
+Patch "Unleashed Style Grinding Animations" by "Skyth"
+WriteProtected<ushort>(0xDF2380, 0xA4E9);
+WriteProtected<byte>(0xDF2382, 0x0);
+WriteNop(0xDF2385, 1);
+WriteProtected<byte>(0xDF2356, 0xEB);
+WriteProtected<byte>(0xDF2485, 0xEB);
+
+// GrindStumbleLimit
+WriteAsmHook(@"
+add esp, 4
+movss xmm0, ds:0x13F9EDC
+", 0xDF21C5, HookBehavior.Replace);
+WriteAsmHook(@"
+add esp, 4
+movss xmm0, ds:0x13F9EDC
+", 0xDF225E, HookBehavior.Replace);
 
 Code "All Walls Are Wall-Jumpable" by "SWS90"
 Write<byte>(GetPointer(0x1E5E2F0, 0x80C), 1)
 
-Patch "Tricks Don't Fill The Boost Gauge" by ""
+Patch "Tricks Don't Fill The Boost Gauge"
 WriteNop(0xE4B323, 8)
 WriteNop(0xE4B353, 8)
 
@@ -608,12 +610,6 @@ Write<float>(0x01B22e84, 1f)
 
 Patch "Disable Brightness Adjustment" by "Skyth"
 WriteProtected<byte>(0xD68183, 0x83, 0xC4, 0x08, 0x90, 0x90);
-
-Patch "Force Every Object to Cast Shadows (Requires FxPipeline)" by "Skyth"
-WriteProtected<uint>(0x10C63F2, 0x85);
-WriteProtected<uint>(0x10C641C, 0x85);
-WriteProtected<uint>(0x10C65CB, 0x85);
-WriteProtected<uint>(0x10C65F5, 0x85);
 
 Patch "Disable Spin Jump Particles" by "Hyper"
 WriteProtected<byte>(0x15E902C, 0x00);
@@ -859,12 +855,6 @@ WriteProtected<byte>(0xCFD47F, 0xE9, 0x95, 0x00, 0x00, 0x00)
 WriteProtected<byte>(0xCFD484, 0xC3)
 WriteNop(0xCFD485, 3)
 
-Patch "Use Regular Shaders in 3D Mode" by "M&M and Skyth"
-WriteProtected<byte>(0x15CA65F, 0x72)
-WriteProtected<byte>(0x15CA66B, 0x72)
-WriteProtected<byte>(0x15CA6CB, 0x72)
-WriteProtected<byte>(0x15CA6DB, 0x72)
-
 Patch "Disable Fast Music" by "Hyper"
 WriteNop(0xE2E30F, 2);
 
@@ -872,3 +862,105 @@ Patch "Always Use Fast Music" by "Hyper"
 WriteProtected<byte>(0xE2E30F, 0xEB);
 WriteNop(0xE2E3A2, 2);
 WriteProtected<byte>(0xE2E3AC, 0xEB, 0x0E);
+
+Patch "Disable Dropped Rings" by "Hyper"
+WriteProtected<byte>(0x1055002, 0xE9, 0xBD, 0x03, 0x00, 0x00);
+
+Patch "Restore Right Stick Camera Controls" by "Skyth & Ahremic"
+//=====//
+// Pan //
+//=====//
+static double PanSmoothingRate = 0.65;
+fixed (double* pPanSmoothingRate = &PanSmoothingRate)
+	WriteProtected(0x10E723E, (uint)pPanSmoothingRate);
+
+// X
+WriteAsmHook(@"
+movss xmm0, ds:0x1E77B74
+shufps xmm0, xmm0, 0
+cvtps2pd xmm0, xmm0
+movapd xmm3, xmm0
+movsd xmm0, ds:0x1464F30
+subsd xmm3, xmm2
+", 0x10E7232, HookBehavior.Replace);
+
+// Y
+WriteAsmHook(@"
+movss xmm0, ds:0x1E77B78
+shufps xmm0, xmm0, 0
+cvtps2pd xmm0, xmm0
+movapd xmm4, xmm0
+movsd xmm0, ds:0x1703C98
+cvtps2pd xmm3, xmm1
+", 0x10E7265, HookBehavior.Replace);
+
+//========//
+// Orient //
+//========//
+
+// X
+WriteAsmHook(@"
+movss xmm1, ds:0x1E77B74
+mulss xmm1, ds:0x13E08A4
+shufps xmm1, xmm1, 0
+cvtps2pd xmm3, xmm1
+xorps xmm1, xmm1
+add esp, 8
+", 0x10EE053, HookBehavior.Replace);
+
+// Y
+WriteAsmHook(@"
+movss xmm1, ds:0x1E77B78
+mulss xmm1, ds:0x13E40B8
+xorps xmm1, ds:0x1703930
+shufps xmm1, xmm1, 0
+cvtps2pd xmm0, xmm1
+xorps xmm1, xmm1
+cvtps2pd xmm2, xmm2
+", 0x10EE030, HookBehavior.Replace);
+
+Patch "All Cameras are Controllable" by "Skyth"
+WriteNop(0x10E7515, 2);
+
+Code "Unleashed Style Camera" by "Skyth"
+static bool initialized = false;
+static double _0 = 0.0;
+static double _50_60 = 50.0 / 60.0;
+
+if (!initialized)
+{
+	WriteAsmHook("mulss xmm0, ds:0x14AF8CC", 0x10ED952, HookBehavior.After);
+	WriteAsmHook("mulss xmm3, ds:0x14AF8CC", 0x10EDB4C, HookBehavior.After);
+	WriteAsmHook("mulss xmm3, ds:0x14AF8CC", 0x10EDAC2, HookBehavior.After);
+
+	WriteAsmHook("cvtps2pd xmm2, xmm1; mulsd xmm0, xmm2", 0x10ED123, HookBehavior.Replace);
+	WriteAsmHook("movss xmm1, ds:0x1559A98", 0x10ED12F, HookBehavior.After);
+	WriteAsmHook("xorpd xmm0, ds:0x1703930; addsd xmm0, ds:0x1703940", 0x10ED14A, HookBehavior.Before);
+
+	fixed (double* p0 = &_0)
+	fixed (double* p50_60 = &_50_60)
+	{
+		WriteProtected<uint>(0x10ED879, (uint)p0);
+		WriteProtected<uint>(0x10ED884, (uint)p50_60);
+	}
+	
+	WriteProtected<byte>(0x10EDEC4, 0xEB);
+	WriteProtected<byte>(0x10EE1AA, 0x0F, 0x57, 0xC0, 0x90, 0x90, 0x90, 0x90, 0x90);
+
+	initialized = true;
+}
+
+Write(0x1A48BFC, 3.0f); // DRIFT_TARGET_SIDE_OFFSET_SCALE
+Write(0x1A48B60, 60.0f); // CAMERA_MAX_PITCH
+Write(0x1A48B6C, 20.0f); // CAMERA_PITCH_MOVE_VELOCITY_MIN
+
+Patch "Use Object Blur On All Player Models" by "Skyth"
+WriteProtected<uint>(0x13E0000, 8); // MTFx
+WriteProtected<uint>(0x10CDE69, 1); // FxPipeline
+
+Patch "Collect Boost Particle Instantly" by "brianuuu"
+WriteNop(0x1124433, 6)
+WriteProtected<byte>(0x1124489, 0xEB)
+WriteNop(0x11244C1, 6)
+WriteNop(0x11244D0, 6)
+WriteProtected<uint>(0x112459B, 0xFFFFFFFF)

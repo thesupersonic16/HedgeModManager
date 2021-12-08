@@ -260,6 +260,11 @@ namespace HedgeModManager
             });
         }
 
+        public ModInfo Clone()
+        {
+            return MemberwiseClone() as ModInfo; 
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 
