@@ -9,6 +9,9 @@ namespace HedgeModManager.GitHub
 {
     public class CommitInfo
     {
+        // From: https://github.blog/changelog/2021-02-08-github-actions-skip-pull-request-and-push-workflows-with-skip-ci/
+        private readonly string[] noCIStrings = { "[skip ci]", "[ci skip]", "[no ci]", "[skip actions]", "[actions skip]" };
+
         [JsonProperty("id")]
         public string ID { get; set; }
 
@@ -26,5 +29,14 @@ namespace HedgeModManager.GitHub
 
         [JsonProperty("committer")]
         public AuthorInfo Committer { get; set; }
+
+        public bool IsSkipCI()
+        {
+            foreach (string noCiString in noCIStrings)
+            {
+                if (Message.Contains(noCiString)) return true;
+            }
+            return false;
+        }
     }
 }
