@@ -598,10 +598,6 @@ WriteNop(0x11AEC63, 22)
 Patch "Homing Attack on Boost" by "SWS90"
 WriteProtected<byte>(0x015FA418, 0)
 
-Patch "Fix Sonic's Legs Swinging Too High" by "Skyth"
-WriteProtected<byte>(0x117F371, 0xE9, 0x35, 0x02, 0x00, 0x00, 0x90);
-WriteProtected<byte>(0x117F5C8, 0xEB);
-
 Code "Disable Depth of Field" by "Luig"
 Write<byte>(0x01A4358D, 0)
 
