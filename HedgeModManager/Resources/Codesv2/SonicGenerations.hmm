@@ -737,11 +737,14 @@ Patch "Red Rings Appear On New Game" by "brianuuu"
 WriteNop(0x11A9ECB, 2);
 
 Patch "Disable Boost Particles" by "Hyper"
-WriteProtected<byte>(0x15E9048, 0x00);
-WriteProtected<byte>(0x15E9060, 0x00);
-WriteProtected<byte>(0x15F99F8, 0x00);
-WriteProtected<byte>(0x15F9A10, 0x00);
-WriteProtected<byte>(0x164330C, 0x00);
+WriteProtected<byte>(0x15A3568, 0x00); /* ef_bo_sha_yh1_boost1 */
+WriteProtected<byte>(0x15E9048, 0x00); /* ef_ch_sng_yh1_boost1 */
+WriteProtected<byte>(0x15E9060, 0x00); /* ef_ch_sng_yh1_boost2 */
+WriteProtected<byte>(0x15EE774, 0x00); /* ef_bo_sha_yh1_hyper_sn */
+WriteProtected<byte>(0x15EE78C, 0x00); /* ef_bo_sha_yh1_hyper_sn */
+WriteProtected<byte>(0x15F99F8, 0x00); /* ef_ch_sps_yh1_boost1 */
+WriteProtected<byte>(0x15F9A10, 0x00); /* ef_ch_sps_yh1_boost2 */
+WriteProtected<byte>(0x164330C, 0x00); /* ef_st_ssh_yh1_bobsled_boost */
 
 Patch "Disable Air Boost" by "Sajid"
 WriteProtected<byte>(0x00DFDFC4, 0xEB, 0x27)
