@@ -23,12 +23,13 @@
     <system:String x:Key="MainUIMods"          >Mods</system:String>
     <system:String x:Key="MainUICodes"         >Codes</system:String>
     <system:String x:Key="MainUISettings"      >Settings</system:String>
-    <system:String x:Key="MainUIRemoveMod"     >Remove Mod</system:String>
+    <system:String x:Key="MainUIRemoveMod"     >Remove Mod</system:String>           <!-- To be removed -->
     <system:String x:Key="MainUIAddMod"        >Add Mod</system:String>
-    <system:String x:Key="MainUIRefreshModList">Refresh Mod List</system:String>
+    <system:String x:Key="MainUIRefreshModList">Refresh List</system:String>
     <system:String x:Key="MainUISave"          >Save</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Save and Play</system:String>
-    <system:String x:Key="MainUIPlay"          >Play</system:String>
+    <system:String x:Key="MainUIConfigureMod"  >Configure Mod</system:String>
+    <system:String x:Key="MainUIPlay"          >Play</system:String>                 <!-- To be removed -->
     <system:String x:Key="MainUIMLDownloadFail">Failed to download mod loader.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Failed to install mod loader.&#x0a;Please make sure you have permissions to write game files.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Failed to uninstall mod loader.&#x0a;Please make sure no games are currently running.</system:String>
@@ -89,6 +90,7 @@
     <system:String x:Key="SettingsUICheckCLUpdate"  >Check for code loader updates</system:String>
     <system:String x:Key="SettingsUICheckModUpdates">Check for mod updates</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Keep Hedge Mod Manager open after starting a game</system:String>
+    <system:String x:Key="SettingsUICheckHMMUpdate" >Check for Updates</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >About Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Language:</system:String>
     <system:String x:Key="SettingsUITheme"          >Theme:</system:String>

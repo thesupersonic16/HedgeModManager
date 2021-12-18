@@ -368,6 +368,11 @@ namespace HedgeModManager
             Console.WriteLine("        Usage: filename [output]");
         }
 
+        public static Uri GetResourceUri(string path)
+        {
+            return new Uri(@"pack://application:,,,/" + Assembly.GetExecutingAssembly().GetName().Name + ";component/" + path, UriKind.Absolute);
+        }
+
         public static GameInstall FindAndSetLocalGame()
         {
             foreach (var game in Games.GetSupportedGames())

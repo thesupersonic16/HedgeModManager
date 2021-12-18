@@ -165,6 +165,9 @@ namespace HedgeModManager
         public Game BaseGame;
         public string GameDirectory;
 
+        public string GameName { get { return Localise("Game" + BaseGame?.GameName, BaseGame?.GameName); } }
+        public Uri GameImage { get { return HedgeApp.GetResourceUri($"Resources/Graphics/Games/{BaseGame?.GameName}.png"); } }
+
         public GameInstall(Game game, string directory)
         {
             BaseGame = game;

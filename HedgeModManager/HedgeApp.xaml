@@ -858,27 +858,47 @@
             </Style>
 
             <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource  HMM.Window.BorderBrush}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ComboBox}">
                             <Grid>
-                                <ToggleButton Style="{StaticResource ComboBoxToggle}"
-                                              IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
-                                              ClickMode="Press" Focusable="False"/>
-                                <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}"
-                                                  HorizontalAlignment="Left" VerticalAlignment="Center"
-                                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="5,0,0,0"/>
-                                <!--<TextBox x:Name="PART_EditableTextBox" Style="{StaticResource ComboBoxEditableTextBox}" Background="Transparent" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}"
-                                         Margin="2,0,25,0" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>-->
-                                <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Fade">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition MinWidth="{x:Static SystemParameters.VerticalScrollBarWidth}" Width="0"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ToggleButton Style="{StaticResource ComboBoxToggle}" BorderBrush="{TemplateBinding BorderBrush}"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                                      ClickMode="Press" Focusable="False" Grid.ColumnSpan="2"/>
+
+                                <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                          Content="{TemplateBinding SelectionBoxItem}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" 
+                                          ContentTemplate="{TemplateBinding ItemTemplate}" Margin="5,0,0,0"/>
+
+                                <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Slide">
                                     <Border BorderThickness="1" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                            Background="{DynamicResource HMM.Window.BackgroundBrush}" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" CornerRadius="2">
+                                            Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
                                         <ScrollViewer>
                                             <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0,5,0,5"/>
                                         </ScrollViewer>
                                     </Border>
                                 </Popup>
                             </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource HMM.Button.BackgroundBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource HMM.Button.BackgroundBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsDropDownOpen" Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.AccentBrush1}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

@@ -1583,6 +1583,42 @@ namespace HedgeModManager
                 box.ShowDialog();
             }
         }
+        private void UI_ModsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ModsList.SelectedItem is ModInfo modInfo)
+                Button_ConfigureMod.IsEnabled = modInfo.HasSchema;
+            else
+                Button_ConfigureMod.IsEnabled = false;
+        }
+
+        private async void UI_CheckUpdates(object sender, RoutedEventArgs e)
+        {
+            await CheckForManagerUpdatesAsync();
+        }
+
+        private void UI_ModFeatureConfig_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var modInfo = (sender as Border).Tag as ModInfo;
+            if (modInfo == null)
+                return;
+
+            ViewModel.SelectedMod = modInfo;
+            if (modInfo.HasSchema)
+            {
+                var window = new ModConfigWindow(modInfo) { Owner = this };
+                window.ShowDialog();
+            }
+        }
+
+        private void UI_ModFeatureUpdate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var modInfo = (sender as Border).Tag as ModInfo;
+            if (modInfo == null)
+                return;
+
+            ViewModel.SelectedMod = modInfo;
+            UI_Update_Mod(sender, null);
+        }
 
         class StatusLogger : ILogger
         {

@@ -36,7 +36,7 @@
                 <TabControl x:Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Margin="-2,0,-2,0">
                     <TabItem x:Name="ModsTab" Header="{DynamicResource MainUIMods}">
                         <Grid>
-                            <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown"
+                            <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown" SelectionChanged="UI_ModsList_SelectionChanged"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
                                       Margin="10,5,10,5" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" 
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
@@ -75,12 +75,12 @@
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                         <Border ToolTip="{DynamicResource ModsUIFeatureConfigDisable}">
-                                                            <Border Background="#00000000" ToolTip="{DynamicResource ModsUIFeatureConfig}" IsEnabled="{Binding HasSchema}">
+                                                            <Border Background="#00000000" ToolTip="{DynamicResource ModsUIFeatureConfig}" IsEnabled="{Binding HasSchema}" Tag="{Binding}" PreviewMouseDown="UI_ModFeatureConfig_PreviewMouseDown">
                                                                 <Path Data="{StaticResource SettingsGeometry}" Fill="{Binding HasSchema, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
                                                             </Border>
                                                         </Border>
                                                         <Border ToolTip="{DynamicResource ModsUIFeatureUpdateDisable}">
-                                                            <Border Background="#00000000" ToolTip="{DynamicResource ModsUIFeatureUpdate}" IsEnabled="{Binding HasUpdates}">
+                                                            <Border Background="#00000000" ToolTip="{DynamicResource ModsUIFeatureUpdate}" IsEnabled="{Binding HasUpdates}"  Tag="{Binding}" PreviewMouseDown="UI_ModFeatureUpdate_PreviewMouseDown">
                                                                 <Path Data="{StaticResource RefreshGeometry}" Fill="{Binding HasUpdates, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
                                                             </Border>
                                                         </Border>
@@ -172,12 +172,10 @@
                                         <!--<CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"             Margin="-1,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding HiddenMode, Converter={StaticResource BoolToVisibilityConverter}}"/>-->
                                     </StackPanel>
 
-                                    <Label                                   Content="{DynamicResource SettingsUILabelGame}" VerticalAlignment="Top" Margin="0,7,253,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
-                                    <ComboBox   x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}"                  Margin="0,7,10,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="Game_Changed" HorizontalAlignment="Right" Width="237" />
-                                    <Label                                   Content="{DynamicResource SettingsUILabelProfile}" VerticalAlignment="Top" Margin="0,38,253,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
-                                    <ComboBox   x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Margin="0,38,39,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Right" Width="208" />
+                                    <Label                                   Content="{DynamicResource SettingsUILabelProfile}" VerticalAlignment="Top" Margin="0,7,253,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
+                                    <ComboBox   x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Margin="0,7,39,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Right" Width="208" />
                                     <Label                                   Content="{DynamicResource SettingsUILabelMDir}"    Margin="4,70,0,0"      HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
-                                    <Button                                  Content="⚙"                                       Margin="0,39,10,0" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Height="24" HorizontalAlignment="Right" Width="24"/>
+                                    <Button                                  Content="⚙"                                       Margin="0,8,10,0" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Height="24" HorizontalAlignment="Right" Width="24"/>
                                     <TextBox                                 Text="{Binding ModsDB.RootDirectory}"              Margin="113,73,39,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
                                     <Button                                  Content="..."                                      Margin="0,73,10,0" VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
                                 </Grid>
@@ -189,10 +187,11 @@
                                     <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"   IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="9,28,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}" IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="9,48,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
                                     <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"     IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="9,68,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="15"/>
-                                    <Button   Content="{DynamicResource SettingsUIAboutHMM}"                                                          Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="61" Width="185" Click="UI_About_Click"/>
-                                    <Label    Content="{DynamicResource SettingsUIReleaseChannel}"                                                           Margin="4,0,0,78" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
+                                    <Button   Content="{DynamicResource SettingsUIAboutHMM}"                                                          Margin="0,0,10,11" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="43" Width="185" Click="UI_About_Click"/>
+                                    <Button   Content="{DynamicResource SettingsUICheckHMMUpdate}"                                                    Margin="0,0,10,61" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="43" Width="185" Click="UI_CheckUpdates"/>
+                                    <Label    Content="{DynamicResource SettingsUIReleaseChannel}"                                                    Margin="4,0,0,78" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
                                     <ComboBox x:Name="ComboBox_Channel" ItemsSource="{Binding UpdateChannels, Source={x:Static Application.Current}}" SelectedItem="{Binding CurrentChannel, Source={x:Static Application.Current}}" Margin="130,0,0,77" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="200" Height="27" SelectionChanged="ComboBox_Channel_SelectionChanged" />
-                                    <Label    Content="{DynamicResource SettingsUILanguage}"                                                           Margin="4,0,0,45" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
+                                    <Label    Content="{DynamicResource SettingsUILanguage}"                                                          Margin="4,0,0,45" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
                                     <ComboBox x:Name="ComboBox_Languages" ItemsSource="{Binding SupportedCultures, Source={x:Static Application.Current}}" SelectedItem="{Binding CurrentCulture, Source={x:Static Application.Current}}" Margin="130,0,0,44" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="200" Height="27" SelectionChanged="ComboBox_Languages_Changed" Loaded="ComboBox_Languages_Loaded" />
                                     <Label    Content="{DynamicResource SettingsUITheme}"                                                           Margin="4,0,0,12" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  />
                                     <ComboBox x:Name="ComboBox_Themes" ItemsSource="{Binding InstalledThemes, Source={x:Static Application.Current}}" SelectedItem="{Binding CurrentTheme, Source={x:Static Application.Current}}" Margin="130,0,0,11" HorizontalAlignment="Left" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="200" Height="27" SelectionChanged="ComboBox_Themes_Changed" Loaded="ComboBox_Themes_Loaded" />
@@ -213,21 +212,26 @@
                             <RowDefinition Height="0.45*"/>
                         </Grid.RowDefinitions>
 
-                        <Button Content="{DynamicResource MainUIRemoveMod}"                   Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_RemoveMod_Click"/>
-                        <Button Content="{DynamicResource MainUIRefreshModList}" Width="Auto" Grid.Column="1" Grid.Row="0" Margin="5" Click="UI_Refresh_Click"/>
-                        <!--<Grid Grid.Row="0" Grid.Column="1" Margin="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Button Content="{DynamicResource MainUIRefreshModList}" Width="Auto" Grid.Column="0" Margin="0,0,5,0" Click="UI_Refresh_Click"/>
-                            <Button Content="Configure Mod" Width="Auto" Grid.Column="1" Margin="5,0,0,0" Click="UI_Refresh_Click"/>
-                        </Grid>-->
-                        <Button Content="{DynamicResource MainUIAddMod}"         Width="Auto" Grid.Column="2" Grid.Row="0" Margin="5" Click="UI_Install_Mod"/>
+                        <Button Content="{DynamicResource MainUIAddMod}" Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_Install_Mod"/>
+                        <Button x:Name="Button_ConfigureMod" Content="{DynamicResource MainUIConfigureMod}" Grid.Column="2" Grid.Row="0" Margin="5" IsEnabled="False" Click="UI_ConfigureMod_Click"/>
+                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Grid.Column="1" Grid.Row="0" Margin="5" SelectionChanged="Game_Changed">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="32" Height="32" CornerRadius="3">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding GameImage}"/>
+                                            </Border.Background>
+                                        </Border>
+                                        <Label Content="{Binding GameName}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
                         <Button Content="{DynamicResource MainUISave}"                        Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
                         <Button Content="{DynamicResource MainUISaveAndPlay}"    Width="Auto" Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
-                        <Button Content="{DynamicResource MainUIPlay}"           Width="Auto" Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Play_Click"/>
+                        <Button Content="{DynamicResource MainUIRefreshModList}" Width="Auto" Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Refresh_Click"/>
                     </Grid>
                 </StackPanel>
             </Grid>

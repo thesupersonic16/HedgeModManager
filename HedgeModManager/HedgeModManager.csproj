@@ -45,6 +45,11 @@
     <None Include="Resources\Keys.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Graphics\Games\PuyoPuyoTetris2.png" />
+    <Resource Include="Resources\Graphics\Games\SonicForces.png" />
+    <Resource Include="Resources\Graphics\Games\SonicGenerations.png" />
+    <Resource Include="Resources\Graphics\Games\SonicLostWorld.png" />
+    <Resource Include="Resources\Graphics\Games\Tokyo2020.png" />
     <Resource Include="Resources\Graphics\icon256.png" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +104,13 @@
   <ItemGroup>
     <Compile Remove="Resources\Keys.cs" />
     <Compile Remove="Resources\MemoryService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Graphics\Games\PuyoPuyoTetris2.png" />
+    <None Remove="Resources\Graphics\Games\SonicForces.png" />
+    <None Remove="Resources\Graphics\Games\SonicGenerations.png" />
+    <None Remove="Resources\Graphics\Games\SonicLostWorld.png" />
+    <None Remove="Resources\Graphics\Games\Tokyo2020.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
