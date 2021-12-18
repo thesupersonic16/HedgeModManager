@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Graphics\Games\PuyoPuyoTetris2.png" />
+    <Resource Include="Resources\Graphics\Games\SonicColorsUltimate.png" />
     <Resource Include="Resources\Graphics\Games\SonicForces.png" />
     <Resource Include="Resources\Graphics\Games\SonicGenerations.png" />
     <Resource Include="Resources\Graphics\Games\SonicLostWorld.png" />
@@ -107,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\Graphics\Games\PuyoPuyoTetris2.png" />
+    <None Remove="Resources\Graphics\Games\SonicColorsUltimate.png" />
     <None Remove="Resources\Graphics\Games\SonicForces.png" />
     <None Remove="Resources\Graphics\Games\SonicGenerations.png" />
     <None Remove="Resources\Graphics\Games\SonicLostWorld.png" />
