@@ -218,7 +218,7 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Border Width="32" Height="32" CornerRadius="3">
+                                        <Border Width="32" Height="32" CornerRadius="3" RenderOptions.BitmapScalingMode="Fant">
                                             <Border.Background>
                                                 <ImageBrush ImageSource="{Binding GameImage}"/>
                                             </Border.Background>
