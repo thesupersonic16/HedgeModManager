@@ -74,10 +74,26 @@
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                        <Path Data="{StaticResource RefreshGeometry}" Fill="{Binding HasUpdates, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
-                                                        <Path Data="{StaticResource SaveGeometry}" Fill="{Binding SupportsSave, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
-                                                        <Path Data="{StaticResource CodeGeometry}" Fill="{Binding HasCodes, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
-                                                        <Path Data="{StaticResource SettingsGeometry}" Fill="{Binding HasSchema, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
+                                                        <Border ToolTip="{DynamicResource ModsUIFeatureConfigDisable}">
+                                                            <Border Background="#00000000" ToolTip="{DynamicResource ModsUIFeatureConfig}" IsEnabled="{Binding HasSchema}">
+                                                                <Path Data="{StaticResource SettingsGeometry}" Fill="{Binding HasSchema, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
+                                                            </Border>
+                                                        </Border>
+                                                        <Border ToolTip="{DynamicResource ModsUIFeatureUpdateDisable}">
+                                                            <Border Background="#00000000" ToolTip="{DynamicResource ModsUIFeatureUpdate}" IsEnabled="{Binding HasUpdates}">
+                                                                <Path Data="{StaticResource RefreshGeometry}" Fill="{Binding HasUpdates, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
+                                                            </Border>
+                                                        </Border>
+                                                        <Border ToolTip="{DynamicResource ModsUIFeatureSaveDisable}">
+                                                            <Border Background="#00000000" ToolTip="{DynamicResource ModsUIFeatureSave}" IsEnabled="{Binding SupportsSave}">
+                                                                <Path Data="{StaticResource SaveGeometry}" Fill="{Binding SupportsSave, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
+                                                            </Border>
+                                                        </Border>
+                                                        <Border ToolTip="{DynamicResource ModsUIFeatureCodeDisable}">
+                                                            <Border Background="#00000000" ToolTip="{DynamicResource ModsUIFeatureCode}" IsEnabled="{Binding HasCodes}">
+                                                                <Path Data="{StaticResource CodeGeometry}" Fill="{Binding HasCodes, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
+                                                            </Border>
+                                                        </Border>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>

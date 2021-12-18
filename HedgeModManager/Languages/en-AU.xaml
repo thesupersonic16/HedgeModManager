@@ -48,6 +48,14 @@
     <system:String x:Key="ModsUICheckUpdatesAll">Check all mods for updates</system:String>
     <system:String x:Key="ModsUIModEdit"        >Edit mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Delete mod</system:String>
+    <system:String x:Key="ModsUIFeatureConfig"  >This mod can be configured.</system:String>
+    <system:String x:Key="ModsUIFeatureConfigDisable">This mod does not support configuration.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdate"       >This mod supports updating.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateDisable">This mod does not support updating.</system:String>
+    <system:String x:Key="ModsUIFeatureSave"         >This mod utilises save redirection.</system:String>
+    <system:String x:Key="ModsUIFeatureSaveDisable"  >This mod does not support save redirection.</system:String>
+    <system:String x:Key="ModsUIFeatureCode"         >This mod contains custom code.</system:String>
+    <system:String x:Key="ModsUIFeatureCodeDisable"  >This mod does not contain custom code.</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Drag and drop items to change the load order of mods.</system:String>
     <system:String x:Key="ModsUISearch"         >Search: </system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager has detected that one or more mods have invalid include directories.&#x0a;Do you want Hedge Mod Manager to attempt to fix this?</system:String>
