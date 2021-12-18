@@ -13,6 +13,7 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:ModUpdateStatusConverter x:Key="ModUpdateStatusConverter"/>
         <local:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
+        <local:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
         <ContextMenu x:Key="ModContextMenu">
             <MenuItem Header="{DynamicResource ModsUIModDescription}" Click="UI_Description_Click" InputGestureText="(Ctrl+D)"/>
             <MenuItem Header="{DynamicResource ModsUIModFavorite}" Click="UI_Favorite_Click" InputGestureText="(Alt+F)"/>
@@ -51,6 +52,7 @@
                                                 <ToolTip Content="{DynamicResource ModsUIModDragDrop}"/>
                                             </Setter.Value>
                                         </Setter>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                     </Style>
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
@@ -67,9 +69,19 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                         <GridViewColumn Header="{DynamicResource ModsUIVersion}"     Width="60"  DisplayMemberBinding="{Binding Version}"/>
-                                        <GridViewColumn Header="{DynamicResource ModsUIAuthor}"      Width="89"  DisplayMemberBinding="{Binding Author}"/>
-                                        <GridViewColumn Header="{DynamicResource ModsUISupportSave}" Width="105" DisplayMemberBinding="{Binding SupportsSave, Converter={StaticResource BoolToYesNoConverter}}"/>
-                                        <GridViewColumn Header="{DynamicResource ModsUIHasUpdate}"   Width="70"  DisplayMemberBinding="{Binding UpdateServer, Converter={StaticResource ModUpdateStatusConverter}}"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUIAuthor}"      Width="129"  DisplayMemberBinding="{Binding Author}"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUIFeatures}" Width="135" >
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <Path Data="{StaticResource RefreshGeometry}" Fill="{Binding HasUpdates, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
+                                                        <Path Data="{StaticResource SaveGeometry}" Fill="{Binding SupportsSave, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
+                                                        <Path Data="{StaticResource CodeGeometry}" Fill="{Binding HasCodes, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
+                                                        <Path Data="{StaticResource SettingsGeometry}" Fill="{Binding HasSchema, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                     </GridView>
                                 </ListView.View>
                             </ListView>

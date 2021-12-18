@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 using Markdig;
 
 namespace HedgeModManager
@@ -168,6 +169,27 @@ namespace HedgeModManager
             if (value is not bool)
                 value = true;
             return (bool)value ? new GridLength((double)parameter) : new GridLength(0);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+    [ValueConversion(typeof(bool), typeof(Brush))]
+    public class BoolToBrushConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var brush = Application.Current.TryFindResource("HMM.Menu.DisabledColor") as Brush;
+            var brushDisabled = brush;
+            if (parameter is string strParam)
+            {
+                try { brush = Application.Current.TryFindResource(strParam) as Brush; }
+                catch { };
+            }
+            return (bool)value ? brush : brushDisabled;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

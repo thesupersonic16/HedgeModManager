@@ -37,8 +37,9 @@
     <system:String x:Key="ModsUIName"           >Name</system:String>
     <system:String x:Key="ModsUIVersion"        >Version</system:String>
     <system:String x:Key="ModsUIAuthor"         >Author</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Supports Save</system:String>
-    <system:String x:Key="ModsUIHasUpdate"      >Updates</system:String>
+    <system:String x:Key="ModsUISupportSave"    >Supports Save</system:String>        <!-- To be removed -->
+    <system:String x:Key="ModsUIHasUpdate"      >Updates</system:String>              <!-- To be removed -->
+    <system:String x:Key="ModsUIFeatures"       >Features</system:String>
     <system:String x:Key="ModsUIModDescription" >Description</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Favourite</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configure mod</system:String>

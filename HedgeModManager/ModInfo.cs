@@ -39,6 +39,9 @@ namespace HedgeModManager
         public bool HasUpdates => !string.IsNullOrEmpty(UpdateServer);
 
         [PropertyTools.DataAnnotations.Browsable(false)]
+        public bool HasCodes => !string.IsNullOrEmpty(DLLFile) || !string.IsNullOrEmpty(CodeFile);
+
+        [PropertyTools.DataAnnotations.Browsable(false)]
         public bool SupportsSave => !string.IsNullOrEmpty(SaveFile);
 
         [PropertyTools.DataAnnotations.Browsable(false)]
