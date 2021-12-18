@@ -1409,6 +1409,14 @@ namespace HedgeModManager
                 {
                     ViewModel.HiddenMode = !ViewModel.HiddenMode;
                 }
+                if (Keyboard.IsKeyDown(Key.F4))
+                {
+                    try
+                    {
+                        HedgeApp.DumpLanguage(HedgeApp.CurrentCulture.FileName);
+                    }
+                    catch { }
+                }
 
             }
             if (ctrlkey)
