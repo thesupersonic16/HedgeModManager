@@ -28,9 +28,6 @@ namespace HedgeModManager.UI
         public ModConfigWindow()
         {
             InitializeComponent();
-
-            Width = RegistryConfig.LastModConfigWindowWidth;
-            Height = RegistryConfig.LastModConfigWindowHeight;
         }
 
         public ModConfigWindow(ModInfo mod)
@@ -49,9 +46,6 @@ namespace HedgeModManager.UI
             panel.HorizontalAlignment = HorizontalAlignment.Stretch;
             panel.VerticalAlignment = VerticalAlignment.Stretch;
             ItemsHost.Children.Add(panel);
-
-            Width  = RegistryConfig.LastModConfigWindowWidth;
-            Height = RegistryConfig.LastModConfigWindowHeight;
         }
 
         private void OnItemHover(string des)
@@ -68,14 +62,6 @@ namespace HedgeModManager.UI
         private void UI_Cancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            RegistryConfig.LastModConfigWindowWidth = Width;
-            RegistryConfig.LastModConfigWindowHeight = Height;
-            RegistryConfig.Save();
-
         }
     }
 }
