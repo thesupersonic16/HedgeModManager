@@ -16,6 +16,11 @@ namespace HedgeModManager
         public static string UILanguage;
         public static string UITheme;
 
+        public static double LastEditModWindowWidth = 450;
+        public static double LastEditModWindowHeight = 550;
+        public static double LastModConfigWindowWidth = 800;
+        public static double LastModConfigWindowHeight = 450;
+
         static RegistryConfig()
         {
             Load();
@@ -27,6 +32,10 @@ namespace HedgeModManager
             key.SetValue("LastGame", LastGameDirectory);
             key.SetValue("UILanguage", UILanguage);
             key.SetValue("UITheme", UITheme);
+            key.SetValue("LastEditModWindowWidth", LastEditModWindowWidth);
+            key.SetValue("LastEditModWindowHeight", LastEditModWindowHeight);
+            key.SetValue("LastModConfigWindowWidth", LastModConfigWindowWidth);
+            key.SetValue("LastModConfigWindowHeight", LastModConfigWindowHeight);
             key.Close();
         }
 
@@ -48,6 +57,14 @@ namespace HedgeModManager
             LastGameDirectory = (string)key.GetValue("LastGame", string.Empty);
             UILanguage = (string)key.GetValue("UILanguage", HedgeApp.PCCulture);
             UITheme = (string)key.GetValue("UITheme", useLightMode ? "LightTheme" : "DarkTheme");
+            try
+            {
+                LastEditModWindowWidth = double.Parse((string)key.GetValue("LastEditModWindowWidth", 450));
+                LastEditModWindowHeight = double.Parse((string)key.GetValue("LastEditModWindowHeight", 550));
+                LastModConfigWindowWidth = double.Parse((string)key.GetValue("LastModConfigWindowWidth", 800));
+                LastModConfigWindowHeight = double.Parse((string)key.GetValue("LastModConfigWindowHeight", 450));
+            }
+            catch { }
             key.Close();
         }
     }

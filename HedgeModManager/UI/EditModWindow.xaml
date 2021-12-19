@@ -7,8 +7,8 @@
         xmlns:pt="http://propertytools.org/wpf"
         mc:Ignorable="d"
         Title="EditModWindow" Style="{StaticResource HedgeWindow}" WindowStartupLocation="CenterScreen" 
-        MinHeight="450" MinWidth="400" 
-        Height="550" Width="450">
+        MinHeight="450" MinWidth="450" 
+        Height="550" Width="450" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>

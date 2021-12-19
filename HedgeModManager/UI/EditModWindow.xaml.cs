@@ -36,6 +36,9 @@ namespace HedgeModManager
             Editor.TabVisibility = TabVisibility.Collapsed;
             Editor.ControlFactory = new PropertyGridControlFactoryEx();
             Editor.DataContext = Mod;
+
+            Width = RegistryConfig.LastEditModWindowWidth;
+            Height = RegistryConfig.LastEditModWindowHeight;
         }
 
         private void Ok_Click(object sender, RoutedEventArgs e)
@@ -52,6 +55,13 @@ namespace HedgeModManager
                 Mod.IncludeDirs.Add(dir.Value);
 
             DialogResult = true;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            RegistryConfig.LastEditModWindowWidth = Width;
+            RegistryConfig.LastEditModWindowHeight = Height;
+            RegistryConfig.Save();
         }
     }
 
