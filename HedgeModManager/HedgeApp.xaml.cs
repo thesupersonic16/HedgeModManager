@@ -38,6 +38,7 @@ using HedgeModManager.UI;
 using HedgeModManager.Themes;
 using HedgeModManager.UI.Models;
 using HedgeModManager.Updates;
+using System.Security;
 
 namespace HedgeModManager
 {
@@ -368,6 +369,11 @@ namespace HedgeModManager
             Console.WriteLine("        Usage: filename [output]");
         }
 
+        public static Uri GetResourceUri(string path)
+        {
+            return new Uri(@"pack://application:,,,/" + Assembly.GetExecutingAssembly().GetName().Name + ";component/" + path, UriKind.Absolute);
+        }
+
         public static GameInstall FindAndSetLocalGame()
         {
             foreach (var game in Games.GetSupportedGames())
@@ -391,6 +397,31 @@ namespace HedgeModManager
                 }
             }
             return null;
+        }
+
+        public static async void DumpLanguage(string culture)
+        {
+            string url = $"https://raw.githubusercontent.com/{RepoOwner}/{RepoName}/{RepoBranch}/HedgeModManager/Languages/en-AU.xaml";
+            var message = await Singleton.GetInstance<HttpClient>().GetStringAsync(url);
+            var lines = message.Replace("\r", "").Split('\n');
+
+            var langDict = GetLanguageResource(culture);
+
+            foreach (DictionaryEntry baseEntry in langDict)
+            {
+                for (int i = 0; i < lines.Length; ++i)
+                {
+                    if (baseEntry.Key is string key && lines[i].Contains($"\"{key}\""))
+                        lines[i] = lines[i].Substring(0, lines[i].IndexOf(">") + 1)
+                            + SecurityElement.Escape(baseEntry.Value as string).Replace("\n", "&#x0a;")
+                            + lines[i].Substring(lines[i].IndexOf("</"));
+                }
+            }
+            if (!Directory.Exists("Languages"))
+                Directory.CreateDirectory("Languages");
+            string path = $"Languages\\{CurrentCulture.FileName}.xaml";
+            File.WriteAllText(path, string.Join("\r\n", lines));
+            Process.Start($"explorer.exe", $"/select,\"{path}\"");
         }
 
         public static ResourceDictionary GetLanguageResource(string culture)

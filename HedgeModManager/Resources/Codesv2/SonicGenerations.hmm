@@ -598,10 +598,6 @@ WriteNop(0x11AEC63, 22)
 Patch "Homing Attack on Boost" by "SWS90"
 WriteProtected<byte>(0x015FA418, 0)
 
-Patch "Fix Sonic's Legs Swinging Too High" by "Skyth"
-WriteProtected<byte>(0x117F371, 0xE9, 0x35, 0x02, 0x00, 0x00, 0x90);
-WriteProtected<byte>(0x117F5C8, 0xEB);
-
 Code "Disable Depth of Field" by "Luig"
 Write<byte>(0x01A4358D, 0)
 
@@ -741,11 +737,14 @@ Patch "Red Rings Appear On New Game" by "brianuuu"
 WriteNop(0x11A9ECB, 2);
 
 Patch "Disable Boost Particles" by "Hyper"
-WriteProtected<byte>(0x15E9048, 0x00);
-WriteProtected<byte>(0x15E9060, 0x00);
-WriteProtected<byte>(0x15F99F8, 0x00);
-WriteProtected<byte>(0x15F9A10, 0x00);
-WriteProtected<byte>(0x164330C, 0x00);
+WriteProtected<byte>(0x15A3568, 0x00); /* ef_bo_sha_yh1_boost1 */
+WriteProtected<byte>(0x15E9048, 0x00); /* ef_ch_sng_yh1_boost1 */
+WriteProtected<byte>(0x15E9060, 0x00); /* ef_ch_sng_yh1_boost2 */
+WriteProtected<byte>(0x15EE774, 0x00); /* ef_bo_sha_yh1_hyper_sn */
+WriteProtected<byte>(0x15EE78C, 0x00); /* ef_bo_sha_yh1_hyper_sn */
+WriteProtected<byte>(0x15F99F8, 0x00); /* ef_ch_sps_yh1_boost1 */
+WriteProtected<byte>(0x15F9A10, 0x00); /* ef_ch_sps_yh1_boost2 */
+WriteProtected<byte>(0x164330C, 0x00); /* ef_st_ssh_yh1_bobsled_boost */
 
 Patch "Disable Air Boost" by "Sajid"
 WriteProtected<byte>(0x00DFDFC4, 0xEB, 0x27)
