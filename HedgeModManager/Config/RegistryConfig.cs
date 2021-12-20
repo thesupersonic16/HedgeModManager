@@ -13,6 +13,7 @@ namespace HedgeModManager
 
         public static string ConfigPath { get; } = @"SOFTWARE\HEDGEMM";
         public static string LastGameDirectory;
+        public static string ExtraGameDirectories;
         public static string UILanguage;
         public static string UITheme;
 
@@ -25,6 +26,7 @@ namespace HedgeModManager
         {
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
             key.SetValue("LastGame", LastGameDirectory);
+            key.SetValue("ExtraGameDirectories", ExtraGameDirectories);
             key.SetValue("UILanguage", UILanguage);
             key.SetValue("UITheme", UITheme);
             key.Close();
@@ -46,6 +48,7 @@ namespace HedgeModManager
 
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
             LastGameDirectory = (string)key.GetValue("LastGame", string.Empty);
+            ExtraGameDirectories = (string)key.GetValue("ExtraGameDirectories", string.Empty);
             UILanguage = (string)key.GetValue("UILanguage", HedgeApp.PCCulture);
             UITheme = (string)key.GetValue("UITheme", useLightMode ? "LightTheme" : "DarkTheme");
             key.Close();
