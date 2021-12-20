@@ -20,20 +20,16 @@
     <system:String x:Key="MainUIMods"          >Mods</system:String>
     <system:String x:Key="MainUICodes"         >Codes</system:String>
     <system:String x:Key="MainUISettings"      >Einstellungen</system:String>
-    <system:String x:Key="MainUIRemoveMod"     >Mod entfernen</system:String>
     <system:String x:Key="MainUIAddMod"        >Mod hinzufügen</system:String>
     <system:String x:Key="MainUIRefreshModList">Mod Liste aktualisieren</system:String>
     <system:String x:Key="MainUISave"          >Speichern</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Speichern und Spielen</system:String>
-    <system:String x:Key="MainUIPlay"          >Spielen</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Download des Mod Loaders ist fehlgeschlagen.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Name</system:String>
     <system:String x:Key="ModsUIVersion"        >Version</system:String>
     <system:String x:Key="ModsUIAuthor"         >Autor</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Unterstützt Spielstand</system:String>
-    <system:String x:Key="ModsUIHasUpdate"      >Updates</system:String>
     <system:String x:Key="ModsUIModDescription" >Beschreibung</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Favorit</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Mod Einstellungen</system:String>
@@ -58,7 +54,6 @@
     <system:String x:Key="SettingsUIEnableML"       >Aktiviere Mod Loader</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Aktiviere Debug Konsole</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Aktiviere Spielstandsumleitung</system:String>
-    <system:String x:Key="SettingsUILoadTopBottom"  >Lade von oben nach unten</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Loader:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Spiel:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Mod Verzeichnis:</system:String>

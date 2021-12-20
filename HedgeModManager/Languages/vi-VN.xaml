@@ -23,12 +23,10 @@
     <system:String x:Key="MainUIMods"          >Mod</system:String>
     <system:String x:Key="MainUICodes"         >Mã</system:String>
     <system:String x:Key="MainUISettings"      >Cài đặt</system:String>
-    <system:String x:Key="MainUIRemoveMod"     >Xoá Mod</system:String>
     <system:String x:Key="MainUIAddMod"        >Thêm Mod</system:String>
     <system:String x:Key="MainUIRefreshModList">Làm mới danh sách Mod</system:String>
     <system:String x:Key="MainUISave"          >Lưu</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Lưu và chơi</system:String>
-    <system:String x:Key="MainUIPlay"          >Chơi</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Tải xuống trình chứa mod thất bại</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Cài đặt trình chứa mod thất bại.&#x0a;Hãy đảm bảo bạn có quyền ghi tệp trò chơi.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Gỡ cài đặt trình chứa mod thất bại.&#x0a;Hãy đảm bảo không có trò chơi nào hiện đang chạy.</system:String>
@@ -37,8 +35,6 @@
     <system:String x:Key="ModsUIName"           >Tên</system:String>
     <system:String x:Key="ModsUIVersion"        >Phiên bản</system:String>
     <system:String x:Key="ModsUIAuthor"         >Tác giả</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Hỗ trợ lưu</system:String>
-    <system:String x:Key="ModsUIHasUpdate"      >Các bản cập nhật</system:String>
     <system:String x:Key="ModsUIModDescription" >Mô tả</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Yêu thích</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Cấu hình Mod</system:String>
@@ -69,7 +65,6 @@
     <system:String x:Key="SettingsUIEnableML"       >Bật trình chứa mod</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Bật bảng điều khiển gỡ lỗi</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Bật chuyển hướng tệp lưu</system:String>
-    <system:String x:Key="SettingsUILoadTopBottom"  >Tải từ trên xuống dưới</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Trình chứa mã:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Trò chơi:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Hồ sơ:</system:String>

@@ -23,12 +23,10 @@
     <system:String x:Key="MainUIMods"               >mods</system:String>
     <system:String x:Key="MainUICodes"              >代碼</system:String>
     <system:String x:Key="MainUISettings"           >設定</system:String>
-    <system:String x:Key="MainUIRemoveMod"          >移除 mod</system:String>
     <system:String x:Key="MainUIAddMod"             >新增 mod</system:String>
     <system:String x:Key="MainUIRefreshModList"     >刷新 mod列表</system:String>
     <system:String x:Key="MainUISave"               >保存</system:String>
     <system:String x:Key="MainUISaveAndPlay"        >保存並運行</system:String>
-    <system:String x:Key="MainUIPlay"               >運行</system:String>
     <system:String x:Key="MainUIMLDownloadFail"     >無法下載 mod加載器</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">mod加載器安裝失敗&#x0a;請確定有足夠權限寫入遊戲目錄</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">mod加載器無法删除&#x0a;請確定當前遊戲沒有正在運行</system:String>
@@ -37,8 +35,6 @@
     <system:String x:Key="ModsUIName"           >名稱</system:String>
     <system:String x:Key="ModsUIVersion"        >版本</system:String>
     <system:String x:Key="ModsUIAuthor"         >作者</system:String>
-    <system:String x:Key="ModsUISupportSave"    >支持存檔</system:String>
-    <system:String x:Key="ModsUIHasUpdate"      >更新</system:String>
     <system:String x:Key="ModsUIModDescription" >描述</system:String>
     <system:String x:Key="ModsUIModFavorite"    >最喜歡</system:String>
     <system:String x:Key="ModsUIModConfigure"   >編輯 mod</system:String>
@@ -67,7 +63,6 @@
     <system:String x:Key="SettingsUIEnableML"       >啟用 mod程式</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >啟用 調試模式</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >啟用 重新導向存檔</system:String>
-    <system:String x:Key="SettingsUILoadTopBottom"  >由上到下排列載入</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >載入器：</system:String>
     <system:String x:Key="SettingsUILabelGame"      >遊戲：</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >設定檔：</system:String>

@@ -23,13 +23,11 @@
     <system:String x:Key="MainUIMods"          >Mods</system:String>
     <system:String x:Key="MainUICodes"         >Codes</system:String>
     <system:String x:Key="MainUISettings"      >Settings</system:String>
-    <system:String x:Key="MainUIRemoveMod"     >Remove Mod</system:String>           <!-- To be removed -->
     <system:String x:Key="MainUIAddMod"        >Add Mod</system:String>
     <system:String x:Key="MainUIRefreshModList">Refresh List</system:String>
     <system:String x:Key="MainUISave"          >Save</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Save and Play</system:String>
     <system:String x:Key="MainUIConfigureMod"  >Configure Mod</system:String>
-    <system:String x:Key="MainUIPlay"          >Play</system:String>                 <!-- To be removed -->
     <system:String x:Key="MainUIMLDownloadFail">Failed to download mod loader.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Failed to install mod loader.&#x0a;Please make sure you have permissions to write game files.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Failed to uninstall mod loader.&#x0a;Please make sure no games are currently running.</system:String>
@@ -38,8 +36,6 @@
     <system:String x:Key="ModsUIName"           >Name</system:String>
     <system:String x:Key="ModsUIVersion"        >Version</system:String>
     <system:String x:Key="ModsUIAuthor"         >Author</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Supports Save</system:String>        <!-- To be removed -->
-    <system:String x:Key="ModsUIHasUpdate"      >Updates</system:String>              <!-- To be removed -->
     <system:String x:Key="ModsUIFeatures"       >Features</system:String>
     <system:String x:Key="ModsUIModDescription" >Description</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Favourite</system:String>
@@ -79,7 +75,6 @@
     <system:String x:Key="SettingsUIEnableML"       >Enable mod loader</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Enable debug console</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Enable save file redirection</system:String>
-    <system:String x:Key="SettingsUILoadTopBottom"  >Load top to bottom</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Loaders:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Game:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Profile:</system:String>

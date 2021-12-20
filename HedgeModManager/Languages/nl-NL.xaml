@@ -21,20 +21,16 @@
     <system:String x:Key="MainUIMods"          >Mods</system:String>
     <system:String x:Key="MainUICodes"         >Codes</system:String>
     <system:String x:Key="MainUISettings"      >Instellingen</system:String>
-    <system:String x:Key="MainUIRemoveMod"     >Mod Verwijderen</system:String>
     <system:String x:Key="MainUIAddMod"        >Mod Toevoegen</system:String>
     <system:String x:Key="MainUIRefreshModList">Mod Lijst Verversen</system:String>
     <system:String x:Key="MainUISave"          >Opslaan</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Opslaan En Spel Starten</system:String>
-    <system:String x:Key="MainUIPlay"          >Spel Starten</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Downloaden van mod loader is mislukt.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Naam</system:String>
     <system:String x:Key="ModsUIVersion"        >Versie</system:String>
     <system:String x:Key="ModsUIAuthor"         >Auteur</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Ondersteunt Spel Data</system:String>
-    <system:String x:Key="ModsUIHasUpdate"      >Bijwerken</system:String>
     <system:String x:Key="ModsUIModDescription" >Beschrijving</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Favoriete</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Mod Configureren</system:String>
@@ -60,7 +56,6 @@
     <system:String x:Key="SettingsUIEnableML"       >Mod Loader Inschakelen</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Debug Console Inschakelen</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Opslag Data Omleiding Inschakelen</system:String>
-    <system:String x:Key="SettingsUILoadTopBottom"  >Mods Van Boven Naar Onder Laden</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Laders:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Spel:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Profiel:</system:String>

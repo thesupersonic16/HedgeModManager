@@ -19,19 +19,15 @@
     <system:String x:Key="MainUIMods"          >Mods</system:String>
     <system:String x:Key="MainUICodes"         >Codes</system:String>
     <system:String x:Key="MainUISettings"      >Paramètres</system:String>
-    <system:String x:Key="MainUIRemoveMod"     >Retirer Mod</system:String>
     <system:String x:Key="MainUIAddMod"        >Ajouter Mod</system:String>
     <system:String x:Key="MainUIRefreshModList">Actualiser la liste de Mods</system:String>
     <system:String x:Key="MainUISave"          >Enregistrer</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Enregistrer et Jouer</system:String>
-    <system:String x:Key="MainUIPlay"          >Jouer</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nom</system:String>
     <system:String x:Key="ModsUIVersion"        >Version</system:String>
     <system:String x:Key="ModsUIAuthor"         >Créateur</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Sauvegarde</system:String>
-    <system:String x:Key="ModsUIHasUpdate"      >Mise à jours</system:String>
     <system:String x:Key="ModsUIModDescription" >Description</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Favoris</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Paramètres</system:String>
@@ -56,7 +52,6 @@
     <system:String x:Key="SettingsUIEnableML"       >Activer le mod loader</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Activer la console debug</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Activer la redirection du fichier de sauvegarde</system:String>
-    <system:String x:Key="SettingsUILoadTopBottom"  >Chargement de haut en bas</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Loaders:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Jeu:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Emplacement:</system:String>
