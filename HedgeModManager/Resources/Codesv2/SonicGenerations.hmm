@@ -515,7 +515,9 @@ Patch "Tricks Don't Fill The Boost Gauge"
 WriteNop(0xE4B323, 8)
 WriteNop(0xE4B353, 8)
 
-Patch "Boost Gauge Starts Empty" by "PTKickass"
+Patch "Boost Gauge Starts Empty" by "PTKickass & brianuuu"
+WriteProtected<uint>(0xE64F25, 0x90C9570F)
+WriteNop(0xE64F29, 4)
 WriteProtected<uint>(0xE64F2F, 0x90C9570F)
 WriteNop(0xE64F33, 4)
 
