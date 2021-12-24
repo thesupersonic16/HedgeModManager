@@ -155,7 +155,9 @@
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
                                     <Image Width="24" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0" Source="Resources/Graphics/icon256.png"/>
-                                    <Label Content="{TemplateBinding Title}" Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,0,0" Foreground="#E9E9E9"/>
+                                    <Label Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,112,0" Foreground="#E9E9E9">
+                                        <TextBlock TextTrimming="CharacterEllipsis" Text="{TemplateBinding Title}"/>
+                                    </Label>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Button x:Name="MinBtn" Style="{DynamicResource WindowFrameButton}" Click="Minimize_Click"
                                                 VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
