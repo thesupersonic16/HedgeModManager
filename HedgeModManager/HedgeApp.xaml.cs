@@ -66,6 +66,7 @@ namespace HedgeModManager
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
+        public static bool AprilFools = false;
 
         public static HttpClient HttpClient { get; private set; }
         public static string UserAgent { get; }
@@ -320,10 +321,12 @@ namespace HedgeModManager
             }
             catch { }
 
-            if (DateTime.Now.Day == 1 && DateTime.Now.Month == 4)
+            AprilFools = DateTime.Now.Day == 1 && DateTime.Now.Month == 4;
+
+            if (AprilFools)
             {
                 var random = new Random();
-                if (random.Next(10) < 4)
+                if (random.Next(10) == 0)
                 {
                     var langDict = new ResourceDictionary { Source = new Uri("Languages/en-UW.xaml", UriKind.Relative) };
                     Current.Resources.MergedDictionaries.RemoveAt(3);

@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Threading;
 using HedgeModManager.UI;
 using System.Collections.ObjectModel;
 using System.Net;
@@ -945,6 +946,34 @@ namespace HedgeModManager
             RefreshProfiles();
             Refresh();
             await CheckForUpdatesAsync();
+
+            if (HedgeApp.AprilFools)
+            {
+                var random = new Random();
+                if (random.Next(10) == 0)
+                {
+                    CleaningGrid.Visibility = Visibility.Visible;
+                    DispatcherTimer timer = new DispatcherTimer();
+                    timer.Interval = TimeSpan.FromMilliseconds(175);
+                    int skipped = 0;
+                    SaveButton.IsEnabled = SavePlayButton.IsEnabled = false;
+                    timer.Tick += (sender, e) =>
+                    {
+                        if (random.Next(5) == 0)
+                            ++skipped;
+                        if (ViewModel.Mods.Count <= skipped)
+                        {
+                            RefreshUI();
+                            SaveButton.IsEnabled = SavePlayButton.IsEnabled = true;
+                            CleaningGrid.Visibility = Visibility.Collapsed;
+                            timer.Stop();
+                            return;
+                        }
+                        ViewModel.Mods.RemoveAt(skipped);
+                    };
+                    timer.Start();
+                }
+            }
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
