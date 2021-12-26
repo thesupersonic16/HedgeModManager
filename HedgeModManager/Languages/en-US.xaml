@@ -72,6 +72,7 @@
     <system:String x:Key="SettingsUIInstallLoader"  >Install Mod Loader</system:String>
     <system:String x:Key="SettingsUIUninstallLoader">Uninstall Mod Loader</system:String>
     <system:String x:Key="SettingsUIOpenMods"       >Open Mods Directory</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >Open Game Directory</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Enable mod loader</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Enable debug console</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Enable save file redirection</system:String>

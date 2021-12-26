@@ -1263,6 +1263,11 @@ namespace HedgeModManager
             Process.Start(HedgeApp.ModsDbPath);
         }
 
+        private void UI_OpenGameDir_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(HedgeApp.CurrentGameInstall.GameDirectory);
+        }
+
         private void UI_ChangeDatabasePath_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new FolderBrowserDialog

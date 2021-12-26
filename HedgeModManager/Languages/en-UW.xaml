@@ -38,7 +38,7 @@
     <system:String x:Key="ModsUIName"           >name</system:String>
     <system:String x:Key="ModsUIVersion"        >vewsion</system:String>
     <system:String x:Key="ModsUIAuthor"         >authow</system:String>
-    <system:String x:Key="ModsUIFeatures"       >Features</system:String>
+    <system:String x:Key="ModsUIFeatures"       >f-featuwes</system:String>
     <system:String x:Key="ModsUIModDescription" >descwiption</system:String>
     <system:String x:Key="ModsUIModFavorite"    >favouwite</system:String>
     <system:String x:Key="ModsUIModConfigure"   >configuwe m-mod</system:String>
@@ -74,6 +74,7 @@
     <system:String x:Key="SettingsUIInstallLoader"  >instaww mod woadew</system:String>
     <system:String x:Key="SettingsUIUninstallLoader">uninstaww m-mod w-woadew</system:String>
     <system:String x:Key="SettingsUIOpenMods"       >open m-mods diwectowy</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >open game diwectowy</system:String>
     <system:String x:Key="SettingsUIEnableML"       >enabwe mod woadew</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >enabwe d-debug consowe</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >enabwe save fiwe wediwection</system:String>
@@ -87,7 +88,7 @@
     <system:String x:Key="SettingsUICheckCLUpdate"  >check fow code woadew updates</system:String>
     <system:String x:Key="SettingsUICheckModUpdates">check fow mod updates</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >keep hedge mod m-managew open aftew stawting a g-game</system:String>
-    <system:String x:Key="SettingsUICheckHMMUpdate" >Check for Updates</system:String>
+    <system:String x:Key="SettingsUICheckHMMUpdate" >check fow updates</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >about hedge mod managew</system:String>
     <system:String x:Key="SettingsUILanguage"       >wanguage:</system:String>
     <system:String x:Key="SettingsUITheme"          >theme:</system:String>

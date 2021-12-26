@@ -168,8 +168,8 @@
                             </Grid.RowDefinitions>
                             <GroupBox Header="{DynamicResource SettingsUIGMLHeader}" HorizontalAlignment="Stretch" Margin="0,0,0.333,30" VerticalAlignment="Stretch">
                                 <Grid>
-                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod Loader"                 Click="UI_OtherLoader_Click" Margin="10,7,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193" IsEnabled="False"/>
-                                    <Button   x:Name="Button_OpenMods"      Content="{DynamicResource SettingsUIOpenMods}" Click="UI_OpenMods_Click"    Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193"/>
+                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod Loader"                    Click="UI_OtherLoader_Click" Margin="10,7,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193" IsEnabled="False"/>
+                                    <Button   x:Name="Button_OpenMods"      Content="{DynamicResource SettingsUIOpenMods}"    Click="UI_OpenMods_Click"    Margin="10,38,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193"/>
 
                                     <StackPanel Margin="10,96,0,8">
                                         <CheckBox Content="{DynamicResource SettingsUIEnableML}"      IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="-1,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />
@@ -180,10 +180,11 @@
 
                                     <Label                                   Content="{DynamicResource SettingsUILabelProfile}" VerticalAlignment="Top" Margin="0,7,253,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
                                     <ComboBox   x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Margin="0,7,39,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Right" Width="208" />
-                                    <Label                                   Content="{DynamicResource SettingsUILabelMDir}"    Margin="4,70,0,0"      HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
-                                    <Button                                  Content="⚙"                                       Margin="0,8,10,0" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Height="24" HorizontalAlignment="Right" Width="24"/>
-                                    <TextBox                                 Text="{Binding ModsDB.RootDirectory}"              Margin="113,73,39,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
-                                    <Button                                  Content="..."                                      Margin="0,73,10,0" VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
+                                    <Label                                   Content="{DynamicResource SettingsUILabelMDir}"   Margin="4,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
+                                    <Button                                  Content="⚙"                                      Margin="0,8,10,0"   VerticalAlignment="Top" Click="UI_ManageProfile_Click" Height="24" HorizontalAlignment="Right" Width="24"/>
+                                    <Button                                  Content="{DynamicResource SettingsUIOpenGameDir}" Margin="0,38,10,0"   VerticalAlignment="Top" HorizontalAlignment="Right" Height="27" Width="237" Click="UI_OpenGameDir_Click"/>
+                                    <TextBox                                 Text="{Binding ModsDB.RootDirectory}"             Margin="113,73,39,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
+                                    <Button                                  Content="..."                                     Margin="0,73,10,0"   VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
                                 </Grid>
                             </GroupBox>
 
