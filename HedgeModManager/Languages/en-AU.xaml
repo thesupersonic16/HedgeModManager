@@ -49,6 +49,8 @@
     <system:String x:Key="ModsUIFeatureConfigDisable">This mod does not support configuration.</system:String>
     <system:String x:Key="ModsUIFeatureUpdate"       >This mod supports updating.</system:String>
     <system:String x:Key="ModsUIFeatureUpdateDisable">This mod does not support updating.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateFailed" >This mod has failed to check for updates.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateBlocked">This mod has been blocked from checking for updates.</system:String>
     <system:String x:Key="ModsUIFeatureSave"         >This mod utilises save redirection.</system:String>
     <system:String x:Key="ModsUIFeatureSaveDisable"  >This mod does not support save redirection.</system:String>
     <system:String x:Key="ModsUIFeatureCode"         >This mod contains custom code.</system:String>

@@ -378,11 +378,13 @@ namespace HedgeModManager
 
             CheckingForUpdates = true;
             UpdateStatus(string.Format(Localise("StatusUICheckingModUpdates"), mod.Title));
+            mod.UpdateStatus = ModUpdateFetcher.Status.BeginCheck;
             var result = await ModUpdateFetcher.FetchUpdate(mod, Singleton.GetInstance<NetworkConfig>(), cancellationToken);
 
             CheckingForUpdates = false;
             bool doUpdate = result.UpdateInfo != null;
 
+            mod.UpdateStatus = result.Status;
             switch (result.Status)
             {
                 case ModUpdateFetcher.Status.Failed:
@@ -412,6 +414,7 @@ namespace HedgeModManager
             var updates = await ModUpdateFetcher.FetchUpdates(updateMods, Singleton.GetInstance<NetworkConfig>(),
                 (mod, status, exception) =>
                 {
+                    mod.UpdateStatus = status;
                     switch (status)
                     {
                         case ModUpdateFetcher.Status.BeginCheck:
@@ -1099,6 +1102,7 @@ namespace HedgeModManager
             if (window.ShowDialog().Value)
             {
                 newMod.Save();
+                newMod.UpdateStatus = ModUpdateFetcher.Status.NoUpdates;
                 ViewModel.SelectedMod = ViewModel.Mods[ViewModel.Mods.IndexOf(mod)] = newMod;
             }
         }

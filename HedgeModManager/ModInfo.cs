@@ -113,6 +113,9 @@ namespace HedgeModManager
         [PropertyTools.DataAnnotations.Browsable(false)]
         public ModFileTree FileTree { get; set; }
 
+        [PropertyTools.DataAnnotations.Browsable(false)]
+        public ModUpdateFetcher.Status UpdateStatus { get; set; }
+
         public ModInfo()
         {
 
