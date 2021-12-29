@@ -22,12 +22,10 @@
     <system:String x:Key="MainUIMods"          >Моды</system:String>
     <system:String x:Key="MainUICodes"         >Коды</system:String>
     <system:String x:Key="MainUISettings"      >Настройки</system:String>
-    <system:String x:Key="MainUIRemoveMod"     >Удалить мод</system:String>
     <system:String x:Key="MainUIAddMod"        >Добавить мод</system:String>
     <system:String x:Key="MainUIRefreshModList">Обновить список модов</system:String>
     <system:String x:Key="MainUISave"          >Сохранить</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Сохранить и запустить игру</system:String>
-    <system:String x:Key="MainUIPlay"          >Запустить игру</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Невозможно скачать загрузчик модов</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Невозможно установить загрузчик модов.&#x0a;Убедитесь, что у вас есть разрешения на запись файлов игры.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Невозможно удалить загрузчик модов.&#x0a;Убедитесь, что игра сейчас не запущена.</system:String>
@@ -36,8 +34,6 @@
     <system:String x:Key="ModsUIName"           >Название</system:String>
     <system:String x:Key="ModsUIVersion"        >Версия</system:String>
     <system:String x:Key="ModsUIAuthor"         >Автор[ы]</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Поддержка сохр.</system:String>
-    <system:String x:Key="ModsUIHasUpdate"      >Обновления</system:String>
     <system:String x:Key="ModsUIModDescription" >Описание</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Избранное</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Настройки мода</system:String>
@@ -66,7 +62,6 @@
     <system:String x:Key="SettingsUIEnableML"       >Включить загрузчик модов</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Включить отладочную консоль</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Включить перенаправление сохранения</system:String>
-    <system:String x:Key="SettingsUILoadTopBottom"  >Инверсия приоритета загрузки модов</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Загрузчик:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Игра:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Профиль:</system:String>

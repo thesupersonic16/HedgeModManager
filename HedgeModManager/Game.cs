@@ -187,6 +187,26 @@ namespace HedgeModManager
             if (epicGames != null)
                 games.AddRange(epicGames);
 
+            // Extra directories
+            if (!string.IsNullOrEmpty(RegistryConfig.ExtraGameDirectories))
+            {
+                foreach (string path in RegistryConfig.ExtraGameDirectories.Split(';'))
+                {
+                    if (Directory.Exists(path))
+                    {
+                        foreach (var game in Games.GetSupportedGames())
+                        {
+                            string fullPath = Path.Combine(path, game.ExecutableName);
+                            if (File.Exists(fullPath))
+                            {
+                                games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath)));
+                            }
+                        }
+                    }
+                }
+            }
+
+
             return !string.IsNullOrEmpty(preference)
                 ? games.OrderBy(x => x.BaseGame.GameName != preference).ToList()
                 : games;

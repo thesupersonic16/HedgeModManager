@@ -21,20 +21,16 @@
     <system:String x:Key="MainUIMods"          >Modificaciones</system:String>
     <system:String x:Key="MainUICodes"         >Trucos</system:String>
     <system:String x:Key="MainUISettings"      >Configuración</system:String>
-    <system:String x:Key="MainUIRemoveMod"     >Quitar Mod</system:String>
     <system:String x:Key="MainUIAddMod"        >Añadir Mod</system:String>
     <system:String x:Key="MainUIRefreshModList">Refrescar lista de Mods</system:String>
     <system:String x:Key="MainUISave"          >Guardar</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Guardar y Jugar</system:String>
-    <system:String x:Key="MainUIPlay"          >Jugar</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Descarga del cargador de mods fallida</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nombre</system:String>
     <system:String x:Key="ModsUIVersion"        >Versión</system:String>
     <system:String x:Key="ModsUIAuthor"         >Autor</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Soporta de guardado</system:String>
-    <system:String x:Key="ModsUIHasUpdate"      >Actualización</system:String>
     <system:String x:Key="ModsUIModDescription" >Descripción</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Favorito</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
@@ -60,7 +56,6 @@
     <system:String x:Key="SettingsUIEnableML"       >Activar cargador de mods</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Activar consola de depuración</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Activar redirección de guardado</system:String>
-    <system:String x:Key="SettingsUILoadTopBottom"  >Cargar de arriba a abajo</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Cargadores:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Juego:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Perfil:</system:String>

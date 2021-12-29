@@ -11,9 +11,10 @@
         MinHeight="620" MinWidth="560" Height="620" Width="560" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <local:ModUpdateStatusConverter x:Key="ModUpdateStatusConverter"/>
         <local:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
         <local:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
+        <local:ModUpdateToBrushConverter x:Key="ModUpdateToBrushConverter"/>
+        <local:ModUpdateToDetailsConverter x:Key="ModUpdateToDetailsConverter"/>
         <ContextMenu x:Key="ModContextMenu">
             <MenuItem Header="{DynamicResource ModsUIModDescription}" Click="UI_Description_Click" InputGestureText="(Ctrl+D)"/>
             <MenuItem Header="{DynamicResource ModsUIModFavorite}" Click="UI_Favorite_Click" InputGestureText="(Alt+F)"/>
@@ -80,8 +81,21 @@
                                                             </Border>
                                                         </Border>
                                                         <Border ToolTip="{DynamicResource ModsUIFeatureUpdateDisable}">
-                                                            <Border Background="#00000000" ToolTip="{DynamicResource ModsUIFeatureUpdate}" IsEnabled="{Binding HasUpdates}"  Tag="{Binding}" PreviewMouseDown="UI_ModFeatureUpdate_PreviewMouseDown">
-                                                                <Path Data="{StaticResource RefreshGeometry}" Fill="{Binding HasUpdates, Converter={StaticResource BoolToBrushConverter}, ConverterParameter=HMM.Button.ForegroundBrush}" Margin="0,0,4,0"/>
+                                                            <Border Background="#00000000" Tag="{Binding}" PreviewMouseDown="UI_ModFeatureUpdate_PreviewMouseDown">
+                                                                <Border.ToolTip>
+                                                                    <MultiBinding Converter="{StaticResource ModUpdateToDetailsConverter}">
+                                                                        <Binding />
+                                                                        <Binding Path="UpdateStatus"/>
+                                                                    </MultiBinding>
+                                                                </Border.ToolTip>
+                                                                <Path Data="{StaticResource RefreshGeometry}" Margin="0,0,4,0">
+                                                                    <Path.Fill>
+                                                                        <MultiBinding Converter="{StaticResource ModUpdateToBrushConverter}">
+                                                                            <Binding />
+                                                                            <Binding Path="UpdateStatus"/>
+                                                                        </MultiBinding>
+                                                                    </Path.Fill>
+                                                                </Path>
                                                             </Border>
                                                         </Border>
                                                         <Border ToolTip="{DynamicResource ModsUIFeatureSaveDisable}">
@@ -109,6 +123,12 @@
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
                                     <Label Content="{DynamicResource ModsUISearch}" Margin="0,-3,0,0"/>
                                     <TextBox x:Name="TextBox_ModsSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_ModsSearch_TextChanged" LostFocus="TextBox_ModsSearch_LostFocus"/>
+                                </StackPanel>
+                            </Border>
+                            <Border x:Name="CleaningGrid" Background="#80000000" CornerRadius="8" Margin="10,5,10,5" Visibility="Collapsed">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock FontSize="32" Text="Cleaning Mods..." Margin="0,0,0,8" HorizontalAlignment="Center"/>
+                                    <ProgressBar MinWidth="300" Height="4" IsIndeterminate="True"/>
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -162,8 +182,8 @@
                             </Grid.RowDefinitions>
                             <GroupBox Header="{DynamicResource SettingsUIGMLHeader}" HorizontalAlignment="Stretch" Margin="0,0,0.333,30" VerticalAlignment="Stretch">
                                 <Grid>
-                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod Loader"                 Click="UI_OtherLoader_Click" Margin="10,7,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193" IsEnabled="False"/>
-                                    <Button   x:Name="Button_OpenMods"      Content="{DynamicResource SettingsUIOpenMods}" Click="UI_OpenMods_Click"    Margin="10,38,0,0"     HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193"/>
+                                    <Button   x:Name="Button_OtherLoader"   Content="Uninstall Mod Loader"                    Click="UI_OtherLoader_Click" Margin="10,7,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193" IsEnabled="False"/>
+                                    <Button   x:Name="Button_OpenMods"      Content="{DynamicResource SettingsUIOpenMods}"    Click="UI_OpenMods_Click"    Margin="10,38,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="193"/>
 
                                     <StackPanel Margin="10,96,0,8">
                                         <CheckBox Content="{DynamicResource SettingsUIEnableML}"      IsChecked="{Binding CPKREDIR.Enabled}"                    Margin="-1,5,0,0"   HorizontalAlignment="Left" VerticalAlignment="Top" />
@@ -174,10 +194,11 @@
 
                                     <Label                                   Content="{DynamicResource SettingsUILabelProfile}" VerticalAlignment="Top" Margin="0,7,253,0" VerticalContentAlignment="Center" Height="27" HorizontalAlignment="Right" Width="62" />
                                     <ComboBox   x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Margin="0,7,39,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Right" Width="208" />
-                                    <Label                                   Content="{DynamicResource SettingsUILabelMDir}"    Margin="4,70,0,0"      HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
-                                    <Button                                  Content="⚙"                                       Margin="0,8,10,0" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Height="24" HorizontalAlignment="Right" Width="24"/>
-                                    <TextBox                                 Text="{Binding ModsDB.RootDirectory}"              Margin="113,73,39,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
-                                    <Button                                  Content="..."                                      Margin="0,73,10,0" VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
+                                    <Label                                   Content="{DynamicResource SettingsUILabelMDir}"   Margin="4,70,0,0"    HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"  />
+                                    <Button                                  Content="⚙"                                      Margin="0,8,10,0"   VerticalAlignment="Top" Click="UI_ManageProfile_Click" Height="24" HorizontalAlignment="Right" Width="24"/>
+                                    <Button                                  Content="{DynamicResource SettingsUIOpenGameDir}" Margin="0,38,10,0"   VerticalAlignment="Top" HorizontalAlignment="Right" Height="27" Width="237" Click="UI_OpenGameDir_Click"/>
+                                    <TextBox                                 Text="{Binding ModsDB.RootDirectory}"             Margin="113,73,39,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
+                                    <Button                                  Content="..."                                     Margin="0,73,10,0"   VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
                                 </Grid>
                             </GroupBox>
 
@@ -229,8 +250,8 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <Button Content="{DynamicResource MainUISave}"                        Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
-                        <Button Content="{DynamicResource MainUISaveAndPlay}"    Width="Auto" Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
+                        <Button x:Name="SaveButton"     Content="{DynamicResource MainUISave}"                        Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
+                        <Button x:Name="SavePlayButton" Content="{DynamicResource MainUISaveAndPlay}"    Width="Auto" Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
                         <Button Content="{DynamicResource MainUIRefreshModList}" Width="Auto" Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Refresh_Click"/>
                     </Grid>
                 </StackPanel>

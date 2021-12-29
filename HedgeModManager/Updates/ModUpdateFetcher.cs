@@ -67,10 +67,8 @@ namespace HedgeModManager.Updates
                 }
 
                 if (info.Version != mod.Version)
-                {
-                    statusCallback?.Invoke(mod, Status.Success, null);
                     updates.Add(info);
-                }
+                statusCallback?.Invoke(mod, Status.Success, null);
             }
 
             return updates;

@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Threading;
 using HedgeModManager.UI;
 using System.Collections.ObjectModel;
 using System.Net;
@@ -377,11 +378,13 @@ namespace HedgeModManager
 
             CheckingForUpdates = true;
             UpdateStatus(string.Format(Localise("StatusUICheckingModUpdates"), mod.Title));
+            mod.UpdateStatus = ModUpdateFetcher.Status.BeginCheck;
             var result = await ModUpdateFetcher.FetchUpdate(mod, Singleton.GetInstance<NetworkConfig>(), cancellationToken);
 
             CheckingForUpdates = false;
             bool doUpdate = result.UpdateInfo != null;
 
+            mod.UpdateStatus = result.Status;
             switch (result.Status)
             {
                 case ModUpdateFetcher.Status.Failed:
@@ -411,6 +414,7 @@ namespace HedgeModManager
             var updates = await ModUpdateFetcher.FetchUpdates(updateMods, Singleton.GetInstance<NetworkConfig>(),
                 (mod, status, exception) =>
                 {
+                    mod.UpdateStatus = status;
                     switch (status)
                     {
                         case ModUpdateFetcher.Status.BeginCheck:
@@ -945,6 +949,34 @@ namespace HedgeModManager
             RefreshProfiles();
             Refresh();
             await CheckForUpdatesAsync();
+
+            if (HedgeApp.AprilFools)
+            {
+                var random = new Random();
+                if (random.Next(10) == 0)
+                {
+                    CleaningGrid.Visibility = Visibility.Visible;
+                    DispatcherTimer timer = new DispatcherTimer();
+                    timer.Interval = TimeSpan.FromMilliseconds(175);
+                    int skipped = 0;
+                    SaveButton.IsEnabled = SavePlayButton.IsEnabled = false;
+                    timer.Tick += (sender, e) =>
+                    {
+                        if (random.Next(5) == 0)
+                            ++skipped;
+                        if (ViewModel.Mods.Count <= skipped)
+                        {
+                            RefreshUI();
+                            SaveButton.IsEnabled = SavePlayButton.IsEnabled = true;
+                            CleaningGrid.Visibility = Visibility.Collapsed;
+                            timer.Stop();
+                            return;
+                        }
+                        ViewModel.Mods.RemoveAt(skipped);
+                    };
+                    timer.Start();
+                }
+            }
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
@@ -1070,6 +1102,7 @@ namespace HedgeModManager
             if (window.ShowDialog().Value)
             {
                 newMod.Save();
+                newMod.UpdateStatus = ModUpdateFetcher.Status.NoUpdates;
                 ViewModel.SelectedMod = ViewModel.Mods[ViewModel.Mods.IndexOf(mod)] = newMod;
             }
         }
@@ -1232,6 +1265,11 @@ namespace HedgeModManager
         private void UI_OpenMods_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(HedgeApp.ModsDbPath);
+        }
+
+        private void UI_OpenGameDir_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(HedgeApp.CurrentGameInstall.GameDirectory);
         }
 
         private void UI_ChangeDatabasePath_Click(object sender, RoutedEventArgs e)

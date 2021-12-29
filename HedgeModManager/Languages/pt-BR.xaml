@@ -23,12 +23,10 @@
     <system:String x:Key="MainUIMods"          >Mods</system:String>
     <system:String x:Key="MainUICodes"         >Códigos</system:String>
     <system:String x:Key="MainUISettings"      >Definições</system:String>
-    <system:String x:Key="MainUIRemoveMod"     >Remover Mod</system:String>
     <system:String x:Key="MainUIAddMod"        >Adicionar Mod</system:String>
     <system:String x:Key="MainUIRefreshModList">Atualizar Lista de Mods</system:String>
     <system:String x:Key="MainUISave"          >Guardar</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Guardar e Jogar</system:String>
-    <system:String x:Key="MainUIPlay"          >Jogar</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Falha ao baixar o carregador de mods.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Falha ao instalar o carregador de mods.&#x0a;Por favor verifique que tem permissões para escrever ficheiros do jogo.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Falha ao desinstalar o carregador de mods.&#x0a;Por favor verifique que não tem nenhum jogo em execução.</system:String>
@@ -37,8 +35,6 @@
     <system:String x:Key="ModsUIName"           >Nome</system:String>
     <system:String x:Key="ModsUIVersion"        >Versão</system:String>
     <system:String x:Key="ModsUIAuthor"         >Autor</system:String>
-    <system:String x:Key="ModsUISupportSave"    >Suporta Gravação</system:String>
-    <system:String x:Key="ModsUIHasUpdate"      >Atualizações</system:String>
     <system:String x:Key="ModsUIModDescription" >Descrição</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Favorito</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
@@ -69,7 +65,6 @@
     <system:String x:Key="SettingsUIEnableML"       >Ativar o carregador de mods</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Ativar console de depuramento</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Ativar redirecionamento do ficheiro de gravação</system:String>
-    <system:String x:Key="SettingsUILoadTopBottom"  >Carregar de cima para baixo</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Carregadores:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Jogo:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Perfil:</system:String>
