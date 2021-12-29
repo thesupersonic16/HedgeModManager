@@ -24,9 +24,10 @@
     <system:String x:Key="MainUICodes"         >Códigos</system:String>
     <system:String x:Key="MainUISettings"      >Definições</system:String>
     <system:String x:Key="MainUIAddMod"        >Adicionar Mod</system:String>
-    <system:String x:Key="MainUIRefreshModList">Atualizar Lista de Mods</system:String>
+    <system:String x:Key="MainUIRefreshModList">Atualizar Lista</system:String>
     <system:String x:Key="MainUISave"          >Guardar</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Guardar e Jogar</system:String>
+    <system:String x:Key="MainUIConfigureMod"  >Configurar Mod</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Falha ao baixar o carregador de mods.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Falha ao instalar o carregador de mods.&#x0a;Por favor verifique que tem permissões para escrever ficheiros do jogo.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Falha ao desinstalar o carregador de mods.&#x0a;Por favor verifique que não tem nenhum jogo em execução.</system:String>
@@ -35,6 +36,7 @@
     <system:String x:Key="ModsUIName"           >Nome</system:String>
     <system:String x:Key="ModsUIVersion"        >Versão</system:String>
     <system:String x:Key="ModsUIAuthor"         >Autor</system:String>
+    <system:String x:Key="ModsUIFeatures"       >Funcionalidades</system:String>
     <system:String x:Key="ModsUIModDescription" >Descrição</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Favorito</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
@@ -43,6 +45,16 @@
     <system:String x:Key="ModsUICheckUpdatesAll">Buscar atualizações para todos os mods</system:String>
     <system:String x:Key="ModsUIModEdit"        >Editar mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Remover mod</system:String>
+    <system:String x:Key="ModsUIFeatureConfig"  >Esse mod pode ser configurado.</system:String>
+    <system:String x:Key="ModsUIFeatureConfigDisable">Esse mod não suporta configuração.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdate"       >Esse mod suporta atualizações.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateDisable">Esse mod não suporta atualização.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateFailed" >Esse mod falhou ao buscar atualizações.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateBlocked">Esse mod foi bloqueado de buscar atualizações.</system:String>
+    <system:String x:Key="ModsUIFeatureSave"         >Esse mod utiliza redirecionamento do ficheiro de gravação.</system:String>
+    <system:String x:Key="ModsUIFeatureSaveDisable"  >Esse mod não suporta redirecionamento do ficheiro de gravação.</system:String>
+    <system:String x:Key="ModsUIFeatureCode"         >Esse mod contém código personalizado.</system:String>
+    <system:String x:Key="ModsUIFeatureCodeDisable"  >Esse mod não contém código personalizado.</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Arraste items para alterar a ordem de carregamento de mods.</system:String>
     <system:String x:Key="ModsUISearch"         >Buscar: </system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">O Hedge Mod Manager detetou que um ou mais mods têm diretorias inválidas.&#x0a;Quer que o Hedge Mod Manager tente corrigir isso?</system:String>
@@ -62,6 +74,7 @@
     <system:String x:Key="SettingsUIInstallLoader"  >Instalar o Carregador de Mods</system:String>
     <system:String x:Key="SettingsUIUninstallLoader">Desinstalar o Carregador de Mods</system:String>
     <system:String x:Key="SettingsUIOpenMods"       >Abrir Diretoria de Mods</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >Abrir Diretoria do Jogo</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Ativar o carregador de mods</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Ativar console de depuramento</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Ativar redirecionamento do ficheiro de gravação</system:String>
@@ -75,6 +88,7 @@
     <system:String x:Key="SettingsUICheckCLUpdate"  >Buscar atualizações do carregador de códigos</system:String>
     <system:String x:Key="SettingsUICheckModUpdates">Buscar atualizações de mods</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Manter o Hedge Mod Manager aberto após iniciar um jogo</system:String>
+    <system:String x:Key="SettingsUICheckHMMUpdate" >Procurar Atualizações</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >Sobre o Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Idioma:</system:String>
     <system:String x:Key="SettingsUITheme"          >Tema:</system:String>
