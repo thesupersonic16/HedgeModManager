@@ -33,45 +33,60 @@ namespace HedgeModManager.Updates
         public static async Task<IReadOnlyList<IModUpdateInfo>> FetchUpdates(IEnumerable<ModInfo> mods, NetworkConfig config = null, 
             Action<ModInfo, Status, Exception> statusCallback = null, CancellationToken cancellationToken = default)
         {
-            var updates = new List<IModUpdateInfo>();
+            var updateTasks = new Task<IModUpdateInfo>[mods.Count()];
+
+            int index = 0;
             foreach (var mod in mods)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                if (!mod.HasUpdates)
-                    continue;
-
-                if (config != null && config.IsServerBlocked(mod.UpdateServer))
+                var modUpdateTask = Task.Run(async () =>
                 {
-                    statusCallback?.Invoke(mod, Status.Blocked, null);
-                    continue;
-                }
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (!mod.HasUpdates)
+                        return null;
 
-                IModUpdateInfo info = null;
+                    if (config != null && config.IsServerBlocked(mod.UpdateServer))
+                    {
+                        statusCallback?.Invoke(mod, Status.Blocked, null);
+                        return null;
+                    }
 
-                statusCallback?.Invoke(mod, Status.BeginCheck, null);
+                    IModUpdateInfo info = null;
 
-                try
-                {
-                    info = await GetInfo(mod, cancellationToken);
-                }
-                catch(Exception e)
-                {
-                    statusCallback?.Invoke(mod, Status.Failed, e);
-                    continue;
-                }
+                    statusCallback?.Invoke(mod, Status.BeginCheck, null);
 
-                if (info == null)
-                {
-                    statusCallback?.Invoke(mod, Status.Failed, null);
-                    continue;
-                }
+                    try
+                    {
+                        info = await GetInfo(mod, cancellationToken);
+                    }
+                    catch (Exception e)
+                    {
+                        statusCallback?.Invoke(mod, Status.Failed, e);
+                        return null;
+                    }
 
-                if (info.Version != mod.Version)
-                    updates.Add(info);
-                statusCallback?.Invoke(mod, Status.Success, null);
+                    if (info == null)
+                    {
+                        statusCallback?.Invoke(mod, Status.Failed, null);
+                        return null;
+                    }
+
+                    statusCallback?.Invoke(mod, Status.Success, null);
+
+                    if (info.Version != mod.Version)
+                        return info;
+
+                    return null;
+                });
+
+                updateTasks[index++] = modUpdateTask;
             }
 
-            return updates;
+            await Task.WhenAll(updateTasks);
+
+            return updateTasks
+                .Select(task => task.Result)
+                .Where(result => result != null)
+                .ToList();
         }
 
         public static async Task<FetchResult> FetchUpdate(ModInfo mod, NetworkConfig config = null, CancellationToken cancellationToken = default)
