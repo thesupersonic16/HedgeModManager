@@ -967,7 +967,7 @@ namespace HedgeModManager
                         if (ViewModel.Mods.Count <= skipped)
                         {
                             RefreshUI();
-                            SaveButton.IsEnabled = SavePlayButton.IsEnabled = true;
+                            RefreshButton.IsEnabled = SaveButton.IsEnabled = SavePlayButton.IsEnabled = true;
                             CleaningGrid.Visibility = Visibility.Collapsed;
                             timer.Stop();
                             return;
@@ -1664,6 +1664,14 @@ namespace HedgeModManager
 
             ViewModel.SelectedMod = modInfo;
             UI_Update_Mod(sender, null);
+        }
+
+        private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (RefreshButton != null)
+            {
+                RefreshButton.IsEnabled = MainTabControl.SelectedItem != SettingsTab;
+            }
         }
 
         class StatusLogger : ILogger
