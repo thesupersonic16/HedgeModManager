@@ -1672,6 +1672,11 @@ namespace HedgeModManager
             {
                 RefreshButton.IsEnabled = MainTabControl.SelectedItem != SettingsTab;
             }
+            if (Button_ConfigureMod != null)
+            {
+                // Check selected item to make sure we're only enabling it if there's anything selected
+                Button_ConfigureMod.IsEnabled = (MainTabControl.SelectedItem == ModsTab) && (ModsList.SelectedItem is ModInfo);
+            }
         }
 
         class StatusLogger : ILogger
