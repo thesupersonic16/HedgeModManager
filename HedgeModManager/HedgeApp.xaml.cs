@@ -154,9 +154,9 @@ namespace HedgeModManager
             {
                 ExceptionWindow.UnhandledExceptionEventHandler(e.ExceptionObject as Exception, e.IsTerminating);
             };
-#endif
             var splashScreen = new SplashScreen("Resources/Graphics/icon256.png");
             splashScreen.Show(false, true);
+#endif
 
             // Gets the embeded version
             CPKREDIRVersion = GetCPKREDIRFileVersion(true);
@@ -339,7 +339,9 @@ namespace HedgeModManager
 
             CodeProvider.TryLoadRoslyn();
 
+#if !DEBUG
             splashScreen.Close(TimeSpan.FromSeconds(0.5));
+#endif
             application.Run();
         }
 
