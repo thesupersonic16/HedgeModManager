@@ -1636,13 +1636,6 @@ namespace HedgeModManager
                 box.ShowDialog();
             }
         }
-        private void UI_ModsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ModsList.SelectedItem is ModInfo modInfo)
-                Button_ConfigureMod.IsEnabled = modInfo.HasSchema;
-            else
-                Button_ConfigureMod.IsEnabled = false;
-        }
 
         private async void UI_CheckUpdates(object sender, RoutedEventArgs e)
         {
@@ -1681,8 +1674,11 @@ namespace HedgeModManager
             }
             if (Button_ConfigureMod != null)
             {
-                // Check selected item to make sure we're only enabling it if there's anything selected
-                Button_ConfigureMod.IsEnabled = (MainTabControl.SelectedItem == ModsTab) && (ModsList.SelectedItem is ModInfo);
+                // Check selected item to make sure we're only enabling it if there's anything selected and has config schema
+                if (MainTabControl.SelectedItem == ModsTab && ModsList.SelectedItem is ModInfo modInfo)
+                    Button_ConfigureMod.IsEnabled = modInfo.HasSchema;
+                else
+                    Button_ConfigureMod.IsEnabled = false;
             }
         }
 

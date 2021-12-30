@@ -37,7 +37,7 @@
                 <TabControl x:Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Margin="-2,0,-2,0" SelectionChanged="MainTabControl_SelectionChanged">
                     <TabItem x:Name="ModsTab" Header="{DynamicResource MainUIMods}">
                         <Grid>
-                            <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown" SelectionChanged="UI_ModsList_SelectionChanged"
+                            <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
                                       Margin="10,5,10,5" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" 
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
