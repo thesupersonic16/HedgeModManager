@@ -126,19 +126,17 @@ namespace HedgeModManager
             ModsDatabase = new ModsDB(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
             if (!Directory.Exists(HedgeApp.ModsDbPath))
             {
-                Application.Current?.MainWindow?.Hide();
-                var box = new HedgeMessageBox("No Mods Found", Localise("DialogUINoModsFolder"));
-
-                box.AddButton("Yes", () =>
+                try
                 {
                     ModsDatabase.SetupFirstTime();
-                    box.Close();
-                });
-
-                box.AddButton("No", () => Environment.Exit(0));
-
-                box.ShowDialog();
-                Application.Current?.MainWindow?.Show();
+                }catch
+                {
+                    Application.Current?.MainWindow?.Hide();
+                    HedgeApp.CreateOKMessageBox(Localise("CommonUIError"),
+                        string.Format(Localise("DialogUINoGameDirAccess"), HedgeApp.CurrentGameInstall.GameDirectory))
+                        .ShowDialog();
+                    Environment.Exit(0);
+                }
             }
         }
 
@@ -461,24 +459,33 @@ namespace HedgeModManager
         public async Task SaveModsDB()
         {
             HedgeApp.Config.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
-            HedgeApp.Config.Save(HedgeApp.ConfigPath);
-            ModsDatabase.Mods.Clear();
-            ModsDatabase.Codes.Clear();
-
-            foreach (var mod in ViewModel.Mods)
+            try
             {
-                ModsDatabase.Mods.Add(mod);
-            }
+                HedgeApp.Config.Save(HedgeApp.ConfigPath);
+                ModsDatabase.Mods.Clear();
+                ModsDatabase.Codes.Clear();
 
-            foreach (var code in CodesDatabase.Codes)
-            {
-                if (code.Enabled)
+                foreach (var mod in ViewModel.Mods)
                 {
-                    ModsDatabase.Codes.Add(code.Name);
+                    ModsDatabase.Mods.Add(mod);
                 }
-            }
 
-            await ModsDatabase.SaveDB();
+                foreach (var code in CodesDatabase.Codes)
+                {
+                    if (code.Enabled)
+                    {
+                        ModsDatabase.Codes.Add(code.Name);
+                    }
+                }
+
+                await ModsDatabase.SaveDB();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                HedgeApp.CreateOKMessageBox(Localise("CommonUIError"),
+                    string.Format(Localise("DialogUINoGameDirAccess"), HedgeApp.CurrentGameInstall.GameDirectory))
+                    .ShowDialog();
+            }
         }
 
         public Task StartGame()

@@ -157,7 +157,6 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Không tìm thấy cập nhật mã</system:String>
     
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager không phát hiện bất kỳ thư mục mod nào.&#x0a;Bạn có muốn tạo một thư mục mod không?</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Bạn chắc chắn muốn xóa "{0}"?&#x0a;Không thể hoàn tác hành động này!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} đã có bản mới nhất.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Có phiên bản mới hơn của {0}! ({1})</system:String>

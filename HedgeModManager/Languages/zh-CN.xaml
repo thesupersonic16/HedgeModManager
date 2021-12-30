@@ -150,7 +150,6 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >未找到代码更新</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager 未检测到任何 mods 文件夹。&#x0a;是否创建一个 mods 文件夹吗？</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">您确定要删除 「{0}」？&#x0a;此操作无法滚回！</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} 已经是最新的。</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate">({1}) 已找到可用的 {0} 的较新版本！</system:String>

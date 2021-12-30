@@ -73,7 +73,7 @@ namespace HedgeModManager
         public void SetupFirstTime()
         {
             Directory.CreateDirectory(RootDirectory);
-            SaveDB();
+            SaveDBSync();
         }
 
         public void DetectMods()

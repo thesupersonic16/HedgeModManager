@@ -170,10 +170,10 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >no c-code updates found</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">hedge m-mod managew did nyot detect a-any mods fowdew.&#x0a;wouwd y-you wike cweate a mods fowdew?</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">awe you suwe you want to dewete &quot;{0}&quot;?&#x0a;this a-action cannot b-be undone!</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} is awweady u-up to date.</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate">a nyewew vewsion of {0} avaiwabwe! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">hedge mod managew c-couwd nyot access t-the game diwectowy.&#x0a;pwease ensuwe the usews g-gwoup has "Write" set to awwow o-on the diwectowy bewow and aww o-of its fiwes and fowdews. rawr x3&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >awe you suwe you want to dewete &quot;{0}&quot;?&#x0a;this a-action cannot b-be undone!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} is awweady u-up to date.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >a nyewew vewsion of {0} avaiwabwe! ({1})</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">awe you suwe you want to cancew updating?&#x0a;this may cowwupt {0}</system:String>
 
     <!-- Status UI Lang Stuff Strings -->

@@ -39,6 +39,7 @@ using HedgeModManager.Themes;
 using HedgeModManager.UI.Models;
 using HedgeModManager.Updates;
 using System.Security;
+using static HedgeModManager.Lang;
 
 namespace HedgeModManager
 {
@@ -397,11 +398,21 @@ namespace HedgeModManager
                     }
                     CurrentGame = game;
                     CurrentGameInstall = steamGame;
-                    RegistryConfig.LastGameDirectory = StartDirectory;
-                    RegistryConfig.Save();
-                    ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
-                    Config = new CPKREDIRConfig(ConfigPath);
-                    ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni));
+                    try
+                    {
+                        RegistryConfig.LastGameDirectory = StartDirectory;
+                        RegistryConfig.Save();
+                        ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
+                        Config = new CPKREDIRConfig(ConfigPath);
+                        ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni));
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        Current.MainWindow = CreateOKMessageBox(Localise("CommonUIError"),
+                            string.Format(Localise("DialogUINoGameDirAccess"), StartDirectory));
+                        Current.MainWindow.ShowDialog();
+                        Environment.Exit(-1);
+                    }
                     return steamGame;
                 }
             }
@@ -623,10 +634,19 @@ namespace HedgeModManager
                     RegistryConfig.Save();
                 }
             }
-
-            ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
-            Config = new CPKREDIRConfig(ConfigPath);
-            ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
+            try
+            {
+                ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
+                Config = new CPKREDIRConfig(ConfigPath);
+                ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Current.MainWindow = CreateOKMessageBox(Localise("CommonUIError"),
+                    string.Format(Localise("DialogUINoGameDirAccess"), StartDirectory));
+                Current.MainWindow.ShowDialog();
+                Environment.Exit(-1);
+            }
         }
 
         public static void InstallGBHandlers()

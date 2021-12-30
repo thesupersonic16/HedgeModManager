@@ -170,7 +170,6 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Nenhuma atualização de códigos encontrada</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">O Hedge Mod Manager não detetou uma pasta para mods.&#x0a;Queres que esta seja criada?</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Tens a certeza de que pretendes apagar "{0}"?&#x0a;Esta ação não pode ser desfeita!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} já está atualizado.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Uma versão mais recente de {0} está disponível! ({1})</system:String>
