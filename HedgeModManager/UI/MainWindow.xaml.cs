@@ -373,7 +373,7 @@ namespace HedgeModManager
 
         public async Task<bool> CheckForModUpdatesAsync(ModInfo mod, CancellationToken cancellationToken = default)
         {
-            if (!mod.HasUpdates)
+            if (!mod.HasUpdates || Singleton.GetInstance<NetworkConfig>().IsServerBlocked(mod.UpdateServer))
                 return false;
 
             CheckingForUpdates = true;
