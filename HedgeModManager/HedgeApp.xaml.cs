@@ -158,7 +158,7 @@ namespace HedgeModManager
 #endif
 
             SplashScreen splashScreen = null;
-            if (!AprilFools || (DateTime.Now.Day == 16 && DateTime.Now.Month == 3))
+            if (AprilFools || (DateTime.Now.Day == 16 && DateTime.Now.Month == 3))
             {
                 splashScreen = new ("Resources/Graphics/splash.png");
                 splashScreen.Show(false, true);
