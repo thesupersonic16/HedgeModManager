@@ -155,9 +155,14 @@ namespace HedgeModManager
             {
                 ExceptionWindow.UnhandledExceptionEventHandler(e.ExceptionObject as Exception, e.IsTerminating);
             };
-            var splashScreen = new SplashScreen("Resources/Graphics/icon256.png");
-            splashScreen.Show(false, true);
 #endif
+
+            SplashScreen splashScreen = null;
+            if (!AprilFools || (DateTime.Now.Day == 16 && DateTime.Now.Month == 3))
+            {
+                splashScreen = new ("Resources/Graphics/splash.png");
+                splashScreen.Show(false, true);
+            }
 
             // Gets the embeded version
             CPKREDIRVersion = GetCPKREDIRFileVersion(true);
@@ -340,9 +345,9 @@ namespace HedgeModManager
 
             CodeProvider.TryLoadRoslyn();
 
-#if !DEBUG
-            splashScreen.Close(TimeSpan.FromSeconds(0.5));
-#endif
+            if (splashScreen != null)
+                splashScreen.Close(TimeSpan.FromSeconds(0.5));
+
             application.Run();
         }
 
