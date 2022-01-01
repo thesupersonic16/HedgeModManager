@@ -110,6 +110,8 @@ namespace HedgeModManager
             Singleton.SetInstance(HttpClient);
             Singleton.SetInstance<IWindowService>(new WindowServiceImplWindows());
 
+            AprilFools = DateTime.Now.Day == 1 && DateTime.Now.Month == 4;
+
             if (args.Length > 2 && string.Compare(args[0], "-update", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 try
@@ -329,8 +331,6 @@ namespace HedgeModManager
                 }
             }
             catch { }
-
-            AprilFools = DateTime.Now.Day == 1 && DateTime.Now.Month == 4;
 
             if (AprilFools)
             {
