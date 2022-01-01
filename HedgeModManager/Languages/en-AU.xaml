@@ -189,6 +189,7 @@
     <!-- Mod Description UI Strings -->
     <system:String x:Key="ModDescriptionUIAbout">About {0}</system:String>
     <system:String x:Key="ModDescriptionUIMadeBy">Made by</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">Made on</system:String>
     <system:String x:Key="ModDescriptionUIDate">on</system:String>
 
     <!-- Mod Downloader Strings -->

@@ -16,23 +16,29 @@
         <StackPanel Margin="5,0,0,0"
             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <TextBlock x:Name="TitleLbl" Text="Title" FontSize="26" Width="Auto"/>
-            <TextBlock FontSize="14" Width="Auto" Visibility="{Binding AuthorURL, Converter={StaticResource EmptyStringToVisibilityConverter}}">
-                <Run Text="{StaticResource ModDescriptionUIMadeBy}"/>
-                <Hyperlink NavigateUri="{Binding AuthorURL}" Click="Hyperlink_OnClick">
-                    <Run Text="{Binding Author}" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}"/>
-                </Hyperlink>
-                <Run Text="{StaticResource ModDescriptionUIDate}"/>
-                <Run Text="{Binding Date}"/>
-            </TextBlock>
-            <TextBlock FontSize="14" Width="Auto" Visibility="{Binding AuthorURL, Converter={StaticResource InverseEmptyStringToVisibilityConverter}}">
-                <Run Text="{StaticResource ModDescriptionUIMadeBy}"/>
-                <Run Text="{Binding Author}"/>
-                <Run Text="{StaticResource ModDescriptionUIDate}"/>
-                <Run Text="{Binding Date}"/>
-            </TextBlock>
+            <StackPanel Orientation="Horizontal" Visibility="{Binding Author, Converter={StaticResource EmptyStringToVisibilityConverter}}">
+                <TextBlock FontSize="14" Margin="0,0,4,0" Width="Auto" Text="{StaticResource ModDescriptionUIMadeBy}"/>
+                <TextBlock FontSize="14" Width="Auto" Visibility="{Binding AuthorURL, Converter={StaticResource EmptyStringToVisibilityConverter}}">
+                    <Hyperlink NavigateUri="{Binding AuthorURL}" Click="Hyperlink_OnClick">
+                        <Run Text="{Binding Author}" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}"/>
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock FontSize="14" Width="Auto" Text="{Binding Author}"
+                           Visibility="{Binding AuthorURL, Converter={StaticResource InverseEmptyStringToVisibilityConverter}}"/>
+                <TextBlock FontSize="14" Margin="4,0,0,0" Width="Auto" Visibility="{Binding Date, Converter={StaticResource EmptyStringToVisibilityConverter}}">
+                    <Run Text="{StaticResource ModDescriptionUIDate}"/>
+                    <Run Text="{Binding Date}"/>
+                </TextBlock>
+            </StackPanel>
+            <Grid Visibility="{Binding Author, Converter={StaticResource InverseEmptyStringToVisibilityConverter}}">
+                <TextBlock FontSize="14" Width="Auto" Visibility="{Binding Date, Converter={StaticResource EmptyStringToVisibilityConverter}}">
+                    <Run Text="{StaticResource ModDescriptionUIMadeOn}"/>
+                    <Run Text="{Binding Date}"/>
+                </TextBlock>
+            </Grid>
         </StackPanel>
         <Rectangle Grid.Row="0" Height="1" Fill="{DynamicResource HMM.Window.BorderBrush}" VerticalAlignment="Bottom"/>
         <TextBox Grid.Row="1" x:Name="DescBx" AcceptsReturn="True" Text="Description" IsReadOnly="True" Foreground="{DynamicResource HMM.Window.LightForegroundBrush}"
-                 Margin="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0"/>
+                 Margin="5" TextWrapping="Wrap" MaxWidth="{Binding ElementName=TitleLbl, Path=ActualWidth}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0"/>
     </Grid>
 </Window>
