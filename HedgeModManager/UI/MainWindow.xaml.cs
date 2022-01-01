@@ -1463,6 +1463,12 @@ namespace HedgeModManager
                     catch { }
                 }
 
+            }else
+            {
+                if (Keyboard.IsKeyDown(Key.F5))
+                {
+                    Refresh();
+                }
             }
             if (ctrlkey)
             {

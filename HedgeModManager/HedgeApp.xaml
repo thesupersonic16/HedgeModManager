@@ -389,6 +389,22 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="RoundBorder" TargetType="{x:Type GroupBox}">
+                <Setter Property="Background" Value="{DynamicResource HMM.Window.AccentBrush1}"/>
+                <Setter Property="MinHeight"  Value="20px" />
+                <Setter Property="MinWidth"   Value="20px" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type GroupBox}">
+                            <Grid>
+                                <Border BorderThickness="1" CornerRadius="8" BorderBrush="{DynamicResource HMM.Window.BorderBrush}">
+                                    <ContentPresenter Margin="4" />
+                                </Border>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <Style TargetType="{x:Type TabItem}">
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.AccentBrush1}"/>
                 <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
@@ -1076,7 +1092,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ToggleButton}">
-                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource HMM.Button.BackgroundBrush}">
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{TemplateBinding Background}">
                                 <Border BorderThickness="0.2" CornerRadius="4" BorderBrush="Gray">
                                     <Path Data="M 0 0 L 4 4 L 8 0 Z" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" Fill="{DynamicResource HMM.Button.ForegroundBrush}"/>
                                 </Border>
@@ -1158,30 +1174,74 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ComboBox}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition MinWidth="{x:Static SystemParameters.VerticalScrollBarWidth}" Width="0"/>
-                                </Grid.ColumnDefinitions>
+                            <Border x:Name="Border" Background="{TemplateBinding Background}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition MinWidth="{x:Static SystemParameters.VerticalScrollBarWidth}" Width="0"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <ToggleButton Style="{StaticResource ComboBoxToggle}" BorderBrush="{TemplateBinding BorderBrush}"
-                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
-                                      ClickMode="Press" Focusable="False" Grid.ColumnSpan="2"/>
+                                    <ToggleButton Style="{StaticResource ComboBoxToggle}" BorderBrush="{TemplateBinding BorderBrush}"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                                          ClickMode="Press" Focusable="False" Grid.ColumnSpan="2" Background="Transparent"/>
 
-                                <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                          Content="{TemplateBinding SelectionBoxItem}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" 
-                                          ContentTemplate="{TemplateBinding ItemTemplate}" Margin="5,0,0,0"/>
+                                    <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                              Content="{TemplateBinding SelectionBoxItem}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" 
+                                              ContentTemplate="{TemplateBinding ItemTemplate}" Margin="5,0,0,0"/>
 
-                                <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Slide">
-                                    <Border BorderThickness="1" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                            Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
-                                        <ScrollViewer>
-                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0,5,0,5"/>
-                                        </ScrollViewer>
-                                    </Border>
-                                </Popup>
-                            </Grid>
-
+                                    <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Slide">
+                                        <Border BorderThickness="1" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                                Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
+                                            <ScrollViewer>
+                                                <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                            </ScrollViewer>
+                                        </Border>
+                                    </Popup>
+                                </Grid>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualStateGroup.Transitions>
+                                            <VisualTransition GeneratedDuration="0:0:0.1" />
+                                            <VisualTransition GeneratedDuration="0" To="Pressed" />
+                                        </VisualStateGroup.Transitions>
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.HoverColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.PressedColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledTextColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Focus">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Window.BackgroundColor1}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.FocusColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="BorderBrush" Value="{DynamicResource HMM.Button.HoverBrush}"/>

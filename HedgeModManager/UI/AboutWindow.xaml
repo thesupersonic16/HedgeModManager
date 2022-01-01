@@ -54,7 +54,7 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="1" Margin="5,8,8,16">
+        <GroupBox Header="{StaticResource AboutWindowUITranslators}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="1" Margin="5,8,8,16">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*"/>

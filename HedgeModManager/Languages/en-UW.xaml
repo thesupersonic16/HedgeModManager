@@ -117,10 +117,11 @@
     <system:String x:Key="OptionsWindowUIError"      >pwease sewect an o-option!</system:String>
 
     <!-- AboutWindow UI Strings -->
-    <system:String x:Key="AboutWindowUITitle"  >about h-hedge mod m-managew</system:String>
-    <system:String x:Key="AboutWindowUILine1"  >a pwogwam d-designed to h-hewp peopwe easiwy w-woad hedgehog engine mods.</system:String>
-    <system:String x:Key="AboutWindowUILine2"  >wequiwes a-a wegawwy owned vewsion o-of one of the suppowted g-games.</system:String>
-    <system:String x:Key="AboutWindowUICredits">cwedits</system:String>
+    <system:String x:Key="AboutWindowUITitle"      >about h-hedge mod m-managew</system:String>
+    <system:String x:Key="AboutWindowUILine1"      >a pwogwam d-designed to h-hewp peopwe easiwy w-woad hedgehog engine mods.</system:String>
+    <system:String x:Key="AboutWindowUILine2"      >wequiwes a-a wegawwy owned vewsion o-of one of the suppowted g-games.</system:String>
+    <system:String x:Key="AboutWindowUICredits"    >cwedits</system:String>
+    <system:String x:Key="AboutWindowUITranslators">twanswatows</system:String>
 
     <!-- ProfileWindow UI Strings -->
     <system:String x:Key="ProfileWindowUITitle"      >manage p-pwofiwes</system:String>

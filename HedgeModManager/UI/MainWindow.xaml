@@ -37,7 +37,7 @@
                 <TabControl x:Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Margin="-2,0,-2,5" SelectionChanged="MainTabControl_SelectionChanged">
                     <TabItem x:Name="ModsTab" Header="{DynamicResource MainUIMods}">
                         <Grid>
-                            <GroupBox Margin="10,5,10,5">
+                            <GroupBox Margin="10,5,10,5" Style="{StaticResource RoundBorder}">
                                 <Grid VerticalAlignment="Bottom" Height="36" Margin="-4,0,-4,-4">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -155,7 +155,7 @@
                     </TabItem>
                     <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}" Selector.Selected="UI_CodesTab_Click" Margin="1,0,-1,0">
                         <Grid>
-                            <GroupBox Margin="10,5,10,5">
+                            <GroupBox Margin="10,5,10,5" Style="{StaticResource RoundBorder}">
                                 <Grid VerticalAlignment="Bottom" Height="36" Margin="-4,0,-4,-4">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>

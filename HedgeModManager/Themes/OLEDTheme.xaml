@@ -16,15 +16,15 @@
     <SolidColorBrush x:Key="HMM.Window.BackgroundBrush2" Color="#FF000000"/>
     <SolidColorBrush x:Key="HMM.Window.ForegroundBrush" Color="#FFE0E0E0"/>
     <SolidColorBrush x:Key="HMM.Window.BorderBrush" Color="#FF3F3F46"/>
-    <SolidColorBrush x:Key="HMM.Button.BackgroundBrush" Color="#FF333333"/>
+    <SolidColorBrush x:Key="HMM.Button.BackgroundBrush" Color="#FF303030"/>
     <SolidColorBrush x:Key="HMM.Button.ForegroundBrush" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="HMM.Window.LightForegroundBrush" Color="LightGray"/>
-    <Color           x:Key="HMM.Button.HoverColor"   A="255" R="102" G="102" B="102"/>
+    <Color           x:Key="HMM.Button.HoverColor"   A="255" R="88" G="88" B="88"/>
     <Color           x:Key="HMM.Button.WarningColor" A="255" R="232" G="17"  B="35"/>
     <Color           x:Key="HMM.Button.PressedColor" A="255" R="175" G="171" B="175"/>
     <SolidColorBrush x:Key="HMM.Button.HoverBrush" Color="{DynamicResource HMM.Button.HoverColor}"/>
     <SolidColorBrush x:Key="HMM.Button.WarningBrush" Color="{DynamicResource HMM.Button.WarningColor}"/>
-    <Color           x:Key="HMM.Button.DisabledColor" A="255" R="187" G="187" B="187"/>
+    <Color           x:Key="HMM.Button.DisabledColor" A="255" R="38" G="38" B="38"/>
     <Color           x:Key="HMM.Button.FocusColor" A="255" R="255" G="255" B="255"/>
     <Color           x:Key="HMM.Button.DisabledTextColor" A="255" R="101" G="101" B="101"/>
     <SolidColorBrush x:Key="HMM.Menu.DisabledColor" Color="#FF222222"/>

@@ -16,7 +16,7 @@
     <SolidColorBrush x:Key="HMM.Window.BackgroundBrush2" Color="#FF202020"/>
     <SolidColorBrush x:Key="HMM.Window.ForegroundBrush" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="HMM.Window.BorderBrush" Color="#FF3F3F46"/>
-    <SolidColorBrush x:Key="HMM.Button.BackgroundBrush" Color="#FF1C1C1C"/>
+    <SolidColorBrush x:Key="HMM.Button.BackgroundBrush" Color="#FF202020"/>
     <SolidColorBrush x:Key="HMM.Button.ForegroundBrush" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="HMM.Window.LightForegroundBrush" Color="LightGray"/>
     <Color           x:Key="HMM.Button.HoverColor"   A="255" R="45" G="45" B="47"/>
