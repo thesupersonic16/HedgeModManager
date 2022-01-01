@@ -27,19 +27,31 @@
         </ContextMenu>
     </Window.Resources>
     <Grid>
-        <Grid Margin="-3,2">
+        <Grid Margin="-3,2,-3,-4">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="StatusLbl" Margin="175,2,4,4" FontSize="12" TextAlignment="Right" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-                <TabControl x:Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Margin="-2,0,-2,0" SelectionChanged="MainTabControl_SelectionChanged">
+                <TabControl x:Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Margin="-2,0,-2,5" SelectionChanged="MainTabControl_SelectionChanged">
                     <TabItem x:Name="ModsTab" Header="{DynamicResource MainUIMods}">
                         <Grid>
+                            <GroupBox Margin="10,5,10,5">
+                                <Grid VerticalAlignment="Bottom" Height="36" Margin="-4,0,-4,-4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button                              Content="{DynamicResource MainUIAddMod}"         Grid.Column="0" Style="{StaticResource LeftButton}"   Click="UI_Install_Mod"/>
+                                    <Button x:Name="RefreshButton"       Content="{DynamicResource MainUIRefreshModList}" Grid.Column="1" Style="{StaticResource MiddleButton}" Click="UI_Refresh_Click"/>
+                                    <Button x:Name="Button_ConfigureMod" Content="{DynamicResource MainUIConfigureMod}"   Grid.Column="2" Style="{StaticResource RightButton}" IsEnabled="False" Click="UI_ConfigureMod_Click"/>
+                                </Grid>
+                            </GroupBox>
                             <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
-                                      Margin="10,5,10,5" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" 
+                                      Margin="10,5,10,41" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" 
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                                       dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
                                       dd:DragDrop.DropHandler="{Binding}">
@@ -69,8 +81,16 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="{DynamicResource ModsUIVersion}"     Width="60"  DisplayMemberBinding="{Binding Version}"/>
-                                        <GridViewColumn Header="{DynamicResource ModsUIAuthor}"      Width="129"  DisplayMemberBinding="{Binding Author}"/>
+                                        <GridViewColumn Header="{DynamicResource ModsUIVersion}"  Width="60">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <TextBlock Text="{Binding Version}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="{DynamicResource ModsUIAuthor}"   Width="129"  DisplayMemberBinding="{Binding Author}"/>
                                         <GridViewColumn Header="{DynamicResource ModsUIFeatures}" Width="135" >
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -136,10 +156,15 @@
                     <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}" Selector.Selected="UI_CodesTab_Click" Margin="1,0,-1,0">
                         <Grid>
                             <GroupBox Margin="10,5,10,5">
-                                <Button x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}" Click="UI_Download_Codes" Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="30" Grid.Row="1" />
+                                <Grid VerticalAlignment="Bottom" Height="36" Margin="-4,0,-4,-4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="Button_DownloadCodes" Content="{DynamicResource CodesUIDownload}" Grid.Column="0" Style="{StaticResource CenterButton}" Click="UI_Download_Codes"/>
+                                </Grid>
                             </GroupBox>
                             <Grid>
-                                <Grid Margin="10,5,10,45" >
+                                <Grid Margin="10,5,10,41" >
                                     <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}"
                                           dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
                                         <ListView.View>
@@ -221,21 +246,15 @@
                         </Grid>
                     </TabItem>
                 </TabControl>
-                <StackPanel VerticalAlignment="Bottom" Grid.Row="1">
-                    <Grid Margin="10,0,10,0" VerticalAlignment="Bottom" Height="100">
+                <Grid Grid.Row="1" Background="{DynamicResource HMM.Window.DialogBottom}">
+                    <Grid Margin="8,1,8,0" VerticalAlignment="Center" Height="56">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.25*"/>
                             <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="0.25*"/>
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="0.45*"/>
-                            <RowDefinition Height="0.45*"/>
-                        </Grid.RowDefinitions>
-
-                        <Button Content="{DynamicResource MainUIAddMod}" Grid.Column="0" Grid.Row="0" Margin="5" Click="UI_Install_Mod"/>
-                        <Button x:Name="Button_ConfigureMod" Content="{DynamicResource MainUIConfigureMod}" Grid.Column="2" Grid.Row="0" Margin="5" IsEnabled="False" Click="UI_ConfigureMod_Click"/>
-                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Grid.Column="1" Grid.Row="0" Margin="5" SelectionChanged="Game_Changed">
+                        
+                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Grid.Column="0" Margin="0,8,5,8" SelectionChanged="Game_Changed">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -250,11 +269,10 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <Button x:Name="SaveButton"     Content="{DynamicResource MainUISave}"                        Grid.Column="0" Grid.Row="1" Margin="5" Click="UI_Save_Click"/>
-                        <Button x:Name="SavePlayButton" Content="{DynamicResource MainUISaveAndPlay}"    Width="Auto" Grid.Column="1" Grid.Row="1" Margin="5" Click="UI_SaveAndPlay_Click"/>
-                        <Button x:Name="RefreshButton"  Content="{DynamicResource MainUIRefreshModList}" Width="Auto" Grid.Column="2" Grid.Row="1" Margin="5" Click="UI_Refresh_Click"/>
+                        <Button x:Name="SaveButton"     Content="{DynamicResource MainUISave}"        Grid.Column="1" Margin="5,8,5,8" Click="UI_Save_Click"/>
+                        <Button x:Name="SavePlayButton" Content="{DynamicResource MainUISaveAndPlay}" Grid.Column="2" Margin="5,8,0,8" Click="UI_SaveAndPlay_Click"/>
                     </Grid>
-                </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

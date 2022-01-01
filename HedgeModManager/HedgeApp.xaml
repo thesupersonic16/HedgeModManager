@@ -502,6 +502,298 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="CenterButton" TargetType="{x:Type Button}">
+                <Setter Property="SnapsToDevicePixels"   Value="true" />
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="Foreground"            Value="{DynamicResource HMM.Button.ForegroundBrush}" />
+                <Setter Property="Background"            Value="{DynamicResource HMM.Button.BackgroundBrush}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border TextBlock.Foreground="{DynamicResource HMM.Window.ForegroundBrush}"
+                        x:Name="Border"
+                        BorderBrush="{TemplateBinding Foreground}"
+                        BorderThickness="0,.2,0,0"
+                        CornerRadius="0,0,8,8"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualStateGroup.Transitions>
+                                            <VisualTransition GeneratedDuration="0:0:0.1" />
+                                            <VisualTransition GeneratedDuration="0" To="Pressed" />
+                                        </VisualStateGroup.Transitions>
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.HoverColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.PressedColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledTextColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Focus">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Window.BackgroundColor1}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.FocusColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter Margin="2"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  RecognizesAccessKey="True" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="LeftButton" TargetType="{x:Type Button}">
+                <Setter Property="SnapsToDevicePixels"   Value="true" />
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="Foreground"            Value="{DynamicResource HMM.Button.ForegroundBrush}" />
+                <Setter Property="Background"            Value="{DynamicResource HMM.Button.BackgroundBrush}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border TextBlock.Foreground="{DynamicResource HMM.Window.ForegroundBrush}"
+                        x:Name="Border"
+                        BorderBrush="{TemplateBinding Foreground}"
+                        BorderThickness="0,.2,.2,0"
+                        CornerRadius="0,0,0,8"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualStateGroup.Transitions>
+                                            <VisualTransition GeneratedDuration="0:0:0.1" />
+                                            <VisualTransition GeneratedDuration="0" To="Pressed" />
+                                        </VisualStateGroup.Transitions>
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.HoverColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.PressedColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledTextColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Focus">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Window.BackgroundColor1}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.FocusColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter Margin="2"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  RecognizesAccessKey="True" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="MiddleButton" TargetType="{x:Type Button}">
+                <Setter Property="SnapsToDevicePixels"   Value="true" />
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="Foreground"            Value="{DynamicResource HMM.Button.ForegroundBrush}" />
+                <Setter Property="Background"            Value="{DynamicResource HMM.Button.BackgroundBrush}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border TextBlock.Foreground="{DynamicResource HMM.Window.ForegroundBrush}"
+                        x:Name="Border"
+                        BorderBrush="{TemplateBinding Foreground}"
+                        BorderThickness=".2,.2,.2,0"
+                        CornerRadius="0,0,0,0" 
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualStateGroup.Transitions>
+                                            <VisualTransition GeneratedDuration="0:0:0.1" />
+                                            <VisualTransition GeneratedDuration="0" To="Pressed" />
+                                        </VisualStateGroup.Transitions>
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.HoverColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.PressedColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledTextColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Focus">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Window.BackgroundColor1}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.FocusColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter Margin="2"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  RecognizesAccessKey="True" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="RightButton" TargetType="{x:Type Button}">
+                <Setter Property="SnapsToDevicePixels"   Value="true" />
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="Foreground"            Value="{DynamicResource HMM.Button.ForegroundBrush}" />
+                <Setter Property="Background"            Value="{DynamicResource HMM.Button.BackgroundBrush}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border TextBlock.Foreground="{DynamicResource HMM.Window.ForegroundBrush}"
+                        x:Name="Border"
+                        BorderBrush="{TemplateBinding Foreground}"
+                        BorderThickness=".2,.2,0,0"
+                        CornerRadius="0,0,8,0" 
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualStateGroup.Transitions>
+                                            <VisualTransition GeneratedDuration="0:0:0.1" />
+                                            <VisualTransition GeneratedDuration="0" To="Pressed" />
+                                        </VisualStateGroup.Transitions>
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.HoverColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.PressedColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledTextColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Focus">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Window.BackgroundColor1}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                              Storyboard.TargetName="Border">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.FocusColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter Margin="2"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  RecognizesAccessKey="True" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
             <!-- Others -->
             <Style TargetType="{x:Type Label}">
@@ -784,9 +1076,9 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ToggleButton}">
-                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource HMM.Window.BackgroundBrush}">
-                                <Border BorderThickness="0.5" CornerRadius="2" BorderBrush="Gray">
-                                    <Path Data="M 0 0 L 4 4 L 8 0 Z" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" Fill="{DynamicResource HMM.Window.ForegroundBrush}"/>
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource HMM.Button.BackgroundBrush}">
+                                <Border BorderThickness="0.2" CornerRadius="4" BorderBrush="Gray">
+                                    <Path Data="M 0 0 L 4 4 L 8 0 Z" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" Fill="{DynamicResource HMM.Button.ForegroundBrush}"/>
                                 </Border>
                             </Grid>
                         </ControlTemplate>
@@ -860,8 +1152,8 @@
             </Style>
 
             <Style TargetType="{x:Type ComboBox}">
-                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource HMM.Button.BackgroundBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource HMM.Button.ForegroundBrush}"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource  HMM.Window.BorderBrush}"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -892,7 +1184,7 @@
 
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource HMM.Button.BackgroundBrush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource HMM.Button.HoverBrush}"/>
                                 </Trigger>
                                 <Trigger Property="IsFocused" Value="True">
                                     <Setter Property="BorderBrush" Value="{DynamicResource HMM.Button.BackgroundBrush}"/>
@@ -919,10 +1211,10 @@
 
                 <Style.Triggers>
                     <Trigger Property="IsHighlighted" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource HMM.Menu.HoverColor}"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Button.HoverBrush}"/>
                     </Trigger>
                     <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource HMM.Menu.HoverColor}"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Button.HoverBrush}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -1016,7 +1308,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ListView}">
-                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8,8,0,0">
                                 <Border.OpacityMask>
                                     <VisualBrush Stretch="Fill">
                                         <VisualBrush.Visual>

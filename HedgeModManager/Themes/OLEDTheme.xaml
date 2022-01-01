@@ -3,7 +3,7 @@
                     xmlns:local="clr-namespace:HedgeModManager.Themes">
 
     <!-- Colours -->
-    <SolidColorBrush x:Key="HMM.Window.DialogBottom" Color="#FF080808"/>
+    <SolidColorBrush x:Key="HMM.Window.DialogBottom" Color="#FF101010"/>
     <SolidColorBrush x:Key="HMM.Window.AccentBrush" Color="#FF0066CC"/>
     <SolidColorBrush x:Key="HMM.Window.HeaderAccentBrush" Color="#FF0066CC"/>
     <SolidColorBrush x:Key="HMM.Window.AccentBrush1" Color="#FF007ACC"/>
