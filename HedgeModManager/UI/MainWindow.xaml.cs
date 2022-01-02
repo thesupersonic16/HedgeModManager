@@ -1137,6 +1137,7 @@ namespace HedgeModManager
         private void UI_Install_Mod(object sender, RoutedEventArgs e)
         {
             var choice = new OptionsWindow(Localise("MainUIInstallFormHeader"), Localise("MainUIInstallFormOptionDir"), Localise("MainUIInstallFormOptionArc"), Localise("MainUIInstallFormOptionNew")).Ask();
+            
             if (choice == 0)
             {
                 var dialog = new FolderBrowserDialog();
@@ -1180,8 +1181,13 @@ namespace HedgeModManager
                     else if (HedgeApp.CurrentGame == Games.SonicColorsUltimate)
                         modDir = "";
                     ModsDatabase.CreateMod(mod, modDir, true);
-                    RefreshMods();
                 }
+            }
+
+            if (choice != -1)
+            {
+                RefreshMods();
+                RefreshUI();
             }
         }
 
