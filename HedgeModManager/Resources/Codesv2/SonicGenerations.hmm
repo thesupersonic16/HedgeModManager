@@ -965,3 +965,9 @@ WriteProtected<byte>(0x1124489, 0xEB)
 WriteNop(0x11244C1, 6)
 WriteNop(0x11244D0, 6)
 WriteProtected<uint>(0x112459B, 0xFFFFFFFF)
+
+Patch "Disable Super Sonic Aura Particles" by "Hyper"
+WriteProtected<byte>(0xDA28DC, 0xEB);
+WriteNop(0xDA79B1, 5);
+WriteProtected<byte>(0xDA892C, 0xEB);
+WriteNop(0xDAD371, 5);
