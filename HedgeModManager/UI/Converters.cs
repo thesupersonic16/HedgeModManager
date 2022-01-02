@@ -187,7 +187,7 @@ namespace HedgeModManager
             var brushWorking = Application.Current.TryFindResource("HMM.Window.AccentBrush") as Brush;
 
             var modInfo = values[0] as ModInfo;
-            var updateStatus = (Updates.ModUpdateFetcher.Status)values[1];
+            var updateStatus = modInfo.UpdateStatus;
             if (modInfo == null)
                 return brushDisabled;
 
