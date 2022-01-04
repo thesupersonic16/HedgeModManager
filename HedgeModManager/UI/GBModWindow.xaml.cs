@@ -122,13 +122,13 @@ namespace HedgeModManager.UI
                     var destinationPath = Path.GetFileName(resp.RequestMessage.RequestUri.AbsoluteUri);
                     using (var destinationFile = File.Create(destinationPath, 8192, FileOptions.Asynchronous))
                         await resp.Content.CopyToAsync(destinationFile, progress);
-
-                    ModsDB.InstallMod(destinationPath, Path.Combine(game.GameDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
-                    File.Delete(destinationPath);
-
-                    // a dialog would be nice here but i ain't adding strings
+                    
                     await Dispatcher.InvokeAsync(() =>
                     {
+                        ModsDB.InstallMod(destinationPath, Path.Combine(game.GameDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
+                        File.Delete(destinationPath);
+
+                        // a dialog would be nice here but i ain't adding strings
                         DialogResult = true;
                         Close();
                     });
