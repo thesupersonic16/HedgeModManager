@@ -971,3 +971,10 @@ WriteProtected<byte>(0xDA28DC, 0xEB);
 WriteNop(0xDA79B1, 5);
 WriteProtected<byte>(0xDA892C, 0xEB);
 WriteNop(0xDAD371, 5);
+
+Patch "Disable Trick Particles" by "Hyper"
+WriteProtected<byte>(0x15E9128, 0x00); /* ef_ch_sng_yh1_jump_trick1 */
+WriteProtected<byte>(0x15E9144, 0x00); /* ef_ch_sng_yh1_jump_trick2 */
+WriteProtected<byte>(0x15E9160, 0x00); /* ef_ch_sng_yh1_jump_trick3 */
+WriteProtected<byte>(0x15E917C, 0x00); /* ef_ch_sng_yh1_jump_trick4 */
+WriteProtected<byte>(0x15E9198, 0x00); /* ef_ch_sng_yh1_jump_trick5 */
