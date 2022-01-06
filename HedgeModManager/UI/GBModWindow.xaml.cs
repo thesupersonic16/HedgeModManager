@@ -23,6 +23,7 @@ using PopupBox = HedgeModManager.Controls.PopupBox;
 using System.Diagnostics;
 using System.Windows.Shell;
 using HedgeModManager.Misc;
+using HedgeModManager.Exceptions;
 
 namespace HedgeModManager.UI
 {
@@ -111,6 +112,21 @@ namespace HedgeModManager.UI
                 });
 
                 var game = HedgeApp.GetGameInstall(Game);
+                if (game == null)
+                {
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        var dialog = new HedgeMessageBox(Localise("CommonUIError"), LocaliseFormat("ModDownloaderNoGameMes", Localise($"Game{Game.GameName}")));
+                        dialog.AddButton(Localise("CommonUIClose"), () =>
+                        {
+                            dialog.Close();
+                            DialogResult = false;
+                            Close();
+                        });
+                        dialog.ShowDialog();
+                    });
+                    return;
+                }
                 HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.GameDirectory, "cpkredir.ini"));
                 var mod = (GBAPIItemDataBasic)DataContext;
 
@@ -123,16 +139,30 @@ namespace HedgeModManager.UI
                     using (var destinationFile = File.Create(destinationPath, 8192, FileOptions.Asynchronous))
                         await resp.Content.CopyToAsync(destinationFile, progress);
                     
+                    ModsDB.InstallMod(destinationPath, Path.Combine(game.GameDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
+                    File.Delete(destinationPath);
+
+                    // a dialog would be nice here but i ain't adding strings
                     await Dispatcher.InvokeAsync(() =>
                     {
-                        ModsDB.InstallMod(destinationPath, Path.Combine(game.GameDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
-                        File.Delete(destinationPath);
-
-                        // a dialog would be nice here but i ain't adding strings
                         DialogResult = true;
                         Close();
                     });
                 }
+            }
+            catch (ModInstallException)
+            {
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    var dialog = new HedgeMessageBox(Localise("CommonUIError"), Localise("DialogUINoDecompressor"));
+                    dialog.AddButton(Localise("CommonUIClose"), () =>
+                    {
+                        dialog.Close();
+                        DialogResult = false;
+                        Close();
+                    });
+                    dialog.ShowDialog();
+                });
             }
             catch (Exception ex)
             {

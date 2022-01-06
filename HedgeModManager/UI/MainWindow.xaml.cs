@@ -30,6 +30,7 @@ using System.Windows.Data;
 using GameBananaAPI;
 using HedgeModManager.GitHub;
 using HedgeModManager.Misc;
+using HedgeModManager.Exceptions;
 
 namespace HedgeModManager
 {
@@ -1158,7 +1159,16 @@ namespace HedgeModManager
                 {
                     dialog.GetResult(out var item);
                     item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out var path);
-                    ModsDatabase.InstallMod(path);
+                    try
+                    {
+                        ModsDatabase.InstallMod(path);
+                    }
+                    catch (ModInstallException)
+                    {
+                        var box = new HedgeMessageBox(Localise("CommonUIError"), Localise("DialogUINoDecompressor"));
+                        box.AddButton(Localise("CommonUIClose"), () => box.Close());
+                        box.ShowDialog();
+                    }
                 }
             }
             else if (choice == 2)

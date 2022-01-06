@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
+using HedgeModManager.Exceptions;
 using Newtonsoft.Json;
 using static HedgeModManager.Lang;
 
@@ -89,7 +90,18 @@ namespace HedgeModManager.UI
 
                     }
                     else
-                        ModsDB.InstallMod(file);
+                    {
+                        try
+                        {
+                            ModsDB.InstallMod(file);
+                        }
+                        catch (ModInstallException)
+                        {
+                            var box = new HedgeMessageBox(Localise("CommonUIError"), Localise("DialogUINoDecompressor"));
+                            box.AddButton(Localise("CommonUIClose"), () => box.Close());
+                            box.ShowDialog();
+                        }
+                    }
                 }
             }
             else

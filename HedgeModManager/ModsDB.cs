@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using GameBananaAPI;
+using HedgeModManager.Exceptions;
 using HedgeModManager.Serialization;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
@@ -271,12 +272,7 @@ namespace HedgeModManager
             }
             if (!InstallModArchiveUsing7Zip(path, root))
                 if (!InstallModArchiveUsingWinRAR(path, root))
-                {
-                    var box = new HedgeMessageBox("ERROR", "Failed to install mods using 7-Zip and WinRAR!\n" +
-                        "Make sure you have either one installed on your system.");
-                    box.AddButton("  Close  ", () => box.Close());
-                    box.ShowDialog();
-                }
+                    throw new ModInstallException("Could not install mod, neither 7-Zip or WinRAR was found!");
         }
 
         public static void InstallModArchiveUsingZipFile(string path, string root)
