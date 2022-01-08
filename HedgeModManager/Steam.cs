@@ -16,15 +16,25 @@ namespace HedgeModManager
 
         public static void Init()
         {
-            // Gets Steam's Registry Key
-            var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Valve\\Steam");
-            // If null then try get it from the 64-bit Registry
-            if (key == null)
-                key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
+            var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
                     .OpenSubKey("SOFTWARE\\Wow6432Node\\Valve\\Steam");
-            // Checks if the Key and Value exists.
-            if (key != null && key.GetValue("InstallPath") is string steamPath)
-                SteamLocation = steamPath;
+
+            if (key == null)
+            {
+                key = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default)
+                    .OpenSubKey("Software\\Valve\\Steam");
+                if (key != null && key.GetValue("SteamPath") is string steamPath)
+                    SteamLocation = steamPath;
+            }
+            else
+            {
+                if (key == null)
+                    key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
+                    .OpenSubKey("SOFTWARE\\Valve\\Steam");
+
+                if (key != null && key.GetValue("InstallPath") is string steamPath)
+                    SteamLocation = steamPath;
+            }
         }
 
         public static string GetCachedProfileImageURLFromSID64(string SID64)
