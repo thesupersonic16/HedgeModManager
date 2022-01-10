@@ -51,7 +51,7 @@
                             </GroupBox>
                             <ListView x:Name="ModsList" PreviewKeyDown="ModsList_OnPreviewKeyDown"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
-                                      Margin="10,5,10,41" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" 
+                                      Margin="10,5,10,41" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" SizeChanged="ModsList_SizeChanged"
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                                       dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
                                       dd:DragDrop.DropHandler="{Binding}">
@@ -248,13 +248,7 @@
                 </TabControl>
                 <Grid Grid.Row="1" Background="{DynamicResource HMM.Window.DialogBottom}">
                     <Grid Margin="8,1,8,0" VerticalAlignment="Center" Height="56">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.5*"/>
-                            <ColumnDefinition Width="0.25*"/>
-                            <ColumnDefinition Width="0.25*"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Grid.Column="0" Margin="0,8,5,8" SelectionChanged="Game_Changed">
+                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Width="260" HorizontalAlignment="Left" Margin="0,8,5,8" SelectionChanged="Game_Changed">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -269,8 +263,10 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <Button x:Name="SaveButton"     Content="{DynamicResource MainUISave}"        Grid.Column="1" Margin="5,8,5,8" Click="UI_Save_Click"/>
-                        <Button x:Name="SavePlayButton" Content="{DynamicResource MainUISaveAndPlay}" Grid.Column="2" Margin="5,8,0,8" Click="UI_SaveAndPlay_Click"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="SaveButton"     Content="{DynamicResource MainUISave}"        Width="130" Margin="5,8,5,8" Click="UI_Save_Click"/>
+                            <Button x:Name="SavePlayButton" Content="{DynamicResource MainUISaveAndPlay}" Width="130" Margin="5,8,0,8" Click="UI_SaveAndPlay_Click"/>
+                        </StackPanel>
                     </Grid>
                 </Grid>
             </Grid>

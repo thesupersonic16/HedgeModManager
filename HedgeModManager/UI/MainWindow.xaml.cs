@@ -1704,6 +1704,16 @@ namespace HedgeModManager
             }
         }
 
+        private void ModsList_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double minWidth = 16 + 200 + 60 + 129 + 135;
+            double extra = Math.Max(0, e.NewSize.Width - minWidth);
+            var view = ModsList.View as GridView;
+            view.Columns[0].Width = 200 + extra * 0.70;
+            view.Columns[1].Width = 60 + extra * 0.10;
+            view.Columns[2].Width = 129 + extra * 0.20;
+        }
+
         class StatusLogger : ILogger
         {
             private MainWindow Window { get; }
