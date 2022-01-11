@@ -1714,6 +1714,15 @@ namespace HedgeModManager
             view.Columns[2].Width = 129 + extra * 0.20;
         }
 
+        private void CodesList_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double minWidth = 16 + 370 + 152;
+            double extra = Math.Max(0, e.NewSize.Width - minWidth);
+            var view = CodesList.View as GridView;
+            view.Columns[0].Width = 370 + extra * 0.70;
+            view.Columns[1].Width = 152 + extra * 0.30;
+        }
+
         class StatusLogger : ILogger
         {
             private MainWindow Window { get; }

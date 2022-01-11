@@ -139,7 +139,7 @@
                             <TextBlock Text="{DynamicResource ModsUINoMods}" Visibility="{Binding HasNoMods, Converter={StaticResource BoolToVisibilityConverter}}"
                                        HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
 
-                            <Border x:Name="ModsFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,5" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
+                            <Border x:Name="ModsFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,41" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
                                     <Label Content="{DynamicResource ModsUISearch}" Margin="0,-3,0,0"/>
                                     <TextBox x:Name="TextBox_ModsSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_ModsSearch_TextChanged" LostFocus="TextBox_ModsSearch_LostFocus"/>
@@ -165,7 +165,7 @@
                             </GroupBox>
                             <Grid>
                                 <Grid Margin="10,5,10,41" >
-                                    <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}"
+                                    <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
                                           dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
                                         <ListView.View>
                                             <GridView AllowsColumnReorder="True">
@@ -189,7 +189,7 @@
                                         <TextBlock x:Name="CodesStatusLbl" Text="{DynamicResource CodesUIFetching}" IsVisibleChanged="OnFetchStatusVisibilityChanged"/>
                                     </StackPanel>
                                 </Grid>
-                                <Border x:Name="CodesFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,45" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
+                                <Border x:Name="CodesFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,41" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
                                         <Label Content="{DynamicResource CodesUISearch}" Margin="0,-3,0,0"/>
                                         <TextBox x:Name="TextBox_CodesSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_CodeSearch_TextChanged" LostFocus="TextBox_CodeSearch_LostFocus"/>
