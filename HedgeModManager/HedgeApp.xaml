@@ -300,12 +300,13 @@
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush1}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.BorderBrush}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TextBox}">
                             <Border Background="{TemplateBinding Background}"
                                     x:Name="Bd"
-                                    BorderBrush="{DynamicResource HMM.Window.BorderBrush}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     CornerRadius="3">
                                 <ScrollViewer x:Name="PART_ContentHost"/>
