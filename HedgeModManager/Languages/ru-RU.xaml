@@ -72,7 +72,7 @@
     <system:String x:Key="SettingsUICheckCLUpdate"  >Проверять коды на наличие обновлений</system:String>
     <system:String x:Key="SettingsUICheckModUpdates">Проверять моды на наличие обновлений</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Оставить Hedge Mod Manager открытым после запуска игры</system:String>
-    <system:String x:Key="SettingsUIAboutHMM"       >О программе Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUIAboutHMM" xml:space="preserve">О программе&#x0a;Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Язык:</system:String>
     <system:String x:Key="SettingsUITheme"          >Тема:</system:String>
 
