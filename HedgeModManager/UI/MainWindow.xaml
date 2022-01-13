@@ -208,30 +208,26 @@
                             
                             <GroupBox Header="{DynamicResource SettingsUIGMLHeader}" Margin="0,0,0,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <Grid>
-                                    <StackPanel Margin="5,10,10,0">
-                                        <Grid Margin="0,0,0,5">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="114"/>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition Width="24"/>
-                                            </Grid.ColumnDefinitions>
+                                    <Grid Margin="5,10,10,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="114"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="24"/>
+                                        </Grid.ColumnDefinitions>
 
-                                            <Label   Content="{DynamicResource SettingsUILabelMDir}" Margin="1,-2,0,0"/>
-                                            <TextBox Text="{Binding ModsDB.RootDirectory}"           Grid.Column="1" Margin="0,0,5,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
-                                            <Button  Content="..."                                   Grid.Column="2" VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
-                                        </Grid>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="114"/>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition Width="24"/>
-                                            </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
 
-                                            <Label    Content="{DynamicResource SettingsUILabelProfile}" Margin="1,-2,0,0"/>
-                                            <ComboBox x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Grid.Column="1" Margin="0,0,5,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="21" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Stretch"/>
-                                            <Button   Content="⚙" Grid.Column="2" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
-                                        </Grid>
-                                    </StackPanel>
+                                        <Label   Content="{DynamicResource SettingsUILabelMDir}" Margin="1,-2,0,0"/>
+                                        <TextBox Text="{Binding ModsDB.RootDirectory}"           Grid.Column="1" Margin="0,0,5,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
+                                        <Button  Content="..."                                   Grid.Column="2" VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
+
+                                        <Label    Content="{DynamicResource SettingsUILabelProfile}" Grid.Row="1" Margin="1,-2,0,0"/>
+                                        <ComboBox x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="1" Margin="0,0,5,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="21" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Stretch"/>
+                                        <Button   Content="⚙" Grid.Column="2" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Grid.Row="1" Height="21" HorizontalAlignment="Right" Width="24"/>
+                                    </Grid>
 
                                     <StackPanel Margin="10,72,0,0">
                                         <CheckBox Content="{DynamicResource SettingsUIEnableML}"          IsChecked="{Binding CPKREDIR.Enabled}"                       Margin="0,0,0,5"/>
