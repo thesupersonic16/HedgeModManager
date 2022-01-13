@@ -174,7 +174,7 @@
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal">
                                                                 <CheckBox IsChecked="{Binding Enabled}" Margin="0,2,4,2"/>
-                                                                <TextBlock Text="{Binding Name}"/>
+                                                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
                                                             </StackPanel>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
