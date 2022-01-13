@@ -300,14 +300,35 @@
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush1}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.BorderBrush}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border Background="{TemplateBinding Background}"
+                                    x:Name="Bd"
+                                    BorderBrush="{DynamicResource HMM.Window.BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="3">
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="{DynamicResource HMM.Menu.DisabledColor}" TargetName="Bd"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource HMM.Menu.DisabledTextColor}"/>
+                                </Trigger>
+                                <Trigger Property="Width" Value="Auto">
+                                    <Setter Property="MinWidth" Value="100"/>
+                                </Trigger>
+                                <Trigger Property="Height" Value="Auto">
+                                    <Setter Property="MinHeight" Value="20"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
-            <Style TargetType="{x:Type pt:TextBoxEx}">
-                <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
-                <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush1}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.BorderBrush}" />
-            </Style>
+            <!-- PropertyTools TextBox style -->
+            <Style TargetType="{x:Type pt:TextBoxEx}" BasedOn="{StaticResource {x:Type TextBox}}"/>
 
             <!-- Tabs -->
             <Style TargetType="{x:Type TabControl}">
@@ -1170,7 +1191,7 @@
             <Style TargetType="{x:Type ComboBox}">
                 <Setter Property="Background" Value="{DynamicResource HMM.Button.BackgroundBrush}"/>
                 <Setter Property="Foreground" Value="{DynamicResource HMM.Button.ForegroundBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource  HMM.Window.BorderBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource HMM.Window.BorderBrush}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ComboBox}">
