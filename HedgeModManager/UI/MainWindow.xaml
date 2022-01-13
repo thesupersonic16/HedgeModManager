@@ -202,7 +202,7 @@
                     <TabItem x:Name="SettingsTab" Header="{DynamicResource MainUISettings}" Margin="2,0,-2,0">
                         <Grid Margin="10,5,10,5">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="220"/>
+                                <RowDefinition Height="228"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             
@@ -212,34 +212,34 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="114"/>
                                             <ColumnDefinition/>
-                                            <ColumnDefinition Width="24"/>
+                                            <ColumnDefinition Width="27"/>
                                         </Grid.ColumnDefinitions>
 
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="32"/>
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
 
-                                        <Label   Content="{DynamicResource SettingsUILabelMDir}" Margin="1,-2,0,0"/>
-                                        <TextBox Text="{Binding ModsDB.RootDirectory}"           Grid.Column="1" Margin="0,0,5,0" VerticalAlignment="Top" IsReadOnly="True" Height="21"/>
-                                        <Button  Content="..."                                   Grid.Column="2" VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="21" HorizontalAlignment="Right" Width="24"/>
+                                        <Label   Content="{DynamicResource SettingsUILabelMDir}" Margin="1,0,0,0"/>
+                                        <TextBox Text="{Binding ModsDB.RootDirectory}"           Grid.Column="1" Margin="0,0,5,0" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True" Height="27"/>
+                                        <Button  Content="..."                                   Grid.Column="2" VerticalAlignment="Top" Click="UI_ChangeDatabasePath_Click" Height="27" HorizontalAlignment="Right" Width="27"/>
 
-                                        <Label    Content="{DynamicResource SettingsUILabelProfile}" Grid.Row="1" Margin="1,-2,0,0"/>
-                                        <ComboBox x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="1" Margin="0,0,5,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="21" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Stretch"/>
-                                        <Button   Content="⚙" Grid.Column="2" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Grid.Row="1" Height="21" HorizontalAlignment="Right" Width="24"/>
+                                        <Label    Content="{DynamicResource SettingsUILabelProfile}" Grid.Row="1" Margin="1,0,0,0"/>
+                                        <ComboBox x:Name="ComboBox_ModProfile" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedModProfile}" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="1" Margin="0,0,5,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="27" SelectionChanged="ComboBox_ModProfile_SelectionChanged" HorizontalAlignment="Stretch"/>
+                                        <Button   Content="⚙" Grid.Column="2" VerticalAlignment="Top" Click="UI_ManageProfile_Click" Grid.Row="1" Height="27" HorizontalAlignment="Right" Width="27"/>
                                     </Grid>
 
-                                    <StackPanel Margin="10,72,0,0">
+                                    <StackPanel Margin="10,80,0,0">
                                         <CheckBox Content="{DynamicResource SettingsUIEnableML}"          IsChecked="{Binding CPKREDIR.Enabled}"                       Margin="0,0,0,5"/>
                                         <CheckBox Content="{DynamicResource SettingsUIEnableDebug}"       IsChecked="{Binding CPKREDIR.EnableDebugConsole}"            Margin="0,0,0,5"/>
                                         <CheckBox Content="{DynamicResource SettingsUIEnableSRedir}"      IsChecked="{Binding CPKREDIR.EnableFallbackSaveRedirection}" Margin="0,0,0,5"/>
                                         <!--<CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"                Visibility="{Binding HiddenMode, Converter={StaticResource BoolToVisibilityConverter}}"/>-->
                                     </StackPanel>
 
-                                    <StackPanel Margin="0,72,10,0" HorizontalAlignment="Right">
-                                        <Button x:Name="Button_OpenMods"    Content="{DynamicResource SettingsUIOpenMods}"        Click="UI_OpenMods_Click"    Margin="0,0,0,5" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="200"/>
-                                        <Button                             Content="{DynamicResource SettingsUIOpenGameDir}"     Click="UI_OpenGameDir_Click" Margin="0,0,0,5" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="200"/>
-                                        <Button x:Name="Button_OtherLoader" Content="{DynamicResource SettingsUIUninstallLoader}" Click="UI_OtherLoader_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="200" IsEnabled="False"/>
+                                    <StackPanel Margin="0,80,10,0" HorizontalAlignment="Right" Width="200">
+                                        <Button x:Name="Button_OpenMods"    Content="{DynamicResource SettingsUIOpenMods}"        Click="UI_OpenMods_Click"    Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
+                                        <Button                             Content="{DynamicResource SettingsUIOpenGameDir}"     Click="UI_OpenGameDir_Click" Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
+                                        <Button x:Name="Button_OtherLoader" Content="{DynamicResource SettingsUIUninstallLoader}" Click="UI_OtherLoader_Click"                  HorizontalAlignment="Stretch" Height="27" IsEnabled="False"/>
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
@@ -256,10 +256,10 @@
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition/>
-                                            <ColumnDefinition Width="200"/>
+                                            <ColumnDefinition Width="220"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Grid Margin="6,0,5,10" VerticalAlignment="Bottom">
+                                        <Grid Margin="6,0,0,10" VerticalAlignment="Bottom">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="32"/>
                                                 <RowDefinition Height="32"/>
@@ -281,7 +281,7 @@
                                             <ComboBox x:Name="ComboBox_Themes"    ItemsSource="{Binding InstalledThemes, Source={x:Static Application.Current}}"   SelectedItem="{Binding CurrentTheme, Source={x:Static Application.Current}}"   Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" Height="27" SelectionChanged="ComboBox_Themes_Changed"    Loaded="ComboBox_Themes_Loaded"/>
                                         </Grid>
 
-                                        <StackPanel Grid.Column="1" Margin="0,0,10,10" VerticalAlignment="Bottom">
+                                        <StackPanel Grid.Column="1" Margin="0,0,0,10" VerticalAlignment="Bottom" Width="200">
                                             <Button Content="{DynamicResource SettingsUICheckHMMUpdate}" Height="43" Margin="0,0,0,5" Click="UI_CheckUpdates"/>
                                             <Button Content="{DynamicResource SettingsUIAboutHMM}"       Height="43" Click="UI_About_Click"/>
                                         </StackPanel>
