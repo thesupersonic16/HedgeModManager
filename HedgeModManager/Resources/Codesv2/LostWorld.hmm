@@ -466,3 +466,20 @@ WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 5");
 
 Patch "Disable Wisp Hints" by "Sajid"
 WriteNop(ASLR(0x0091AAF8), 6)
+
+Patch "Fix Rigid Bodies Falling Through Collision" by "ĐeäTh & Darío"
+static int p_updateBroadphaseAndResetCollisionInformationOfWarpedBody = (int)ASLR(0x00AED500);
+static int p_setLinearVelocity = (int)ASLR(0x00B88220);
+
+WriteAsmHook
+(
+    $@"mov eax, {p_setLinearVelocity}
+	call eax
+	mov edx, [esi+14h]
+	mov edx, [edx+10h]
+	push edx
+	mov eax, {p_updateBroadphaseAndResetCollisionInformationOfWarpedBody}
+	call eax
+	add esp, 4",
+    ASLR(0x004B974F), HookBehavior.Replace
+)
