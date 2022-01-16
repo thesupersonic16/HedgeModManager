@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("HedgeModManager")]
-[assembly: AssemblyCopyright("Copyright © NeverFinishAnything 2021")]
+[assembly: AssemblyCopyright("Copyright © NeverFinishAnything 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
