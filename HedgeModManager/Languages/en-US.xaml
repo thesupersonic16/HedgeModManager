@@ -78,6 +78,7 @@
     <system:String x:Key="SettingsUIEnableML"       >Enable mod loader</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Enable debug console</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Enable save file redirection</system:String>
+    <system:String x:Key="SettingsUIUseLauncher"    >Use game launcher if possible</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Loaders:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Game:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Profile:</system:String>

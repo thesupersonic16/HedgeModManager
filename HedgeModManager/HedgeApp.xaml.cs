@@ -398,7 +398,7 @@ namespace HedgeModManager
                     var steamGame = GameInstalls.FirstOrDefault(x => x.BaseGame == game);
                     if (steamGame == null)
                     {
-                        steamGame = new GameInstall(game, StartDirectory);
+                        steamGame = new GameInstall(game, StartDirectory, GameLauncher.None);
                         GameInstalls.Add(steamGame);
                     }
                     CurrentGame = game;

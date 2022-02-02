@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -164,14 +165,53 @@ namespace HedgeModManager
     {
         public Game BaseGame;
         public string GameDirectory;
+        public GameLauncher Launcher;
 
         public string GameName { get { return Localise("Game" + BaseGame?.GameName, BaseGame?.GameName); } }
         public Uri GameImage { get { return HedgeApp.GetResourceUri($"Resources/Graphics/Games/{BaseGame?.GameName}.png"); } }
 
-        public GameInstall(Game game, string directory)
+        public GameInstall(Game game, string directory, GameLauncher launcher)
         {
             BaseGame = game;
             GameDirectory = directory;
+            Launcher = launcher;
+        }
+
+        public void StartGame(bool useLauncher = true, string startDirectory = null)
+        {
+            if (useLauncher)
+            {
+                switch (Launcher)
+                {
+                    case GameLauncher.Steam:
+                        Process.Start(new ProcessStartInfo
+                        {
+                            FileName = $"steam://run/{BaseGame.AppID}",
+                            UseShellExecute = true
+                        });
+                        break;
+                    // TODO: Find out how to call EGS to start games
+                    //case GameLauncher.Epic:
+                    //    break;
+                    default:
+                        Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
+                        {
+                            WorkingDirectory = startDirectory
+                        });
+                        break;
+                }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(startDirectory))
+                    startDirectory = HedgeApp.StartDirectory;
+
+                Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
+                {
+                    WorkingDirectory = startDirectory
+                });
+            }
+
         }
 
         public static List<GameInstall> SearchForGames(string preference = null)
@@ -199,7 +239,7 @@ namespace HedgeModManager
                             string fullPath = Path.Combine(path, game.ExecutableName);
                             if (File.Exists(fullPath))
                             {
-                                games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath)));
+                                games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.None));
                             }
                         }
                     }
@@ -213,6 +253,13 @@ namespace HedgeModManager
         }
 
         public override string ToString() => Localise("Game" + BaseGame.GameName, BaseGame.GameName);
+    }
+
+    public enum GameLauncher
+    {
+        None,
+        Steam,
+        Epic
     }
 
     public class CodeLoaderInfo

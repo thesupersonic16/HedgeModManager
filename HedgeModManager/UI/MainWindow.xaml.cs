@@ -491,10 +491,7 @@ namespace HedgeModManager
 
         public Task StartGame()
         {
-            Process.Start(new ProcessStartInfo(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecutableName))
-            {
-                WorkingDirectory = HedgeApp.StartDirectory
-            });
+            HedgeApp.CurrentGameInstall.StartGame(HedgeApp.Config.UseLauncher);
 
             if (!HedgeApp.Config.KeepOpen)
                 Dispatcher.Invoke(() => Close());
