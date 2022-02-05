@@ -190,9 +190,13 @@ namespace HedgeModManager
                             UseShellExecute = true
                         });
                         break;
-                    // TODO: Find out how to call EGS to start games
-                    //case GameLauncher.Epic:
-                    //    break;
+                    case GameLauncher.Epic:
+                        Process.Start(new ProcessStartInfo
+                        {
+                            FileName = $"com.epicgames.launcher://apps/{BaseGame.AppID}?action=launch&silent=true",
+                            UseShellExecute = true
+                        });
+                        break;
                     default:
                         Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
                         {
