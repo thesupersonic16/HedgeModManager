@@ -353,10 +353,44 @@ namespace HedgeModManager
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            var args = ParseArguments(e.Args);
+
             // GB Integration shows UI, and therefore should be done *after* Application.Run
             if (e.Args.Length > 1 && e.Args[0].ToLowerInvariant() == "-gb")
             {
                 GBAPI.ParseCommandLine(e.Args[1]);
+                Shutdown();
+            }
+
+            // Set selected game
+            if (args.Any(t => t.Key == "-game" && t.Value != null))
+            {
+                SelectGameInstall(GameInstalls.FirstOrDefault(
+                    t => t.BaseGame.GameName.ToLowerInvariant() == args["-game"].ToLowerInvariant()));
+            }
+
+            // Set selected profile
+            // TODO: Add a check to see if the profile exists
+            if (args.Any(t => t.Key == "-profile" && t.Value != null))
+            {
+                Config.ModProfile = args["-profile"];
+            }
+
+            // Saves the configuration from other start options
+            if (args.Any(t => t.Key == "-save"))
+            {
+                var window = MainWindow as MainWindow;
+                
+                // Profiles
+                window.RefreshProfiles();
+                Config.ModsDbIni = Path.Combine(ModsDbPath, window.SelectedModProfile.ModDBPath);
+                Config.Save(ConfigPath);
+            }
+
+            // Launches the selected game
+            if (args.Any(t => t.Key == "-launch"))
+            {
+                CurrentGameInstall?.StartGame(Config.UseLauncher);
                 Shutdown();
             }
 
@@ -387,6 +421,20 @@ namespace HedgeModManager
         public static Uri GetResourceUri(string path)
         {
             return new Uri(@"pack://application:,,,/" + Assembly.GetExecutingAssembly().GetName().Name + ";component/" + path, UriKind.Absolute);
+        }
+
+        public static Dictionary<string, string> ParseArguments(string[] args)
+        {
+            var dict = new Dictionary<string, string>();
+
+            for (int i = 0; i < args.Length; ++i)
+            {
+                if (args[i].StartsWith("-") && i + 1 != args.Length && !args[i + 1].StartsWith("-"))
+                    dict[args[i]] = args[++i];
+                else
+                    dict[args[i]] = null;
+            }
+            return dict;
         }
 
         public static GameInstall FindAndSetLocalGame()

@@ -1212,8 +1212,8 @@ namespace HedgeModManager
 
         public void UpdateStatus(string str)
         {
-            Dispatcher.Invoke(() => StatusLbl.Text = str);
-            StatusTimer.Change(4000, Timeout.Infinite);
+            Dispatcher?.Invoke(() => StatusLbl.Text = str);
+            StatusTimer?.Change(4000, Timeout.Infinite);
         }
 
         private async void Game_Changed(object sender, SelectionChangedEventArgs e)
