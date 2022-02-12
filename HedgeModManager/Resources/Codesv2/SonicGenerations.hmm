@@ -977,6 +977,14 @@ WriteProtected<byte>(0x15E9198, 0x00); /* ef_ch_sng_yh1_jump_trick5 */
 Patch "Start Stages with None" by "Hyper"
 WriteNop(0xD944D3, 6);
 
+Patch "Start Stages with Dash" by "Hyper"
+WriteProtected<byte>(0xD944D3, 0xE9, 0xC7, 0x00, 0x00, 0x00);
+WriteNop(0xD945C4, 2);
+
+Patch "Start Stages with CrouchingStartBack" by "Hyper"
+WriteProtected<byte>(0xD944D3, 0xE9, 0xEF, 0x01, 0x00, 0x00);
+WriteNop(0xD946F0, 2);
+
 Patch "Start Stages with CrouchingStartFront" by "Hyper"
 WriteProtected<byte>(0xD944D3, 0xE9, 0x59, 0x01, 0x00, 0x00);
 WriteNop(0xD9465A, 2);
