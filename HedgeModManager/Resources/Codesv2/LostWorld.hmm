@@ -483,3 +483,32 @@ WriteAsmHook
 	add esp, 4",
     ASLR(0x004B974F), HookBehavior.Replace
 )
+
+Patch "Fix Depth Effects On Intel GPUs" by "Skyth"
+WriteAsmHook(ASLR(0xC2B233), HookBehavior.Replace, @"
+mov eax, dword ptr [ebp + 8]
+
+loop:
+cmp dword ptr [eax], 0xFFFF
+jz break
+
+cmp dword ptr [eax], 0x3B7F0001
+jnz continue
+cmp dword ptr [eax + 4], 0x377F0001
+jnz continue
+cmp dword ptr [eax + 8], 0x3F7F0001
+jnz continue
+
+mov dword ptr [eax], 0x3F800000
+mov dword ptr [eax + 4], 0
+mov dword ptr [eax + 8], 0
+jmp break
+
+continue:
+add eax, 4
+jmp loop
+
+break:
+mov eax, [ecx + 0x64]
+mov ecx, [eax]
+");
