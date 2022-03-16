@@ -67,7 +67,7 @@ namespace HedgeModManager
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
-        public static bool AprilFools = false;
+        public static bool AprilFools, IizukaBirthday = false;
 
         public static HttpClient HttpClient { get; private set; }
         public static string UserAgent { get; }
@@ -110,7 +110,8 @@ namespace HedgeModManager
             Singleton.SetInstance(HttpClient);
             Singleton.SetInstance<IWindowService>(new WindowServiceImplWindows());
 
-            AprilFools = DateTime.Now.Day == 1 && DateTime.Now.Month == 4;
+            AprilFools      = DateTime.Now.Day == 1 && DateTime.Now.Month == 4;
+            IizukaBirthday  = DateTime.Now.Day == 16 && DateTime.Now.Month == 3;
 
             if (args.Length > 2 && string.Compare(args[0], "-update", StringComparison.OrdinalIgnoreCase) >= 0)
             {
@@ -160,7 +161,7 @@ namespace HedgeModManager
 #endif
 
             SplashScreen splashScreen = null;
-            if (AprilFools || (DateTime.Now.Day == 16 && DateTime.Now.Month == 3))
+            if (AprilFools || IizukaBirthday)
             {
                 splashScreen = new ("Resources/Graphics/splash.png");
                 splashScreen.Show(false, true);
