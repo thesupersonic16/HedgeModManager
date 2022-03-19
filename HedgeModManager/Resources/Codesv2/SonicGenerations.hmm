@@ -425,6 +425,11 @@ WriteNop(0xE5FB17, 6)
 WriteProtected<byte>(0xE5FE10, 0x48)
 WriteProtected<byte>(0xE5FE70, 0x48)
 
+Patch "Fix Homing Trail Position" by "Ahremic"
+WriteProtected<byte>(0xE4F442, 0xF0); // Replaces "UpVector" (0x450), i.e. the floor normal,
+                                      // with "ModelUpVector" (0x4F0), Sonic's actual upward direction.
+                                      // This fixes an actual *bug* where the homing trail position was just WRONG.
+
 Patch "Stomp Keeps Horizontal Velocity" by "TGE"
 string code = @"
 movaps xmm1, [edi+0x290]
