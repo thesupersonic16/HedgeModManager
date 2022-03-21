@@ -459,10 +459,17 @@ WriteProtected<uint>(0x105334D, 0x10C47C6)
 WriteNop(0x1053351, 16)
 
 Patch "Triggers Debug View" by "Aruki"
-Write<byte>(0x1E5E39B, 1)
+*(bool*)0x1E5E39B = true;
 
 Patch "Object Collision Debug View" by "Aruki"
-Write<byte>(0x1E5E3A0, 1)
+*(bool*)0x1E5E3A0 = true;
+
+Patch "Terrain Collision Debug View" by "Sajid"
+WriteProtected<byte>(0xCF2497, 1);
+WriteNop(0xCF2515, 23);
+
+Patch "Stage Collision Debug View" by "M&M"
+*(bool*)0x1E5E382 = true;
 
 Patch "Borderless Fullscreen" by "Sajid"
 string code = @"mov eax,[ebp+18]
