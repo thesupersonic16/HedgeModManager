@@ -209,14 +209,13 @@ namespace HedgeModManager
                 }
             }
 
-            for (int i = 0; i < ModsDatabase.Mods.Count; i++)
+            var favoriteDisabledMods = ModsDatabase.Mods.Where(t => t.Favorite && !t.Enabled).ToList();
+            favoriteDisabledMods.Sort((a, b) => b.Title.CompareTo(a.Title));
+
+            foreach (var mod in favoriteDisabledMods)
             {
-                var mod = ModsDatabase.Mods[i];
-                if (mod.Favorite && !mod.Enabled)
-                {
-                    ModsDatabase.Mods.Remove(mod);
-                    ModsDatabase.Mods.Insert(ModsDatabase.ActiveMods.Count, mod);
-                }
+                ModsDatabase.Mods.Remove(mod);
+                ModsDatabase.Mods.Insert(ModsDatabase.ActiveMods.Count, mod);
             }
 
             // Sets the DataContext for all the Components
