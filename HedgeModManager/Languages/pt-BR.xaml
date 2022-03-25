@@ -78,6 +78,7 @@
     <system:String x:Key="SettingsUIEnableML"       >Ativar o carregador de mods</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Ativar console de depuramento</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Ativar redirecionamento do ficheiro de gravação</system:String>
+    <system:String x:Key="SettingsUIUseLauncher"    >Usar o inicializador do jogo</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Carregadores:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Jogo:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Perfil:</system:String>
@@ -121,6 +122,7 @@
     <system:String x:Key="AboutWindowUILine1">Um programa desenhado para facilitar o carregamento de mods para a Hedgehog Engine.</system:String>
     <system:String x:Key="AboutWindowUILine2">Requer uma cópia legal de um dos jogos suportados.</system:String>
     <system:String x:Key="AboutWindowUICredits">Créditos</system:String>
+    <system:String x:Key="AboutWindowUITranslators">Tradutores</system:String>
 
     <!-- ProfileWindow UI Strings -->
     <system:String x:Key="ProfileWindowUITitle"      >Gerenciar Perfis</system:String>
@@ -170,11 +172,12 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Nenhuma atualização de códigos encontrada</system:String>
 
     <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">O Hedge Mod Manager não conseguiu aceder à diretoria do jogo.&#x0a;Por favor verifique que o grupo Utilizadores tem acesso de &quot;Escrita&quot; na diretoria abaixo e em todos os seus ficheiros e pastas.&#x0a;&#x0a;{0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Tem a certeza de que pretende apagar "{0}"?&#x0a;Esta ação não pode ser desfeita!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} já está atualizado.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Uma versão mais recente de {0} está disponível! ({1})</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Tem a certeza de que pretende cancelar a atualização?&#x0a;Esta ação pode corrumper {0}</system:String>
-
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Não foi possível encontrar o 7-Zip ou o WinRAR!&#x0a;Um desses é necessário para extrair dados de mods&#x0a;&#x0a;Por favor verifique que pelo menos um desses se encontra instalado no seu sistema.</system:String>
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >concluída</system:String>
     <system:String x:Key="StatusUIUpdateCompletedPlural"        >concluídas</system:String>
@@ -187,6 +190,7 @@
     <!-- Mod Description UI Strings -->
     <system:String x:Key="ModDescriptionUIAbout">Acerca de {0}</system:String>
     <system:String x:Key="ModDescriptionUIMadeBy">Feito por</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">Feito a</system:String>
     <system:String x:Key="ModDescriptionUIDate">a</system:String>
 
     <!-- Mod Downloader Strings -->
