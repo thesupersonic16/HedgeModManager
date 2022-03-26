@@ -16,6 +16,7 @@
         <local:LangEntry FileName="ru-RU" Name="Русский (Russian)"/>
         <local:LangEntry FileName="es-MX" Name="Espanõl (Mexico)"/>
         <local:LangEntry FileName="vi-VN" Name="Tiếng Việt (Vietnamese)"/>
+        <local:LangEntry FileName="it-IT" Name="Italiano (Italy)"/>
     </local:LanguageList>
     
 </ResourceDictionary>
