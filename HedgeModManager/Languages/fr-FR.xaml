@@ -8,21 +8,26 @@
     <system:String x:Key="CommonUIOK"     >Confirmer</system:String>
     <system:String x:Key="CommonUICancel" >Annuler</system:String>
     <system:String x:Key="CommonUIYes"    >Oui</system:String>
+    <system:String x:Key="CommonUIBlocked" >Bloquée</system:String>
     <system:String x:Key="CommonUINo"     >Non</system:String>
+    <system:String x:Key="CommonUIRetry"   >Réessayez</system:String>
     <system:String x:Key="CommonUIUpdate" >MàJ</system:String>
+    <system:String x:Key="CommonUIDownload">Download</system:String>
     <system:String x:Key="CommonUIDelete" >Supprimer</system:String>
     <system:String x:Key="CommonUINone"   >Aucun</system:String>
     <system:String x:Key="CommonUIIgnore" >Ignorer</system:String>
     <system:String x:Key="CommonUIWarning">ATTENTION</system:String>
+    <system:String x:Key="CommonUIError"   >ERREUR</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Mods</system:String>
     <system:String x:Key="MainUICodes"         >Codes</system:String>
     <system:String x:Key="MainUISettings"      >Paramètres</system:String>
     <system:String x:Key="MainUIAddMod"        >Ajouter Mod</system:String>
-    <system:String x:Key="MainUIRefreshModList">Actualiser la liste de Mods</system:String>
+    <system:String x:Key="MainUIRefreshModList">Actualiser la Liste</system:String>
     <system:String x:Key="MainUISave"          >Enregistrer</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Enregistrer et Jouer</system:String>
+    <system:String x:Key="MainUIConfigureMod"  >Configurer le Mod</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nom</system:String>
@@ -33,14 +38,26 @@
     <system:String x:Key="ModsUIModConfigure"   >Paramètres</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Ouvrir le dossier</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Vérification de MàJ</system:String>
+    <system:String x:Key="ModsUICheckUpdatesAll">Vérifier tous les mods pour MàJ</system:String>
     <system:String x:Key="ModsUIModEdit"        >Modifier mod</system:String>
     <system:String x:Key="ModsUIModDelete"      >Supprimer mod</system:String>
+    <system:String x:Key="ModsUIFeatureConfig"  >Ce mod peut être configuré.</system:String>
+    <system:String x:Key="ModsUIFeatureConfigDisable">Ce mod ne supporte pas de configuration.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdate"       >Ce mod supporte de MàJ.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateDisable">Ce mod ne supporte pas de MàJ.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateFailed" >La verification MàJ pour ce mod à échoué.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateBlocked">Ce mod à été bloquée de verifiér pour MàJ.</system:String>
+    <system:String x:Key="ModsUIFeatureSave"         >Ce mod utilise la redirection du fichier de sauvegarde.</system:String>
+    <system:String x:Key="ModsUIFeatureSaveDisable"  >Ce mod ne supporte pas la redirection du fichier de sauvegarde.</system:String>
+    <system:String x:Key="ModsUIFeatureCode"         >Ce mod contient code personnalisé.</system:String>
+    <system:String x:Key="ModsUIFeatureCodeDisable"  >Ce mod ne contient pas code personnalisé.</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >Maintenir et déplacer pour changer l'ordre de priorité.</system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager a détecté que un ou plusieurs mods&#x0a;contient(nent) un dossier include invalide.&#x0a;Voulez-vous que Hedge Mod Manager essaye de corriger le problème?</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Nom</system:String>
     <system:String x:Key="CodesUIDownload">Télécharger des codes a partir de la base de donnée.</system:String>
+    <system:String x:Key="CodesUIUpdate"  >MàJ des codes a partir de la base de donnée.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Les codes installés ne sont pas compatibles avec le code loader.&#x0a;Veuillez mettre à jour les codes ainsi que le code loader.&#x0a;ATTENTION: Ceci va effacer tous les codes personnalisés</system:String>
 
     <!-- Settings UI Strings -->
@@ -49,11 +66,14 @@
     <system:String x:Key="SettingsUIInstallLoader"  >Installer Mod Loader</system:String>
     <system:String x:Key="SettingsUIUninstallLoader">Désinstaller Mod Loader</system:String>
     <system:String x:Key="SettingsUIOpenMods"       >Ouvrir le dossier Mods</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >Ouvrir le dossier du Jeux</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Activer le mod loader</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Activer la console debug</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Activer la redirection du fichier de sauvegarde</system:String>
+    <system:String x:Key="SettingsUIUseLauncher"    >Utiliser le lanceur du jeux</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Loaders:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Jeu:</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >Profil:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Emplacement:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
@@ -63,6 +83,8 @@
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Laisser Hedge Mod Mananger ouvert après démarrage du jeu</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >A propos de Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Langue:</system:String>
+    <system:String x:Key="SettingsUITheme"          >Thème:</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel" >Chaneau de MàJ:</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >Installer un mod par...</system:String>
@@ -81,6 +103,7 @@
     <system:String x:Key="AboutWindowUILine1">Un programme conçu pour facilement charger des mods fait pour l'Hedgehog Engine.</system:String>
     <system:String x:Key="AboutWindowUILine2">Nécessite une copie légitime des jeux.</system:String>
     <system:String x:Key="AboutWindowUICredits">Credits:</system:String>
+    <system:String x:Key="AboutWindowUITranslators">Traducteurs</system:String>
 
 
 
@@ -125,5 +148,22 @@
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Paramètres de {0}</system:String>
+    <!-- Mod Description UI Strings -->
+    <system:String x:Key="ModDescriptionUIAbout">A propos de {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">Faite par</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">Faite le</system:String>
+    <system:String x:Key="ModDescriptionUIDate">le</system:String>
+    <!-- Themes -->
+    <system:String x:Key="ThemeDark"  >Sombre</system:String>
+    <system:String x:Key="ThemeDarker">Plus Sombre</system:String>
+    <system:String x:Key="ThemeOLED"  >OLED</system:String>
+    <system:String x:Key="ThemeLight" >Claire</system:String>
 
+    <!-- Games -->
+    <system:String x:Key="GameSonicGenerations">Sonic Generations</system:String>
+    <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
+    <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
+    <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colours: Ultimate</system:String>
 </ResourceDictionary>
