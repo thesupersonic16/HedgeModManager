@@ -356,14 +356,14 @@ namespace HedgeModManager
                     CodesOutdated = false;
 
                     // Codes are the same, so use default text.
-                    Button_DownloadCodes.Content = Localise("CodesUIDownload");
+                    Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
                 }
                 else
                 {
                     CodesOutdated = true;
 
                     // Codes are different, report update possibility.
-                    Button_DownloadCodes.Content = Localise("CodesUIUpdate");
+                    Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIUpdate");
                 }
             }
             catch (HttpRequestException) { /* do nothing for http exceptions */ }
@@ -1269,7 +1269,7 @@ namespace HedgeModManager
                             CodesOutdated = false;
 
                             // Reset button text if there was an update that was just downloaded.
-                            Button_DownloadCodes.Content = Localise("CodesUIDownload");
+                            Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
                         }
                     }
                 };
