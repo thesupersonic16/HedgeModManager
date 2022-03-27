@@ -372,6 +372,7 @@ namespace HedgeModManager
 
             // Set selected profile
             // TODO: Add a check to see if the profile exists
+            // TODO: Handle profile configs
             if (args.Any(t => t.Key == "-profile" && t.Value != null))
             {
                 Config.ModProfile = args["-profile"];

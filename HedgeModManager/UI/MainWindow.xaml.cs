@@ -1546,6 +1546,7 @@ namespace HedgeModManager
             {
                 new ExceptionWindow(ex).ShowDialog();
             }
+            ViewModel.SaveProfileConfig(SelectedModProfile, ModsDatabase);
             SelectedModProfile.Enabled = false;
             SelectedModProfile = ComboBox_ModProfile.SelectedItem as ModProfile ?? HedgeApp.ModProfiles.First();
             SelectedModProfile.Enabled = true;
@@ -1553,6 +1554,8 @@ namespace HedgeModManager
             string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
             HedgeApp.Config.Save(HedgeApp.ConfigPath);
             File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
+            RefreshMods();
+            ViewModel.LoadProfileConfig(SelectedModProfile, ModsDatabase);
             Refresh();
         }
 

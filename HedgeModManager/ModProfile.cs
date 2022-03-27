@@ -23,6 +23,7 @@ namespace HedgeModManager
         public bool Enabled { get; set; }
         public string Name { get; set; }
         public string ModDBPath { get; set; }
+        public string FileName => string.Join(string.Empty, Name.Split(Path.GetInvalidFileNameChars())).Replace(" ", "") + ".ini";
 
         public ModProfile(string name, string modDBPath)
         {

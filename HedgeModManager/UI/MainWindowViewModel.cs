@@ -109,5 +109,33 @@ namespace HedgeModManager.UI
                 GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.Drop(dropInfo);
             }
         }
+
+        // NOTE: Loading values may not be needed as data may already be up to date
+        public void SaveProfileConfig(ModProfile profile, ModsDB modsDB)
+        {
+            foreach (var mod in modsDB.Mods)
+            {
+                if (mod.ConfigSchema == null)
+                    continue;
+                string fileName = Path.Combine(mod.RootDirectory, "profiles", profile.FileName);
+                if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+                    Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+                mod.ConfigSchema.LoadValuesFromIni(Path.Combine(mod.RootDirectory, mod.ConfigSchema.IniFile));
+                mod.ConfigSchema.SaveIni(fileName);
+            }
+        }
+        public void LoadProfileConfig(ModProfile profile, ModsDB modsDB)
+        {
+            foreach (var mod in modsDB.Mods)
+            {
+                string fileName = Path.Combine(mod.RootDirectory, "profiles", profile.FileName);
+                if (mod.ConfigSchema == null || !File.Exists(fileName))
+                    continue;
+
+                mod.ConfigSchema.LoadValuesFromIni(fileName);
+                mod.ConfigSchema.SaveIni(Path.Combine(mod.RootDirectory, mod.ConfigSchema.IniFile));
+            }
+        }
     }
 }
