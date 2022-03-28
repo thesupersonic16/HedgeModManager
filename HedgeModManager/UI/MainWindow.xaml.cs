@@ -1561,6 +1561,8 @@ namespace HedgeModManager
 
         private void UI_ManageProfile_Click(object sender, RoutedEventArgs e)
         {
+            // Ensure configs are saved
+            ViewModel.SaveProfileConfig(SelectedModProfile, ModsDatabase);
             var manager = new ProfileManagerWindow() { Owner = this };
             manager.DataContext = DataContext;
             manager.ShowDialog();

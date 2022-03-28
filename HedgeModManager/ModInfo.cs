@@ -230,6 +230,28 @@ namespace HedgeModManager
             return valid;
         }
 
+        public void ExportConfig(ModProfile profile)
+        {
+            if (ConfigSchema == null)
+                return;
+            string fileName = Path.Combine(RootDirectory, "profiles", profile.FileName);
+            if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+            ConfigSchema.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
+            ConfigSchema.SaveIni(fileName);
+        }
+
+        public void ImportConfig(ModProfile profile)
+        {
+            string fileName = Path.Combine(RootDirectory, "profiles", profile.FileName);
+            if (ConfigSchema == null || !File.Exists(fileName))
+                return;
+
+            ConfigSchema.LoadValuesFromIni(fileName);
+            ConfigSchema.SaveIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
+        }
+
         public void FixIncludeDirectories()
         {
             var validDirs = new List<string>();

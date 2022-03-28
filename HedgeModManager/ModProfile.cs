@@ -80,14 +80,23 @@ namespace HedgeModManager
             foreach (var mod in db.Mods)
             {
                 if (mod.Enabled)
-                    ActiveMods.Add(new Mod { ID = mod.ID, Name = mod.Title });
+                    ActiveMods.Add(CreateExportMod(mod));
 
                 if (mod.Favorite)
-                    FavoriteMods.Add(new Mod { ID = mod.ID, Name = mod.Title });
+                    FavoriteMods.Add(CreateExportMod(mod));
             }
 
             foreach (string code in db.Codes)
                 ActiveCodes.Add(code);
+
+            Mod CreateExportMod(ModInfo modInfo)
+            {
+                string config = null;
+                string profileConfigPath = Path.Combine(modInfo.RootDirectory, "profiles", profile.FileName);
+                if (File.Exists(profileConfigPath))
+                    config = File.ReadAllText(profileConfigPath);
+                return new Mod { ID = modInfo.ID, Name = modInfo.Title, Config = config };
+            }
         }
 
         public static ExportProfile Create(ModProfile profile)
@@ -151,6 +160,13 @@ namespace HedgeModManager
                     result.UnresolvedMods.Add(mod);
                     continue;
                 }
+                if (!string.IsNullOrEmpty(mod.Config))
+                {
+                    string profileConfigPath = Path.Combine(dbMod.RootDirectory, "profiles", result.Profile.FileName);
+                    if (!Directory.Exists(Path.GetDirectoryName(profileConfigPath)))
+                        Directory.CreateDirectory(Path.GetDirectoryName(profileConfigPath));
+                    File.WriteAllText(profileConfigPath, mod.Config);
+                }
                 
                 dbMod.Enabled = true;
             }
@@ -187,6 +203,7 @@ namespace HedgeModManager
         {
             public string Name { get; set; }
             public string ID { get; set; }
+            public string Config { get; set; }
         }
 
         public class ImportResult
