@@ -811,6 +811,12 @@ namespace HedgeModManager
                 if (startGame)
                     await StartGame();
             }
+            catch (UnauthorizedAccessException)
+            {
+                HedgeApp.CreateOKMessageBox(Localise("CommonUIError"),
+                    string.Format(Localise("DialogUINoGameDirAccess"), HedgeApp.CurrentGameInstall.GameDirectory))
+                    .ShowDialog();
+            }
             catch (Exception ex)
             {
                 Dispatcher.Invoke(() => new ExceptionWindow(ex).ShowDialog());
@@ -1300,13 +1306,30 @@ namespace HedgeModManager
 
             if (dialog.ShowDialog())
             {
-                HedgeApp.ModsDbPath = dialog.SelectedFolder;
-                ViewModel.CPKREDIR.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
-                if (ViewModel.CPKREDIR.ModsDbIni.StartsWith(HedgeApp.StartDirectory))
-                    ViewModel.CPKREDIR.ModsDbIni = ViewModel.CPKREDIR.ModsDbIni.Substring(HedgeApp.StartDirectory.Length + 1);
-                ViewModel.CPKREDIR.Save(Path.Combine(HedgeApp.StartDirectory, "cpkredir.ini"));
-                Refresh();
-                UpdateStatus(Localise("StatusUIModsDBLocationChanged"));
+                string oldDBPath = HedgeApp.ModsDbPath;
+                string oldDBIniPath = ViewModel.CPKREDIR.ModsDbIni;
+
+                try
+                {
+                    HedgeApp.ModsDbPath = dialog.SelectedFolder;
+                    ViewModel.CPKREDIR.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
+                    if (ViewModel.CPKREDIR.ModsDbIni.StartsWith(HedgeApp.StartDirectory))
+                        ViewModel.CPKREDIR.ModsDbIni = ViewModel.CPKREDIR.ModsDbIni.Substring(HedgeApp.StartDirectory.Length + 1);
+                    ViewModel.CPKREDIR.Save(Path.Combine(HedgeApp.StartDirectory, "cpkredir.ini"));
+                    Refresh();
+                    UpdateStatus(Localise("StatusUIModsDBLocationChanged"));
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    HedgeApp.CreateOKMessageBox(Localise("CommonUIError"),
+                        string.Format(Localise("DialogUINoGameDirAccess"),
+                        HedgeApp.CurrentGameInstall.GameDirectory + " and\n" +
+                        HedgeApp.ModsDbPath))
+                        .ShowDialog();
+                    HedgeApp.ModsDbPath = oldDBPath;
+                    ViewModel.CPKREDIR.ModsDbIni = oldDBIniPath;
+                    Refresh();
+                }
             }
         }
 
