@@ -1008,3 +1008,16 @@ WriteNop(0xD9474A, 2);
 Patch "Start Stages with ReadyGo" by "Hyper"
 WriteProtected<byte>(0xD944D3, 0xE9, 0x60, 0x03, 0x00, 0x00);
 WriteNop(0xD94861, 6);
+
+Patch "Disable Stomp Particles" by "Skyth"
+WriteProtected<byte>(0x15E9094, 0x00);
+WriteProtected<byte>(0x15E90AC, 0x00);
+WriteProtected<byte>(0x15E90C4, 0x00);
+
+Patch "Disable Slide Particles" by "Skyth"
+WriteProtected<byte>(0x15E91B4, 0x00);
+WriteProtected<byte>(0x15E91CC, 0x00);
+
+Patch "Disable Drift Particles" by "Hyper"
+WriteProtected<byte>(0x15E92B4, 0x00);
+WriteProtected<byte>(0x15E92CC, 0x00);
