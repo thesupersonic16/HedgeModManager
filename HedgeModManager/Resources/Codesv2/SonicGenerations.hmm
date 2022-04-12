@@ -1021,3 +1021,6 @@ WriteProtected<byte>(0x15E91CC, 0x00);
 Patch "Disable Drift Particles" by "Hyper"
 WriteProtected<byte>(0x15E92B4, 0x00);
 WriteProtected<byte>(0x15E92CC, 0x00);
+
+Code "Disable Instant Damage on Enemy Contact" by "Skyth"
+*(int*)0x1E0BE34 = 0;
