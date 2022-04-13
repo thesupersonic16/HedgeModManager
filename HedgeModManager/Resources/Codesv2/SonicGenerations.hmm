@@ -1024,3 +1024,6 @@ WriteProtected<byte>(0x15E92CC, 0x00);
 
 Code "Disable Instant Damage on Enemy Contact" by "Skyth"
 *(int*)0x1E0BE34 = 0;
+
+Patch "Disable Title Outro" by "Skyth"
+WriteProtected<int>(0x57346F, 0x16A36CC);
