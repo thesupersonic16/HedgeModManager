@@ -799,12 +799,12 @@ namespace HedgeModManager
 
         public async Task SaveConfig(bool startGame = false)
         {
-            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
-            File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
-            ShowMissingOtherLoaderWarning();
-            EnableSaveRedirIfUsed();
             try
             {
+                string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+                File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
+                ShowMissingOtherLoaderWarning();
+                EnableSaveRedirIfUsed();
                 await SaveModsDB();
                 Refresh();
                 UpdateStatus(Localise("StatusUIModsDBSaved"));
