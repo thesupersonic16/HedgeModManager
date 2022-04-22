@@ -1027,3 +1027,8 @@ Code "Disable Instant Damage on Enemy Contact" by "Skyth"
 
 Patch "Disable Title Outro" by "Skyth"
 WriteProtected<int>(0x57346F, 0x16A36CC);
+
+Code "Force Motion Blur" by "Skyth & Kitzu"
+Write<byte>(0x1A43103, 1)
+Write<float>(0x1A431F4, 1)
+Write<float>(0x1A43210, 1)
