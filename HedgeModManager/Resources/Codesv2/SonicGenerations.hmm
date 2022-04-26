@@ -1032,3 +1032,7 @@ Code "Force Motion Blur" by "Skyth & Kitzu"
 Write<byte>(0x1A43103, 1)
 Write<float>(0x1A431F4, 1)
 Write<float>(0x1A43210, 1)
+
+Patch "Replace Airboost with Super Flight" by "SWS90 & Ahremic"
+WriteNop(0x00DFE04C,2);
+WriteProtected<byte>(0x0123FD3C,0xEB);  
