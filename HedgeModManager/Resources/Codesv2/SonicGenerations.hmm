@@ -1034,5 +1034,20 @@ Write<float>(0x1A431F4, 1)
 Write<float>(0x1A43210, 1)
 
 Patch "Replace Airboost with Super Flight" by "SWS90 & Ahremic"
-WriteNop(0x00DFE04C,2);
-WriteProtected<byte>(0x0123FD3C,0xEB);  
+var BoostPtr = GetPointer(0x01E5E2F0, 0x5BC)
+if (BoostPtr >= 1)
+{
+    var BoostAmt = Read<float>(BoostPtr);
+
+if (BoostAmt == 0)
+{
+WriteProtected<byte>(0x00DFE04C , 0x74,0x11); 
+WriteProtected<byte>(0x00DFE04E , 0x56); 
+WriteProtected<byte>(0x0123FD3C , 0x75); 
+}
+if (BoostAmt > 0)
+{
+WriteNop(0x00DFE04C , 2);
+WriteProtected<byte>(0x0123FD3C , 0xEB);
+}
+}
