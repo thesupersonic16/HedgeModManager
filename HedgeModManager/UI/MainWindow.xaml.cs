@@ -158,13 +158,25 @@ namespace HedgeModManager
 
             CodesDatabase.Codes.Sort((x, y) => x.Name.CompareTo(y.Name));
 
-            CodesDatabase.Codes.ForEach((x) =>
+            // Sort enabled codes in alphabetical order.
             {
-                if (x.Enabled)
-                    CodesList.Items.Insert(0, x);
-                else
-                    CodesList.Items.Add(x);
-            });
+                for (int i = CodesDatabase.Codes.Count - 1; i >= 0; i--)
+                {
+                    var code = CodesDatabase.Codes[i];
+
+                    if (code.Enabled)
+                        CodesList.Items.Insert(0, code);
+                }
+
+                CodesDatabase.Codes.ForEach
+                (
+                    (code) =>
+                    {
+                        if (!code.Enabled)
+                            CodesList.Items.Add(code);
+                    }
+                );
+            }
 
             UpdateStatus(LocaliseFormat("StatusUILoadedMods", ModsDatabase.Mods.Count));
             CheckCodeCompatibility();
