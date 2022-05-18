@@ -1050,9 +1050,3 @@ if (BoostPtr >= 1)
     WriteProtected<byte>(0x0123FD3C, 0xEB);
   }
 }
-
-Patch "Disable Classic Dash Panels" by "Hyper"
-WriteProtected<byte>(0x1672FB0, 0x00);
-
-Patch "Disable Modern Dash Panels" by "Hyper"
-WriteProtected<byte>(0x1672FC8, 0x00);
