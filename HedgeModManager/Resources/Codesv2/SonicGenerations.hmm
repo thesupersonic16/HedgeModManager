@@ -687,9 +687,6 @@ Write<float>(0x01A57310, 50f)
 Write<float>(0x01A57314, 50f)
 Write<float>(0x01A57318, 60f)
 
-Patch "Remove SEGA from Title Bar" by "Hyper"
-WriteProtected<byte>(0xE7A99D, 0x3C);
-
 Patch "Disable Checkpoints" by "Hyper"
 WriteNop(0x1033338, 2);
 
