@@ -372,7 +372,6 @@ Write<float>(0x19FD2C, 30.0f)
 WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 1.0f / 30.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 30.0f)
-WriteProtected<float>(0x13E08A0, 1.0f / 30.0f) /* Cutscene Playback */
 
 Code "Locked 60 FPS" by "Skyth and M&M"
 Write<float>(0x19FD2C, 60.0f)
@@ -380,8 +379,8 @@ WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 1.0f / 60.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 60.0f)
 
-Code "60 FPS Cutscenes (experimental, requires Locked 60 FPS)"
-WriteProtected<float>(0x13E08A0, 1.0f / 60.0f)
+Patch "60 FPS Cutscenes (experimental, requires Locked 60 FPS)"
+WriteProtected<byte>(0xB21F0B, 0xCC, 0xF8, 0x4A);
 
 Code "Locked 72 FPS (experimental)" by "Skyth and M&M"
 Write<float>(0x19FD2C, 72.0f);
