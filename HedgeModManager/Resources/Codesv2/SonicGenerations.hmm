@@ -379,7 +379,7 @@ WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 1.0f / 60.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 60.0f)
 
-Patch "60 FPS Cutscenes (experimental, requires Locked 60 FPS)"
+Patch "60 FPS Cutscenes (experimental)"
 WriteProtected<byte>(0xB21F0B, 0xCC, 0xF8, 0x4A);
 
 Code "Locked 72 FPS (experimental)" by "Skyth and M&M"
