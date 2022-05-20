@@ -1059,3 +1059,47 @@ Patch "Collect Super Rings Instantly" by "brianuuu"
 WriteNop(0xE4155E, 2);
 WriteNop(0xE415C8, 2);
 WriteProtected<int>(0xE4157A, -1);
+
+Patch "Unleashed Style Stomp" by "Skyth, brianuuu & Ahremic"
+WriteAsmHook(@"
+movss [esp + 2Ch], xmm0
+movaps xmm0, [esp + 20h]
+cmp byte ptr [edi + 5E8h], 0
+jz skip
+push esi
+mov esi, edi
+mov eax, 0E4F100h
+call eax
+pop esi
+skip:
+movaps [edi + 2B0h], xmm0
+", 0x1254D41, HookBehavior.Replace);
+WriteProtected<byte>(0x1254D47, 0xEB, 0x0A);
+WriteProtected<byte>(0x1254D59, 0x00);
+WriteProtected<byte>(0x1254D60, 0x01);
+WriteProtected<byte>(0x12548C0, 0xE9, 0x7B, 0x09, 0x00, 0x00);
+WriteProtected<int>(0x1255275, 500); 
+WriteProtected<int>(0x125539A, 498); 
+WriteProtected<int>(0x125541C, 497); 
+WriteProtected<byte>(0x12552E4, 0x78, 0xA3, 0xBA);
+
+WriteAsmHook(@"
+cmp byte ptr [esi + 440h], 0
+jz skip
+push ebx
+sub esp, 8
+mov ebx, dword ptr [esi]
+mov ebx, dword ptr [ebx + 74h]
+push 1
+push 1E8C7Bh
+lea eax, dword ptr [esp + 8]
+push eax
+mov ecx, esi
+call ebx
+mov ebx, 50CA30h
+call ebx
+add esp, 8
+pop ebx
+skip:
+cmp byte ptr [esi + 440h], 0
+", 0x12552C5, HookBehavior.Replace);
