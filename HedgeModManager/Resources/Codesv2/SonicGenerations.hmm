@@ -1048,12 +1048,10 @@ if (BoostPtr >= 1)
 }
 
 Patch "Unleashed Stick Deadzones" by "M&M"
-WriteNop(0xE75F40, 10); /* InputThreshold (0.02f) */
-WriteNop(0xE75F50, 5);
-WriteNop(0xE75FE5, 10); /* InputTransformHalf (0.5f) */
-WriteNop(0xE75FF5, 5);
-WriteNop(0xE7608A, 10); /* InputTransformPower (3.0f) */
-WriteNop(0xE7609A, 5);
+WriteProtected<byte>(0x16055EC, 0x00); /* InputThreshold (0.02f) */
+WriteProtected<byte>(0xE75F93, 0x38, 0x71); /* InputTransformHalf (0.85f) */
+WriteProtected<byte>(0x1605610, 0x00);
+WriteProtected<byte>(0x160562C, 0x00); /* InputTransformPower (3.0f) */
 
 Patch "Collect Super Rings Instantly" by "brianuuu"
 WriteNop(0xE4155E, 2);
