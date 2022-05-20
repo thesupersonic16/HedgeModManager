@@ -1053,12 +1053,6 @@ WriteProtected<byte>(0xE75F93, 0x38, 0x71); /* InputTransformHalf (0.85f) */
 WriteProtected<byte>(0x1605610, 0x69);
 WriteProtected<byte>(0x160562C, 0x69); /* InputTransformPower (3.0f) */
 
-Patch "SWA Stick Deadzones" by "M&M"
-WriteProtected<byte>(0x16055EC, 0x69); /* InputThreshold (0.02f) */
-WriteProtected<byte>(0xE75F93, 0x28, 0x56, 0x60); /* InputTransformHalf (0.0f) */
-WriteProtected<byte>(0x1605610, 0x69);
-WriteProtected<byte>(0x160562C, 0x69); /* InputTransformPower (3.0f) */
-
 Patch "Collect Super Rings Instantly" by "brianuuu"
 WriteNop(0xE4155E, 2);
 WriteNop(0xE415C8, 2);
