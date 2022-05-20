@@ -1103,3 +1103,6 @@ pop ebx
 skip:
 cmp byte ptr [esi + 440h], 0
 ", 0x12552C5, HookBehavior.Replace);
+
+Patch "Show Mega Drive in the Hub World" by "Hyper"
+WriteProtected<byte>(0xEED498, 0x01);
