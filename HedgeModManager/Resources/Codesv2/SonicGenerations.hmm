@@ -1054,3 +1054,8 @@ WriteNop(0xE75FE5, 10); /* InputTransformHalf (0.5f) */
 WriteNop(0xE75FF5, 5);
 WriteNop(0xE7608A, 10); /* InputTransformPower (3.0f) */
 WriteNop(0xE7609A, 5);
+
+Patch "Collect Super Rings Instantly" by "brianuuu"
+WriteNop(0xE4155E, 2);
+WriteNop(0xE415C8, 2);
+WriteProtected<int>(0xE4157A, -1);
