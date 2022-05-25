@@ -517,4 +517,4 @@ Patch "Fix Pull Switch Grip Height" by "ĐeäTh"
 WriteProtected<float>(ASLR(0x00DF2D14), -10.5f)
 
 Patch "No Instant Death Bomb Carts" by "ĐeäTh"
-WriteNop(ALSR(0x007D82A2), 3);
+WriteNop(ASLR(0x007D82A2), 3);
