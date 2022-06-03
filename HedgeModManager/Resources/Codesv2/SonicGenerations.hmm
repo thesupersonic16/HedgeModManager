@@ -7,8 +7,9 @@ Patch "Disable Ring Cap" by "Darío"
 WriteProtected<ushort>(0xE68522, 0xDEB)
 WriteProtected<byte>(0x1098E5F, 0xEB)
 
-Patch "Disable Damage" by "SuperSonic16"
-WriteNop(0xE2836A, 0x5)
+Patch "Disable Damage" by "SuperSonic16 & brianuuu"
+WriteProtected<byte>(0xDEAF2A, 0xEB)
+WriteProtected<byte>(0xE28364, 0xEB)
 
 Patch "Infinite Lives" by "CodenameGamma"
 WriteNop(0xD59A67, 0x6)
@@ -1104,3 +1105,9 @@ cmp byte ptr [esi + 440h], 0
 
 Patch "Show Mega Drive in the Hub World" by "Hyper"
 WriteProtected<byte>(0xEED498, 0x01);
+
+Patch "Jump Dash Keeps Momentum" by "Ahremic"
+WriteProtected<byte>(0x01231B0C, 0xE8)// Modern
+WriteNop(0x01231B0D, 4)
+WriteProtected<byte>(0x0122E9BB, 0xE8)// Classic
+WriteNop(0x0122E9BC, 4)
