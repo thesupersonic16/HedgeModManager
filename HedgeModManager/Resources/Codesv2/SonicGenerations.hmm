@@ -1112,7 +1112,7 @@ WriteNop(0x01231B0D, 4);
 WriteProtected<byte>(0x0122E9BB, 0xE8);// Classic
 WriteNop(0x0122E9BC, 4);
 
-Patch "Dropped Rings bounce less & flicker" by "Ahremic"
+Patch "Dropped Rings Bounce Less and Flicker" by "Ahremic"
 // Set new bounce multiplier on contact
 static float NewMultiplier = 1.65f; // Previously 2.0f, would just reflect your velocity 1:1 on flat ground.
 fixed (float* pNewMultiplier = &NewMultiplier)
