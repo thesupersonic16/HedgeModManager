@@ -1107,7 +1107,63 @@ Patch "Show Mega Drive in the Hub World" by "Hyper"
 WriteProtected<byte>(0xEED498, 0x01);
 
 Patch "Jump Dash Keeps Momentum" by "Ahremic"
-WriteProtected<byte>(0x01231B0C, 0xE8)// Modern
-WriteNop(0x01231B0D, 4)
-WriteProtected<byte>(0x0122E9BB, 0xE8)// Classic
-WriteNop(0x0122E9BC, 4)
+WriteProtected<byte>(0x01231B0C, 0xE8);// Modern
+WriteNop(0x01231B0D, 4);
+WriteProtected<byte>(0x0122E9BB, 0xE8);// Classic
+WriteNop(0x0122E9BC, 4);
+
+Patch "Dropped Rings bounce less & flicker" by "Ahremic"
+// Set new bounce multiplier on contact
+static float NewMultiplier = 1.65f; // Previously 2.0f, would just reflect your velocity 1:1 on flat ground.
+fixed (float* pNewMultiplier = &NewMultiplier)
+	WriteProtected(0x006F2936, (uint)pNewMultiplier);
+	
+// Initialize extra allocated memory-- data size is 0x180 but it only uses up to 0x174
+WriteAsmHook(@"movss dword ptr [esi + 0x174], xmm0
+mov dword ptr [esi + 0x178], 0",    0x01054F43, HookBehavior.After);
+
+// Ring flashing when time is about to run out
+static float WarningTime  =  1.0f;                   // Amount of time the rings will flash before disappearing
+static float TargetTime   =  2.0f * (1.0f / 60.0f);  // Number of frames each flash interval lasts (2) at 60fps 
+
+fixed (float* pWarningTime = &WarningTime)
+fixed (float* pTargetTime  = &TargetTime)
+{
+    WriteAsmHook($@"movss  xmm0, [edi + 0x128]
+subss  xmm0, ds:{(uint)pWarningTime}
+movss  xmm1, ds:{(uint)pTargetTime}
+subss  xmm0, xmm1
+comiss xmm0, [edi + 0x160]
+ja return
+
+; Add flicker timer by deltaTime (ebx), check if it exceeds our timer
+movss  xmm0, [edi + 0x174]
+addss  xmm0, [ebx]
+movss  [edi + 0x174], xmm0
+comiss xmm1, xmm0
+ja return
+
+; Flip visibility when we hit our desired time
+cmp    byte ptr [edi + 0x178], 0
+sete   al
+mov    [edi + 0x178], al
+; Set timer back to zero
+mov dword ptr [edi + 0x174], 0
+
+
+; Function Call for setting a CGameObject's visibility
+push ecx
+push  eax
+mov   eax, [edi + 0x178]
+push  eax
+push  edi
+xor   eax, eax
+mov   ecx, 0x00D5F770 ; Actual function address
+call  ecx
+pop   eax
+pop   ecx
+
+; Continue with the rest of the update function
+return:
+", 0x01054B37,HookBehavior.After);
+}
