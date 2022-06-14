@@ -118,8 +118,8 @@
     <system:String x:Key="OptionsWindowUIError"      >请选择一个选项！</system:String>
 
     <!-- AboutWindow UI Strings -->
-    <system:String x:Key="AboutWindowUITitle"      >关於Hedge Mod Manager</system:String>
-    <system:String x:Key="AboutWindowUILine1"      >设计Hedgehog Engine 程序是帮助人们更容易地加载 mod 。</system:String>
+    <system:String x:Key="AboutWindowUITitle"      >关于 Hedge Mod Manager</system:String>
+    <system:String x:Key="AboutWindowUILine1"      >设计 Hedge Mod Manager 程序的目的是帮助人们能够更方便地加载 Mod 。</system:String>
     <system:String x:Key="AboutWindowUILine2"      >需要合法拥有的游戏版本来支持。</system:String>
     <system:String x:Key="AboutWindowUICredits"    >来源：</system:String>
     <system:String x:Key="AboutWindowUITranslators">翻译员</system:String>
