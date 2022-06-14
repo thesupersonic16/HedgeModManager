@@ -22,7 +22,7 @@
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >名称</system:String>
     <system:String x:Key="MainUICodes"         >代码</system:String>
-    <system:String x:Key="MainUISettings"      >设定</system:String>
+    <system:String x:Key="MainUISettings"      >设置</system:String>
     <system:String x:Key="MainUIAddMod"        >新增 Mod</system:String>
     <system:String x:Key="MainUIRefreshModList">刷新 Mod 列表</system:String>
     <system:String x:Key="MainUISave"          >保存</system:String>
@@ -81,7 +81,7 @@
     <system:String x:Key="SettingsUIUseLauncher"    >使用 游戏启动器加载</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >加载器：</system:String>
     <system:String x:Key="SettingsUILabelGame"      >游戏：</system:String>
-    <system:String x:Key="SettingsUILabelProfile"   >设定档：</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >设置档：</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Mod 目录：</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
@@ -125,18 +125,18 @@
     <system:String x:Key="AboutWindowUITranslators">翻译员</system:String>
 
     <!-- ProfileWindow UI Strings -->
-    <system:String x:Key="ProfileWindowUITitle"      >管理设定档</system:String>
-    <system:String x:Key="ProfileWindowUIRenameTitle">更改设定档</system:String>
-    <system:String x:Key="ProfileWindowUICreateTitle">创建设定档</system:String>
-    <system:String x:Key="ProfileWindowUIName"       >设定档名称</system:String>
-    <system:String x:Key="ProfileWindowUIFile"       >配置设定档名称</system:String>
-    <system:String x:Key="ProfileWindowUICreate"     >新增设定档</system:String>
-    <system:String x:Key="ProfileWindowUIRename"     >更改设定档</system:String>
-    <system:String x:Key="ProfileWindowUIClone"      >克隆设定档</system:String>
+    <system:String x:Key="ProfileWindowUITitle"      >管理设置档</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">更改设置档</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">创建设置档</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >设置档名称</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >配置设置档名称</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >新增设置档</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >更改设置档</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >克隆设置档</system:String>
     <system:String x:Key="ProfileWindowUIExport"     >导出</system:String>
     <system:String x:Key="ProfileWindowUIImport"     >导入</system:String>
-    <system:String x:Key="ProfileWindowUIDelete"     >删除设定档</system:String>
-    <system:String x:Key="ProfileWindowUINameLabel"  >设定档名称：</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >删除设置档</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >设置档名称：</system:String>
     <system:String x:Key="ProfileWindowUIImportFail" >导入 Mod 配置文件失败</system:String>
     <system:String x:Key="ProfileWindowUIImportMissingMods"   >未找到以下 Mod：</system:String>
     <system:String x:Key="ProfileWindowUIImportMissingCodes"  >未找到以下代码：</system:String>
