@@ -226,10 +226,10 @@
 
     <!-- Games -->
     <system:String x:Key="GameSonicGenerations">Sonic Generations - 索尼克 世代</system:String>
-    <system:String x:Key="GameSonicLostWorld">Sonic Lost World - 索尼克 失落的世界</system:String>
-    <system:String x:Key="GameSonicForces">Sonic Forces - 索尼克 武力</system:String>
-    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2 - 魔法气泡特趣思俄罗斯框</system:String>
+    <system:String x:Key="GameSonicLostWorld">Sonic Lost World - 索尼克 失落世界</system:String>
+    <system:String x:Key="GameSonicForces">Sonic Forces - 索尼克 力量</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2 - 魔法气泡特趣思俄罗斯方块</system:String>
     <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020 - 2020年夏季奥运会</system:String>
-    <system:String x:Key="GameSonicColorsUltimate">Sonic Colours Ultimate - 索尼克缤纷色彩 究极版</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors Ultimate - 索尼克缤纷色彩 究极版</system:String>
 
 </ResourceDictionary>
