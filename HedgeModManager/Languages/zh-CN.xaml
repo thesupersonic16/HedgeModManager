@@ -100,9 +100,9 @@
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"    >Mod 安装方式</system:String>
-    <system:String x:Key="MainUIInstallFormOptionDir" >从文件夹中加载</system:String>
-    <system:String x:Key="MainUIInstallFormOptionArc" >从封存档案中加载</system:String>
-    <system:String x:Key="MainUIInstallFormOptionNew" >制作一个复本（给开发人员！）</system:String>
+    <system:String x:Key="MainUIInstallFormOptionDir" >从文件夹中安装</system:String>
+    <system:String x:Key="MainUIInstallFormOptionArc" >从压缩包中安装</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew" >制作副本（适用于开发者）</system:String>
     <system:String x:Key="MainUIMissingLoaderHeader"  >Mod 加载器尚未完成安装！</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">在加载 {0} Mod 之前，需要安装 Mod 加载器。&#x0a;是否现在安装？</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"    >选择从何处加载 Mod…</system:String>
