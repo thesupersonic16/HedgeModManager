@@ -107,8 +107,8 @@
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">在加载 {0} Mod 之前，需要安装 Mod 加载器。&#x0a;是否现在安装？</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"    >选择从何处加载 Mod…</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle"  >检测到缺少运行环境！</system:String>
-    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} 需要 {1} 安装在 mod上 &#x0a;来正常运行, 你想要使用HMM来安装这个运行环境吗？ </system:String>
-    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">使用一个或多个的 mod时需要启用「存档重新导向」才能正常工作。 需要启用此功能吗？＆＃x0a;（当您知道自己在做什么时候才单击否。）</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} 需要 {1} 安装在 Mod 上 &#x0a;来正常运行, 你想要使用HMM来安装这个运行环境吗？ </system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">使用一个或多个的 Mod 时需要启用「存档重新导向」才能正常工作。 需要启用此功能吗？＆＃x0a;（当您知道自己在做什么时候才单击否。）</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" >无法解决 Mod 依赖</system:String>
     <system:String x:Key="MainUIMissingDepends"       >以下 Mod 缺少依赖项：</system:String>
     <system:String x:Key="MainUIMissingDependsResolve">从 GameBanana 去解决 Mod 问题</system:String>
@@ -149,7 +149,7 @@
     <system:String x:Key="PropertyEditorUIValue">数值</system:String>
 
     <!-- Status UI Strings -->
-    <system:String x:Key="StatusUILoadedMods"             >已加载 {0} mods</system:String>
+    <system:String x:Key="StatusUILoadedMods"             >已加载 {0} 个 Mod</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >查询 {0} 项更新</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >更新失败 {0}！ {1}</system:String>
     <system:String x:Key="StatusUIModUpdateCheckFinish"   >Mod 已查询 {0} 项完成， {1} 项失败</system:String>
@@ -177,7 +177,7 @@
     <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} 已经是最新的。</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >({1}) 已找到可用的 {0} 的较新版本！</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">您确定要取消更新吗？&#x0a;这可能会损坏 {0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >找不到 7-Zip 或 WinRAR！&#x0a;这是解压 mod 数据必要的软件&#x0a;&#x0a;请确保您的系统上安装了其中一个。</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >找不到 7-Zip 或 WinRAR！&#x0a;这是解压 Mod 数据必要的软件&#x0a;&#x0a;请确保您的系统上安装了其中一个。</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >项完成</system:String>
