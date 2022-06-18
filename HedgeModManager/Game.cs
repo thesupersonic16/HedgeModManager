@@ -179,6 +179,9 @@ namespace HedgeModManager
 
         public void StartGame(bool useLauncher = true, string startDirectory = null)
         {
+            if (string.IsNullOrEmpty(startDirectory))
+                startDirectory = HedgeApp.StartDirectory;
+
             if (useLauncher)
             {
                 switch (Launcher)
@@ -207,9 +210,6 @@ namespace HedgeModManager
             }
             else
             {
-                if (string.IsNullOrEmpty(startDirectory))
-                    startDirectory = HedgeApp.StartDirectory;
-
                 Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
                 {
                     WorkingDirectory = startDirectory
