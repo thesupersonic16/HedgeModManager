@@ -185,8 +185,9 @@ namespace HedgeModManager
         public Game BaseGame;
         public string GameDirectory;
         public GameLauncher Launcher;
+        public bool ShowLauncher = false;
 
-        public string GameName { get { return Localise("Game" + BaseGame?.GameName, BaseGame?.GameName); } }
+        public string GameName { get { return Localise("Game" + BaseGame?.GameName, BaseGame?.GameName) + (ShowLauncher ? $" ({Localise("Launcher" + Launcher)})" : ""); } }
         public Uri GameImage { get { return HedgeApp.GetResourceUri($"Resources/Graphics/Games/{BaseGame?.GameName}.png"); } }
 
         public GameInstall(Game game, string directory, GameLauncher launcher)
@@ -269,6 +270,14 @@ namespace HedgeModManager
                 }
             }
 
+            // Check for dupes
+            foreach (var game in games.GroupBy(t => t.BaseGame).Where(t => t.Count() > 1).Select(t => t.Key))
+            {
+                foreach (var install in games.Where(t => t.BaseGame == game))
+                {
+                    install.ShowLauncher = true;
+                }
+            }
 
             return !string.IsNullOrEmpty(preference)
                 ? games.OrderBy(x => x.BaseGame.GameName != preference).ToList()
