@@ -46,6 +46,17 @@ namespace HedgeModManager
             ModLoaderFileName = "d3d11.dll",
             DirectXVersion = 11
         };
+
+        public static ModLoader HiteModLoader = new ModLoader()
+        {
+            ModLoaderDownloadURL = Resources.URL_HML_DL,
+            ModLoaderData = EmbeddedLoaders.HiteModLoader,
+            ModLoaderName = "Hite Mod Loader",
+            ModLoaderID = "HiteModLoader",
+            ModLoaderFileName = "d3d11.dll",
+            DirectXVersion = 11,
+        };
+
     }
 
     public class ModLoader

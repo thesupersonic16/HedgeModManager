@@ -54,7 +54,7 @@ namespace HedgeModManager
             foreach (var game in Games.GetSupportedGames())
             {
                 var installation = launcherInstalled.InstallationList.FirstOrDefault(x =>
-                    x.AppName.Equals(game.AppID, StringComparison.OrdinalIgnoreCase));
+                    x.AppName.Equals(game.EGSID, StringComparison.OrdinalIgnoreCase));
 
                 if (installation == null)
                     continue;

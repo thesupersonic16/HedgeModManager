@@ -95,12 +95,27 @@ namespace HedgeModManager
             ExecutableName = "Sonic Colors - Ultimate.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
-            AppID = "e5071e19d08c45a6bdda5d92fbd0a03e",
+            EGSID = "e5071e19d08c45a6bdda5d92fbd0a03e",
             GBProtocol = "hedgemmrainbow",
             Is64Bit = true,
             ModLoader = ModLoaders.RainbowModLoader,
             CodesURL = Resources.URL_RML_CODES,
             GamePath = Path.Combine("rainbow Shipping", "Sonic Colors - Ultimate.exe")
+        };
+
+        public static Game SonicOrigins = new Game()
+        {
+            GameName = "SonicOrigins",
+            ExecutableName = "SonicOrigins.exe",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = false,
+            AppID = "1794960",
+            EGSID = "5070a8e44cf74ba3b9a4ca0c0dce5cf1",
+            GBProtocol = "hedgemmhite",
+            Is64Bit = true,
+            ModLoader = ModLoaders.HiteModLoader,
+            CodesURL = Resources.URL_HML_CODES,
+            GamePath = Path.Combine("SonicOrigins", "build", "main", "projects", "exec", "SonicOrigins.exe")
         };
 
         public static IEnumerable<Game> GetSupportedGames()
@@ -111,6 +126,7 @@ namespace HedgeModManager
             yield return PuyoPuyoTetris2;
             yield return Tokyo2020;
             yield return SonicColorsUltimate;
+            yield return SonicOrigins;
         }
     }
 
@@ -120,6 +136,7 @@ namespace HedgeModManager
         public static byte[] LostCodeLoader;
         public static byte[] HE2ModLoader;
         public static byte[] RainbowModLoader;
+        public static byte[] HiteModLoader;
 
         static EmbeddedLoaders()
         {
@@ -130,6 +147,7 @@ namespace HedgeModManager
                 LostCodeLoader = GetFile("LostCodeLoader.dll");
                 HE2ModLoader = GetFile("HE2ModLoader.dll");
                 RainbowModLoader = GetFile("RainbowModLoader.dll");
+                HiteModLoader = GetFile("HiteModLoader.dll");
 
                 byte[] GetFile(string name)
                 {
@@ -153,6 +171,7 @@ namespace HedgeModManager
         public bool SupportsCPKREDIR = false;
         public bool SupportsSaveRedirection = false;
         public string AppID = "0";
+        public string EGSID = null;
         public string GBProtocol;
         public bool Is64Bit = false;
         public string CodesURL;
@@ -196,7 +215,7 @@ namespace HedgeModManager
                     case GameLauncher.Epic:
                         Process.Start(new ProcessStartInfo
                         {
-                            FileName = $"com.epicgames.launcher://apps/{BaseGame.AppID}?action=launch&silent=true",
+                            FileName = $"com.epicgames.launcher://apps/{BaseGame.EGSID}?action=launch&silent=true",
                             UseShellExecute = true
                         });
                         break;
