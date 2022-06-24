@@ -165,7 +165,7 @@ namespace HedgeModManager
 
     public class Game
     {
-        public string GameName = "Unnamed Game";
+        public string GameName = "NoGame";
         public string ExecutableName = string.Empty;
         public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
@@ -245,11 +245,11 @@ namespace HedgeModManager
 
             var games = new List<GameInstall>();
 
-            if (steamGames != null)
-                games.AddRange(steamGames);
+            //if (steamGames != null)
+            //    games.AddRange(steamGames);
 
-            if (epicGames != null)
-                games.AddRange(epicGames);
+            //if (epicGames != null)
+            //    games.AddRange(epicGames);
 
             // Extra directories
             if (!string.IsNullOrEmpty(RegistryConfig.ExtraGameDirectories))

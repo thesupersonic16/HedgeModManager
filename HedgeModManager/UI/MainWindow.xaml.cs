@@ -92,6 +92,9 @@ namespace HedgeModManager
 
         public void RefreshProfiles()
         {
+            if (HedgeApp.CurrentGame == Games.Unknown)
+                return;
+
             HedgeApp.ModProfiles.Clear();
             try
             {
@@ -143,6 +146,10 @@ namespace HedgeModManager
 
         public void RefreshMods()
         {
+            // Don't refresh when there is no games
+            if (HedgeApp.CurrentGame == Games.Unknown)
+                return;
+
             CodesList.Items.Clear();
 
             LoadDatabase();
@@ -209,6 +216,29 @@ namespace HedgeModManager
 
         public void RefreshUI()
         {
+            ModsTab.IsEnabled = CodesTab.IsEnabled = ComboBox_ModProfile.IsEnabled = MLSettingsGrid.IsEnabled
+                = HMMSettingsSackPanel.IsEnabled = SaveButton.IsEnabled = SavePlayButton.IsEnabled = HedgeApp.CurrentGame != Games.Unknown;
+            // I am lazy
+            ComboBox_ModProfile.Visibility = HedgeApp.CurrentGame != Games.Unknown ? Visibility.Visible : Visibility.Collapsed;
+
+            // No game selected
+            if (HedgeApp.CurrentGame == Games.Unknown)
+            {
+                ViewModel = new MainWindowViewModel
+                {
+                    ModsDB = new ModsDB(),
+                    Games = HedgeApp.GameInstalls,
+                    DevBuild = !string.IsNullOrEmpty(HedgeApp.RepoCommit)
+                };
+                DataContext = ViewModel;
+
+                Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString})";
+
+                MainTabControl.SelectedItem = SettingsTab;
+                ComboBox_GameStatus.SelectedValue = HedgeApp.GameInstalls.FirstOrDefault();
+                return;
+            }
+
             // Re-arrange the mods
             for (int i = 0; i < ModsDatabase.ActiveMods.Count; i++)
             {
@@ -354,6 +384,9 @@ namespace HedgeModManager
 
         public async Task CheckForCodeUpdates()
         {
+            if (HedgeApp.CurrentGame == Games.Unknown)
+                return;
+
             if (!File.Exists(CodeProvider.CodesTextPath))
                 return;
 
@@ -581,7 +614,7 @@ namespace HedgeModManager
         {
             await CheckForManagerUpdatesAsync();
 
-            if (HedgeApp.Config.CheckForModUpdates)
+            if (HedgeApp.Config?.CheckForModUpdates == true)
             {
                 ContextCancelSource = new CancellationTokenSource();
                 try
@@ -596,7 +629,7 @@ namespace HedgeModManager
 
         public async Task CheckForManagerUpdatesAsync()
         {
-            if (!HedgeApp.Config.CheckForUpdates && !ViewModel.DevBuild)
+            if (!HedgeApp.Config?.CheckForUpdates == true && !ViewModel.DevBuild)
                 return;
 
             UpdateStatus(Localise("StatusUICheckingForUpdates"));
@@ -684,7 +717,7 @@ namespace HedgeModManager
 
         protected async Task CheckForLoaderUpdateAsync()
         {
-            if (!HedgeApp.Config.CheckLoaderUpdates)
+            if (!(HedgeApp.Config?.CheckLoaderUpdates == true))
                 return;
 
             if (HedgeApp.CurrentGame.ModLoader == null)
@@ -963,6 +996,11 @@ namespace HedgeModManager
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
+
+            // Check if a game is selected
+            if (HedgeApp.CurrentGame == Games.Unknown)
+                return;
+
 
             // Update CPKREDIR if needed
             if (HedgeApp.CurrentGame.SupportsCPKREDIR)
@@ -1259,11 +1297,12 @@ namespace HedgeModManager
                 RefreshProfiles();
                 Refresh();
                 UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGame));
-
-                // Schedule checking for code updates if available.
-                if (Button_DownloadCodes.IsEnabled)
-                    await CheckForCodeUpdates();
-
+                if (HedgeApp.CurrentGame != Games.Unknown)
+                {
+                    // Schedule checking for code updates if available.
+                    if (Button_DownloadCodes.IsEnabled)
+                        await CheckForCodeUpdates();
+                }
                 await CheckForUpdatesAsync();
             }
 

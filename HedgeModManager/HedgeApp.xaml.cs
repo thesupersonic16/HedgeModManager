@@ -208,32 +208,15 @@ namespace HedgeModManager
                 }
             }
 
-            if (CurrentGame == Games.Unknown)
-            {
-                var game = GameInstalls.FirstOrDefault();
-                SelectGameInstall(game);
-                StartDirectory = game?.GameDirectory;
-            }
-
-            if (CurrentGame == Games.Unknown)
-            {
-                var dialog = new HedgeMessageBox($"No Games Found!", 
-                    "Please make sure your games are properly installed on Steam/Epic Games or\nrun Hedge Mod Manager inside of any of the supported game's directory.");
-
-                // Seems to fix the crash.
-                application.MainWindow = dialog;
-                
-                dialog.AddButton("Exit", () => dialog.Close());
-
-                dialog.ShowDialog();
-                return;
-            }
-
 #endif
 
-            if (string.IsNullOrEmpty(ModsDbPath))
+            if (GameInstalls.Count == 0)
+                GameInstalls.Add(new GameInstall(Games.Unknown, null, GameLauncher.None));
+
+            if (string.IsNullOrEmpty(ModsDbPath) && !string.IsNullOrEmpty(StartDirectory))
                 ModsDbPath = Path.Combine(StartDirectory, "Mods");
-            ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
+            if (!string.IsNullOrEmpty(StartDirectory))
+                ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
 
             if (args.Length > 0)
             {
@@ -691,9 +674,12 @@ namespace HedgeModManager
             }
             try
             {
-                ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
-                Config = new CPKREDIRConfig(ConfigPath);
-                ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
+                if (HedgeApp.CurrentGame != Games.Unknown)
+                {
+                    ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
+                    Config = new CPKREDIRConfig(ConfigPath);
+                    ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
+                }
             }
             catch (UnauthorizedAccessException)
             {
