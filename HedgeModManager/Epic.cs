@@ -59,7 +59,7 @@ namespace HedgeModManager
                 if (installation == null)
                     continue;
 
-                string fullPath = Path.Combine(installation.InstallLocation, game.GamePath);
+                string fullPath = Path.Combine(installation.InstallLocation, game.GamePath.Substring(game.GamePath.IndexOf('\\') + 1));
 
                 if (File.Exists(fullPath))
                     games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.Epic));

@@ -101,7 +101,7 @@ namespace HedgeModManager
             Is64Bit = true,
             ModLoader = ModLoaders.RainbowModLoader,
             CodesURL = Resources.URL_RML_CODES,
-            GamePath = Path.Combine("rainbow Shipping", "Sonic Colors - Ultimate.exe")
+            GamePath = Path.Combine("SonicColorsUltimate", "rainbow Shipping", "Sonic Colors - Ultimate.exe")
         };
 
         public static Game SonicOrigins = new Game()
