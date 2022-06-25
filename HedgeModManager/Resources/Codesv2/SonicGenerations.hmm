@@ -1167,3 +1167,6 @@ pop   ecx
 return:
 ", 0x01054B37,HookBehavior.After);
 }
+
+Patch "Disable Classic Run Particles" by "Hyper"
+WriteProtected<byte>(0xDC1C6F, 0xE9, 0x99, 0x00, 0x00, 0x00);
