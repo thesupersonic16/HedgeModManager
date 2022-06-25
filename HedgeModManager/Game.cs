@@ -67,6 +67,7 @@ namespace HedgeModManager
             ExecutableName = "PuyoPuyoTetris2.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
+            UsesRawFolder = true,
             AppID = "1259790",
             GBProtocol = "hedgemmtenpex",
             Is64Bit = true,
@@ -109,6 +110,7 @@ namespace HedgeModManager
             ExecutableName = "SonicOrigins.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
+            UsesRawFolder = true,
             AppID = "1794960",
             EGSID = "5070a8e44cf74ba3b9a4ca0c0dce5cf1",
             GBProtocol = "hedgemmhite",
@@ -170,6 +172,7 @@ namespace HedgeModManager
         public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
         public bool SupportsSaveRedirection = false;
+        public bool UsesRawFolder = false;
         public string AppID = "0";
         public string EGSID = null;
         public string GBProtocol;

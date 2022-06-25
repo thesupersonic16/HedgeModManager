@@ -1238,7 +1238,7 @@ namespace HedgeModManager
                 if (editor.ShowDialog().Value)
                 {
                     var modDir = "disk";
-                    if (HedgeApp.CurrentGame == Games.PuyoPuyoTetris2)
+                    if (HedgeApp.CurrentGame.UsesRawFolder)
                         modDir = "raw";
                     else if (HedgeApp.CurrentGame == Games.SonicColorsUltimate)
                         modDir = "";
