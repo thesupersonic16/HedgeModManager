@@ -443,13 +443,14 @@ namespace HedgeModManager
             }catch{}
         }
 
-        public void CreateMod(ModInfo mod, string rootDir = "disk", bool openFolder = false)
+        public void CreateMod(ModInfo mod, string[] folders, bool openFolder)
         {
             string path = string.Concat(mod.Title.Split(Path.GetInvalidFileNameChars()));
             path = Path.Combine(RootDirectory, path);
             Directory.CreateDirectory(path);
-            if (!string.IsNullOrEmpty(rootDir))
-                Directory.CreateDirectory(Path.Combine(path, rootDir));
+            foreach (string folder in folders)
+                if (!string.IsNullOrEmpty(folder))
+                    Directory.CreateDirectory(Path.Combine(path, folder));
             mod.RootDirectory = path;
             mod.Save();
 

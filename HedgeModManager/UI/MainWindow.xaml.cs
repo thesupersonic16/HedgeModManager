@@ -1236,14 +1236,7 @@ namespace HedgeModManager
                 mod.IncludeDirs.Add(".");
                 var editor = new EditModWindow(mod) { Owner = this };
                 if (editor.ShowDialog().Value)
-                {
-                    var modDir = "disk";
-                    if (HedgeApp.CurrentGame.UsesRawFolder)
-                        modDir = "raw";
-                    else if (HedgeApp.CurrentGame == Games.SonicColorsUltimate)
-                        modDir = "";
-                    ModsDatabase.CreateMod(mod, modDir, true);
-                }
+                    ModsDatabase.CreateMod(mod, HedgeApp.CurrentGame.Folders, true);
             }
 
             if (choice != -1)

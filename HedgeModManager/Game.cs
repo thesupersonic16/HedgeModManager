@@ -25,6 +25,7 @@ namespace HedgeModManager
             ExecutableName = "SonicGenerations.exe",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
+            Folders = new [] { "disk/bb", "disk/bb2", "disk/bb3" },
             AppID = "71340",
             GBProtocol = "hedgemmgens",
             Is64Bit = false,
@@ -39,6 +40,7 @@ namespace HedgeModManager
             ExecutableName = "slw.exe",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
+            Folders = new[] { "disk/sonic2013_patch_0" },
             AppID = "329440",
             GBProtocol = "hedgemmlw",
             Is64Bit = false,
@@ -53,6 +55,7 @@ namespace HedgeModManager
             ExecutableName = "Sonic Forces.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
+            Folders = new[] { "disk/wars_patch" },
             AppID = "637100",
             GBProtocol = "hedgemmforces",
             Is64Bit = true,
@@ -67,7 +70,7 @@ namespace HedgeModManager
             ExecutableName = "PuyoPuyoTetris2.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
-            UsesRawFolder = true,
+            Folders = new[] { "raw" },
             AppID = "1259790",
             GBProtocol = "hedgemmtenpex",
             Is64Bit = true,
@@ -82,6 +85,7 @@ namespace HedgeModManager
             ExecutableName = "musashi.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
+            Folders = new[] { "musashi_0" },
             AppID = "981890",
             GBProtocol = "hedgemmmusashi",
             Is64Bit = true,
@@ -96,6 +100,7 @@ namespace HedgeModManager
             ExecutableName = "Sonic Colors - Ultimate.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
+            Folders = new[] { "PCCriPak" },
             EGSID = "e5071e19d08c45a6bdda5d92fbd0a03e",
             GBProtocol = "hedgemmrainbow",
             Is64Bit = true,
@@ -110,7 +115,7 @@ namespace HedgeModManager
             ExecutableName = "SonicOrigins.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
-            UsesRawFolder = true,
+            Folders = new[] { "raw", "Sonic1u", "Sonic2u", "Sonic3ku", "SonicCDu" },
             AppID = "1794960",
             EGSID = "5070a8e44cf74ba3b9a4ca0c0dce5cf1",
             GBProtocol = "hedgemmhite",
@@ -172,7 +177,7 @@ namespace HedgeModManager
         public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
         public bool SupportsSaveRedirection = false;
-        public bool UsesRawFolder = false;
+        public string[] Folders = { "raw" };
         public string AppID = "0";
         public string EGSID = null;
         public string GBProtocol;
