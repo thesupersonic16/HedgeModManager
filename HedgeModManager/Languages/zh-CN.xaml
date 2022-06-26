@@ -49,8 +49,8 @@
     <system:String x:Key="ModsUIFeatureConfigDisable">这个 Mod 不支持设置。</system:String>
     <system:String x:Key="ModsUIFeatureUpdate"       >这个 Mod 支持更新。</system:String>
     <system:String x:Key="ModsUIFeatureUpdateDisable">这个 Mod 不支持更新。</system:String>
-    <system:String x:Key="ModsUIFeatureUpdateFailed" >此 Mod 检查更新失败。</system:String>
-    <system:String x:Key="ModsUIFeatureUpdateBlocked">该 Mod 已被阻止检查更新。</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateFailed" >这个 Mod 检查更新失败。</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateBlocked">这个 Mod 已被阻止检查更新。</system:String>
     <system:String x:Key="ModsUIFeatureSave"         >这个 Mod 存档使用重新导向。</system:String>
     <system:String x:Key="ModsUIFeatureSaveDisable"  >这个 Mod 存档不支援重新导向。</system:String>
     <system:String x:Key="ModsUIFeatureCode"         >这个 Mod 包含自定义代码。</system:String>
@@ -66,7 +66,7 @@
     <system:String x:Key="CodesUIUpdate"  >更新社区代码</system:String>
     <system:String x:Key="CodesUISearch"  >搜寻：</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">安装的代码与代码加载器不相容。&#x0a;请更新代码和代码加载器。&#x0a;警告：这将删除所有自定义代码。</system:String>
-    <system:String xml:space="preserve" x:Key="CodesUIFetching">正在获取代码…</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIFetching">正在下载代码…</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
@@ -78,7 +78,7 @@
     <system:String x:Key="SettingsUIEnableML"       >启用 Mod 程序</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >启用 调试控制台</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >启用 重新导向存档</system:String>
-    <system:String x:Key="SettingsUIUseLauncher"    >使用 游戏启动器加载</system:String>
+    <system:String x:Key="SettingsUIUseLauncher"    >启用 游戏启动器加载</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >加载器：</system:String>
     <system:String x:Key="SettingsUILabelGame"      >游戏：</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >设置档：</system:String>
@@ -214,7 +214,7 @@
     <system:String x:Key="ExceptionWindowButtonIgnore"    >忽略并关闭</system:String>
     <system:String x:Key="ExceptionWindowButtonReport"    >在 GitHub 上提交报告</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >有新的更新可用！</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >这个版本的 Hedge Mod Manager 似乎已经过时了。&#x0a;強烈建議先更新，再看看問題是否仍然存在&#x0a;需要更新吗？</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >这个版本的 Hedge Mod Manager 似乎已经过时了。&#x0a;強烈建議先更新，再看看問題是否仍然存在&#x0a;要更新吗？</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">更新错误！</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager 无法更新！&#x0a;请手动下载最新版本。</system:String>
 
@@ -230,6 +230,10 @@
     <system:String x:Key="GameSonicForces">Sonic Forces - 索尼克 力量</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2 - 魔法气泡特趣思俄罗斯方块</system:String>
     <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020 - 2020年夏季奥运会</system:String>
-    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors Ultimate - 索尼克缤纷色彩 究极版</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors Ultimate - 索尼克 缤纷色彩 究极版</system:String>
+    <system:String x:Key="GameSonicOrigins">Sonic Origins - 索尼克 起源</system:String>
+    <system:String x:Key="GameNoGame">未能检测游戏</system:String>
+    <system:String x:Key="LauncherSteam">Steam蒸汽</system:String>
+    <system:String x:Key="LauncherEpic">Epic Games</system:String>
 
 </ResourceDictionary>
