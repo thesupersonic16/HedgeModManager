@@ -72,10 +72,12 @@ namespace HedgeModManager
         public string AuthorURL { get; set; } = string.Empty;
 
         // Main
+        [PropertyTools.DataAnnotations.DisplayName("Update Server")]
         [PropertyTools.DataAnnotations.Category("Main")]
         [IniField("Main")]
         public string UpdateServer { get; set; }
 
+        [PropertyTools.DataAnnotations.DisplayName("Save File")]
         [IniField("Main")]
         public string SaveFile { get; set; }
 
@@ -103,6 +105,7 @@ namespace HedgeModManager
         [IniField("Main")]
         public string CodeFile { get; set; } = string.Empty;
 
+        [PropertyTools.DataAnnotations.DisplayName("Config Schema File")]
         [IniField("Main")]
         public string ConfigSchemaFile { get; set; } = string.Empty;
 
