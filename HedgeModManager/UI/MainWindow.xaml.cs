@@ -232,7 +232,7 @@ namespace HedgeModManager
                 };
                 DataContext = ViewModel;
 
-                Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString})";
+                Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString})" + (HedgeApp.IsLinux ? " (Linux)" : "");
 
                 MainTabControl.SelectedItem = SettingsTab;
                 ComboBox_GameStatus.SelectedValue = HedgeApp.GameInstalls.FirstOrDefault();
@@ -278,7 +278,7 @@ namespace HedgeModManager
 
             DataContext = ViewModel;
 
-            Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {HedgeApp.CurrentGame} ({SelectedModProfile?.Name})";
+            Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {HedgeApp.CurrentGame} ({SelectedModProfile?.Name})" + (HedgeApp.IsLinux ? " (Linux)" : "");
 
             if (HedgeApp.CurrentGame.ModLoader != null)
             {
@@ -535,7 +535,8 @@ namespace HedgeModManager
 
         public Task StartGame()
         {
-            HedgeApp.CurrentGameInstall.StartGame(HedgeApp.Config.UseLauncher);
+            // Force launcher if running on linux
+            HedgeApp.CurrentGameInstall.StartGame(HedgeApp.Config.UseLauncher || HedgeApp.IsLinux);
 
             if (!HedgeApp.Config.KeepOpen)
                 Dispatcher.Invoke(() => Close());
@@ -859,7 +860,7 @@ namespace HedgeModManager
             catch (UnauthorizedAccessException)
             {
                 HedgeApp.CreateOKMessageBox(Localise("CommonUIError"),
-                    string.Format(Localise("DialogUINoGameDirAccess"), HedgeApp.CurrentGameInstall.GameDirectory))
+                    string.Format(Localise("DialogUINoGameDirAccess"), HedgeApp.StartDirectory))
                     .ShowDialog();
             }
             catch (Exception ex)

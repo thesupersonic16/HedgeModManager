@@ -40,6 +40,7 @@ using HedgeModManager.UI.Models;
 using HedgeModManager.Updates;
 using System.Security;
 using static HedgeModManager.Lang;
+using Microsoft.Win32;
 
 namespace HedgeModManager
 {
@@ -67,7 +68,7 @@ namespace HedgeModManager
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
-        public static bool AprilFools, IizukaBirthday = false;
+        public static bool AprilFools, IizukaBirthday, IsLinux = false;
 
         public static HttpClient HttpClient { get; private set; }
         public static string UserAgent { get; }
@@ -112,6 +113,15 @@ namespace HedgeModManager
 
             AprilFools      = DateTime.Now.Day == 1 && DateTime.Now.Month == 4;
             IizukaBirthday  = DateTime.Now.Day == 16 && DateTime.Now.Month == 3;
+
+            // Check for Wine, assuming Linux
+            RegistryKey key = null;
+            if ((key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).OpenSubKey("SOFTWARE\\Wine")) != null)
+            {
+                key.Close();
+                IsLinux = true;
+            }
+
 
             if (args.Length > 2 && string.Compare(args[0], "-update", StringComparison.OrdinalIgnoreCase) >= 0)
             {

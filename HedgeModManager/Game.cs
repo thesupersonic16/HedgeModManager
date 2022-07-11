@@ -215,11 +215,23 @@ namespace HedgeModManager
                 switch (Launcher)
                 {
                     case GameLauncher.Steam:
-                        Process.Start(new ProcessStartInfo
+                        if (HedgeApp.IsLinux)
                         {
-                            FileName = $"steam://run/{BaseGame.AppID}",
-                            UseShellExecute = true
-                        });
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = $"start",
+                                Arguments = $"/unix /usr/bin/xdg-open steam://run/{BaseGame.AppID}",
+                                UseShellExecute = true
+                            });
+                        }
+                        else
+                        {
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = $"steam://run/{BaseGame.AppID}",
+                                UseShellExecute = true
+                            });
+                        }
                         break;
                     case GameLauncher.Epic:
                         Process.Start(new ProcessStartInfo
@@ -243,7 +255,6 @@ namespace HedgeModManager
                     WorkingDirectory = startDirectory
                 });
             }
-
         }
 
         public static List<GameInstall> SearchForGames(string preference = null)
