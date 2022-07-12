@@ -1175,3 +1175,17 @@ Patch "Never Receive Boost From Drift" by "Hyper"
 WriteProtected<byte>(0xE03E46, 0xD9, 0xEE);
 WriteNop(0xE03E48, 6);
 WriteProtected<byte>(0x15E96B0, 0x00);
+
+Patch "Never Receive Boost From Rings" by "Hyper"
+{
+	void NOP(int floatInstrAddr, int paramStrAddr)
+	{
+		WriteProtected<byte>(floatInstrAddr, 0xD9, 0xEE); /* fldz */
+		WriteNop(floatInstrAddr + 2, 6);
+		WriteProtected<byte>(paramStrAddr, 0x00);
+	}
+	
+	NOP(0x120628B, 0x15FA690); /* ChaosEnergyRecoverRateByRing */
+	NOP(0x1206335, 0x15FA6DC); /* ChaosEnergyRecoverRateByRingBonus */
+	NOP(0x12063DF, 0x15FA72C); /* ChaosEnergyRecoverRateByRingPenalty */
+}
