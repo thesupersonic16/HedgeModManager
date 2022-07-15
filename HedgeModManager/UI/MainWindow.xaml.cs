@@ -221,6 +221,9 @@ namespace HedgeModManager
             // I am lazy
             ComboBox_ModProfile.Visibility = HedgeApp.CurrentGame != Games.Unknown ? Visibility.Visible : Visibility.Collapsed;
 
+            if (HedgeApp.AprilFools)
+                SavePlayButton.Content = "Save & Pay";
+
             // No game selected
             if (HedgeApp.CurrentGame == Games.Unknown)
             {
