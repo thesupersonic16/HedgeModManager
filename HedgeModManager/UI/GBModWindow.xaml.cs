@@ -272,7 +272,16 @@ namespace HedgeModManager.UI
                 Imagebar.Children.Add(button);
             }
 
-            Description.Text = $@"
+            if (HedgeApp.IsLinux)
+            {
+                Description.Text = string.Empty;
+                Description.Visibility = Visibility.Collapsed;
+                DescriptionText.Text = mod.Body;
+                DescriptionText.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Description.Text = $@"
 <html>
     <body>
         <style>
@@ -281,6 +290,7 @@ namespace HedgeModManager.UI
         {mod.Body}
     </body>
 </html>";
+            }
             foreach (var group in mod.Credits.Credits)
             {
                 if (group.Value.Count < 1)
