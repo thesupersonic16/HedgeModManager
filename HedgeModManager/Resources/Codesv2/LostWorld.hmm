@@ -17,6 +17,9 @@ WriteAsmHook
 	"mov DWORD PTR [ebp+8], 1"
 )
 
+Patch "16:10 In-Game Resolution" by "ĐeäTh"
+WriteProtected<int>(ASLR(0xD56D30), 0x3FCCCCCD)
+
 Patch "21:9 (2560x1080) In-Game Resolution" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x4017B426)
 
