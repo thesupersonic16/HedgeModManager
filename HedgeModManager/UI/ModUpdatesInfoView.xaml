@@ -96,9 +96,12 @@
                              <ProgressBar Grid.Column="1" Height="4" IsIndeterminate="True"/>
                          </Grid>
 
-                         <wpf:HtmlPanel Background="Transparent" Width="Auto" Height="Auto" Visibility="{Binding SelectedInfo.Changelog.IsCompleted, Converter={StaticResource BoolToVisibilityConverter}}"
+                        <wpf:HtmlPanel Background="Transparent" Width="Auto" Height="Auto" Visibility="{Binding SelectedInfo.Changelog.IsCompleted, Converter={StaticResource BoolToVisibilityConverterWin}}"
                                         Text="{Binding SelectedInfo.Changelog.Result, Converter={StaticResource MarkdownToHtmlConverter}}"/>
-                     </Grid>
+                        <ScrollViewer Background="Transparent" Width="Auto" Height="Auto" Visibility="{Binding SelectedInfo.Changelog.IsCompleted, Converter={StaticResource BoolToVisibilityConverterLinux}}">
+                            <TextBlock Width="Auto" Height="Auto" Margin="2,2,2,2" Text="{Binding SelectedInfo.Changelog.Result}"/>
+                        </ScrollViewer>
+                    </Grid>
                 </Grid>
 
                 <ContentControl Content="{Binding SelectedInfo}"

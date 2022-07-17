@@ -45,7 +45,7 @@ namespace HedgeModManager
             InitializeComponent();
             Header.Text = header;
 
-            if (type == InputType.Basic)
+            if (type == InputType.Basic || HedgeApp.IsLinux)
             {
                 Message.Child = new ScrollViewer()
                 {

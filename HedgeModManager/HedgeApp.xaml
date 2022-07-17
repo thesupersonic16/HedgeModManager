@@ -42,6 +42,8 @@
 
             <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <local:BoolToVisibilityConverterWin x:Key="BoolToVisibilityConverterWin"/>
+            <local:BoolToVisibilityConverterLinux x:Key="BoolToVisibilityConverterLinux"/>
             <local:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter"/>
             <local:InverseEmptyStringToVisibilityConverter x:Key="InverseEmptyStringToVisibilityConverter"/>
             <local:NullToBoolConverter x:Key="NullToBoolConverter"/>
