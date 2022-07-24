@@ -1189,3 +1189,6 @@ Patch "Never Receive Boost From Rings" by "Hyper"
 	NOP(0x1206335, 0x15FA6DC); /* ChaosEnergyRecoverRateByRingBonus */
 	NOP(0x12063DF, 0x15FA72C); /* ChaosEnergyRecoverRateByRingPenalty */
 }
+
+Patch "Disable Color Correction" by "M&M"
+WriteProtected<byte>(0x1699F54, 0x00);
