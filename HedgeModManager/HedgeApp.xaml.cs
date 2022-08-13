@@ -184,6 +184,7 @@ namespace HedgeModManager
 
             Steam.Init();
             InstallGBHandlers();
+            InstallOneClickHandler();
             SetupLanguages();
             LoadLanguageFolder();
             SetupThemes();
@@ -353,6 +354,18 @@ namespace HedgeModManager
             if (e.Args.Length > 1 && e.Args[0].ToLowerInvariant() == "-gb")
             {
                 GBAPI.ParseCommandLine(e.Args[1]);
+                Shutdown();
+            }
+
+            // URL command
+            if (e.Args.Length >= 1 && e.Args[0].ToLowerInvariant().StartsWith("hedgemm://"))
+            {
+                string arg = e.Args[0].ToLowerInvariant();
+                if (arg.StartsWith("hedgemm://install/"))
+                {
+                    string url = arg.Substring("hedgemm://install/".Length);
+                    new ModInstallWindow(url).ShowDialog();
+                }
                 Shutdown();
             }
 
@@ -972,6 +985,27 @@ namespace HedgeModManager
 
             Process.Start(path, $"-update \"{AppPath}\" {Process.GetCurrentProcess().Id}");
             Current.Shutdown();
+        }
+
+        /// <summary>
+        /// Installs the one-click install handler
+        /// </summary>
+        public static bool InstallOneClickHandler()
+        {
+            try
+            {
+                var reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\hedgemm");
+                reg.SetValue("", $"URL:HedgeModManager");
+                reg.SetValue("URL Protocol", "");
+                reg = reg.CreateSubKey("shell\\open\\command");
+                reg.SetValue("", $"\"{HedgeApp.AppPath}\" \"%1\"");
+                reg.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public static string GetCPKREDIRVersionString()

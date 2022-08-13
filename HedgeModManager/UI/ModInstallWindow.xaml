@@ -1,0 +1,70 @@
+﻿<Window x:Class="HedgeModManager.UI.ModInstallWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+        xmlns:local="clr-namespace:HedgeModManager.UI"
+        xmlns:controls="clr-namespace:HedgeModManager.Controls"
+        mc:Ignorable="d"
+        Title="{Binding Name, FallbackValue=Name}" Height="600" Width="900"
+        MinHeight="600" MinWidth="900"
+        Style="{DynamicResource HedgeWindow}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo />
+    </Window.TaskbarItemInfo>
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <controls:Sidebar x:Name="Imagebar" HorizontalAlignment="Left" SidebarWidth="120" OpenOnClick="True" Background="{DynamicResource HMM.Window.BackgroundBrush}" Panel.ZIndex="1"/>
+            <Grid Margin="10,10,0,0" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <Label Padding="7,0,0,0" Content="{Binding Name, FallbackValue=Name}" FontSize="20"/>
+                    </StackPanel>
+                    <ScrollViewer Grid.Row="1" Margin="0,0,5,0">
+                        <Grid>
+                            <wpf:HtmlPanel x:Name="Description" Background="Transparent"/>
+                            <TextBlock x:Name="DescriptionText" Width="Auto" Height="Auto" Background="Transparent" Visibility="Collapsed"/>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Rectangle Width="2" HorizontalAlignment="Left" Fill="{DynamicResource HMM.Window.DialogBottom}"/>
+                    <Grid Margin="5,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Credits" FontSize="20"/>
+                        <ScrollViewer Grid.Row="1" Margin="10,0,5,40">
+                            <StackPanel x:Name="CreditsPanel" Orientation="Vertical"/>
+                        </ScrollViewer>
+                        <Button x:Name="DownloadButton" Grid.Row="2" Height="25" Content="Download" Margin="5" Click="Download_Click" IsDefault="True"/>
+                        <ProgressBar x:Name="Progress" Visibility="Collapsed" Maximum="1" Grid.Row="2" Height="25" Margin="5" />
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="LoadingGrid" Background="#80000000" Visibility="Collapsed">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock FontSize="32" Text="Loading..." Margin="0,0,0,8" HorizontalAlignment="Center"/>
+                <ProgressBar MinWidth="300" Height="4" IsIndeterminate="True"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
