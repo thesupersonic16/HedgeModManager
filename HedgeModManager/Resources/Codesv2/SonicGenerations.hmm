@@ -297,6 +297,9 @@ WriteProtected<byte>(0xD58A93, 0xEB, 0x41, 0xEB, 0x3F)
 Patch "Replay Rescue Cutscenes" by "Muzzarino"
 WriteProtected<ushort>(0xD29532, 0x6EB)
 
+Patch "Replay Tutorial Videos"
+WriteProtected<bool>(0x107ACEE,false)
+
 Patch "Colour Dodge Trail Blending" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0x9)
 
@@ -412,6 +415,243 @@ Write<float>(0x19FD2C, 165.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 165.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 165.0f)
+
+Patch "Disable Widescreen Mode"
+private int Width = 1280;
+private int Height = 720;
+
+	void CopyHookAddress(int srcaddress, params int[] address)
+	{
+		for (int i = 0; i < address.Length; i++)
+		{
+			WriteProtected<int>(address[i] + 0x1,(Read<int>(srcaddress + 0x1) + (srcaddress + 0x5)) - (address[i] + 0x5))
+		}
+	}
+	
+	void ReplaceReturnFunction(int address, int count)
+	{
+		for (int i = 0; i < count; i++)
+		{
+			WriteProtected<byte>(address + i,(byte)(i == 0 ? 0xC3 : 0xCC))
+		}
+	}
+
+WriteProtected<int>(0xD6C9EE,0x1807044)
+WriteProtected<bool>(0xE7A9A5,false)
+WriteProtected<int>(0x10FA272,0x1703940)
+
+WriteProtected<int>(0xD5AF94,0x16A14B0)
+WriteProtected<int>(0xE7AD52,0x16A14B0)
+
+ReplaceReturnFunction(0x675400,32)
+ReplaceReturnFunction(0x675440,144)
+ReplaceReturnFunction(0x6754D0,80)
+
+WriteProtected<double>(0x1703EA8,(double)Width)
+WriteProtected<double>(0x1703EA0,(double)Height / 0.75)
+WriteProtected<double>(0x1703F58,259 + 120)
+WriteProtected<float>(0x1704850,(float)(Height + 5) / 0.75f)
+
+Write<float>(0x1804F8C,(float)Width)
+Write<float>(0x1804F90,(float)Height)
+
+WriteProtected<float>(0x1A42254,1.0012500286102294921875f / 0.75f)
+
+for (int i = 0; i < 2; i++)
+{
+	Write<float>(0x1B23F00 + (i*0x1C),(float)Width)
+	Write<float>(0x1B23F04 + (i*0x1C),(float)Height)
+	Write<float>(0x1B23F08 + (i*0x1C),1f / Read<float>(0x1B23F00))
+	Write<float>(0x1B23F0C + (i*0x1C),1f / Read<float>(0x1B23F04))
+	Write<float>(0x1B23F10 + (i*0x1C),0f * Read<float>(0x1B23F08) * Convert.ToSingle(i == 0))
+	Write<float>(0x1B23F14 + (i*0x1C),120f * Read<float>(0x1B23F0C) * Convert.ToSingle(i == 0))
+	Write<float>(0x1B23F18 + (i*0x1C),Read<float>(0x1B23F00) / Read<float>(0x1B23F04))
+}
+
+WriteAsmHook(@$"push ecx
+lea eax,[esp - 0x4]
+push eax
+lea ecx,[esp - 0x4]
+push ecx
+mov eax,0x675520
+call eax
+movss xmm0,[edi + 0xBC]
+subss xmm0,[esp + 0x4]
+movss [edi + 0xBC],xmm0
+add esp,0x8
+pop ecx
+push 0x6621A0",
+0xD08E79,HookBehavior.Replace,HookParameter.Call)
+
+WriteAsmHook(@$"push eax
+push ecx
+lea eax,[esp - 0x4]
+push eax
+lea ecx,[esp - 0x4]
+push ecx
+mov eax,0x675520
+call eax
+movss xmm0,[edi + 0xBC]
+subss xmm0,[esp + 0x4]
+movss [edi + 0xBC],xmm0
+add esp,0x8
+pop ecx
+pop eax",
+0xD08F04,HookBehavior.Before)
+
+WriteAsmHook(@$"sub esp,0x8
+push eax
+push ecx
+lea eax,[esp + 0xC]
+push eax
+lea ecx,[esp + 0xC]
+push ecx
+mov eax,0x675520
+call eax
+add esp,0x8
+movss xmm0,[esp + 0x8]
+addss xmm0,[esp + 0x14]
+movss [esp + 0x14],xmm0
+movss xmm0,[esp + 0xC]
+addss xmm0,[esp + 0x18]
+movss [esp + 0x18],xmm0
+pop ecx
+pop eax
+add esp,0x8
+push 0x679B50",
+0xD09111,HookBehavior.Replace,HookParameter.Call)
+CopyHookAddress(0xD09111,0xD25020,0xD25131)
+
+WriteAsmHook(@$"sub esp,0x30
+mov eax,ds:0x1E66B34
+push 00
+push eax
+lea ecx,[esp + 0x10]
+mov eax,0x65FBE0
+call eax
+mov ecx,[esp + 0x8]
+mov edx,[ecx + 0x4]
+mov ecx,[edx + 0x14]
+mov eax,[ecx]
+mov edx,[eax + 0x10]
+call edx
+fmul dword ptr ds:0x16D2E4C
+fdiv dword ptr ds:0x1703B38
+fld1
+fcomp
+fnstsw ax
+test ah,05
+jp WidescreenFOV
+fdiv st(0),st(0)
+WidescreenFOV:
+fstp dword ptr [esp + 0x10]
+lea ecx,[esp + 0x8]
+mov eax,0x65FC40
+call eax
+fld dword ptr [esp + 0x38]
+mov eax,0xA6EBE0
+fmul qword ptr ds:0x17038F8
+fdiv dword ptr [esp + 0x10]
+mov eax,0xA6ED10
+call eax
+fadd st(0),st(0)
+fstp dword ptr [esp + 0x38]
+add esp,0x30
+push 0x6F2370",
+0xD50BD5,HookBehavior.Replace,HookParameter.Call)
+CopyHookAddress(0xD50BD5,0xD5AFAE,0x10FA2AD)
+
+WriteAsmHook(@$"mov al,[esp + 0x4]
+mov [ecx + 0x28],al
+mov eax,ds:0x1E66B34
+push 00
+push eax
+lea ecx,[esp + 0x1C]
+mov eax,0x65FBE0
+call eax
+mov ecx,[esp + 0x14]
+mov edx,[ecx + 0x4]
+mov ecx,[edx + 0x14]
+mov eax,[ecx]
+mov edx,[eax + 0x10]
+call edx
+fld st(0)
+fmul dword ptr ds:0x16D2E4C
+fdiv dword ptr ds:0x1703B38
+fld1
+fcomp
+fnstsw ax
+test ah,05
+jp WidescreenFMV
+fdiv st(0),st(0)
+WidescreenFMV:
+fxch st(1)
+fdivr dword ptr ds:0x1703B38
+fdiv dword ptr ds:0x16D2E4C
+fmul st(0),st(1)
+lea eax,[esp + 0x20]
+lea ecx,[esp + 0x28]
+push eax
+push ecx
+call ScaleOpeningFMVCoord
+lea eax,[esp + 0x2C]
+lea ecx,[esp + 0x34]
+push eax
+push ecx
+call ScaleOpeningFMVCoord
+add esp,0x10
+lea ecx,[esp + 0x14]
+mov eax,0x65FC40
+call eax
+add dword ptr [esp],0x27
+cmp byte ptr [edi + 0x30],00
+ret 0004
+ScaleOpeningFMVCoord:
+push eax
+mov eax,[esp + 0xC]
+push ecx
+mov ecx,[esp + 0xC]
+fld st(0)
+fld1
+fsubrp
+fmul qword ptr ds:0x17038F8
+fst dword ptr [eax]
+faddp
+fstp dword ptr [ecx]
+pop ecx
+pop eax",
+0x1059D11,HookBehavior.Replace,HookParameter.Call)
+
+WriteAsmHook(@$"sub esp,0x30
+mov eax,0xA6EBE0
+call eax
+mov eax,ds:0x1E66B34
+push 00
+push eax
+lea ecx,[esp + 0x10]
+mov eax,0x65FBE0
+call eax
+mov ecx,[esp + 0x8]
+mov edx,[ecx + 0x4]
+mov ecx,[edx + 0x14]
+mov eax,[ecx]
+mov edx,[eax + 0x10]
+call edx
+fmul dword ptr ds:0x16D2E4C
+fdiv dword ptr ds:0x1703B38
+fld1
+fcomp
+fnstsw ax
+test ah,05
+jnp WidescreenFOV
+fdiv st(1),st(0)
+WidescreenFOV:
+fstp st(0)
+lea ecx,[esp + 0x8]
+mov eax,0x65FC40
+call eax
+add esp,0x30",
+0x11AED8E,HookBehavior.Replace,HookParameter.Call)
 
 Patch "Disable FPS Limit" by "Skyth"
 WriteProtected<byte>(0xE7B580, 0xEB);
