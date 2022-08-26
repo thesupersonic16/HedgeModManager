@@ -58,13 +58,19 @@ if (*(byte*)(rsdkV3Flags + 0x1DC) == 1)
 if (*(long*)rsdkGlobals != 0)
 {
     // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-    if (*(byte*)(*(long*)rsdkGlobals + 0x447D08) == 1)
+    // Version 1.00: rsdkGlobals + 0x447D08
+    // Version 1.04: rsdkGlobals + 0x4C3508 (Thanks to RDC)
+    if (*(byte*)(*(long*)rsdkGlobals + 0x4C3508) == 1)
     {
         // HUD Update
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x447D20, 0x00);
+        // Version 1.00: rsdkGlobals + 0x447D20
+        // Version 1.04: rsdkGlobals + 0x4C34D4 (Thanks to RDC)
+        WriteProtected<byte>(*(long*)rsdkGlobals + 0x4C34D4, 0x00);
 
         // Coin Mode
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x447CD4, 0x00);
+        // Version 1.00: rsdkGlobals + 0x447CD4
+        // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
+        WriteProtected<byte>(*(long*)rsdkGlobals + 0x4C3520, 0x00);
     }
 }
 
@@ -122,12 +128,18 @@ if (*(byte*)(rsdkV3Flags + 0x1DC) == 3)
 if (*(long*)rsdkGlobals != 0)
 {
     // Check if game.playMode is set to BOOT_PLAYMODE_MIRRORING
-    if (*(byte*)(*(long*)rsdkGlobals + 0x447D08) == 3)
+    // Version 1.00: rsdkGlobals + 0x447D08
+    // Version 1.04: rsdkGlobals + 0x4C3508 (Thanks to RDC)
+    if (*(byte*)(*(long*)rsdkGlobals + 0x4C3508) == 3)
     {
         // HUD Update
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x447D20, 0x00);
+        // Version 1.00: rsdkGlobals + 0x447D20
+        // Version 1.04: rsdkGlobals + 0x4C34D4 (Thanks to RDC)
+        WriteProtected<byte>(*(long*)rsdkGlobals + 0x4C34D4, 0x00);
 
         // Coin Mode
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x447CD4, 0x00);
+        // Version 1.00: rsdkGlobals + 0x447CD4
+        // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
+        WriteProtected<byte>(*(long*)rsdkGlobals + 0x4C3520, 0x00);
     }
 }
