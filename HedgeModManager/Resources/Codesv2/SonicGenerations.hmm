@@ -1192,3 +1192,6 @@ Patch "Never Receive Boost From Rings" by "Hyper"
 
 Patch "Disable Color Correction" by "M&M"
 WriteProtected<byte>(0x1699F54, 0x00);
+
+Patch "Disable Controller Rumble" by "brianuuu"
+WriteProtected<byte>(0x9C7F56, 0xB8, 0x01, 0x00, 0x00, 0x00, 0xEB, 0x11, 0x90, 0x90)
