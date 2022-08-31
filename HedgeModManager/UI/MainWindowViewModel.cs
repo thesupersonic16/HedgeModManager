@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
+using HedgeModManager.Exceptions;
 using Newtonsoft.Json;
 using static HedgeModManager.Lang;
 
@@ -89,13 +90,36 @@ namespace HedgeModManager.UI
 
                     }
                     else
-                        ModsDB.InstallMod(file);
+                    {
+                        try
+                        {
+                            ModsDB.InstallMod(file);
+                        }
+                        catch (ModInstallException)
+                        {
+                            var box = new HedgeMessageBox(Localise("CommonUIError"), Localise("DialogUINoDecompressor"));
+                            box.AddButton(Localise("CommonUIClose"), () => box.Close());
+                            box.ShowDialog();
+                        }
+                    }
                 }
             }
             else
             {
                 GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.Drop(dropInfo);
             }
+        }
+
+        // NOTE: Loading values may not be needed as data may already be up to date
+        public void SaveProfileConfig(ModProfile profile, ModsDB modsDB)
+        {
+            foreach (var mod in modsDB.Mods)
+                mod.ExportConfig(profile);
+        }
+        public void LoadProfileConfig(ModProfile profile, ModsDB modsDB)
+        {
+            foreach (var mod in modsDB.Mods)
+                mod.ImportConfig(profile);
         }
     }
 }

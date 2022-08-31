@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using GameBananaAPI;
+using HedgeModManager.Exceptions;
 using HedgeModManager.Serialization;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
@@ -73,7 +74,7 @@ namespace HedgeModManager
         public void SetupFirstTime()
         {
             Directory.CreateDirectory(RootDirectory);
-            SaveDB();
+            SaveDBSync();
         }
 
         public void DetectMods()
@@ -125,7 +126,7 @@ namespace HedgeModManager
             List<ModInfo> newMods = null;
             newMods = CheckDepends(Mods, enabledMods);
             while (newMods != null)
-                newMods = CheckDepends(newMods, enabledMods);
+                newMods = CheckDepends(Mods, enabledMods);
 
             return report;
 
@@ -134,9 +135,6 @@ namespace HedgeModManager
                 List<ModInfo> result = null;
                 foreach (var mod in mods)
                 {
-                    if (newMods != null && newMods.Contains(mod))
-                        continue;
-
                     if (mod.Enabled)
                     {
                         DependencyReport.ErrorInfo info = null;
@@ -271,12 +269,7 @@ namespace HedgeModManager
             }
             if (!InstallModArchiveUsing7Zip(path, root))
                 if (!InstallModArchiveUsingWinRAR(path, root))
-                {
-                    var box = new HedgeMessageBox("ERROR", "Failed to install mods using 7-Zip and WinRAR!\n" +
-                        "Make sure you have either one installed on your system.");
-                    box.AddButton("  Close  ", () => box.Close());
-                    box.ShowDialog();
-                }
+                    throw new ModInstallException("Could not install mod, neither 7-Zip or WinRAR was found!");
         }
 
         public static void InstallModArchiveUsingZipFile(string path, string root)
@@ -300,41 +293,45 @@ namespace HedgeModManager
 
         public static bool InstallModArchiveUsing7Zip(string path, string root)
         {
-            // Gets 7-Zip's Registry Key
-            var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\7-Zip");
-            // If null then try get it from the 64-bit Registry
-            if (key == null)
-                key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
-                    .OpenSubKey("SOFTWARE\\7-Zip");
-            // Checks if 7-Zip is installed by checking if the key and path value exists
-            if (key != null && key.GetValue("Path") is string exePath)
+            string exePath = null;
+            // Check if file exists next to the main assembly
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "7z.exe")))
+                exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "7z.exe");
+            // Find the path from the registry
+            if (exePath == null)
             {
-                // Path to 7z.exe
+                var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\7-Zip");
+                if (key == null)
+                    key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
+                        .OpenSubKey("SOFTWARE\\7-Zip");
+                if (key != null)
+                    exePath = key.GetValue("Path") as string;
+            }
+            // Find 7z.exe from the PATH variable if still not found
+            exePath ??= Environment.GetEnvironmentVariable("PATH").Split(';').ToList()
+                .Where(s => File.Exists(Path.Combine(s, "7z.exe"))).FirstOrDefault();
+
+            // Checks if 7-Zip is installed
+            if (exePath != null)
+            {
                 string exe = Path.Combine(exePath, "7z.exe");
 
                 // Path to the install temp directory
                 string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
 
-                // Deletes the temp directory if it exists
                 if (Directory.Exists(tempDirectory))
                     DeleteReadOnlyDirectory(tempDirectory);
-
-                // Creates the temp directory
                 Directory.CreateDirectory(tempDirectory);
 
                 // Extracts the archive to the temp directory
                 var psi = new ProcessStartInfo(exe, $"x \"{path}\" -o\"{tempDirectory}\" -y");
                 Process.Start(psi).WaitForExit(1000 * 60 * 5);
 
-                // Search and install mods from the temp directory
                 InstallModDirectory(tempDirectory, root);
 
-                // Deletes the temp directory with all of its contents
                 DeleteReadOnlyDirectory(tempDirectory);
-                key.Close();
                 return true;
             }
-            // 7-Zip is not installed
             return false;
         }
 
@@ -447,13 +444,14 @@ namespace HedgeModManager
             }catch{}
         }
 
-        public void CreateMod(ModInfo mod, string rootDir = "disk", bool openFolder = false)
+        public void CreateMod(ModInfo mod, string[] folders, bool openFolder)
         {
             string path = string.Concat(mod.Title.Split(Path.GetInvalidFileNameChars()));
             path = Path.Combine(RootDirectory, path);
             Directory.CreateDirectory(path);
-            if (!string.IsNullOrEmpty(rootDir))
-                Directory.CreateDirectory(Path.Combine(path, rootDir));
+            foreach (string folder in folders)
+                if (!string.IsNullOrEmpty(folder))
+                    Directory.CreateDirectory(Path.Combine(path, folder));
             mod.RootDirectory = path;
             mod.Save();
 

@@ -72,10 +72,12 @@ namespace HedgeModManager
         public string AuthorURL { get; set; } = string.Empty;
 
         // Main
+        [PropertyTools.DataAnnotations.DisplayName("Update Server")]
         [PropertyTools.DataAnnotations.Category("Main")]
         [IniField("Main")]
         public string UpdateServer { get; set; }
 
+        [PropertyTools.DataAnnotations.DisplayName("Save File")]
         [IniField("Main")]
         public string SaveFile { get; set; }
 
@@ -103,6 +105,7 @@ namespace HedgeModManager
         [IniField("Main")]
         public string CodeFile { get; set; } = string.Empty;
 
+        [PropertyTools.DataAnnotations.DisplayName("Config Schema File")]
         [IniField("Main")]
         public string ConfigSchemaFile { get; set; } = string.Empty;
 
@@ -112,6 +115,9 @@ namespace HedgeModManager
 
         [PropertyTools.DataAnnotations.Browsable(false)]
         public ModFileTree FileTree { get; set; }
+
+        [PropertyTools.DataAnnotations.Browsable(false)]
+        public ModUpdateFetcher.Status UpdateStatus { get; set; }
 
         public ModInfo()
         {
@@ -225,6 +231,28 @@ namespace HedgeModManager
             }
 
             return valid;
+        }
+
+        public void ExportConfig(ModProfile profile)
+        {
+            if (ConfigSchema == null)
+                return;
+            string fileName = Path.Combine(RootDirectory, "profiles", profile.FileName);
+            if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+            ConfigSchema.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
+            ConfigSchema.SaveIni(fileName);
+        }
+
+        public void ImportConfig(ModProfile profile)
+        {
+            string fileName = Path.Combine(RootDirectory, "profiles", profile.FileName);
+            if (ConfigSchema == null || !File.Exists(fileName))
+                return;
+
+            ConfigSchema.LoadValuesFromIni(fileName);
+            ConfigSchema.SaveIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
         }
 
         public void FixIncludeDirectories()

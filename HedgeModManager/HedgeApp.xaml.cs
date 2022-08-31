@@ -39,6 +39,8 @@ using HedgeModManager.Themes;
 using HedgeModManager.UI.Models;
 using HedgeModManager.Updates;
 using System.Security;
+using static HedgeModManager.Lang;
+using Microsoft.Win32;
 
 namespace HedgeModManager
 {
@@ -66,6 +68,7 @@ namespace HedgeModManager
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
+        public static bool AprilFools, IizukaBirthday, IsLinux = false;
 
         public static HttpClient HttpClient { get; private set; }
         public static string UserAgent { get; }
@@ -107,6 +110,18 @@ namespace HedgeModManager
 
             Singleton.SetInstance(HttpClient);
             Singleton.SetInstance<IWindowService>(new WindowServiceImplWindows());
+
+            AprilFools      = DateTime.Now.Day == 1 && DateTime.Now.Month == 4;
+            IizukaBirthday  = DateTime.Now.Day == 16 && DateTime.Now.Month == 3;
+
+            // Check for Wine, assuming Linux
+            RegistryKey key = null;
+            if ((key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).OpenSubKey("SOFTWARE\\Wine")) != null)
+            {
+                key.Close();
+                IsLinux = true;
+            }
+
 
             if (args.Length > 2 && string.Compare(args[0], "-update", StringComparison.OrdinalIgnoreCase) >= 0)
             {
@@ -154,6 +169,14 @@ namespace HedgeModManager
                 ExceptionWindow.UnhandledExceptionEventHandler(e.ExceptionObject as Exception, e.IsTerminating);
             };
 #endif
+
+            SplashScreen splashScreen = null;
+            if (AprilFools || IizukaBirthday)
+            {
+                splashScreen = new ("Resources/Graphics/splash.png");
+                splashScreen.Show(false, true);
+            }
+
             // Gets the embeded version
             CPKREDIRVersion = GetCPKREDIRFileVersion(true);
             RegistryConfig.Load();
@@ -161,6 +184,7 @@ namespace HedgeModManager
 
             Steam.Init();
             InstallGBHandlers();
+            InstallOneClickHandler();
             SetupLanguages();
             LoadLanguageFolder();
             SetupThemes();
@@ -195,32 +219,15 @@ namespace HedgeModManager
                 }
             }
 
-            if (CurrentGame == Games.Unknown)
-            {
-                var game = GameInstalls.FirstOrDefault();
-                SelectGameInstall(game);
-                StartDirectory = game?.GameDirectory;
-            }
-
-            if (CurrentGame == Games.Unknown)
-            {
-                var dialog = new HedgeMessageBox($"No Games Found!", 
-                    "Please make sure your games are properly installed on Steam/Epic Games or\nrun Hedge Mod Manager inside of any of the supported game's directory.");
-
-                // Seems to fix the crash.
-                application.MainWindow = dialog;
-                
-                dialog.AddButton("Exit", () => dialog.Close());
-
-                dialog.ShowDialog();
-                return;
-            }
-
 #endif
 
-            if (string.IsNullOrEmpty(ModsDbPath))
+            if (GameInstalls.Count == 0)
+                GameInstalls.Add(new GameInstall(Games.Unknown, null, GameLauncher.None));
+
+            if (string.IsNullOrEmpty(ModsDbPath) && !string.IsNullOrEmpty(StartDirectory))
                 ModsDbPath = Path.Combine(StartDirectory, "Mods");
-            ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
+            if (!string.IsNullOrEmpty(StartDirectory))
+                ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
 
             if (args.Length > 0)
             {
@@ -320,10 +327,10 @@ namespace HedgeModManager
             }
             catch { }
 
-            if (DateTime.Now.Day == 1 && DateTime.Now.Month == 4)
+            if (AprilFools)
             {
                 var random = new Random();
-                if (random.Next(10) < 4)
+                if (random.Next(10) == 0)
                 {
                     var langDict = new ResourceDictionary { Source = new Uri("Languages/en-UW.xaml", UriKind.Relative) };
                     Current.Resources.MergedDictionaries.RemoveAt(3);
@@ -333,15 +340,65 @@ namespace HedgeModManager
 
             CodeProvider.TryLoadRoslyn();
 
+            if (splashScreen != null)
+                splashScreen.Close(TimeSpan.FromSeconds(0.5));
+
             application.Run();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            var args = ParseArguments(e.Args);
+
             // GB Integration shows UI, and therefore should be done *after* Application.Run
             if (e.Args.Length > 1 && e.Args[0].ToLowerInvariant() == "-gb")
             {
                 GBAPI.ParseCommandLine(e.Args[1]);
+                Shutdown();
+            }
+
+            // URL command
+            if (e.Args.Length >= 1 && e.Args[0].ToLowerInvariant().StartsWith("hedgemm://"))
+            {
+                string arg = e.Args[0].ToLowerInvariant();
+                if (arg.StartsWith("hedgemm://install/"))
+                {
+                    string url = arg.Substring("hedgemm://install/".Length);
+                    new ModInstallWindow(url).ShowDialog();
+                }
+                Shutdown();
+            }
+
+            // Set selected game
+            if (args.Any(t => t.Key == "-game" && t.Value != null))
+            {
+                SelectGameInstall(GameInstalls.FirstOrDefault(
+                    t => t.BaseGame.GameName.ToLowerInvariant() == args["-game"].ToLowerInvariant()));
+            }
+
+            // Set selected profile
+            // TODO: Add a check to see if the profile exists
+            // TODO: Handle profile configs
+            if (args.Any(t => t.Key == "-profile" && t.Value != null))
+            {
+                Config.ModProfile = args["-profile"];
+            }
+
+            // Saves the configuration from other start options
+            if (args.Any(t => t.Key == "-save"))
+            {
+                var window = MainWindow as MainWindow;
+                
+                // Profiles
+                window.RefreshProfiles();
+                Config.ModsDbIni = Path.Combine(ModsDbPath, window.SelectedModProfile.ModDBPath);
+                Config.Save(ConfigPath);
+            }
+
+            // Launches the selected game
+            if (args.Any(t => t.Key == "-launch"))
+            {
+                CurrentGameInstall?.StartGame(Config.UseLauncher);
                 Shutdown();
             }
 
@@ -374,6 +431,20 @@ namespace HedgeModManager
             return new Uri(@"pack://application:,,,/" + Assembly.GetExecutingAssembly().GetName().Name + ";component/" + path, UriKind.Absolute);
         }
 
+        public static Dictionary<string, string> ParseArguments(string[] args)
+        {
+            var dict = new Dictionary<string, string>();
+
+            for (int i = 0; i < args.Length; ++i)
+            {
+                if (args[i].StartsWith("-") && i + 1 != args.Length && !args[i + 1].StartsWith("-"))
+                    dict[args[i]] = args[++i];
+                else
+                    dict[args[i]] = null;
+            }
+            return dict;
+        }
+
         public static GameInstall FindAndSetLocalGame()
         {
             foreach (var game in Games.GetSupportedGames())
@@ -383,16 +454,26 @@ namespace HedgeModManager
                     var steamGame = GameInstalls.FirstOrDefault(x => x.BaseGame == game);
                     if (steamGame == null)
                     {
-                        steamGame = new GameInstall(game, StartDirectory);
+                        steamGame = new GameInstall(game, StartDirectory, GameLauncher.None);
                         GameInstalls.Add(steamGame);
                     }
                     CurrentGame = game;
                     CurrentGameInstall = steamGame;
-                    RegistryConfig.LastGameDirectory = StartDirectory;
-                    RegistryConfig.Save();
-                    ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
-                    Config = new CPKREDIRConfig(ConfigPath);
-                    ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni));
+                    try
+                    {
+                        RegistryConfig.LastGameDirectory = StartDirectory;
+                        RegistryConfig.Save();
+                        ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
+                        Config = new CPKREDIRConfig(ConfigPath);
+                        ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni));
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        Current.MainWindow = CreateOKMessageBox(Localise("CommonUIError"),
+                            string.Format(Localise("DialogUINoGameDirAccess"), StartDirectory));
+                        Current.MainWindow.ShowDialog();
+                        Environment.Exit(-1);
+                    }
                     return steamGame;
                 }
             }
@@ -614,10 +695,22 @@ namespace HedgeModManager
                     RegistryConfig.Save();
                 }
             }
-
-            ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
-            Config = new CPKREDIRConfig(ConfigPath);
-            ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
+            try
+            {
+                if (HedgeApp.CurrentGame != Games.Unknown)
+                {
+                    ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
+                    Config = new CPKREDIRConfig(ConfigPath);
+                    ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Current.MainWindow = CreateOKMessageBox(Localise("CommonUIError"),
+                    string.Format(Localise("DialogUINoGameDirAccess"), StartDirectory));
+                Current.MainWindow.ShowDialog();
+                Environment.Exit(-1);
+            }
         }
 
         public static void InstallGBHandlers()
@@ -892,6 +985,27 @@ namespace HedgeModManager
 
             Process.Start(path, $"-update \"{AppPath}\" {Process.GetCurrentProcess().Id}");
             Current.Shutdown();
+        }
+
+        /// <summary>
+        /// Installs the one-click install handler
+        /// </summary>
+        public static bool InstallOneClickHandler()
+        {
+            try
+            {
+                var reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\hedgemm");
+                reg.SetValue("", $"URL:HedgeModManager");
+                reg.SetValue("URL Protocol", "");
+                reg = reg.CreateSubKey("shell\\open\\command");
+                reg.SetValue("", $"\"{HedgeApp.AppPath}\" \"%1\"");
+                reg.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public static string GetCPKREDIRVersionString()

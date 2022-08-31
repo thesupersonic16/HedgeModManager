@@ -267,6 +267,24 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicOrigins.hmm.
+        /// </summary>
+        internal static string URL_HML_CODES {
+            get {
+                return ResourceManager.GetString("URL_HML_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HiteModLoader.dll.
+        /// </summary>
+        internal static string URL_HML_DL {
+            get {
+                return ResourceManager.GetString("URL_HML_DL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://nightly.link/thesupersonic16/HedgeModManager/suites/{0}/artifacts/{1}.
         /// </summary>
         internal static string URL_HMM_DEV {

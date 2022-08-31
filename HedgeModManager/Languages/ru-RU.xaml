@@ -147,7 +147,6 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Не найдено обновлений к кодам</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager не смог найти папки с модами.&#x0a;Вы хотите создать папку с модами?</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Вы действительно хотите удалить "{0}"?&#x0a;Это действие нельзя будет отменить!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} обновлен до последней версии.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Доступна новая версия {0}! ({1})</system:String>

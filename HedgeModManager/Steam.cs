@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,15 +17,33 @@ namespace HedgeModManager
 
         public static void Init()
         {
-            // Gets Steam's Registry Key
-            var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Valve\\Steam");
-            // If null then try get it from the 64-bit Registry
-            if (key == null)
-                key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64)
+            // Not sure about OSX
+            // Assume Steam is located in the home folder for Linux
+            if (HedgeApp.IsLinux)
+            {
+                string home = Environment.GetEnvironmentVariable("WINEHOMEDIR").Replace("\\??\\", "");
+                SteamLocation = Path.Combine(home, ".steam/steam");
+            }
+
+            var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
                     .OpenSubKey("SOFTWARE\\Wow6432Node\\Valve\\Steam");
-            // Checks if the Key and Value exists.
-            if (key != null && key.GetValue("InstallPath") is string steamPath)
-                SteamLocation = steamPath;
+
+            if (key == null)
+            {
+                key = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default)
+                    .OpenSubKey("Software\\Valve\\Steam");
+                if (key != null && key.GetValue("SteamPath") is string steamPath)
+                    SteamLocation = steamPath;
+            }
+            else
+            {
+                if (key == null)
+                    key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
+                    .OpenSubKey("SOFTWARE\\Valve\\Steam");
+
+                if (key != null && key.GetValue("InstallPath") is string steamPath)
+                    SteamLocation = steamPath;
+            }
         }
 
         public static string GetCachedProfileImageURLFromSID64(string SID64)
@@ -76,7 +95,7 @@ namespace HedgeModManager
                         var fullPath = Path.Combine(path, game.GamePath);
                         if (File.Exists(fullPath))
                         {
-                            games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath)));
+                            games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.Steam));
                         }
                     }
                 }

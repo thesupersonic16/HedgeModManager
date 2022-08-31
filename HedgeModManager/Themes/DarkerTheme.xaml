@@ -16,7 +16,7 @@
     <SolidColorBrush x:Key="HMM.Window.BackgroundBrush2" Color="#FF202020"/>
     <SolidColorBrush x:Key="HMM.Window.ForegroundBrush" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="HMM.Window.BorderBrush" Color="#FF3F3F46"/>
-    <SolidColorBrush x:Key="HMM.Button.BackgroundBrush" Color="#FF1C1C1C"/>
+    <SolidColorBrush x:Key="HMM.Button.BackgroundBrush" Color="#FF202020"/>
     <SolidColorBrush x:Key="HMM.Button.ForegroundBrush" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="HMM.Window.LightForegroundBrush" Color="LightGray"/>
     <Color           x:Key="HMM.Button.HoverColor"   A="255" R="45" G="45" B="47"/>
@@ -30,6 +30,9 @@
     <SolidColorBrush x:Key="HMM.Menu.DisabledColor" Color="#FF323232"/>
     <SolidColorBrush x:Key="HMM.Menu.HoverColor" Color="#FF575757"/>
     <SolidColorBrush x:Key="HMM.Menu.DisabledTextColor" Color="#FFC9C9C9"/>
+
+    <SolidColorBrush  x:Key="HMM.Common.Red" Color="#E00000"/>
+    <SolidColorBrush  x:Key="HMM.Common.Green" Color="#008B00"/>
 
     <SolidColorBrush  x:Key="HMM.PressedBrush" Color="{DynamicResource HMM.Button.PressedColor}"/>
     <DropShadowEffect x:Key="HoverEffect" BlurRadius="5" Color="#FFA0A0A0" Opacity="0" Direction="0" ShadowDepth="0"/>

@@ -50,7 +50,7 @@ namespace HedgeModManager
             LastGameDirectory = (string)key.GetValue("LastGame", string.Empty);
             ExtraGameDirectories = (string)key.GetValue("ExtraGameDirectories", string.Empty);
             UILanguage = (string)key.GetValue("UILanguage", HedgeApp.PCCulture);
-            UITheme = (string)key.GetValue("UITheme", useLightMode ? "LightTheme" : "DarkTheme");
+            UITheme = (string)key.GetValue("UITheme", useLightMode ? "LightTheme" : "DarkerTheme");
             key.Close();
         }
     }

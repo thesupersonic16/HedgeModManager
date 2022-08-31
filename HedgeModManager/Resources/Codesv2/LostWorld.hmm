@@ -17,6 +17,9 @@ WriteAsmHook
 	"mov DWORD PTR [ebp+8], 1"
 )
 
+Patch "16:10 In-Game Resolution" by "ĐeäTh"
+WriteProtected<int>(ASLR(0xD56D30), 0x3FCCCCCD)
+
 Patch "21:9 (2560x1080) In-Game Resolution" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x4017B426)
 
@@ -466,3 +469,58 @@ WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 5");
 
 Patch "Disable Wisp Hints" by "Sajid"
 WriteNop(ASLR(0x0091AAF8), 6)
+
+Patch "Fix Rigid Bodies Falling Through Collision" by "ĐeäTh & Darío"
+static int p_updateBroadphaseAndResetCollisionInformationOfWarpedBody = (int)ASLR(0x00AED500);
+static int p_setLinearVelocity = (int)ASLR(0x00B88220);
+
+WriteAsmHook
+(
+    $@"mov eax, {p_setLinearVelocity}
+	call eax
+	mov edx, [esi+14h]
+	mov edx, [edx+10h]
+	push edx
+	mov eax, {p_updateBroadphaseAndResetCollisionInformationOfWarpedBody}
+	call eax
+	add esp, 4",
+    ASLR(0x004B974F), HookBehavior.Replace
+)
+
+Patch "Fix Depth Effects On Intel GPUs" by "Skyth"
+WriteAsmHook(ASLR(0xC2B233), HookBehavior.Replace, @"
+mov eax, dword ptr [ebp + 8]
+
+loop:
+cmp dword ptr [eax], 0xFFFF
+jz break
+
+cmp dword ptr [eax], 0x3B7F0001
+jnz continue
+cmp dword ptr [eax + 4], 0x377F0001
+jnz continue
+cmp dword ptr [eax + 8], 0x3F7F0001
+jnz continue
+
+mov dword ptr [eax], 0x3F800000
+mov dword ptr [eax + 4], 0
+mov dword ptr [eax + 8], 0
+jmp break
+
+continue:
+add eax, 4
+jmp loop
+
+break:
+mov eax, [ecx + 0x64]
+mov ecx, [eax]
+");
+
+Patch "Fix Pull Switch Grip Height" by "ĐeäTh"
+WriteProtected<float>(ASLR(0x00DF2D14), -10.5f)
+
+Patch "No Instant Death Bomb Carts" by "ĐeäTh"
+WriteNop(ASLR(0x007D82A2), 3);
+
+Patch "Infinite Bounce Attacks" by "ĐeäTh"
+WriteNop(ASLR(0x008CA177), 4);

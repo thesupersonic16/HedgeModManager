@@ -50,8 +50,10 @@
     <Resource Include="Resources\Graphics\Games\SonicForces.png" />
     <Resource Include="Resources\Graphics\Games\SonicGenerations.png" />
     <Resource Include="Resources\Graphics\Games\SonicLostWorld.png" />
+    <Resource Include="Resources\Graphics\Games\SonicOrigins.png" />
     <Resource Include="Resources\Graphics\Games\Tokyo2020.png" />
     <Resource Include="Resources\Graphics\icon256.png" />
+    <Resource Include="Resources\Graphics\splash.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -112,7 +114,9 @@
     <None Remove="Resources\Graphics\Games\SonicForces.png" />
     <None Remove="Resources\Graphics\Games\SonicGenerations.png" />
     <None Remove="Resources\Graphics\Games\SonicLostWorld.png" />
+    <None Remove="Resources\Graphics\Games\SonicOrigins.png" />
     <None Remove="Resources\Graphics\Games\Tokyo2020.png" />
+    <None Remove="Resources\Graphics\splash.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

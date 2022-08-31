@@ -11,29 +11,6 @@ using Markdig;
 
 namespace HedgeModManager
 {
-    [ValueConversion(typeof(string), typeof(string))]
-    public class ModUpdateStatusConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var server = (string)value;
-            if (string.IsNullOrEmpty(server))
-                return Lang.Localise("CommonUINo");
-
-            if (Singleton.GetInstance<NetworkConfig>() == null)
-                return Lang.Localise("CommonUIYes");
-
-            return Singleton.GetInstance<NetworkConfig>().IsServerBlocked(server)
-                ? Lang.Localise("CommonUIBlocked")
-                : Lang.Localise("CommonUIYes");
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
-    }
-
     [ValueConversion(typeof(bool), typeof(string))]
     public class BoolToYesNoConverter : IValueConverter
     {
@@ -88,6 +65,10 @@ namespace HedgeModManager
         
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            // HTML rendering currently does not work on Linux
+            if (HedgeApp.IsLinux)
+                return string.Empty;
+
             string md = value?.ToString();
             if (string.IsNullOrEmpty(md))
                 return string.Empty;
@@ -143,6 +124,47 @@ namespace HedgeModManager
         }
     }
 
+    [ValueConversion(typeof(bool), typeof(Visibility))]
+    public class BoolToVisibilityConverterLinux : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is bool val) || !HedgeApp.IsLinux)
+                return Visibility.Collapsed;
+
+            return val ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is Visibility vis))
+                throw new ArgumentException("Invalid argument");
+
+            return vis == Visibility.Visible;
+        }
+    }
+
+    [ValueConversion(typeof(bool), typeof(Visibility))]
+    public class BoolToVisibilityConverterWin : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is bool val) || HedgeApp.IsLinux)
+                return Visibility.Collapsed;
+
+            return val ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is Visibility vis))
+                throw new ArgumentException("Invalid argument");
+
+            return vis == Visibility.Visible;
+        }
+    }
+
+
     [ValueConversion(typeof(object), typeof(bool))]
     public class NullToBoolConverter : IValueConverter
     {
@@ -197,4 +219,84 @@ namespace HedgeModManager
             throw new NotSupportedException();
         }
     }
+
+    [ValueConversion(typeof(ModInfo), typeof(Brush))]
+    public class ModUpdateToBrushConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var brush = Application.Current.TryFindResource("HMM.Button.ForegroundBrush") as Brush;
+            var brushDisabled = Application.Current.TryFindResource("HMM.Menu.DisabledColor") as Brush;
+            var brushBlocked = Application.Current.TryFindResource("HMM.Common.Red") as Brush;
+            var brushCompleted = Application.Current.TryFindResource("HMM.Common.Green") as Brush;
+            var brushWorking = Application.Current.TryFindResource("HMM.Window.AccentBrush") as Brush;
+
+            var modInfo = values[0] as ModInfo;
+            var updateStatus = modInfo.UpdateStatus;
+            if (modInfo == null)
+                return brushDisabled;
+
+            if (updateStatus != Updates.ModUpdateFetcher.Status.NoUpdates)
+            {
+                switch (updateStatus)
+                {
+                    case Updates.ModUpdateFetcher.Status.BeginCheck:
+                        return brushWorking;
+                    case Updates.ModUpdateFetcher.Status.Failed:
+                    case Updates.ModUpdateFetcher.Status.Blocked:
+                        return brushBlocked;
+                    case Updates.ModUpdateFetcher.Status.Success:
+                    case Updates.ModUpdateFetcher.Status.UpToDate:
+                        return brushCompleted;
+                    default:
+                        break;
+                }
+            }    
+
+            var server = modInfo.UpdateServer;
+
+            if (string.IsNullOrEmpty(server))
+                return brushDisabled;
+
+            if (Singleton.GetInstance<NetworkConfig>() != null &&
+                Singleton.GetInstance<NetworkConfig>().IsServerBlocked(server))
+                brush = brushBlocked;
+
+            return brush;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    [ValueConversion(typeof(ModInfo), typeof(string))]
+    public class ModUpdateToDetailsConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var modInfo = values[0] as ModInfo;
+            if (modInfo == null)
+                return Lang.Localise("ModsUIFeatureUpdateDisable");
+
+            var server = modInfo.UpdateServer;
+
+            if (string.IsNullOrEmpty(server))
+                return Lang.Localise("ModsUIFeatureUpdateDisable");
+            if (modInfo.UpdateStatus == Updates.ModUpdateFetcher.Status.Failed)
+                return Lang.Localise("ModsUIFeatureUpdateFailed");
+
+            if (Singleton.GetInstance<NetworkConfig>() != null &&
+                Singleton.GetInstance<NetworkConfig>().IsServerBlocked(server))
+                return Lang.Localise("ModsUIFeatureUpdateBlocked");
+
+            return Lang.Localise("ModsUIFeatureUpdate");
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

@@ -3,8 +3,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:system="clr-namespace:System;assembly=mscorlib">
 
-    <!-- uwu'd with https://github.com/Daniel-Liu-c0deb0t/uwu -->
-
     <!-- Common UI Strings -->
     <system:String x:Key="CommonUIClose"   >cwose</system:String>
     <system:String x:Key="CommonUIOK"      >ok</system:String>
@@ -38,7 +36,7 @@
     <system:String x:Key="ModsUIName"           >name</system:String>
     <system:String x:Key="ModsUIVersion"        >vewsion</system:String>
     <system:String x:Key="ModsUIAuthor"         >authow</system:String>
-    <system:String x:Key="ModsUIFeatures"       >Features</system:String>
+    <system:String x:Key="ModsUIFeatures"       >featuwes</system:String>
     <system:String x:Key="ModsUIModDescription" >descwiption</system:String>
     <system:String x:Key="ModsUIModFavorite"    >favouwite</system:String>
     <system:String x:Key="ModsUIModConfigure"   >configuwe m-mod</system:String>
@@ -51,6 +49,8 @@
     <system:String x:Key="ModsUIFeatureConfigDisable">this mod does n-nyot suppowt configuwation. (U ᵕ U❁)</system:String>
     <system:String x:Key="ModsUIFeatureUpdate"       >this m-mod suppowts updating.</system:String>
     <system:String x:Key="ModsUIFeatureUpdateDisable">this mod d-does nyot suppowt updating. (˘ω˘)</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateFailed" >This mod has failed to check for updates.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateBlocked">This mod has been blocked from checking for updates.</system:String>
     <system:String x:Key="ModsUIFeatureSave"         >this mod utiwises save w-wediwection. o.O</system:String>
     <system:String x:Key="ModsUIFeatureSaveDisable"  >this mod does nyot s-suppowt save w-wediwection. o.O</system:String>
     <system:String x:Key="ModsUIFeatureCode"         >this m-mod contains custom code. (///ˬ///✿)</system:String>
@@ -74,9 +74,11 @@
     <system:String x:Key="SettingsUIInstallLoader"  >instaww mod woadew</system:String>
     <system:String x:Key="SettingsUIUninstallLoader">uninstaww m-mod w-woadew</system:String>
     <system:String x:Key="SettingsUIOpenMods"       >open m-mods diwectowy</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >open game diwectowy</system:String>
     <system:String x:Key="SettingsUIEnableML"       >enabwe mod woadew</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >enabwe d-debug consowe</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >enabwe save fiwe wediwection</system:String>
+    <system:String x:Key="SettingsUIUseLauncher"    >use game w-waunchew</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >woadews:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >game:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >pwofiwe:</system:String>
@@ -110,16 +112,17 @@
     <system:String x:Key="MainUIMissingDependsHeader" >faiwed t-to wesowve mod dependencies</system:String>
     <system:String x:Key="MainUIMissingDepends"       >the f-fowwowing mods have missing d-dependencies:</system:String>
     <system:String x:Key="MainUIMissingDependsResolve">wesowve g-gb mods</system:String>
-    <system:String x:Key="MainUIResolvable" xml:space="preserve">one o-ow mowe dependencies can be automaticawwy wesowved&#x0a;fwom gamebanana by cwicking "wesowve g-gb mods". UwU</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">one o-ow mowe dependencies can be automaticawwy wesowved&#x0a;fwom gamebanana by cwicking &quot;wesowve g-gb mods&quot;. UwU</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >pwease sewect an o-option!</system:String>
 
     <!-- AboutWindow UI Strings -->
-    <system:String x:Key="AboutWindowUITitle"  >about h-hedge mod m-managew</system:String>
-    <system:String x:Key="AboutWindowUILine1"  >a pwogwam d-designed to h-hewp peopwe easiwy w-woad hedgehog engine mods.</system:String>
-    <system:String x:Key="AboutWindowUILine2"  >wequiwes a-a wegawwy owned vewsion o-of one of the suppowted g-games.</system:String>
-    <system:String x:Key="AboutWindowUICredits">cwedits</system:String>
+    <system:String x:Key="AboutWindowUITitle"      >about h-hedge mod m-managew</system:String>
+    <system:String x:Key="AboutWindowUILine1"      >a pwogwam d-designed to h-hewp peopwe easiwy w-woad hedgehog engine mods.</system:String>
+    <system:String x:Key="AboutWindowUILine2"      >wequiwes a-a wegawwy owned vewsion o-of one of the suppowted g-games.</system:String>
+    <system:String x:Key="AboutWindowUICredits"    >cwedits</system:String>
+    <system:String x:Key="AboutWindowUITranslators">twanswatows</system:String>
 
     <!-- ProfileWindow UI Strings -->
     <system:String x:Key="ProfileWindowUITitle"      >manage p-pwofiwes</system:String>
@@ -169,11 +172,12 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >no c-code updates found</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">hedge m-mod managew did nyot detect a-any mods fowdew.&#x0a;wouwd y-you wike cweate a mods fowdew?</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">awe you suwe you want to dewete &quot;{0}&quot;?&#x0a;this a-action cannot b-be undone!</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} is awweady u-up to date.</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate">a nyewew vewsion of {0} avaiwabwe! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">h-hedge mod managew couwd nyot a-access the game diwectowy.&#x0a;pwease e-ensuwe the usews gwoup h-has &quot;wwite&quot; set to awwow on the diwectowy b-bewow and aww of its fiwes a-and fowdews.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >awe you suwe you want to dewete &quot;{0}&quot;?&#x0a;this a-action cannot b-be undone!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} is awweady u-up to date.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >a nyewew vewsion of {0} avaiwabwe! ({1})</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">awe you suwe you want to cancew updating?&#x0a;this may cowwupt {0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >c-couwd n-nyot find 7-zip ow winwaw!&#x0a;this is wequiwed to extwact the mod data&#x0a;&#x0a;pwease make s-suwe you have eithew one instawwed on youw system. -.-</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >compweted</system:String>
@@ -187,6 +191,7 @@
     <!-- Mod Description UI Strings -->
     <system:String x:Key="ModDescriptionUIAbout">about {0}</system:String>
     <system:String x:Key="ModDescriptionUIMadeBy">made by</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">Made on</system:String>
     <system:String x:Key="ModDescriptionUIDate">on</system:String>
 
     <!-- Mod Downloader Strings -->

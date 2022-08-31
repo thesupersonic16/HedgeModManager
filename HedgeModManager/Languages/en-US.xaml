@@ -49,6 +49,8 @@
     <system:String x:Key="ModsUIFeatureConfigDisable">This mod does not support configuration.</system:String>
     <system:String x:Key="ModsUIFeatureUpdate"       >This mod supports updating.</system:String>
     <system:String x:Key="ModsUIFeatureUpdateDisable">This mod does not support updating.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateFailed" >This mod has failed to check for updates.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateBlocked">This mod has been blocked from checking for updates.</system:String>
     <system:String x:Key="ModsUIFeatureSave"         >This mod utilizes save redirection.</system:String>
     <system:String x:Key="ModsUIFeatureSaveDisable"  >This mod does not support save redirection.</system:String>
     <system:String x:Key="ModsUIFeatureCode"         >This mod contains custom code.</system:String>
@@ -72,9 +74,11 @@
     <system:String x:Key="SettingsUIInstallLoader"  >Install Mod Loader</system:String>
     <system:String x:Key="SettingsUIUninstallLoader">Uninstall Mod Loader</system:String>
     <system:String x:Key="SettingsUIOpenMods"       >Open Mods Directory</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >Open Game Directory</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Enable mod loader</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Enable debug console</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Enable save file redirection</system:String>
+    <system:String x:Key="SettingsUIUseLauncher"    >Use game launcher</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Loaders:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Game:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Profile:</system:String>
@@ -95,29 +99,30 @@
     <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">You are about to change to the Development channel. This channel may contain untested features and bugs.&#x0a;&#x0a;Are you sure you want to continue? Hedge Mod Manager will need to restart to change channels.</system:String>
 
     <!-- MainWindow UI Strings -->
-    <system:String x:Key="MainUIInstallFormHeader"   >Install a mod by...</system:String>
-    <system:String x:Key="MainUIInstallFormOptionDir">Installing from a folder</system:String>
-    <system:String x:Key="MainUIInstallFormOptionArc">Installing from an archive</system:String>
-    <system:String x:Key="MainUIInstallFormOptionNew">Making one (for developers!)</system:String>
-    <system:String x:Key="MainUIMissingLoaderHeader" >Mod Loader Not Yet Installed!</system:String>
+    <system:String x:Key="MainUIInstallFormHeader"    >Install a mod by...</system:String>
+    <system:String x:Key="MainUIInstallFormOptionDir" >Installing from a folder</system:String>
+    <system:String x:Key="MainUIInstallFormOptionArc" >Installing from an archive</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew" >Making one (for developers!)</system:String>
+    <system:String x:Key="MainUIMissingLoaderHeader"  >Mod Loader Not Yet Installed!</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">In order for {0} to start loading mods, the mod loader needs to be installed.&#x0a;Would you like to install it now?</system:String>
-    <system:String x:Key="MainUISelectModsDBTitle"   >Select where to load mods from...</system:String>
-    <system:String x:Key="MainUIRuntimeMissingTitle" >Missing Runtime Detected!</system:String>
+    <system:String x:Key="MainUISelectModsDBTitle"    >Select where to load mods from...</system:String>
+    <system:String x:Key="MainUIRuntimeMissingTitle"  >Missing Runtime Detected!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requires {1} to be installed for mods &#x0a;to function properly, would you like HMM to install this runtime?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">One or more enabled mods require save file redirection to work properly. Enable this feature?&#x0a;Click no only if you know what you are doing.</system:String>
-    <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Failed to resolve mod dependencies</system:String>
-    <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >The following mods have missing dependencies:</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" >Failed to resolve mod dependencies</system:String>
+    <system:String x:Key="MainUIMissingDepends"       >The following mods have missing dependencies:</system:String>
     <system:String x:Key="MainUIMissingDependsResolve">Resolve GB Mods</system:String>
-    <system:String x:Key="MainUIResolvable" xml:space="preserve">One or more dependencies can be automatically resolved&#x0a;from GameBanana by clicking "Resolve GB Mods".</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">One or more dependencies can be automatically resolved&#x0a;from GameBanana by clicking &quot;Resolve GB Mods&quot;.</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Please select an option!</system:String>
 
     <!-- AboutWindow UI Strings -->
-    <system:String x:Key="AboutWindowUITitle"  >About Hedge Mod Manager</system:String>
-    <system:String x:Key="AboutWindowUILine1"  >A program designed to help people easily load Hedgehog Engine mods.</system:String>
-    <system:String x:Key="AboutWindowUILine2"  >Requires a legally owned version of one of the supported games.</system:String>
-    <system:String x:Key="AboutWindowUICredits">Credits</system:String>
+    <system:String x:Key="AboutWindowUITitle"      >About Hedge Mod Manager</system:String>
+    <system:String x:Key="AboutWindowUILine1"      >A program designed to help people easily load Hedgehog Engine mods.</system:String>
+    <system:String x:Key="AboutWindowUILine2"      >Requires a legally owned version of one of the supported games.</system:String>
+    <system:String x:Key="AboutWindowUICredits"    >Credits</system:String>
+    <system:String x:Key="AboutWindowUITranslators">Translators</system:String>
 
     <!-- ProfileWindow UI Strings -->
     <system:String x:Key="ProfileWindowUITitle"      >Manage Profiles</system:String>
@@ -127,7 +132,7 @@
     <system:String x:Key="ProfileWindowUIFile"       >File Name</system:String>
     <system:String x:Key="ProfileWindowUICreate"     >Create</system:String>
     <system:String x:Key="ProfileWindowUIRename"     >Rename</system:String>
-    <system:String x:Key="ProfileWindowUIClone"      >Clone </system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Clone</system:String>
     <system:String x:Key="ProfileWindowUIExport"     >Export</system:String>
     <system:String x:Key="ProfileWindowUIImport"     >Import</system:String>
     <system:String x:Key="ProfileWindowUIDelete"     >Delete Profile</system:String>
@@ -165,13 +170,14 @@
     <system:String x:Key="StatusUIDownloadFailed"         >Download failed</system:String>
     <system:String x:Key="StatusUICodeUpdatesAvailable"   >Code updates available!</system:String>
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >No code updates found</system:String>
-    
+
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoModsFolder">Hedge Mod Manager did not detect any mods folder.&#x0a;Would you like create a mods folder?</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Are you sure you want to delete "{0}"?&#x0a;This action cannot be undone!</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} is already up to date.</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate">A newer version of {0} available! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager could not access the game directory.&#x0a;Please ensure the Users group has &quot;Write&quot; set to Allow on the directory below and all of its files and folders.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >Are you sure you want to delete &quot;{0}&quot;?&#x0a;This action cannot be undone!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} is already up to date.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >A newer version of {0} available! ({1})</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Are you sure you want to cancel updating?&#x0a;This may corrupt {0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Could not find 7-Zip or WinRAR!&#x0a;This is required to extract the mod data&#x0a;&#x0a;Please make sure you have either one installed on your system.</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >completed</system:String>
@@ -185,6 +191,7 @@
     <!-- Mod Description UI Strings -->
     <system:String x:Key="ModDescriptionUIAbout">About {0}</system:String>
     <system:String x:Key="ModDescriptionUIMadeBy">Made by</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">Made on</system:String>
     <system:String x:Key="ModDescriptionUIDate">on</system:String>
 
     <!-- Mod Downloader Strings -->
@@ -224,5 +231,9 @@
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
     <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
     <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
+    <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
+    <system:String x:Key="GameNoGame">No Game Detected!</system:String>
+    <system:String x:Key="LauncherSteam">Steam</system:String>
+    <system:String x:Key="LauncherEpic">Epic Games</system:String>
 
 </ResourceDictionary>

@@ -12,6 +12,9 @@ namespace HedgeModManager
     {
         public Dictionary<string, IniGroup> Groups = new Dictionary<string, IniGroup>(StringComparer.OrdinalIgnoreCase);
 
+        // Should the file be rewritten if error was found
+        private bool _rewrite = false;
+
         public IniGroup this[string key]
         {
             get
@@ -38,12 +41,18 @@ namespace HedgeModManager
         public IniFile(string path) : this()
         {
             using (var stream = File.OpenRead(path))
+            {
                 Read(stream);
+                if (_rewrite)
+                    WriteWithBackup(stream);
+            }
         }
 
         public IniFile(Stream stream)
         {
             Read(stream);
+            if (_rewrite)
+                WriteWithBackup(stream);
         }
 
         public virtual void Read(Stream stream)
@@ -88,6 +97,10 @@ namespace HedgeModManager
                             var key = line.Substring(0, i).Trim();
                             var value = line.Substring(i + 1).Trim();
 
+                            // Fix common error
+                            if (value.StartsWith("\"") && !value.EndsWith("\""))
+                                _rewrite = true;
+
                             this[currentGroup][$"{c}{key}"] = value.Trim('"');
                             break;
                         }
@@ -98,9 +111,13 @@ namespace HedgeModManager
         public virtual void Write(Stream stream)
         {
             var writer = new StreamWriter(stream);
-
+            bool first = false;
             foreach (var group in Groups)
             {
+                if (!first)
+                    first = true;
+                else
+                    writer.WriteLine();
                 writer.WriteLine($"[{group.Key}]");
                 foreach (var val in group.Value.Params)
                 {
@@ -112,6 +129,38 @@ namespace HedgeModManager
             }
             writer.Flush();
             writer.Dispose();
+        }
+
+        public bool WriteWithBackup(Stream stream)
+        {
+            if (stream is FileStream fileStream)
+            {
+                string path = fileStream.Name;
+                string writePath = Path.ChangeExtension(path, ".temp");
+                string backupPath = Path.ChangeExtension(path, ".ini.backup");
+
+                // Make sure to close the stream if its new in write mode and at the start
+                if (stream.CanWrite && stream.Position == 0)
+                {
+                    Write(stream);
+                }
+                else
+                {
+                    stream.Close();
+                    using (stream = File.OpenWrite(writePath))
+                        Write(stream);
+                }
+
+
+                if (File.Exists(backupPath))
+                    return false;
+
+                File.Move(path, backupPath);
+                File.Move(writePath, path);
+
+                return true;
+            }
+            return false;
         }
 
         public class IniGroup

@@ -136,11 +136,16 @@ namespace HedgeModManager
             body.AppendLine();
             body.AppendLine("Directory tree:");
             body.AppendLine(GetDirectoryTree(false));
-            
+
+            body.AppendLine("Registry tree:");
             body.AppendLine(GetRegistryTree(Registry.CurrentUser, RegistryConfig.ConfigPath));
             body.AppendLine(GetRegistryTree(Registry.LocalMachine, "SOFTWARE\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes"));
             body.AppendLine(GetRegistryTree(Registry.LocalMachine, "SOFTWARE\\7-Zip"));
             body.AppendLine(GetRegistryTree(Registry.LocalMachine, "SOFTWARE\\WinRAR"));
+
+            body.AppendLine(GetRegistryTree(Registry.LocalMachine, "SOFTWARE\\Wow6432Node\\Valve\\Steam"));
+            body.AppendLine(GetRegistryTree(Registry.CurrentUser,  "Software\\Valve\\Steam", false));
+            body.AppendLine(GetRegistryTree(Registry.LocalMachine, "SOFTWARE\\Valve\\Steam"));
 
             foreach (var game in Games.GetSupportedGames())
             {
@@ -198,12 +203,12 @@ namespace HedgeModManager
             }
         }
 
-        public static string GetRegistryTree(RegistryKey baseKey, string path)
+        public static string GetRegistryTree(RegistryKey baseKey, string path, bool recursive = true)
         {
             var key = baseKey.OpenSubKey(path);
             if (key != null)
             {
-                var report = GetRegistryTree(key);
+                var report = GetRegistryTree(key, recursive);
                 key.Close();
                 return report;
             }
@@ -211,7 +216,7 @@ namespace HedgeModManager
             return string.Empty;
         }
 
-        public static string GetRegistryTree(RegistryKey key)
+        public static string GetRegistryTree(RegistryKey key, bool recursive = true)
         {
             var body = new StringBuilder();
             int keyLevel = 0;
@@ -230,28 +235,34 @@ namespace HedgeModManager
 
                 foreach (var value in values)
                 {
+                    // Skip some personal information
+                    if (!string.IsNullOrEmpty(value) && (value.Contains("UUID") || value.Contains("Login")))
+                        continue;
+
                     for (int i = 0; i <= keyLevel + 1; i++)
                         body.Append("--");
 
                     body.AppendLine($"{(string.IsNullOrEmpty(value) ? "(default)" : value)}: {k.GetValue(value)}");
                 }
-
-                foreach (var sub in keys)
+                if (recursive)
                 {
-                    keyLevel += 1;
-                    var subKey = k.OpenSubKey(sub, false);
-                    if (subKey != null)
+                    foreach (var sub in keys)
                     {
-                        GetTree(subKey);
-                        subKey.Close();
+                        keyLevel += 1;
+                        var subKey = k.OpenSubKey(sub, false);
+                        if (subKey != null)
+                        {
+                            GetTree(subKey);
+                            subKey.Close();
+                        }
+                        else
+                        {
+                            for (int i = 0; i < keyLevel; i++)
+                                body.Append("--");
+                            body.AppendLine(k.Name);
+                        }
+                        keyLevel -= 1;
                     }
-                    else
-                    {
-                        for (int i = 0; i < keyLevel; i++)
-                            body.Append("--");
-                        body.AppendLine(k.Name);
-                    }
-                    keyLevel -= 1;
                 }
             }
         }
