@@ -54,12 +54,12 @@ namespace HedgeModManager
             foreach (var game in Games.GetSupportedGames())
             {
                 var installation = launcherInstalled.InstallationList.FirstOrDefault(x =>
-                    x.AppName.Equals(game.AppID, StringComparison.OrdinalIgnoreCase));
+                    x.AppName.Equals(game.EGSID, StringComparison.OrdinalIgnoreCase));
 
                 if (installation == null)
                     continue;
 
-                string fullPath = Path.Combine(installation.InstallLocation, game.GamePath);
+                string fullPath = Path.Combine(installation.InstallLocation, game.GamePath.Substring(game.GamePath.IndexOf('\\') + 1));
 
                 if (File.Exists(fullPath))
                     games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.Epic));

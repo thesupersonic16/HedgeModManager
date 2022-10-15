@@ -24,40 +24,33 @@ using System.Diagnostics;
 using System.Windows.Shell;
 using HedgeModManager.Misc;
 using HedgeModManager.Exceptions;
+using Newtonsoft.Json;
+using Markdig;
 
 namespace HedgeModManager.UI
 {
     /// <summary>
     /// Interaction logic for GBModWindow.xaml
     /// </summary>
-    public partial class GBModWindow : Window
+    public partial class ModInstallWindow : Window
     {
-        public Game Game;
-        public string ItemType;
-        public int ItemId;
-        public string DownloadURL;
-        public string Protocol;
 
-        public GBModWindow(string itemType, int itemId, string dl, string protocol)
+        private string URL;
+        public ModDownload ModDownloadInfo { get; set; }
+
+        public ModInstallWindow(string url)
         {
-            //DataContext = mod;
-            //Game = game;
-
-            Game = Games.Unknown;
-            ItemType = itemType;
-            ItemId = itemId;
-            Protocol = protocol;
-            DownloadURL = dl;
+            URL = url;
             InitializeComponent();
         }
 
         private void Screenshot_Click(object sender, RoutedEventArgs e)
         {
-            var shot = (GBAPIScreenshotData)((Button)sender).Tag;
+            var url = ((Button)sender).Tag as string;
             var popup = new PopupBox();
             var image = new BitmapImage();
             image.BeginInit();
-            image.UriSource = new Uri(shot.URL);
+            image.UriSource = new Uri(url);
             image.CacheOption = BitmapCacheOption.OnLoad;
             image.EndInit();
             popup.Children.Add(new Border()
@@ -68,21 +61,6 @@ namespace HedgeModManager.UI
                 {
                     Source = image,
                     Stretch = Stretch.Fill
-                }
-            });
-            popup.Show(this);
-        }
-
-        private void Audio_Click(object sender, RoutedEventArgs e)
-        {
-            var mod = (GBAPIItemDataBasic)DataContext;
-            var url = mod.SoundURL;
-            var popup = new PopupBox();
-            popup.Children.Add(new Border()
-            {
-                Child = new AudioPlayer()
-                {
-                    Source = url,
                 }
             });
             popup.Show(this);
@@ -111,12 +89,12 @@ namespace HedgeModManager.UI
                     }
                 });
 
-                var game = HedgeApp.GetGameInstall(Game);
+                var game = HedgeApp.GetGameInstall(ModDownloadInfo.Game);
                 if (game == null)
                 {
                     await Dispatcher.InvokeAsync(() =>
                     {
-                        var dialog = new HedgeMessageBox(Localise("CommonUIError"), LocaliseFormat("ModDownloaderNoGameMes", Localise($"Game{Game.GameName}")));
+                        var dialog = new HedgeMessageBox(Localise("CommonUIError"), LocaliseFormat("ModDownloaderNoGameMes", Localise($"Game{ModDownloadInfo.Game.GameName}")));
                         dialog.AddButton(Localise("CommonUIClose"), () =>
                         {
                             dialog.Close();
@@ -127,10 +105,11 @@ namespace HedgeModManager.UI
                     });
                     return;
                 }
-                HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.GameDirectory, "cpkredir.ini"));
-                var mod = (GBAPIItemDataBasic)DataContext;
 
-                using (var resp = await Singleton.GetInstance<HttpClient>().GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
+                // Load game config
+                HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.GameDirectory, "cpkredir.ini"));
+
+                using (var resp = await Singleton.GetInstance<HttpClient>().GetAsync(ModDownloadInfo.DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
                 {
                     resp.EnsureSuccessStatusCode();
                     Directory.SetCurrentDirectory(Path.GetDirectoryName(HedgeApp.AppPath));
@@ -138,11 +117,12 @@ namespace HedgeModManager.UI
                     var destinationPath = Path.GetFileName(resp.RequestMessage.RequestUri.AbsoluteUri);
                     using (var destinationFile = File.Create(destinationPath, 8192, FileOptions.Asynchronous))
                         await resp.Content.CopyToAsync(destinationFile, progress);
-                    
+
                     ModsDB.InstallMod(destinationPath, Path.Combine(game.GameDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
                     File.Delete(destinationPath);
 
                     // a dialog would be nice here but i ain't adding strings
+                    // I agree
                     await Dispatcher.InvokeAsync(() =>
                     {
                         DialogResult = true;
@@ -193,105 +173,79 @@ namespace HedgeModManager.UI
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is GBAPIItemDataBasic mod)
+            if (ModDownloadInfo != null)
             {
-                PopulateUI(mod);
+                await Dispatcher.InvokeAsync(() => PopulateUI());
             }
             else
             {
                 LoadingGrid.Visibility = Visibility.Visible;
 
-                var item = new GBAPIItemDataBasic(ItemType, ItemId);
-                item = await GBAPI.PopulateItemDataAsync(item).ConfigureAwait(false);
+                var json = await Singleton.GetInstance<HttpClient>().GetStringAsync(URL).ConfigureAwait(false);
 
-                var game = Games.Unknown;
-                foreach (var gam in Games.GetSupportedGames())
+                if (json != null)
                 {
-                    if (gam.GBProtocol == Protocol)
+                    ModDownloadInfo = JsonConvert.DeserializeObject<ModDownload>(json);
+                    await Dispatcher.InvokeAsync(() =>
                     {
-                        game = gam;
-                        break;
-                    }
+                        DataContext = ModDownloadInfo;
+                        PopulateUI();
+                    });
                 }
-
-                await Dispatcher.InvokeAsync(() =>
+                if (ModDownloadInfo == null || ModDownloadInfo.Game == null)
                 {
-                    if (game == Games.Unknown || item.ModName == null)
+                    await Dispatcher.InvokeAsync(() =>
                     {
-                        HedgeApp.CreateOKMessageBox("Error", $"Invalid GameBanana item!").ShowDialog();
+                        // TODO: May want to make this translatable
+                        HedgeApp.CreateOKMessageBox("Error", $"Invalid mod download file!").ShowDialog();
                         DialogResult = false;
                         Close();
-                        return;
-                    }
-
-                    Game = game;
-                    DataContext = item;
-                    PopulateUI(item);
-                });
+                    });
+                    return;
+                }
             }
         }
 
-        private void PopulateUI(GBAPIItemDataBasic mod)
+        private void PopulateUI()
         {
             LoadingGrid.Visibility = Visibility.Collapsed;
 
-            foreach (var screenshot in mod.Screenshots)
+            foreach (var image in ModDownloadInfo.Images)
             {
                 var button = new Button()
                 {
                     Margin = new Thickness(2.5),
                     Width = 96,
                     Height = 54,
-                    Tag = screenshot,
+                    Tag = image
                 };
 
                 button.Content = new Image()
                 {
-                    Source = new BitmapImage(new Uri(screenshot.URLSmall)),
+                    Source = new BitmapImage(new Uri(image)),
                     Stretch = Stretch.Fill,
                 };
                 button.Click += Screenshot_Click;
                 Imagebar.Children.Add(button);
             }
 
-            if (!string.IsNullOrEmpty(mod.SoundURL?.AbsoluteUri))
-            {
-                var button = new Button()
-                {
-                    Margin = new Thickness(2.5),
-                    Width = 96,
-                    Height = 54,
-                };
+            // TODO: Include audio
 
-                button.Content = new Image()
-                {
-                    Source = new BitmapImage(new Uri("/Resources/Graphics/AudioThumbnail.png", UriKind.Relative)),
-                    Stretch = Stretch.Fill,
-                };
-                button.Click += Audio_Click;
-                Imagebar.Children.Add(button);
-            }
-
+            // TODO: Fix rendering issue on Linux
             if (HedgeApp.IsLinux)
             {
                 Description.Text = string.Empty;
                 Description.Visibility = Visibility.Collapsed;
-                DescriptionText.Text = mod.Body;
+                DescriptionText.Text = ModDownloadInfo.Description;
                 DescriptionText.Visibility = Visibility.Visible;
             }
             else
             {
-                Description.Text = $@"
-<html>
-    <body>
-        <style>
-            {HedgeMessageBox.GetHtmlStyleSheet()}
-        </style>
-        {mod.Body}
-    </body>
-</html>";
+                Description.Text = $"<html><body><style>{HedgeMessageBox.GetHtmlStyleSheet()}</style>" +
+                    $"{Markdown.ToHtml(ModDownloadInfo.Description, new MarkdownPipelineBuilder().UseAdvancedExtensions().Build())}</body></html>";
             }
-            foreach (var group in mod.Credits.Credits)
+            
+            foreach (var group in ModDownloadInfo.Authors)
             {
                 if (group.Value.Count < 1)
                     continue;
@@ -306,29 +260,29 @@ namespace HedgeModManager.UI
                     Padding = new Thickness(0, 2, 0, 2)
                 });
 
-                foreach (var credit in group.Value)
+                foreach (var author in group.Value)
                 {
                     var block = new TextBlock()
                     {
-                        Text = credit.MemberID == 0 ? credit.MemberName : string.Empty,
+                        Text = author.Link == null ? author.Name: string.Empty,
                         FontSize = 14,
                         TextWrapping = TextWrapping.WrapWithOverflow,
                         Padding = new Thickness(0, 0, 0, .5)
                     };
-                    if (credit.MemberID != 0)
+                    if (author.Link != null)
                     {
                         var link = new Hyperlink();
                         var run = new Run();
-                        link.NavigateUri = new Uri($"https://gamebanana.com/members/{credit.MemberID}");
-                        run.Text = credit.MemberName;
-                        link.Click += (x, y) => { System.Diagnostics.Process.Start(link.NavigateUri.ToString()); };
+                        link.NavigateUri = new Uri(author.Link);
+                        run.Text = author.Name;
+                        link.Click += (x, y) => { Process.Start(link.NavigateUri.ToString()); };
                         link.Inlines.Add(run);
                         block.Inlines.Add(link);
                     }
 
                     CreditsPanel.Children.Add(block);
-                    if (!string.IsNullOrEmpty(credit.Role))
-                        CreditsPanel.Children.Add(new TextBlock() { Text = credit.Role, FontSize = 11.2, TextWrapping = TextWrapping.WrapWithOverflow, Padding = new Thickness(0, 0, 0, .5) });
+                    if (!string.IsNullOrEmpty(author.Description))
+                        CreditsPanel.Children.Add(new TextBlock() { Text = author.Description, FontSize = 11.2, TextWrapping = TextWrapping.WrapWithOverflow, Padding = new Thickness(0, 0, 0, .5) });
                 }
             }
         }

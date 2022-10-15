@@ -4,58 +4,81 @@
   xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <!-- Common UI Strings -->
-    <system:String x:Key="CommonUIClose"  >Cerrar</system:String>
-    <system:String x:Key="CommonUIOK"     >OK</system:String>
-    <system:String x:Key="CommonUICancel" >Cancelar</system:String>
-    <system:String x:Key="CommonUIYes"    >Si</system:String>
-    <system:String x:Key="CommonUINo"     >No</system:String>
-    <system:String x:Key="CommonUIRetry"  >Reintentar</system:String>
-    <system:String x:Key="CommonUIUpdate" >Actualizar</system:String>
-    <system:String x:Key="CommonUIDelete" >Borrar</system:String>
-    <system:String x:Key="CommonUINone"   >Ninguno</system:String>
-    <system:String x:Key="CommonUIIgnore" >Ignorar</system:String>
-    <system:String x:Key="CommonUIWarning">ADVERTENCIA</system:String>
-    <system:String x:Key="CommonUIError"  >ERROR</system:String>
+    <system:String x:Key="CommonUIClose"   >Cerrar</system:String>
+    <system:String x:Key="CommonUIOK"      >OK</system:String>
+    <system:String x:Key="CommonUICancel"  >Cancelar</system:String>
+    <system:String x:Key="CommonUIYes"     >Si</system:String>
+    <system:String x:Key="CommonUIBlocked" >Bloqueado</system:String>
+    <system:String x:Key="CommonUINo"      >No</system:String>
+    <system:String x:Key="CommonUIRetry"   >Reintentar</system:String>
+    <system:String x:Key="CommonUIUpdate"  >Actualizar</system:String>
+    <system:String x:Key="CommonUIDownload">Descargar</system:String>
+    <system:String x:Key="CommonUIDelete"  >Borrar</system:String>
+    <system:String x:Key="CommonUINone"    >Ninguno</system:String>
+    <system:String x:Key="CommonUIIgnore"  >Ignorar</system:String>
+    <system:String x:Key="CommonUIWarning" >ADVERTENCIA</system:String>
+    <system:String x:Key="CommonUIError"   >ERROR</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Modificaciones</system:String>
-    <system:String x:Key="MainUICodes"         >Trucos</system:String>
+    <system:String x:Key="MainUICodes"         >Códigos</system:String>
     <system:String x:Key="MainUISettings"      >Configuración</system:String>
     <system:String x:Key="MainUIAddMod"        >Añadir Mod</system:String>
     <system:String x:Key="MainUIRefreshModList">Refrescar lista de Mods</system:String>
     <system:String x:Key="MainUISave"          >Guardar</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Guardar y Jugar</system:String>
+    <system:String x:Key="MainUIConfigureMod"  >Configurar Mod</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Descarga del cargador de mods fallida</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Error al instalar cargador de mods.&#x0a;Asegúrate de tener permisos para escribir los archivos del juego.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Error al desinstalar cargador de mods.&#x0a;Asegúrate de que ningún juego este abierto.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nombre</system:String>
     <system:String x:Key="ModsUIVersion"        >Versión</system:String>
     <system:String x:Key="ModsUIAuthor"         >Autor</system:String>
+    <system:String x:Key="ModsUIFeatures"       >Características</system:String>
     <system:String x:Key="ModsUIModDescription" >Descripción</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Favorito</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
     <system:String x:Key="ModsUIModOpenFolder"  >Abrir carpeta contenedora</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Revisar actualización</system:String>
+    <system:String x:Key="ModsUICheckUpdatesAll">Revisar actualización en todos los mods.</system:String>
     <system:String x:Key="ModsUIModEdit"        >Editar mod</system:String>
-    <system:String x:Key="ModsUIModDelete"      >Borrar mod</system:String>
-    <system:String x:Key="ModsUIModDragDrop"    >Arrastra y suelta objetos para cambiar el orden de carga de los mods</system:String>
+    <system:String x:Key="ModsUIModDelete"      >Eliminar mod</system:String>
+    <system:String x:Key="ModsUIFeatureConfig"  >Este mod puede configurarse.</system:String>
+    <system:String x:Key="ModsUIFeatureConfigDisable">Este mod no puede configurarse.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdate"       >Este mod puede actualizarse.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateDisable">Este mod no puede actualizarse.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateFailed" >Este mod fallo en buscar actualizaciones.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateBlocked">Este mod tiene bloqueado buscar actualizaciones.</system:String>
+    <system:String x:Key="ModsUIFeatureSave"         >Este mod utiliza redirección de partida guardada.</system:String>
+    <system:String x:Key="ModsUIFeatureSaveDisable"  >Este mod no utiliza redirección de partida guardada</system:String>
+    <system:String x:Key="ModsUIFeatureCode"         >Este mod contiene cambios al código del juego.</system:String>
+    <system:String x:Key="ModsUIFeatureCodeDisable"  >Este mod no contiene cambios al código del juego.</system:String>
+    <system:String x:Key="ModsUIModDragDrop"    >Arrastre y suelte elementos para cambiar el orden de carga de mods</system:String>
+    <system:String x:Key="ModsUISearch"         >Buscar:</system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager ha detectado que uno o más mods incluyen directorios inválidos.&#x0a;¿Quieres que Hedge Mod Manager intente arreglarlo?</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUINoMods">...Esta vacío aquí.&#x0a;¡Ve por mods!</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Nombre</system:String>
     <system:String x:Key="CodesUIDownload">Descargar trucos de la comunidad</system:String>
     <system:String x:Key="CodesUIUpdate"  >Actualizar códigos de la comunidad</system:String>
+    <system:String x:Key="CodesUISearch"  >Buscar:</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Los códigos instalados son incompatibles con el cargador de códigos.&#x0a;Por favor, actualiza los códigos y el cargador de códigos.&#x0a;ADVERTENCIA: Esto borrará cualquier código personalizado.</system:String>
-
+    <system:String xml:space="preserve" x:Key="CodesUIFetching">Obteniendo códigos...</system:String>
+    
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
     <system:String x:Key="SettingsUIGMLHeader"      >Cargador de Juego y Mods</system:String>
     <system:String x:Key="SettingsUIInstallLoader"  >Instalar cargador de mods</system:String>
     <system:String x:Key="SettingsUIUninstallLoader">Desinstalar cargador de mods</system:String>
-    <system:String x:Key="SettingsUIOpenMods"       >Abrir carpeta de mdos</system:String>
+    <system:String x:Key="SettingsUIOpenMods"       >Abrir carpeta de mods</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >Abrir carpeta de juego</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Activar cargador de mods</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Activar consola de depuración</system:String>
-    <system:String x:Key="SettingsUIEnableSRedir"   >Activar redirección de guardado</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >Activar redirección de partida guardada</system:String>
+    <system:String x:Key="SettingsUIUseLauncher"    >Usar lanzador del juego</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Cargadores:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Juego:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Perfil:</system:String>
@@ -66,32 +89,40 @@
     <system:String x:Key="SettingsUICheckCLUpdate"  >Obtener actualizaciones del cargador de códigos</system:String>
     <system:String x:Key="SettingsUICheckModUpdates">Obtener actualizaciones de mods</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Mantener Hedge Mod Manager abierto después de iniciar el juego</system:String>
+    <system:String x:Key="SettingsUICheckHMMUpdate" >Buscar actualizaciones</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >Acerca de Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Idioma:</system:String>
     <system:String x:Key="SettingsUITheme"          >Tema:</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel" >Canal de actualización:</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >Cambiar canal de actualización</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Vas a cambiar al canal de Lanzamiento.&#x0a;&#x0a;¿Seguro que quieres continuar? Hedge Mod Manager necesita reiniciar para cambiar canal.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Vas a cambiar al canal de Desarrollo. Este canal puede contener funciones experimentales y errores.&#x0a;&#x0a;¿Seguro que quieres continuar? Hedge Mod Manager necesita reiniciar para cambiar canal.</system:String>
 
     <!-- MainWindow UI Strings -->
-    <system:String x:Key="MainUIInstallFormHeader"   >Instalando un mod de...</system:String>
-    <system:String x:Key="MainUIInstallFormOptionDir">Instalando de una carpeta</system:String>
-    <system:String x:Key="MainUIInstallFormOptionArc">Instalando de un archivo</system:String>
-    <system:String x:Key="MainUIInstallFormOptionNew">Creando mod (¡Para desarrolladores!)</system:String>
+    <system:String x:Key="MainUIInstallFormHeader"   >Instalar un mod usando...</system:String>
+    <system:String x:Key="MainUIInstallFormOptionDir">Instalación desde una carpeta</system:String>
+    <system:String x:Key="MainUIInstallFormOptionArc">Instalación desde un archivo comprimido</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew">Creando un mod (¡Para desarrolladores!)</system:String>
     <system:String x:Key="MainUIMissingLoaderHeader" >¡Cargador de mods no instalado!</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Para que {0} cargue mods, se debe instalar el cargador de mods. ¿Quieres instalarlo?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"   >Selecciona de dónde cargar mods...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >¡Runtime faltante detectado!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requiere que {1} sea instalado para los mods &#x0a;para que funcionen adecuadamente, ¿Te gustaría que HMM instalase este runtime?</system:String>
-    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Uno o más de los mods activados requieren redirección del archivo de guardado para funcionar correctamente. ¿Activar esta función?&#x0a;Presiona no sólo si sabes lo que estás haciendo.</system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Uno o más de los mods activados requieren redirección de la partida guardada para funcionar correctamente. ¿Activar esta función?&#x0a;Presiona no sólo si sabes lo que estás haciendo.</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Fallo al resolver las dependencias del mod</system:String>
     <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >Los siguientes mods tienen dependencias faltantes:</system:String>
-    
+    <system:String x:Key="MainUIMissingDependsResolve">Corregir mods de GB</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">Una o más dependencias pueden corregirse automáticamente&#x0a;desde GameBanana con la funcion de&quot;Corregir mods de GB&quot;.</system:String>
+
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >¡Elige una opción!</system:String>
 
     <!-- AboutWindow UI Strings -->
     <system:String x:Key="AboutWindowUITitle"  >Sobre Hedge Mod Manager</system:String>
-    <system:String x:Key="AboutWindowUILine1"  >Un programa diseñado para cargar mods de juegos hechos con el Hedgehog Engine</system:String>
-    <system:String x:Key="AboutWindowUILine2"  >Necesita una versión legal de cualquiera de los juegos soportados.</system:String>
+    <system:String x:Key="AboutWindowUILine1"  >Un programa diseñado para cargar facilmente mods de juegos hechos con el Hedgehog Engine</system:String>
+    <system:String x:Key="AboutWindowUILine2"  >Requiere una versión legalmente adquirida de cualquiera de los juegos soportados.</system:String>
     <system:String x:Key="AboutWindowUICredits">Créditos:</system:String>
+    <system:String x:Key="AboutWindowUITranslators">Traductores</system:String>
 
     <!-- ProfileWindow UI Strings -->
     <system:String x:Key="ProfileWindowUITitle"      >Gestionar perfiles</system:String>
@@ -119,7 +150,7 @@
 
     <!-- Status UI Strings -->
     <system:String x:Key="StatusUILoadedMods"             >Cargados {0} mods</system:String>
-    <system:String x:Key="StatusUICheckingModUpdates"     >Obteniendo actualizaciones de {0}</system:String>
+    <system:String x:Key="StatusUICheckingModUpdates"     >Comprobando actualizaciones de {0}</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >¡Error al actualizar {0}! {1}</system:String>
     <system:String x:Key="StatusUIModUpdateCheckFinish"   >Revisión de Actualizaciones: {0} completadas, {1} fallidas</system:String>
     <system:String x:Key="StatusUIStartingGame"           >Iniciando {0}</system:String>
@@ -129,33 +160,80 @@
     <system:String x:Key="StatusUICheckingForLoaderUpdate">Obteniendo actualizaciones de {0}</system:String>
     <system:String x:Key="StatusUILoaderUpToDate"         >{0} esta en la versión mas reciente</system:String>
     <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Error al revisar actualizaciones de {0}</system:String>
-    <system:String x:Key="StatusUIInstalledLoader"        >Instalado {0}</system:String>
-    <system:String x:Key="StatusUIDeletedMod"             >Borrado {0}</system:String>
-    <system:String x:Key="StatusUIModsDBSaved"            >Guardada base de datos</system:String>
+    <system:String x:Key="StatusUIInstalledLoader"        >{0} Instalado</system:String>
+    <system:String x:Key="StatusUIDeletedMod"             >{0} Borrado</system:String>
+    <system:String x:Key="StatusUIModsDBSaved"            >Guardada base de datos de mods</system:String>
     <system:String x:Key="StatusUIModsDBLocationChanged"  >Cambio de ubicación de la base de datos</system:String>
     <system:String x:Key="StatusUIGameChange"             >Cambio de juego a {0}</system:String>
-    <system:String x:Key="StatusUIDownloadingCodes"       >Descargando trucos para {0}</system:String>
+    <system:String x:Key="StatusUIDownloadingCodes"       >Descargando códigos para {0}</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >Descarga finalizada</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >Descarga fallida</system:String>
     <system:String x:Key="StatusUICodeUpdatesAvailable"   >¡Actualización de códigos disponible!</system:String>
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >No se han encontrado actualizaciones de códigos.</system:String>
 
     <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager no puede acceder a la carpeta del juego.&#x0a;Asegurate que el grupo Usuarios tiene el permiso &quot;Escritura&quot; en Permitir en la siguiente carpeta y todas sus subcarpetas y archivos.&#x0a;&#x0a;{0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">¿Quieres borrar "{0}"?&#x0a;¡Ésta acción no puede deshacerse!</system:String>
-
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} esta actualizado.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >Una nueva versión de {0} está disponible! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">¿Quieres cancelar la actualización?&#x0a;{0} podría corromperse</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >No se encontró 7-Zip o WinRAR!&#x0a;Se necesita para extraer los archivos del mod&#x0a;&#x0a;Asegúrate de instalar cualquiera de los dos en tu sistema.</system:String>
+    
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >completado</system:String>
     <system:String x:Key="StatusUIUpdateCompletedPlural"        >completados</system:String>
-    <system:String x:Key="StatusUIUpdateFailedSingular"         >fallidos</system:String>
+    <system:String x:Key="StatusUIUpdateFailedSingular"         >fallido</system:String>
     <system:String x:Key="StatusUIUpdateFailedPlural"           >fallidos</system:String>
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">Configurar {0}</system:String>
 
+    <!-- Mod Description UI Strings -->
+    <system:String x:Key="ModDescriptionUIAbout">Acerca de {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">Creado por</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">Creado en</system:String>
+    <system:String x:Key="ModDescriptionUIDate">el</system:String>
+
     <!-- Mod Downloader Strings -->
-    <system:String x:Key="ModDownloaderFailed">Descarga del mod fallida</system:String>
+    <system:String x:Key="ModDownloaderFailed">Fallo al Descargar mod</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Ocurrió un error en la descarga. Los servidores están sobrecargados o caídos. Intenta de nuevo más tarde. &#x0a;&#x0a;Detalles: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Fallo al buscar juego</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager no pudo encontrar la instalacion de {0}</system:String>
 
+    <!-- Mod Updates Window Strings -->
+    <system:String x:Key="ModUpdatesChangelog"    >Cambios</system:String>
+    <system:String x:Key="ModDownloadsDescription">Descripción</system:String>
+    <system:String x:Key="ModUpdatesTitle"        >Actualizaciones del Mod</system:String>
+    <system:String x:Key="ModDownloadsTitle"      >Descargas del Mod</system:String>
+
+    <!-- Exception Window Strings -->
+    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Error</system:String>
+    <system:String x:Key="ExceptionWindowCrash"           >¡Hedge Mod Manager lanzo una Excepcion!</system:String>
+    <system:String x:Key="ExceptionWindowUnhandled"       >¡Hedge Mod Manager encontró un error!</system:String>
+    <system:String x:Key="ExceptionWindowButtonCopyLog"   >Copiar registro al Portapapeles</system:String>
+    <system:String x:Key="ExceptionWindowButtonIgnore"    >Ignorar y cerrar</system:String>
+    <system:String x:Key="ExceptionWindowButtonReport"    >Reportar en GitHub</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >¡Nueva actualización disponible!</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Parece que esta versión de Hedge Mod Manager está obsoleta.&#x0a;Es recomendable que actualices y compruebes si el error continua.&#x0a;¿Actualizar ahora?</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorTitle">¡Error al actualizar!</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >¡Hedge Mod Manager no pudo actualizarse!&#x0a;Descarga la nueva versión manualmente.</system:String>
+
+    <!-- Themes -->
+    <system:String x:Key="ThemeDark"  >Oscuro</system:String>
+    <system:String x:Key="ThemeDarker">Mas Oscuro</system:String>
+    <system:String x:Key="ThemeOLED"  >OLED</system:String>
+    <system:String x:Key="ThemeLight" >Claro</system:String>
+
+    <!-- Games -->
+    <system:String x:Key="GameSonicGenerations">Sonic Generations</system:String>
+    <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
+    <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
+    <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
+    <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
+    <system:String x:Key="GameNoGame">¡No se detectó el juego!</system:String>
+    <system:String x:Key="LauncherSteam">Steam</system:String>
+    <system:String x:Key="LauncherEpic">Epic Games</system:String>
+    
 </ResourceDictionary>

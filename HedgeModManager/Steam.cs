@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +17,14 @@ namespace HedgeModManager
 
         public static void Init()
         {
+            // Not sure about OSX
+            // Assume Steam is located in the home folder for Linux
+            if (HedgeApp.IsLinux)
+            {
+                string home = Environment.GetEnvironmentVariable("WINEHOMEDIR").Replace("\\??\\", "");
+                SteamLocation = Path.Combine(home, ".steam/steam");
+            }
+
             var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
                     .OpenSubKey("SOFTWARE\\Wow6432Node\\Valve\\Steam");
 

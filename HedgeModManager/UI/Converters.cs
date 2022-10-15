@@ -65,6 +65,10 @@ namespace HedgeModManager
         
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            // HTML rendering currently does not work on Linux
+            if (HedgeApp.IsLinux)
+                return string.Empty;
+
             string md = value?.ToString();
             if (string.IsNullOrEmpty(md))
                 return string.Empty;
@@ -119,6 +123,47 @@ namespace HedgeModManager
             return vis == Visibility.Visible;
         }
     }
+
+    [ValueConversion(typeof(bool), typeof(Visibility))]
+    public class BoolToVisibilityConverterLinux : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is bool val) || !HedgeApp.IsLinux)
+                return Visibility.Collapsed;
+
+            return val ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is Visibility vis))
+                throw new ArgumentException("Invalid argument");
+
+            return vis == Visibility.Visible;
+        }
+    }
+
+    [ValueConversion(typeof(bool), typeof(Visibility))]
+    public class BoolToVisibilityConverterWin : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is bool val) || HedgeApp.IsLinux)
+                return Visibility.Collapsed;
+
+            return val ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is Visibility vis))
+                throw new ArgumentException("Invalid argument");
+
+            return vis == Visibility.Visible;
+        }
+    }
+
 
     [ValueConversion(typeof(object), typeof(bool))]
     public class NullToBoolConverter : IValueConverter

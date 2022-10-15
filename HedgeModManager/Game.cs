@@ -25,6 +25,7 @@ namespace HedgeModManager
             ExecutableName = "SonicGenerations.exe",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
+            Folders = new [] { "disk/bb", "disk/bb2", "disk/bb3" },
             AppID = "71340",
             GBProtocol = "hedgemmgens",
             Is64Bit = false,
@@ -39,6 +40,7 @@ namespace HedgeModManager
             ExecutableName = "slw.exe",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
+            Folders = new[] { "disk/sonic2013_patch_0" },
             AppID = "329440",
             GBProtocol = "hedgemmlw",
             Is64Bit = false,
@@ -53,6 +55,7 @@ namespace HedgeModManager
             ExecutableName = "Sonic Forces.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
+            Folders = new[] { "disk/wars_patch" },
             AppID = "637100",
             GBProtocol = "hedgemmforces",
             Is64Bit = true,
@@ -67,6 +70,7 @@ namespace HedgeModManager
             ExecutableName = "PuyoPuyoTetris2.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
+            Folders = new[] { "raw" },
             AppID = "1259790",
             GBProtocol = "hedgemmtenpex",
             Is64Bit = true,
@@ -81,6 +85,7 @@ namespace HedgeModManager
             ExecutableName = "musashi.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
+            Folders = new[] { "musashi_0" },
             AppID = "981890",
             GBProtocol = "hedgemmmusashi",
             Is64Bit = true,
@@ -95,12 +100,29 @@ namespace HedgeModManager
             ExecutableName = "Sonic Colors - Ultimate.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
-            AppID = "e5071e19d08c45a6bdda5d92fbd0a03e",
+            Folders = new[] { "PCCriPak" },
+            EGSID = "e5071e19d08c45a6bdda5d92fbd0a03e",
             GBProtocol = "hedgemmrainbow",
             Is64Bit = true,
             ModLoader = ModLoaders.RainbowModLoader,
             CodesURL = Resources.URL_RML_CODES,
-            GamePath = Path.Combine("rainbow Shipping", "Sonic Colors - Ultimate.exe")
+            GamePath = Path.Combine("SonicColorsUltimate", "rainbow Shipping", "Sonic Colors - Ultimate.exe")
+        };
+
+        public static Game SonicOrigins = new Game()
+        {
+            GameName = "SonicOrigins",
+            ExecutableName = "SonicOrigins.exe",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = false,
+            Folders = new[] { "raw", "Sonic1u", "Sonic2u", "Sonic3ku", "SonicCDu" },
+            AppID = "1794960",
+            EGSID = "5070a8e44cf74ba3b9a4ca0c0dce5cf1",
+            GBProtocol = "hedgemmhite",
+            Is64Bit = true,
+            ModLoader = ModLoaders.HiteModLoader,
+            CodesURL = Resources.URL_HML_CODES,
+            GamePath = Path.Combine("SonicOrigins", "build", "main", "projects", "exec", "SonicOrigins.exe")
         };
 
         public static IEnumerable<Game> GetSupportedGames()
@@ -111,6 +133,7 @@ namespace HedgeModManager
             yield return PuyoPuyoTetris2;
             yield return Tokyo2020;
             yield return SonicColorsUltimate;
+            yield return SonicOrigins;
         }
     }
 
@@ -120,6 +143,7 @@ namespace HedgeModManager
         public static byte[] LostCodeLoader;
         public static byte[] HE2ModLoader;
         public static byte[] RainbowModLoader;
+        public static byte[] HiteModLoader;
 
         static EmbeddedLoaders()
         {
@@ -130,6 +154,7 @@ namespace HedgeModManager
                 LostCodeLoader = GetFile("LostCodeLoader.dll");
                 HE2ModLoader = GetFile("HE2ModLoader.dll");
                 RainbowModLoader = GetFile("RainbowModLoader.dll");
+                HiteModLoader = GetFile("HiteModLoader.dll");
 
                 byte[] GetFile(string name)
                 {
@@ -147,12 +172,14 @@ namespace HedgeModManager
 
     public class Game
     {
-        public string GameName = "Unnamed Game";
+        public string GameName = "NoGame";
         public string ExecutableName = string.Empty;
         public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
         public bool SupportsSaveRedirection = false;
+        public string[] Folders = { "raw" };
         public string AppID = "0";
+        public string EGSID = null;
         public string GBProtocol;
         public bool Is64Bit = false;
         public string CodesURL;
@@ -166,8 +193,9 @@ namespace HedgeModManager
         public Game BaseGame;
         public string GameDirectory;
         public GameLauncher Launcher;
+        public bool ShowLauncher = false;
 
-        public string GameName { get { return Localise("Game" + BaseGame?.GameName, BaseGame?.GameName); } }
+        public string GameName { get { return Localise("Game" + BaseGame?.GameName, BaseGame?.GameName) + (ShowLauncher ? $" ({Localise("Launcher" + Launcher)})" : ""); } }
         public Uri GameImage { get { return HedgeApp.GetResourceUri($"Resources/Graphics/Games/{BaseGame?.GameName}.png"); } }
 
         public GameInstall(Game game, string directory, GameLauncher launcher)
@@ -179,21 +207,36 @@ namespace HedgeModManager
 
         public void StartGame(bool useLauncher = true, string startDirectory = null)
         {
+            if (string.IsNullOrEmpty(startDirectory))
+                startDirectory = HedgeApp.StartDirectory;
+
             if (useLauncher)
             {
                 switch (Launcher)
                 {
                     case GameLauncher.Steam:
-                        Process.Start(new ProcessStartInfo
+                        if (HedgeApp.IsLinux)
                         {
-                            FileName = $"steam://run/{BaseGame.AppID}",
-                            UseShellExecute = true
-                        });
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = $"start",
+                                Arguments = $"/unix /usr/bin/xdg-open steam://run/{BaseGame.AppID}",
+                                UseShellExecute = true
+                            });
+                        }
+                        else
+                        {
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = $"steam://run/{BaseGame.AppID}",
+                                UseShellExecute = true
+                            });
+                        }
                         break;
                     case GameLauncher.Epic:
                         Process.Start(new ProcessStartInfo
                         {
-                            FileName = $"com.epicgames.launcher://apps/{BaseGame.AppID}?action=launch&silent=true",
+                            FileName = $"com.epicgames.launcher://apps/{BaseGame.EGSID}?action=launch&silent=true",
                             UseShellExecute = true
                         });
                         break;
@@ -207,15 +250,11 @@ namespace HedgeModManager
             }
             else
             {
-                if (string.IsNullOrEmpty(startDirectory))
-                    startDirectory = HedgeApp.StartDirectory;
-
                 Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
                 {
                     WorkingDirectory = startDirectory
                 });
             }
-
         }
 
         public static List<GameInstall> SearchForGames(string preference = null)
@@ -250,6 +289,14 @@ namespace HedgeModManager
                 }
             }
 
+            // Check for dupes
+            foreach (var game in games.GroupBy(t => t.BaseGame).Where(t => t.Count() > 1).Select(t => t.Key))
+            {
+                foreach (var install in games.Where(t => t.BaseGame == game))
+                {
+                    install.ShowLauncher = true;
+                }
+            }
 
             return !string.IsNullOrEmpty(preference)
                 ? games.OrderBy(x => x.BaseGame.GameName != preference).ToList()

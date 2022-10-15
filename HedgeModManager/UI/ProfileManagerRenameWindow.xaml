@@ -18,8 +18,8 @@
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{DynamicResource ProfileWindowUINameLabel}" Margin="55,3,363.667,41" Grid.Row="1" Width="106"></TextBlock>
         <TextBox x:Name="ProfileNameTextbox" Text="{Binding NewProfileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,21,0,18" Width="414"></TextBox>
         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-4" Grid.Row="2" Background="{StaticResource HMM.Window.DialogBottom}">
+            <Button Content="{StaticResource CommonUICancel}" Margin="12,0,0,0" VerticalAlignment="Center" Width="75" Height="23" IsCancel="True" />
             <Button Content="{StaticResource CommonUIOK}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_OK_Click" IsDefault="True" />
-            <Button Content="{StaticResource CommonUICancel}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" IsCancel="True" />
         </StackPanel>
     </Grid>
 </Window>

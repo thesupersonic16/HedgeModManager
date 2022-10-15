@@ -17,6 +17,9 @@ WriteAsmHook
 	"mov DWORD PTR [ebp+8], 1"
 )
 
+Patch "16:10 In-Game Resolution" by "ĐeäTh"
+WriteProtected<int>(ASLR(0xD56D30), 0x3FCCCCCD)
+
 Patch "21:9 (2560x1080) In-Game Resolution" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x4017B426)
 
@@ -515,3 +518,9 @@ mov ecx, [eax]
 
 Patch "Fix Pull Switch Grip Height" by "ĐeäTh"
 WriteProtected<float>(ASLR(0x00DF2D14), -10.5f)
+
+Patch "No Instant Death Bomb Carts" by "ĐeäTh"
+WriteNop(ASLR(0x007D82A2), 3);
+
+Patch "Infinite Bounce Attacks" by "ĐeäTh"
+WriteNop(ASLR(0x008CA177), 4);

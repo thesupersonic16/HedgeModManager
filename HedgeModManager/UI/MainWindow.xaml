@@ -207,7 +207,7 @@
                             </Grid.RowDefinitions>
                             
                             <GroupBox Header="{DynamicResource SettingsUIGMLHeader}" Margin="0,0,0,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                <Grid>
+                                <Grid x:Name="MLSettingsGrid">
                                     <Grid Margin="5,10,10,0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="114"/>
@@ -247,7 +247,7 @@
 
                             <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2">
                                 <Grid>
-                                    <StackPanel Margin="10,10,0,0">
+                                    <StackPanel x:Name="HMMSettingsSackPanel" Margin="10,10,0,0">
                                         <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"   IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="0,0,0,5"/>
                                         <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"   IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="0,0,0,5"/>
                                         <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}" IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="0,0,0,5"/>

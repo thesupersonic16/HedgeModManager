@@ -152,6 +152,16 @@ namespace GameBananaAPI
 
             item.ItemType = type;
             item.ItemID = id;
+
+            // Populate file list
+            foreach (var file in item.Files)
+            {
+                request = $"https://api.gamebanana.com/Core/Item/Data?itemtype=File&itemid={file.Key}&fields=Metadata().aArchiveFilesList()&return_keys=1";
+                response = await Singleton.GetInstance<HttpClient>().GetStringAsync(request);
+                response = Uri.UnescapeDataString(response);
+                file.Value.Files = JsonConvert.DeserializeObject<JObject>(response).First.First.ToObject<List<string>>();
+            }
+
             return item;
         }
 
@@ -267,60 +277,7 @@ namespace GameBananaAPI
         public int DateAdded { get; set; }
         [JsonProperty("_nDownloadCount")]
         public string DownloadCount { get; set; }
-        [JsonProperty("_aMetadata")]
-        public GBAPIFileMetadata FileMetadata { get; set; }
-    }
-
-    public class GBAPIFileMetadata
-    {
-        [JsonIgnoreAttribute]
-        public List<string> Files = new List<string>();
-        [JsonIgnoreAttribute]
-        public string MimeType { get; set; }
-
-        [JsonExtensionData]
-        private Dictionary<string, JToken> FileMetadata { get; set; }
-
-        [OnDeserialized]
-        private void OnDeserialized(StreamingContext context)
-        {
-            try
-            {
-                MimeType = FileMetadata["_sMimeType"].ToString();
-                if (FileMetadata.ContainsKey("_aArchiveFileTree"))
-                    Files.AddRange(LoopDirectory("", FileMetadata["_aArchiveFileTree"].ToObject<JObject>()));
-            }
-            catch
-            {
-                // Failed
-            }
-        }
-
-        private List<string> LoopDirectory(string dir, JObject jObject)
-        {
-            var list = new List<string>();
-            foreach (var data in jObject)
-            {
-                switch (data.Value.Type)
-                {
-                    case JTokenType.String:
-                        list.Add(Path.Combine(dir, data.Value.ToString()));
-                        break;
-                    case JTokenType.Object:
-                        var obj = data.Value.ToObject<JObject>();
-                        list.AddRange(LoopDirectory(Path.Combine(dir, data.Key), obj));
-                        break;
-                    case JTokenType.Array:
-                        var array = data.Value.ToObject<JArray>();
-                        foreach (var file in array)
-                            list.Add(Path.Combine(dir, data.Key, file.ToString()));
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return list;
-        }
+        public List<string> Files { get; set; }
     }
 
     public class GBAPIItemDataBasic : GBAPIItemData

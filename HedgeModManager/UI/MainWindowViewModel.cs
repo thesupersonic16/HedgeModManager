@@ -109,5 +109,17 @@ namespace HedgeModManager.UI
                 GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.Drop(dropInfo);
             }
         }
+
+        // NOTE: Loading values may not be needed as data may already be up to date
+        public void SaveProfileConfig(ModProfile profile, ModsDB modsDB)
+        {
+            foreach (var mod in modsDB.Mods)
+                mod.ExportConfig(profile);
+        }
+        public void LoadProfileConfig(ModProfile profile, ModsDB modsDB)
+        {
+            foreach (var mod in modsDB.Mods)
+                mod.ImportConfig(profile);
+        }
     }
 }

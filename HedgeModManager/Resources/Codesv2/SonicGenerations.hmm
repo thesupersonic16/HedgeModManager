@@ -7,8 +7,9 @@ Patch "Disable Ring Cap" by "Darío"
 WriteProtected<ushort>(0xE68522, 0xDEB)
 WriteProtected<byte>(0x1098E5F, 0xEB)
 
-Patch "Disable Damage" by "SuperSonic16"
-WriteNop(0xE2836A, 0x5)
+Patch "Disable Damage" by "SuperSonic16 & brianuuu"
+WriteProtected<byte>(0xDEAF2A, 0xEB)
+WriteProtected<byte>(0xE28364, 0xEB)
 
 Patch "Infinite Lives" by "CodenameGamma"
 WriteNop(0xD59A67, 0x6)
@@ -372,7 +373,6 @@ Write<float>(0x19FD2C, 30.0f)
 WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 1.0f / 30.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 30.0f)
-WriteProtected<float>(0x13E08A0, 1.0f / 30.0f) /* Cutscene Playback */
 
 Code "Locked 60 FPS" by "Skyth and M&M"
 Write<float>(0x19FD2C, 60.0f)
@@ -380,8 +380,8 @@ WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 1.0f / 60.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 60.0f)
 
-Code "60 FPS Cutscenes (experimental, requires Locked 60 FPS)"
-WriteProtected<float>(0x13E08A0, 1.0f / 60.0f)
+Patch "60 FPS Cutscenes (experimental)" by "M&M"
+WriteProtected<byte>(0xB21F0B, 0xCC, 0xF8, 0x4A);
 
 Code "Locked 72 FPS (experimental)" by "Skyth and M&M"
 Write<float>(0x19FD2C, 72.0f);
@@ -687,9 +687,6 @@ Code "2x Shadowmap Draw Distance but Lower Quality Shadows" by "Luig"
 Write<float>(0x01A57310, 50f)
 Write<float>(0x01A57314, 50f)
 Write<float>(0x01A57318, 60f)
-
-Patch "Remove SEGA from Title Bar" by "Hyper"
-WriteProtected<byte>(0xE7A99D, 0x3C);
 
 Patch "Disable Checkpoints" by "Hyper"
 WriteNop(0x1033338, 2);
@@ -1008,3 +1005,190 @@ WriteNop(0xD9474A, 2);
 Patch "Start Stages with ReadyGo" by "Hyper"
 WriteProtected<byte>(0xD944D3, 0xE9, 0x60, 0x03, 0x00, 0x00);
 WriteNop(0xD94861, 6);
+
+Patch "Disable Stomp Particles" by "Skyth"
+WriteProtected<byte>(0x15E9094, 0x00);
+WriteProtected<byte>(0x15E90AC, 0x00);
+WriteProtected<byte>(0x15E90C4, 0x00);
+
+Patch "Disable Slide Particles" by "Skyth"
+WriteProtected<byte>(0x15E91B4, 0x00);
+WriteProtected<byte>(0x15E91CC, 0x00);
+
+Patch "Disable Drift Particles" by "Hyper"
+WriteProtected<byte>(0x15E92B4, 0x00);
+WriteProtected<byte>(0x15E92CC, 0x00);
+
+Code "Disable Instant Damage on Enemy Contact" by "Skyth"
+*(int*)0x1E0BE34 = 0;
+
+Patch "Disable Title Outro" by "Skyth"
+WriteProtected<int>(0x57346F, 0x16A36CC);
+
+Code "Force Motion Blur" by "Skyth & Kitzu"
+Write<byte>(0x1A43103, 1)
+Write<float>(0x1A431F4, 1)
+Write<float>(0x1A43210, 1)
+
+Code "Replace Airboost with Super Flight" by "SWS90 & Ahremic"
+var BoostPtr = GetPointer(0x01E5E2F0, 0x5BC)
+if (BoostPtr >= 1)
+{
+  var BoostAmt = Read<float>(BoostPtr);
+  if (BoostAmt == 0)
+  {
+    WriteProtected<byte>(0x00DFE04C, 0x74,0x11); 
+    WriteProtected<byte>(0x00DFE04E, 0x56); 
+    WriteProtected<byte>(0x0123FD3C, 0x75); 
+  }
+  else
+  {
+    WriteNop(0x00DFE04C , 2);
+    WriteProtected<byte>(0x0123FD3C, 0xEB);
+  }
+}
+
+Patch "Unleashed Stick Deadzones" by "M&M"
+WriteProtected<byte>(0x16055EC, 0x69); /* InputThreshold (0.02f) */
+WriteProtected<byte>(0xE75F93, 0x38, 0x71); /* InputTransformHalf (0.85f) */
+WriteProtected<byte>(0x1605610, 0x69);
+WriteProtected<byte>(0x160562C, 0x69); /* InputTransformPower (3.0f) */
+
+Patch "Collect Super Rings Instantly" by "brianuuu"
+WriteNop(0xE4155E, 2);
+WriteNop(0xE415C8, 2);
+WriteProtected<int>(0xE4157A, -1);
+
+Patch "Unleashed Style Stomp" by "Skyth, brianuuu & Ahremic"
+WriteAsmHook(@"
+movss [esp + 2Ch], xmm0
+movaps xmm0, [esp + 20h]
+cmp byte ptr [edi + 5E8h], 0
+jz skip
+push esi
+mov esi, edi
+mov eax, 0E4F100h
+call eax
+pop esi
+skip:
+movaps [edi + 2B0h], xmm0
+", 0x1254D41, HookBehavior.Replace);
+WriteProtected<byte>(0x1254D47, 0xEB, 0x0A);
+WriteProtected<byte>(0x1254D59, 0x00);
+WriteProtected<byte>(0x1254D60, 0x01);
+WriteProtected<byte>(0x12548C0, 0xE9, 0x7B, 0x09, 0x00, 0x00);
+WriteProtected<int>(0x1255275, 500); 
+WriteProtected<int>(0x125539A, 498); 
+WriteProtected<int>(0x125541C, 497); 
+WriteProtected<byte>(0x12552E4, 0x78, 0xA3, 0xBA);
+
+WriteAsmHook(@"
+cmp byte ptr [esi + 440h], 0
+jz skip
+push ebx
+sub esp, 8
+mov ebx, dword ptr [esi]
+mov ebx, dword ptr [ebx + 74h]
+push 1
+push 1E8C7Bh
+lea eax, dword ptr [esp + 8]
+push eax
+mov ecx, esi
+call ebx
+mov ebx, 50CA30h
+call ebx
+add esp, 8
+pop ebx
+skip:
+cmp byte ptr [esi + 440h], 0
+", 0x12552C5, HookBehavior.Replace);
+
+Patch "Show Mega Drive in the Hub World" by "Hyper"
+WriteProtected<byte>(0xEED498, 0x01);
+
+Patch "Jump Dash Keeps Momentum" by "Ahremic"
+WriteProtected<byte>(0x01231B0C, 0xE8);// Modern
+WriteNop(0x01231B0D, 4);
+WriteProtected<byte>(0x0122E9BB, 0xE8);// Classic
+WriteNop(0x0122E9BC, 4);
+
+Patch "Dropped Rings Bounce Less and Flicker" by "Ahremic"
+// Set new bounce multiplier on contact
+static float NewMultiplier = 1.65f; // Previously 2.0f, would just reflect your velocity 1:1 on flat ground.
+fixed (float* pNewMultiplier = &NewMultiplier)
+	WriteProtected(0x006F2936, (uint)pNewMultiplier);
+	
+// Initialize extra allocated memory-- data size is 0x180 but it only uses up to 0x174
+WriteAsmHook(@"movss dword ptr [esi + 0x174], xmm0
+mov dword ptr [esi + 0x178], 0",    0x01054F43, HookBehavior.After);
+
+// Ring flashing when time is about to run out
+static float WarningTime  =  1.0f;                   // Amount of time the rings will flash before disappearing
+static float TargetTime   =  2.0f * (1.0f / 60.0f);  // Number of frames each flash interval lasts (2) at 60fps 
+
+fixed (float* pWarningTime = &WarningTime)
+fixed (float* pTargetTime  = &TargetTime)
+{
+    WriteAsmHook($@"movss  xmm0, [edi + 0x128]
+subss  xmm0, ds:{(uint)pWarningTime}
+movss  xmm1, ds:{(uint)pTargetTime}
+subss  xmm0, xmm1
+comiss xmm0, [edi + 0x160]
+ja return
+
+; Add flicker timer by deltaTime (ebx), check if it exceeds our timer
+movss  xmm0, [edi + 0x174]
+addss  xmm0, [ebx]
+movss  [edi + 0x174], xmm0
+comiss xmm1, xmm0
+ja return
+
+; Flip visibility when we hit our desired time
+cmp    byte ptr [edi + 0x178], 0
+sete   al
+mov    [edi + 0x178], al
+; Set timer back to zero
+mov dword ptr [edi + 0x174], 0
+
+
+; Function Call for setting a CGameObject's visibility
+push ecx
+push  eax
+mov   eax, [edi + 0x178]
+push  eax
+push  edi
+xor   eax, eax
+mov   ecx, 0x00D5F770 ; Actual function address
+call  ecx
+pop   eax
+pop   ecx
+
+; Continue with the rest of the update function
+return:
+", 0x01054B37,HookBehavior.After);
+}
+
+Patch "Disable Classic Run Particles" by "Hyper"
+WriteProtected<byte>(0xDC1C6F, 0xE9, 0x99, 0x00, 0x00, 0x00);
+
+Patch "Never Receive Boost From Drift" by "Hyper"
+WriteProtected<byte>(0xE03E46, 0xD9, 0xEE);
+WriteNop(0xE03E48, 6);
+WriteProtected<byte>(0x15E96B0, 0x00);
+
+Patch "Never Receive Boost From Rings" by "Hyper"
+{
+	void NOP(int floatInstrAddr, int paramStrAddr)
+	{
+		WriteProtected<byte>(floatInstrAddr, 0xD9, 0xEE); /* fldz */
+		WriteNop(floatInstrAddr + 2, 6);
+		WriteProtected<byte>(paramStrAddr, 0x00);
+	}
+	
+	NOP(0x120628B, 0x15FA690); /* ChaosEnergyRecoverRateByRing */
+	NOP(0x1206335, 0x15FA6DC); /* ChaosEnergyRecoverRateByRingBonus */
+	NOP(0x12063DF, 0x15FA72C); /* ChaosEnergyRecoverRateByRingPenalty */
+}
+
+Patch "Disable Color Correction" by "M&M"
+WriteProtected<byte>(0x1699F54, 0x00);
