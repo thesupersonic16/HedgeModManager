@@ -224,7 +224,8 @@ namespace HedgeModManager
             if (GameInstalls.Count == 0)
                 GameInstalls.Add(new GameInstall(Games.Unknown, null, GameLauncher.None));
 
-            if (string.IsNullOrEmpty(ModsDbPath) && !string.IsNullOrEmpty(StartDirectory))
+            bool modsDbValidPath = !string.IsNullOrEmpty(ModsDbPath) && Directory.Exists(ModsDbPath);
+            if (!modsDbValidPath && !string.IsNullOrEmpty(StartDirectory))
                 ModsDbPath = Path.Combine(StartDirectory, "Mods");
             if (!string.IsNullOrEmpty(StartDirectory))
                 ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
@@ -701,7 +702,12 @@ namespace HedgeModManager
                 {
                     ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
                     Config = new CPKREDIRConfig(ConfigPath);
+
                     ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
+                    if (!Directory.Exists(ModsDbPath))
+                    {
+                        ModsDbPath = Path.Combine(StartDirectory, "Mods");
+                    }
                 }
             }
             catch (UnauthorizedAccessException)
