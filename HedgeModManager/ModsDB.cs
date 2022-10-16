@@ -57,13 +57,7 @@ namespace HedgeModManager
                 {
                     using (var stream = File.OpenRead(iniPath))
                         IniSerializer.Deserialize(this, stream);
-
-                    // Read relative mod paths as full paths
-                    foreach(var modGuid in mMods.Keys.ToList())
-                    {
-                        mMods[modGuid] = MakeModPathFull(mMods[modGuid]);
-                    }
-
+                    
                     // Force load order to bottom to top
                     ReverseLoadOrder = false;
                 }
@@ -203,8 +197,6 @@ namespace HedgeModManager
                 if (mod.Favorite)
                     FavoriteMods.Add(id);
 
-                mod.RootDirectory = MakeModPathRelative(mod.RootDirectory);
-
                 // ReSharper disable once AssignNullToNotNullAttribute
                 mMods.Add(id, $"{mod.RootDirectory}{Path.DirectorySeparatorChar}mod.ini");
             }
@@ -231,18 +223,6 @@ namespace HedgeModManager
 
                 await CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
             }
-        }
-
-        public string MakeModPathRelative(string modPath)
-        {
-            // Returns mod directory as folder name only.
-            return Path.GetFileName(modPath);
-        }
-
-        public string MakeModPathFull(string modPath)
-        {
-            // Converts the relative directory into a full path based on the database location
-            return Path.Combine(RootDirectory, modPath);
         }
 
         public ModInfo GetModFromActiveGUID(string id)
