@@ -215,23 +215,7 @@ namespace HedgeModManager
                 switch (Launcher)
                 {
                     case GameLauncher.Steam:
-                        if (HedgeApp.IsLinux)
-                        {
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = $"start",
-                                Arguments = $"/unix /usr/bin/xdg-open steam://run/{BaseGame.AppID}",
-                                UseShellExecute = true
-                            });
-                        }
-                        else
-                        {
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = $"steam://run/{BaseGame.AppID}",
-                                UseShellExecute = true
-                            });
-                        }
+                        HedgeApp.StartURL($"steam://run/{BaseGame.AppID}", true);
                         break;
                     case GameLauncher.Epic:
                         Process.Start(new ProcessStartInfo

@@ -399,7 +399,7 @@ namespace HedgeModManager
             // Launches the selected game
             if (args.Any(t => t.Key == "-launch"))
             {
-                CurrentGameInstall?.StartGame(Config.UseLauncher);
+                CurrentGameInstall?.StartGame(Config.UseLauncher || HedgeApp.IsLinux);
                 Shutdown();
             }
 
@@ -1011,6 +1011,32 @@ namespace HedgeModManager
             catch
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Executes an URL. xdg-open is used on Linux
+        /// </summary>
+        /// <param name="url">URL to execute</param>
+        /// <param name="useShellExecute">ProcessStartInfo.UseShellExecute</param>
+        public static void StartURL(string url, bool useShellExecute = true)
+        {
+            if (IsLinux)
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = $"start",
+                    Arguments = $"/b /unix /usr/bin/xdg-open {url}",
+                    UseShellExecute = useShellExecute
+                });
+            }
+            else
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = $"{url}",
+                    UseShellExecute = useShellExecute
+                });
             }
         }
 

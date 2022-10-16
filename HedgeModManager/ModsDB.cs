@@ -518,7 +518,7 @@ namespace HedgeModManager
 
             if (openFolder)
             {
-                Process.Start(path);
+                HedgeApp.StartURL(path);
             }
         }
 
