@@ -130,12 +130,7 @@ namespace HedgeModManager.Properties {
         ///}
         ///
         ///th, td {
-        ///    padding: 2px;
-        ///}
-        ///
-        ///th {
-        ///    text-align: left;
-        ///}.
+        ///    padding:  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GBStyleSheet {
             get {
@@ -184,8 +179,7 @@ namespace HedgeModManager.Properties {
         ///        None = 0x00,
         ///
         ///        /// &lt;summary&gt;
-        ///        ///  The left mouse button.
-        ///        / [rest of string was truncated]&quot;;.
+        ///        ///  The left mou [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Keys {
             get {
@@ -210,7 +204,7 @@ namespace HedgeModManager.Properties {
         ///                IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
         ///
         ///        [DllImport(&quot;kernel32.dll&quot;, CharSet = CharSet.Auto)]
-        ///        public static extern IntPtr GetModule [rest of string was truncated]&quot;;.
+        ///        public static extern  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MemoryService {
             get {
@@ -231,20 +225,11 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicForces.hmm.
-        /// </summary>
-        internal static string URL_FML_CODES {
-            get {
-                return ResourceManager.GetString("URL_FML_CODES", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicGenerations.hmm.
         /// </summary>
-        internal static string URL_GCL_CODES {
+        internal static string URL_BLUEBLUR_CODES {
             get {
-                return ResourceManager.GetString("URL_GCL_CODES", resourceCulture);
+                return ResourceManager.GetString("URL_BLUEBLUR_CODES", resourceCulture);
             }
         }
         
@@ -269,9 +254,9 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicOrigins.hmm.
         /// </summary>
-        internal static string URL_HML_CODES {
+        internal static string URL_HITE_CODES {
             get {
-                return ResourceManager.GetString("URL_HML_CODES", resourceCulture);
+                return ResourceManager.GetString("URL_HITE_CODES", resourceCulture);
             }
         }
         
@@ -312,15 +297,6 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/LostWorld.hmm.
-        /// </summary>
-        internal static string URL_LCL_CODES {
-            get {
-                return ResourceManager.GetString("URL_LCL_CODES", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/LostCodeLoader.dll.
         /// </summary>
         internal static string URL_LCL_DL {
@@ -341,18 +317,27 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/TokyoOlympics2020.hmm.
         /// </summary>
-        internal static string URL_MML_CODES {
+        internal static string URL_MUSASHI_CODES {
             get {
-                return ResourceManager.GetString("URL_MML_CODES", resourceCulture);
+                return ResourceManager.GetString("URL_MUSASHI_CODES", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicColorsUltimate.hmm.
         /// </summary>
-        internal static string URL_RML_CODES {
+        internal static string URL_RAINBOW_CODES {
             get {
-                return ResourceManager.GetString("URL_RML_CODES", resourceCulture);
+                return ResourceManager.GetString("URL_RAINBOW_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicFrontiers.hmm.
+        /// </summary>
+        internal static string URL_RANGERS_CODES {
+            get {
+                return ResourceManager.GetString("URL_RANGERS_CODES", resourceCulture);
             }
         }
         
@@ -366,11 +351,29 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/LostWorld.hmm.
+        /// </summary>
+        internal static string URL_SONIC2013_CODES {
+            get {
+                return ResourceManager.GetString("URL_SONIC2013_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/PuyoPuyoTetris2.hmm.
         /// </summary>
-        internal static string URL_TML_CODES {
+        internal static string URL_TENPEX_CODES {
             get {
-                return ResourceManager.GetString("URL_TML_CODES", resourceCulture);
+                return ResourceManager.GetString("URL_TENPEX_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicForces.hmm.
+        /// </summary>
+        internal static string URL_WARS_CODES {
+            get {
+                return ResourceManager.GetString("URL_WARS_CODES", resourceCulture);
             }
         }
         
