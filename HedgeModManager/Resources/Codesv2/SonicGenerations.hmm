@@ -1195,3 +1195,6 @@ WriteProtected<byte>(0x1699F54, 0x00);
 
 Code "Disable Light Shafts" by "Skyth"
 *(bool*)0x1E5E333 = false;
+
+Code "Disable Planar Reflections" by "Skyth"
+*(bool*)0x1B22E78 = false;
