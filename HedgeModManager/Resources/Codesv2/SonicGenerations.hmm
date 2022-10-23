@@ -1192,3 +1192,6 @@ Patch "Never Receive Boost From Rings" by "Hyper"
 
 Patch "Disable Color Correction" by "M&M"
 WriteProtected<byte>(0x1699F54, 0x00);
+
+Code "Disable Light Shafts" by "Skyth"
+*(bool*)0x1E5E333 = false;
