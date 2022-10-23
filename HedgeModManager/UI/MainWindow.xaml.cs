@@ -1188,7 +1188,7 @@ namespace HedgeModManager
 
         private void UI_Open_Folder(object sender, RoutedEventArgs e)
         {
-            Process.Start(ViewModel.SelectedMod.RootDirectory);
+            HedgeApp.StartURL(ViewModel.SelectedMod.RootDirectory);
         }
 
         private void UI_Install_Mod(object sender, RoutedEventArgs e)
@@ -1337,12 +1337,12 @@ namespace HedgeModManager
 
         private void UI_OpenMods_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(HedgeApp.ModsDbPath);
+            HedgeApp.StartURL(HedgeApp.ModsDbPath);
         }
 
         private void UI_OpenGameDir_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(HedgeApp.CurrentGameInstall.GameDirectory);
+            HedgeApp.StartURL(HedgeApp.CurrentGameInstall.GameDirectory);
         }
 
         private void UI_ChangeDatabasePath_Click(object sender, RoutedEventArgs e)

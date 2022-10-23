@@ -57,7 +57,7 @@ namespace HedgeModManager
                 {
                     using (var stream = File.OpenRead(iniPath))
                         IniSerializer.Deserialize(this, stream);
-
+                    
                     // Force load order to bottom to top
                     ReverseLoadOrder = false;
                 }
@@ -232,7 +232,7 @@ namespace HedgeModManager
             if (modPair.Key == null)
                 return null;
 
-            return Mods.FirstOrDefault(t => Path.GetDirectoryName(modPair.Value) == t.RootDirectory);
+            return Mods.FirstOrDefault(t => Path.GetDirectoryName(modPair.Value).Equals(t.RootDirectory, StringComparison.OrdinalIgnoreCase));
         }
 
         public void DeleteMod(ModInfo mod)
@@ -498,7 +498,7 @@ namespace HedgeModManager
 
             if (openFolder)
             {
-                Process.Start(path);
+                HedgeApp.StartURL(path);
             }
         }
 

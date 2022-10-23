@@ -1195,3 +1195,9 @@ WriteProtected<byte>(0x1699F54, 0x00);
 
 Patch "Disable Controller Rumble" by "brianuuu"
 WriteProtected<byte>(0x9C7F56, 0xB8, 0x01, 0x00, 0x00, 0x00, 0xEB, 0x11, 0x90, 0x90)
+
+Code "Disable Light Shafts" by "Skyth"
+*(bool*)0x1E5E333 = false;
+
+Code "Disable Planar Reflections" by "Skyth"
+*(bool*)0x1B22E78 = false;
