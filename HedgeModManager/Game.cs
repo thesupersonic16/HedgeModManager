@@ -224,6 +224,9 @@ namespace HedgeModManager
                             UseShellExecute = true
                         });
                         break;
+                    case GameLauncher.Heroic:
+                        HedgeApp.StartURL($"heroic://launch/{BaseGame.EGSID}", true);
+                        break;
                     default:
                         Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
                         {
@@ -294,7 +297,8 @@ namespace HedgeModManager
     {
         None,
         Steam,
-        Epic
+        Epic,
+        Heroic
     }
 
     public class CodeLoaderInfo

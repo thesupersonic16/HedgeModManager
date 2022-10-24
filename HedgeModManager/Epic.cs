@@ -9,7 +9,7 @@ namespace HedgeModManager
 {
     public class Epic
     {
-        public class Installation
+        public class EGSInstallation
         {
             public string InstallLocation { get; set; }
             public string NamespaceId { get; set; }
@@ -19,12 +19,88 @@ namespace HedgeModManager
             public string AppName { get; set; }
         }
 
-        public class LauncherInstalled
+        public class LegendaryInstallation
         {
-            public List<Installation> InstallationList { get; set; }
+            [JsonProperty("app_name")]
+            public string AppName { get; set; }
+            [JsonProperty("executable")]
+            public string Executable { get; set; }
+            [JsonProperty("install_path")]
+            public string InstallPath { get; set; }
+            [JsonProperty("version")]
+            public string Version { get; set; }
+        }
+
+        public class EGSLauncherInstalled
+        {
+            public List<EGSInstallation> InstallationList { get; set; }
         }
 
         public static List<GameInstall> SearchForGames()
+        {
+            var games = new List<GameInstall>();
+            games.AddRange(SearchForGamesEGS() ?? new List<GameInstall>());
+            games.AddRange(SearchForGamesHeroic() ?? new List<GameInstall>());
+            return games;
+        }
+
+        public static List<GameInstall> SearchForGamesHeroic()
+        {
+            // Find home folder
+            string home = null;
+            if (HedgeApp.IsLinux)
+            {
+                home = Environment.GetEnvironmentVariable("WINEHOMEDIR")?.Replace("\\??\\", "");
+                // Prefix "Z:" if starts with "/"
+                if (home?.StartsWith("/") == true)
+                    home = $"Z:{home}";
+            }
+            else
+            {
+                home = Environment.GetEnvironmentVariable("USERPROFILE");
+            }
+
+            // Return if home folder is not found
+            if (home == null)
+                return null;
+
+            string installedFilePath = Path.Combine(home, ".config", "legendary", "installed.json");
+            if (!File.Exists(installedFilePath))
+                installedFilePath = Path.Combine(home, ".var", "app", "com.heroicgameslauncher.hgl", "config", "legendary", "installed.json");
+            
+            if (!File.Exists(installedFilePath))
+                return null;
+
+            var installations = new Dictionary<string, LegendaryInstallation>();
+
+            try
+            {
+                installations = JsonConvert.DeserializeObject<Dictionary<string, LegendaryInstallation>>(File.ReadAllText(installedFilePath));
+            }
+            catch
+            {
+                return null;
+            }
+
+            var games = new List<GameInstall>();
+
+            foreach (var game in Games.GetSupportedGames())
+            {
+                var installation = installations.FirstOrDefault(x => x.Key.Equals(game.EGSID, StringComparison.OrdinalIgnoreCase));
+
+                if (installation.Value == null)
+                    continue;
+
+                string fullPath = Path.Combine(installation.Value.InstallPath, installation.Value.Executable);
+                
+                if (File.Exists(fullPath))
+                    games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.Heroic));
+            }
+
+            return games;
+        }
+
+        public static List<GameInstall> SearchForGamesEGS()
         {
             var eos = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Epic Games\\EOS");
 
@@ -34,11 +110,11 @@ namespace HedgeModManager
             string launcherInstalledFilePath = Path.Combine(modSdkMetadataDir, 
                 "..", "..", "..", "UnrealEngineLauncher", "LauncherInstalled.dat");
 
-            LauncherInstalled launcherInstalled;
+            EGSLauncherInstalled launcherInstalled;
 
             try
             {
-                launcherInstalled = JsonConvert.DeserializeObject<LauncherInstalled>(File.ReadAllText(launcherInstalledFilePath));
+                launcherInstalled = JsonConvert.DeserializeObject<EGSLauncherInstalled>(File.ReadAllText(launcherInstalledFilePath));
             }
 
             catch
