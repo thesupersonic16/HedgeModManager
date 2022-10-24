@@ -88,11 +88,17 @@ namespace HedgeModManager
 
             foreach (string path in paths)
             {
+                string libraryPath = path;
+
+                // Prepend "Z:" if the path starts with "/" on WINE
+                if (HedgeApp.IsLinux && libraryPath.StartsWith("/"))
+                    libraryPath = $"Z:{libraryPath}";
+
                 if (Directory.Exists(path))
                 {
                     foreach (var game in Games.GetSupportedGames())
                     {
-                        var fullPath = Path.Combine(path, game.GamePath);
+                        var fullPath = Path.Combine(libraryPath, game.GamePath);
                         if (File.Exists(fullPath))
                         {
                             games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.Steam));
