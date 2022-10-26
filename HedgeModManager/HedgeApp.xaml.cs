@@ -998,19 +998,24 @@ namespace HedgeModManager
         /// </summary>
         public static bool InstallOneClickHandler()
         {
-            try
+            if (IsLinux)
+                return Linux.GenerateDesktop();
+            else
             {
-                var reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\hedgemm");
-                reg.SetValue("", $"URL:HedgeModManager");
-                reg.SetValue("URL Protocol", "");
-                reg = reg.CreateSubKey("shell\\open\\command");
-                reg.SetValue("", $"\"{HedgeApp.AppPath}\" \"%1\"");
-                reg.Close();
-                return true;
-            }
-            catch
-            {
-                return false;
+                try
+                {
+                    var reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\hedgemm");
+                    reg.SetValue("", $"URL:HedgeModManager");
+                    reg.SetValue("URL Protocol", "");
+                    reg = reg.CreateSubKey("shell\\open\\command");
+                    reg.SetValue("", $"\"{HedgeApp.AppPath}\" \"%1\"");
+                    reg.Close();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
