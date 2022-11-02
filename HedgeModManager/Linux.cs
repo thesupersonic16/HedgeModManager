@@ -24,7 +24,11 @@ namespace HedgeModManager
                 var deserializer = new DeserializerBuilder()
                     .IgnoreUnmatchedProperties().Build();
                 var config = deserializer.Deserialize<BottleConfig>(File.ReadAllText(GetBottleConfigPath()));
-                var program = config.External_Programs.FirstOrDefault().Value;
+                var program = config.External_Programs?.FirstOrDefault(x => x.Value.name == "HedgeModManager").Value;
+
+                // Ignore if program is not found
+                if (program == null)
+                    return false;
 
                 ExtractIcon(icon = Path.Combine(program.folder, "icon.png"));
 
@@ -70,6 +74,7 @@ namespace HedgeModManager
             group["StartupNotify"] = "false";
             group["NoDisplay"] = (!display).ToString().ToLower();
             group["MimeType"] = mimeType;
+            group["Categories"] = "Game";
 
             // Write desktop file
             using (var stream = File.OpenWrite(filePath))
@@ -92,7 +97,6 @@ namespace HedgeModManager
         }
 
         // Wine
-
         public static string GetHomeDirectory() => Environment.GetEnvironmentVariable("WINEHOMEDIR").Replace("\\??\\", "");
         public static string GetPrefixDirectory() => Environment.GetEnvironmentVariable("WINEPREFIX").Replace("\\??\\", "");
 
