@@ -112,7 +112,7 @@
     <system:String x:Key="MainUIMissingDependsHeader" >Failed to resolve mod dependencies</system:String>
     <system:String x:Key="MainUIMissingDepends"       >The following mods have missing dependencies:</system:String>
     <system:String x:Key="MainUIMissingDependsResolve">Resolve GB Mods</system:String>
-    <system:String x:Key="MainUIResolvable" xml:space="preserve">One or more dependencies can be automatically resolved&#x0a;from GameBanana by clicking &quot;Resolve GB Mods&quot;.</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">One or more dependencies can be automatically resolved&#x0a;from GameBanana by clicking "Resolve GB Mods".</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Please select an option!</system:String>
@@ -235,5 +235,6 @@
     <system:String x:Key="GameNoGame">No Game Detected!</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>
+    <system:String x:Key="LauncherHeroic">Heroic</system:String>
 
 </ResourceDictionary>

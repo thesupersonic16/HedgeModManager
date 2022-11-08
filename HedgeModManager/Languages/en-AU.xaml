@@ -170,7 +170,7 @@
     <system:String x:Key="StatusUIDownloadFailed"         >Download failed</system:String>
     <system:String x:Key="StatusUICodeUpdatesAvailable"   >Code updates available!</system:String>
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >No code updates found</system:String>
-    
+
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager could not access the game directory.&#x0a;Please ensure the Users group has &quot;Write&quot; set to Allow on the directory below and all of its files and folders.&#x0a;&#x0a;{0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >Are you sure you want to delete &quot;{0}&quot;?&#x0a;This action cannot be undone!</system:String>
