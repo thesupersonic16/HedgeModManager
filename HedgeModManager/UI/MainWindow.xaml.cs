@@ -801,6 +801,8 @@ namespace HedgeModManager
 
         public void EnableSaveRedirIfUsed()
         {
+            HedgeApp.Config.SaveFileFallback = HedgeApp.CurrentGame.SaveName;
+
             if (HedgeApp.Config.EnableFallbackSaveRedirection)
             {
                 HedgeApp.Config.EnableSaveFileRedirection = true;
