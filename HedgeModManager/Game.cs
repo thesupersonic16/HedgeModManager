@@ -23,6 +23,7 @@ namespace HedgeModManager
         {
             GameName = "SonicGenerations",
             ExecutableName = "SonicGenerations.exe",
+            SaveName = "cpkredir.sav",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
             Folders = new [] { "disk/bb", "disk/bb2", "disk/bb3" },
@@ -38,6 +39,7 @@ namespace HedgeModManager
         {
             GameName = "SonicLostWorld",
             ExecutableName = "slw.exe",
+            SaveName = "cpkredir.sav",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
             Folders = new[] { "disk/sonic2013_patch_0" },
@@ -49,10 +51,12 @@ namespace HedgeModManager
             GamePath = Path.Combine("Sonic Lost World", "slw.exe")
         };
 
+        // TODO: Change SaveName to "savedata.xml" once we have code to transfer fallback saves to the new name.
         public static Game SonicForces = new Game()
         {
             GameName = "SonicForces",
             ExecutableName = "Sonic Forces.exe",
+            SaveName = "cpkredir.sav",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
             Folders = new[] { "disk/wars_patch" },
@@ -113,8 +117,9 @@ namespace HedgeModManager
         {
             GameName = "SonicOrigins",
             ExecutableName = "SonicOrigins.exe",
+            SaveName = "savedata",
             SupportsCPKREDIR = false,
-            SupportsSaveRedirection = false,
+            SupportsSaveRedirection = true,
             Folders = new[] { "raw", "Sonic1u", "Sonic2u", "Sonic3ku", "SonicCDu" },
             AppID = "1794960",
             EGSID = "5070a8e44cf74ba3b9a4ca0c0dce5cf1",
@@ -129,8 +134,9 @@ namespace HedgeModManager
         {
             GameName = "SonicFrontiers",
             ExecutableName = "SonicFrontiers.exe",
+            SaveName = "savedata",
             SupportsCPKREDIR = false,
-            SupportsSaveRedirection = false,
+            SupportsSaveRedirection = true,
             Folders = new[] { "raw" },
             AppID = "1237320",
             GBProtocol = "hedgemmrangers",
@@ -190,6 +196,7 @@ namespace HedgeModManager
     {
         public string GameName = "NoGame";
         public string ExecutableName = string.Empty;
+        public string SaveName = string.Empty;
         public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
         public bool SupportsSaveRedirection = false;
