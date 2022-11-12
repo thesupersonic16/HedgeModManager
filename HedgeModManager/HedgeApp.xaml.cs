@@ -41,6 +41,7 @@ using HedgeModManager.Updates;
 using System.Security;
 using static HedgeModManager.Lang;
 using Microsoft.Win32;
+using HedgeModManager.CLI;
 
 namespace HedgeModManager
 {
@@ -230,83 +231,6 @@ namespace HedgeModManager
             if (!string.IsNullOrEmpty(StartDirectory))
                 ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
 
-            if (args.Length > 0)
-            {
-                string arg = args[0].ToLower();
-
-                if (arg == "-h")
-                {
-                    ShowHelp();
-                    return;
-                }
-
-                if (arg == "-encrypt")
-                {
-                    if (args.Length < 2)
-                    {
-                        Console.WriteLine("Insufficient arguments.");
-                        return;
-                    }
-
-                    var filename = args[1] + ".bytes";
-                    if (args.Length > 2)
-                        filename = args[2];
-
-                    using (var file = File.OpenRead(args[1]))
-                    using (var encrypted = File.Create(filename))
-                    {
-                        CryptoProvider.Encrypt(file, encrypted);
-                        Console.WriteLine($"Successfully encrypted {filename}");
-                    }
-                    return;
-                }
-
-                if (arg == "-decrypt")
-                {
-                    if (args.Length < 2)
-                    {
-                        Console.WriteLine("Insufficient arguments.");
-                        return;
-                    }
-
-                    var filename = Path.ChangeExtension(args[1], string.Empty);
-                    if (args.Length > 2)
-                        filename = args[2];
-
-                    using (var encrypted = File.OpenRead(args[1]))
-                    using (var decrypted = File.Create(filename))
-                    {
-                        CryptoProvider.Decrypt(encrypted, decrypted);
-                        Console.WriteLine($"Successfully decrypted {filename}");
-                    }
-                    return;
-                }
-
-                if (arg == "-decryptzip")
-                {
-                    if (args.Length < 2)
-                    {
-                        Console.WriteLine("Insufficient arguments.");
-                        return;
-                    }
-
-                    var filename = Path.ChangeExtension(args[1], ".zip");
-                    if (args.Length > 2)
-                        filename = args[2];
-
-
-                    byte[] data = Convert.FromBase64String(File.ReadAllText(args[1]));
-
-                    using (var encrypted = new MemoryStream(data))
-                    using (var decrypted = File.Create(filename))
-                    {
-                        CryptoProvider.Decrypt(encrypted, decrypted);
-                        Console.WriteLine($"Successfully decrypted {filename}");
-                    }
-                    return;
-                }
-            }
-
             if (CurrentGame.SupportsCPKREDIR)
             {
                 if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))
@@ -349,15 +273,6 @@ namespace HedgeModManager
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            var args = ParseArguments(e.Args);
-
-            // GB Integration shows UI, and therefore should be done *after* Application.Run
-            if (e.Args.Length > 1 && e.Args[0].ToLowerInvariant() == "-gb")
-            {
-                GBAPI.ParseCommandLine(e.Args[1]);
-                Shutdown();
-            }
-
             // URL command
             if (e.Args.Length >= 1 && e.Args[0].ToLowerInvariant().StartsWith("hedgemm://"))
             {
@@ -370,38 +285,8 @@ namespace HedgeModManager
                 Shutdown();
             }
 
-            // Set selected game
-            if (args.Any(t => t.Key == "-game" && t.Value != null))
-            {
-                SelectGameInstall(GameInstalls.FirstOrDefault(
-                    t => t.BaseGame.GameName.ToLowerInvariant() == args["-game"].ToLowerInvariant()));
-            }
-
-            // Set selected profile
-            // TODO: Add a check to see if the profile exists
-            // TODO: Handle profile configs
-            if (args.Any(t => t.Key == "-profile" && t.Value != null))
-            {
-                Config.ModProfile = args["-profile"];
-            }
-
-            // Saves the configuration from other start options
-            if (args.Any(t => t.Key == "-save"))
-            {
-                var window = MainWindow as MainWindow;
-                
-                // Profiles
-                window.RefreshProfiles();
-                Config.ModsDbIni = Path.Combine(ModsDbPath, window.SelectedModProfile.ModDBPath);
-                Config.Save(ConfigPath);
-            }
-
-            // Launches the selected game
-            if (args.Any(t => t.Key == "-launch"))
-            {
-                CurrentGameInstall?.StartGame(Config.UseLauncher || HedgeApp.IsLinux);
-                Shutdown();
-            }
+            var args = CommandLine.ParseArguments(e.Args);
+            CommandLine.ExecuteArguments(args);
 
             base.OnStartup(e);
             MainWindow.Show();
