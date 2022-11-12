@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace HedgeModManager.CLI.Commands
 {
+    [CliDeprecatedCommandName("-profile")]
     [CliCommand("launch", "l", null, "Launches the selected game", "--launch", "--game SonicLostWorld --launch")]
     public class CliCommandLaunch : ICliCommand
     {

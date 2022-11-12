@@ -8,6 +8,7 @@ namespace HedgeModManager.CLI.Commands
 {
     // TODO: Add a check to see if the profile exists
     // TODO: Handle profile configs
+    [CliDeprecatedCommandName("-profile")]
     [CliCommand("profile", "p", new[] { typeof(string) }, "Set selected profile", "--profile {ProfileName}", "--profile \"Sonic Unleashed\"")]
     public class CliCommandProfile : ICliCommand
     {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace HedgeModManager.CLI.Commands
 {
+    [CliDeprecatedCommandName("-game")]
     [CliCommand("game", "g", new [] { typeof(string) }, "Set selected game", "--game {GameName}", "--game SonicFrontiers")]
     public class CliCommandGame : ICliCommand
     {

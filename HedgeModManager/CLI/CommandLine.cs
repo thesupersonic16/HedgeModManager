@@ -60,6 +60,23 @@ namespace HedgeModManager.CLI
                     var command = RegisteredCommands.FirstOrDefault(x => x.Key.Alias == args[i].Substring(1));
                     if (args[i].StartsWith("--"))
                         command = RegisteredCommands.FirstOrDefault(x => x.Key.Name == args[i].Substring(2));
+                    // Check if deprecated name is used
+                    if (command.Key == null)
+                    {
+                        foreach (var commandDef in RegisteredCommands)
+                        {
+                            foreach (var deprecatedName in 
+                                commandDef.Value.GetCustomAttributes<CliDeprecatedCommandNameAttribute>())
+                            {
+                                if (deprecatedName.Name == args[i])
+                                {
+                                    command = commandDef;
+                                    Console.WriteLine("Warning: Deprecated command name ({0}) was used, please use --{1} instead",
+                                        deprecatedName.Name, commandDef.Key.Name);
+                                }
+                            }
+                        }
+                    }
                     if (command.Key == null)
                         continue;
 

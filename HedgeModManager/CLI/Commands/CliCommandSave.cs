@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace HedgeModManager.CLI.Commands
 {
+    [CliDeprecatedCommandName("-save")]
     [CliCommand("save", "s", null, "Saves the configuration from other start options", "--save", "--profile \"Sonic Unleashed\" --save")]
     public class CliCommandSave : ICliCommand
     {
