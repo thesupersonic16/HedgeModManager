@@ -883,11 +883,11 @@ namespace HedgeModManager
         /// </summary>
         public static bool InstallOneClickHandler()
         {
-            if (IsLinux)
-                return Linux.GenerateDesktop();
-            else
+            try
             {
-                try
+                if (IsLinux)
+                    return Linux.GenerateDesktop();
+                else
                 {
                     var reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\hedgemm");
                     reg.SetValue("", $"URL:HedgeModManager");
@@ -897,10 +897,10 @@ namespace HedgeModManager
                     reg.Close();
                     return true;
                 }
-                catch
-                {
-                    return false;
-                }
+            }
+            catch
+            {
+                return false;
             }
         }
 
