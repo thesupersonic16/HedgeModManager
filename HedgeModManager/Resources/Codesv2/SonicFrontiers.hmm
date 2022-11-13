@@ -105,6 +105,42 @@ Patch "Disable Drift Input Prompt" by "Hyper"
     );
 }
 
+Patch "Disable Guardian Introductions" by "Hyper"
+{
+    /* WARNING: due to the lack of signatures, this patch may break something
+                or stop working in future versions of the game. */
+
+    // Ashura (Asura)
+    WriteProtected<byte>(0x14053025E, Assemble("mov edx, 7"));
+
+    // Blade (Ninja)
+    WriteProtected<byte>(0x140554214, 0xEB, 0x31);
+
+    // Charger (Caterpillar)
+    WriteProtected<byte>(0x14057528B, Assemble("mov edx, 3"));
+
+    // Daruma (Tower)
+    WriteProtected<byte>(0x14059E877, 0xE9, 0xC7, 0x00, 0x00, 0x00);
+
+    // Flyer (Squid)
+    WriteProtected<byte>(0x1405B19AC, Assemble("mov edx, 3"));
+
+    // Skier (Shark)
+    WriteProtected<byte>(0x1405CB02E, 0xE9, 0x00, 0x01, 0x00, 0x00);
+
+    // Spider
+    WriteProtected<byte>(0x1405E4186, Assemble("mov edx, 3"));
+
+    // Strider
+    WriteProtected<byte>(0x1405FE226, Assemble("mov edx, 2"));
+
+    // Sumo
+    WriteProtected<byte>(0x140617ADC, 0xEB);
+
+    // Tyrant (Tank)
+    WriteProtected<byte>(0x14065B0FB, Assemble("mov edx, 4"));
+}
+
 Patch "Disable In-Game Letterboxing" by "Hyper"
 {
     WriteProtected<byte>
