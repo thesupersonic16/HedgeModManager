@@ -29,8 +29,8 @@
     <system:String x:Key="MainUISaveAndPlay"   >Guardar e Jogar</system:String>
     <system:String x:Key="MainUIConfigureMod"  >Configurar Mod</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Falha ao transferir o carregador de mods.</system:String>
-    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Falha ao instalar o carregador de mods.&#x0a;Por favor verifica que tens permissões para escrever ficheiros do jogo.</system:String>
-    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Falha ao desinstalar o carregador de mods.&#x0a;Por favor verifica que não tens nenhum jogo em execução.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Falha ao instalar o carregador de mods.&#x0a;Por favor verifique que tem permissões para escrever nos ficheiros do jogo.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Falha ao desinstalar o carregador de mods.&#x0a;Por favor verifique que não tem nenhum jogo em execução.</system:String>
 
     <!-- Mods UI Strings -->
     <system:String x:Key="ModsUIName"           >Nome</system:String>
@@ -40,7 +40,7 @@
     <system:String x:Key="ModsUIModDescription" >Descrição</system:String>
     <system:String x:Key="ModsUIModFavorite"    >Favorito</system:String>
     <system:String x:Key="ModsUIModConfigure"   >Configurar mod</system:String>
-    <system:String x:Key="ModsUIModOpenFolder"  >Abrir pasta do conteúdo</system:String>
+    <system:String x:Key="ModsUIModOpenFolder"  >Abrir pasta de conteúdos</system:String>
     <system:String x:Key="ModsUIModCheckUpdates">Procurar atualizações</system:String>
     <system:String x:Key="ModsUICheckUpdatesAll">Procurar atualizações para todos os mods</system:String>
     <system:String x:Key="ModsUIModEdit"        >Editar mod</system:String>
@@ -48,16 +48,16 @@
     <system:String x:Key="ModsUIFeatureConfig"  >Este mod pode ser configurado.</system:String>
     <system:String x:Key="ModsUIFeatureConfigDisable">Este mod não suporta configuração.</system:String>
     <system:String x:Key="ModsUIFeatureUpdate"       >Este mod suporta atualizações.</system:String>
-    <system:String x:Key="ModsUIFeatureUpdateDisable">Este mod não suporta atualização.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateDisable">Este mod não suporta atualizações.</system:String>
     <system:String x:Key="ModsUIFeatureUpdateFailed" >Este mod falhou ao procurar atualizações.</system:String>
     <system:String x:Key="ModsUIFeatureUpdateBlocked">Este mod foi bloqueado de procurar atualizações.</system:String>
     <system:String x:Key="ModsUIFeatureSave"         >Este mod utiliza redirecionamento do ficheiro de gravação.</system:String>
     <system:String x:Key="ModsUIFeatureSaveDisable"  >Este mod não suporta redirecionamento do ficheiro de gravação.</system:String>
     <system:String x:Key="ModsUIFeatureCode"         >Este mod contém código personalizado.</system:String>
     <system:String x:Key="ModsUIFeatureCodeDisable"  >Este mod não contém código personalizado.</system:String>
-    <system:String x:Key="ModsUIModDragDrop"    >Arrasta items para alterar a ordem de carregamento de mods.</system:String>
+    <system:String x:Key="ModsUIModDragDrop"    >Arraste os items para alterar a ordem de carregamento de mods.</system:String>
     <system:String x:Key="ModsUISearch"         >Pesquisar: </system:String>
-    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">O Hedge Mod Manager detetou que um ou mais mods têm diretorias inválidas.&#x0a;Queres que o Hedge Mod Manager tente corrigir este problema?</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">O Hedge Mod Manager detetou que um ou mais mods têm directórios inválidos.&#x0a;Quer que o Hedge Mod Manager tente corrigir este problema?</system:String>
     <system:String xml:space="preserve" x:Key="ModsUINoMods">...Não há nada aqui.&#x0a;Arranja alguns mods!</system:String>
     
     <!-- Codes UI Strings -->
@@ -65,7 +65,7 @@
     <system:String x:Key="CodesUIDownload">Transferir Códigos da Comunidade</system:String>
     <system:String x:Key="CodesUIUpdate"  >Atualizar Códigos da Comunidade</system:String>
     <system:String x:Key="CodesUISearch"  >Pesquisar: </system:String>
-    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Os códigos instalados são incompatíveis com o carregador de códigos.&#x0a;Por favor atualiza os códigos e o carregador.&#x0a;AVISO: Isto irá apagar quaisquer códigos personalizados.</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Os códigos instalados são incompatíveis com o carregador de códigos.&#x0a;Por favor atualize os códigos e o carregador.&#x0a;AVISO: Isto irá apagar quaisquer códigos personalizados.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">A obter códigos...</system:String>
     
     <!-- Settings UI Strings -->
@@ -73,8 +73,8 @@
     <system:String x:Key="SettingsUIGMLHeader"      >Jogo &amp; Carregador de Mods</system:String>
     <system:String x:Key="SettingsUIInstallLoader"  >Instalar o Carregador de Mods</system:String>
     <system:String x:Key="SettingsUIUninstallLoader">Desinstalar o Carregador de Mods</system:String>
-    <system:String x:Key="SettingsUIOpenMods"       >Abrir Diretoria de Mods</system:String>
-    <system:String x:Key="SettingsUIOpenGameDir"    >Abrir Diretoria do Jogo</system:String>
+    <system:String x:Key="SettingsUIOpenMods"       >Abrir Diretório de Mods</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >Abrir Diretório do Jogo</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Ativar o carregador de mods</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Ativar consola de depuração</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Ativar redirecionamento do ficheiro de gravação</system:String>
@@ -82,7 +82,7 @@
     <system:String x:Key="SettingsUILabelLoaders"   >Carregadores:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Jogo:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Perfil:</system:String>
-    <system:String x:Key="SettingsUILabelMDir"      >Diretoria de Mods:</system:String>
+    <system:String x:Key="SettingsUILabelMDir"      >Diretório de Mods:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUICheckMLUpdate"  >Procurar atualizações do carregador de mods</system:String>
@@ -95,8 +95,8 @@
     <system:String x:Key="SettingsUITheme"          >Tema:</system:String>
     <system:String x:Key="SettingsUIReleaseChannel" >Canal de Atualizações:</system:String>
     <system:String x:Key="SettingsUIChangingChannelTitle" >A Mudar de Canal de Atualizações</system:String>
-    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Estás prestes a mudar para o canal 'Release'.&#x0a;&#x0a;Tens a certeza de que pretendes continuar? O Hedge Mod Manager tem de reiniciar para mudar de canal.</system:String>
-    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Estás prestes a mudar para o canal 'Development'. Este canal pode conter funcionalidades não testadas assim como outros problemas.&#x0a;&#x0a;Tens a certeza de que pretendes continuar? O Hedge Mod Manager tem de reiniciar para mudar de canal.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Está prestes a mudar para o canal 'Release'.&#x0a;&#x0a;Tem a certeza de que pretende continuar? O Hedge Mod Manager terá de reiniciar para mudar de canal.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Está prestes a mudar para o canal 'Development'. Este canal pode conter funcionalidades não testadas assim como outros problemas.&#x0a;&#x0a;Tem a certeza de que pretende continuar? O Hedge Mod Manager terá de reiniciar para mudar de canal.</system:String>
     
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"   >Instalar um mod através de...</system:String>
@@ -104,21 +104,21 @@
     <system:String x:Key="MainUIInstallFormOptionArc">Instalar a partir de um arquivo</system:String>
     <system:String x:Key="MainUIInstallFormOptionNew">Criar um (para desenvolvedores!)</system:String>
     <system:String x:Key="MainUIMissingLoaderHeader" >Carregador de Mods Não Instalado!</system:String>
-    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc"   >De maneira a que {0} possa carregar mods, o carregador de mods precisa de estar instalado.&#x0a;Queres instala-lo agora?</system:String>
-    <system:String x:Key="MainUISelectModsDBTitle"   >Seleciona a pasta de onde pretendes carregar mods...</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc"   >De maneira a que {0} possa carregar mods, o carregador de mods precisa de estar instalado.&#x0a;Quer instala-lo agora?</system:String>
+    <system:String x:Key="MainUISelectModsDBTitle"   >Selecione a pasta de onde pretende carregar mods...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle" >Runtime Em Falta Detetada!</system:String>
-    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requer que {1} esteja instalado/a para que os mods funcionem corretamente. Queres que o HMM instale esta runtime?</system:String>
-    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Um ou mais mods ativados requerem o redirecionamento do ficheiro de gravação para funcionarem corretamente. Ativar esta funcionalidade?&#x0a;Clica "não" apenas se souberes o que estás a fazer.</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requer que {1} esteja instalado/a para que os mods funcionem corretamente. Quer que o HMM instale esta runtime?</system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Um ou mais mods ativados requerem o redirecionamento do ficheiro de gravação para funcionarem corretamente. Ativar esta funcionalidade?&#x0a;Clique "não" apenas se souber o que estás a fazer.</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" xml:space="preserve">Falha ao resolver dependências de mods</system:String>
     <system:String x:Key="MainUIMissingDepends" xml:space="preserve"      >Os seguintes mods têm dependências em falta:</system:String>
     <system:String x:Key="MainUIMissingDependsResolve">Resolver Mods do GameBanana</system:String>
     <system:String x:Key="MainUIResolvable" xml:space="preserve">Uma ou mais dependências podem ser resolvidas automaticamente&#x0a;a partir do GameBanana ao clicar em "Resolver Mods do GameBanana".</system:String>
 
     <!-- OptionsWindow UI Strings -->
-    <system:String x:Key="OptionsWindowUIError"      >Por favor seleciona uma opção!</system:String>
+    <system:String x:Key="OptionsWindowUIError"      >Por favor selecione uma opção!</system:String>
 
     <!-- AboutWindow UI Strings -->
-    <system:String x:Key="AboutWindowUITitle">Acerda do Hedge Mod Manager</system:String>
+    <system:String x:Key="AboutWindowUITitle">Acerca do Hedge Mod Manager</system:String>
     <system:String x:Key="AboutWindowUILine1">Um programa desenhado para facilitar o carregamento de mods para a Hedgehog Engine.</system:String>
     <system:String x:Key="AboutWindowUILine2">Requer uma cópia legal de um dos jogos suportados.</system:String>
     <system:String x:Key="AboutWindowUICredits">Créditos</system:String>
@@ -142,7 +142,7 @@
     <system:String x:Key="ProfileWindowUIImportMissingCodes"  >Os seguintes códigos não foram encontrados:</system:String>
 
     <!-- EditModWindow UI Strings -->
-    <system:String x:Key="EditModWindowUIHeader">Por favor preenche alguns detalhes sobre o teu mod.</system:String>
+    <system:String x:Key="EditModWindowUIHeader">Por favor preencha alguns detalhes sobre o seu mod.</system:String>
 
     <!-- PropertyEditor UI Strings -->
     <system:String x:Key="PropertyEditorUIName">Nome</system:String>
@@ -172,12 +172,12 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Nenhuma atualização de códigos encontrada</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">O Hedge Mod Manager não conseguiu aceder à diretoria do jogo.&#x0a;Por favor verifica que o grupo Utilizadores tem acesso de &quot;Escrita&quot; na diretoria abaixo e em todos os seus ficheiros e pastas.&#x0a;&#x0a;{0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Tens a certeza de que pretendes apagar "{0}"?&#x0a;Esta ação não pode ser desfeita!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">O Hedge Mod Manager não conseguiu aceder ao diretório do jogo.&#x0a;Por favor verifique que o grupo Utilizadores tem acesso de &quot;Escrita&quot; na diretoria abaixo e em todos os seus ficheiros e pastas.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Tem a certeza de que pretende apagar "{0}"?&#x0a;Esta ação não pode ser desfeita!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} já está atualizado.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Uma versão mais recente de {0} está disponível! ({1})</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Tens a certeza de que pretendes cancelar a atualização?&#x0a;Esta ação pode corrumper {0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Não foi possível encontrar o 7-Zip ou o WinRAR!&#x0a;Um destes é necessário para extrair dados de mods&#x0a;&#x0a;Por favor verifica que pelo menos um destes encontra-se instalado no teu sistema.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Tem a certeza que pretende cancelar a atualização?&#x0a;Esta ação pode corrumper {0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Não foi possível encontrar o 7-Zip ou o WinRAR!&#x0a;Um destes é necessário para extrair dados de mods&#x0a;&#x0a;Por favor verifique que pelo menos um destes se encontra instalado no seu sistema.</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >concluída</system:String>
@@ -196,7 +196,7 @@
 
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Falha ao Transferir Mod</system:String>
-    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Ocorreu um erro durante a transferência. Os servidores poderão estar em baixo ou sobrecarregados. Por favor tenta novamente mais tarde. &#x0a;&#x0a;Detalhes: {0}</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Ocorreu um erro durante a transferência. Os servidores poderão estar em baixo ou sobrecarregados. Por favor tente novamente mais tarde. &#x0a;&#x0a;Detalhes: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Falha ao Encontrar Jogo</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">O Hedge Mod Manager foi incapaz de encontrar uma instalação de {0}</system:String>
 
@@ -211,12 +211,12 @@
     <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager Lançou uma Exceção!</system:String>
     <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager Encontrou um Erro!</system:String>
     <system:String x:Key="ExceptionWindowButtonCopyLog"   >Copiar Log para Área de Transferência</system:String>
-    <system:String x:Key="ExceptionWindowButtonIgnore"    >Ignorar and Fechar</system:String>
+    <system:String x:Key="ExceptionWindowButtonIgnore"    >Ignorar e Fechar</system:String>
     <system:String x:Key="ExceptionWindowButtonReport"    >Submeter Relatório no GitHub</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Nova Atualização Disponível!</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Parece que esta versão do Hedge Mod Manager encontra-se desatualizada.&#x0a;É altamente recomendado que atualizes primeiro e verifiques se este problema ainda ocorre.&#x0a;Queres atualizar agora?</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Parece que esta versão do Hedge Mod Manager se encontra desatualizada.&#x0a;É altamente recomendado que atualize primeiro e verifique se este problema ainda ocorre.&#x0a;Quer atualizar agora?</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">Erro na Atualização!</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Não foi possível atualizar o Hedge Mod Manager!&#x0a;Por favor transfere manualmente a última versão.</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Não foi possível atualizar o Hedge Mod Manager!&#x0a;Por favor transfira a última versão manualmente.</system:String>
 
     <!-- Themes -->
     <system:String x:Key="ThemeDark">Escuro</system:String>
@@ -230,6 +230,12 @@
     <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
     <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
-    <system:String x:Key="GameSonicColorsUltimate">Sonic Colours: Ultimate</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
+    <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
+    <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
+    <system:String x:Key="GameNoGame">Nenhum Jogo Detetado!</system:String>
+    <system:String x:Key="LauncherSteam">Steam</system:String>
+    <system:String x:Key="LauncherEpic">Epic Games</system:String>
+    <system:String x:Key="LauncherHeroic">Heroic</system:String>
 
 </ResourceDictionary>
