@@ -259,61 +259,58 @@ Patch "Disable Vignette" by "Hyper"
 }
 
 Patch "Fix Resolution Resetting on Launch" by "Hyper"
+//
+    #load "System.Xml.dll"
+
+    using System.IO;
+    using System.Xml.Serialization;
+    
+    [XmlRoot(ElementName = "ScreenSetting")]
+    public class ScreenSetting
+    {
+        [XmlAttribute(AttributeName = "left")]
+        public int Left { get; set; }
+
+        [XmlAttribute(AttributeName = "top")]
+        public int Top { get; set; }
+
+        [XmlAttribute(AttributeName = "width")]
+        public int Width { get; set; }
+
+        [XmlAttribute(AttributeName = "height")]
+        public int Height { get; set; }
+
+        [XmlAttribute(AttributeName = "resolutionWidth")]
+        public int ResolutionWidth { get; set; }
+
+        [XmlAttribute(AttributeName = "resolutionHeight")]
+        public int ResolutionHeight { get; set; }
+
+        [XmlAttribute(AttributeName = "fullscreenStyle")]
+        public int FullscreenStyle { get; set; }
+
+        [XmlAttribute(AttributeName = "fullscreenState")]
+        public int FullscreenState { get; set; }
+    }
+//
 {
-    string xml = System.IO.Path.Combine
+    string xml = Path.Combine
     (
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         @"SEGA\SonicFrontiers\steam\x64\screen_setting.xml"
     );
     
-    if (System.IO.File.Exists(xml))
+    if (!File.Exists(xml))
     {
-        string root = System.IO.File.ReadAllLines(xml)[1];
-
-        /* We can't access System.Xml in this context,
-           so we have to settle for manual parsing. */
-
-        string[] split = root.Split('\"');
-
-        if (split.Length >= 11)
+        Console.WriteLine($"[Fix Resolution Resetting on Launch] Code halted, file not found: {xml}");
+        return;
+    }
+    
+    try
+    {
+        using (StringReader reader = new StringReader(File.ReadAllText(xml)))
         {
-            if (!int.TryParse(split[9], out int resolutionWidth))
-            {
-                Console.WriteLine("[Fix Resolution Resetting on Launch] Failed to parse resolutionWidth from XML.");
-                return;
-            }
-
-            if (!int.TryParse(split[11], out int resolutionHeight))
-            {
-                Console.WriteLine("[Fix Resolution Resetting on Launch] Failed to parse resolutionHeight from XML.");
-                return;
-            }
-
-            // Kill XML value reading for resolutionWidth and resolutionHeight.
-            WriteProtected<byte>
-            (
-                /* 0x150A0F5C2 */
-                ScanSignature
-                (
-                    "\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x48\x8B\xAC\x24\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x20\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x24\x48\x8D\x4C\x24\x00\xB3\x01\xE8\x00\x00\x00\x00\x0F\xB6\xC3\x48\x81\xC4\x00\x00\x00\x00\x5F\x5B\xC3",
-                    "xxxxxxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxx????xxxx????xxxxxxxxx????xxxxxxxxx????xxxx????xxxxxxxxx????xxxxxxx?xxx????xxxxxx????xxx"
-                ),
-                
-                0xEB
-            );
-
-            // Always pass resolutionWidth -1 check so we can force new value.
-            WriteProtected<byte>
-            (
-                /* 0x140BB6682 */
-                ScanSignature
-                (
-                    "\x75\x41\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x0E\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01\x83\xB9\x00\x00\x00\x00\x00\x75\x41\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x0E\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01",
-                    "xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxxxx?????xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxx"
-                ),
-            
-                0xEB, 0x30
-            );
+            var screenSetting = (ScreenSetting)new XmlSerializer(typeof(ScreenSetting)).Deserialize(reader);
 
             // Force resolutionWidth from XML as default value.
             WriteProtected<byte>
@@ -325,20 +322,7 @@ Patch "Fix Resolution Resetting on Launch" by "Hyper"
                     "xx????????xxxxxxxxx?????xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxx"
                 ),
                 
-                Assemble($"mov dword ptr [rcx + 0xF0], 0x{resolutionWidth:X}")
-            );
-            
-            // Always pass resolutionHeight -1 check so we can force new value.
-            WriteProtected<byte>
-            (
-                /* 0x140BB66CC */
-                ScanSignature
-                (
-                    "\x75\x41\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x0E\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01\x41\x0F\xB6\xC7\x34\x01\x88\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x40\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x10\x8B\x81\x00\x00\x00\x00\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20",
-                    "xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxxxxxxxxxx????xxxxxx?????xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????xx????xxxx"
-                ),
-                
-                0xEB, 0x30
+                Assemble($"mov dword ptr [rcx + 0xF0], 0x{screenSetting.ResolutionWidth:X}")
             );
 
             // Force resolutionHeight from XML as default value.
@@ -351,10 +335,54 @@ Patch "Fix Resolution Resetting on Launch" by "Hyper"
                     "xx????????xxxxxxxxxxxxxxx????xxxxxx?????xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????xx????xxxx"
                 ),
                 
-                Assemble($"mov dword ptr [rcx + 0xF4], 0x{resolutionHeight:X}")
+                Assemble($"mov dword ptr [rcx + 0xF4], 0x{screenSetting.ResolutionHeight:X}")
             );
         }
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[Fix Resolution Resetting on Launch] {ex}");
+        return;
+    }
+
+    // Kill XML value reading for resolutionWidth and resolutionHeight.
+    WriteProtected<byte>
+    (
+        /* 0x150A0F5C2 */
+        ScanSignature
+        (
+            "\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x48\x8B\xAC\x24\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x20\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x24\x48\x8D\x4C\x24\x00\xB3\x01\xE8\x00\x00\x00\x00\x0F\xB6\xC3\x48\x81\xC4\x00\x00\x00\x00\x5F\x5B\xC3",
+            "xxxxxxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxx????xxxx????xxxxxxxxx????xxxxxxxxx????xxxx????xxxxxxxxx????xxxxxxx?xxx????xxxxxx????xxx"
+        ),
+        
+        0xEB
+    );
+
+    // Always pass resolutionWidth -1 check so we can force new value.
+    WriteProtected<byte>
+    (
+        /* 0x140BB6682 */
+        ScanSignature
+        (
+            "\x75\x41\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x0E\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01\x83\xB9\x00\x00\x00\x00\x00\x75\x41\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x0E\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01",
+            "xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxxxx?????xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxx"
+        ),
+    
+        0xEB, 0x30
+    );
+    
+    // Always pass resolutionHeight -1 check so we can force new value.
+    WriteProtected<byte>
+    (
+        /* 0x140BB66CC */
+        ScanSignature
+        (
+            "\x75\x41\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x0E\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01\x41\x0F\xB6\xC7\x34\x01\x88\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x40\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x10\x8B\x81\x00\x00\x00\x00\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20",
+            "xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxxxxxxxxxx????xxxxxx?????xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????xx????xxxx"
+        ),
+        
+        0xEB, 0x30
+    );
 }
 
 Patch "Force 4K Video Playback" by "Hyper"
