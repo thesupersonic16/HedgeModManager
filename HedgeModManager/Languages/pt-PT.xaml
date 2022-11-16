@@ -1,4 +1,4 @@
-<ResourceDictionary 
+﻿<ResourceDictionary 
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:system="clr-namespace:System;assembly=mscorlib">
@@ -176,7 +176,7 @@
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod">Tens a certeza de que pretendes apagar "{0}"?&#x0a;Esta ação não pode ser desfeita!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} já está atualizado.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Uma versão mais recente de {0} está disponível! ({1})</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Tens a certeza de que pretendes cancelar a atualização?&#x0a;Esta ação pode corrumper {0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Tens a certeza de que pretendes cancelar a atualização?&#x0a;Esta ação pode corromper {0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Não foi possível encontrar o 7-Zip ou o WinRAR!&#x0a;Um destes é necessário para extrair dados de mods&#x0a;&#x0a;Por favor verifica que pelo menos um destes encontra-se instalado no teu sistema.</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
