@@ -120,7 +120,7 @@ Patch "Centre Game Window on Launch" by "Hyper"
             if (top < 0)
             {
                 Console.WriteLine("[Centre Game Window on Launch] Invalid Y position! Defaulting to zero...");
-                top  = 0;
+                top = 0;
             }
 
             // Force new left value as default value.
