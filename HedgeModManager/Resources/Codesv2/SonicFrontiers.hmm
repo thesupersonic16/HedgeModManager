@@ -111,11 +111,15 @@ Patch "Centre Game Window on Launch" by "Hyper"
             int left = (screen.Width / 2) - (screenSetting.Width / 2);
             int top  = ((screen.Height / 2) - (screenSetting.Height / 2)) - GetTitleBarHeight();
 
-            if (left < 0 || top < 0)
+            if (left < 0)
             {
-                Console.WriteLine("[Centre Game Window on Launch] Invalid screen parameters! Defaulting to top-left...");
-
+                Console.WriteLine("[Centre Game Window on Launch] Invalid X position! Defaulting to zero...");
                 left = 0;
+            }
+
+            if (top < 0)
+            {
+                Console.WriteLine("[Centre Game Window on Launch] Invalid Y position! Defaulting to zero...");
                 top  = 0;
             }
 
