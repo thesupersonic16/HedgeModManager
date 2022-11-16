@@ -30,6 +30,159 @@ Patch "Always Unlocked Arcade Mode" by "Hyper"
     );
 }
 
+Patch "Centre Game Window on Launch" by "Hyper"
+//
+    #load "System.Xml.dll"
+
+    using System.IO;
+    using System.Xml.Serialization;
+    
+    [XmlRoot(ElementName = "ScreenSetting")]
+    public class ScreenSetting
+    {
+        [XmlAttribute(AttributeName = "left")]
+        public int Left { get; set; }
+
+        [XmlAttribute(AttributeName = "top")]
+        public int Top { get; set; }
+
+        [XmlAttribute(AttributeName = "width")]
+        public int Width { get; set; }
+
+        [XmlAttribute(AttributeName = "height")]
+        public int Height { get; set; }
+
+        [XmlAttribute(AttributeName = "resolutionWidth")]
+        public int ResolutionWidth { get; set; }
+
+        [XmlAttribute(AttributeName = "resolutionHeight")]
+        public int ResolutionHeight { get; set; }
+
+        [XmlAttribute(AttributeName = "fullscreenStyle")]
+        public int FullscreenStyle { get; set; }
+
+        [XmlAttribute(AttributeName = "fullscreenState")]
+        public int FullscreenState { get; set; }
+    }
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    static extern int GetSystemMetrics(int nIndex);
+
+    static Size GetScreenSize()
+        => new Size(GetSystemMetrics(0), GetSystemMetrics(1));
+
+    static int GetTitleBarHeight()
+        => GetSystemMetrics(31);
+
+    struct Size
+    {
+        public int Width { get; set; }
+
+        public int Height { get; set; }
+
+        public Size(int width, int height)
+        {
+            Width  = width;
+            Height = height;
+        }
+    }
+//
+{
+    string xml = Path.Combine
+    (
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        @"SEGA\SonicFrontiers\steam\x64\screen_setting.xml"
+    );
+    
+    if (!File.Exists(xml))
+    {
+        Console.WriteLine($"[Centre Game Window on Launch] Code halted, file not found: {xml}");
+        return;
+    }
+    
+    try
+    {
+        using (StringReader reader = new StringReader(File.ReadAllText(xml)))
+        {
+            var screenSetting = (ScreenSetting)new XmlSerializer(typeof(ScreenSetting)).Deserialize(reader);
+            
+            Size screen = GetScreenSize();
+
+            int left = (screen.Width / 2) - (screenSetting.Width / 2);
+            int top  = ((screen.Height / 2) - (screenSetting.Height / 2)) - GetTitleBarHeight();
+
+            if (left < 0 || top < 0)
+            {
+                Console.WriteLine("[Centre Game Window on Launch] Invalid screen parameters! Defaulting to top-left...");
+
+                left = 0;
+                top  = 0;
+            }
+
+            // Force new left value as default value.
+            WriteAsmHook
+            (
+                $"mov dword ptr [rbx], 0x{left:X}",
+
+                /* 0x150A0F546 */
+                ScanSignature
+                (
+                    "\x4D\x85\xFF\x74\x3A\x48\x85\xF6\x74\x35\x48\x85\xED\x74\x30\x48\x85\xC0\x74\x2B\x4C\x89\xF9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x03\xE8\x00\x00\x00\x00\x48\x89\xE9\x89\x43\x04\xE8\x00\x00\x00\x00\x4C\x89\xF1\x89\x43\x08\xE8\x00\x00\x00\x00\x89\x43\x0C\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\x48\x89\xC5\xE8\x00\x00\x00\x00\x4C\x8B\xBC\x24\x00\x00\x00\x00\x48\x89\xC6\x4C\x8B\xB4\x24\x00\x00\x00\x00\x48\x85\xED\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14",
+                    "xxxxxxxxxxxxxxxxxxxxxxxx????xxxxxx????xxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxxxx????xxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxx????xxxxxxx????xxx"
+                ),
+
+                HookBehavior.Replace
+            );
+
+            // Force new top value as default value.
+            WriteAsmHook
+            (
+                $"mov dword ptr [rbx + 4], 0x{top:X}",
+
+                /* 0x150A0F555 */
+                ScanSignature
+                (
+                    "\x48\x85\xC0\x74\x2B\x4C\x89\xF9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x03\xE8\x00\x00\x00\x00\x48\x89\xE9\x89\x43\x04\xE8\x00\x00\x00\x00\x4C\x89\xF1\x89\x43\x08\xE8\x00\x00\x00\x00\x89\x43\x0C\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\x48\x89\xC5\xE8\x00\x00\x00\x00\x4C\x8B\xBC\x24\x00\x00\x00\x00\x48\x89\xC6\x4C\x8B\xB4\x24\x00\x00\x00\x00\x48\x85\xED\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14",
+                    "xxxxxxxxx????xxxxxx????xxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxxxx????xxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxx????xxxxxxx????xxx"
+                ),
+
+                HookBehavior.Replace
+            );
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[Centre Game Window on Launch] {ex}");
+        return;
+    }
+
+    // Kill XML value reading for left.
+    WriteNop
+    (
+        /* 0x150A0F565 */
+        ScanSignature
+        (
+            "\x89\x03\xE8\x00\x00\x00\x00\x48\x89\xE9\x89\x43\x04\xE8\x00\x00\x00\x00\x4C\x89\xF1\x89\x43\x08\xE8\x00\x00\x00\x00\x89\x43\x0C\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\x48\x89\xC5\xE8\x00\x00\x00\x00\x4C\x8B\xBC\x24\x00\x00\x00\x00\x48\x89\xC6\x4C\x8B\xB4\x24\x00\x00\x00\x00\x48\x85\xED\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x48\x8B\xAC\x24\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x20\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x24\x48\x8D\x4C\x24\x00\xB3\x01\xE8\x00\x00\x00\x00\x0F\xB6\xC3\x48\x81\xC4\x00\x00\x00\x00\x5F\x5B\xC3",
+            "xxx????xxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxxxx????xxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxx????xxxx????xxxxxxxxx????xxxxxxxxx????xxxx????xxxxxxxxx????xxxxxxx?xxx????xxxxxx????xxx"
+        ),
+        
+        7
+    );
+
+    // Kill XML value reading for top.
+    WriteNop
+    (
+        /* 0x150A0F56F */
+        ScanSignature
+        (
+            "\x89\x43\x04\xE8\x00\x00\x00\x00\x4C\x89\xF1\x89\x43\x08\xE8\x00\x00\x00\x00\x89\x43\x0C\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\x48\x89\xC5\xE8\x00\x00\x00\x00\x4C\x8B\xBC\x24\x00\x00\x00\x00\x48\x89\xC6\x4C\x8B\xB4\x24\x00\x00\x00\x00\x48\x85\xED\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x48\x8B\xAC\x24\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x20\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x24\x48\x8D\x4C\x24\x00\xB3\x01\xE8\x00\x00\x00\x00\x0F\xB6\xC3\x48\x81\xC4\x00\x00\x00\x00\x5F\x5B\xC3",
+            "xxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxxxx????xxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxx????xxxx????xxxxxxxxx????xxxxxxxxx????xxxx????xxxxxxxxx????xxxxxxx?xxx????xxxxxx????xxx"
+        ),
+        
+        3
+    );
+}
+
 Patch "Disable Automatic Boost Gauge Replenishment" by "Hyper"
 {
     WriteNop
@@ -314,7 +467,7 @@ Patch "Fix Resolution Resetting on Launch" by "Hyper"
 
             if (screenSetting.ResolutionWidth <= 0 || screenSetting.ResolutionHeight <= 0)
             {
-                Console.WriteLine("[Fix Resolution Resetting on Launch] Invalid window parameters! Defaulting to 1280x720...");
+                Console.WriteLine("[Fix Resolution Resetting on Launch] Invalid screen parameters! Defaulting to 1280x720...");
                 
                 screenSetting.ResolutionWidth  = 1280;
                 screenSetting.ResolutionHeight = 720;
