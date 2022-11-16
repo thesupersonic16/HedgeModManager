@@ -277,8 +277,17 @@ Patch "Fix Resolution Resetting on Launch" by "Hyper"
 
         if (split.Length >= 11)
         {
-            int resolutionWidth  = int.Parse(split[9]);
-            int resolutionHeight = int.Parse(split[11]);
+            if (!int.TryParse(split[9], out int resolutionWidth))
+            {
+                Console.WriteLine("[Fix Resolution Resetting on Launch] Failed to parse resolutionWidth from XML.");
+                return;
+            }
+
+            if (!int.TryParse(split[11], out int resolutionHeight))
+            {
+                Console.WriteLine("[Fix Resolution Resetting on Launch] Failed to parse resolutionHeight from XML.");
+                return;
+            }
 
             // Kill XML value reading for resolutionWidth and resolutionHeight.
             WriteProtected<byte>
