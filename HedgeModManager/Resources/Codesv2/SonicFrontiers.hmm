@@ -312,6 +312,14 @@ Patch "Fix Resolution Resetting on Launch" by "Hyper"
         {
             var screenSetting = (ScreenSetting)new XmlSerializer(typeof(ScreenSetting)).Deserialize(reader);
 
+            if (screenSetting.ResolutionWidth <= 0 || screenSetting.ResolutionHeight <= 0)
+            {
+                Console.WriteLine("[Fix Resolution Resetting on Launch] Invalid window parameters! Defaulting to 1280x720...");
+                
+                screenSetting.ResolutionWidth  = 1280;
+                screenSetting.ResolutionHeight = 720;
+            }
+
             // Force resolutionWidth from XML as default value.
             WriteProtected<byte>
             (
