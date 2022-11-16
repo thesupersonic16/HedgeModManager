@@ -105,6 +105,21 @@ Patch "Disable Drift Input Prompt" by "Hyper"
     );
 }
 
+Patch "Disable Framerate Limiter in Cutscenes" by "M&M"
+{
+    WriteNop
+    (
+        /* 0x140126D90 */
+        ScanSignature
+        (
+            "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
+            "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
+        ),
+
+        51
+    );
+}
+
 Patch "Disable Guardian Introductions" by "Hyper"
 {
     /* WARNING: due to the lack of signatures, this patch may break something
@@ -243,7 +258,7 @@ Patch "Disable Vignette" by "Hyper"
     );
 }
 
-Patch "Fix Resolution Resetting On Launch" by "Hyper"
+Patch "Fix Resolution Resetting on Launch" by "Hyper"
 {
     string xml = System.IO.Path.Combine
     (
@@ -265,7 +280,7 @@ Patch "Fix Resolution Resetting On Launch" by "Hyper"
             int resolutionWidth  = int.Parse(split[9]);
             int resolutionHeight = int.Parse(split[11]);
 
-            // Kill XML value reading for width and height.
+            // Kill XML value reading for resolutionWidth and resolutionHeight.
             WriteProtected<byte>
             (
                 /* 0x150A0F5C2 */
@@ -278,7 +293,7 @@ Patch "Fix Resolution Resetting On Launch" by "Hyper"
                 0xEB
             );
 
-            // Always pass width -1 check so we can force new value.
+            // Always pass resolutionWidth -1 check so we can force new value.
             WriteProtected<byte>
             (
                 /* 0x140BB6682 */
@@ -291,7 +306,7 @@ Patch "Fix Resolution Resetting On Launch" by "Hyper"
                 0xEB, 0x30
             );
 
-            // Force width from XML as default value.
+            // Force resolutionWidth from XML as default value.
             WriteProtected<byte>
             (
                 /* 0x140BB66B4 */
@@ -304,7 +319,7 @@ Patch "Fix Resolution Resetting On Launch" by "Hyper"
                 Assemble($"mov dword ptr [rcx + 0xF0], 0x{resolutionWidth:X}")
             );
             
-            // Always pass height -1 check so we can force new value.
+            // Always pass resolutionHeight -1 check so we can force new value.
             WriteProtected<byte>
             (
                 /* 0x140BB66CC */
@@ -317,7 +332,7 @@ Patch "Fix Resolution Resetting On Launch" by "Hyper"
                 0xEB, 0x30
             );
 
-            // Force height from XML as default value.
+            // Force resolutionHeight from XML as default value.
             WriteProtected<byte>
             (
                 /* 0x140BB66FE */
@@ -497,20 +512,5 @@ Patch "Infinite Boost Gauge" by "Hyper"
         ),
         
         0xE9, 0xC2, 0x01, 0x00, 0x00
-    );
-}
-
-Patch "Disable Framerate Limiter on Cutscenes" by "M&M"
-{
-    WriteNop
-    (
-        /* 0x140126D90 */
-        ScanSignature
-        (
-            "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
-            "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
-        ),
-
-        51
     );
 }
