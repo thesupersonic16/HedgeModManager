@@ -14,7 +14,6 @@ Patch "2560x1080 Ultrawide (experimental)" by "M&M & Hyper"
 	WriteProtected<float>(AspectRatio, 2560.0f / 1080.0f); // 0x141222F9C
 }
 
-
 Patch "3440x1440 Ultrawide (experimental)" by "M&M & Hyper"
 {
 	/* 0x1401477CE */
