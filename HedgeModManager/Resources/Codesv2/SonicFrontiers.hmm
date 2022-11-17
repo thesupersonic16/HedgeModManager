@@ -286,6 +286,7 @@ Patch "Disable Guardian Introductions" by "Hyper"
     WriteProtected<byte>(0x14053025E, Assemble("mov edx, 7"));
 
     // Blade (Ninja)
+    WriteNop(0x140554199, 5);
     WriteProtected<byte>(0x140554214, 0xEB, 0x31);
 
     // Charger (Caterpillar)
