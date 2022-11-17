@@ -107,7 +107,7 @@
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">{0}のMODをロードしてプレイするためには、MODローダーがインストールされている必要があります。&#x0a;今すぐインストールしますか？</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"    >MODのロード先を選択する</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle"  >ランタイムの欠落を検出しました！</system:String>
-    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} が正しく機能するためには、{1}をインストールする必要があります。&#x0a;HMMにこのランタイムをインストールしますか？</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0}が正しく機能するためには、{1}をインストールする必要があります。&#x0a;HMMにこのランタイムをインストールしますか？</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">セーブファイルリダイレクトが必要なMODがあります。この機能を有効にしますか？&#x0a;何をするか理解している場合のみ、「いいえ」をクリックしてください。</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" >MODの依存関係の解決に失敗しました。</system:String>
     <system:String x:Key="MainUIMissingDepends"       >以下のMODは、依存関係がありません:</system:String>
@@ -177,7 +177,7 @@
     <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0}は既に最新です。</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >新しいバージョンの{0}が利用可能です！ ({1})</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">本当にアップデートをキャンセルしますか？&#x0a;{0}が破損する可能性があります。</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >7-Zip または WinRARが見つかりませんでした。&#x0a;これはMODデータの解凍に必要です。&#x0a;&#x0a;どちらかがシステムにインストールされていることを確認してください。</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >7-ZipまたはWinRARが見つかりませんでした。&#x0a;これはMODデータの解凍に必要です。&#x0a;&#x0a;どちらかがシステムにインストールされていることを確認してください。</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >完了</system:String>
