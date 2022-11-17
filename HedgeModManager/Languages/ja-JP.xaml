@@ -57,8 +57,8 @@
     <system:String x:Key="ModsUIFeatureCodeDisable"  >このMODにはカスタムコードが含まれていません。</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >ドラッグ&amp;ドロップでMODのロード順を変更できます。</system:String>
     <system:String x:Key="ModsUISearch"         >検索: </system:String>
-    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Managerは、1つまたは複数のMODのインクルードフォルダが無効であることを検出しました。&#x0a;Hedge Mod Managerがこれを修正してもよろしいですか?</system:String>
-    <system:String xml:space="preserve" x:Key="ModsUINoMods">...何も無いようです。&#x0a;MODを入手しましょう!</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Managerは、1つまたは複数のMODのインクルードフォルダが無効であることを検出しました。&#x0a;Hedge Mod Managerがこれを修正してもよろしいですか？</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUINoMods">...何も無いようです。&#x0a;MODを入手しましょう！</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >名前</system:String>
@@ -95,19 +95,19 @@
     <system:String x:Key="SettingsUITheme"          >UIテーマ:</system:String>
     <system:String x:Key="SettingsUIReleaseChannel" >アップデートチャネル:</system:String>
     <system:String x:Key="SettingsUIChangingChannelTitle" >チャネルの変更</system:String>
-    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Releaseチャネルに変更しようとしています。&#x0a;&#x0a;本当に続行しますか? チャネルの変更にはHedge Mod Managerの再起動が必要です。</system:String>
-    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Developmentチャネルに変更しようとしています。 このチャネルには未検証の機能やバグが含まれている可能性があります。&#x0a;&#x0a;本当に続行しますか? チャネルの変更にはHedge Mod Managerの再起動が必要です。</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Releaseチャネルに変更しようとしています。&#x0a;&#x0a;本当に続行しますか？ チャネルの変更にはHedge Mod Managerの再起動が必要です。</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Developmentチャネルに変更しようとしています。 このチャネルには未検証の機能やバグが含まれている可能性があります。&#x0a;&#x0a;本当に続行しますか？ チャネルの変更にはHedge Mod Managerの再起動が必要です。</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"    >MODのインストール</system:String>
     <system:String x:Key="MainUIInstallFormOptionDir" >フォルダからインストールする</system:String>
     <system:String x:Key="MainUIInstallFormOptionArc" >圧縮ファイルからインストールする</system:String>
     <system:String x:Key="MainUIInstallFormOptionNew" >MOD作成 (開発者用)</system:String>
-    <system:String x:Key="MainUIMissingLoaderHeader"  >MODローダーがインストールされていません!</system:String>
-    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">{0}のMODをロードしてプレイするためには、MODローダーがインストールされている必要があります。&#x0a;今すぐインストールしますか?</system:String>
+    <system:String x:Key="MainUIMissingLoaderHeader"  >MODローダーがインストールされていません！</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">{0}のMODをロードしてプレイするためには、MODローダーがインストールされている必要があります。&#x0a;今すぐインストールしますか？</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"    >MODのロード先を選択する</system:String>
-    <system:String x:Key="MainUIRuntimeMissingTitle"  >ランタイムの欠落を検出しました!</system:String>
-    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} が正しく機能するためには、{1}をインストールする必要があります。&#x0a;HMMにこのランタイムをインストールしますか?</system:String>
+    <system:String x:Key="MainUIRuntimeMissingTitle"  >ランタイムの欠落を検出しました！</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} が正しく機能するためには、{1}をインストールする必要があります。&#x0a;HMMにこのランタイムをインストールしますか？</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">セーブファイルリダイレクトが必要なMODがあります。この機能を有効にしますか？&#x0a;何をするか理解している場合のみ、「いいえ」をクリックしてください。</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" >MODの依存関係の解決に失敗しました。</system:String>
     <system:String x:Key="MainUIMissingDepends"       >以下のMODは、依存関係がありません:</system:String>
@@ -115,7 +115,7 @@
     <system:String x:Key="MainUIResolvable" xml:space="preserve">「GB MODの解決」をクリックすると、&#x0a;GameBananaから依存関係を自動的に解決することができます。</system:String>
 
     <!-- OptionsWindow UI Strings -->
-    <system:String x:Key="OptionsWindowUIError"      >オプションを選択してください!</system:String>
+    <system:String x:Key="OptionsWindowUIError"      >オプションを選択してください！</system:String>
 
     <!-- AboutWindow UI Strings -->
     <system:String x:Key="AboutWindowUITitle"      >Hedge Mod Managerについて</system:String>
@@ -151,7 +151,7 @@
     <!-- Status UI Strings -->
     <system:String x:Key="StatusUILoadedMods"             >{0}個のMODをロードしました</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >{0}のアップデートを確認中</system:String>
-    <system:String x:Key="StatusUIFailedToUpdate"         >{0}のアップデートに失敗しました! {1}</system:String>
+    <system:String x:Key="StatusUIFailedToUpdate"         >{0}のアップデートに失敗しました！ {1}</system:String>
     <system:String x:Key="StatusUIModUpdateCheckFinish"   >MODのアップデートの確認が完了しました: 完了({0}) , 失敗({1})</system:String>
     <system:String x:Key="StatusUIStartingGame"           >{0}を起動中</system:String>
     <system:String x:Key="StatusUICheckingForUpdates"     >アップデートを確認中</system:String>
@@ -168,15 +168,15 @@
     <system:String x:Key="StatusUIDownloadingCodes"       >{0}のコードをダウンロード中</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >ダウンロード完了</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >ダウンロード失敗</system:String>
-    <system:String x:Key="StatusUICodeUpdatesAvailable"   >コードのアップデートが利用可能です!</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >コードのアップデートが利用可能です！</system:String>
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >コードのアップデートはありません</system:String>
 
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Managerはゲームフォルダにアクセスできませんでした。&#x0a;以下のフォルダとフォルダ内の全てのファイルについて、Usersグループが&quot;書き込み&quot;を許可する設定になっていることを確認してください。&#x0a;&#x0a;{0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >本当に&quot;{0}&quot;を削除しますか?&#x0a;この操作は元に戻せません!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >本当に&quot;{0}&quot;を削除しますか？&#x0a;この操作は元に戻せません！</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0}は既に最新です。</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >新しいバージョンの{0}が利用可能です! ({1})</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">本当にアップデートをキャンセルしますか?&#x0a;{0}が破損する可能性があります。</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >新しいバージョンの{0}が利用可能です！ ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">本当にアップデートをキャンセルしますか？&#x0a;{0}が破損する可能性があります。</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >7-Zip または WinRARが見つかりませんでした。&#x0a;これはMODデータの解凍に必要です。&#x0a;&#x0a;どちらかがシステムにインストールされていることを確認してください。</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
@@ -213,10 +213,10 @@
     <system:String x:Key="ExceptionWindowButtonCopyLog"   >ログをクリップボードにコピー</system:String>
     <system:String x:Key="ExceptionWindowButtonIgnore"    >無視して閉じる</system:String>
     <system:String x:Key="ExceptionWindowButtonReport"    >GitHubでレポートを提出する</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >アップデートが利用可能です!</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >アップデートが利用可能です！</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >このHedge Mod Managerのバージョンは古いようです。&#x0a;まずはアップデートを行い、問題が発生するかどうかを確認することを強くお勧めします。&#x0a;今すぐアップデートしますか？</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorTitle">アップデートエラー!</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Managerのアップデートができませんでした!&#x0a;最新版を手動でダウンロードしてください。</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorTitle">アップデートエラー！</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Managerのアップデートができませんでした！&#x0a;最新版を手動でダウンロードしてください。</system:String>
 
     <!-- Themes -->
     <system:String x:Key="ThemeDark"  >ダーク</system:String>
@@ -233,7 +233,7 @@
     <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate - ソニックカラーズ: アルティメット</system:String>
     <system:String x:Key="GameSonicOrigins">Sonic Origins - ソニックオリジンズ</system:String>
     <system:String x:Key="GameSonicFrontiers">Sonic Frontiers - ソニックフロンティア</system:String>
-    <system:String x:Key="GameNoGame">ゲームが見つかりません!</system:String>
+    <system:String x:Key="GameNoGame">ゲームが見つかりません！</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>
     <system:String x:Key="LauncherHeroic">Heroic</system:String>
