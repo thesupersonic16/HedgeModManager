@@ -225,14 +225,14 @@
     <system:String x:Key="ThemeLight" >ライト</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameSonicGenerations">Sonic Generations - ソニックジェネレーションズ</system:String>
-    <system:String x:Key="GameSonicLostWorld">Sonic Lost World - ソニックロストワールド</system:String>
-    <system:String x:Key="GameSonicForces">Sonic Forces - ソニックフォース</system:String>
-    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2 - ぷよぷよテトリス2</system:String>
-    <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020 - 東京2020オリンピック</system:String>
-    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate - ソニックカラーズ: アルティメット</system:String>
-    <system:String x:Key="GameSonicOrigins">Sonic Origins - ソニックオリジンズ</system:String>
-    <system:String x:Key="GameSonicFrontiers">Sonic Frontiers - ソニックフロンティア</system:String>
+    <system:String x:Key="GameSonicGenerations">ソニックジェネレーションズ</system:String>
+    <system:String x:Key="GameSonicLostWorld">ソニックロストワールド</system:String>
+    <system:String x:Key="GameSonicForces">ソニックフォース</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">ぷよぷよテトリス ２</system:String>
+    <system:String x:Key="GameTokyo2020">東京2020オリンピック</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">ソニックカラーズ アルティメット</system:String>
+    <system:String x:Key="GameSonicOrigins">ソニックオリジンズ</system:String>
+    <system:String x:Key="GameSonicFrontiers">ソニックフロンティア</system:String>
     <system:String x:Key="GameNoGame">ゲームが見つかりません！</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>
