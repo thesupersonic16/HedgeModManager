@@ -212,7 +212,7 @@
     <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Managerにエラーが発生しました。</system:String>
     <system:String x:Key="ExceptionWindowButtonCopyLog"   >ログをクリップボードにコピー</system:String>
     <system:String x:Key="ExceptionWindowButtonIgnore"    >無視して閉じる</system:String>
-    <system:String x:Key="ExceptionWindowButtonReport"    >Githubでレポートを提出する</system:String>
+    <system:String x:Key="ExceptionWindowButtonReport"    >GitHubでレポートを提出する</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >アップデートが利用可能です!</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >このHedge Mod Managerのバージョンは古いようです。&#x0a;まずはアップデートを行い、問題が発生するかどうかを確認することを強くお勧めします。&#x0a;今すぐアップデートしますか？</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">アップデートエラー!</system:String>
