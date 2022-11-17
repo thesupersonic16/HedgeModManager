@@ -63,7 +63,7 @@ namespace HedgeModManager
         public string ModProfile { get; set; } = "Default";
 
         [IniField("HedgeModManager", "UseLauncher")]
-        public bool UseLauncher { get; set; } = false;
+        public bool UseLauncher { get; set; } = true;
 
         public bool EnableDebugConsole 
         { 
