@@ -225,13 +225,14 @@
     <system:String x:Key="ThemeLight" >明亮</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameSonicGenerations">Sonic Generations - 索尼克 世代</system:String>
-    <system:String x:Key="GameSonicLostWorld">Sonic Lost World - 索尼克 失落世界</system:String>
-    <system:String x:Key="GameSonicForces">Sonic Forces - 索尼克 力量</system:String>
-    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2 - 魔法气泡特趣思俄罗斯方块</system:String>
-    <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020 - 2020年夏季奥运会</system:String>
-    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors Ultimate - 索尼克 缤纷色彩 究极版</system:String>
-    <system:String x:Key="GameSonicOrigins">Sonic Origins - 索尼克 起源</system:String>
+    <system:String x:Key="GameSonicGenerations">索尼克 世代</system:String>
+    <system:String x:Key="GameSonicLostWorld">索尼克 失落世界</system:String>
+    <system:String x:Key="GameSonicForces">索尼克 力量</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">魔法气泡 特趣思 俄罗斯方块 2</system:String>
+    <system:String x:Key="GameTokyo2020">2020东京奥运</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">索尼克 缤纷色彩 究极版</system:String>
+    <system:String x:Key="GameSonicOrigins">索尼克 起源</system:String>
+    <system:String x:Key="GameSonicFrontiers">索尼克 未知边境</system:String>
     <system:String x:Key="GameNoGame">未能检测游戏</system:String>
     <system:String x:Key="LauncherSteam">Steam蒸汽</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>

@@ -228,7 +228,7 @@
     <system:String x:Key="GameSonicGenerations">ソニックジェネレーションズ</system:String>
     <system:String x:Key="GameSonicLostWorld">ソニックロストワールド</system:String>
     <system:String x:Key="GameSonicForces">ソニックフォース</system:String>
-    <system:String x:Key="GamePuyoPuyoTetris2">ぷよぷよテトリス ２</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">ぷよぷよテトリス 2</system:String>
     <system:String x:Key="GameTokyo2020">東京2020オリンピック</system:String>
     <system:String x:Key="GameSonicColorsUltimate">ソニックカラーズ アルティメット</system:String>
     <system:String x:Key="GameSonicOrigins">ソニックオリジンズ</system:String>
