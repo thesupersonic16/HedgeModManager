@@ -12,9 +12,9 @@ WriteNop(ASLR(0x85C68E), 6)
 Patch "Enable Stage Retry Option" by "Sajid"
 WriteAsmHook
 (
-	ASLR(0x005169E3),
-	HookBehavior.After,
-	"mov DWORD PTR [ebp+8], 1"
+    ASLR(0x005169E3),
+    HookBehavior.After,
+    "mov DWORD PTR [ebp+8], 1"
 )
 
 Patch "16:10 In-Game Resolution" by "ĐeäTh"
@@ -188,27 +188,27 @@ divss xmm1,[{ASLR(0xD56D30)}]"
 
 if (Read<byte>(ASLR(0x4178AB)) == 0xE8)
 {
-	WriteAsmHook(code, ASLR(0x4178AB), HookBehavior.Replace)
-	WriteAsmHook(code, ASLR(0x419601), HookBehavior.Replace)
-	WriteAsmHook(code2, ASLR(0x41E9D0), HookBehavior.Replace)
-	WriteAsmHook(code2, ASLR(0x42589C), HookBehavior.Replace)
-	WriteAsmHook(code2, ASLR(0x4272F5), HookBehavior.Replace)
-	WriteAsmHook(code2, ASLR(0x427DF0), HookBehavior.Replace)
-	WriteAsmHook(code2, ASLR(0x428878), HookBehavior.Replace)
-	WriteAsmHook(code2, ASLR(0x4292FE), HookBehavior.Replace)
-	WriteAsmHook(code2, ASLR(0x437490), HookBehavior.Replace)
-	WriteAsmHook(code2, ASLR(0x43CB11), HookBehavior.Replace)
-	WriteAsmHook(code2, ASLR(0x530664), HookBehavior.Replace)
-	WriteAsmHook(code3, ASLR(0x5305F9), HookBehavior.Replace)
-	WriteAsmHook(code4, ASLR(0x4A824C), HookBehavior.Before)
-	WriteAsmHook(code5, ASLR(0x401737), HookBehavior.Replace)
-	WriteAsmHook(code6, ASLR(0x43D41E), HookBehavior.Replace)
-	WriteAsmHook(code6, ASLR(0x441D41), HookBehavior.Replace)
-	WriteAsmHook(code7, ASLR(0x49C380), HookBehavior.Before)
-	WriteAsmHook(code8, ASLR(0x49C3BA), HookBehavior.Before)
-	WriteAsmHook(code9, ASLR(0x41EA22), HookBehavior.Before)
-	WriteAsmHook(code10, ASLR(0x8FF420), HookBehavior.Before)
-	WriteAsmHook(code11, ASLR(0x8FF456), HookBehavior.Before)
+    WriteAsmHook(code, ASLR(0x4178AB), HookBehavior.Replace)
+    WriteAsmHook(code, ASLR(0x419601), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x41E9D0), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x42589C), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x4272F5), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x427DF0), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x428878), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x4292FE), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x437490), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x43CB11), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x530664), HookBehavior.Replace)
+    WriteAsmHook(code3, ASLR(0x5305F9), HookBehavior.Replace)
+    WriteAsmHook(code4, ASLR(0x4A824C), HookBehavior.Before)
+    WriteAsmHook(code5, ASLR(0x401737), HookBehavior.Replace)
+    WriteAsmHook(code6, ASLR(0x43D41E), HookBehavior.Replace)
+    WriteAsmHook(code6, ASLR(0x441D41), HookBehavior.Replace)
+    WriteAsmHook(code7, ASLR(0x49C380), HookBehavior.Before)
+    WriteAsmHook(code8, ASLR(0x49C3BA), HookBehavior.Before)
+    WriteAsmHook(code9, ASLR(0x41EA22), HookBehavior.Before)
+    WriteAsmHook(code10, ASLR(0x8FF420), HookBehavior.Before)
+    WriteAsmHook(code11, ASLR(0x8FF456), HookBehavior.Before)
 }
 
 Patch "Disable Lockon (Except for Unbeatable Bosses)" by "Sajid"
@@ -254,16 +254,16 @@ mov eax, [ecx]
 cmp eax, -4";
 WriteAsmHook
 (
-	ASLR(0x00911F2D),
-	HookBehavior.Replace,
-	code
+    ASLR(0x00911F2D),
+    HookBehavior.Replace,
+    code
 )
 
 WriteAsmHook
 (
-	ASLR(0x00912332),
-	HookBehavior.After,
-	"mov edi, 1"
+    ASLR(0x00912332),
+    HookBehavior.After,
+    "mov edi, 1"
 )
 WriteProtected<byte>(ASLR(0x00912338), 0x57);
 WriteProtected<byte>(ASLR(0x00912326), 0x6A, 0x00);
@@ -299,19 +299,19 @@ Patch "1280x720 Movie Player" by "ĐeäTh"
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
-	WriteAsmHook
-	(
-		ASLR(0x0049C398),
-		HookBehavior.Replace,
-		$"mulss xmm5, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C398),
+        HookBehavior.Replace,
+        $"mulss xmm5, [{(uint)multiplierPtr}]"
+    )
 
-	WriteAsmHook
-	(
-		ASLR(0x0049C3C2),
-		HookBehavior.Replace,
-		$"mulss xmm7, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C3C2),
+        HookBehavior.Replace,
+        $"mulss xmm7, [{(uint)multiplierPtr}]"
+    )
 }
 
 WriteProtected<float>(ASLR(0x00D61CE8), 1280);
@@ -321,19 +321,19 @@ Patch "1920x1080 Movie Player" by "ĐeäTh"
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
-	WriteAsmHook
-	(
-		ASLR(0x0049C398),
-		HookBehavior.Replace,
-		$"mulss xmm5, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C398),
+        HookBehavior.Replace,
+        $"mulss xmm5, [{(uint)multiplierPtr}]"
+    )
 
-	WriteAsmHook
-	(
-		ASLR(0x0049C3C2),
-		HookBehavior.Replace,
-		$"mulss xmm7, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C3C2),
+        HookBehavior.Replace,
+        $"mulss xmm7, [{(uint)multiplierPtr}]"
+    )
 }
 
 WriteProtected<float>(ASLR(0x00D61CE8), 1920);
@@ -343,19 +343,19 @@ Patch "2560x1440 Movie Player" by "ĐeäTh"
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
-	WriteAsmHook
-	(
-		ASLR(0x0049C398),
-		HookBehavior.Replace,
-		$"mulss xmm5, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C398),
+        HookBehavior.Replace,
+        $"mulss xmm5, [{(uint)multiplierPtr}]"
+    )
 
-	WriteAsmHook
-	(
-		ASLR(0x0049C3C2),
-		HookBehavior.Replace,
-		$"mulss xmm7, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C3C2),
+        HookBehavior.Replace,
+        $"mulss xmm7, [{(uint)multiplierPtr}]"
+    )
 }
 
 WriteProtected<float>(ASLR(0x00D61CE8), 2560);
@@ -365,19 +365,19 @@ Patch "3840x2160 Movie Player" by "ĐeäTh"
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
-	WriteAsmHook
-	(
-		ASLR(0x0049C398),
-		HookBehavior.Replace,
-		$"mulss xmm5, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C398),
+        HookBehavior.Replace,
+        $"mulss xmm5, [{(uint)multiplierPtr}]"
+    )
 
-	WriteAsmHook
-	(
-		ASLR(0x0049C3C2),
-		HookBehavior.Replace,
-		$"mulss xmm7, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C3C2),
+        HookBehavior.Replace,
+        $"mulss xmm7, [{(uint)multiplierPtr}]"
+    )
 }
 
 WriteProtected<float>(ASLR(0x00D61CE8), 3840);
@@ -387,19 +387,19 @@ Patch "2560x1080 Movie Player" by "ĐeäTh"
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
-	WriteAsmHook
-	(
-		ASLR(0x0049C398),
-		HookBehavior.Replace,
-		$"mulss xmm5, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C398),
+        HookBehavior.Replace,
+        $"mulss xmm5, [{(uint)multiplierPtr}]"
+    )
 
-	WriteAsmHook
-	(
-		ASLR(0x0049C3C2),
-		HookBehavior.Replace,
-		$"mulss xmm7, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C3C2),
+        HookBehavior.Replace,
+        $"mulss xmm7, [{(uint)multiplierPtr}]"
+    )
 }
 
 WriteProtected<float>(ASLR(0x00D61CE8), 2560);
@@ -409,19 +409,19 @@ Patch "3440x1440 Movie Player" by "ĐeäTh"
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
-	WriteAsmHook
-	(
-		ASLR(0x0049C398),
-		HookBehavior.Replace,
-		$"mulss xmm5, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C398),
+        HookBehavior.Replace,
+        $"mulss xmm5, [{(uint)multiplierPtr}]"
+    )
 
-	WriteAsmHook
-	(
-		ASLR(0x0049C3C2),
-		HookBehavior.Replace,
-		$"mulss xmm7, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C3C2),
+        HookBehavior.Replace,
+        $"mulss xmm7, [{(uint)multiplierPtr}]"
+    )
 }
 
 WriteProtected<float>(ASLR(0x00D61CE8), 3440);
@@ -431,19 +431,19 @@ Patch "5120x2160 Movie Player" by "ĐeäTh"
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
-	WriteAsmHook
-	(
-		ASLR(0x0049C398),
-		HookBehavior.Replace,
-		$"mulss xmm5, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C398),
+        HookBehavior.Replace,
+        $"mulss xmm5, [{(uint)multiplierPtr}]"
+    )
 
-	WriteAsmHook
-	(
-		ASLR(0x0049C3C2),
-		HookBehavior.Replace,
-		$"mulss xmm7, [{(uint)multiplierPtr}]"
-	)
+    WriteAsmHook
+    (
+        ASLR(0x0049C3C2),
+        HookBehavior.Replace,
+        $"mulss xmm7, [{(uint)multiplierPtr}]"
+    )
 }
 
 WriteProtected<float>(ASLR(0x00D61CE8), 5120);
@@ -477,13 +477,13 @@ static int p_setLinearVelocity = (int)ASLR(0x00B88220);
 WriteAsmHook
 (
     $@"mov eax, {p_setLinearVelocity}
-	call eax
-	mov edx, [esi+14h]
-	mov edx, [edx+10h]
-	push edx
-	mov eax, {p_updateBroadphaseAndResetCollisionInformationOfWarpedBody}
-	call eax
-	add esp, 4",
+    call eax
+    mov edx, [esi+14h]
+    mov edx, [edx+10h]
+    push edx
+    mov eax, {p_updateBroadphaseAndResetCollisionInformationOfWarpedBody}
+    call eax
+    add esp, 4",
     ASLR(0x004B974F), HookBehavior.Replace
 )
 
@@ -545,45 +545,45 @@ static IntPtr ms_pFormat = System.Runtime.InteropServices.Marshal.StringToHGloba
 
 fixed(int* millisecondsPtr = &ms_milliseconds)
 {
-	// Calculate Milliseconds
-	WriteAsmHook
-	(
-		$@"mov eax, [ebp - 0x3C]
-		mov edx, 0
-		mov ecx, 100
-		div ecx
-		sub ecx, edx
-		cmp ecx, 100
-		jne ignoreFallback
-		mov ecx, 00
+    // Calculate Milliseconds
+    WriteAsmHook
+    (
+        $@"mov eax, [ebp - 0x3C]
+        mov edx, 0
+        mov ecx, 100
+        div ecx
+        sub ecx, edx
+        cmp ecx, 100
+        jne ignoreFallback
+        mov ecx, 00
 
-		ignoreFallback:
-		mov [{(uint)millisecondsPtr}], ecx
-		mov ecx, [ebx + 128h]",
-		ASLR(0x0091685E), HookBehavior.Replace
-	)
+        ignoreFallback:
+        mov [{(uint)millisecondsPtr}], ecx
+        mov ecx, [ebx + 128h]",
+        ASLR(0x0091685E), HookBehavior.Replace
+    )
 
-	// Change Display String for Count Down Timer
-	WriteAsmHook
-	(
-		$@"mov eax, [{(uint)millisecondsPtr}]
-		push eax
-		mov edx, 0
-		mov eax, edi
-		mov ecx, 0x3C
-		div ecx
-		push edx
-		push eax
-		push {(uint)ms_pFormat}
-		lea eax, [ebp - 44h]
-		push 40h
-		push eax
-		mov [esi + 1B0h], edi
-		mov eax, {ms_fpSnprintf}
-		call eax
-		add esp, 8
-		mov eax, {ms_pRetAddressCountDownUpdate}
-		jmp eax",
-		ASLR(0x00501CE0), HookBehavior.Replace
-	)
+    // Change Display String for Count Down Timer
+    WriteAsmHook
+    (
+        $@"mov eax, [{(uint)millisecondsPtr}]
+        push eax
+        mov edx, 0
+        mov eax, edi
+        mov ecx, 0x3C
+        div ecx
+        push edx
+        push eax
+        push {(uint)ms_pFormat}
+        lea eax, [ebp - 44h]
+        push 40h
+        push eax
+        mov [esi + 1B0h], edi
+        mov eax, {ms_fpSnprintf}
+        call eax
+        add esp, 8
+        mov eax, {ms_pRetAddressCountDownUpdate}
+        jmp eax",
+        ASLR(0x00501CE0), HookBehavior.Replace
+    )
 }

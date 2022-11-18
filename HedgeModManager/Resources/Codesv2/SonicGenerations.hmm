@@ -239,15 +239,15 @@ Read<uint>(0xB1D86F) == 0x15100FF3 &&
 Read<uint>(0x57876F) == 0x44110FF3 &&
 Read<ushort>(0x789A04) == 0x87D9)
 {
-	WriteAsmHook(code, 0x6F23C6, HookBehavior.Replace)
-	WriteAsmHook(code2, 0x64928A, HookBehavior.Replace)
-	WriteAsmHook(code3, 0xD08F88, HookBehavior.After)
-	WriteAsmHook(code4, 0xD09111, HookBehavior.Replace)
-	WriteAsmHook(code5, 0x1059D37, HookBehavior.Before)
-	WriteAsmHook(code6, 0xB1D845, HookBehavior.Replace)
-	WriteAsmHook(code7, 0xB1D86F, HookBehavior.Replace)
-	WriteAsmHook(code8, 0x57876F, HookBehavior.Before)
-	WriteAsmHook(code9, 0x789A04, HookBehavior.Before)
+    WriteAsmHook(code, 0x6F23C6, HookBehavior.Replace)
+    WriteAsmHook(code2, 0x64928A, HookBehavior.Replace)
+    WriteAsmHook(code3, 0xD08F88, HookBehavior.After)
+    WriteAsmHook(code4, 0xD09111, HookBehavior.Replace)
+    WriteAsmHook(code5, 0x1059D37, HookBehavior.Before)
+    WriteAsmHook(code6, 0xB1D845, HookBehavior.Replace)
+    WriteAsmHook(code7, 0xB1D86F, HookBehavior.Replace)
+    WriteAsmHook(code8, 0x57876F, HookBehavior.Before)
+    WriteAsmHook(code9, 0x789A04, HookBehavior.Before)
 }
 
 Patch "Field of View Adjustment" by "Muzzarino"
@@ -877,7 +877,7 @@ Patch "Restore Right Stick Camera Controls" by "Skyth & Ahremic"
 //=====//
 static double PanSmoothingRate = 0.65;
 fixed (double* pPanSmoothingRate = &PanSmoothingRate)
-	WriteProtected(0x10E723E, (uint)pPanSmoothingRate);
+    WriteProtected(0x10E723E, (uint)pPanSmoothingRate);
 
 // X
 WriteAsmHook(@"
@@ -934,25 +934,25 @@ static double _50_60 = 50.0 / 60.0;
 
 if (!initialized)
 {
-	WriteAsmHook("mulss xmm0, ds:0x14AF8CC", 0x10ED952, HookBehavior.After);
-	WriteAsmHook("mulss xmm3, ds:0x14AF8CC", 0x10EDB4C, HookBehavior.After);
-	WriteAsmHook("mulss xmm3, ds:0x14AF8CC", 0x10EDAC2, HookBehavior.After);
+    WriteAsmHook("mulss xmm0, ds:0x14AF8CC", 0x10ED952, HookBehavior.After);
+    WriteAsmHook("mulss xmm3, ds:0x14AF8CC", 0x10EDB4C, HookBehavior.After);
+    WriteAsmHook("mulss xmm3, ds:0x14AF8CC", 0x10EDAC2, HookBehavior.After);
 
-	WriteAsmHook("cvtps2pd xmm2, xmm1; mulsd xmm0, xmm2", 0x10ED123, HookBehavior.Replace);
-	WriteAsmHook("movss xmm1, ds:0x1559A98", 0x10ED12F, HookBehavior.After);
-	WriteAsmHook("xorpd xmm0, ds:0x1703930; addsd xmm0, ds:0x1703940", 0x10ED14A, HookBehavior.Before);
+    WriteAsmHook("cvtps2pd xmm2, xmm1; mulsd xmm0, xmm2", 0x10ED123, HookBehavior.Replace);
+    WriteAsmHook("movss xmm1, ds:0x1559A98", 0x10ED12F, HookBehavior.After);
+    WriteAsmHook("xorpd xmm0, ds:0x1703930; addsd xmm0, ds:0x1703940", 0x10ED14A, HookBehavior.Before);
 
-	fixed (double* p0 = &_0)
-	fixed (double* p50_60 = &_50_60)
-	{
-		WriteProtected<uint>(0x10ED879, (uint)p0);
-		WriteProtected<uint>(0x10ED884, (uint)p50_60);
-	}
-	
-	WriteProtected<byte>(0x10EDEC4, 0xEB);
-	WriteProtected<byte>(0x10EE1AA, 0x0F, 0x57, 0xC0, 0x90, 0x90, 0x90, 0x90, 0x90);
+    fixed (double* p0 = &_0)
+    fixed (double* p50_60 = &_50_60)
+    {
+        WriteProtected<uint>(0x10ED879, (uint)p0);
+        WriteProtected<uint>(0x10ED884, (uint)p50_60);
+    }
 
-	initialized = true;
+    WriteProtected<byte>(0x10EDEC4, 0xEB);
+    WriteProtected<byte>(0x10EE1AA, 0x0F, 0x57, 0xC0, 0x90, 0x90, 0x90, 0x90, 0x90);
+
+    initialized = true;
 }
 
 Write(0x1A48BFC, 3.0f); // DRIFT_TARGET_SIDE_OFFSET_SCALE
@@ -1037,9 +1037,9 @@ if (BoostPtr >= 1)
   var BoostAmt = Read<float>(BoostPtr);
   if (BoostAmt == 0)
   {
-    WriteProtected<byte>(0x00DFE04C, 0x74,0x11); 
-    WriteProtected<byte>(0x00DFE04E, 0x56); 
-    WriteProtected<byte>(0x0123FD3C, 0x75); 
+    WriteProtected<byte>(0x00DFE04C, 0x74,0x11);
+    WriteProtected<byte>(0x00DFE04E, 0x56);
+    WriteProtected<byte>(0x0123FD3C, 0x75);
   }
   else
   {
@@ -1077,9 +1077,9 @@ WriteProtected<byte>(0x1254D47, 0xEB, 0x0A);
 WriteProtected<byte>(0x1254D59, 0x00);
 WriteProtected<byte>(0x1254D60, 0x01);
 WriteProtected<byte>(0x12548C0, 0xE9, 0x7B, 0x09, 0x00, 0x00);
-WriteProtected<int>(0x1255275, 500); 
-WriteProtected<int>(0x125539A, 498); 
-WriteProtected<int>(0x125541C, 497); 
+WriteProtected<int>(0x1255275, 500);
+WriteProtected<int>(0x125539A, 498);
+WriteProtected<int>(0x125541C, 497);
 WriteProtected<byte>(0x12552E4, 0x78, 0xA3, 0xBA);
 
 WriteAsmHook(@"
@@ -1116,15 +1116,15 @@ Patch "Dropped Rings Bounce Less and Flicker" by "Ahremic"
 // Set new bounce multiplier on contact
 static float NewMultiplier = 1.65f; // Previously 2.0f, would just reflect your velocity 1:1 on flat ground.
 fixed (float* pNewMultiplier = &NewMultiplier)
-	WriteProtected(0x006F2936, (uint)pNewMultiplier);
-	
+    WriteProtected(0x006F2936, (uint)pNewMultiplier);
+
 // Initialize extra allocated memory-- data size is 0x180 but it only uses up to 0x174
 WriteAsmHook(@"movss dword ptr [esi + 0x174], xmm0
 mov dword ptr [esi + 0x178], 0",    0x01054F43, HookBehavior.After);
 
 // Ring flashing when time is about to run out
 static float WarningTime  =  1.0f;                   // Amount of time the rings will flash before disappearing
-static float TargetTime   =  2.0f * (1.0f / 60.0f);  // Number of frames each flash interval lasts (2) at 60fps 
+static float TargetTime   =  2.0f * (1.0f / 60.0f);  // Number of frames each flash interval lasts (2) at 60fps
 
 fixed (float* pWarningTime = &WarningTime)
 fixed (float* pTargetTime  = &TargetTime)
@@ -1178,16 +1178,16 @@ WriteProtected<byte>(0x15E96B0, 0x00);
 
 Patch "Never Receive Boost From Rings" by "Hyper"
 {
-	void NOP(int floatInstrAddr, int paramStrAddr)
-	{
-		WriteProtected<byte>(floatInstrAddr, 0xD9, 0xEE); /* fldz */
-		WriteNop(floatInstrAddr + 2, 6);
-		WriteProtected<byte>(paramStrAddr, 0x00);
-	}
-	
-	NOP(0x120628B, 0x15FA690); /* ChaosEnergyRecoverRateByRing */
-	NOP(0x1206335, 0x15FA6DC); /* ChaosEnergyRecoverRateByRingBonus */
-	NOP(0x12063DF, 0x15FA72C); /* ChaosEnergyRecoverRateByRingPenalty */
+    void NOP(int floatInstrAddr, int paramStrAddr)
+    {
+        WriteProtected<byte>(floatInstrAddr, 0xD9, 0xEE); /* fldz */
+        WriteNop(floatInstrAddr + 2, 6);
+        WriteProtected<byte>(paramStrAddr, 0x00);
+    }
+
+    NOP(0x120628B, 0x15FA690); /* ChaosEnergyRecoverRateByRing */
+    NOP(0x1206335, 0x15FA6DC); /* ChaosEnergyRecoverRateByRingBonus */
+    NOP(0x12063DF, 0x15FA72C); /* ChaosEnergyRecoverRateByRingPenalty */
 }
 
 Patch "Disable Color Correction" by "M&M"
