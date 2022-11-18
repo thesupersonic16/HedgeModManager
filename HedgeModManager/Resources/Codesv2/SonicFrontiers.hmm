@@ -2,38 +2,38 @@
 
 Patch "Adjust Aspect Ratio to Resolution (experimental)" by "M&M & Hyper"
 //
-	[System.Runtime.InteropServices.DllImport("user32.dll")]
-	static extern int GetSystemMetrics(int nIndex);
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    static extern int GetSystemMetrics(int nIndex);
 
-	static Size GetScreenSize()
-		=> new Size(GetSystemMetrics(0), GetSystemMetrics(1));
+    static Size GetScreenSize()
+        => new Size(GetSystemMetrics(0), GetSystemMetrics(1));
 
-	struct Size
-	{
-		public int Width { get; set; }
+    struct Size
+    {
+        public int Width { get; set; }
 
-		public int Height { get; set; }
+        public int Height { get; set; }
 
-		public Size(int width, int height)
-		{
-			Width  = width;
-			Height = height;
-		}
-	}
+        public Size(int width, int height)
+        {
+            Width  = width;
+            Height = height;
+        }
+    }
 //
 {
-	/* 0x1401477CE */
-	long instrAddr = ScanSignature
-	(
-		"\xF3\x0F\x59\x05\x00\x00\x00\x00\x44\x8B\xC6\xF3\x0F\x2C\xD0\xEB\x07\x8B\xD3\xF3\x44\x0F\x2C\xC1\x3B\x54\x24\x78\x75\x07\x44\x3B\x44\x24\x00\x74\x0C\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x84\xC0\x75\x2B\x45\x84\xF6\x74\x26\x3B\x5F\x20\x75\x05\x3B\x77\x24\x74\x1C\x48\x8B\x07\x44\x8B\xCB\x44\x8B\x47\x2C\x48\x8B\xCF\x8B\x57\x28\xC6\x44\x24\x00\x00\x89\x74\x24\x20\xFF\x50\x58\x39\x5D\x20\x75\x05\x39\x75\x24\x74\x04\x48\x89\x5D\x20\x48\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x40\x41\x5E\x5D\x5B\xC3",
-		"xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxx?xxxxx????x????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxx?xxxx?xxxxxxxxx"
-	);
+    /* 0x1401477CE */
+    long instrAddr = ScanSignature
+    (
+        "\xF3\x0F\x59\x05\x00\x00\x00\x00\x44\x8B\xC6\xF3\x0F\x2C\xD0\xEB\x07\x8B\xD3\xF3\x44\x0F\x2C\xC1\x3B\x54\x24\x78\x75\x07\x44\x3B\x44\x24\x00\x74\x0C\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x84\xC0\x75\x2B\x45\x84\xF6\x74\x26\x3B\x5F\x20\x75\x05\x3B\x77\x24\x74\x1C\x48\x8B\x07\x44\x8B\xCB\x44\x8B\x47\x2C\x48\x8B\xCF\x8B\x57\x28\xC6\x44\x24\x00\x00\x89\x74\x24\x20\xFF\x50\x58\x39\x5D\x20\x75\x05\x39\x75\x24\x74\x04\x48\x89\x5D\x20\x48\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x40\x41\x5E\x5D\x5B\xC3",
+        "xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxx?xxxxx????x????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxx?xxxx?xxxxxxxxx"
+    );
 
-	long AspectRatio = instrAddr + Read<uint>(instrAddr + 4) + 8;
+    long AspectRatio = instrAddr + Read<uint>(instrAddr + 4) + 8;
 
-	Size Screen = GetScreenSize();
+    Size Screen = GetScreenSize();
 
-	WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
+    WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
 }
 
 Patch "Always Have Power Boost" by "SuperSonic16"
