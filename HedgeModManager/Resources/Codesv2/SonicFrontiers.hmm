@@ -745,3 +745,20 @@ Patch "Infinite Boost Gauge" by "Hyper"
         0xE9, 0xC2, 0x01, 0x00, 0x00
     );
 }
+
+Patch "Raise FPS Cap to 300 (experimental)" by "NM"
+{
+    WriteAsmHook(
+        // 0x43960000 == 300.0f
+        @"
+            mov dword ptr [rcx+0x14],0x43960000
+            mov rbx,rcx
+            movss dword ptr [rcx+144h],xmm1
+        ",
+
+        // 0x15094C206
+        ScanSignature("\xF3\x0F\x11\x49\x14\x48", "xxxxxx"),
+
+        HookBehavior.Replace
+    );
+}
