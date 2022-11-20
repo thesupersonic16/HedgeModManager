@@ -2,24 +2,15 @@
 
 Patch "Adjust Aspect Ratio to Resolution (experimental)" by "M&M & Hyper"
 //
+    #load "System.Drawing.dll"
+
+    using System.Drawing;
+
     [System.Runtime.InteropServices.DllImport("user32.dll")]
     static extern int GetSystemMetrics(int nIndex);
 
     static Size GetScreenSize()
         => new Size(GetSystemMetrics(0), GetSystemMetrics(1));
-
-    struct Size
-    {
-        public int Width { get; set; }
-
-        public int Height { get; set; }
-
-        public Size(int width, int height)
-        {
-            Width  = width;
-            Height = height;
-        }
-    }
 //
 {
     /* 0x1401477CE */
@@ -68,8 +59,10 @@ Patch "Always Unlocked Arcade Mode" by "Hyper"
 
 Patch "Centre Game Window on Launch" by "Hyper"
 //
+    #load "System.Drawing.dll"
     #load "System.Xml.dll"
 
+    using System.Drawing;
     using System.IO;
     using System.Xml.Serialization;
 
@@ -109,19 +102,6 @@ Patch "Centre Game Window on Launch" by "Hyper"
 
     static int GetTitleBarHeight()
         => GetSystemMetrics(31);
-
-    struct Size
-    {
-        public int Width { get; set; }
-
-        public int Height { get; set; }
-
-        public Size(int width, int height)
-        {
-            Width  = width;
-            Height = height;
-        }
-    }
 //
 {
     string xml = Path.Combine
