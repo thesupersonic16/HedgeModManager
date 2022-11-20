@@ -787,7 +787,6 @@ Patch "Remove FPS Cap (experimental)" by "NM"
             With the current FPS address' value uncapped (EAX), we can now write it to the FPS cap address, which is stored in RDI. This will sync the FPS cap with the actual FPS, fixing the speedup issue.
         */
         @"
-            comiss xmm1, dword ptr [rdi]
             mov eax, dword ptr [rax]
             mov dword ptr [rbx+00000144h], eax
             mov dword ptr [rdi], eax
