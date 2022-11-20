@@ -753,3 +753,52 @@ Patch "Infinite Boost Gauge" by "Hyper"
         0xE9, 0xC2, 0x01, 0x00, 0x00
     );
 }
+
+Patch "Remove FPS Cap (experimental)" by "NM"
+{
+    /*
+        At the moment, this is the best method I have found for uncapping FPS.
+        There are **most likely** much better ways of removing the FPS cap, and there is definitely room for improvement within this script.
+        This script utilizes two steps to eliminate the cap, all of which will be outlined below.
+    */
+
+    /*
+        Frontiers seemingly utilizes a sleep function when limiting FPS, and so we must first prevent that function from being called.
+        By NOPing these opcodes and not changing anything else, however, the game will speed up.
+    */
+    WriteNop(
+        /* 0x140BB9700 */
+        ScanSignature(
+            "\xE8\x7B\x60\x3D\x00\x48\x8D\x4C\x24\x60\xE8\x21\x75\x3D\x00\x48\x8B\x4C\x24\x60\x48\x8B\x43\x20",
+            "x????xxxxxx????xxxxxxxxx"
+        ),
+
+        5
+    );
+
+    /*
+        The change in speed is seemingly caused by the cap not being in sync with the current FPS. To fix this, we must first uncap the value of a current FPS address.
+        The cap is controlled by the opcode "cmova rax, rdi," where RAX is the calculated current FPS and RDI is the user's set FPS cap. To remove this, we will be scanning for the opcode before it.
+        From 0x140BB97D1 to 0x140BB97DA, there are 15 bytes. This will allow us to successfully write the hook, which is 14 bytes long.
+    */
+    WriteAsmHook(
+        /*
+            To get rid of the opcode which enforces the cap, we simply do not include it. We can also remove "comiss xmm1, dword ptr [rdi]," which invokes the comparison.
+            With the current FPS address' value uncapped (EAX), we can now write it to the FPS cap address, which is stored in RDI. This will sync the FPS cap with the actual FPS, fixing the speedup issue.
+        */
+        @"
+            comiss xmm1, dword ptr [rdi]
+            mov eax, dword ptr [rax]
+            mov dword ptr [rbx+00000144h], eax
+            mov dword ptr [rdi], eax
+        ",
+
+        /* 0x140BB97D1 */
+        ScanSignature(
+            "\x0F\x2F\x0F\x48\x0F\x47\xC7\x8B\x00\x89\x83\x44\x01\x00\x00",
+            "xxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
