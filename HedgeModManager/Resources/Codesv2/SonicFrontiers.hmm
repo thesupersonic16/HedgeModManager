@@ -25,6 +25,7 @@ Patch "Adjust Aspect Ratio to Resolution (experimental)" by "M&M & Hyper"
     Size Screen = GetScreenSize();
 
     WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
+    //
 }
 
 Patch "Always Have Power Boost" by "SuperSonic16"
