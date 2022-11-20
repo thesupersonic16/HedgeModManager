@@ -295,39 +295,150 @@ Patch "Disable Framerate Limiter in Cutscenes" by "M&M"
 
 Patch "Disable Guardian Introductions" by "Hyper"
 {
-    /* WARNING: due to the lack of signatures, this patch may break something
-                or stop working in future versions of the game. */
+    // Asura
+    WriteProtected<byte>
+    (
+        /* 0x14053025E */
+        ScanSignature
+        (
+            "\x74\x0A\xBA\x00\x00\x00\x00\xE9\x00\x00\x00\x00\x48\x8B\x5E\x18",
+            "xxx????x????xxxx"
+        )
+        + 2,
 
-    // Ashura (Asura)
-    WriteProtected<byte>(0x14053025E, Assemble("mov edx, 7"));
+        Assemble("mov edx, 7")
+    );
 
-    // Blade (Ninja)
-    WriteNop(0x140554199, 5);
-    WriteProtected<byte>(0x140554214, 0xEB, 0x31);
+    // Ninja
+    {
+        WriteNop
+        (
+            /* 0x140554199 */
+            ScanSignature
+            (
+                "\xE8\x00\x00\x00\x00\x4C\x8D\x0D\x00\x00\x00\x00\x4C\x8D\x44\x24\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\x5F\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8D\x54\x24\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5F\x18",
+                "x????xxx????xxxx?xxx????xxxx?x????xxxxx????xxxxxxx????xxxx?xxxx????xxxx"
+            ),
+            
+            5
+        );
 
-    // Charger (Caterpillar)
-    WriteProtected<byte>(0x14057528B, Assemble("mov edx, 3"));
+        WriteProtected<byte>
+        (
+            /* 0x140554214 */
+            ScanSignature
+            (
+                "\x72\x27\x80\x7E\x34\x00",
+                "xxxxxx"
+            ),
+            
+            0xEB, 0x31
+        );
+    }
 
-    // Daruma (Tower)
-    WriteProtected<byte>(0x14059E877, 0xE9, 0xC7, 0x00, 0x00, 0x00);
+    // Caterpillar
+    WriteProtected<byte>
+    (
+        /* 0x14057528B */
+        ScanSignature
+        (
+            "\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5E\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x9C\x24\x00\x00\x00\x00\x84\xC0\x75\x12\x48\x8B\xCE\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x32\xC0\x48\x83\xC4\x78\xC3\x32\xC0\x48\x83\xC4\x78\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x48\x8B\xC4",
+            "x????xxxx????xxxxx????xxxxxxx????xxxx????xxxx????xxxxxxxx????xxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+        
+        Assemble("mov edx, 3")
+    );
 
-    // Flyer (Squid)
-    WriteProtected<byte>(0x1405B19AC, Assemble("mov edx, 3"));
+    // Tower
+    WriteProtected<byte>
+    (
+        /* 0x14059E877 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x48\x8B\x5E\x18\x0F\x29\x74\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\x88\x00\x00\x00\x00",
+            "xx????xxxxxxxx?x????xxxxxxx????xxx????"
+        ),
+        
+        0xE9, 0xC7, 0x00, 0x00, 0x00
+    );
 
-    // Skier (Shark)
-    WriteProtected<byte>(0x1405CB02E, 0xE9, 0x00, 0x01, 0x00, 0x00);
+    // Squid
+    WriteProtected<byte>
+    (
+        /* 0x1405B19AC */
+        ScanSignature
+        (
+            "\xBA\x00\x00\x00\x00\xEB\x2A\x48\x8B\x5E\x18",
+            "x????xxxxxx"
+        ),
+        
+        Assemble("mov edx, 3")
+    );
+
+    // Shark
+    WriteProtected<byte>
+    (
+        /* 0x1405CB02E */
+        ScanSignature
+        (
+            "\x48\x8B\xE8\x0F\x84\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00",
+            "xxxxx????xxx????"
+        ),
+        
+        0xE9, 0x00, 0x01, 0x00, 0x00
+    );
 
     // Spider
-    WriteProtected<byte>(0x1405E4186, Assemble("mov edx, 3"));
+    WriteProtected<byte>
+    (
+        /* 0x1405E4186 */
+        ScanSignature
+        (
+            "\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5E\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x84\xC0\x75\x12\x48\x8B\xCE\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x0F\x28\x74\x24\x00\x4C\x8D\x5C\x24\x00\x49\x8B\x5B\x10\x32\xC0\x49\x8B\x73\x18\x49\x8B\xE3\x5F\xC3\xCC\xCC\x48\x89\x5C\x24\x00\x48\x89\x6C\x24\x00",
+            "x????xxxx????xxxxx????xxxxxxx????xxxx????xxxxxxxx????xxxxxx????xxxx?xxxx?xxxxxxxxxxxxxxxxxxxxx?xxxx?"
+        ),
+        
+        Assemble("mov edx, 3")
+    );
 
     // Strider
-    WriteProtected<byte>(0x1405FE226, Assemble("mov edx, 2"));
+    WriteProtected<byte>
+    (
+        /* 0x1405FE226 */
+        ScanSignature
+        (
+            "\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5E\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x84\xC0\x75\x15",
+            "x????xxxx????xxxxx????xxxxxxx????xxxx????xxxx"
+        ),
+        
+        Assemble("mov edx, 2")
+    );
 
     // Sumo
-    WriteProtected<byte>(0x140617ADC, 0xEB);
+    WriteProtected<byte>
+    (
+        /* 0x140617ADC */
+        ScanSignature
+        (
+            "\x74\x15\x48\x8B\xCE\xE8\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5E\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x84\xC0\x75\x12\x48\x8B\xCE\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x0F\x28\x74\x24\x00\x4C\x8D\x5C\x24\x00\x49\x8B\x5B\x10\x32\xC0\x49\x8B\x73\x18\x49\x8B\xE3\x5F\xC3\xCC\xCC\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00",
+            "xxxxxx????x????xxxx????xxxxx????xxxxxxx????xxxx????xxxxxxxx????xxxxxx????xxxx?xxxx?xxxxxxxxxxxxxxxxxxxxx?xxxx?"
+        ),
 
-    // Tyrant (Tank)
-    WriteProtected<byte>(0x14065B0FB, Assemble("mov edx, 4"));
+        0xEB
+    );
+
+    // Tank
+    WriteProtected<byte>
+    (
+        /* 0x14065B0FB */
+        ScanSignature
+        (
+            "\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5E\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x9C\x24\x00\x00\x00\x00\x84\xC0\x75\x12\x48\x8B\xCE\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x32\xC0\x48\x83\xC4\x78\xC3\x32\xC0\x48\x83\xC4\x78\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x40\x56",
+            "x????xxxx????xxxxx????xxxxxxx????xxxx????xxxx????xxxxxxxx????xxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        Assemble("mov edx, 4")
+    );
 }
 
 Patch "Disable In-Game Letterboxing" by "Hyper"
