@@ -1,6 +1,10 @@
 name: Windows Build
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+      # Ignore code files.
+      - 'HedgeModManager/Resources/Codesv2/**'
 
 env:
   # Path to the solution file relative to the root of the project.
