@@ -531,6 +531,28 @@ Patch "Disable Shadows" by "Luig & Hyper"
     );
 }
 
+Patch "Disable Starfall" by "Hyper"
+{
+    WriteAsmHook
+    (
+        @"
+            mov al, 1
+            add rsp, 70h
+            pop rdi
+            ret
+        ",
+
+        /* 0x1493544B9 */
+        ScanSignature
+        (
+            "\x8B\x4A\x08\x81\xE9\x00\x00\x00\x00\x0F\x84\x00\x00\x00\x00\x83\xE9\x0B",
+            "xxxxx????xx????xxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Disable Trick Hint Particles" by "Hyper"
 {
     // Dash Rings
