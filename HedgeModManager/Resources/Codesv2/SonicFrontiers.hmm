@@ -389,24 +389,8 @@ Patch "Disable Framerate Limiter (experimental)" by "NM & M&M"
     );
 
     /*
-        This is the same code used for "Disable Framerate Limiter in Cutscenes", which prevents cutscenes from speeding up when they first play.
-        The code itself will still be available spearately for those who want cutscenes uncapped (to 60fps) but don't want the issues from fully uncapping.
+        This completely removes the framerate capping code for cutscenes, which prevents cutscenes from speeding up when they first play.
     */
-    WriteProtected<byte>
-    (
-        /* 0x140126D90 */
-        ScanSignature
-        (
-            "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
-            "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
-        ),
-
-        0xEB, 0x31
-    );
-}
-
-Patch "Disable Framerate Limiter in Cutscenes" by "M&M"
-{
     WriteProtected<byte>
     (
         /* 0x140126D90 */
