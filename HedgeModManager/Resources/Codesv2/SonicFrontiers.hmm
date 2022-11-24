@@ -42,6 +42,21 @@ Patch "Always Have Power Boost" by "SuperSonic16"
     );
 }
 
+Patch "Always Run in the Background" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x140BBDEF4 */
+        ScanSignature
+        (
+            "\x74\x18\x4D\x8B\xCE",
+            "xxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
 Patch "Always Trickable Dash Rings" by "Hyper"
 {
     WriteProtected<byte>
