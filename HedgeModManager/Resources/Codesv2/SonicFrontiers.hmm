@@ -27,6 +27,21 @@ Patch "Adjust Aspect Ratio to Resolution (experimental)" by "M&M & Hyper"
     WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
 }
 
+Patch "Always Have Phantom Rush" by "NM"
+{
+    WriteNop
+    (
+        /* 0x140779819 */
+        ScanSignature
+        (
+            "\x72\x09\x66\x83\x89\xF0\x00\x00\x00\x40\xC3\x0F\x2F\xC2\x77\x0C\xB8\xBF\xFF\x00\x00\x66\x21\x81\xF0\x00\x00\x00\xC3",
+            "x?xxx????xxxxxx?xxxxxxxx????x"
+        ),
+
+        2
+    );
+}
+
 Patch "Always Have Power Boost" by "SuperSonic16"
 {
     WriteProtected<byte>
@@ -1047,5 +1062,25 @@ Patch "Infinite Boost Gauge" by "Hyper"
         ),
 
         0xE9, 0xC2, 0x01, 0x00, 0x00
+    );
+}
+
+Patch "Infinite Quick Cyloop Gauge" by "NM"
+{
+    WriteAsmHook
+    (
+        @"
+            mov dword ptr [rcx+0x000000B8], 0x42F00000 ; 120.0f, the max value of the gauge
+            movss xmm0, dword ptr [rcx+0x000000B4]
+        ",
+
+        /* 0x14AA2A749 */
+        ScanSignature
+        (
+            "\xF3\x0F\x11\x91\xB8\x00\x00\x00\xF3\x0F\x10\x81\xB4\x00\x00\x00\xF3\x0F\x5C\xC2\x0F\x54\x05\xDC\xA2\x64\xF6\x0F\x2F\x05\xCD\xA2\x64\xF6\x0F\x96\xD0\xC3",
+            "xxxx????xxxx????xxxxxxx????xxx????xxxx"
+        ),
+
+        HookBehavior.Replace
     );
 }
