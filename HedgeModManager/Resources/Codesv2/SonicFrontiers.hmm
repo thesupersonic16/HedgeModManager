@@ -117,6 +117,50 @@ Patch "Always Unlocked Arcade Mode" by "Hyper"
     );
 }
 
+Patch "Always Use Day TOD for Islands" by "NM"
+{
+    WriteAsmHook
+    (
+        @"
+            add dword ptr [rcx], edx
+            mov dword ptr [rcx+04h], 8h ; Hours
+            add dword ptr [rcx+08h], r9d ; Minutes
+            movss dword ptr [rcx+0x0C], xmm0 ; Seconds
+        ",
+
+        /* 0x147FCB53B */
+        ScanSignature
+        (
+            "\x01\x11\x44\x01\x41\x04\x44\x01\x49\x08\xF3\x0F\x11\x41\x0C\xE9\x91\x12\x1F\xF8\x6D\x0F\xA2\xC3",
+            "xxxxx?xxx?xxxx?x????xxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Always Use Night TOD for Islands" by "NM"
+{
+    WriteAsmHook
+    (
+        @"
+            add dword ptr [rcx], edx
+            mov dword ptr [rcx+04h], 0h ; Hours
+            add dword ptr [rcx+08h], r9d ; Minutes
+            movss dword ptr [rcx+0x0C], xmm0 ; Seconds
+        ",
+
+        /* 0x147FCB53B */
+        ScanSignature
+        (
+            "\x01\x11\x44\x01\x41\x04\x44\x01\x49\x08\xF3\x0F\x11\x41\x0C\xE9\x91\x12\x1F\xF8\x6D\x0F\xA2\xC3",
+            "xxxxx?xxx?xxxx?x????xxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Centre Game Window on Launch" by "Hyper"
 //
     #load "System.Drawing.dll"
