@@ -117,7 +117,7 @@ Patch "Always Unlocked Arcade Mode" by "Hyper"
     );
 }
 
-Patch "Always Use Day TOD for Islands" by "NM"
+Patch "Always Day on Islands" by "NM"
 {
     WriteAsmHook
     (
@@ -139,7 +139,7 @@ Patch "Always Use Day TOD for Islands" by "NM"
     );
 }
 
-Patch "Always Use Night TOD for Islands" by "NM"
+Patch "Always Night on Islands" by "NM"
 {
     WriteAsmHook
     (
