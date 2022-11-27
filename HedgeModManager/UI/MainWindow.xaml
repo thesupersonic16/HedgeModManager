@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:local="clr-namespace:HedgeModManager"
+        xmlns:misc="clr-namespace:HedgeModManager.Misc"
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
@@ -166,10 +167,20 @@
                             <Grid>
                                 <Grid Margin="10,5,10,41" >
                                     <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
-                                          dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
+                                          PreviewKeyDown="CodesList_OnPreviewKeyDown" misc:GridViewSort.AutoSort="True">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                                <Setter Property="ToolTip">
+                                                    <Setter.Value>
+                                                        <ToolTip Content="{DynamicResource CodesUIInfo}"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <EventSetter Event="MouseDoubleClick" Handler="CodesList_MouseDoubleClick"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
                                         <ListView.View>
-                                            <GridView AllowsColumnReorder="True">
-                                                <GridViewColumn Header="{DynamicResource CodesUIName}" Width="370">
+                                            <GridView>
+                                                <GridViewColumn Header="{DynamicResource CodesUIName}" Width="285" misc:GridViewSort.PropertyName="Name">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal">
@@ -179,7 +190,8 @@
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
-                                                <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="152"/>
+                                                <GridViewColumn Header="{DynamicResource CodesUICategory}" DisplayMemberBinding="{Binding Category}" Width="85"/>
+                                                <GridViewColumn Header="{DynamicResource ModsUIAuthor}"    DisplayMemberBinding="{Binding Author}"   Width="125"/>
                                             </GridView>
                                         </ListView.View>
                                     </ListView>

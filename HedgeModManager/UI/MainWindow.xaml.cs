@@ -167,6 +167,12 @@ namespace HedgeModManager
 
             // Sort enabled codes in alphabetical order.
             {
+                var sortedHeader = GridViewSort.GetSortedColumnHeader(CodesList);
+                {
+                    if (sortedHeader != null)
+                        GridViewSort.RemoveSortGlyph(sortedHeader);
+                }
+
                 for (int i = CodesDatabase.Codes.Count - 1; i >= 0; i--)
                 {
                     var code = CodesDatabase.Codes[i];
@@ -1799,11 +1805,12 @@ namespace HedgeModManager
 
         private void CodesList_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double minWidth = 16 + 370 + 152;
+            double minWidth = 16 + 285 + 85 + 125;
             double extra = Math.Max(0, e.NewSize.Width - minWidth);
             var view = CodesList.View as GridView;
-            view.Columns[0].Width = 370 + extra * 0.70;
-            view.Columns[1].Width = 152 + extra * 0.30;
+            view.Columns[0].Width = 285 + extra * 0.75;
+            view.Columns[1].Width = 85 + extra * 0.10;
+            view.Columns[2].Width = 125 + extra * 0.15;
         }
 
         class StatusLogger : ILogger
@@ -1812,6 +1819,11 @@ namespace HedgeModManager
             public StatusLogger(MainWindow window) => Window = window;
             public void Write(string str) => Window.UpdateStatus(str);
             public void WriteLine(string str) => Window.UpdateStatus(str);
+        }
+
+        private void CodesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            new AboutCodeWindow(CodesList.SelectedItem as Code).ShowDialog();
         }
     }
 }
