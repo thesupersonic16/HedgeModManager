@@ -301,13 +301,22 @@ namespace HedgeModManager
         public void FilterCodes(string text)
         {
             CodesList.Items.Clear();
+
+            int enabledIndex = 0;
             foreach (Code code in CodesDatabase.Codes)
-                if (code.Name.ToLowerInvariant().Contains(text) ||
-                    (code.Author != null && code.Author.ToLowerInvariant().Contains(text)))
+            {
+                if
+                (
+                    code.Name.ToLowerInvariant().Contains(text) ||
+                    (code.Author != null && code.Author.ToLowerInvariant().Contains(text))
+                )
+                {
                     if (code.Enabled)
-                        CodesList.Items.Insert(0, code);
+                        CodesList.Items.Insert(enabledIndex++, code);
                     else
                         CodesList.Items.Add(code);
+                }
+            }
         }
 
         public void FilterMods(string text)
