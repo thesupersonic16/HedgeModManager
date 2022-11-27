@@ -8,6 +8,7 @@ Code "Enable Lives in Anniversary Mode" in "Gameplay" by "ĐeäTh"
 static long rsdkV3Flags;
 static long rsdkV4Flags;
 static long rsdkGlobals;
+static int rsdkGOffset;
 
 if (rsdkV3Flags == 0)
 {
@@ -30,6 +31,7 @@ if (rsdkGlobals == 0)
     var result = ScanSignature("\x48\x8B\x05\x00\x00\x00\x00\x8B\x80\x00\x00\x00\x00\x85\xC0\x78\x2D\x83\xF8\x01\x7E\x1F\x83\xF8\x02\x74\x11\x83\xC0\xFC\x83\xF8\x02\x77\x1B\x48\x8D\x0D\x00\x00\x00\x00\xEB\x19\x48\x8D\x0D\x00\x00\x00\x00\xEB\x10\x48\x8D\x0D\x00\x00\x00\x00\xEB\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\xB2\x02\x4C\x8B\x80\x00\x00\x00\x00\x41\xFF\xD0\x48\x8B\x0D\x00\x00\x00\x00\x66\x89\x41\x04",
     "xxx????xx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxx????xxxxx????xxxxx????xxx????xxxxx????xxxxxx????xxxx");
     rsdkGlobals = (long)result + *((int*)IntPtr.Add(new IntPtr(result), 3)) + 7;
+    rsdkGOffset = *((int*)IntPtr.Add(new IntPtr(result), 9));
     return;
 }
 
@@ -58,13 +60,19 @@ if (*(byte*)(rsdkV3Flags + 0x1DC) == 1)
 if (*(long*)rsdkGlobals != 0)
 {
     // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-    if (*(byte*)(*(long*)rsdkGlobals + 0x447D08) == 1)
+    // Version 1.00: rsdkGlobals + 0x447D08
+    // Version 1.04: rsdkGlobals + 0x4C3508 (Thanks to RDC)
+    if (*(byte*)(*(long*)rsdkGlobals + rsdkGOffset + 0x104) == 1)
     {
         // HUD Update
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x447D20, 0x00);
+        // Version 1.00: rsdkGlobals + 0x447D20
+        // Version 1.04: rsdkGlobals + 0x4C34D4 (Thanks to RDC)
+        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0xD0, 0x00);
 
         // Coin Mode
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x447CD4, 0x00);
+        // Version 1.00: rsdkGlobals + 0x447CD4
+        // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
+        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x11C, 0x00);
     }
 }
 
@@ -72,6 +80,7 @@ Code "Enable Lives in Mirror Mode" in "Gameplay" by "ĐeäTh"
 static long rsdkV3Flags;
 static long rsdkV4Flags;
 static long rsdkGlobals;
+static int rsdkGOffset;
 
 if (rsdkV3Flags == 0)
 {
@@ -94,6 +103,7 @@ if (rsdkGlobals == 0)
     var result = ScanSignature("\x48\x8B\x05\x00\x00\x00\x00\x8B\x80\x00\x00\x00\x00\x85\xC0\x78\x2D\x83\xF8\x01\x7E\x1F\x83\xF8\x02\x74\x11\x83\xC0\xFC\x83\xF8\x02\x77\x1B\x48\x8D\x0D\x00\x00\x00\x00\xEB\x19\x48\x8D\x0D\x00\x00\x00\x00\xEB\x10\x48\x8D\x0D\x00\x00\x00\x00\xEB\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\xB2\x02\x4C\x8B\x80\x00\x00\x00\x00\x41\xFF\xD0\x48\x8B\x0D\x00\x00\x00\x00\x66\x89\x41\x04",
     "xxx????xx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxx????xxxxx????xxxxx????xxx????xxxxx????xxxxxx????xxxx");
     rsdkGlobals = (long)result + *((int*)IntPtr.Add(new IntPtr(result), 3)) + 7;
+    rsdkGOffset = *((int*)IntPtr.Add(new IntPtr(result), 9));
     return;
 }
 
@@ -122,12 +132,18 @@ if (*(byte*)(rsdkV3Flags + 0x1DC) == 3)
 if (*(long*)rsdkGlobals != 0)
 {
     // Check if game.playMode is set to BOOT_PLAYMODE_MIRRORING
-    if (*(byte*)(*(long*)rsdkGlobals + 0x447D08) == 3)
+    // Version 1.00: rsdkGlobals + 0x447D08
+    // Version 1.04: rsdkGlobals + 0x4C3508 (Thanks to RDC)
+    if (*(byte*)(*(long*)rsdkGlobals + rsdkGOffset + 0x104) == 3)
     {
         // HUD Update
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x447D20, 0x00);
+        // Version 1.00: rsdkGlobals + 0x447D20
+        // Version 1.04: rsdkGlobals + 0x4C34D4 (Thanks to RDC)
+        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0xD0, 0x00);
 
         // Coin Mode
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x447CD4, 0x00);
+        // Version 1.00: rsdkGlobals + 0x447CD4
+        // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
+        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x11C, 0x00);
     }
 }
