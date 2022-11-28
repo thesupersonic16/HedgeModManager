@@ -1109,6 +1109,21 @@ Patch "Force Xbox Series Controller UI" by "Hyper"
     );
 }
 
+Patch "Hide Boost Gauge" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x140851023 */
+        ScanSignature
+        (
+            "\x74\x23\x0F\xB7\xC1",
+            "xxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
 Patch "Hide Skip Button in Cutscenes" by "Hyper"
 {
     WriteProtected<byte>
