@@ -1109,6 +1109,21 @@ Patch "Force Xbox Series Controller UI" in "UI" by "Hyper"
     );
 }
 
+Patch "Hide Boost Gauge" in "UI" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x140851023 */
+        ScanSignature
+        (
+            "\x74\x23\x0F\xB7\xC1",
+            "xxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
 Patch "Hide Skip Button in Cutscenes" in "UI" by "Hyper" does "Hides the button prompt at the bottom-right to skip cutscenes. This does not disable the ability to skip cutscenes."
 {
     WriteProtected<byte>
