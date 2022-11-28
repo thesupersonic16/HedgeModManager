@@ -70,7 +70,7 @@
                                     </Style>
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
-                                    <GridView>
+                                    <GridView AllowsColumnReorder="False">
                                         <GridViewColumn Header="{DynamicResource ModsUIName}" Width="200">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -194,7 +194,7 @@
                                             </Style>
                                         </ListView.ItemContainerStyle>
                                         <ListView.View>
-                                            <GridView>
+                                            <GridView AllowsColumnReorder="False">
                                                 <GridViewColumn Header="{DynamicResource CodesUIName}" Width="285">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
