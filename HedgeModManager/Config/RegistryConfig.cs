@@ -17,6 +17,8 @@ namespace HedgeModManager
         public static string UILanguage;
         public static string UITheme;
 
+        public static int CodesSortingColumnIndex = 1;
+
         static RegistryConfig()
         {
             Load();
@@ -29,6 +31,7 @@ namespace HedgeModManager
             key.SetValue("ExtraGameDirectories", ExtraGameDirectories);
             key.SetValue("UILanguage", UILanguage);
             key.SetValue("UITheme", UITheme);
+            key.SetValue("CodesSortingColumnIndex", CodesSortingColumnIndex);
             key.Close();
         }
 
@@ -51,6 +54,7 @@ namespace HedgeModManager
             ExtraGameDirectories = (string)key.GetValue("ExtraGameDirectories", string.Empty);
             UILanguage = (string)key.GetValue("UILanguage", HedgeApp.PCCulture);
             UITheme = (string)key.GetValue("UITheme", useLightMode ? "LightTheme" : "DarkerTheme");
+            CodesSortingColumnIndex = (int)key.GetValue("CodesSortingColumnIndex", 1);
             key.Close();
         }
     }

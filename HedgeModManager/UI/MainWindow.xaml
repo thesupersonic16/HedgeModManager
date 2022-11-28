@@ -167,7 +167,7 @@
                             <Grid>
                                 <Grid Margin="10,5,10,41" >
                                     <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
-                                          PreviewKeyDown="CodesList_OnPreviewKeyDown" misc:GridViewSort.AutoSort="True">
+                                          PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                                 <Setter Property="ToolTip">
@@ -180,7 +180,7 @@
                                         </ListView.ItemContainerStyle>
                                         <ListView.View>
                                             <GridView>
-                                                <GridViewColumn Header="{DynamicResource CodesUIName}" Width="285" misc:GridViewSort.PropertyName="Name">
+                                                <GridViewColumn Header="{DynamicResource CodesUIName}" Width="285">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal">

@@ -31,6 +31,7 @@ using GameBananaAPI;
 using HedgeModManager.GitHub;
 using HedgeModManager.Misc;
 using HedgeModManager.Exceptions;
+using System.Reflection;
 
 namespace HedgeModManager
 {
@@ -144,6 +145,46 @@ namespace HedgeModManager
             }
         }
 
+        private void SortCodesList(int index = -1)
+        {
+            CodesList.Items.Clear();
+
+            switch (index == -1 ? RegistryConfig.CodesSortingColumnIndex : index)
+            {
+                // Name
+                case 0:
+                    CodesDatabase.Codes.Sort((x, y) => x.Name.CompareTo(y.Name));
+                    break;
+
+                // Category
+                case 1:
+                    CodesDatabase.Codes = CodesDatabase.Codes.OrderBy(x => x.Category).ThenBy(x => x.Name).ToList();
+                    break;
+
+                // Author
+                case 2:
+                    CodesDatabase.Codes = CodesDatabase.Codes.OrderBy(x => x.Author).ThenBy(x => x.Name).ToList();
+                    break;
+            }
+
+            for (int i = CodesDatabase.Codes.Count - 1; i >= 0; i--)
+            {
+                var code = CodesDatabase.Codes[i];
+
+                if (code.Enabled)
+                    CodesList.Items.Insert(0, code);
+            }
+
+            CodesDatabase.Codes.ForEach
+            (
+                (code) =>
+                {
+                    if (!code.Enabled)
+                        CodesList.Items.Add(code);
+                }
+            );
+        }
+
         public void RefreshMods()
         {
             // Don't refresh when there is no games
@@ -163,33 +204,7 @@ namespace HedgeModManager
                     code.Enabled = true;
             });
 
-            CodesDatabase.Codes.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-            // Sort enabled codes in alphabetical order.
-            {
-                var sortedHeader = GridViewSort.GetSortedColumnHeader(CodesList);
-                {
-                    if (sortedHeader != null)
-                        GridViewSort.RemoveSortGlyph(sortedHeader);
-                }
-
-                for (int i = CodesDatabase.Codes.Count - 1; i >= 0; i--)
-                {
-                    var code = CodesDatabase.Codes[i];
-
-                    if (code.Enabled)
-                        CodesList.Items.Insert(0, code);
-                }
-
-                CodesDatabase.Codes.ForEach
-                (
-                    (code) =>
-                    {
-                        if (!code.Enabled)
-                            CodesList.Items.Add(code);
-                    }
-                );
-            }
+            SortCodesList();
 
             UpdateStatus(LocaliseFormat("StatusUILoadedMods", ModsDatabase.Mods.Count));
             CheckCodeCompatibility();
@@ -1824,6 +1839,28 @@ namespace HedgeModManager
         private void CodesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             new AboutCodeWindow(CodesList.SelectedItem as Code).ShowDialog();
+        }
+
+        private void CodesList_GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            var header = e.OriginalSource as GridViewColumnHeader;
+
+            if (header != null)
+            {
+                GridViewHeaderRowPresenter headerRowPresenter = header.Parent as GridViewHeaderRowPresenter;
+
+                if (headerRowPresenter != null)
+                {
+                    /* The world if GridViewColumnHeader.ActualIndex was public:
+                       https://i.kym-cdn.com/entries/icons/mobile/000/026/738/future.jpg */
+                    int index = headerRowPresenter.Columns.IndexOf(header.Column);
+
+                    RegistryConfig.CodesSortingColumnIndex = index;
+                    RegistryConfig.Save();
+
+                    SortCodesList(index);
+                }
+            }
         }
     }
 }
