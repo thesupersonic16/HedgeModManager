@@ -226,7 +226,7 @@ WriteNop(ASLR(0x4A3D82), 5)
 Patch "Enable DLC Music in Battle Mode" in "Audio" by "ĐeäTh"
 WriteNop(ASLR(0x0095B570), 6)
 
-Patch "Sideways Wall Jump Fix" in "Gameplay" by "Sajid"
+Patch "Sideways Wall Jump Fix" in "Fixes" by "Sajid"
 WriteNop(ASLR(0x008C142C), 2)
 
 Patch "DLC Stages Always Replayable" in "Cheats" by "ĐeäTh"
@@ -273,7 +273,7 @@ Patch "Disable DLC Prizes" in "Gameplay" by "ĐeäTh"
 WriteNop(ASLR(0x0094595B), 12);
 WriteNop(ASLR(0x00945630), 5);
 
-Patch "Fix Depth Of Field Draw Order" in "Graphics" by "Sajid"
+Patch "Fix Depth Of Field Draw Order" in "Fixes" by "Sajid"
 static int p_DofRes = (int)ASLR(0x00FEFC7C);
 static int p_GrassRes = (int)ASLR(0x00FB6D1C);
 static int p_ShadowRes = (int)ASLR(0x00FB6D1D);
@@ -470,7 +470,7 @@ WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 5");
 Patch "Disable Wisp Hints" in "UI" by "Sajid"
 WriteNop(ASLR(0x0091AAF8), 6)
 
-Patch "Fix Rigid Bodies Falling Through Collision" in "Gameplay" by "ĐeäTh & Darío"
+Patch "Fix Rigid Bodies Falling Through Collision" in "Fixes" by "ĐeäTh & Darío"
 static int p_updateBroadphaseAndResetCollisionInformationOfWarpedBody = (int)ASLR(0x00AED500);
 static int p_setLinearVelocity = (int)ASLR(0x00B88220);
 
@@ -487,7 +487,7 @@ WriteAsmHook
     ASLR(0x004B974F), HookBehavior.Replace
 )
 
-Patch "Fix Depth Effects On Intel GPUs" in "Graphics" by "Skyth"
+Patch "Fix Depth Effects On Intel GPUs" in "Fixes" by "Skyth"
 WriteAsmHook(ASLR(0xC2B233), HookBehavior.Replace, @"
 mov eax, dword ptr [ebp + 8]
 
@@ -516,7 +516,7 @@ mov eax, [ecx + 0x64]
 mov ecx, [eax]
 ");
 
-Patch "Fix Pull Switch Grip Height" in "Gameplay" by "ĐeäTh"
+Patch "Fix Pull Switch Grip Height" in "Fixes" by "ĐeäTh"
 WriteProtected<float>(ASLR(0x00DF2D14), -10.5f)
 
 Patch "No Instant Death Bomb Carts" in "Cheats" by "ĐeäTh"

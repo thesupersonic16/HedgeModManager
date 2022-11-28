@@ -161,7 +161,7 @@ Patch "Always Night on Islands" in "Graphics" by "NM"
     );
 }
 
-Patch "Centre Game Window on Launch" in "Graphics" by "Hyper"
+Patch "Centre Game Window on Launch" in "Fixes" by "Hyper"
 //
     #load "System.Drawing.dll"
     #load "System.Xml.dll"
@@ -822,7 +822,7 @@ Patch "Disable Vignette" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Fix Resolution Resetting on Launch" in "Graphics" by "Hyper" does "Fixes a bug that causes the internal resolution to reset to 1280x720 if the game is unfocused during boot."
+Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a bug that causes the internal resolution to reset to 1280x720 if the game is unfocused during boot."
 //
     #load "System.Xml.dll"
 

@@ -418,7 +418,7 @@ WriteProtected<float>(0x14AF8CC, 1.0f / 165.0f)
 Patch "Disable FPS Limit" in "Graphics" by "Skyth"
 WriteProtected<byte>(0xE7B580, 0xEB);
 
-Patch "Fix Input Delay with Arbitrary Framerates (experimental)" in "Graphics" by "Skyth"
+Patch "Fix Input Delay with Arbitrary Framerates (experimental)" in "Fixes" by "Skyth"
 WriteProtected<byte>(0xD6CBCA, 0xF3, 0x0F, 0x10, 0x44, 0x24, 0x24);
 WriteNop(0xD6CBD0, 14);
 
@@ -427,7 +427,7 @@ WriteNop(0xE5FB17, 6)
 WriteProtected<byte>(0xE5FE10, 0x48)
 WriteProtected<byte>(0xE5FE70, 0x48)
 
-Patch "Fix Homing Trail Position" in "Graphics" by "Ahremic"
+Patch "Fix Homing Trail Position" in "Fixes" by "Ahremic"
 WriteProtected<byte>(0xE4F442, 0xF0); // Replaces "UpVector" (0x450), i.e. the floor normal,
                                       // with "ModelUpVector" (0x4F0), Sonic's actual upward direction.
                                       // This fixes an actual *bug* where the homing trail position was just WRONG.
@@ -453,7 +453,7 @@ WriteProtected<byte>(0x1661882, 0x69, 0x63, 0x65, 0x70, 0x61, 0x6E, 0x65, 0x6C, 
 WriteProtected<byte>(0x166189E, 0x69, 0x63, 0x65, 0x70, 0x61, 0x6E, 0x65, 0x6C, 0x5F)
 WriteProtected<byte>(0x16618BA, 0x69, 0x63, 0x65, 0x70, 0x61, 0x6E, 0x65, 0x6C, 0x5F)
 
-Patch "Fix Skydive Collision Detection" in "Gameplay" by "N69"
+Patch "Fix Skydive Collision Detection" in "Fixes" by "N69"
 WriteNop(0x119822E, 18)
 
 Patch "All Rings Can Be Light Dashed" in "Gameplay" by "Skyth"
@@ -605,7 +605,7 @@ WriteProtected<byte>(0x9C817D, 0x0)
 WriteNop(0x9C8A70, 2)
 WriteNop(0x9C8AC0, 2)
 
-Patch "Fix Boost Gauge Particles" in "Graphics" by "Skyth" does
+Patch "Fix Boost Gauge Particles" in "Fixes" by "Skyth" does
 /*
 Fixes the chaos energy particles going to the top-left of the screen instead of the boost gauge.
 
@@ -840,7 +840,7 @@ mov dword ptr [ebx+0x174],0
 movq xmm0,qword ptr [eax+0x10]"
 WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
-Code "3D Spindash Doesn't Crash" in "Gameplay" by "Chimera"
+Code "3D Spindash Doesn't Crash" in "Fixes" by "Chimera"
 WriteProtected<uint>(0x16D8CD4, 0x11D6140) /* Replaces the vftable entry for classic's 3D spindash update with his slide. */
 
 Patch "Boost Particles go to Sonic" in "Graphics" by "brianuuu"
