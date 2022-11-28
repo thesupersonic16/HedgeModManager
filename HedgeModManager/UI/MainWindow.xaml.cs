@@ -31,7 +31,6 @@ using GameBananaAPI;
 using HedgeModManager.GitHub;
 using HedgeModManager.Misc;
 using HedgeModManager.Exceptions;
-using System.Reflection;
 
 namespace HedgeModManager
 {
