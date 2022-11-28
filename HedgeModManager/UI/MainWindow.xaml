@@ -165,7 +165,12 @@
                                 </Grid>
                             </GroupBox>
                             <Grid>
-                                <Grid Margin="10,5,10,41" >
+                                <Grid Margin="10,5,10,41">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="24"/>
+                                    </Grid.RowDefinitions>
+                                    
                                     <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
                                           PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click">
                                         <ListView.ItemContainerStyle>
@@ -189,8 +194,9 @@
                                                     </Setter.Value>
                                                 </Setter>
                                                 <EventSetter Event="MouseDoubleClick" Handler="CodesList_MouseDoubleClick"/>
-                                                <EventSetter Event="MouseEnter" Handler="CodesList_MouseEnter"/>
-                                                <EventSetter Event="MouseLeave" Handler="CodesList_MouseLeave"/>
+                                                <EventSetter Event="MouseEnter"       Handler="CodesList_MouseEnter"/>
+                                                <EventSetter Event="MouseLeave"       Handler="CodesList_MouseLeave"/>
+                                                <EventSetter Event="Selected"         Handler="CodesList_ListViewItem_Selected"/>
                                             </Style>
                                         </ListView.ItemContainerStyle>
                                         <ListView.View>
@@ -216,25 +222,16 @@
                                         <TextBlock x:Name="CodesStatusLbl" Text="{DynamicResource CodesUIFetching}" IsVisibleChanged="OnFetchStatusVisibilityChanged"/>
                                     </StackPanel>
 
-                                    <Grid Name="UpperCodeDescriptionBox" Visibility="Hidden" VerticalAlignment="Top" Margin="0,23,9,0"
-                                          Height="Auto" MaxHeight="86" Background="{DynamicResource HMM.Window.BackgroundBrush}">
-                                        <Border BorderBrush="{DynamicResource HMM.Window.BorderBrush}" BorderThickness="1,1,0,1">
-                                            <TextBlock Name="UpperCodeDescription"
+                                    <Grid Grid.Row="1" Background="{DynamicResource HMM.Window.BackgroundBrush}">
+                                        <Border BorderBrush="{DynamicResource HMM.Window.BorderBrush}" BorderThickness="1,0,1,1">
+                                            <TextBlock Name="CodeDescription"
                                                        Margin="8,2.5,5,5"
                                                        VerticalAlignment="Center"
                                                        TextTrimming="CharacterEllipsis"
-                                                       TextWrapping="WrapWithOverflow"/>
-                                        </Border>
-                                    </Grid>
-
-                                    <Grid Name="LowerCodeDescriptionBox" Visibility="Hidden" VerticalAlignment="Bottom" Margin="0,0,9,0"
-                                          Height="Auto" MaxHeight="86" Background="{DynamicResource HMM.Window.BackgroundBrush}" MouseEnter="LowerCodeDescriptionBox_MouseEnter">
-                                        <Border BorderBrush="{DynamicResource HMM.Window.BorderBrush}" BorderThickness="1,1,0,1">
-                                            <TextBlock Name="LowerCodeDescription"
-                                                       Margin="8,2.5,5,5"
-                                                       VerticalAlignment="Center"
-                                                       TextTrimming="CharacterEllipsis"
-                                                       TextWrapping="WrapWithOverflow"/>
+                                                       TextWrapping="WrapWithOverflow"
+                                                       Text="{DynamicResource CodesUIInfoHint}"
+                                                       FontStyle="Italic"
+                                                       Foreground="#FF646464"/>
                                         </Border>
                                     </Grid>
                                 </Grid>
@@ -297,11 +294,10 @@
                             <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2">
                                 <Grid>
                                     <StackPanel x:Name="HMMSettingsSackPanel" Margin="10,10,0,0">
-                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"        IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"        IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"      IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUIShowCodeDescriptions}" Name="UI_ShowCodeDescriptions" Checked="UI_ShowCodeDescriptions_CheckedChanged" Unchecked="UI_ShowCodeDescriptions_CheckedChanged" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"          IsChecked="{Binding CPKREDIR.KeepOpen}"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"   IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"   IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}" IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"     IsChecked="{Binding CPKREDIR.KeepOpen}"/>
                                     </StackPanel>
 
                                     <Grid>

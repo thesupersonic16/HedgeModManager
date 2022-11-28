@@ -31,6 +31,7 @@ using GameBananaAPI;
 using HedgeModManager.GitHub;
 using HedgeModManager.Misc;
 using HedgeModManager.Exceptions;
+using System.Windows.Media;
 
 namespace HedgeModManager
 {
@@ -58,8 +59,6 @@ namespace HedgeModManager
         protected Timer StatusTimer;
 
         private bool CodesOutdated = false;
-
-        private bool IsIntersectLowerCodeDescriptionBox = false;
 
         public ILogger StatusLog { get; }
 
@@ -318,8 +317,6 @@ namespace HedgeModManager
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentGameInstall;
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
-
-            UI_ShowCodeDescriptions.IsChecked = RegistryConfig.ShowCodeDescriptions;
         }
 
         public void FilterCodes(string text)
@@ -1533,9 +1530,10 @@ namespace HedgeModManager
             var code = ViewModel.SelectedCode;
 
             if (Keyboard.IsKeyDown(Key.Space))
-            {
                 code.Enabled = !code.Enabled;
-            }
+
+            if (Keyboard.IsKeyDown(Key.Enter))
+                OpenAboutCodeWindow(code);
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1839,12 +1837,15 @@ namespace HedgeModManager
             public void WriteLine(string str) => Window.UpdateStatus(str);
         }
 
-        private void CodesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void OpenAboutCodeWindow(Code code)
         {
-            var code = CodesList.SelectedItem as Code;
-
             if (!string.IsNullOrEmpty(code.Description))
                 new AboutCodeWindow(code).ShowDialog();
+        }
+
+        private void CodesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenAboutCodeWindow(CodesList.SelectedItem as Code);
         }
 
         private void CodesList_GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
@@ -1857,7 +1858,7 @@ namespace HedgeModManager
 
                 if (headerRowPresenter != null)
                 {
-                    /* The world if GridViewColumnHeader.ActualIndex was public:
+                    /* The world if GridViewColumnHeader.ActualIndex was public;
                        https://i.kym-cdn.com/entries/icons/mobile/000/026/738/future.jpg */
                     int index = headerRowPresenter.Columns.IndexOf(header.Column);
 
@@ -1869,56 +1870,45 @@ namespace HedgeModManager
             }
         }
 
-        private void CodesList_MouseEnter(object sender, MouseEventArgs e)
+        private void UpdateCodeDescription(Code code)
         {
-            if (!RegistryConfig.ShowCodeDescriptions)
-                return;
-
-            var code = (sender as ListViewItem).Content as Code;
-
-            Grid codeDescriptionBox;
-            TextBlock codeDescription;
-
-            /* We're getting the grid here, since that must be hidden in order
-               to hide the borders, because collapsing them doesn't do that. */
-            if (IsIntersectLowerCodeDescriptionBox)
+            var theme = new ResourceDictionary();
             {
-                codeDescriptionBox = UpperCodeDescriptionBox;
-                codeDescription    = UpperCodeDescription;
-            }
-            else
-            {
-                codeDescriptionBox = LowerCodeDescriptionBox;
-                codeDescription    = LowerCodeDescription;
+                theme.Source = new Uri($"Themes/{RegistryConfig.UITheme}.xaml", UriKind.Relative);
             }
 
             if (code != null && !string.IsNullOrEmpty(code.Description))
             {
-                codeDescriptionBox.Visibility = Visibility.Visible;
-                codeDescription.Text = code.Description;
+                CodeDescription.Text       = code.Description;
+                CodeDescription.FontStyle  = FontStyles.Normal;
+                CodeDescription.Foreground = (SolidColorBrush)theme["HMM.Window.ForegroundBrush"];
                 return;
             }
 
-            codeDescriptionBox.Visibility = Visibility.Hidden;
-            IsIntersectLowerCodeDescriptionBox = false;
+            CodeDescription.Text       = Localise("CodesUIInfoHint");
+            CodeDescription.FontStyle  = FontStyles.Italic;
+            CodeDescription.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF646464");
+        }
+
+        private void CodesList_MouseEnter(object sender, MouseEventArgs e)
+        {
+            UpdateCodeDescription((sender as ListViewItem).Content as Code);
         }
 
         private void CodesList_MouseLeave(object sender, MouseEventArgs e)
         {
-            UpperCodeDescriptionBox.Visibility = Visibility.Hidden;
-            LowerCodeDescriptionBox.Visibility = Visibility.Hidden;
-            IsIntersectLowerCodeDescriptionBox = false;
+            if (CodesList.SelectedItems.Count == 1)
+            {
+                UpdateCodeDescription(CodesList.SelectedItem as Code);
+                return;
+            }
+
+            UpdateCodeDescription(null);
         }
 
-        private void UI_ShowCodeDescriptions_CheckedChanged(object sender, RoutedEventArgs e)
+        private void CodesList_ListViewItem_Selected(object sender, RoutedEventArgs e)
         {
-            RegistryConfig.ShowCodeDescriptions = (sender as CheckBox)?.IsChecked == true;
-            RegistryConfig.Save();
-        }
-
-        private void LowerCodeDescriptionBox_MouseEnter(object sender, MouseEventArgs e)
-        {
-            IsIntersectLowerCodeDescriptionBox = true;
+            UpdateCodeDescription((sender as ListViewItem).Content as Code);
         }
     }
 }
