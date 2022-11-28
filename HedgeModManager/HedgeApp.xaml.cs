@@ -276,8 +276,8 @@ namespace HedgeModManager
             // URL command
             if (e.Args.Length >= 1 && e.Args[0].ToLowerInvariant().StartsWith("hedgemm://"))
             {
-                string arg = e.Args[0].ToLowerInvariant();
-                if (arg.StartsWith("hedgemm://install/"))
+                string arg = e.Args[0];
+                if (arg.StartsWith("hedgemm://install/", StringComparison.InvariantCultureIgnoreCase))
                 {
                     string url = arg.Substring("hedgemm://install/".Length);
                     new ModInstallWindow(url).ShowDialog();
