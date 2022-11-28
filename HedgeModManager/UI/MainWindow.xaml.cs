@@ -60,6 +60,8 @@ namespace HedgeModManager
 
         private bool CodesOutdated = false;
 
+        private bool IsIntersectLowerCodeDescriptionBox = false;
+
         public ILogger StatusLog { get; }
 
         public MainWindow()
@@ -1840,7 +1842,10 @@ namespace HedgeModManager
 
         private void CodesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            new AboutCodeWindow(CodesList.SelectedItem as Code).ShowDialog();
+            var code = CodesList.SelectedItem as Code;
+
+            if (!string.IsNullOrEmpty(code.Description))
+                new AboutCodeWindow(code).ShowDialog();
         }
 
         private void CodesList_GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
@@ -1872,25 +1877,49 @@ namespace HedgeModManager
 
             var code = (sender as ListViewItem).Content as Code;
 
+            Grid codeDescriptionBox;
+            TextBlock codeDescription;
+
+            /* We're getting the grid here, since that must be hidden in order
+               to hide the borders, because collapsing them doesn't do that. */
+            if (IsIntersectLowerCodeDescriptionBox)
+            {
+                codeDescriptionBox = UpperCodeDescriptionBox;
+                codeDescription    = UpperCodeDescription;
+            }
+            else
+            {
+                codeDescriptionBox = LowerCodeDescriptionBox;
+                codeDescription    = LowerCodeDescription;
+            }
+
             if (code != null && !string.IsNullOrEmpty(code.Description))
             {
-                CodeDescription.Text = code.Description;
-                CodeDescription.Visibility = Visibility.Visible;
+                codeDescriptionBox.Visibility = Visibility.Visible;
+                codeDescription.Text = code.Description;
                 return;
             }
 
-            CodeDescription.Visibility = Visibility.Collapsed;
+            codeDescriptionBox.Visibility = Visibility.Hidden;
+            IsIntersectLowerCodeDescriptionBox = false;
         }
 
         private void CodesList_MouseLeave(object sender, MouseEventArgs e)
         {
-            CodeDescription.Visibility = Visibility.Collapsed;
+            UpperCodeDescriptionBox.Visibility = Visibility.Hidden;
+            LowerCodeDescriptionBox.Visibility = Visibility.Hidden;
+            IsIntersectLowerCodeDescriptionBox = false;
         }
 
         private void UI_ShowCodeDescriptions_CheckedChanged(object sender, RoutedEventArgs e)
         {
             RegistryConfig.ShowCodeDescriptions = (sender as CheckBox)?.IsChecked == true;
             RegistryConfig.Save();
+        }
+
+        private void LowerCodeDescriptionBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+            IsIntersectLowerCodeDescriptionBox = true;
         }
     }
 }
