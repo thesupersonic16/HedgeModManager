@@ -168,7 +168,8 @@
                                 <Grid Margin="10,5,10,41">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
-                                        <RowDefinition Height="24"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Name="CodeDescriptionRow" Height="24" MinHeight="24"/>
                                     </Grid.RowDefinitions>
                                     
                                     <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
@@ -222,7 +223,15 @@
                                         <TextBlock x:Name="CodesStatusLbl" Text="{DynamicResource CodesUIFetching}" IsVisibleChanged="OnFetchStatusVisibilityChanged"/>
                                     </StackPanel>
 
-                                    <Grid Grid.Row="1" Background="{DynamicResource HMM.Window.BackgroundBrush}">
+                                    <GridSplitter Grid.Row="1"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Center"
+                                                  Background="{DynamicResource HMM.Window.BorderBrush}" 
+                                                  ShowsPreview="True"
+                                                  Height="1"
+                                                  MouseDoubleClick="CodeDescription_GridSplitter_MouseDoubleClick"/>
+                                    
+                                    <Grid Grid.Row="2" Background="{DynamicResource HMM.Window.BackgroundBrush}" MouseDown="CodeDescription_MouseDown">
                                         <Border BorderBrush="{DynamicResource HMM.Window.BorderBrush}" BorderThickness="1,0,1,1">
                                             <TextBlock Name="CodeDescription"
                                                        Margin="8,2.5,5,5"

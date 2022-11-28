@@ -1910,5 +1910,16 @@ namespace HedgeModManager
         {
             UpdateCodeDescription((sender as ListViewItem).Content as Code);
         }
+
+        private void CodeDescription_GridSplitter_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            CodeDescriptionRow.Height = GridLength.Auto;
+        }
+
+        private void CodeDescription_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (CodesList.SelectedItems.Count == 1)
+                OpenAboutCodeWindow(CodesList.SelectedItem as Code);
+        }
     }
 }
