@@ -1111,16 +1111,16 @@ Patch "Force Xbox Series Controller UI" by "Hyper"
 
 Patch "Hide Boost Gauge" by "Hyper"
 {
-    WriteProtected<byte>
+    WriteNop
     (
-        /* 0x140851023 */
+        /* 0x1408F1426 */
         ScanSignature
         (
-            "\x74\x23\x0F\xB7\xC1",
-            "xxxxx"
+            "\x80\x4F\x3D\x01\xE8\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\xC6\x48\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x40\x5D\xC3",
+            "xxxxx????xxxx?xxxxxxx?xxxx?xxxxxx"
         ),
-        
-        0xEB
+
+        4
     );
 }
 
