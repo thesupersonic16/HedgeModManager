@@ -317,6 +317,8 @@ namespace HedgeModManager
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentGameInstall;
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
+
+            UI_ShowCodeDescriptions.IsChecked = RegistryConfig.ShowCodeDescriptions;
         }
 
         public void FilterCodes(string text)
@@ -1861,6 +1863,34 @@ namespace HedgeModManager
                     SortCodesList(index);
                 }
             }
+        }
+
+        private void CodesList_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (!RegistryConfig.ShowCodeDescriptions)
+                return;
+
+            var code = (sender as ListViewItem).Content as Code;
+
+            if (code != null && !string.IsNullOrEmpty(code.Description))
+            {
+                CodeDescription.Text = code.Description;
+                CodeDescription.Visibility = Visibility.Visible;
+                return;
+            }
+
+            CodeDescription.Visibility = Visibility.Collapsed;
+        }
+
+        private void CodesList_MouseLeave(object sender, MouseEventArgs e)
+        {
+            CodeDescription.Visibility = Visibility.Collapsed;
+        }
+
+        private void UI_ShowCodeDescriptions_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            RegistryConfig.ShowCodeDescriptions = (sender as CheckBox)?.IsChecked == true;
+            RegistryConfig.Save();
         }
     }
 }

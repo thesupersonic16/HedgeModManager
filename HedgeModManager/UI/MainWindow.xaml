@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:local="clr-namespace:HedgeModManager"
-        xmlns:misc="clr-namespace:HedgeModManager.Misc"
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
@@ -166,6 +165,11 @@
                             </GroupBox>
                             <Grid>
                                 <Grid Margin="10,5,10,41" >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="Auto" MaxHeight="86"/>
+                                    </Grid.RowDefinitions>
+                                    
                                     <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
                                           PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click">
                                         <ListView.ItemContainerStyle>
@@ -176,6 +180,8 @@
                                                     </Setter.Value>
                                                 </Setter>
                                                 <EventSetter Event="MouseDoubleClick" Handler="CodesList_MouseDoubleClick"/>
+                                                <EventSetter Event="MouseEnter" Handler="CodesList_MouseEnter"/>
+                                                <EventSetter Event="MouseLeave" Handler="CodesList_MouseLeave"/>
                                             </Style>
                                         </ListView.ItemContainerStyle>
                                         <ListView.View>
@@ -200,6 +206,15 @@
                                                HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock x:Name="CodesStatusLbl" Text="{DynamicResource CodesUIFetching}" IsVisibleChanged="OnFetchStatusVisibilityChanged"/>
                                     </StackPanel>
+
+                                    <Grid Grid.Row="1" Margin="0,0,1,0" Height="Auto">
+                                        <TextBlock Name="CodeDescription"
+                                                       Margin="8,2.5,5,5"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       TextWrapping="WrapWithOverflow"
+                                                       Visibility="Collapsed"/>
+                                    </Grid>
                                 </Grid>
                                 <Border x:Name="CodesFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,41" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
@@ -260,10 +275,11 @@
                             <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2">
                                 <Grid>
                                     <StackPanel x:Name="HMMSettingsSackPanel" Margin="10,10,0,0">
-                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"   IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"   IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}" IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"     IsChecked="{Binding CPKREDIR.KeepOpen}"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"        IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"        IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"      IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIShowCodeDescriptions}" Name="UI_ShowCodeDescriptions" Checked="UI_ShowCodeDescriptions_CheckedChanged" Unchecked="UI_ShowCodeDescriptions_CheckedChanged" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"          IsChecked="{Binding CPKREDIR.KeepOpen}"/>
                                     </StackPanel>
 
                                     <Grid>
