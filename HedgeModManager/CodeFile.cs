@@ -189,16 +189,16 @@ namespace HedgeModManager
                         {
                             var match = matches[i].Value;
 
-                            if (match.Trim().Equals("by", StringComparison.OrdinalIgnoreCase))
-                            {
-                                i++;
-                                currentCode.Author = matches[i].Value.Trim(' ', '"');
-                            }
-
                             if (match.Trim().Equals("in", StringComparison.OrdinalIgnoreCase))
                             {
                                 i++;
                                 currentCode.Category = matches[i].Value.Trim(' ', '"');
+                            }
+
+                            if (match.Trim().Equals("by", StringComparison.OrdinalIgnoreCase))
+                            {
+                                i++;
+                                currentCode.Author = matches[i].Value.Trim(' ', '"');
                             }
 
                             if (match.Trim().Equals("does", StringComparison.OrdinalIgnoreCase))
