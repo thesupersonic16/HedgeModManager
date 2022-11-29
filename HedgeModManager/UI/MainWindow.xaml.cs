@@ -284,6 +284,9 @@ namespace HedgeModManager
                 ModsDatabase.Mods.Insert(ModsDatabase.ActiveMods.Count, mod);
             }
 
+            // Clear the code description and use default text.
+            UpdateCodeDescription(null);
+
             // Sets the DataContext for all the Components
             ViewModel = new MainWindowViewModel
             {
@@ -1840,7 +1843,14 @@ namespace HedgeModManager
         private void OpenAboutCodeWindow(Code code)
         {
             if (!string.IsNullOrEmpty(code.Description))
+            {
                 new AboutCodeWindow(code).ShowDialog();
+
+                /* This seems to be the only way to
+                   unselect the codes after closing
+                   this dialog window. */
+                Refresh();
+            }
         }
 
         private void CodesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
