@@ -87,12 +87,11 @@
     <system:String x:Key="SettingsUILabelProfile"   >Profile:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Mods Directory:</system:String>
     <!--   Hedge Mod Manager -->
-    <system:String x:Key="SettingsUIHMMHeader"           >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"       >Check for mod loader updates</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"       >Check for code loader updates</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates"     >Check for mod updates</system:String>
-    <system:String x:Key="SettingsUIKeepHMMOpen"         >Keep Hedge Mod Manager open after starting a game</system:String>
-    <system:String x:Key="SettingsUIShowCodeDescriptions">Display descriptions for codes when hovering over them</system:String>
+    <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"  >Check for mod loader updates</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"  >Check for code loader updates</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates">Check for mod updates</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"    >Keep Hedge Mod Manager open after starting a game</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate" >Check for Updates</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >About Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Language:</system:String>
