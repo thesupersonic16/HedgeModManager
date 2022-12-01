@@ -31,6 +31,7 @@ using GameBananaAPI;
 using HedgeModManager.GitHub;
 using HedgeModManager.Misc;
 using HedgeModManager.Exceptions;
+using System.Windows.Media;
 
 namespace HedgeModManager
 {
@@ -144,6 +145,46 @@ namespace HedgeModManager
             }
         }
 
+        private void SortCodesList(int index = -1)
+        {
+            CodesList.Items.Clear();
+
+            switch (index == -1 ? RegistryConfig.CodesSortingColumnIndex : index)
+            {
+                // Name
+                case 0:
+                    CodesDatabase.Codes.Sort((x, y) => x.Name.CompareTo(y.Name));
+                    break;
+
+                // Category
+                case 1:
+                    CodesDatabase.Codes = CodesDatabase.Codes.OrderBy(x => x.Category).ThenBy(x => x.Name).ToList();
+                    break;
+
+                // Author
+                case 2:
+                    CodesDatabase.Codes = CodesDatabase.Codes.OrderBy(x => x.Author).ThenBy(x => x.Name).ToList();
+                    break;
+            }
+
+            for (int i = CodesDatabase.Codes.Count - 1; i >= 0; i--)
+            {
+                var code = CodesDatabase.Codes[i];
+
+                if (code.Enabled)
+                    CodesList.Items.Insert(0, code);
+            }
+
+            CodesDatabase.Codes.ForEach
+            (
+                (code) =>
+                {
+                    if (!code.Enabled)
+                        CodesList.Items.Add(code);
+                }
+            );
+        }
+
         public void RefreshMods()
         {
             // Don't refresh when there is no games
@@ -163,27 +204,7 @@ namespace HedgeModManager
                     code.Enabled = true;
             });
 
-            CodesDatabase.Codes.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-            // Sort enabled codes in alphabetical order.
-            {
-                for (int i = CodesDatabase.Codes.Count - 1; i >= 0; i--)
-                {
-                    var code = CodesDatabase.Codes[i];
-
-                    if (code.Enabled)
-                        CodesList.Items.Insert(0, code);
-                }
-
-                CodesDatabase.Codes.ForEach
-                (
-                    (code) =>
-                    {
-                        if (!code.Enabled)
-                            CodesList.Items.Add(code);
-                    }
-                );
-            }
+            SortCodesList();
 
             UpdateStatus(LocaliseFormat("StatusUILoadedMods", ModsDatabase.Mods.Count));
             CheckCodeCompatibility();
@@ -262,6 +283,9 @@ namespace HedgeModManager
                 ModsDatabase.Mods.Remove(mod);
                 ModsDatabase.Mods.Insert(ModsDatabase.ActiveMods.Count, mod);
             }
+
+            // Clear the code description and use default text.
+            UpdateCodeDescription(null);
 
             // Sets the DataContext for all the Components
             ViewModel = new MainWindowViewModel
@@ -1509,9 +1533,10 @@ namespace HedgeModManager
             var code = ViewModel.SelectedCode;
 
             if (Keyboard.IsKeyDown(Key.Space))
-            {
                 code.Enabled = !code.Enabled;
-            }
+
+            if (Keyboard.IsKeyDown(Key.Enter))
+                OpenAboutCodeWindow(code);
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1799,11 +1824,12 @@ namespace HedgeModManager
 
         private void CodesList_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double minWidth = 16 + 370 + 152;
+            double minWidth = 16 + 285 + 85 + 125;
             double extra = Math.Max(0, e.NewSize.Width - minWidth);
             var view = CodesList.View as GridView;
-            view.Columns[0].Width = 370 + extra * 0.70;
-            view.Columns[1].Width = 152 + extra * 0.30;
+            view.Columns[0].Width = 285 + extra * 0.75;
+            view.Columns[1].Width = 85 + extra * 0.10;
+            view.Columns[2].Width = 125 + extra * 0.15;
         }
 
         class StatusLogger : ILogger
@@ -1812,6 +1838,98 @@ namespace HedgeModManager
             public StatusLogger(MainWindow window) => Window = window;
             public void Write(string str) => Window.UpdateStatus(str);
             public void WriteLine(string str) => Window.UpdateStatus(str);
+        }
+
+        private void OpenAboutCodeWindow(Code code)
+        {
+            if (!string.IsNullOrEmpty(code.Description))
+            {
+                new AboutCodeWindow(code).ShowDialog();
+
+                /* This seems to be the only way to
+                   unselect the codes after closing
+                   this dialog window. */
+                Refresh();
+            }
+        }
+
+        private void CodesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenAboutCodeWindow(CodesList.SelectedItem as Code);
+        }
+
+        private void CodesList_GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            var header = e.OriginalSource as GridViewColumnHeader;
+
+            if (header != null)
+            {
+                GridViewHeaderRowPresenter headerRowPresenter = header.Parent as GridViewHeaderRowPresenter;
+
+                if (headerRowPresenter != null)
+                {
+                    /* The world if GridViewColumnHeader.ActualIndex was public;
+                       https://i.kym-cdn.com/entries/icons/mobile/000/026/738/future.jpg */
+                    int index = headerRowPresenter.Columns.IndexOf(header.Column);
+
+                    RegistryConfig.CodesSortingColumnIndex = index;
+                    RegistryConfig.Save();
+
+                    SortCodesList(index);
+                }
+            }
+        }
+
+        private void UpdateCodeDescription(Code code)
+        {
+            var theme = new ResourceDictionary();
+            {
+                theme.Source = new Uri($"Themes/{RegistryConfig.UITheme}.xaml", UriKind.Relative);
+            }
+
+            if (code != null && !string.IsNullOrEmpty(code.Description))
+            {
+                CodeDescription.Text       = code.Description;
+                CodeDescription.FontStyle  = FontStyles.Normal;
+                CodeDescription.Foreground = (SolidColorBrush)theme["HMM.Window.ForegroundBrush"];
+                return;
+            }
+
+            CodeDescription.Text       = Localise("CodesUIInfoHint");
+            CodeDescription.FontStyle  = FontStyles.Italic;
+            CodeDescription.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF646464");
+        }
+
+        private void CodesList_MouseEnter(object sender, MouseEventArgs e)
+        {
+            UpdateCodeDescription((sender as ListViewItem).Content as Code);
+        }
+
+        private void CodesList_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (CodesList.SelectedItems.Count == 1)
+            {
+                UpdateCodeDescription(CodesList.SelectedItem as Code);
+                return;
+            }
+
+            UpdateCodeDescription(null);
+        }
+
+        private void CodesList_ListViewItem_Selected(object sender, RoutedEventArgs e)
+        {
+            UpdateCodeDescription((sender as ListViewItem).Content as Code);
+        }
+
+        private void CodeDescription_GridSplitter_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            CodeDescriptionRow.Height = GridLength.Auto;
+        }
+
+        private void CodeDescription_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (CodesList.SelectedItems.Count == 1)
+                OpenAboutCodeWindow(CodesList.SelectedItem as Code);
         }
     }
 }

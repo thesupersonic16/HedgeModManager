@@ -1,27 +1,29 @@
 !!VERSION 1.0
 
-Code "Infinite Rings" by "SuperSonic16"
+Code "Infinite Rings" in "Cheats" by "SuperSonic16"
 Write<uint>(GetPointer(0x1E5E2F0, 0x5B8), 0x3E7)
 
-Patch "Disable Ring Cap" by "Darío"
+Patch "Disable Ring Cap" in "Gameplay" by "Darío" does "Allows the ring counter to exceed 999 rings."
 WriteProtected<ushort>(0xE68522, 0xDEB)
 WriteProtected<byte>(0x1098E5F, 0xEB)
 
-Patch "Disable Damage" by "SuperSonic16 & brianuuu"
+Patch "Disable Damage" in "Cheats" by "SuperSonic16 & brianuuu"
 WriteProtected<byte>(0xDEAF2A, 0xEB)
 WriteProtected<byte>(0xE28364, 0xEB)
 
-Patch "Infinite Lives" by "CodenameGamma"
+Patch "Infinite Lives" in "Cheats" by "CodenameGamma"
 WriteNop(0xD59A67, 0x6)
 
-Patch "Always Run in the Background" by "SuperSonic16"
+Patch "Always Run in the Background" in "System" by "SuperSonic16" does "Stops the game from pausing when the window is unfocused."
 WriteProtected<byte>(0xE7BF04, 0xEB)
 
-Patch "Never Lose Rings With Super Sonic" by "Muzzarino"
+Patch "Never Lose Rings With Super Sonic" in "Cheats" by "Muzzarino"
 WriteNop(0xE64E80, 6)
 
-Patch "Custom Material Blend Modes" by "Muzzarino"
-/* Overrides the game's default blend parameter with user specified blend params.
+Patch "Custom Material Blend Modes" in "Graphics" by "Muzzarino" does
+/*
+Overrides the game's default blend parameter with user specified blend params.
+
 To use, hex edit the model's ".material" file with the blend flag set to mark the offset to be changed.
 When specifying blend types, the source blend is shifted 4 bytes, and the destination factor is added onto the byte. Default is 00.
 
@@ -38,7 +40,7 @@ WriteProtected<ushort>(0x6874DE, 0x9050)
 WriteProtected<byte>(0x6FEAB9, 0x31, 0xD2, 0x8B, 0xC2, 0x0F, 0xB6, 0x4B, 0x5A, 0x88, 0xC8, 0x24, 0x0F, 0xC0, 0xE9, 0x04, 0x84, 0xC9, 0xB2, 0x05, 0x0F, 0x44, 0xCA, 0xB2, 0x06, 0x84, 0xC0, 0x0F, 0x44, 0xC2, 0x50, 0x51, 0x8B, 0xCE, 0x85, 0xED, 0x6A, 0x01, 0x75, 0x07, 0xC7, 0x04, 0x24, 0x02, 0x00, 0x00, 0x00, 0x6A, 0x1B, 0xE8, 0x32, 0xD0, 0xD0, 0xFF, 0x8B, 0xCE, 0xFF, 0x34, 0x24, 0x6A, 0x13, 0xE8, 0x26, 0xD0, 0xD0, 0xFF, 0xFF, 0x74, 0x24, 0x04, 0x6A, 0x14, 0x8B, 0xCE, 0xE8, 0x19, 0xD0, 0xD0, 0xFF, 0x83, 0xC4, 0x08, 0x5F, 0x5D, 0x5B, 0x5E, 0xC3)
 WriteProtected<byte>(0x10DD240, 0x8B, 0x44, 0x24, 0x04, 0x56, 0x50, 0x83, 0x24, 0x24, 0x0F, 0x83, 0x3C, 0x24, 0x00, 0x75, 0x04, 0x83, 0x0C, 0x24, 0x06, 0xC1, 0xE8, 0x04, 0x85, 0xC0, 0x75, 0x03, 0x83, 0xC8, 0x05, 0x50, 0x8B, 0xF1, 0x8B, 0x4E, 0x08, 0x6A, 0x13, 0x83, 0xC1, 0x60, 0xE8, 0xB2, 0xE8, 0x32, 0xFF, 0x8B, 0x4E, 0x08, 0x6A, 0x14, 0x83, 0xC1, 0x60, 0xE8, 0xA5, 0xE8, 0x32, 0xFF, 0x5E, 0xC2, 0x0C, 0x00)
 
-Code "Can Always Activate Super Sonic" by "Muzzarino"
+Code "Can Always Activate Super Sonic" in "Cheats" by "Muzzarino" does "Allows Sonic to transform into Super Sonic, regardless of ring count or whether the skill is equipped."
 WriteProtected<byte>(0x11D33A4, 0xEB)
 WriteProtected<byte>(0xE634C5, 0)
 WriteProtected<byte>(0x11D67DC, 0xEB)
@@ -54,7 +56,7 @@ if (ptr0 != 0 && ptr1 != 0)
     Write<byte>(ptr1, (byte)(Read<byte>(ptr1) | 0x10))
 }
 
-Code "Widescreen Support" by "Muzzarino"
+Code "Widescreen Support" in "Graphics" by "Muzzarino" does "Dynamically adjusts the aspect ratio to match the game resolution (recommended for ultrawide)."
 Double width = (Double)Read<uint>(0x01DFE228)
 Double height = (Double)Read<uint>(0x01DFE22C)
 Double defaultwidth = 1280.0
@@ -250,7 +252,7 @@ Read<ushort>(0x789A04) == 0x87D9)
     WriteAsmHook(code9, 0x789A04, HookBehavior.Before)
 }
 
-Patch "Field of View Adjustment" by "Muzzarino"
+Patch "Field of View Adjustment" in "Graphics" by "Muzzarino" does "Dynamically adjusts the field of view based on the current aspect ratio."
 string code = @"push 0x3F800000
 fdiv dword ptr [esp]
 add esp,0x04
@@ -258,7 +260,7 @@ fstp dword ptr [esp+0x0C]
 fld dword ptr [ebp+0x14]"
 WriteAsmHook(code, 0x6F23AA, HookBehavior.Replace)
 
-Patch "Bypass Boss Key Check" by "Muzzarino"
+Patch "Bypass Boss Key Check" in "Cheats" by "Muzzarino" does "Allows progression through White World without collecting the boss keys."
 WriteProtected<byte>(0xEFB9FC, 0xEB)
 WriteProtected<byte>(0xEFA160, 0x0)
 WriteProtected<byte>(0x108B6DA, 0x0)
@@ -267,62 +269,62 @@ WriteProtected<byte>(0x108B6D5, 0x0)
 WriteProtected<byte>(0x4DA787, 0x0)
 WriteProtected<byte>(0x4DA787, 0x8C)
 
-Patch "Have All Chaos Emeralds" by "Muzzarino"
+Patch "Have All Chaos Emeralds" in "Cheats" by "Muzzarino"
 WriteProtected<uint>(0x108BB11, 0x900300C6)
 WriteProtected<byte>(0x108BB15, 0x90)
 WriteProtected<ushort>(0x108BB1F, 0x34EB)
 
-Patch "Sparkles Remain on the Hub World" by "Muzzarino"
+Patch "Sparkles Remain on the Hub World" in "Gameplay" by "Muzzarino" does "Keeps the sparkle effects in White World for stages you haven't played yet."
 WriteProtected<ushort>(0xEE3DA6, 0x6EB)
 
-Patch "Win Challenges Without Meeting the Required Amount of Items" by "Muzzarino"
+Patch "Win Challenges Without Meeting the Required Amount of Items" in "Cheats" by "Muzzarino"
 WriteProtected<uint>(0xD0EAB9, 0xCCC301B0)
 
-Code "Infinite Boost Gauge" by "Zoney"
+Code "Infinite Boost Gauge" in "Cheats" by "Zoney"
 Write<float>(GetPointer(0x1E5E2F0, 0x5BC), 500)
 
-Patch "All Levels are Selectable" by "Muzzarino"
+Patch "All Levels are Selectable" in "Cheats" by "Muzzarino"
 WriteProtected<byte>(0xEE5DE8, 0xC)
 WriteProtected<byte>(0xEE6134, 0xC)
 
-Patch "Buy Anything at the Skill Shop With Any Points" by "Muzzarino"
+Patch "Buy Anything at the Skill Shop With Any Points" in "Cheats" by "Muzzarino"
 WriteNop(0x4409D2, 6)
 
-Patch "Never Subtract Points When Buying a Skill" by "Muzzarino"
+Patch "Never Subtract Points When Buying a Skill" in "Cheats" by "Muzzarino"
 WriteNop(0x440726, 6)
 
-Patch "All Levels Display Names Even If Not Unlocked"  by "Muzzarino & brianuuu"
+Patch "All Levels Display Names Even If Not Unlocked" in "Gameplay" by "Muzzarino & brianuuu" does "Always displays the stage title in the loading screen regardless of whether the stage has been played already."
 WriteProtected<byte>(0xD58A93, 0xEB, 0x41, 0xEB, 0x3F)
 
-Patch "Replay Rescue Cutscenes" by "Muzzarino"
+Patch "Replay Rescue Cutscenes" in "Gameplay" by "Muzzarino" does "Always plays the rescue cutscenes after finishing a stage and returning to White World."
 WriteProtected<ushort>(0xD29532, 0x6EB)
 
-Patch "Colour Dodge Trail Blending" by "Muzzarino"
+Patch "Colour Dodge Trail Blending" in "Graphics" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0x9)
 
-Patch "Lighten Trail Blending" by "Muzzarino"
+Patch "Lighten Trail Blending" in "Graphics" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0xA)
 
-Patch "Screen Trail Blending" by "Muzzarino"
+Patch "Screen Trail Blending" in "Graphics" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0x2)
 WriteProtected<byte>(0xE8D3B7, 0x4)
 
-Patch "Colour Burn Trail Blending" by "Muzzarino"
+Patch "Colour Burn Trail Blending" in "Graphics" by "Muzzarino"
 WriteProtected<byte>(0xE8D3B7, 0x3)
 
-Patch "Opaque Trail Blending" by "Muzzarino"
+Patch "Opaque Trail Blending" in "Graphics" by "Muzzarino"
 WriteProtected<byte>(0xE8D3B7, 0x1)
 
-Patch "Normal Trail Blending" by "Muzzarino"
+Patch "Normal Trail Blending" in "Graphics" by "Muzzarino"
 WriteProtected<byte>(0xE8D3B7, 0x6)
 
-Patch "Glowing Trail Blending" by "Muzzarino"
+Patch "Glowing Trail Blending" in "Graphics" by "Muzzarino"
 WriteProtected<byte>(0xE8D3B7, 0x7)
 
-Patch "Subtractive Trail Blending" by "Muzzarino"
+Patch "Subtractive Trail Blending" in "Graphics" by "Muzzarino"
 WriteProtected<byte>(0xE8D3AC, 0xB)
 
-Patch "Subtitles Appear Additive If Colour Is Bright" by "Muzzarino"
+Patch "Subtitles Appear Additive If Colour Is Bright" in "Graphics" by "Muzzarino" does "Changes the blend mode of the subtitle font if the background colour is too bright for them to be visible."
 WriteProtected<byte>(0x40FED4, 0xE9)
 WriteProtected<uint>(0x40FED5, 0xFB1DBE)
 WriteNop(0x40FED9, 2)
@@ -343,107 +345,107 @@ WriteProtected<uint>(0x13C1CC6, 0x4C48324)
 WriteProtected<byte>(0x13C1CCA, 0xE9)
 WriteProtected<uint>(0x13C1CCB, 0xFF04E20C)
 
-Patch "Freeze Timer" by "Muzzarino"
+Patch "Freeze Timer" in "Cheats" by "Muzzarino"
 WriteNop(0xD02E48, 8)
 
-Patch "Freeze Challenge Timer" by "Muzzarino"
+Patch "Freeze Challenge Timer" in "Cheats" by "Muzzarino"
 WriteNop(0x124EFC5, 8)
 WriteNop(0xD0E7D5, 2)
 
-Patch "Don't Allow Timer to Reduce Ranks on Challenges" by "Muzzarino"
+Patch "Don't Allow Timer to Reduce Ranks on Challenges" in "Cheats" by "Muzzarino" does "Prevents the challenge timer from affecting your rank, always keeping it at an S rank."
 WriteProtected<uint>(0xD611B3, 0x90C0570F)
 WriteNop(0xD611B7, 4)
 
-Patch "1280x720 Media Player" by "N69"
+Patch "1280x720 Media Player" in "Graphics" by "N69" does "Forces the CRIWARE video player to use a 1280x720 viewport. This is only useful for mods that have higher resolution video files."
 WriteProtected<ushort>(0xB210A1, 1280)
 WriteProtected<ushort>(0xB210B1, 720)
 
-Patch "1920x1080 Media Player" by "N69"
+Patch "1920x1080 Media Player" in "Graphics" by "N69" does "Forces the CRIWARE video player to use a 1920x1080 viewport. This is only useful for mods that have higher resolution video files."
 WriteProtected<ushort>(0xB210A1, 1920)
 WriteProtected<ushort>(0xB210B1, 1080)
 
-Code "29.97 FPS Cap" by "PTKickass"
+Code "29.97 FPS Cap" in "Graphics" by "PTKickass"
 Write<float>(0x19FD2C, 29.97f)
 
-Code "59.94 FPS Cap" by "PTKickass"
+Code "59.94 FPS Cap" in "Graphics" by "PTKickass"
 Write<float>(0x19FD2C, 59.94f)
 
-Code "Locked 30 FPS (experimental)" by "Skyth and M&M"
+Code "Locked 30 FPS (experimental)" in "Graphics" by "Skyth and M&M"
 Write<float>(0x19FD2C, 30.0f)
 WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 1.0f / 30.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 30.0f)
 
-Code "Locked 60 FPS" by "Skyth and M&M"
+Code "Locked 60 FPS" in "Graphics" by "Skyth and M&M"
 Write<float>(0x19FD2C, 60.0f)
 WriteNop(0xE7B5D7, 2)
 WriteProtected<float>(0x1704258, 1.0f / 60.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 60.0f)
 
-Patch "60 FPS Cutscenes (experimental)" by "M&M"
+Patch "60 FPS Cutscenes (experimental)" in "Graphics" by "M&M"
 WriteProtected<byte>(0xB21F0B, 0xCC, 0xF8, 0x4A);
 
-Code "Locked 72 FPS (experimental)" by "Skyth and M&M"
+Code "Locked 72 FPS (experimental)" in "Graphics" by "Skyth and M&M"
 Write<float>(0x19FD2C, 72.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 72.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 72.0f)
 
-Code "Locked 75 FPS (experimental)" by "Skyth and M&M"
+Code "Locked 75 FPS (experimental)" in "Graphics" by "Skyth and M&M"
 Write<float>(0x19FD2C, 75.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 75.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 75.0f)
 
-Code "Locked 120 FPS (experimental)" by "Skyth and M&M"
+Code "Locked 120 FPS (experimental)" in "Graphics" by "Skyth and M&M"
 Write<float>(0x19FD2C, 120.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 120.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 120.0f)
 
-Code "Locked 144 FPS (experimental)" by "Skyth and M&M"
+Code "Locked 144 FPS (experimental)" in "Graphics" by "Skyth and M&M"
 Write<float>(0x19FD2C, 144.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 144.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 144.0f)
 
-Code "Locked 165 FPS (experimental)" by "Skyth and M&M"
+Code "Locked 165 FPS (experimental)" in "Graphics" by "Skyth and M&M"
 Write<float>(0x19FD2C, 165.0f);
 WriteNop(0xE7B5D7, 2);
 WriteProtected<float>(0x1704258, 1.0f / 165.0f)
 WriteProtected<float>(0x14AF8CC, 1.0f / 165.0f)
 
-Patch "Disable FPS Limit" by "Skyth"
+Patch "Disable FPS Limit" in "Graphics" by "Skyth"
 WriteProtected<byte>(0xE7B580, 0xEB);
 
-Patch "Fix Input Delay with Arbitrary Framerates (experimental)" by "Skyth"
+Patch "Fix Input Delay with Arbitrary Framerates (experimental)" in "Fixes" by "Skyth"
 WriteProtected<byte>(0xD6CBCA, 0xF3, 0x0F, 0x10, 0x44, 0x24, 0x24);
 WriteNop(0xD6CBD0, 14);
 
-Patch "Longer Blue Trail" by "N69 & Nekit"
+Patch "Longer Blue Trail" in "Graphics" by "N69 & Nekit"
 WriteNop(0xE5FB17, 6)
 WriteProtected<byte>(0xE5FE10, 0x48)
 WriteProtected<byte>(0xE5FE70, 0x48)
 
-Patch "Fix Homing Trail Position" by "Ahremic"
+Patch "Fix Homing Trail Position" in "Fixes" by "Ahremic"
 WriteProtected<byte>(0xE4F442, 0xF0); // Replaces "UpVector" (0x450), i.e. the floor normal,
                                       // with "ModelUpVector" (0x4F0), Sonic's actual upward direction.
                                       // This fixes an actual *bug* where the homing trail position was just WRONG.
 
-Patch "Stomp Keeps Horizontal Velocity" by "TGE"
+Patch "Stomp Keeps Horizontal Velocity" in "Gameplay" by "TGE"
 string code = @"
 movaps xmm1, [edi+0x290]
 addps xmm0, xmm1
 movaps [edi+0x290], xmm0"
 WriteAsmHook(code, 0x01254D4C, HookBehavior.Replace)
 
-Patch "Unleashed Sweepkick" by "N69"
+Patch "Unleashed Sweepkick" in "Gameplay" by "N69" does "Replaces the crouch animation with the sweepkick animation. This does not restore functionality."
 WriteProtected<ushort>(0xDFF8D6, 0x5608)
 
-Patch "No Trick Rainbow Rings" by "Hyper"
+Patch "No Trick Rainbow Rings" in "Gameplay" by "Hyper"
 WriteNop(0x115A6AF, 2);
 
-Patch "Ice Pillars Replace Fire Pillars" by "N69 & RFunk195"
+Patch "Ice Pillars Replace Fire Pillars" in "Gameplay" by "N69 & RFunk195"
 WriteProtected<byte>(0xE020EB, 0x1)
 WriteProtected<byte>(0x16617CB, 0x31)
 WriteProtected<byte>(0x16617D2, 0x31)
@@ -451,27 +453,27 @@ WriteProtected<byte>(0x1661882, 0x69, 0x63, 0x65, 0x70, 0x61, 0x6E, 0x65, 0x6C, 
 WriteProtected<byte>(0x166189E, 0x69, 0x63, 0x65, 0x70, 0x61, 0x6E, 0x65, 0x6C, 0x5F)
 WriteProtected<byte>(0x16618BA, 0x69, 0x63, 0x65, 0x70, 0x61, 0x6E, 0x65, 0x6C, 0x5F)
 
-Patch "Fix Skydive Collision Detection" by "N69"
+Patch "Fix Skydive Collision Detection" in "Fixes" by "N69"
 WriteNop(0x119822E, 18)
 
-Patch "All Rings Can Be Light Dashed" by "Skyth"
+Patch "All Rings Can Be Light Dashed" in "Gameplay" by "Skyth"
 WriteProtected<uint>(0x105334D, 0x10C47C6)
 WriteNop(0x1053351, 16)
 
-Patch "Triggers Debug View" by "Aruki"
+Patch "Triggers Debug View" in "Debug" by "Aruki"
 *(bool*)0x1E5E39B = true;
 
-Patch "Object Collision Debug View" by "Aruki"
+Patch "Object Collision Debug View" in "Debug" by "Aruki"
 *(bool*)0x1E5E3A0 = true;
 
-Patch "Terrain Collision Debug View" by "Sajid"
+Patch "Terrain Collision Debug View" in "Debug" by "Sajid"
 WriteProtected<byte>(0xCF2497, 1);
 WriteNop(0xCF2515, 23);
 
-Patch "Stage Collision Debug View" by "M&M"
+Patch "Stage Collision Debug View" in "Debug" by "M&M"
 *(bool*)0x1E5E382 = true;
 
-Patch "Borderless Fullscreen" by "Sajid"
+Patch "Borderless Fullscreen" in "Graphics" by "Sajid"
 string code = @"mov eax,[ebp+18]
 mov [eax+0x20],00000001
 mov [eax+0x1C],00000000
@@ -480,17 +482,17 @@ mov [ebp-0x1C],ecx
 push 0x00003210"
 WriteAsmHook(code, 0xA5EB5B, HookBehavior.Replace)
 
-Patch "No Out of Control Balloons" by "N69"
+Patch "No Out of Control Balloons" in "Gameplay" by "N69" does "Prevents control being restricted after hitting a balloon."
 WriteProtected<uint>(0x11BEBAA, 0xB6E9)
 WriteProtected<byte>(0x11BEBAE, 0x0)
 WriteNop(0x11BEBAF, 2)
 
-Patch "No Out of Control Jump Springs"
+Patch "No Out of Control Jump Springs" in "Gameplay" does "Prevents control being restricted after hitting a spring."
 WriteProtected<uint>(0x11BEA91, 0x1CFE9)
 WriteProtected<ushort>(0x11BEA95, 0x8B00)
 WriteProtected<byte>(0x11BEA97, 0x83)
 
-Patch "Use Bumpers to Switch Grind Rails" by "Skyth"
+Patch "Use Bumpers to Switch Grind Rails" in "Gameplay" by "Skyth"
 WriteProtected<uint>(0xDFCC92, 0x10244C8B)
 WriteNop(0xDFCC96, 2)
 WriteProtected<ushort>(0xDFCC99, 0xE1BA)
@@ -501,7 +503,7 @@ WriteProtected<uint>(0xDFCCA8, 0xCE1BA0F)
 WriteNop(0xDFCCAC, 7)
 WriteProtected<byte>(0xDFCCB3, 0x73)
 
-Patch "Unleashed Style Grinding Animations" by "Skyth"
+Patch "Unleashed Style Grinding Animations" in "Gameplay" by "Skyth" does "Restores the leaning and stumble animations similar to Sonic Unleashed."
 WriteProtected<ushort>(0xDF2380, 0xA4E9);
 WriteProtected<byte>(0xDF2382, 0x0);
 WriteNop(0xDF2385, 1);
@@ -518,52 +520,52 @@ add esp, 4
 movss xmm0, ds:0x13F9EDC
 ", 0xDF225E, HookBehavior.Replace);
 
-Code "All Walls Are Wall-Jumpable" by "SWS90"
+Code "All Walls Are Wall-Jumpable" in "Gameplay" by "SWS90"
 Write<byte>(GetPointer(0x1E5E2F0, 0x80C), 1)
 
-Patch "Tricks Don't Fill The Boost Gauge"
+Patch "Tricks Don't Fill The Boost Gauge" in "Gameplay"
 WriteNop(0xE4B323, 8)
 WriteNop(0xE4B353, 8)
 
-Patch "Boost Gauge Starts Empty" by "PTKickass & brianuuu"
+Patch "Boost Gauge Starts Empty" in "Gameplay" by "PTKickass & brianuuu"
 WriteProtected<uint>(0xE64F25, 0x90C9570F)
 WriteNop(0xE64F29, 4)
 WriteProtected<uint>(0xE64F2F, 0x90C9570F)
 WriteNop(0xE64F33, 4)
 
-Code "Everything is 1/4 Speed Except For Sonic" by "Sajid"
+Code "Everything is 1/4 Speed Except For Sonic" in "Gameplay" by "Sajid"
 Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19D), 1)
 Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 0.25f)
 
-Code "Everything is 1/2 Speed Except For Sonic" by "Sajid"
+Code "Everything is 1/2 Speed Except For Sonic" in "Gameplay" by "Sajid"
 Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19D), 1)
 Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 0.5f)
 
-Code "Everything is 2x Speed Except For Sonic" by "Sajid"
+Code "Everything is 2x Speed Except For Sonic" in "Gameplay" by "Sajid"
 Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19D), 1)
 Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 2)
 
-Code "Everything is 4x Speed Except For Sonic" by "Sajid"
+Code "Everything is 4x Speed Except For Sonic" in "Gameplay" by "Sajid"
 Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19D), 1)
 Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A4), 4)
 
-Code "Everything is 2x Speed" by "Darío"
+Code "Everything is 2x Speed" in "Gameplay" by "Darío"
 Write<byte>(GetPointer(0x1E0BE5C, 8, 0x19C), 1)
 Write<float>(GetPointer(0x1E0BE5C, 8, 0x1A0), 2)
 
-Patch "Allow Multiple Instances" by "Sajid & Skyth"
+Patch "Allow Multiple Instances" in "System" by "Sajid & Skyth" does "Allows multiple instances of Sonic Generations to be running at once."
 WriteProtected<byte>(0xE7A6E6, 0x83)
 WriteProtected<byte>(0xE7A6E7, 0xC4)
 WriteProtected<byte>(0xE7A6E8, 0xC)
 WriteNop(0xE7A6E9, 0x3)
 
-Code "Disable Motion Blur" by "Skyth"
+Code "Disable Motion Blur" in "Graphics" by "Skyth"
 Write<byte>(0x1A43103, 0)
 
-Code "Set Shadow Bias to 0.0002" by "Skyth"
+Code "Set Shadow Bias to 0.0002" in "Graphics" by "Skyth"
 Write<float>(0x1A4356C, 0.0002f)
 
-Patch "Disable HUD in Stages" by "brianuuu"
+Patch "Disable HUD in Stages" in "UI" by "brianuuu"
 WriteNop(0x108AB3F, 2)
 WriteProtected<byte>(0x108ABFE, 0xE9, 0xED, 0x00, 0x00, 0x00, 0x90)
 WriteNop(0x108D563, 6)
@@ -573,14 +575,14 @@ WriteProtected<byte>(0x1098B6D, 0xE9, 0xF6, 0x00, 0x00, 0x00, 0x90)
 WriteNop(0x117DE55, 2)
 WriteProtected<byte>(0x117DE67, 0xEB)
 
-Patch "Disable Sonic Smoke Trail" by "Sajid"
+Patch "Disable Sonic Smoke Trail" in "Graphics" by "Sajid"
 Write<byte>(0x1A44AE2, 0)
 WriteNop(0x11A2D28, 23)
 
-Patch "Disable Homing Attack" by "Sajid"
+Patch "Disable Homing Attack" in "Gameplay" by "Sajid"
 WriteProtected<float>(0x1704800, 0)
 
-Patch "Controller Hotplugging Support" by "Skyth"
+Patch "Controller Hotplugging Support" in "System" by "Skyth"
 WriteProtected<byte>(0x9C85FA, 0x83)
 WriteProtected<byte>(0x9C85FB, 0xFA)
 WriteProtected<byte>(0x9C85FC, 0x4)
@@ -603,69 +605,75 @@ WriteProtected<byte>(0x9C817D, 0x0)
 WriteNop(0x9C8A70, 2)
 WriteNop(0x9C8AC0, 2)
 
-Patch "Fix Boost Gauge Particles" by "Skyth"
+Patch "Fix Boost Gauge Particles" in "Fixes" by "Skyth" does
+/*
+Fixes the chaos energy particles going to the top-left of the screen instead of the boost gauge.
+
+Known issues;
+- Crashes during the rival battle against Shadow.
+*/
 WriteProtected<byte>(0x11AEC51, 0xB9, 0x00, 0x00, 0x34, 0x44, 0x66, 0x0F, 0x6E, 0xD1, 0xB9, 0x00, 0x00, 0xA0, 0x44, 0x66, 0x0F, 0x6E, 0xC1)
 WriteNop(0x11AEC63, 22)
 
-Patch "Homing Attack on Boost" by "SWS90"
+Patch "Homing Attack on Boost" in "Gameplay" by "SWS90" does "Remaps the homing attack to the X button like Sonic Unleashed."
 WriteProtected<byte>(0x015FA418, 0)
 
-Code "Disable Depth of Field" by "Luig"
+Code "Disable Depth of Field" in "Graphics" by "Luig"
 Write<byte>(0x01A4358D, 0)
 
-Code "Full Resolution Planar Reflections" by "Luig"
+Code "Full Resolution Planar Reflections" in "Graphics" by "Luig"
 Write<float>(0x01B22e84, 1f)
 
-Patch "Disable Brightness Adjustment" by "Skyth"
+Patch "Disable Brightness Adjustment" in "Graphics" by "Skyth"
 WriteProtected<byte>(0xD68183, 0x83, 0xC4, 0x08, 0x90, 0x90);
 
-Patch "Disable Spin Jump Particles" by "Hyper"
+Patch "Disable Spin Jump Particles" in "Graphics" by "Hyper" does "Disables the particle effect for when Sonic jumps and curls into a ball."
 WriteProtected<byte>(0x15E902C, 0x00);
 WriteProtected<byte>(0x15F99DC, 0x00);
 
-Patch "Disable Light Dash Particles" by "Hyper"
+Patch "Disable Light Dash Particles" in "Graphics" by "Hyper" does "Disables the particle effects that hint about a light dash trail."
 WriteProtected<byte>(0x10538EB, 0xE9, 0x8F, 0x00, 0x00, 0x00, 0x90);
 
-Patch "Disable Lap Time Display" by "Hyper"
+Patch "Disable Lap Time Display" in "UI" by "Hyper" does "Disables the timer that appears when passing a checkpoint you've been to previously."
 WriteProtected<byte>(0x10976EF, 0x90, 0xE9);
 
-Patch "Disable Homing Reticles" by "Hyper"
+Patch "Disable Homing Reticles" in "UI" by "Hyper"
 WriteProtected<byte>(0xB6AB8C, 0xE9, 0xF7, 0x01, 0x00, 0x00);
 WriteProtected<byte>(0xDEBC36, 0x00);
 
-Patch "Disable Spin Dash on Dash Panels" by "Hyper"
+Patch "Disable Spin Dash on Dash Panels" in "Gameplay" by "Hyper" does "Disables the short spin dash animation that occurs when hitting a dash panel."
 WriteProtected<byte>(0xE0AC1C, 0xE9, 0x27, 0x01, 0x00, 0x00);
 WriteProtected<byte>(0xE0C734, 0xE9, 0x27, 0x01, 0x00, 0x00);
 
-Patch "Disable Boost Gauge" by "Hyper"
+Patch "Disable Boost Gauge" in "Gameplay" by "Hyper"
 WriteNop(0x109B8DD, 2);
 
-Patch "Disable Boost Button Prompt" by "Hyper"
+Patch "Disable Boost Button Prompt" in "UI" by "Hyper"
 WriteProtected<byte>(0x109BC7C, 0xE9, 0x71, 0x01, 0x00, 0x00);
 
-Patch "Always Use Ellipse Spin Dash" by "Hyper"
+Patch "Always Use Ellipse Spin Dash" in "Graphics" by "Hyper"
 WriteProtected<byte>(0x1289ADE, 0x14, 0xAE);
 
-Patch "Always Use Sphere Spin Dash" by "Hyper"
+Patch "Always Use Sphere Spin Dash" in "Graphics" by "Hyper"
 WriteProtected<byte>(0x1A545A4, 0xEC, 0xAD);
 
-Patch "Disable Loading Hints" by "Hyper"
+Patch "Disable Loading Hints" in "UI" by "Hyper" does "Disables the Omochao hints on loading screens. This also removes the artificial load times that were added for the hints to be readable."
 WriteProtected<byte>(0x448959, 0xE9, 0x12, 0x01, 0x00, 0x00);
 
-Patch "Disable Title Loading Video" by "Hyper"
+Patch "Disable Title Loading Video" in "Graphics" by "Hyper" does "Disables the few extra low resolution frames of Sonic falling when loading out of the title screen."
 WriteProtected<byte>(0xD6966E, 0xE9, 0x14, 0x01, 0x00, 0x00);
 
-Patch "Increased Homing Speed" by "Hyper"
+Patch "Increased Homing Speed" in "Gameplay" by "Hyper"
 WriteProtected<byte>(0x120FF35, 0xF3, 0x0F, 0x10, 0x05, 0xFC, 0x15, 0xA4, 0x01);
 WriteProtected<byte>(0x121618B, 0xF3, 0x0F, 0x10, 0x05, 0xFC, 0x15, 0xA4, 0x01);
 WriteProtected<byte>(0x15FDC18, 0x00);
 WriteProtected<byte>(0x15FFD80, 0x00);
 
-Patch "Disable Homing Delay" by "Hyper"
+Patch "Disable Homing Delay" in "Gameplay" by "Hyper"
 WriteNop(0x1205D44, 8);
 WriteProtected<byte>(0x15FA49C, 0x00);
 
-Patch "Disable Lives" by "Hyper"
+Patch "Disable Lives" in "Gameplay" by "Hyper" does "Prevents Sonic from losing lives and removes all 1-UP related items from the stages."
 WriteNop(0xD59A67, 6);
 WriteNop(0xE68562, 5);
 WriteProtected<byte>(0x1098C82, 0xEB);
@@ -674,28 +682,28 @@ WriteProtected<byte>(0x11CCA82, 0xE9, 0xB1, 0x00, 0x00, 0x00);
 WriteProtected<byte>(0x166463C, 0x00);
 WriteProtected<byte>(0x167DDE4, 0x00);
 
-Patch "Use Japanese Name for Rooftop Run" by "Hyper"
+Patch "Use Japanese Name for Rooftop Run" in "UI" by "Hyper" does "Uses the 'Orange Roofs' stage title instead of 'Rooftop Run' for White World."
 WriteNop(0xEE51E5, 2);
 
-Patch "Use Original Stage Text Colours" by "Hyper"
+Patch "Use Original Stage Text Colours" in "UI" by "Hyper" does "Uses the coloured stage title models in White World, instead of being gold if you have S ranks for those particular stages."
 WriteProtected<byte>(0xEE3F90, 0xEB, 0x2A);
 
-Code "Full Resolution Distortion Effects" by "Luig"
+Code "Full Resolution Distortion Effects" in "Graphics" by "Luig"
 Write<float>(0x01B22E6C, 1f)
 
-Code "2x Shadowmap Draw Distance but Lower Quality Shadows" by "Luig"
+Code "2x Shadowmap Draw Distance but Lower Quality Shadows" in "Graphics" by "Luig"
 Write<float>(0x01A57310, 50f)
 Write<float>(0x01A57314, 50f)
 Write<float>(0x01A57318, 60f)
 
-Patch "Disable Checkpoints" by "Hyper"
+Patch "Disable Checkpoints" in "Gameplay" by "Hyper"
 WriteNop(0x1033338, 2);
 
-Patch "Never Receive Boost From Enemies" by "Hyper"
+Patch "Never Receive Boost From Enemies" in "Gameplay" by "Hyper"
 WriteProtected<byte>(0x112435C, 0xE9, 0xAB, 0x00, 0x00, 0x00);
 WriteNop(0x11246D9, 5);
 
-Patch "Disable Character Action Voices" by "Hyper"
+Patch "Disable Character Action Voices" in "Audio" by "Hyper"
 WriteProtected<uint>(0xDF0B96, 0xFFFFFF);  /* 3002_action01 (used for Unleashed jump selector) */
 WriteProtected<uint>(0xDF0C08, 0xFFFFFF);  /* 3002_action01 (used for Unleashed jump selector) */
 WriteProtected<uint>(0xDFC993, 0xFFFFFF);  /* 3002_action01 (used for bouncing off physics objects) */
@@ -728,21 +736,21 @@ WriteProtected<uint>(0x1231971, 0xFFFFFF); /* 3002_action05 (used for light dash
 WriteProtected<uint>(0xDF0B63, 0xFFFFFF);  /* 3002_damage06 */
 WriteProtected<uint>(0x11D72DC, 0xFFFFFF); /* 3002_action06 */
 
-Patch "Disable Boost Audio Filter" by "Hyper"
+Patch "Disable Boost Audio Filter" in "Audio" by "Hyper"
 WriteProtected<byte>(0xE2E26B, 0xEB); /* Sonic::Player::CPlayerSpeedPosturePluginAisacGhz */
 WriteProtected<byte>(0xE2E409, 0xEB); /* Sonic::Player::CPlayerSpeedPosturePluginAisac */
 
-Patch "Disable Water Audio Filter" by "Hyper"
+Patch "Disable Water Audio Filter" in "Audio" by "Hyper"
 WriteProtected<byte>(0xD6F084, 0xC7, 0x06, 0xFC, 0xD2, 0x6D, 0x01); /* replace WaterToGround with Nop */
 WriteProtected<byte>(0xD6F53A, 0xE9, 0xC7, 0x00, 0x00, 0x00); /* Sonic::CSoundBgmAisacController::GroundToWater */
 
-Patch "Classic Sonic Always Has Homing Attack" by "Sajid"
+Patch "Classic Sonic Always Has Homing Attack" in "Cheats" by "Sajid"
 WriteNop(0x00DC50DF, 6)
 
-Patch "Red Rings Appear On New Game" by "brianuuu"
+Patch "Red Rings Appear On New Game" in "Gameplay" by "brianuuu"
 WriteNop(0x11A9ECB, 2);
 
-Patch "Disable Boost Particles" by "Hyper"
+Patch "Disable Boost Particles" in "Graphics" by "Hyper"
 WriteProtected<byte>(0x15A3568, 0x00); /* ef_bo_sha_yh1_boost1 */
 WriteProtected<byte>(0x15E9048, 0x00); /* ef_ch_sng_yh1_boost1 */
 WriteProtected<byte>(0x15E9060, 0x00); /* ef_ch_sng_yh1_boost2 */
@@ -752,11 +760,11 @@ WriteProtected<byte>(0x15F99F8, 0x00); /* ef_ch_sps_yh1_boost1 */
 WriteProtected<byte>(0x15F9A10, 0x00); /* ef_ch_sps_yh1_boost2 */
 WriteProtected<byte>(0x164330C, 0x00); /* ef_st_ssh_yh1_bobsled_boost */
 
-Patch "Disable Air Boost" by "Sajid"
+Patch "Disable Air Boost" in "Gameplay" by "Sajid"
 WriteProtected<byte>(0x00DFDFC4, 0xEB, 0x27)
 WriteProtected<byte>(0x00DFE046, 0xEB, 0x9E)
 
-Patch "Closer Super Sonic FOV" by "brianuuu"
+Patch "Closer Super Sonic FOV" in "Graphics" by "brianuuu"
 WriteProtected<byte>(0x11D9F32, 0xC7, 0x80, 0x70, 0x01, 0x00, 0x00)
 WriteProtected<float>(0x11D9F38, (float)1.3089969288525)
 WriteNop(0x11D9F3C, 2)
@@ -765,77 +773,77 @@ WriteProtected<float>(0x11D9F03, (float)0.8)
 WriteNop(0x11D9F07, 8)
 WriteProtected<byte>(0x10E7B96, 0xEB, 0x0A)
 
-Patch "Decrease Super Sonic Rings Every Second" by "brianuuu"
+Patch "Decrease Super Sonic Rings Every Second" in "Gameplay" by "brianuuu"
 WriteProtected<byte>(0x11D6807, 0xC7, 0x47, 0x64)
 WriteProtected<float>(0x11D680A, 1)
 WriteProtected<byte>(0x11D680E, 0xEB, 0x1D)
 
-Patch "Disable Super Sonic Floating Boost (Ground Boost)" by "Skyth"
+Patch "Disable Super Sonic Floating Boost (Ground Boost)" in "Gameplay" by "Skyth"
 WriteProtected<byte>(0xDFF34C, 0xEB);
 
-Patch "Disable Super Sonic Floating Boost (Air Boost)" by "Skyth"
+Patch "Disable Super Sonic Floating Boost (Air Boost)" in "Gameplay" by "Skyth"
 WriteProtected<byte>(0xDFE04C, 0xEB);
 
-Patch "Disable Rail Boosters" by "Hyper"
+Patch "Disable Rail Boosters" in "Gameplay" by "Hyper"
 WriteProtected<byte>(0x166F238, 0x00);
 
-Patch "Disable Spike Wisp Music" by "Hyper"
+Patch "Disable Spike Wisp Music" in "Audio" by "Hyper"
 WriteProtected<byte>(0xE3DD80, 0xEB, 0x33); /* Spike - on contact with wisp active */
 WriteProtected<byte>(0xE3E00A, 0xEB, 0x33); /* Spike - on contact without wisp active */
 
-Patch "Disable Rocket Wisp Music" by "Hyper"
+Patch "Disable Rocket Wisp Music" in "Audio" by "Hyper"
 WriteProtected<byte>(0xE3E0AA, 0xEB, 0x33);
 
-Patch "Disable Skill Set Limiters" by "Hyper"
+Patch "Disable Skill Set Limiters" in "Cheats" by "Hyper" does "Allows skills to be equipped regardless of how many points they require."
 WriteProtected<byte>(0x421CD7, 0xE9, 0xC6, 0x04, 0x00, 0x00, 0x90); /* disable point limit progress bar */
 WriteProtected<byte>(0x4235F4, 0xE9, 0x9A, 0x00, 0x00, 0x00, 0x90); /* disable greyed out selection animation */
 WriteProtected<byte>(0x4237D0, 0xE9, 0x9A, 0x00, 0x00, 0x00, 0x90); /* disable greyed out animation */
 WriteProtected<byte>(0x424410, 0xEB, 0x0E);
 WriteProtected<byte>(0x42445B, 0xEB, 0x6F);
 
-Patch "Disable Invincibility Music" by "Hyper"
+Patch "Disable Invincibility Music" in "Audio" by "Hyper"
 WriteProtected<byte>(0x11DD879, 0xEB, 0x2F);
 
-Patch "Disable FxPipeline Radial Blur" by "Hyper"
+Patch "Disable FxPipeline Radial Blur" in "Graphics" by "Hyper"
 WriteProtected<byte>(0x15CE9B0, 0x00);
 
-Patch "Disable Fast Fall Animation" by "Skyth"
+Patch "Disable Fast Fall Animation" in "Graphics" by "Skyth"
 WriteProtected<byte>(0x111913A, 0xEB);
 
-Patch "Force S-Rank" by "brianuuu"
+Patch "Force S-Rank" in "Cheats" by "brianuuu"
 string code = @"mov dword ptr [ebx+0x170],4
 mov dword ptr [ebx+0x174],4
 movq xmm0,qword ptr [eax+0x10]"
 WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
-Patch "Force A-Rank" by "brianuuu"
+Patch "Force A-Rank" in "Cheats" by "brianuuu"
 string code = @"mov dword ptr [ebx+0x170],3
 mov dword ptr [ebx+0x174],3
 movq xmm0,qword ptr [eax+0x10]"
 WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
-Patch "Force B-Rank" by "brianuuu"
+Patch "Force B-Rank" in "Cheats" by "brianuuu"
 string code = @"mov dword ptr [ebx+0x170],2
 mov dword ptr [ebx+0x174],2
 movq xmm0,qword ptr [eax+0x10]"
 WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
-Patch "Force C-Rank" by "brianuuu"
+Patch "Force C-Rank" in "Cheats" by "brianuuu"
 string code = @"mov dword ptr [ebx+0x170],1
 mov dword ptr [ebx+0x174],1
 movq xmm0,qword ptr [eax+0x10]"
 WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
-Patch "Force D-Rank" by "brianuuu"
+Patch "Force D-Rank" in "Cheats" by "brianuuu"
 string code = @"mov dword ptr [ebx+0x170],0
 mov dword ptr [ebx+0x174],0
 movq xmm0,qword ptr [eax+0x10]"
 WriteAsmHook(code, 0xCFE22B, HookBehavior.Replace)
 
-Code "3D Spindash Doesn't Crash" by "Chimera"
+Code "3D Spindash Doesn't Crash" in "Fixes" by "Chimera"
 WriteProtected<uint>(0x16D8CD4, 0x11D6140) /* Replaces the vftable entry for classic's 3D spindash update with his slide. */
 
-Patch "Boost Particles go to Sonic" by "brianuuu"
+Patch "Boost Particles go to Sonic" in "Graphics" by "brianuuu"
 WriteProtected<byte>(0x10967B4,0xA1,0xF0,0xE2,0xE5,0x01,0x85,0xC0,0x0F,0x84,0x27,0x01,0x00,0x00,0x8B,0x80,0x10)
 WriteProtected<byte>(0x10967C4,0x01,0x00,0x00,0x8B,0x80,0xAC,0x00,0x00,0x00,0x85,0xC0,0x0F,0x84,0x13,0x01,0x00)
 WriteProtected<byte>(0x10967D4,0x00,0x8B,0x40,0x10,0xF3,0x0F,0x10,0x50,0x74,0xBA,0x00,0x00,0x00,0x3F,0x66,0x0F)
@@ -843,35 +851,35 @@ WriteProtected<byte>(0x10967E4,0x6E,0xC2,0xF3,0x0F,0x58,0xD0,0xF3,0x0F,0x10,0x40
 WriteProtected<byte>(0x10967F4,0x8B,0x55,0x08,0xF3,0x0F,0x11,0x42,0x10,0xF3,0x0F,0x11,0x52,0x14,0xF3,0x0F,0x11)
 WriteProtected<byte>(0x1096804,0x4A,0x18,0xE9,0xDD,0x00,0x00,0x00)
 
-Patch "Disable Grind Rail Lock-on" by "brianuuu"
+Patch "Disable Grind Rail Lock-on" in "Gameplay" by "brianuuu" does "Removes the homing targets from the beginning and end of rails."
 WriteProtected<byte>(0x121EDA4, 0xE9, 0xAD, 0x00, 0x00, 0x00)
 
-Patch "Disable Blue Trail" by "Hyper"
+Patch "Disable Blue Trail" in "Graphics" by "Hyper" does "Removes the blue trail from Sonic after performing certain actions."
 WriteProtected<byte>(0xE5FDE5, 0xE9, 0x19, 0x01, 0x00, 0x00);
 
-Patch "Always Play Regular Results Music" by "M&M"
+Patch "Always Play Regular Results Music" in "Audio" by "M&M"
 WriteProtected<byte>(0xCFD4CA, 0x00, 0x39)
 
-Patch "Always Play S-Rank Results Music" by "M&M"
+Patch "Always Play S-Rank Results Music" in "Audio" by "M&M"
 WriteProtected<byte>(0xCFD4E8, 0xF8, 0x38)
 
-Patch "Only Play Results Intro" by "M&M"
+Patch "Only Play Results Intro" in "Audio" by "M&M"
 WriteProtected<byte>(0xCFD47F, 0xE9, 0x95, 0x00, 0x00, 0x00)
 WriteProtected<byte>(0xCFD484, 0xC3)
 WriteNop(0xCFD485, 3)
 
-Patch "Disable Fast Music" by "Hyper"
+Patch "Disable Fast Music" in "Audio" by "Hyper" does "Prevents the 'faster' music from playing in Green Hill and Sky Sanctuary."
 WriteNop(0xE2E30F, 2);
 
-Patch "Always Use Fast Music" by "Hyper"
+Patch "Always Use Fast Music" in "Audio" by "Hyper" does "Always plays the 'faster' music in Green Hill and Sky Sanctuary."
 WriteProtected<byte>(0xE2E30F, 0xEB);
 WriteNop(0xE2E3A2, 2);
 WriteProtected<byte>(0xE2E3AC, 0xEB, 0x0E);
 
-Patch "Disable Dropped Rings" by "Hyper"
+Patch "Disable Dropped Rings" in "Gameplay" by "Hyper" does "Removes the bouncing rings when taking damage, similar to Sonic Unleashed."
 WriteProtected<byte>(0x1055002, 0xE9, 0xBD, 0x03, 0x00, 0x00);
 
-Patch "Restore Right Stick Camera Controls" by "Skyth & Ahremic"
+Patch "Restore Right Stick Camera Controls" in "Gameplay" by "Skyth & Ahremic"
 //=====//
 // Pan //
 //=====//
@@ -924,10 +932,10 @@ xorps xmm1, xmm1
 cvtps2pd xmm2, xmm2
 ", 0x10EE030, HookBehavior.Replace);
 
-Patch "All Cameras are Controllable" by "Skyth"
+Patch "All Cameras are Controllable" in "Gameplay" by "Skyth"
 WriteNop(0x10E7515, 2);
 
-Code "Unleashed Style Camera" by "Skyth"
+Code "Unleashed Style Camera" in "Gameplay" by "Skyth"
 static bool initialized = false;
 static double _0 = 0.0;
 static double _50_60 = 50.0 / 60.0;
@@ -959,78 +967,78 @@ Write(0x1A48BFC, 3.0f); // DRIFT_TARGET_SIDE_OFFSET_SCALE
 Write(0x1A48B60, 60.0f); // CAMERA_MAX_PITCH
 Write(0x1A48B6C, 20.0f); // CAMERA_PITCH_MOVE_VELOCITY_MIN
 
-Patch "Use Object Blur On All Player Models" by "Skyth"
+Patch "Use Object Blur On All Player Models" in "Graphics" by "Skyth"
 WriteProtected<uint>(0x13E0000, 8); // MTFx
 WriteProtected<uint>(0x10CDE69, 1); // FxPipeline
 
-Patch "Collect Boost Particle Instantly" by "brianuuu"
+Patch "Collect Boost Particle Instantly" in "Gameplay" by "brianuuu" does "Immediately increases the boost gauge when defeating an enemy."
 WriteNop(0x1124433, 6)
 WriteProtected<byte>(0x1124489, 0xEB)
 WriteNop(0x11244C1, 6)
 WriteNop(0x11244D0, 6)
 WriteProtected<uint>(0x112459B, 0xFFFFFFFF)
 
-Patch "Disable Super Sonic Aura Particles" by "Hyper"
+Patch "Disable Super Sonic Aura Particles" in "Graphics" by "Hyper"
 WriteProtected<byte>(0xDA28DC, 0xEB);
 WriteNop(0xDA79B1, 5);
 WriteProtected<byte>(0xDA892C, 0xEB);
 WriteNop(0xDAD371, 5);
 
-Patch "Disable Trick Particles" by "Hyper"
+Patch "Disable Trick Particles" in "Graphics" by "Hyper"
 WriteProtected<byte>(0x15E9128, 0x00); /* ef_ch_sng_yh1_jump_trick1 */
 WriteProtected<byte>(0x15E9144, 0x00); /* ef_ch_sng_yh1_jump_trick2 */
 WriteProtected<byte>(0x15E9160, 0x00); /* ef_ch_sng_yh1_jump_trick3 */
 WriteProtected<byte>(0x15E917C, 0x00); /* ef_ch_sng_yh1_jump_trick4 */
 WriteProtected<byte>(0x15E9198, 0x00); /* ef_ch_sng_yh1_jump_trick5 */
 
-Patch "Start Stages with None" by "Hyper"
+Patch "Start Stages with None" in "Gameplay" by "Hyper"
 WriteNop(0xD944D3, 6);
 
-Patch "Start Stages with Dash" by "Hyper"
+Patch "Start Stages with Dash" in "Gameplay" by "Hyper"
 WriteProtected<byte>(0xD944D3, 0xE9, 0xC7, 0x00, 0x00, 0x00);
 WriteNop(0xD945C4, 2);
 
-Patch "Start Stages with CrouchingStartBack" by "Hyper"
+Patch "Start Stages with CrouchingStartBack" in "Gameplay" by "Hyper"
 WriteProtected<byte>(0xD944D3, 0xE9, 0xEF, 0x01, 0x00, 0x00);
 WriteNop(0xD946F0, 2);
 
-Patch "Start Stages with CrouchingStartFront" by "Hyper"
+Patch "Start Stages with CrouchingStartFront" in "Gameplay" by "Hyper"
 WriteProtected<byte>(0xD944D3, 0xE9, 0x59, 0x01, 0x00, 0x00);
 WriteNop(0xD9465A, 2);
 
-Patch "Start Stages with Stand" by "Hyper"
+Patch "Start Stages with Stand" in "Gameplay" by "Hyper"
 WriteProtected<byte>(0xD944D3, 0xE9, 0x49, 0x02, 0x00, 0x00);
 WriteNop(0xD9474A, 2);
 
-Patch "Start Stages with ReadyGo" by "Hyper"
+Patch "Start Stages with ReadyGo" in "Gameplay" by "Hyper"
 WriteProtected<byte>(0xD944D3, 0xE9, 0x60, 0x03, 0x00, 0x00);
 WriteNop(0xD94861, 6);
 
-Patch "Disable Stomp Particles" by "Skyth"
+Patch "Disable Stomp Particles" in "Graphics" by "Skyth"
 WriteProtected<byte>(0x15E9094, 0x00);
 WriteProtected<byte>(0x15E90AC, 0x00);
 WriteProtected<byte>(0x15E90C4, 0x00);
 
-Patch "Disable Slide Particles" by "Skyth"
+Patch "Disable Slide Particles" in "Graphics" by "Skyth"
 WriteProtected<byte>(0x15E91B4, 0x00);
 WriteProtected<byte>(0x15E91CC, 0x00);
 
-Patch "Disable Drift Particles" by "Hyper"
+Patch "Disable Drift Particles" in "Graphics" by "Hyper"
 WriteProtected<byte>(0x15E92B4, 0x00);
 WriteProtected<byte>(0x15E92CC, 0x00);
 
-Code "Disable Instant Damage on Enemy Contact" by "Skyth"
+Code "Disable Instant Damage on Enemy Contact" in "Gameplay" by "Skyth" does "Prevents Sonic from taking damage when colliding with enemies, similar to Sonic Unleashed."
 *(int*)0x1E0BE34 = 0;
 
-Patch "Disable Title Outro" by "Skyth"
+Patch "Disable Title Outro" in "UI" by "Skyth" does "Immediately transitions out of the title screen without Sonic jumping from the logo."
 WriteProtected<int>(0x57346F, 0x16A36CC);
 
-Code "Force Motion Blur" by "Skyth & Kitzu"
+Code "Force Motion Blur" in "Graphics" by "Skyth & Kitzu"
 Write<byte>(0x1A43103, 1)
 Write<float>(0x1A431F4, 1)
 Write<float>(0x1A43210, 1)
 
-Code "Replace Airboost with Super Flight" by "SWS90 & Ahremic"
+Code "Replace Airboost with Super Flight" in "Gameplay" by "SWS90 & Ahremic"
 var BoostPtr = GetPointer(0x01E5E2F0, 0x5BC)
 if (BoostPtr >= 1)
 {
@@ -1048,18 +1056,18 @@ if (BoostPtr >= 1)
   }
 }
 
-Patch "Unleashed Stick Deadzones" by "M&M"
+Patch "Unleashed Stick Deadzones" in "Gameplay" by "M&M"
 WriteProtected<byte>(0x16055EC, 0x69); /* InputThreshold (0.02f) */
 WriteProtected<byte>(0xE75F93, 0x38, 0x71); /* InputTransformHalf (0.85f) */
 WriteProtected<byte>(0x1605610, 0x69);
 WriteProtected<byte>(0x160562C, 0x69); /* InputTransformPower (3.0f) */
 
-Patch "Collect Super Rings Instantly" by "brianuuu"
+Patch "Collect Super Rings Instantly" in "Gameplay" by "brianuuu" does "Immediately increases the ring counter by 10, instead of gradually adding 10 rings, similar to Sonic Unleashed."
 WriteNop(0xE4155E, 2);
 WriteNop(0xE415C8, 2);
 WriteProtected<int>(0xE4157A, -1);
 
-Patch "Unleashed Style Stomp" by "Skyth, brianuuu & Ahremic"
+Patch "Unleashed Style Stomp" in "Gameplay" by "Skyth, brianuuu & Ahremic"
 WriteAsmHook(@"
 movss [esp + 2Ch], xmm0
 movaps xmm0, [esp + 20h]
@@ -1103,16 +1111,16 @@ skip:
 cmp byte ptr [esi + 440h], 0
 ", 0x12552C5, HookBehavior.Replace);
 
-Patch "Show Mega Drive in the Hub World" by "Hyper"
+Patch "Show Mega Drive in the Hub World" in "Graphics" by "Hyper" does "Restores the Mega Drive above Green Hill. This does not restore functionality."
 WriteProtected<byte>(0xEED498, 0x01);
 
-Patch "Jump Dash Keeps Momentum" by "Ahremic"
+Patch "Jump Dash Keeps Momentum" in "Gameplay" by "Ahremic"
 WriteProtected<byte>(0x01231B0C, 0xE8);// Modern
 WriteNop(0x01231B0D, 4);
 WriteProtected<byte>(0x0122E9BB, 0xE8);// Classic
 WriteNop(0x0122E9BC, 4);
 
-Patch "Dropped Rings Bounce Less and Flicker" by "Ahremic"
+Patch "Dropped Rings Bounce Less and Flicker" in "Gameplay" by "Ahremic"
 // Set new bounce multiplier on contact
 static float NewMultiplier = 1.65f; // Previously 2.0f, would just reflect your velocity 1:1 on flat ground.
 fixed (float* pNewMultiplier = &NewMultiplier)
@@ -1168,15 +1176,15 @@ return:
 ", 0x01054B37,HookBehavior.After);
 }
 
-Patch "Disable Classic Run Particles" by "Hyper"
+Patch "Disable Classic Run Particles" in "Graphics" by "Hyper"
 WriteProtected<byte>(0xDC1C6F, 0xE9, 0x99, 0x00, 0x00, 0x00);
 
-Patch "Never Receive Boost From Drift" by "Hyper"
+Patch "Never Receive Boost From Drift" in "Gameplay" by "Hyper"
 WriteProtected<byte>(0xE03E46, 0xD9, 0xEE);
 WriteNop(0xE03E48, 6);
 WriteProtected<byte>(0x15E96B0, 0x00);
 
-Patch "Never Receive Boost From Rings" by "Hyper"
+Patch "Never Receive Boost From Rings" in "Gameplay" by "Hyper"
 {
     void NOP(int floatInstrAddr, int paramStrAddr)
     {
@@ -1190,14 +1198,14 @@ Patch "Never Receive Boost From Rings" by "Hyper"
     NOP(0x12063DF, 0x15FA72C); /* ChaosEnergyRecoverRateByRingPenalty */
 }
 
-Patch "Disable Color Correction" by "M&M"
+Patch "Disable Color Correction" in "Graphics" by "M&M"
 WriteProtected<byte>(0x1699F54, 0x00);
 
-Patch "Disable Controller Rumble" by "brianuuu"
+Patch "Disable Controller Rumble" in "Gameplay" by "brianuuu"
 WriteProtected<byte>(0x9C7F56, 0xB8, 0x01, 0x00, 0x00, 0x00, 0xEB, 0x11, 0x90, 0x90)
 
-Code "Disable Light Shafts" by "Skyth"
+Code "Disable Light Shafts" in "Graphics" by "Skyth"
 *(bool*)0x1E5E333 = false;
 
-Code "Disable Planar Reflections" by "Skyth"
+Code "Disable Planar Reflections" in "Graphics" by "Skyth"
 *(bool*)0x1B22E78 = false;

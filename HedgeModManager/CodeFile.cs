@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HedgeModManager.Misc;
+using Markdig.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -113,7 +114,11 @@ namespace HedgeModManager
     {
         public string Name { get; set; }
 
+        public string Category { get; set; }
+
         public string Author { get; set; }
+
+        public string Description { get; set; }
 
         public bool IsPatch { get; set; }
 
@@ -158,6 +163,8 @@ namespace HedgeModManager
             var codes = new List<Code>();
             Code currentCode = null;
             {
+                bool isMultilineDescription = false;
+
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
@@ -182,12 +189,81 @@ namespace HedgeModManager
                         {
                             var match = matches[i].Value;
 
+                            if (match.Trim().Equals("in", StringComparison.OrdinalIgnoreCase))
+                            {
+                                i++;
+                                currentCode.Category = matches[i].Value.Trim(' ', '"');
+                            }
+
                             if (match.Trim().Equals("by", StringComparison.OrdinalIgnoreCase))
                             {
                                 i++;
                                 currentCode.Author = matches[i].Value.Trim(' ', '"');
                             }
+
+                            if (match.Trim().Equals("does", StringComparison.OrdinalIgnoreCase))
+                            {
+                                i++;
+
+                                /* If the line ends with "does" on its own,
+                                   the description will be on the next line. */
+                                if (line.EndsWith("does"))
+                                    isMultilineDescription = true;
+                                else
+                                    currentCode.Description = matches[i].Value.Trim(' ', '"');
+                            }
                         }
+
+                        continue;
+                    }
+
+                    if (isMultilineDescription)
+                    {
+                        string startDelimiter = "/*";
+                        string endDelimiter   = "*/";
+
+                        bool lineContainsStartDelimiter = false;
+                        bool lineContainsEndDelimiter   = false;
+
+                        if (line.StartsWith(startDelimiter))
+                        {
+                            if (line == startDelimiter)
+                                continue;
+
+                            lineContainsStartDelimiter = true;
+                        }
+                        
+                        if (line.EndsWith(endDelimiter))
+                        {
+                            isMultilineDescription = false;
+
+                            if (line == endDelimiter)
+                                continue;
+
+                            lineContainsEndDelimiter = true;
+                        }
+
+                        string GetDescriptionLine()
+                        {
+                            string result = line;
+
+                            if (lineContainsStartDelimiter)
+                            {
+                                int delimiterLength = result[startDelimiter.Length].IsWhitespace()
+                                                        ? startDelimiter.Length + 1
+                                                        : startDelimiter.Length;
+
+                                result = result.Remove(0, delimiterLength);
+                            }
+
+                            if (lineContainsEndDelimiter)
+                                result = result.Substring(0, result.Length - endDelimiter.Length);
+
+                            return string.IsNullOrEmpty(currentCode.Description) ? result : '\n' + result;
+                        }
+
+                        currentCode.Description += GetDescriptionLine();
+
                         continue;
                     }
 

@@ -1,6 +1,6 @@
 !!VERSION 1.2
 
-Patch "Adjust Aspect Ratio to Resolution (experimental)" by "M&M & Hyper"
+Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M & Hyper" does "Dynamically adjusts the aspect ratio to match the game resolution (recommended for ultrawide)."
 //
     #load "System.Drawing.dll"
 
@@ -27,7 +27,7 @@ Patch "Adjust Aspect Ratio to Resolution (experimental)" by "M&M & Hyper"
     WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
 }
 
-Patch "Always Have Phantom Rush" by "NM"
+Patch "Always Have Phantom Rush" in "Cheats" by "NM"
 {
     WriteNop
     (
@@ -42,7 +42,7 @@ Patch "Always Have Phantom Rush" by "NM"
     );
 }
 
-Patch "Always Have Power Boost" by "SuperSonic16"
+Patch "Always Have Power Boost" in "Cheats" by "SuperSonic16"
 {
     WriteProtected<byte>
     (
@@ -57,7 +57,7 @@ Patch "Always Have Power Boost" by "SuperSonic16"
     );
 }
 
-Patch "Always Run in the Background" by "NM"
+Patch "Always Run in the Background" in "System" by "NM" does "Stops the game from pausing when the window is unfocused."
 {
     WriteProtected<byte>
     (
@@ -72,7 +72,7 @@ Patch "Always Run in the Background" by "NM"
     );
 }
 
-Patch "Always Trickable Dash Rings" by "Hyper"
+Patch "Always Trickable Dash Rings" in "Cheats" by "Hyper"
 {
     WriteProtected<byte>
     (
@@ -87,7 +87,7 @@ Patch "Always Trickable Dash Rings" by "Hyper"
     );
 }
 
-Patch "Always Trickable Jump Boards" by "Hyper"
+Patch "Always Trickable Jump Boards" in "Cheats" by "Hyper"
 {
     WriteProtected<byte>
     (
@@ -102,7 +102,7 @@ Patch "Always Trickable Jump Boards" by "Hyper"
     );
 }
 
-Patch "Always Unlocked Arcade Mode" by "Hyper"
+Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
 {
     WriteNop
     (
@@ -117,7 +117,7 @@ Patch "Always Unlocked Arcade Mode" by "Hyper"
     );
 }
 
-Patch "Always Day on Islands" by "NM"
+Patch "Always Day on Islands" in "Graphics" by "NM"
 {
     WriteAsmHook
     (
@@ -139,7 +139,7 @@ Patch "Always Day on Islands" by "NM"
     );
 }
 
-Patch "Always Night on Islands" by "NM"
+Patch "Always Night on Islands" in "Graphics" by "NM"
 {
     WriteAsmHook
     (
@@ -161,7 +161,7 @@ Patch "Always Night on Islands" by "NM"
     );
 }
 
-Patch "Centre Game Window on Launch" by "Hyper"
+Patch "Centre Game Window on Launch" in "Fixes" by "Hyper"
 //
     #load "System.Drawing.dll"
     #load "System.Xml.dll"
@@ -307,7 +307,7 @@ Patch "Centre Game Window on Launch" by "Hyper"
     );
 }
 
-Patch "Disable Automatic Boost Gauge Replenishment" by "Hyper"
+Patch "Disable Automatic Boost Gauge Replenishment" in "Gameplay" by "Hyper" does "Prevents the boost gauge from refilling over time."
 {
     WriteNop
     (
@@ -322,7 +322,7 @@ Patch "Disable Automatic Boost Gauge Replenishment" by "Hyper"
     );
 }
 
-Patch "Disable Boost Audio Filter" by "Hyper"
+Patch "Disable Boost Audio Filter" in "Audio" by "Hyper"
 {
     WriteProtected<byte>
     (
@@ -337,7 +337,7 @@ Patch "Disable Boost Audio Filter" by "Hyper"
     );
 }
 
-Patch "Disable Camera Shake" by "Hyper"
+Patch "Disable Camera Shake" in "Graphics" by "Hyper" does "Disables camera shake during combat."
 {
     WriteProtected<byte>
     (
@@ -352,7 +352,7 @@ Patch "Disable Camera Shake" by "Hyper"
     );
 }
 
-Patch "Disable Chromatic Aberration" by "Luig & Hyper"
+Patch "Disable Chromatic Aberration" in "Graphics" by "Luig & Hyper" does "Disables the RGB separation effect at edges of the screen in certain scenarios."
 {
     WriteNop
     (
@@ -367,7 +367,7 @@ Patch "Disable Chromatic Aberration" by "Luig & Hyper"
     );
 }
 
-Patch "Disable Cyber Space CRT Effects" by "Hyper & PTKickass"
+Patch "Disable Cyber Space CRT Effects" in "Graphics" by "Hyper & PTKickass" does "Disables the CRT scanline effect on distant terrain models in Cyber Space."
 {
     WriteProtected<byte>
     (
@@ -382,7 +382,7 @@ Patch "Disable Cyber Space CRT Effects" by "Hyper & PTKickass"
     );
 }
 
-Patch "Disable Drift Input Prompt" by "Hyper"
+Patch "Disable Drift Input Prompt" in "UI" by "Hyper" does "Disables the input prompt that covers up Sonic when using drift dash panels."
 {
     WriteNop
     (
@@ -397,7 +397,7 @@ Patch "Disable Drift Input Prompt" by "Hyper"
     );
 }
 
-Patch "Disable Fixed Camera Notifications" by "Hyper"
+Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the fixed camera icon at the top-right of the screen, as well as the tutorial about it at the beginning of the game."
 {
     // Disable fixed camera UI element.
     WriteProtected<byte>
@@ -426,7 +426,7 @@ Patch "Disable Fixed Camera Notifications" by "Hyper"
     );
 }
 
-Patch "Disable Framerate Limiter (experimental)" by "NM & M&M"
+Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M"
 {
     /*
         At the moment, this is the best method I have found for uncapping FPS.
@@ -493,7 +493,7 @@ Patch "Disable Framerate Limiter (experimental)" by "NM & M&M"
     );
 }
 
-Patch "Disable Guardian Introductions" by "Hyper"
+Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
 {
     // Asura
     WriteProtected<byte>
@@ -641,7 +641,7 @@ Patch "Disable Guardian Introductions" by "Hyper"
     );
 }
 
-Patch "Disable In-Game Letterboxing" by "Hyper"
+Patch "Disable In-Game Letterboxing" in "Graphics" by "Hyper" does "Disables letterboxing for in-game cutscenes and Training Simulator. This will not work for pre-rendered cutscenes."
 {
     WriteProtected<byte>
     (
@@ -656,7 +656,7 @@ Patch "Disable In-Game Letterboxing" by "Hyper"
     );
 }
 
-Patch "Disable Power Boost" by "Hyper"
+Patch "Disable Power Boost" in "Gameplay" by "Hyper"
 {
     WriteProtected<byte>
     (
@@ -671,7 +671,7 @@ Patch "Disable Power Boost" by "Hyper"
     );
 }
 
-Patch "Disable Power Boost Cutscene" by "Hyper"
+Patch "Disable Power Boost Cutscene" in "Gameplay" by "Hyper" does "Disables the pre-rendered cutscene that occurs every time you acquire Power Boost."
 {
     WriteProtected<byte>
     (
@@ -686,7 +686,7 @@ Patch "Disable Power Boost Cutscene" by "Hyper"
     );
 }
 
-Patch "Disable Ring Loss" by "M&M"
+Patch "Disable Ring Loss" in "Cheats" by "M&M"
 {
     WriteProtected<byte>
     (
@@ -701,7 +701,7 @@ Patch "Disable Ring Loss" by "M&M"
     );
 }
 
-Patch "Disable Sequence Colliders" by "Hyper"
+Patch "Disable Sequence Colliders" in "Cheats" by "Hyper" does "Disables invisible walls that are usually removed by specific events. This will not remove invisible walls surrounding the islands."
 {
     WriteProtected<byte>
     (
@@ -716,7 +716,7 @@ Patch "Disable Sequence Colliders" by "Hyper"
     );
 }
 
-Patch "Disable Shadows" by "Luig & Hyper"
+Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
 {
     WriteProtected<byte>
     (
@@ -731,7 +731,7 @@ Patch "Disable Shadows" by "Luig & Hyper"
     );
 }
 
-Patch "Disable Starfall" by "Hyper"
+Patch "Disable Starfall" in "Gameplay" by "Hyper" does "Disables the Starfall event that begins the meteor shower and slot machine."
 {
     WriteAsmHook
     (
@@ -753,7 +753,7 @@ Patch "Disable Starfall" by "Hyper"
     );
 }
 
-Patch "Disable Super Combat Particles" by "Hyper"
+Patch "Disable Super Combat Particles" in "Graphics" by "Hyper" does "Disables the giant fist and foot particles during combat as Super Sonic."
 {
     WriteProtected<byte>
     (
@@ -768,7 +768,7 @@ Patch "Disable Super Combat Particles" by "Hyper"
     );
 }
 
-Patch "Disable Trick Hint Particles" by "Hyper"
+Patch "Disable Trick Hint Particles" in "Graphics" by "Hyper" does "Disables the particles that hint at dash rings, jump boards and springs being trickable."
 {
     // Dash Rings
     WriteProtected<byte>
@@ -810,7 +810,7 @@ Patch "Disable Trick Hint Particles" by "Hyper"
     );
 }
 
-Patch "Disable Umbrella Camera Lock-On" by "Hyper"
+Patch "Disable Umbrella Camera Lock-On" in "Gameplay" by "Hyper" does "Disables the lock-on camera when the Umbrella enemy in Ares jumps into the sky."
 {
     WriteProtected<byte>
     (
@@ -837,7 +837,7 @@ Patch "Disable Umbrella Camera Lock-On" by "Hyper"
     );
 }
 
-Patch "Disable Vignette" by "Hyper"
+Patch "Disable Vignette" in "Graphics" by "Hyper"
 {
     WriteNop
     (
@@ -852,7 +852,7 @@ Patch "Disable Vignette" by "Hyper"
     );
 }
 
-Patch "Fix Resolution Resetting on Launch" by "Hyper"
+Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a bug that causes the internal resolution to reset to 1280x720 if the game is unfocused during boot."
 //
     #load "System.Xml.dll"
 
@@ -987,7 +987,7 @@ Patch "Fix Resolution Resetting on Launch" by "Hyper"
     );
 }
 
-Patch "Force 4K Video Playback" by "Hyper"
+Patch "Force 4K Video Playback" in "Graphics" by "Hyper" does "Forces the game to use the pre-rendered cutscenes encoded at 4K, regardless of game resolution."
 {
     WriteNop
     (
@@ -1014,7 +1014,7 @@ Patch "Force 4K Video Playback" by "Hyper"
     );
 }
 
-Patch "Force PlayStation 4 Controller UI" by "Hyper"
+Patch "Force PlayStation 4 Controller UI" in "UI" by "Hyper"
 {
     WriteAsmHook
     (
@@ -1036,7 +1036,7 @@ Patch "Force PlayStation 4 Controller UI" by "Hyper"
     );
 }
 
-Patch "Force PlayStation 5 Controller UI" by "Hyper"
+Patch "Force PlayStation 5 Controller UI" in "UI" by "Hyper"
 {
     WriteAsmHook
     (
@@ -1058,7 +1058,7 @@ Patch "Force PlayStation 5 Controller UI" by "Hyper"
     );
 }
 
-Patch "Force Switch Controller UI" by "Hyper"
+Patch "Force Switch Controller UI" in "UI" by "Hyper"
 {
     WriteAsmHook
     (
@@ -1080,7 +1080,7 @@ Patch "Force Switch Controller UI" by "Hyper"
     );
 }
 
-Patch "Force Xbox One Controller UI" by "Hyper"
+Patch "Force Xbox One Controller UI" in "UI" by "Hyper"
 {
     WriteAsmHook
     (
@@ -1102,7 +1102,7 @@ Patch "Force Xbox One Controller UI" by "Hyper"
     );
 }
 
-Patch "Force Xbox Series Controller UI" by "Hyper"
+Patch "Force Xbox Series Controller UI" in "UI" by "Hyper"
 {
     WriteAsmHook
     (
@@ -1124,7 +1124,7 @@ Patch "Force Xbox Series Controller UI" by "Hyper"
     );
 }
 
-Patch "Hide Boost Gauge" by "Hyper"
+Patch "Hide Boost Gauge" in "UI" by "Hyper"
 {
     WriteProtected<byte>
     (
@@ -1139,7 +1139,7 @@ Patch "Hide Boost Gauge" by "Hyper"
     );
 }
 
-Patch "Hide Skip Button in Cutscenes" by "Hyper"
+Patch "Hide Skip Button in Cutscenes" in "UI" by "Hyper" does "Hides the button prompt at the bottom-right to skip cutscenes. This does not disable the ability to skip cutscenes."
 {
     WriteProtected<byte>
     (
@@ -1154,7 +1154,7 @@ Patch "Hide Skip Button in Cutscenes" by "Hyper"
     );
 }
 
-Patch "Infinite Boost Gauge" by "Hyper"
+Patch "Infinite Boost Gauge" in "Cheats" by "Hyper"
 {
     WriteProtected<byte>
     (
@@ -1169,7 +1169,7 @@ Patch "Infinite Boost Gauge" by "Hyper"
     );
 }
 
-Patch "Infinite Quick Cyloop Gauge" by "NM"
+Patch "Infinite Quick Cyloop Gauge" in "Cheats" by "NM"
 {
     WriteAsmHook
     (

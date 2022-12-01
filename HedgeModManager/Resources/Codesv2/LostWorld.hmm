@@ -1,15 +1,15 @@
 !!VERSION 1.0
 
-Patch "Don't Lose Rings" by "Sajid"
+Patch "Don't Lose Rings" in "Cheats" by "Sajid"
 WriteNop(ASLR(0x866900), 2)
 
-Patch "Disable Super Music" by "Sajid"
+Patch "Disable Super Music" in "Audio" by "Sajid"
 WriteNop(ASLR(0x91ABAD), 6)
 
-Patch "Invisible Cloak Sonic (Requires jump or spin)" by "Muzzarino"
+Patch "Invisible Cloak Sonic (Requires jump or spin)" in "Graphics" by "Muzzarino"
 WriteNop(ASLR(0x85C68E), 6)
 
-Patch "Enable Stage Retry Option" by "Sajid"
+Patch "Enable Stage Retry Option" in "UI" by "Sajid"
 WriteAsmHook
 (
     ASLR(0x005169E3),
@@ -17,22 +17,22 @@ WriteAsmHook
     "mov DWORD PTR [ebp+8], 1"
 )
 
-Patch "16:10 In-Game Resolution" by "ĐeäTh"
+Patch "16:10 In-Game Resolution" in "Graphics" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x3FCCCCCD)
 
-Patch "21:9 (2560x1080) In-Game Resolution" by "ĐeäTh"
+Patch "21:9 (2560x1080) In-Game Resolution" in "Graphics" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x4017B426)
 
-Patch "21:9 (3440x1440) In-Game Resolution" by "ĐeäTh"
+Patch "21:9 (3440x1440) In-Game Resolution" in "Graphics" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x4018E38E)
 
-Patch "21:9 (3840x1600) In-Game Resolution" by "ĐeäTh"
+Patch "21:9 (3840x1600) In-Game Resolution" in "Graphics" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x4019999A)
 
-Patch "32:9 In-Game Resolution" by "ĐeäTh"
+Patch "32:9 In-Game Resolution" in "Graphics" by "ĐeäTh"
 WriteProtected<int>(ASLR(0xD56D30), 0x40638E39)
 
-Code "Widescreen Support" by "Muzzarino"
+Code "Widescreen Support" in "Graphics" by "Muzzarino" does "Dynamically adjusts the aspect ratio to match the game resolution (recommended for ultrawide)."
 var ptr = GetPointer(ASLR(0xFD3CA8))
 WriteProtected<float>(ASLR(0xD56D30), ptr != 0 ? (float)(Read<uint>(ptr + 0xF8)) / (float)(Read<uint>(ptr + 0xFC)) : 16f / 9f)
 WriteProtected<double>(ASLR(0xEB2E00), (Double)Read<float>(ASLR(0xD56D30)))
@@ -211,7 +211,7 @@ if (Read<byte>(ASLR(0x4178AB)) == 0xE8)
     WriteAsmHook(code11, ASLR(0x8FF456), HookBehavior.Before)
 }
 
-Patch "Disable Lockon (Except for Unbeatable Bosses)" by "Sajid"
+Patch "Disable Lockon (Except for Unbeatable Bosses)" in "Gameplay" by "Sajid"
 WriteProtected<uint>(ASLR(0x00537D15), 0x5005)
 WriteProtected<uint>(ASLR(0x0053AFD1), 0x1003)
 WriteProtected<uint>(ASLR(0x005A8121), 0x1003)
@@ -220,16 +220,16 @@ WriteProtected<uint>(ASLR(0x00587A71), 0x1003)
 WriteProtected<uint>(ASLR(0x0059889A), 0x5005)
 WriteProtected<uint>(ASLR(0x0058FDC1), 0x1003)
 
-Patch "Disable Voice Option Completely" by "M&M"
+Patch "Disable Voice Option Completely" in "UI" by "M&M"
 WriteNop(ASLR(0x4A3D82), 5)
 
-Patch "Enable DLC Music in Battle Mode" by "ĐeäTh"
+Patch "Enable DLC Music in Battle Mode" in "Audio" by "ĐeäTh"
 WriteNop(ASLR(0x0095B570), 6)
 
-Patch "Sideways Wall Jump Fix" by "Sajid"
+Patch "Sideways Wall Jump Fix" in "Fixes" by "Sajid"
 WriteNop(ASLR(0x008C142C), 2)
 
-Patch "DLC Stages Always Replayable" by "ĐeäTh"
+Patch "DLC Stages Always Replayable" in "Cheats" by "ĐeäTh"
 WriteNop(ASLR(0x0090D2BC), 2);
 String code = $@"mov eax, {ASLR(0x0090D210)}
 push 0
@@ -269,11 +269,11 @@ WriteProtected<byte>(ASLR(0x00912338), 0x57);
 WriteProtected<byte>(ASLR(0x00912326), 0x6A, 0x00);
 WriteNop(ASLR(0x0094594F), 12);
 
-Patch "Disable DLC Prizes" by "ĐeäTh"
+Patch "Disable DLC Prizes" in "Gameplay" by "ĐeäTh"
 WriteNop(ASLR(0x0094595B), 12);
 WriteNop(ASLR(0x00945630), 5);
 
-Patch "Fix Depth Of Field Draw Order" by "Sajid"
+Patch "Fix Depth Of Field Draw Order" in "Fixes" by "Sajid"
 static int p_DofRes = (int)ASLR(0x00FEFC7C);
 static int p_GrassRes = (int)ASLR(0x00FB6D1C);
 static int p_ShadowRes = (int)ASLR(0x00FB6D1D);
@@ -295,7 +295,7 @@ WriteAsmHook
     ASLR(0x00904E64), HookBehavior.Replace
 )
 
-Patch "1280x720 Movie Player" by "ĐeäTh"
+Patch "1280x720 Movie Player" in "Graphics" by "ĐeäTh" does "Forces the CRIWARE video player to use a 1280x720 viewport. This is only useful for mods that have higher resolution video files."
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
@@ -317,7 +317,7 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 1280);
 WriteProtected<float>(ASLR(0x00D593B0), 720);
 
-Patch "1920x1080 Movie Player" by "ĐeäTh"
+Patch "1920x1080 Movie Player" in "Graphics" by "ĐeäTh" does "Forces the CRIWARE video player to use a 1920x1080 viewport. This is only useful for mods that have higher resolution video files."
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
@@ -339,7 +339,7 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 1920);
 WriteProtected<float>(ASLR(0x00D593B0), 1080);
 
-Patch "2560x1440 Movie Player" by "ĐeäTh"
+Patch "2560x1440 Movie Player" in "Graphics" by "ĐeäTh" does "Forces the CRIWARE video player to use a 2560x1440 viewport. This is only useful for mods that have higher resolution video files."
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
@@ -361,7 +361,7 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 2560);
 WriteProtected<float>(ASLR(0x00D593B0), 1440);
 
-Patch "3840x2160 Movie Player" by "ĐeäTh"
+Patch "3840x2160 Movie Player" in "Graphics" by "ĐeäTh" does "Forces the CRIWARE video player to use a 3840x2160 viewport. This is only useful for mods that have higher resolution video files."
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
@@ -383,7 +383,7 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 3840);
 WriteProtected<float>(ASLR(0x00D593B0), 2160);
 
-Patch "2560x1080 Movie Player" by "ĐeäTh"
+Patch "2560x1080 Movie Player" in "Graphics" by "ĐeäTh" does "Forces the CRIWARE video player to use a 2560x1080 viewport. This is only useful for mods that have higher resolution video files."
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
@@ -405,7 +405,7 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 2560);
 WriteProtected<float>(ASLR(0x00D593B0), 1080);
 
-Patch "3440x1440 Movie Player" by "ĐeäTh"
+Patch "3440x1440 Movie Player" in "Graphics" by "ĐeäTh" does "Forces the CRIWARE video player to use a 3440x1440 viewport. This is only useful for mods that have higher resolution video files."
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
@@ -427,7 +427,7 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 3440);
 WriteProtected<float>(ASLR(0x00D593B0), 1440);
 
-Patch "5120x2160 Movie Player" by "ĐeäTh"
+Patch "5120x2160 Movie Player" in "Graphics" by "ĐeäTh" does "Forces the CRIWARE video player to use a 5120x2160 viewport. This is only useful for mods that have higher resolution video files."
 static float ms_RenderTextureMultiplier = 1.0f;
 fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 {
@@ -449,28 +449,28 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 5120);
 WriteProtected<float>(ASLR(0x00D593B0), 2160);
 
-Patch "Force Language to Japanese" by "M&M & ĐeäTh"
+Patch "Force Language to Japanese" in "UI" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 0");
 
-Patch "Force Language to English" by "M&M & ĐeäTh"
+Patch "Force Language to English" in "UI" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 1");
 
-Patch "Force Language to French" by "M&M & ĐeäTh"
+Patch "Force Language to French" in "UI" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 2");
 
-Patch "Force Language to German" by "M&M & ĐeäTh"
+Patch "Force Language to German" in "UI" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 3");
 
-Patch "Force Language to Italian" by "M&M & ĐeäTh"
+Patch "Force Language to Italian" in "UI" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 4");
 
-Patch "Force Language to Spanish" by "M&M & ĐeäTh"
+Patch "Force Language to Spanish" in "UI" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 5");
 
-Patch "Disable Wisp Hints" by "Sajid"
+Patch "Disable Wisp Hints" in "UI" by "Sajid"
 WriteNop(ASLR(0x0091AAF8), 6)
 
-Patch "Fix Rigid Bodies Falling Through Collision" by "ĐeäTh & Darío"
+Patch "Fix Rigid Bodies Falling Through Collision" in "Fixes" by "ĐeäTh & Darío"
 static int p_updateBroadphaseAndResetCollisionInformationOfWarpedBody = (int)ASLR(0x00AED500);
 static int p_setLinearVelocity = (int)ASLR(0x00B88220);
 
@@ -487,7 +487,7 @@ WriteAsmHook
     ASLR(0x004B974F), HookBehavior.Replace
 )
 
-Patch "Fix Depth Effects On Intel GPUs" by "Skyth"
+Patch "Fix Depth Effects On Intel GPUs" in "Fixes" by "Skyth"
 WriteAsmHook(ASLR(0xC2B233), HookBehavior.Replace, @"
 mov eax, dword ptr [ebp + 8]
 
@@ -516,16 +516,16 @@ mov eax, [ecx + 0x64]
 mov ecx, [eax]
 ");
 
-Patch "Fix Pull Switch Grip Height" by "ĐeäTh"
+Patch "Fix Pull Switch Grip Height" in "Fixes" by "ĐeäTh"
 WriteProtected<float>(ASLR(0x00DF2D14), -10.5f)
 
-Patch "No Instant Death Bomb Carts" by "ĐeäTh"
+Patch "No Instant Death Bomb Carts" in "Cheats" by "ĐeäTh"
 WriteNop(ASLR(0x007D82A2), 3);
 
-Patch "Infinite Bounce Attacks" by "ĐeäTh"
+Patch "Infinite Bounce Attacks" in "Gameplay" by "ĐeäTh"
 WriteNop(ASLR(0x008CA177), 4);
 
-Patch "Traditional Countdown Timer" by "ĐeäTh"
+Patch "Traditional Countdown Timer" in "UI" by "ĐeäTh" does "Displays the timer in the typical 00:00.00 format, rather than counting down in seconds."
 // Allow bigger time constraints to be displayed on HUD
 WriteProtected<int>(ASLR(0x00501CC5), 3599);
 WriteProtected<int>(ASLR(0x00501CCC), 3599);

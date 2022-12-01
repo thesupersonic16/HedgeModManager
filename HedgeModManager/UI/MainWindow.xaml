@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:local="clr-namespace:HedgeModManager"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
@@ -69,7 +70,7 @@
                                     </Style>
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
-                                    <GridView>
+                                    <GridView AllowsColumnReorder="False">
                                         <GridViewColumn Header="{DynamicResource ModsUIName}" Width="200">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -164,12 +165,44 @@
                                 </Grid>
                             </GroupBox>
                             <Grid>
-                                <Grid Margin="10,5,10,41" >
+                                <Grid Margin="10,5,10,41">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Name="CodeDescriptionRow" Height="24" MinHeight="24"/>
+                                    </Grid.RowDefinitions>
+                                    
                                     <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
-                                          dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
+                                          PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                                <Setter Property="ToolTip">
+                                                    <Setter.Value>
+                                                        <ToolTip Content="{DynamicResource CodesUIInfo}" Tag="{Binding Description}">
+                                                            <ToolTip.Style>
+                                                                <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="Tag" Value="{x:Static sys:String.Empty}">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="Tag" Value="{x:Null}">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </ToolTip.Style>
+                                                        </ToolTip>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <EventSetter Event="MouseDoubleClick" Handler="CodesList_MouseDoubleClick"/>
+                                                <EventSetter Event="MouseEnter"       Handler="CodesList_MouseEnter"/>
+                                                <EventSetter Event="MouseLeave"       Handler="CodesList_MouseLeave"/>
+                                                <EventSetter Event="Selected"         Handler="CodesList_ListViewItem_Selected"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
                                         <ListView.View>
-                                            <GridView AllowsColumnReorder="True">
-                                                <GridViewColumn Header="{DynamicResource CodesUIName}" Width="370">
+                                            <GridView AllowsColumnReorder="False">
+                                                <GridViewColumn Header="{DynamicResource CodesUIName}" Width="285">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal">
@@ -179,7 +212,8 @@
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
-                                                <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="152"/>
+                                                <GridViewColumn Header="{DynamicResource CodesUICategory}" DisplayMemberBinding="{Binding Category}" Width="85"/>
+                                                <GridViewColumn Header="{DynamicResource ModsUIAuthor}"    DisplayMemberBinding="{Binding Author}"   Width="125"/>
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
@@ -188,6 +222,27 @@
                                                HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock x:Name="CodesStatusLbl" Text="{DynamicResource CodesUIFetching}" IsVisibleChanged="OnFetchStatusVisibilityChanged"/>
                                     </StackPanel>
+
+                                    <GridSplitter Grid.Row="1"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Center"
+                                                  Background="{DynamicResource HMM.Window.BorderBrush}" 
+                                                  ShowsPreview="True"
+                                                  Height="1"
+                                                  MouseDoubleClick="CodeDescription_GridSplitter_MouseDoubleClick"/>
+                                    
+                                    <Grid Grid.Row="2" Background="{DynamicResource HMM.Window.BackgroundBrush}" MouseDown="CodeDescription_MouseDown">
+                                        <Border BorderBrush="{DynamicResource HMM.Window.BorderBrush}" BorderThickness="1,0,1,1">
+                                            <TextBlock Name="CodeDescription"
+                                                       Margin="8,2.5,5,5"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       TextWrapping="WrapWithOverflow"
+                                                       Text="{DynamicResource CodesUIInfoHint}"
+                                                       FontStyle="Italic"
+                                                       Foreground="#FF646464"/>
+                                        </Border>
+                                    </Grid>
                                 </Grid>
                                 <Border x:Name="CodesFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,41" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
