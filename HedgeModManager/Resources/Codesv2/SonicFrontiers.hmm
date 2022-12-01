@@ -397,6 +397,21 @@ Patch "Disable Drift Input Prompt" in "UI" by "Hyper" does "Disables the input p
     );
 }
 
+Patch "Disable Dropped Rings" in "Gameplay" by "Hyper" does "Removes the bouncing rings when taking damage."
+{
+    WriteNop
+    (
+        /* 0x14086AF2A */
+        ScanSignature
+        (
+            "\xE8\x00\x00\x00\x00\x4C\x8D\x05\x00\x00\x00\x00\x48\x8B\xD7\x48\x8D\x4D\x77\xE8\x00\x00\x00\x00\x4C\x8B\xAC\x24\x00\x00\x00\x00\x48\x8B\x9C\x24\x00\x00\x00\x00\x0F\x28\xB4\x24\x00\x00\x00\x00\x48\x81\xC4\x00\x00\x00\x00\x41\x5E\x41\x5C\x5F\x5D\xC3",
+            "x????xxx????xxxxxxxx????xxxx????xxxx????xxxx????xxx????xxxxxxx"
+        ),
+
+        5
+    );
+}
+
 Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the fixed camera icon at the top-right of the screen, as well as the tutorial about it at the beginning of the game."
 {
     // Disable fixed camera UI element.
