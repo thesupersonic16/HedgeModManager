@@ -1842,20 +1842,24 @@ namespace HedgeModManager
 
         private void OpenAboutCodeWindow(Code code)
         {
-            if (!string.IsNullOrEmpty(code.Description))
+            if (!string.IsNullOrEmpty(code?.Description))
             {
                 new AboutCodeWindow(code).ShowDialog();
 
                 /* This seems to be the only way to
                    unselect the codes after closing
                    this dialog window. */
-                Refresh();
+                //Refresh();
             }
         }
 
         private void CodesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            OpenAboutCodeWindow(CodesList.SelectedItem as Code);
+            var item = (ListViewItem)sender;
+            if (item == null || item.Content == null)
+                return;
+
+            OpenAboutCodeWindow(item.Content as Code);
         }
 
         private void CodesList_GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
