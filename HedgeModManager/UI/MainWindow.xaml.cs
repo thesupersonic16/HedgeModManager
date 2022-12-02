@@ -1887,9 +1887,9 @@ namespace HedgeModManager
                 theme.Source = new Uri($"Themes/{RegistryConfig.UITheme}.xaml", UriKind.Relative);
             }
 
-            if (code != null && !string.IsNullOrEmpty(code.Description))
+            if (code != null)
             {
-                CodeDescription.Text       = code.Description;
+                CodeDescription.Text       = !string.IsNullOrEmpty(code.Description) ? code.Description : Localise("CodesUINoInfo");
                 CodeDescription.FontStyle  = FontStyles.Normal;
                 CodeDescription.Foreground = (SolidColorBrush)theme["HMM.Window.ForegroundBrush"];
                 return;
