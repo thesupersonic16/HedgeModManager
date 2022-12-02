@@ -68,6 +68,7 @@
     <system:String x:Key="CodesUISearch"  >Search: </system:String>
     <system:String x:Key="CodesUIInfo"    >Double-click this code for more information.</system:String>
     <system:String x:Key="CodesUIInfoHint">Hover over a code for more information.</system:String>
+    <system:String x:Key="CodesUINoInfo"  >No information available.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">The installed codes are incompatible with the code loader.&#x0a;Please update the codes and the code loader.&#x0a;WARNING: This will erase any custom codes.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">Fetching codes...</system:String>
 
