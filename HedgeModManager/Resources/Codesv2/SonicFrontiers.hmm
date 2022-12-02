@@ -1,6 +1,6 @@
 !!VERSION 1.2
 
-Patch "Adjust Aspect Ratio to Resolution (experimental) (v1.01)" in "Graphics" by "M&M & Hyper" does "Dynamically adjusts the aspect ratio to match the game resolution (recommended for ultrawide)."
+Patch "Adjust Aspect Ratio to Resolution (experimental) (outdated)" in "Graphics" by "M&M & Hyper" does "Dynamically adjusts the aspect ratio to match the game resolution (recommended for ultrawide)."
 //
     #load "System.Drawing.dll"
 
@@ -72,7 +72,7 @@ Patch "Always Run in the Background" in "System" by "NM" does "Stops the game fr
     );
 }
 
-Patch "Always Trickable Dash Rings (v1.01)" in "Cheats" by "Hyper"
+Patch "Always Trickable Dash Rings (outdated)" in "Cheats" by "Hyper"
 {
     WriteProtected<byte>
     (
@@ -412,7 +412,7 @@ Patch "Disable Dropped Rings" in "Gameplay" by "Hyper" does "Removes the bouncin
     );
 }
 
-Patch "Disable Fixed Camera Notifications (v1.01)" in "UI" by "Hyper" does "Disables the fixed camera icon at the top-right of the screen, as well as the tutorial about it at the beginning of the game."
+Patch "Disable Fixed Camera Notifications (outdated)" in "UI" by "Hyper" does "Disables the fixed camera icon at the top-right of the screen, as well as the tutorial about it at the beginning of the game."
 {
     // Disable fixed camera UI element.
     WriteProtected<byte>
@@ -441,7 +441,7 @@ Patch "Disable Fixed Camera Notifications (v1.01)" in "UI" by "Hyper" does "Disa
     );
 }
 
-Patch "Disable Framerate Limiter (experimental) (v1.01)" in "Graphics" by "NM & M&M"
+Patch "Disable Framerate Limiter (experimental) (outdated)" in "Graphics" by "NM & M&M"
 {
     /*
         At the moment, this is the best method I have found for uncapping FPS.
@@ -656,7 +656,7 @@ Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables t
     );
 }
 
-Patch "Disable In-Game Letterboxing (v1.01)" in "Graphics" by "Hyper" does "Disables letterboxing for in-game cutscenes and Training Simulator. This will not work for pre-rendered cutscenes."
+Patch "Disable In-Game Letterboxing (outdated)" in "Graphics" by "Hyper" does "Disables letterboxing for in-game cutscenes and Training Simulator. This will not work for pre-rendered cutscenes."
 {
     WriteProtected<byte>
     (
@@ -716,7 +716,7 @@ Patch "Disable Ring Loss" in "Cheats" by "M&M"
     );
 }
 
-Patch "Disable Sequence Colliders (v1.01)" in "Cheats" by "Hyper" does "Disables invisible walls that are usually removed by specific events. This will not remove invisible walls surrounding the islands."
+Patch "Disable Sequence Colliders (outdated)" in "Cheats" by "Hyper" does "Disables invisible walls that are usually removed by specific events. This will not remove invisible walls surrounding the islands."
 {
     WriteProtected<byte>
     (
