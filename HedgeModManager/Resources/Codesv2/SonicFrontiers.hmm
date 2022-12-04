@@ -31,6 +31,57 @@ Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M &
     WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
 }
 
+Patch "Always Day on Islands" in "Graphics" by "NM"
+{
+    /*
+        When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
+        At the moment, NOPing the JNE of these fixes this, and does not seem to cause any other issues.
+    */
+
+    /* 0x147E382AB */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x27\x41\x8B\x40\x08\x39\x42\x08\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C",
+            "x?xxx?xx?x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?"
+        ),
+
+        2
+    );
+
+    /* 0x147E382B4 */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C\xF3\x41\x0F\x10\x40\x0C\x0F\x2F\x42",
+            "x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?xxxxx?xxx"
+        ),
+
+        2
+    );
+
+    WriteAsmHook
+    (
+        @"
+            add dword ptr [rcx], edx
+            mov dword ptr [rcx+04h], 8h ; Hours
+            mov dword ptr [rcx+08h], 0h ; Minutes
+            mov dword ptr [rcx+0x0C], 0h ; Seconds
+        ",
+
+        /* 0x147E22D2B */
+        ScanSignature
+        (
+            "\x01\x11\x44\x01\x41\x04\x44\x01\x49\x08\xF3\x0F\x11\x41\x0C\xE9\x91\x12\x1F\xF8",
+            "xxxxx?xxx?xxxx?x????"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Always Have Phantom Rush" in "Cheats" by "NM"
 {
     WriteNop
@@ -121,15 +172,44 @@ Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Day on Islands" in "Graphics" by "NM"
+Patch "Always Night on Islands" in "Graphics" by "NM"
 {
+    /*
+        When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
+        At the moment, NOPing the JNE of these fixes this, and does not seem to cause any other issues.
+    */
+
+    /* 0x147E382AB */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x27\x41\x8B\x40\x08\x39\x42\x08\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C",
+            "x?xxx?xx?x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?"
+        ),
+
+        2
+    );
+
+    /* 0x147E382B4 */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C\xF3\x41\x0F\x10\x40\x0C\x0F\x2F\x42",
+            "x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?xxxxx?xxx"
+        ),
+
+        2
+    );
+
     WriteAsmHook
     (
         @"
             add dword ptr [rcx], edx
-            mov dword ptr [rcx+04h], 8h ; Hours
-            add dword ptr [rcx+08h], r9d ; Minutes
-            movss dword ptr [rcx+0x0C], xmm0 ; Seconds
+            mov dword ptr [rcx+04h], 0h ; Hours
+            mov dword ptr [rcx+08h], 0h ; Minutes
+            mov dword ptr [rcx+0x0C], 0h ; Seconds
         ",
 
         /* 0x147E22D2B */
@@ -143,15 +223,95 @@ Patch "Always Day on Islands" in "Graphics" by "NM"
     );
 }
 
-Patch "Always Night on Islands" in "Graphics" by "NM"
+Patch "Always Sunrise on Islands" in "Graphics" by "NM"
 {
+    /*
+        When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
+        At the moment, NOPing the JNE of these fixes this, and does not seem to cause any other issues.
+    */
+
+    /* 0x147E382AB */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x27\x41\x8B\x40\x08\x39\x42\x08\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C",
+            "x?xxx?xx?x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?"
+        ),
+
+        2
+    );
+
+    /* 0x147E382B4 */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C\xF3\x41\x0F\x10\x40\x0C\x0F\x2F\x42",
+            "x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?xxxxx?xxx"
+        ),
+
+        2
+    );
+
     WriteAsmHook
     (
         @"
             add dword ptr [rcx], edx
-            mov dword ptr [rcx+04h], 0h ; Hours
-            add dword ptr [rcx+08h], r9d ; Minutes
-            movss dword ptr [rcx+0x0C], xmm0 ; Seconds
+            mov dword ptr [rcx+04h], 4h ; Hours
+            mov dword ptr [rcx+08h], 0h ; Minutes
+            mov dword ptr [rcx+0x0C], 0h ; Seconds
+        ",
+
+        /* 0x147E22D2B */
+        ScanSignature
+        (
+            "\x01\x11\x44\x01\x41\x04\x44\x01\x49\x08\xF3\x0F\x11\x41\x0C\xE9\x91\x12\x1F\xF8",
+            "xxxxx?xxx?xxxx?x????"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Always Sunset on Islands" in "Graphics" by "NM"
+{
+    /*
+        When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
+        At the moment, NOPing the JNE of these fixes this, and does not seem to cause any other issues.
+    */
+
+    /* 0x147E382AB */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x27\x41\x8B\x40\x08\x39\x42\x08\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C",
+            "x?xxx?xx?x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?"
+        ),
+
+        2
+    );
+
+    /* 0x147E382B4 */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C\xF3\x41\x0F\x10\x40\x0C\x0F\x2F\x42",
+            "x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?xxxxx?xxx"
+        ),
+
+        2
+    );
+
+    WriteAsmHook
+    (
+        @"
+            add dword ptr [rcx], edx
+            mov dword ptr [rcx+04h], 14h ; Hours
+            mov dword ptr [rcx+08h], 19h ; Minutes
+            mov dword ptr [rcx+0x0C], 0h ; Seconds
         ",
 
         /* 0x147E22D2B */
