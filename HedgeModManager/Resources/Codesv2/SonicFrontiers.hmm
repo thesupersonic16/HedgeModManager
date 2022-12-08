@@ -1383,6 +1383,35 @@ Patch "Hide Boost Gauge" in "UI" by "Hyper"
     );
 }
 
+Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift dash panels, but still allows them to function, similarly to drift zones in Sonic Colours."
+{
+    // Remove model.
+    WriteNop
+    (
+        /* 0x140432970 */
+        ScanSignature
+        (
+            "\x48\x89\x47\x38\x48\x8D\x1D\x00\x00\x00\x00",
+            "xxxxxxx????"
+        ),
+        
+        4
+    );
+
+    // Remove sound.
+    WriteNop
+    (
+        /* 0x140432AEC */
+        ScanSignature
+        (
+            "\xE8\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\xB0\x01\x48\x81\xC4\x00\x00\x00\x00\x5E",
+            "x????xxxx?x????xxxxx????x"
+        ),
+
+        5
+    );
+}
+
 Patch "Hide Skip Button in Cutscenes" in "UI" by "Hyper" does "Hides the button prompt at the bottom-right to skip cutscenes. This does not disable the ability to skip cutscenes."
 {
     WriteProtected<byte>
