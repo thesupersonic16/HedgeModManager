@@ -2,6 +2,8 @@ name: Windows Build
 
 on:
   push:
+    branches:
+      - rewrite
     paths-ignore:
       # Ignore code files.
       - 'HedgeModManager/Resources/Codesv2/**'
