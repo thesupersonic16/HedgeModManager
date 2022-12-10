@@ -820,35 +820,6 @@ Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables t
     );
 }
 
-Patch "Disable Homing Reticle" in "UI" by "Hyper"
-{
-    // Disable sound and main reticle.
-    WriteProtected<byte>
-    (
-        /* 0x1408BCE17 */
-        ScanSignature
-        (
-            "\x0F\x84\x00\x00\x00\x00\x49\x8D\x7D\x50",
-            "xx????xxxx"
-        ),
-        
-        0xE9, 0xB1, 0x00, 0x00, 0x00
-    );
-
-    // Disable lock-on triangle.
-    WriteProtected<byte>
-    (
-        /* 0x14C6A0C48 */
-        ScanSignature
-        (
-            "\x74\x17\x48\x8D\x55\x17\x48\x89\xC1\xE8\x00\x00\x00\x00\x48\x89\xFA\x48\x89\xD9\xE8\x00\x00\x00\x00\x4C\x8D\x9C\x24\x00\x00\x00\x00\x49\x8B\x5B\x10\x49\x8B\x73\x18\x49\x8B\x7B\x20\x4C\x89\xDC\x5D\xC3\xCC\x0F\x1F\x44\x00\x00",
-            "xxxxxxxxxx????xxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxx"
-        ),
-        
-        0xEB
-    );
-}
-
 Patch "Disable In-Game Letterboxing" in "Graphics" by "Hyper" does "Disables letterboxing for in-game cutscenes and Training Simulator. This will not work for pre-rendered cutscenes."
 {
     WriteProtected<byte>
@@ -1409,6 +1380,35 @@ Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift da
         ),
 
         5
+    );
+}
+
+Patch "Hide Homing Reticle" in "UI" by "Hyper"
+{
+    // Disable sound and main reticle.
+    WriteProtected<byte>
+    (
+        /* 0x1408BCE17 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x49\x8D\x7D\x50",
+            "xx????xxxx"
+        ),
+        
+        0xE9, 0xB1, 0x00, 0x00, 0x00
+    );
+
+    // Disable lock-on triangle.
+    WriteProtected<byte>
+    (
+        /* 0x14C6A0C48 */
+        ScanSignature
+        (
+            "\x74\x17\x48\x8D\x55\x17\x48\x89\xC1\xE8\x00\x00\x00\x00\x48\x89\xFA\x48\x89\xD9\xE8\x00\x00\x00\x00\x4C\x8D\x9C\x24\x00\x00\x00\x00\x49\x8B\x5B\x10\x49\x8B\x73\x18\x49\x8B\x7B\x20\x4C\x89\xDC\x5D\xC3\xCC\x0F\x1F\x44\x00\x00",
+            "xxxxxxxxxx????xxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+        
+        0xEB
     );
 }
 
