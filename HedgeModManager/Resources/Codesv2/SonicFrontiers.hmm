@@ -1412,6 +1412,48 @@ Patch "Hide Homing Reticle" in "UI" by "Hyper"
     );
 }
 
+Patch "Hide Oxygen Gauge" in "UI" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x1408E2DB0 */
+        ScanSignature
+        (
+            "\x74\x1C\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x85\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xEB\x6C\x3D\x7E\x23\x00\x00\x0F\x85\x98\x00\x00\x00\x0F\xB6\x42\x20",
+            "xxx????xxx????xxxxxxx????xxxxxx????xxx????xxxxxxx????xxxxxxxxxxxxxxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
+Patch "Hide Skill Piece Transition" in "UI" by "Hyper" does "Removes the transition when picking up skill pieces to put them into the skill points display."
+{
+    WriteNop
+    (
+        /* 0x1407F0906 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x50\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x80\xE8\xCC\xCC\xCC\xCC\x45\x84\xFF",
+            "x????xxxxxx????xxxxx????xxx"
+        ),
+        
+        5
+    );
+
+    WriteNop
+    (
+        /* 0x14084A7AB */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\xB7\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x17\xE8",
+            "x????xxxxx????xxxxx"
+        ),
+        
+        5
+    );
+}
+
 Patch "Hide Skip Button in Cutscenes" in "UI" by "Hyper" does "Hides the button prompt at the bottom-right to skip cutscenes. This does not disable the ability to skip cutscenes."
 {
     WriteProtected<byte>
@@ -1421,6 +1463,22 @@ Patch "Hide Skip Button in Cutscenes" in "UI" by "Hyper" does "Hides the button 
         (
             "\x74\x71\x48\x8D\x5C\x24\x00\xBF\x00\x00\x00\x00\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x83\xC3\x18\x48\x83\xEF\x01\x75\xEE\x0F\x57\xC0\xC7\x84\x24\x00\x00\x00\x00\x00\x00\x00\x00\x4C\x8D\x05\x00\x00\x00\x00\x0F\x29\x84\x24\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x40\x88\xBC\x24\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x48\x8D\x54\x24\x00\x66\xC7\x84\x24\x00\x00\x00\x00\x00\x00\x48\x8B\xCD\xC6\x84\x24\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xAC\x24\x00\x00\x00\x00\xC6\x86\x00\x00\x00\x00\x00\x48\x81\xC4\x00\x00\x00\x00\x5F\x5E\x5B\xC3",
             "xxxxxx?x????xxxx????xxxxxxxxxxxxxxxx????????xxx????xxxx????xxx????xxxx????xxxx?x????xxxx?xxxx??????xxxxxx?????x????xxxx????xx?????xxx????xxxx"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Hide Titan Health Gauge" in "UI" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* v1.01: 0x14C76211A */
+        /* v1.10: 0x14C6036DB */
+        ScanSignature
+        (
+            "\x74\x18\x48\x8D\x54\x24\x70\x48\x89\xC1\xE8\xCC\xCC\xCC\xCC\x48\x89\xFA",
+            "xxxxxxxxxxx????xxx"
         ),
 
         0xEB
