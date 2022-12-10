@@ -213,9 +213,9 @@ namespace HedgeModManager
             GameInstalls = GameInstall.SearchForGames();
             if (FindAndSetLocalGame() == null)
             {
-                if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
+                if (!string.IsNullOrEmpty(RegistryConfig.LastGame) && CurrentGame == Games.Unknown)
                 {
-                    StartDirectory = RegistryConfig.LastGameDirectory;
+                    StartDirectory = RegistryConfig.LastGame;
                     FindAndSetLocalGame();
                 }
             }
