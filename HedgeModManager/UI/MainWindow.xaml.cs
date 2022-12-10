@@ -153,6 +153,10 @@ namespace HedgeModManager
 
         private void SortCodesList(int index = -1)
         {
+            // Set toggle checkbox and switch to user view.
+            CheckBox_CodesUseTreeView.IsChecked = RegistryConfig.CodesUseTreeView;
+            InvokeChangeCodesView(RegistryConfig.CodesUseTreeView);
+
             if (IsCodesTreeView)
             {
                 ExpandedCodeCategories.Clear();
@@ -259,10 +263,6 @@ namespace HedgeModManager
                 if (code != null)
                     code.Enabled = true;
             });
-
-            // I am also lazy
-            CheckBox_CodesUseTreeView.IsChecked = RegistryConfig.CodesUseTreeView;
-            InvokeChangeCodesView(RegistryConfig.CodesUseTreeView);
 
             SortCodesList();
 
@@ -1692,7 +1692,6 @@ namespace HedgeModManager
                     }
                     else if (MainTabControl.SelectedItem == CodesTab)
                     {
-
                         if (CodesFind.Visibility == Visibility.Visible)
                         {
                             // Switch to user view.
