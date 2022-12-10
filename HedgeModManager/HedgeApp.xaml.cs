@@ -347,7 +347,7 @@ namespace HedgeModManager
                     CurrentGameInstall = steamGame;
                     try
                     {
-                        RegistryConfig.LastGameDirectory = StartDirectory;
+                        RegistryConfig.LastGame = StartDirectory;
                         RegistryConfig.Save();
                         ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
                         Config = new CPKREDIRConfig(ConfigPath);
@@ -577,7 +577,7 @@ namespace HedgeModManager
                     CurrentGame = game;
                     CurrentGameInstall = gameinstall;
                     StartDirectory = gameinstall.GameDirectory;
-                    RegistryConfig.LastGameDirectory = StartDirectory;
+                    RegistryConfig.LastGame = StartDirectory;
                     RegistryConfig.Save();
                 }
             }

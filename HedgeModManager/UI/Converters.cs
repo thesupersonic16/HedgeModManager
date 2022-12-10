@@ -124,6 +124,27 @@ namespace HedgeModManager
         }
     }
 
+
+    [ValueConversion(typeof(bool), typeof(Visibility))]
+    public class InverseBoolToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is not bool)
+                return Visibility.Collapsed;
+
+            return (bool)value ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is not Visibility)
+                throw new ArgumentException("Invalid argument");
+
+            return (Visibility)value == Visibility.Collapsed;
+        }
+    }
+
     [ValueConversion(typeof(bool), typeof(Visibility))]
     public class BoolToVisibilityConverterLinux : IValueConverter
     {
