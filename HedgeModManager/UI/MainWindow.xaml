@@ -180,7 +180,7 @@
                                         <ColumnDefinition Name="CodesTreeDescriptionColumn" Width="225" MinWidth="225"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <TreeView x:Name="CodesTree" BorderThickness="0" Margin="0,2,2,0" PreviewKeyDown="CodesList_OnPreviewKeyDown"
+                                    <TreeView x:Name="CodesTree" BorderThickness="0" Margin="0,2,1,0" PreviewKeyDown="CodesList_OnPreviewKeyDown"
                                               ContextMenu="{DynamicResource CodesTreeContextMenu}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                         <TreeView.Resources>
                                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
