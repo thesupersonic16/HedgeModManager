@@ -31,7 +31,7 @@ Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M &
     WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
 }
 
-Patch "Always Day on Islands" in "Graphics" by "NM"
+Patch "Always Day on Islands" in "Time" by "NM"
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -172,7 +172,7 @@ Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Night on Islands" in "Graphics" by "NM"
+Patch "Always Night on Islands" in "Time" by "NM"
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -223,7 +223,7 @@ Patch "Always Night on Islands" in "Graphics" by "NM"
     );
 }
 
-Patch "Always Sunrise on Islands" in "Graphics" by "NM"
+Patch "Always Sunrise on Islands" in "Time" by "NM"
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -274,7 +274,7 @@ Patch "Always Sunrise on Islands" in "Graphics" by "NM"
     );
 }
 
-Patch "Always Sunset on Islands" in "Graphics" by "NM"
+Patch "Always Sunset on Islands" in "Time" by "NM"
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
