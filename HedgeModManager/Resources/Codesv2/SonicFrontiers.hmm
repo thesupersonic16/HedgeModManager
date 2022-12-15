@@ -590,7 +590,7 @@ Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the
 
         0xEB, 0x0D
     );
-    
+
     // Disable guide regarding fixed camera.
     WriteProtected<byte>
     (
@@ -600,7 +600,7 @@ Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the
             "\x0F\x84\x00\x00\x00\x00\x4C\x89\xB4\x24\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x4C\x8B\x76\x08\x8B\x0D\x00\x00\x00\x00\x81\xF1\x00\x00\x00\x00\x41\x89\xC8\x4C\x89\xF1\x49\x8B\x06\xFF\x50\x08\x02\x15\x00\x00\x00\x00\x48\x89\xC3\x48\x85\xC0\x0F\x84\x00\x00\x00\x00\x4C\x89\x70\x08\xB9\x00\x00\x00\x00\xC6\x40\x10\x01\x89\x78\x14\xC7\x40\x00\x00\x00\x00\x00\x40\x88\x78\x1C\x48\x89\x48\x30\x48\x89\x78\x20\x48\x89\x78\x28\x4C\x89\x70\x38\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x03\x66\xC7\x43\x00\x00\x00\x48\x89\x7B\x48\x89\x7B\x50\x89\x4B\x54\x4C\x89\x73\x58\x48\x89\x7B\x60\x89\x7B\x68\x89\x4B\x6C\x4C\x89\x73\x70\x48\x89\x7B\x78\x48\x89\xBB\x00\x00\x00\x00\x48\x89\x8B\x00\x00\x00\x00\x4C\x89\xB3\x00\x00\x00\x00\x8B\x15\x00\x00\x00\x00\x81\xF2\x00\x00\x00\x00\x89\x93\x00\x00\x00\x00\x66\xC7\x83\x00\x00\x00\x00\x00\x00\x8A\x15\x00\x00\x00\x00\x80\xF2\x40\x88\x93\x00\x00\x00\x00\xEB\x03",
             "xx????xxxx????x????xxxxxx????xx????xxxxxxxxxxxxxx????xxxxxxxx????xxxxx????xxxxxxxxx?????xxxxxxxxxxxxxxxxxxxxxxx????xxxxxx???xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxx????xx????xx????xx????xxx??????xx????xxxxx????xx"
         ),
-        
+
         0xE9, 0x5C, 0x01, 0x00, 0x00
     );
 }
@@ -670,6 +670,20 @@ Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M"
 
         0xEB, 0x31
     );
+
+    /*
+        Frontiers limits the monitor refresh rate to 60hz and forces VSync when in fullscreen.
+        To prevent the game from doing this, we set both of these bytes to 0.
+    */
+    long instrAddr = ScanSignature
+    (
+        /* 0x140F4198E */
+        "\xC7\x45\xF8\x3C\x00\x00\x00\xC7\x45\xFC\x01\x00\x00\x00\x41\x8B\x04\x24\x41\x0F\xB6\x4C\x24\x14\x41\x0F\xB6\x7C\x24\x1C\x89\x45\xF0\x41\x8B\x44\x24\x04\x89\x45\xF4\xE8\xCC\xCC\xCC\xCC\x40\x84\xFF\x74\x05\x8B\x40\x18\xEB\x03",
+        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxx"
+    );
+
+    WriteProtected<byte>(instrAddr + 3, 0);
+    WriteProtected<byte>(instrAddr + 10, 0);
 }
 
 Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
@@ -971,7 +985,7 @@ This only affects the following objects;
             "\x75\x0D\x45\x38\xA7\xB8\x00\x00\x00",
             "xxxxxxxxx"
         ),
-        
+
         Assemble("nop; nop; mov byte ptr [r15 + 0xB8], 0; nop; nop; nop; nop; nop")
     );
 
@@ -1004,22 +1018,22 @@ This only affects the following objects;
 
         /* 0x1403E862C */
         WriteProtected<byte>(funcAddr + 0x25C, 0xEB);
-        
+
         /* 0x1403E8790 */
         WriteProtected<byte>(funcAddr + 0x3C0, 0xEB);
-        
+
         /* 0x1403E89E9 */
         WriteProtected<byte>(funcAddr + 0x619, 0xEB);
-        
+
         /* 0x1403E8B22 */
         WriteProtected<byte>(funcAddr + 0x752, 0xEB);
-        
+
         /* 0x1403E8BCD */
         WriteProtected<byte>(funcAddr + 0x7FD, 0xEB);
-        
+
         /* 0x1403E8C63 */
         WriteProtected<byte>(funcAddr + 0x893, 0xEB);
-        
+
         /* 0x1403E8E21 */
         WriteProtected<byte>(funcAddr + 0xA51, 0xE9, 0xED, 0x00, 0x00, 0x00);
     }
@@ -1302,7 +1316,7 @@ Patch "Force PlayStation 4 Controller UI" in "UI" by "Hyper"
             "\x74\x1F\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x12\x80\x78\x4C\x02",
             "xxxxxx????xxxxxxxxx"
         ),
-        
+
         0xEB
     );
 }
@@ -1338,7 +1352,7 @@ Patch "Force PlayStation 5 Controller UI" in "UI" by "Hyper"
             "\x74\x1F\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x12\x80\x78\x4C\x02",
             "xxxxxx????xxxxxxxxx"
         ),
-        
+
         0xEB
     );
 }
@@ -1438,7 +1452,7 @@ Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift da
             "\x48\x89\x47\x38\x48\x8D\x1D\x00\x00\x00\x00",
             "xxxxxxx????"
         ),
-        
+
         4
     );
 
@@ -1467,7 +1481,7 @@ Patch "Hide Homing Reticle" in "UI" by "Hyper"
             "\x0F\x84\x00\x00\x00\x00\x49\x8D\x7D\x50",
             "xx????xxxx"
         ),
-        
+
         0xE9, 0xB1, 0x00, 0x00, 0x00
     );
 
@@ -1480,7 +1494,7 @@ Patch "Hide Homing Reticle" in "UI" by "Hyper"
             "\x74\x17\x48\x8D\x55\x17\x48\x89\xC1\xE8\x00\x00\x00\x00\x48\x89\xFA\x48\x89\xD9\xE8\x00\x00\x00\x00\x4C\x8D\x9C\x24\x00\x00\x00\x00\x49\x8B\x5B\x10\x49\x8B\x73\x18\x49\x8B\x7B\x20\x4C\x89\xDC\x5D\xC3\xCC\x0F\x1F\x44\x00\x00",
             "xxxxxxxxxx????xxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxx"
         ),
-        
+
         0xEB
     );
 }
@@ -1495,7 +1509,7 @@ Patch "Hide Oxygen Gauge" in "UI" by "Hyper"
             "\x74\x1C\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x85\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xEB\x6C\x3D\x7E\x23\x00\x00\x0F\x85\x98\x00\x00\x00\x0F\xB6\x42\x20",
             "xxx????xxx????xxxxxxx????xxxxxx????xxx????xxxxxxx????xxxxxxxxxxxxxxxxx"
         ),
-        
+
         0xEB
     );
 }
@@ -1510,7 +1524,7 @@ Patch "Hide Skill Piece Transition" in "UI" by "Hyper" does "Removes the transit
             "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x50\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x80\xE8\xCC\xCC\xCC\xCC\x45\x84\xFF",
             "x????xxxxxx????xxxxx????xxx"
         ),
-        
+
         5
     );
 
@@ -1522,7 +1536,7 @@ Patch "Hide Skill Piece Transition" in "UI" by "Hyper" does "Removes the transit
             "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\xB7\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x17\xE8",
             "x????xxxxx????xxxxx"
         ),
-        
+
         5
     );
 }
