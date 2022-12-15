@@ -659,23 +659,21 @@ Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M"
     /*
         This completely removes the framerate capping code for cutscenes, which prevents cutscenes from speeding up when they first play.
     */
-    WriteProtected<byte>
+    long instrAddr = ScanSignature
     (
         /* 0x140126D90 */
-        ScanSignature
-        (
-            "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
-            "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
-        ),
-
-        0xEB, 0x31
+        "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
+        "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
     );
+
+    if (instrAddr != 0)
+        WriteProtected<byte>(instrAddr, 0xEB, 0x31);
 
     /*
         Frontiers limits the monitor refresh rate to 60hz and forces VSync when in fullscreen.
         To prevent the game from doing this, we set both of these bytes to 0.
     */
-    long instrAddr = ScanSignature
+    instrAddr = ScanSignature
     (
         /* 0x140F4198E */
         "\xC7\x45\xF8\x3C\x00\x00\x00\xC7\x45\xFC\x01\x00\x00\x00\x41\x8B\x04\x24\x41\x0F\xB6\x4C\x24\x14\x41\x0F\xB6\x7C\x24\x1C\x89\x45\xF0\x41\x8B\x44\x24\x04\x89\x45\xF4\xE8\xCC\xCC\xCC\xCC\x40\x84\xFF\x74\x05\x8B\x40\x18\xEB\x03",
