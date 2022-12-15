@@ -686,6 +686,19 @@ Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M"
     WriteProtected<byte>(instrAddr + 10, 0);
 }
 
+Patch "Disable Framerate Limiter in Cutscenes" in "Graphics" by "M&M"
+{
+    long instrAddr = ScanSignature
+    (
+        /* 0x140126D90 */
+        "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
+        "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
+    );
+
+    if (instrAddr != 0)
+        WriteProtected<byte>(instrAddr, 0xEB, 0x31);
+}
+
 Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
 {
     // Asura
