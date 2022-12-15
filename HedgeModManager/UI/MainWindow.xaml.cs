@@ -1983,12 +1983,7 @@ namespace HedgeModManager
 
         private void UpdateCodeDescription(Code code)
         {
-            var theme = new ResourceDictionary()
-            {
-                Source = new Uri($"Themes/{RegistryConfig.UITheme}.xaml", UriKind.Relative)
-            };
-
-            var fgBrush = (SolidColorBrush)theme["HMM.Window.ForegroundBrush"];
+            var fgBrush = (SolidColorBrush)HedgeApp.Current.FindResource("HMM.Window.ForegroundBrush");
             var noBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF646464");
 
             TextBlock textBlock;
