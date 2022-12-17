@@ -531,6 +531,61 @@ Patch "Disable Chromatic Aberration" in "Graphics" by "Luig & Hyper" does "Disab
     );
 }
 
+Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables the animations for when Sonic becomes increasingly more corrupted in the later islands."
+{
+    // LANDING_CORRUPTION_WEAK
+    WriteProtected<byte>
+    (
+        /* 0x140830C7D */
+        ScanSignature
+        (
+            "\x74\x15\xB8\x04\x00\x00\x00\x48\x8B\x5C\x24\x30",
+            "xxxxxxxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // LANDING_CORRUPTION_STRONG
+    WriteNop
+    (
+        /* 0x140830CA8 */
+        ScanSignature
+        (
+            "\xBA\x05\x00\x00\x00\x0F\x45\xCA\x8B\xC1",
+            "xxxxxxxxxx"
+        ),
+        
+        8
+    );
+
+    // IDLE_CORRUPTION_WEAK_LOOP
+    WriteProtected<byte>
+    (
+        /* 0x140830DB4 */
+        ScanSignature
+        (
+            "\x74\x15\xB8\x0B\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // IDLE_CORRUPTION_STRONG_LOOP
+    WriteProtected<byte>
+    (
+        /* 0x140830DDA */
+        ScanSignature
+        (
+            "\x74\x15\xB8\x0C\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
 Patch "Disable Cyber Space CRT Effects" in "Graphics" by "Hyper & PTKickass" does "Disables the CRT scanline effect on distant terrain models in Cyber Space."
 {
     WriteProtected<byte>
