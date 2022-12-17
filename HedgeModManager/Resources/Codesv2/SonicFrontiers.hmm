@@ -1507,6 +1507,48 @@ Patch "Hide Boost Gauge" in "UI" by "Hyper"
     );
 }
 
+Patch "Hide Challenge Markers" in "Graphics" by "Hyper" does "Hides the markers that appear next to challenges on the islands."
+{
+    // Hide map sensor visual.
+    WriteProtected<byte>
+    (
+        /* 0x1403BF63B */
+        ScanSignature
+        (
+            "\x74\x17\x48\x8D\x55\xD7\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD3\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8B\x8F\x58\x02\x00\x00",
+            "xxxxxxxxxx????xxxxxxx????xxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // Disable map sensor sound.
+    WriteNop
+    (
+        /* 0x1403BF888 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD3\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x4C\x8D\x9C\x24\xB0\x00\x00\x00\x49\x8B\x5B\x28\x49\x8B\x73\x30\x49\x8B\x7B\x38\x49\x8B\xE3\x41\x5F\x41\x5E\x5D\xC3\x48\x8B\x45\xC7",
+            "x????xxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+        
+        5
+    );
+
+    // Hide map sensor name.
+    WriteProtected<byte>
+    (
+        /* 0x1408D128F */
+        ScanSignature
+        (
+            "\x0F\x8E\x47\x02\x00\x00\x4C\x89\xA4\x24\x58\x01\x00\x00",
+            "xxxxxxxxxxxxxx"
+        ),
+        
+        0xE9, 0x48, 0x02, 0x00, 0x00
+    );
+}
+
 Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift dash panels, but still allows them to function, similarly to drift zones in Sonic Colours."
 {
     // Remove model.
