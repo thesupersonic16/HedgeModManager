@@ -516,6 +516,21 @@ Patch "Disable Camera Shake" in "Graphics" by "Hyper" does "Disables camera shak
     );
 }
 
+Patch "Disable Challenge Marker Scanner" in "Gameplay" by "Hyper" does "Disables the scanning event and map transition after completing challenges."
+{
+    WriteProtected<byte>
+    (
+        /* 0x149477152 */
+        ScanSignature
+        (
+            "\x74\x1E\x41\x83\xF8\x01\x75\x70",
+            "xxxxxxxx"
+        ),
+
+        0xEB, 0x76
+    );
+}
+
 Patch "Disable Chromatic Aberration" in "Graphics" by "Luig & Hyper" does "Disables the RGB separation effect at edges of the screen in certain scenarios."
 {
     WriteNop
