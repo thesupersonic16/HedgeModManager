@@ -1522,19 +1522,6 @@ Patch "Hide Challenge Markers" in "Graphics" by "Hyper" does "Hides the markers 
         0xEB
     );
 
-    // Disable map sensor sound.
-    WriteNop
-    (
-        /* 0x1403BF888 */
-        ScanSignature
-        (
-            "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD3\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x4C\x8D\x9C\x24\xB0\x00\x00\x00\x49\x8B\x5B\x28\x49\x8B\x73\x30\x49\x8B\x7B\x38\x49\x8B\xE3\x41\x5F\x41\x5E\x5D\xC3\x48\x8B\x45\xC7",
-            "x????xxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        ),
-        
-        5
-    );
-
     // Hide map sensor name.
     WriteProtected<byte>
     (
