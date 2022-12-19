@@ -1,9 +1,4 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HedgeModManager
 {
@@ -12,7 +7,7 @@ namespace HedgeModManager
         private const string PersonalizePath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
         public static string ConfigPath { get; } = @"SOFTWARE\HEDGEMM";
-        public static string LastGame;
+        public static string LastGameDirectory;
         public static string ExtraGameDirectories;
         public static string UILanguage;
         public static string UITheme;
@@ -29,7 +24,7 @@ namespace HedgeModManager
         public static void Save()
         {
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
-            key.SetValue(nameof(LastGame), LastGame);
+            key.SetValue("LastGame", LastGameDirectory);
             key.SetValue(nameof(ExtraGameDirectories), ExtraGameDirectories);
             key.SetValue(nameof(UILanguage), UILanguage);
             key.SetValue(nameof(UITheme), UITheme);
@@ -53,7 +48,7 @@ namespace HedgeModManager
             }
 
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
-            LastGame                = (string)key.GetValue(nameof(LastGame), string.Empty);
+            LastGameDirectory       = (string)key.GetValue("LastGame", string.Empty);
             ExtraGameDirectories    = (string)key.GetValue(nameof(ExtraGameDirectories), string.Empty);
             UILanguage              = (string)key.GetValue(nameof(UILanguage), HedgeApp.PCCulture);
             UITheme                 = (string)key.GetValue(nameof(UITheme), useLightMode ? "LightTheme" : "DarkerTheme");

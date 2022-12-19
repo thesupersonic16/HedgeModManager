@@ -213,9 +213,9 @@ namespace HedgeModManager
             GameInstalls = GameInstall.SearchForGames();
             if (FindAndSetLocalGame() == null)
             {
-                if (!string.IsNullOrEmpty(RegistryConfig.LastGame) && CurrentGame == Games.Unknown)
+                if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
                 {
-                    StartDirectory = RegistryConfig.LastGame;
+                    StartDirectory = RegistryConfig.LastGameDirectory;
                     FindAndSetLocalGame();
                 }
             }
@@ -347,7 +347,7 @@ namespace HedgeModManager
                     CurrentGameInstall = steamGame;
                     try
                     {
-                        RegistryConfig.LastGame = StartDirectory;
+                        RegistryConfig.LastGameDirectory = StartDirectory;
                         RegistryConfig.Save();
                         ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
                         Config = new CPKREDIRConfig(ConfigPath);
@@ -577,7 +577,7 @@ namespace HedgeModManager
                     CurrentGame = game;
                     CurrentGameInstall = gameinstall;
                     StartDirectory = gameinstall.GameDirectory;
-                    RegistryConfig.LastGame = StartDirectory;
+                    RegistryConfig.LastGameDirectory = StartDirectory;
                     RegistryConfig.Save();
                 }
             }
