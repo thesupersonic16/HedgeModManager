@@ -229,7 +229,7 @@
     <system:String x:Key="GameSonicLostWorld">索尼克 失落世界</system:String>
     <system:String x:Key="GameSonicForces">索尼克 力量</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">魔法气泡 特趣思 俄罗斯方块 2</system:String>
-    <system:String x:Key="GameTokyo2020">索尼克在 2022 东京奥运会</system:String>
+    <system:String x:Key="GameTokyo2020">2020东京奥运</system:String>
     <system:String x:Key="GameSonicColorsUltimate">索尼克 缤纷色彩 究极版</system:String>
     <system:String x:Key="GameSonicOrigins">索尼克 起源</system:String>
     <system:String x:Key="GameSonicFrontiers">索尼克 未知边境</system:String>
