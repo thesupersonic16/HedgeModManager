@@ -63,6 +63,7 @@
                 <StackPanel Grid.Column="0">
                     <Label Content="PTKickass"/>
                     <Label Content="JoeyLaw"/>
+                    <Label Content="_Wr_"/>
                     <Label Content="LJSTAR"/>
                     <Label Content="Nanoposan69"/>
                     <Label Content="ricky-daniel13"/>
@@ -76,6 +77,7 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Portuguese translations"/>
+                    <Label Content="Chinese translations"/>
                     <Label Content="Chinese translations"/>
                     <Label Content="French translation"/>
                     <Label Content="Russian translation"/>
