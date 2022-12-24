@@ -154,8 +154,7 @@ namespace HedgeModManager
         private void SortCodesList(int index = -1)
         {
             // Set toggle checkbox and switch to user view.
-            CheckBox_CodesUseTreeView.IsChecked = RegistryConfig.CodesUseTreeView;
-            InvokeChangeCodesView(RegistryConfig.CodesUseTreeView);
+            InvokeChangeCodesView((CheckBox_CodesUseTreeView.IsChecked = RegistryConfig.CodesUseTreeView).Value);
 
             if (IsCodesTreeView)
             {
@@ -297,8 +296,16 @@ namespace HedgeModManager
 
         public void InvokeChangeCodesView(bool useTreeView = true)
         {
+            /* Using an argument to switch view, rather than the registry
+               config value, so we don't change any settings when switching
+               views temporarily. */
             if (!useTreeView)
-                goto InitListView;
+            {
+                IsCodesTreeView = false;
+                CodesListContainer.Visibility = Visibility.Visible;
+                CodesTreeContainer.Visibility = Visibility.Collapsed;
+                return;
+            }
 
             if (RegistryConfig.CodesUseTreeView)
             {
@@ -307,11 +314,6 @@ namespace HedgeModManager
                 CodesTreeContainer.Visibility = Visibility.Visible;
                 return;
             }
-
-        InitListView:
-            IsCodesTreeView = false;
-            CodesListContainer.Visibility = Visibility.Visible;
-            CodesTreeContainer.Visibility = Visibility.Collapsed;
         }
 
         public void RefreshUI()
@@ -1887,6 +1889,7 @@ namespace HedgeModManager
 
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            InvokeChangeCodesView(RegistryConfig.CodesUseTreeView);
             if (RefreshButton != null)
             {
                 RefreshButton.IsEnabled = MainTabControl.SelectedItem != SettingsTab;
