@@ -62,9 +62,13 @@
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >名稱</system:String>
+    <system:String x:Key="CodesUICategory">類別</system:String>
     <system:String x:Key="CodesUIDownload">下載社區代碼</system:String>
     <system:String x:Key="CodesUIUpdate"  >更新社區代碼</system:String>
     <system:String x:Key="CodesUISearch"  >尋找：</system:String>
+    <system:String x:Key="CodesUIInfo"    >雙擊代碼去題示更多資料</system:String>
+    <system:String x:Key="CodesUIInfoHint">把「鼠標」懸停在代碼上來顯示更多資料</system:String>
+    <system:String x:Key="CodesUINoInfo"  >無資料</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">已載入的代碼與代碼加載器不相容。&#x0a;請更新代碼和代碼加載器。&#x0a; 警告：此動作會覆蓋所有自定義代碼。 </system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">正在下載代碼…</system:String>
 
@@ -170,7 +174,7 @@
     <system:String x:Key="StatusUIDownloadFailed"         >下載失敗</system:String>
     <system:String x:Key="StatusUICodeUpdatesAvailable"   >代碼更新可用！</system:String>
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >未找到代碼更新</system:String>
-    
+
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager 無法讀取遊戲目錄。&#x0a;請確保以下目錄及其所有文件和文件夾的用戶組「寫入」設置為允許。&#x0a;&#x0a;{0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >您確定要刪除 「{0}」？&#x0a;此操作無法撤消！</system:String>
@@ -236,5 +240,6 @@
     <system:String x:Key="GameNoGame">找不到遊戲</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>
+    <system:String x:Key="LauncherHeroic">Heroic</system:String>
 
 </ResourceDictionary>
