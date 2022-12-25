@@ -77,8 +77,8 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Portuguese translations"/>
-                    <Label Content="Chinese translations"/>
-                    <Label Content="Chinese translations"/>
+                    <Label Content="Chinese (Traditional) translation"/>
+                    <Label Content="Chinese (Simplified) translation"/>
                     <Label Content="French translation"/>
                     <Label Content="Russian translation"/>
                     <Label Content="Spanish translation"/>
