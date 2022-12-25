@@ -1431,22 +1431,55 @@ namespace HedgeModManager
             UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGame));
             try
             {
-                var downloader = new DownloadWindow($"Downloading codes for {HedgeApp.CurrentGame}", HedgeApp.CurrentGame.CodesURL, CodeProvider.CodesTextPath)
+                string codesPath = CodeProvider.CodesTextPath;
+
+                /* Parse current codes list, since ModsDB.CodesDatabase
+                   is contaminated with codes from ExtraCodes.hmm */
+                var oldCodes = new CodeFile(codesPath);
+
+                var downloader = new DownloadWindow($"Downloading codes for {HedgeApp.CurrentGame}", HedgeApp.CurrentGame.CodesURL, codesPath)
                 {
                     DownloadCompleted = () =>
                     {
                         Refresh();
+
+                        CodesOutdated = false;
+
                         UpdateStatus(Localise("StatusUIDownloadFinished"));
+                        Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
 
-                        // Update button visual.
+                        var diff = new CodeFile(codesPath).Diff(oldCodes);
                         {
-                            CodesOutdated = false;
+                            var sb = new StringBuilder();
 
-                            // Reset button text if there was an update that was just downloaded.
-                            Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
+                            foreach (var code in diff)
+                            {
+                                sb.AppendLine($"- {code}");
+
+                                if (code.Type == CodeDiffResult.CodeDiffType.Renamed)
+                                {
+                                    // Restore enabled state of renamed code.
+                                    if (ViewModel.ModsDB.Codes.Contains(code.OriginalName))
+                                        ViewModel.ModsDB.CodesDatabase.Codes.Find(x => x.Name == code.NewName).Enabled = true;
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(sb.ToString()))
+                            {
+                                var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+                                {
+                                    box.AddButton(Localise("CommonUIOK"), () => box.Close());
+                                    box.ShowDialog();
+                                }
+                            }
+                            else
+                            {
+                                UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
+                            }
                         }
                     }
                 };
+
                 downloader.Start();
             }
             catch
