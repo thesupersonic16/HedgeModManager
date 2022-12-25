@@ -148,7 +148,7 @@ if (*(long*)rsdkGlobals != 0)
     }
 }
 
-Code "Always Disable Super Music in S3&K" in "Audio" by "MegAmi" does "Due to how the cheat works, the Super music may still play in some instances, such as after the AIZ Act 1 bombing cutscene."
+Code "Disable Super Music in S3&K" in "Audio" by "MegAmi" does "Due to how the cheat works, the Super music may still play in some instances, such as after the AIZ Act 1 bombing cutscene."
 static long rsdkGlobals;
 static int rsdkGOffset;
 
