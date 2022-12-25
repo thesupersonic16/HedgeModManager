@@ -31,7 +31,7 @@ Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M &
     WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
 }
 
-Patch "Always Day on Islands" in "Graphics" by "NM"
+Patch "Always Day on Islands" in "Time" by "NM"
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -172,7 +172,7 @@ Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Night on Islands" in "Graphics" by "NM"
+Patch "Always Night on Islands" in "Time" by "NM"
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -223,7 +223,7 @@ Patch "Always Night on Islands" in "Graphics" by "NM"
     );
 }
 
-Patch "Always Sunrise on Islands" in "Graphics" by "NM"
+Patch "Always Sunrise on Islands" in "Time" by "NM"
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -274,7 +274,7 @@ Patch "Always Sunrise on Islands" in "Graphics" by "NM"
     );
 }
 
-Patch "Always Sunset on Islands" in "Graphics" by "NM"
+Patch "Always Sunset on Islands" in "Time" by "NM"
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -516,6 +516,21 @@ Patch "Disable Camera Shake" in "Graphics" by "Hyper" does "Disables camera shak
     );
 }
 
+Patch "Disable Challenge Marker Scanner" in "Gameplay" by "Hyper" does "Disables the scanning event and map transition after completing challenges."
+{
+    WriteProtected<byte>
+    (
+        /* 0x149477152 */
+        ScanSignature
+        (
+            "\x74\x1E\x41\x83\xF8\x01\x75\x70",
+            "xxxxxxxx"
+        ),
+
+        0xEB, 0x76
+    );
+}
+
 Patch "Disable Chromatic Aberration" in "Graphics" by "Luig & Hyper" does "Disables the RGB separation effect at edges of the screen in certain scenarios."
 {
     WriteNop
@@ -528,6 +543,61 @@ Patch "Disable Chromatic Aberration" in "Graphics" by "Luig & Hyper" does "Disab
         ),
 
         4
+    );
+}
+
+Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables the animations for when Sonic becomes increasingly more corrupted in the later islands."
+{
+    // LANDING_CORRUPTION_WEAK
+    WriteProtected<byte>
+    (
+        /* 0x140830C7D */
+        ScanSignature
+        (
+            "\x74\x15\xB8\x04\x00\x00\x00\x48\x8B\x5C\x24\x30",
+            "xxxxxxxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // LANDING_CORRUPTION_STRONG
+    WriteNop
+    (
+        /* 0x140830CA8 */
+        ScanSignature
+        (
+            "\xBA\x05\x00\x00\x00\x0F\x45\xCA\x8B\xC1",
+            "xxxxxxxxxx"
+        ),
+        
+        8
+    );
+
+    // IDLE_CORRUPTION_WEAK_LOOP
+    WriteProtected<byte>
+    (
+        /* 0x140830DB4 */
+        ScanSignature
+        (
+            "\x74\x15\xB8\x0B\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // IDLE_CORRUPTION_STRONG_LOOP
+    WriteProtected<byte>
+    (
+        /* 0x140830DDA */
+        ScanSignature
+        (
+            "\x74\x15\xB8\x0C\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        0xEB
     );
 }
 
@@ -590,7 +660,7 @@ Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the
 
         0xEB, 0x0D
     );
-    
+
     // Disable guide regarding fixed camera.
     WriteProtected<byte>
     (
@@ -600,7 +670,7 @@ Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the
             "\x0F\x84\x00\x00\x00\x00\x4C\x89\xB4\x24\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x4C\x8B\x76\x08\x8B\x0D\x00\x00\x00\x00\x81\xF1\x00\x00\x00\x00\x41\x89\xC8\x4C\x89\xF1\x49\x8B\x06\xFF\x50\x08\x02\x15\x00\x00\x00\x00\x48\x89\xC3\x48\x85\xC0\x0F\x84\x00\x00\x00\x00\x4C\x89\x70\x08\xB9\x00\x00\x00\x00\xC6\x40\x10\x01\x89\x78\x14\xC7\x40\x00\x00\x00\x00\x00\x40\x88\x78\x1C\x48\x89\x48\x30\x48\x89\x78\x20\x48\x89\x78\x28\x4C\x89\x70\x38\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x03\x66\xC7\x43\x00\x00\x00\x48\x89\x7B\x48\x89\x7B\x50\x89\x4B\x54\x4C\x89\x73\x58\x48\x89\x7B\x60\x89\x7B\x68\x89\x4B\x6C\x4C\x89\x73\x70\x48\x89\x7B\x78\x48\x89\xBB\x00\x00\x00\x00\x48\x89\x8B\x00\x00\x00\x00\x4C\x89\xB3\x00\x00\x00\x00\x8B\x15\x00\x00\x00\x00\x81\xF2\x00\x00\x00\x00\x89\x93\x00\x00\x00\x00\x66\xC7\x83\x00\x00\x00\x00\x00\x00\x8A\x15\x00\x00\x00\x00\x80\xF2\x40\x88\x93\x00\x00\x00\x00\xEB\x03",
             "xx????xxxx????x????xxxxxx????xx????xxxxxxxxxxxxxx????xxxxxxxx????xxxxx????xxxxxxxxx?????xxxxxxxxxxxxxxxxxxxxxxx????xxxxxx???xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxx????xx????xx????xx????xxx??????xx????xxxxx????xx"
         ),
-        
+
         0xE9, 0x5C, 0x01, 0x00, 0x00
     );
 }
@@ -659,17 +729,42 @@ Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M"
     /*
         This completely removes the framerate capping code for cutscenes, which prevents cutscenes from speeding up when they first play.
     */
-    WriteProtected<byte>
+    long instrAddr = ScanSignature
     (
         /* 0x140126D90 */
-        ScanSignature
-        (
-            "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
-            "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
-        ),
-
-        0xEB, 0x31
+        "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
+        "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
     );
+
+    if (instrAddr != 0)
+        WriteProtected<byte>(instrAddr, 0xEB, 0x31);
+
+    /*
+        Frontiers limits the monitor refresh rate to 60hz and forces VSync when in fullscreen.
+        To prevent the game from doing this, we set both of these bytes to 0.
+    */
+    instrAddr = ScanSignature
+    (
+        /* 0x140F4198E */
+        "\xC7\x45\xF8\x3C\x00\x00\x00\xC7\x45\xFC\x01\x00\x00\x00\x41\x8B\x04\x24\x41\x0F\xB6\x4C\x24\x14\x41\x0F\xB6\x7C\x24\x1C\x89\x45\xF0\x41\x8B\x44\x24\x04\x89\x45\xF4\xE8\xCC\xCC\xCC\xCC\x40\x84\xFF\x74\x05\x8B\x40\x18\xEB\x03",
+        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxx"
+    );
+
+    WriteProtected<byte>(instrAddr + 3, 0);
+    WriteProtected<byte>(instrAddr + 10, 0);
+}
+
+Patch "Disable Framerate Limiter in Cutscenes" in "Graphics" by "M&M"
+{
+    long instrAddr = ScanSignature
+    (
+        /* 0x140126D90 */
+        "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
+        "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
+    );
+
+    if (instrAddr != 0)
+        WriteProtected<byte>(instrAddr, 0xEB, 0x31);
 }
 
 Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
@@ -952,6 +1047,79 @@ Patch "Disable Super Combat Particles" in "Graphics" by "Hyper" does "Disables t
     );
 }
 
+Patch "Disable Traversal Objects in Chests" in "Gameplay" by "Hyper" does
+/*
+Disables the hidden traversal objects in chests that require cyloop to reveal, making them always accessible.
+
+This only affects the following objects;
+- Dash Panels
+- Jump Boards
+- Springs
+*/
+{
+    // Dash Panels
+    WriteProtected<byte>
+    (
+        /* 0x140335B1D */
+        ScanSignature
+        (
+            "\x75\x0D\x45\x38\xA7\xB8\x00\x00\x00",
+            "xxxxxxxxx"
+        ),
+
+        Assemble("nop; nop; mov byte ptr [r15 + 0xB8], 0; nop; nop; nop; nop; nop")
+    );
+
+    // Jump Boards
+    {
+        /* 0x14037F023 */
+        long instrAddr = ScanSignature
+        (
+            "\x80\xB8\xB8\x00\x00\x00\x00\x74\x1D",
+            "xxxxxxxxx"
+        );
+
+        WriteProtected<byte>(instrAddr, Assemble("mov byte ptr [rax + 0xB8], 0"));
+
+        /* 0x14037F02A */
+        WriteProtected<byte>(instrAddr + 0x07, 0xEB);
+    }
+
+    // Springs
+    {
+        /* 0x1403E83D0 */
+        long funcAddr = ScanSignature
+        (
+            "\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x48\x89\x7C\x24\x20\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\x6C\x24\xC9\x48\x81\xEC\xC0\x00\x00\x00\x4C",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        );
+
+        /* 0x1403E84E1 */
+        WriteProtected<byte>(funcAddr + 0x111, 0xEB);
+
+        /* 0x1403E862C */
+        WriteProtected<byte>(funcAddr + 0x25C, 0xEB);
+
+        /* 0x1403E8790 */
+        WriteProtected<byte>(funcAddr + 0x3C0, 0xEB);
+
+        /* 0x1403E89E9 */
+        WriteProtected<byte>(funcAddr + 0x619, 0xEB);
+
+        /* 0x1403E8B22 */
+        WriteProtected<byte>(funcAddr + 0x752, 0xEB);
+
+        /* 0x1403E8BCD */
+        WriteProtected<byte>(funcAddr + 0x7FD, 0xEB);
+
+        /* 0x1403E8C63 */
+        WriteProtected<byte>(funcAddr + 0x893, 0xEB);
+
+        /* 0x1403E8E21 */
+        WriteProtected<byte>(funcAddr + 0xA51, 0xE9, 0xED, 0x00, 0x00, 0x00);
+    }
+}
+
 Patch "Disable Trick Hint Particles" in "Graphics" by "Hyper" does "Disables the particles that hint at dash rings, jump boards and springs being trickable."
 {
     // Dash Rings
@@ -1229,7 +1397,7 @@ Patch "Force PlayStation 4 Controller UI" in "UI" by "Hyper"
             "\x74\x1F\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x12\x80\x78\x4C\x02",
             "xxxxxx????xxxxxxxxx"
         ),
-        
+
         0xEB
     );
 }
@@ -1265,7 +1433,7 @@ Patch "Force PlayStation 5 Controller UI" in "UI" by "Hyper"
             "\x74\x1F\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x12\x80\x78\x4C\x02",
             "xxxxxx????xxxxxxxxx"
         ),
-        
+
         0xEB
     );
 }
@@ -1354,6 +1522,35 @@ Patch "Hide Boost Gauge" in "UI" by "Hyper"
     );
 }
 
+Patch "Hide Challenge Markers" in "Graphics" by "Hyper" does "Hides the markers that appear next to challenges on the islands."
+{
+    // Hide map sensor visual.
+    WriteProtected<byte>
+    (
+        /* 0x1403BF63B */
+        ScanSignature
+        (
+            "\x74\x17\x48\x8D\x55\xD7\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD3\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8B\x8F\x58\x02\x00\x00",
+            "xxxxxxxxxx????xxxxxxx????xxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // Hide map sensor name.
+    WriteProtected<byte>
+    (
+        /* 0x1408D128F */
+        ScanSignature
+        (
+            "\x0F\x8E\x47\x02\x00\x00\x4C\x89\xA4\x24\x58\x01\x00\x00",
+            "xxxxxxxxxxxxxx"
+        ),
+        
+        0xE9, 0x48, 0x02, 0x00, 0x00
+    );
+}
+
 Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift dash panels, but still allows them to function, similarly to drift zones in Sonic Colours."
 {
     // Remove model.
@@ -1365,7 +1562,7 @@ Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift da
             "\x48\x89\x47\x38\x48\x8D\x1D\x00\x00\x00\x00",
             "xxxxxxx????"
         ),
-        
+
         4
     );
 
@@ -1383,6 +1580,21 @@ Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift da
     );
 }
 
+Patch "Hide Enemy Health Gauge" in "UI" by "Hyper & Gordon Ramsay" does "Hides the health gauge for standard enemies and guardians."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1404FC4CB */
+        ScanSignature
+        (
+            "\x0F\x84\xF7\x00\x00\x00\xBA\x44\x23\x00\x00",
+            "xxxxxxxxxxx"
+        ),
+
+        0xE9, 0xF8, 0x00, 0x00, 0x00
+    );
+}
+
 Patch "Hide Homing Reticle" in "UI" by "Hyper"
 {
     // Disable sound and main reticle.
@@ -1394,7 +1606,7 @@ Patch "Hide Homing Reticle" in "UI" by "Hyper"
             "\x0F\x84\x00\x00\x00\x00\x49\x8D\x7D\x50",
             "xx????xxxx"
         ),
-        
+
         0xE9, 0xB1, 0x00, 0x00, 0x00
     );
 
@@ -1407,7 +1619,7 @@ Patch "Hide Homing Reticle" in "UI" by "Hyper"
             "\x74\x17\x48\x8D\x55\x17\x48\x89\xC1\xE8\x00\x00\x00\x00\x48\x89\xFA\x48\x89\xD9\xE8\x00\x00\x00\x00\x4C\x8D\x9C\x24\x00\x00\x00\x00\x49\x8B\x5B\x10\x49\x8B\x73\x18\x49\x8B\x7B\x20\x4C\x89\xDC\x5D\xC3\xCC\x0F\x1F\x44\x00\x00",
             "xxxxxxxxxx????xxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxx"
         ),
-        
+
         0xEB
     );
 }
@@ -1422,7 +1634,7 @@ Patch "Hide Oxygen Gauge" in "UI" by "Hyper"
             "\x74\x1C\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x85\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xEB\x6C\x3D\x7E\x23\x00\x00\x0F\x85\x98\x00\x00\x00\x0F\xB6\x42\x20",
             "xxx????xxx????xxxxxxx????xxxxxx????xxx????xxxxxxx????xxxxxxxxxxxxxxxxx"
         ),
-        
+
         0xEB
     );
 }
@@ -1437,7 +1649,7 @@ Patch "Hide Skill Piece Transition" in "UI" by "Hyper" does "Removes the transit
             "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x50\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x80\xE8\xCC\xCC\xCC\xCC\x45\x84\xFF",
             "x????xxxxxx????xxxxx????xxx"
         ),
-        
+
         5
     );
 
@@ -1449,7 +1661,7 @@ Patch "Hide Skill Piece Transition" in "UI" by "Hyper" does "Removes the transit
             "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\xB7\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x17\xE8",
             "x????xxxxx????xxxxx"
         ),
-        
+
         5
     );
 }
