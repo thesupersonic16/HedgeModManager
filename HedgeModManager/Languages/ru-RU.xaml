@@ -27,6 +27,7 @@
     <system:String x:Key="MainUIRefreshModList">Обновить список модов</system:String>
     <system:String x:Key="MainUISave"          >Сохранить</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Сохранить и запустить игру</system:String>
+	<system:String x:Key="MainUIConfigureMod"  >Настроить мод</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Невозможно скачать загрузчик модов</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Невозможно установить загрузчик модов.&#x0a;Убедитесь, что у вас есть разрешения на запись файлов игры.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Невозможно удалить загрузчик модов.&#x0a;Убедитесь, что игра сейчас не запущена.</system:String>
