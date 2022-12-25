@@ -4,7 +4,7 @@ Patch "Disable Auto Save Icon" in "UI" by "Hyper"
 // 1.0.0: 0x140403FAC
 WriteProtected<byte>(ScanSignature("\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x48\x8D\x6C\x24\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\xDA\x48\x8B\xF9\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x33\xF6\x48\x85\xC0\x74\x16\x48\x85\xFF\x48\x8D\x97\x00\x00\x00\x00\x48\x8B\xC8\x48\x0F\x44\xD6\xE8\x00\x00\x00\x00\x0F\x57\xC0\xC7\x45\x00\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\xC6\x45\xBB\x80\xF3\x0F\x7F\x45\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x89\x75\xCF\xE8\x00\x00\x00\x00\x48\x8B\x15\x00\x00\x00\x00\x48\x8D\x4D\xA7\x48\x89\x45\xAF\xC7\x45\x00\x00\x00\x00\x00\xC6\x45\xBB\x15\xE8\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x48\x8B\xD8", "xxxx?xxxx?xxxx?xxxxx?xxx????xxxxxxx????xxxxxxx????xxxxxxxxxxxxx????xxxxxxxx????xxxxx?????xxx????xxxxxxxx?xxx?????xxx?????xxxx????xxx????xxxxxxxxxx?????xxxxx????x????xxxxxxx????xxx") + 0x1C, 0xE9, 0x94, 0x01, 0x00, 0x00);
 
-Code "Enable Lives in Anniversary Mode" in "Gameplay" by "ĐeäTh"
+Code "Enable Lives in Anniversary Mode" in "Gameplay" by "ĐeäTh" does "Enabling this code will cause Anniversary Mode to use a different set of saves from normal, and your regular Anniversary Mode saves will be inaccessible."
 static long rsdkV3Flags;
 static long rsdkV4Flags;
 static long rsdkGlobals;
@@ -76,7 +76,7 @@ if (*(long*)rsdkGlobals != 0)
     }
 }
 
-Code "Enable Lives in Mirror Mode" in "Gameplay" by "ĐeäTh"
+Code "Enable Lives in Mirror Mode" in "Gameplay" by "ĐeäTh" does "Enabling this code will cause Mirror Mode to use a different set of saves from normal, and your regular Mirror Mode saves will be inaccessible."
 static long rsdkV3Flags;
 static long rsdkV4Flags;
 static long rsdkGlobals;
@@ -146,4 +146,23 @@ if (*(long*)rsdkGlobals != 0)
         // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
         WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x11C, 0x00);
     }
+}
+
+Code "Disable Super Music in S3&K" in "Audio" by "MegAmi" does "Due to how the cheat works, the Super music may still play in some instances, such as after the AIZ Act 1 bombing cutscene."
+static long rsdkGlobals;
+static int rsdkGOffset;
+
+// Globals sigscan code by ĐeäTh
+if (rsdkGlobals == 0)
+{
+    var result = ScanSignature("\x48\x8B\x05\x00\x00\x00\x00\x8B\x80\x00\x00\x00\x00\x85\xC0\x78\x2D\x83\xF8\x01\x7E\x1F\x83\xF8\x02\x74\x11\x83\xC0\xFC\x83\xF8\x02\x77\x1B\x48\x8D\x0D\x00\x00\x00\x00\xEB\x19\x48\x8D\x0D\x00\x00\x00\x00\xEB\x10\x48\x8D\x0D\x00\x00\x00\x00\xEB\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\xB2\x02\x4C\x8B\x80\x00\x00\x00\x00\x41\xFF\xD0\x48\x8B\x0D\x00\x00\x00\x00\x66\x89\x41\x04",
+    "xxx????xx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxx????xxxxx????xxxxx????xxx????xxxxx????xxxxxx????xxxx");
+    rsdkGlobals = (long)result + *((int*)IntPtr.Add(new IntPtr(result), 3)) + 7;
+    rsdkGOffset = *((int*)IntPtr.Add(new IntPtr(result), 9));
+    return;
+}
+
+if (*(long*)rsdkGlobals != 0)
+{
+    WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset - 0x08, 0x00);
 }
