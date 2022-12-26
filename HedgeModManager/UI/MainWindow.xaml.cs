@@ -1431,13 +1431,14 @@ namespace HedgeModManager
             UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGame));
             try
             {
-                string codesPath = CodeProvider.CodesTextPath;
+                string codesFilePath = CodeProvider.CodesTextPath;
+                bool codesFileExists = File.Exists(codesFilePath);
 
                 /* Parse current codes list, since ModsDB.CodesDatabase
                    is contaminated with codes from ExtraCodes.hmm */
-                var oldCodes = new CodeFile(codesPath);
+                var oldCodes = new CodeFile(codesFilePath);
 
-                var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGame), HedgeApp.CurrentGame.CodesURL, codesPath)
+                var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGame), HedgeApp.CurrentGame.CodesURL, codesFilePath)
                 {
                     DownloadCompleted = () =>
                     {
@@ -1448,7 +1449,11 @@ namespace HedgeModManager
                         UpdateStatus(Localise("StatusUIDownloadFinished"));
                         Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
 
-                        var diff = new CodeFile(codesPath).Diff(oldCodes);
+                        // Don't display diff for initial download.
+                        if (!codesFileExists)
+                            return;
+
+                        var diff = new CodeFile(codesFilePath).Diff(oldCodes);
                         {
                             var sb = new StringBuilder();
 
