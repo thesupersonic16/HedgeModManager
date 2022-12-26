@@ -58,7 +58,7 @@ namespace HedgeModManager
             foreach (var code in Codes)
             {
                 // Added
-                if (old.Codes.Where(x => x.Name == code.Name).Count() == 0)
+                if (!old.Codes.Where(x => x.Name == code.Name).Any())
                 {
                     addedCodes.Add(code.Name);
                     continue;
@@ -94,7 +94,7 @@ namespace HedgeModManager
                 }
 
                 // Removed
-                if (Codes.Where(x => x.Name == code.Name).Count() == 0)
+                if (!Codes.Where(x => x.Name == code.Name).Any())
                 {
                     diff.Add(new CodeDiffResult(code.Name, CodeDiffResult.CodeDiffType.Removed));
                     continue;
