@@ -1437,7 +1437,7 @@ namespace HedgeModManager
                    is contaminated with codes from ExtraCodes.hmm */
                 var oldCodes = new CodeFile(codesPath);
 
-                var downloader = new DownloadWindow($"Downloading codes for {HedgeApp.CurrentGame}", HedgeApp.CurrentGame.CodesURL, codesPath)
+                var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGame), HedgeApp.CurrentGame.CodesURL, codesPath)
                 {
                     DownloadCompleted = () =>
                     {
