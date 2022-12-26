@@ -1436,7 +1436,7 @@ namespace HedgeModManager
 
                 /* Parse current codes list, since ModsDB.CodesDatabase
                    is contaminated with codes from ExtraCodes.hmm */
-                var oldCodes = new CodeFile(codesFilePath);
+                var oldCodes = codesFileExists ? new CodeFile(codesFilePath) : null;
 
                 var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGame), HedgeApp.CurrentGame.CodesURL, codesFilePath)
                 {
