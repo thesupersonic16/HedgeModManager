@@ -75,6 +75,13 @@
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">The installed codes are incompatible with the code loader.&#x0a;Please update the codes and the code loader.&#x0a;WARNING: This will erase any custom codes.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">Fetching codes...</system:String>
 
+    <!-- Diff UI Strings -->
+    <system:String x:Key="DiffUITitle"   >Changelog</system:String>
+    <system:String x:Key="DiffUIAdded"   >Added: {0}</system:String>
+    <system:String x:Key="DiffUIModified">Modified: {0}</system:String>
+    <system:String x:Key="DiffUIRemoved" >Removed: {0}</system:String>
+    <system:String x:Key="DiffUIRenamed" >Renamed: {0}</system:String>
+
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
     <system:String x:Key="SettingsUIGMLHeader"      >Game &amp; Mod Loader</system:String>

@@ -24,6 +24,13 @@ namespace HedgeModManager
         public Dictionary<string, string> Tags { get; set; } = new Dictionary<string, string>();
         public List<Code> Codes { get; set; } = new List<Code>();
 
+        public CodeFile() { }
+
+        public CodeFile(string codeFilePath)
+        {
+            ParseFile(codeFilePath);
+        }
+
         public Version FileVersion
         {
             get
@@ -41,6 +48,63 @@ namespace HedgeModManager
                 mFileVersion = value;
                 Tags[VersionTag] = mFileVersion.ToString();
             }
+        }
+
+        public List<CodeDiffResult> Diff(CodeFile old)
+        {
+            var diff       = new List<CodeDiffResult>();
+            var addedCodes = new List<string>();
+
+            foreach (var code in Codes)
+            {
+                // Added
+                if (!old.Codes.Where(x => x.Name == code.Name).Any())
+                {
+                    addedCodes.Add(code.Name);
+                    continue;
+                }
+            }
+
+            foreach (var code in old.Codes)
+            {
+                // Modified
+                if (Codes.Where(x => x.Name == code.Name).SingleOrDefault() is Code modified)
+                {
+                    if (code.Lines.ToString() != modified.Lines.ToString())
+                    {
+                        diff.Add(new CodeDiffResult(code.Name, CodeDiffResult.CodeDiffType.Modified));
+                        continue;
+                    }
+                }
+
+                // Renamed
+                if (Codes.Where(x => x.Lines.ToString() == code.Lines.ToString()).SingleOrDefault() is Code renamed)
+                {
+                    if (code.Name != renamed.Name)
+                    {
+                        diff.Add(new CodeDiffResult($"{code.Name} -> {renamed.Name}", CodeDiffResult.CodeDiffType.Renamed, code.Name, renamed.Name));
+
+                        /* Remove this code from the add list
+                           so we don't display it twice. */
+                        if (addedCodes.Contains(renamed.Name))
+                            addedCodes.Remove(renamed.Name);
+
+                        continue;
+                    }
+                }
+
+                // Removed
+                if (!Codes.Where(x => x.Name == code.Name).Any())
+                {
+                    diff.Add(new CodeDiffResult(code.Name, CodeDiffResult.CodeDiffType.Removed));
+                    continue;
+                }
+            }
+
+            foreach (string code in addedCodes)
+                diff.Add(new CodeDiffResult(code, CodeDiffResult.CodeDiffType.Added));
+
+            return diff.OrderBy(x => x.Type).ToList();
         }
 
         public void ParseFile(string path)
@@ -107,6 +171,64 @@ namespace HedgeModManager
             }
 
             return file;
+        }
+    }
+
+    public class CodeDiffResult
+    {
+        /// <summary>
+        /// The details about this change.
+        /// </summary>
+        public string Changelog { get; set; }
+
+        /// <summary>
+        /// The change made to this code.
+        /// </summary>
+        public CodeDiffType Type { get; set; }
+
+        /// <summary>
+        /// The original name of a code before renaming.
+        /// </summary>
+        public string OriginalName { get; set; }
+
+        /// <summary>
+        /// The new name of a code after renaming.
+        /// </summary>
+        public string NewName { get; set; }
+
+        public CodeDiffResult(string changelog, CodeDiffType type)
+        {
+            Changelog = changelog;
+            Type      = type;
+        }
+
+        public CodeDiffResult(string changelog, CodeDiffType type, string originalName, string newName)
+        {
+            Changelog    = changelog;
+            Type         = type;
+            OriginalName = originalName;
+            NewName      = newName;
+        }
+
+        public override string ToString()
+        {
+            string key = Type switch
+            {
+                CodeDiffType.Added   => "DiffUIAdded",
+                CodeDiffType.Removed => "DiffUIRemoved",
+                CodeDiffType.Renamed => "DiffUIRenamed",
+                _                    => "DiffUIModified",
+            };
+
+            return Lang.LocaliseFormat(key, Changelog);
+        }
+
+        public enum CodeDiffType
+        {
+            Added,
+            Modified,
+            Removed,
+            Renamed
         }
     }
 
