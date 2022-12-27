@@ -1712,6 +1712,42 @@ Patch "Infinite Boost Gauge" in "Cheats" by "Hyper"
     );
 }
 
+Code "Infinite Skill Points" in "Cheats" by "Hyper"
+//
+    static bool Initialised = false;
+
+    static long Pointer = 0;
+//
+{
+    if (!Initialised)
+    {
+        fixed (long* pPointer = &Pointer)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    mov rax, {(long)pPointer}
+                    mov [rax], rbx
+                ",
+
+                /* 0x14014425D */
+                ScanSignature
+                (
+                    "\x0F\x85\x6D\x01\x00\x00\x83\x79\x0C\x00",
+                    "xxxxxxxxxx"
+                ),
+
+                HookBehavior.Replace
+            );
+        }
+
+        Initialised = true;
+    }
+
+    if (Pointer != 0)
+        *(short*)((Pointer - 0x70) + 0x84) = 999;
+}
+
 Patch "Infinite Training Simulator Timer" in "Cheats" by "Hyper" does "Allows the timer in Training Simulator to drop below zero and continue uninterrupted."
 {
     WriteProtected<byte>
