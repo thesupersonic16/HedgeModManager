@@ -976,6 +976,29 @@ Patch "Disable Ring Loss" in "Cheats" by "M&M"
     );
 }
 
+Patch "Disable Save/Load Deny" in "UI" by "Hyper" does
+/*
+Disables the permission change that prohibits you from being able to save and load during combat.
+
+This also allows you to save as soon as you have the Save Data menu within the tutorial area.
+
+Known issues;
+- Saving immediately after acquiring Cyloop will create a save file that softlocks upon loading - please progress further before saving.
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x14D10DF81 */
+        ScanSignature
+        (
+            "\x74\x0E\x83\xFE\x01",
+            "xxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
 Patch "Disable Sequence Colliders" in "Cheats" by "Hyper" does "Disables invisible walls that are usually removed by specific events. This will not remove invisible walls surrounding the islands."
 {
     WriteProtected<byte>
