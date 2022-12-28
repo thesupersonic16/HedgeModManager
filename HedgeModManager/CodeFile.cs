@@ -55,13 +55,8 @@ namespace HedgeModManager
             var diff       = new List<CodeDiffResult>();
             var addedCodes = new List<string>();
 
-            void TrimLineBreaks(Code code)
-                => code.Lines = new StringBuilder(code.Lines.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
-
             foreach (var code in Codes)
             {
-                TrimLineBreaks(code);
-
                 // Added
                 if (!old.Codes.Where(x => x.Name == code.Name).Any())
                 {
@@ -72,8 +67,6 @@ namespace HedgeModManager
 
             foreach (var code in old.Codes)
             {
-                TrimLineBreaks(code);
-
                 // Modified
                 if (Codes.Where(x => x.Name == code.Name).SingleOrDefault() is Code modified)
                 {
@@ -253,10 +246,21 @@ namespace HedgeModManager
 
         public bool Enabled { get; set; }
 
+        public StringBuilder Header { get; set; } = new StringBuilder();
         public StringBuilder Lines { get; set; } = new StringBuilder();
 
         protected SyntaxTree mCachedSyntaxTree;
         protected int mCachedHash;
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder(Header.ToString());
+            {
+                sb.AppendLine(Lines.ToString());
+            }
+
+            return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+        }
 
         public static List<Code> ParseFiles(params string[] paths)
         {
@@ -308,6 +312,8 @@ namespace HedgeModManager
                         currentCode = new Code();
                         codes.Add(currentCode);
 
+                        currentCode.Header.AppendLine(line);
+
                         var matches = Regex.Matches(line, "(\"[^\"]*\"|[^\"]+)(\\s+|$)");
                         currentCode.IsPatch = isPatch;
                         var name = matches[1].Value.Trim(' ', '"');
@@ -354,6 +360,8 @@ namespace HedgeModManager
                         bool lineContainsStartDelimiter = false;
                         bool lineContainsEndDelimiter   = false;
 
+                        currentCode.Header.AppendLine(line);
+
                         if (line.StartsWith(startDelimiter))
                         {
                             if (line == startDelimiter)
@@ -398,6 +406,9 @@ namespace HedgeModManager
 
                     currentCode?.Lines.AppendLine(line);
                 }
+
+                // Remove trailing line breaks.
+                currentCode.Lines = new StringBuilder(currentCode.Lines.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
             }
 
             return codes;
