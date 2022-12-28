@@ -18,7 +18,6 @@
     <system:String x:Key="CommonUIIgnore"  >Ignore</system:String>
     <system:String x:Key="CommonUIWarning" >WARNING</system:String>
     <system:String x:Key="CommonUIError"   >ERROR</system:String>
-    <system:String x:Key="CommonUICopyToClipboard">Copy to Clipboard</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Mods</system:String>
@@ -70,6 +69,7 @@
     <system:String x:Key="CodesUIInfo"    >Double-click this code for more information.</system:String>
     <system:String x:Key="CodesUIInfoHint">Hover over a code for more information.</system:String>
     <system:String x:Key="CodesUINoInfo"  >No information available.</system:String>
+    <system:String x:Key="CodesUICopyCode">Copy Code to Clipboard</system:String>
     <system:String x:Key="CodesUIExpand"  >Expand All</system:String>
     <system:String x:Key="CodesUICollapse">Collapse All</system:String>
     <system:String x:Key="CodesUINullCategory">Uncategorised</system:String>
