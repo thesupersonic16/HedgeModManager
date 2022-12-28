@@ -2200,11 +2200,15 @@ namespace HedgeModManager
                     if (codeVM == null)
                         continue;
 
+                    var visibility = codeVM.IsRoot
+                        ? Visibility.Collapsed
+                        : Visibility.Visible;
+
                     if (item is Separator separator && separator?.Tag as string == "Item")
-                        separator.Visibility = codeVM.IsRoot ? Visibility.Collapsed : Visibility.Visible;
+                        separator.Visibility = visibility;
 
                     if (item is MenuItem menuItem && menuItem?.Tag as string == "Item")
-                        menuItem.Visibility = codeVM.IsRoot ? Visibility.Collapsed : Visibility.Visible;
+                        menuItem.Visibility = visibility;
                 }
             }
         }
