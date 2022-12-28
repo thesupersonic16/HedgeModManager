@@ -1560,6 +1560,19 @@ Patch "Hide Challenge Markers" in "Graphics" by "Hyper" does "Hides the markers 
         0xEB
     );
 
+    // Hide map sensor prerequisite marker.
+    WriteProtected<byte>
+    (
+        /* 0x1403BF6B3 */
+        ScanSignature
+        (
+            "\x0F\x85\xE5\x00\x00\x00\xE8",
+            "xxxxxxx"
+        ),
+        
+        0xE9, 0xE6, 0x00, 0x00, 0x00
+    );
+
     // Hide map sensor name.
     WriteProtected<byte>
     (
