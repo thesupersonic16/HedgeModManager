@@ -28,8 +28,13 @@
             <MenuItem x:Name="ContextMenuItemCheckUpdateAll" Header="{DynamicResource ModsUICheckUpdatesAll}" Click="UI_CheckUpdates_AllMods"/>
         </ContextMenu>
         <ContextMenu x:Key="CodesTreeContextMenu">
-            <MenuItem Header="{DynamicResource CodesUIExpand}"   Click="UI_CodesTree_ExpandAll_Click"/>
-            <MenuItem Header="{DynamicResource CodesUICollapse}" Click="UI_CodesTree_CollapseAll_Click"/>
+            <MenuItem Header="{DynamicResource CommonUICopyToClipboard}" Click="UI_CodesView_CopyToClipboard_Click" Tag="Item" Visibility="Collapsed"/>
+            <Separator Style="{DynamicResource SeparatorThemeStyle}" Tag="Item" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUIExpand}"           Click="UI_CodesTree_ExpandAll_Click"/>
+            <MenuItem Header="{DynamicResource CodesUICollapse}"         Click="UI_CodesTree_CollapseAll_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="CodesListContextMenu">
+            <MenuItem Header="{DynamicResource CommonUICopyToClipboard}" Click="UI_CodesView_CopyToClipboard_Click"/>
         </ContextMenu>
     </Window.Resources>
     <Grid>
@@ -182,7 +187,8 @@
 
                                     <TreeView x:Name="CodesTree" BorderThickness="0" Margin="0,2,1,0" PreviewKeyDown="CodesList_OnPreviewKeyDown"
                                               ContextMenu="{DynamicResource CodesTreeContextMenu}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                              Background="{DynamicResource HMM.Window.BackgroundBrush}">
+                                              Background="{DynamicResource HMM.Window.BackgroundBrush}" ContextMenuOpening="CodesTree_ContextMenuOpening"
+                                              PreviewMouseRightButtonDown="CodesTree_PreviewMouseRightButtonDown">
                                         <TreeView.Resources>
                                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
                                                              Color="{DynamicResource HMM.Button.HoverColor}"/>
@@ -217,10 +223,10 @@
                                                                 </ToolTip>
                                                             </Setter.Value>
                                                         </Setter>
-                                                        <EventSetter Event="MouseDoubleClick" Handler="CodesList_MouseDoubleClick"/>
-                                                        <EventSetter Event="MouseEnter"       Handler="CodesView_MouseEnter"/>
-                                                        <EventSetter Event="MouseLeave"       Handler="CodesView_MouseLeave"/>
-                                                        <EventSetter Event="Selected"         Handler="CodesView_ViewItem_Selected"/>
+                                                        <EventSetter Event="MouseDoubleClick" Handler="CodesView_Item_MouseDoubleClick"/>
+                                                        <EventSetter Event="MouseEnter"       Handler="CodesView_Item_MouseEnter"/>
+                                                        <EventSetter Event="MouseLeave"       Handler="CodesView_Item_MouseLeave"/>
+                                                        <EventSetter Event="Selected"         Handler="CodesView_Item_Selected"/>
                                                     </Style>
                                                 </HierarchicalDataTemplate.ItemContainerStyle>
                                                 <Grid>
@@ -274,6 +280,7 @@
                                           PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                                <Setter Property="ContextMenu" Value="{DynamicResource CodesListContextMenu}"/>
                                                 <Setter Property="ToolTip">
                                                     <Setter.Value>
                                                         <ToolTip Content="{DynamicResource CodesUIInfo}" Tag="{Binding Description}">
@@ -292,10 +299,10 @@
                                                         </ToolTip>
                                                     </Setter.Value>
                                                 </Setter>
-                                                <EventSetter Event="MouseDoubleClick" Handler="CodesList_MouseDoubleClick"/>
-                                                <EventSetter Event="MouseEnter"       Handler="CodesView_MouseEnter"/>
-                                                <EventSetter Event="MouseLeave"       Handler="CodesView_MouseLeave"/>
-                                                <EventSetter Event="Selected"         Handler="CodesView_ViewItem_Selected"/>
+                                                <EventSetter Event="MouseDoubleClick" Handler="CodesView_Item_MouseDoubleClick"/>
+                                                <EventSetter Event="MouseEnter"       Handler="CodesView_Item_MouseEnter"/>
+                                                <EventSetter Event="MouseLeave"       Handler="CodesView_Item_MouseLeave"/>
+                                                <EventSetter Event="Selected"         Handler="CodesView_Item_Selected"/>
                                             </Style>
                                         </ListView.ItemContainerStyle>
                                         <ListView.View>

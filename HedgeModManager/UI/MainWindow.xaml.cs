@@ -1990,7 +1990,7 @@ namespace HedgeModManager
             return null;
         }
 
-        private void CodesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void CodesView_Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var code = GetCodeFromView(sender);
 
@@ -2098,12 +2098,12 @@ namespace HedgeModManager
             );
         }
 
-        private void CodesView_MouseEnter(object sender, MouseEventArgs e)
+        private void CodesView_Item_MouseEnter(object sender, MouseEventArgs e)
         {
             UpdateCodeDescription(GetCodeFromView(sender));
         }
 
-        private void CodesView_MouseLeave(object sender, MouseEventArgs e)
+        private void CodesView_Item_MouseLeave(object sender, MouseEventArgs e)
         {
             if (IsCodesTreeView)
             {
@@ -2125,7 +2125,7 @@ namespace HedgeModManager
             UpdateCodeDescription(null);
         }
 
-        private void CodesView_ViewItem_Selected(object sender, RoutedEventArgs e)
+        private void CodesView_Item_Selected(object sender, RoutedEventArgs e)
         {
             UpdateCodeDescription(GetCodeFromView(sender));
         }
@@ -2187,6 +2187,52 @@ namespace HedgeModManager
         private void UI_CodesTree_CollapseAll_Click(object sender, RoutedEventArgs e)
         {
             SetCodesTreeExpandedState(false);
+        }
+
+        private void CodesTree_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            if (CodesTree.SelectedItem != null)
+            {
+                foreach (var item in CodesTree.ContextMenu.Items)
+                {
+                    var codeVM = CodesTree.SelectedItem as CodeHierarchyViewModel;
+
+                    if (codeVM == null)
+                        continue;
+
+                    if (item is Separator separator && separator?.Tag as string == "Item")
+                        separator.Visibility = codeVM.IsRoot ? Visibility.Collapsed : Visibility.Visible;
+
+                    if (item is MenuItem menuItem && menuItem?.Tag as string == "Item")
+                        menuItem.Visibility = codeVM.IsRoot ? Visibility.Collapsed : Visibility.Visible;
+                }
+            }
+        }
+
+        private void CodesTree_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+
+            if (treeViewItem != null)
+            {
+                // Select the hovered item upon right-clicking.
+                treeViewItem.Focus();
+
+                e.Handled = true;
+            }
+
+            static TreeViewItem VisualUpwardSearch(DependencyObject source)
+            {
+                while (source != null && source is not TreeViewItem)
+                    source = VisualTreeHelper.GetParent(source);
+
+                return source as TreeViewItem;
+            }
+        }
+
+        private void UI_CodesView_CopyToClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(GetCodeFromView(IsCodesTreeView ? CodesTree : CodesList)?.ToString());
         }
     }
 }

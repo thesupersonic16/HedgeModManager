@@ -18,6 +18,7 @@
     <system:String x:Key="CommonUIIgnore"  >Ignore</system:String>
     <system:String x:Key="CommonUIWarning" >WARNING</system:String>
     <system:String x:Key="CommonUIError"   >ERROR</system:String>
+    <system:String x:Key="CommonUICopyToClipboard">Copy to Clipboard</system:String>
 
     <!-- Main UI Strings -->
     <system:String x:Key="MainUIMods"          >Mods</system:String>
