@@ -181,7 +181,8 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TreeView x:Name="CodesTree" BorderThickness="0" Margin="0,2,1,0" PreviewKeyDown="CodesList_OnPreviewKeyDown"
-                                              ContextMenu="{DynamicResource CodesTreeContextMenu}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                              ContextMenu="{DynamicResource CodesTreeContextMenu}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                              Background="{DynamicResource HMM.Window.BackgroundBrush}">
                                         <TreeView.Resources>
                                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
                                                              Color="{DynamicResource HMM.Button.HoverColor}"/>

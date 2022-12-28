@@ -976,6 +976,29 @@ Patch "Disable Ring Loss" in "Cheats" by "M&M"
     );
 }
 
+Patch "Disable Save/Load Deny" in "UI" by "Hyper" does
+/*
+Disables the permission change that prohibits you from being able to save and load during combat.
+
+This also allows you to save as soon as you have the Save Data menu within the tutorial area.
+
+Known issues;
+- Saving immediately after acquiring Cyloop will create a save file that softlocks upon loading - please progress further before saving.
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x14D10DF81 */
+        ScanSignature
+        (
+            "\x74\x0E\x83\xFE\x01",
+            "xxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
 Patch "Disable Sequence Colliders" in "Cheats" by "Hyper" does "Disables invisible walls that are usually removed by specific events. This will not remove invisible walls surrounding the islands."
 {
     WriteProtected<byte>
@@ -1712,6 +1735,42 @@ Patch "Infinite Boost Gauge" in "Cheats" by "Hyper"
     );
 }
 
+Code "Infinite Skill Points" in "Cheats" by "Hyper"
+//
+    static bool Initialised = false;
+
+    static long Pointer = 0;
+//
+{
+    if (!Initialised)
+    {
+        fixed (long* pPointer = &Pointer)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    mov rax, {(long)pPointer}
+                    mov [rax], rbx
+                ",
+
+                /* 0x14014425D */
+                ScanSignature
+                (
+                    "\x0F\x85\x6D\x01\x00\x00\x83\x79\x0C\x00",
+                    "xxxxxxxxxx"
+                ),
+
+                HookBehavior.Replace
+            );
+        }
+
+        Initialised = true;
+    }
+
+    if (Pointer != 0)
+        *(short*)((Pointer - 0x70) + 0x84) = 999;
+}
+
 Patch "Infinite Training Simulator Timer" in "Cheats" by "Hyper" does "Allows the timer in Training Simulator to drop below zero and continue uninterrupted."
 {
     WriteProtected<byte>
@@ -1741,6 +1800,35 @@ Patch "Infinite Quick Cyloop Gauge" in "Cheats" by "NM"
         (
             "\xF3\x0F\x11\x91\xB8\x00\x00\x00\xF3\x0F\x10\x81\xB4\x00\x00\x00\xF3\x0F\x5C\xC2\x0F\x54\x05\xDC\xA2\x64\xF6\x0F\x2F\x05\xCD\xA2\x64\xF6\x0F\x96\xD0\xC3",
             "xxxx????xxxx????xxxxxxx????xxx????xxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Fix Upreel Grip Position" in "Fixes" by "ĐeäTh" does "Adjusts Sonic's grip position on the Upreel object's handle so that it lines up with the actual object."
+{
+    IntPtr gripOffsetPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(16);
+    *((float*)gripOffsetPtr + 0) = 0.0f;
+    *((float*)gripOffsetPtr + 1) = -1.025f;
+    *((float*)gripOffsetPtr + 2) = 0.0f;
+    *((float*)gripOffsetPtr + 3) = 0.0f;
+
+    WriteAsmHook
+    (
+        $@"
+            mov rax, {(long)gripOffsetPtr}
+            movups xmm15, [rax]
+            mulps xmm0, xmm15
+            lea rdx, [rbp - 0x39]
+            lea rcx, [rbp - 0x69]
+        ",
+
+        /* v1.10: 0x1498C86A7 */
+        ScanSignature
+        (
+            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xC7\x48\x8D\x4D\x97\x0F\x29\x45\xD7\xE8\xCC\xCC\xCC\xCC\x0F\x28\x45\xB7\x0F\x58\x00\x0F\x11\x46\x30\x0F\x28\x45\xC7\x0F\x11\x46\x40\xE9\xAF\x00\x00\x00\x0F\xB6\x81\xC8\x02\x00\x00\xA8\x01\x0F\x84\xA0\x00\x00\x00\x24\xFE\x31\xDB",
+            "xxx????xxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         ),
 
         HookBehavior.Replace

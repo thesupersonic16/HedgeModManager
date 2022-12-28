@@ -55,8 +55,13 @@ namespace HedgeModManager
             var diff       = new List<CodeDiffResult>();
             var addedCodes = new List<string>();
 
+            void TrimLineBreaks(Code code)
+                => code.Lines = new StringBuilder(code.Lines.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
+
             foreach (var code in Codes)
             {
+                TrimLineBreaks(code);
+
                 // Added
                 if (!old.Codes.Where(x => x.Name == code.Name).Any())
                 {
@@ -67,6 +72,8 @@ namespace HedgeModManager
 
             foreach (var code in old.Codes)
             {
+                TrimLineBreaks(code);
+
                 // Modified
                 if (Codes.Where(x => x.Name == code.Name).SingleOrDefault() is Code modified)
                 {
