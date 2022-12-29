@@ -408,7 +408,8 @@ namespace HedgeModManager
                 }
 
                 // Remove trailing line breaks.
-                currentCode.Lines = new StringBuilder(currentCode.Lines.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
+                if (currentCode != null)
+                    currentCode.Lines = new StringBuilder(currentCode.Lines.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
             }
 
             return codes;
