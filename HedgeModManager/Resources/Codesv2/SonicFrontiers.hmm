@@ -31,6 +31,35 @@ Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M &
     WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
 }
 
+Patch "Always Cloudy on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Cloudy on supported islands.
+
+Supported islands;
+- Kronos
+- Ares
+- Chaos
+- Rhea
+- Ouranos
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB, 0x4E);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+}
+
 Patch "Always Day on Islands" in "Time" by "NM"
 {
     /*
@@ -112,6 +141,34 @@ Patch "Always Have Power Boost" in "Cheats" by "SuperSonic16"
     );
 }
 
+Patch "Always Rainy on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Rainy on supported islands.
+
+Supported islands;
+- Kronos
+- Chaos
+- Rhea
+- Ouranos
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB, 0x38);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+}
+
 Patch "Always Run in the Background" in "System" by "NM" does "Stops the game from pausing when the window is unfocused."
 {
     WriteProtected<byte>
@@ -125,6 +182,60 @@ Patch "Always Run in the Background" in "System" by "NM" does "Stops the game fr
 
         0xEB
     );
+}
+
+Patch "Always Sandstorm on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Sandstorm on supported islands.
+
+Supported islands;
+- Ares
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB, 0x22);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+}
+
+Patch "Always Sunny on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Sunny on supported islands.
+
+Supported islands;
+- Kronos
+- Ares
+- Chaos
+- Rhea
+- Ouranos
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
 }
 
 Patch "Always Trickable Dash Rings" in "Cheats" by "Hyper"
@@ -672,6 +783,35 @@ Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the
         ),
 
         0xE9, 0x5C, 0x01, 0x00, 0x00
+    );
+}
+
+Patch "Disable Forced Weather for Bosses" in "Weather" by "Hyper" does "Disables the weather being forced to Sunny for Giganto and Supreme."
+{
+    // Giganto
+    WriteProtected<byte>
+    (
+        /* 0x14024E456 */
+        ScanSignature
+        (
+            "\x74\x0A\x33\xD2\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x18\x48\x8B\x48\x28\x48\x8B\x59\x48\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8",
+            "xxxxxxxx????xxxxxxxxxxxxx????xxxxxxx????xxx"
+        ),
+        
+        0xEB
+    );
+
+    // Supreme
+    WriteProtected<byte>
+    (
+        /* 0x1402AFE04 */
+        ScanSignature
+        (
+            "\x74\x0A\x33\xD2\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x18\x48\x8B\x48\x28\x48\x8B\x59\x48\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x45\x33\xFF",
+            "xxxxxxxx????xxxxxxxxxxxxx????xxxxxxx????xxx"
+        ),
+        
+        0xEB
     );
 }
 
