@@ -141,6 +141,111 @@ Patch "Always Have Power Boost" in "Cheats" by "SuperSonic16"
     );
 }
 
+Patch "Always Play 1st Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 1; nop")
+    );
+}
+
+Patch "Always Play 2nd Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 2; nop")
+    );
+}
+
+Patch "Always Play 3rd Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 3; nop")
+    );
+}
+
+Patch "Always Play 4th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 4; nop")
+    );
+}
+
+Patch "Always Play 5th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 5; nop")
+    );
+}
+
+Patch "Always Play 6th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 6; nop")
+    );
+}
+
+Patch "Always Play 7th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 7; nop")
+    );
+}
+
 Patch "Always Rainy on Islands" in "Weather" by "Hyper" does
 /*
 Forces the weather to Rainy on supported islands.
@@ -1502,6 +1607,35 @@ Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a b
     );
 }
 
+Patch "Fix Upreel Grip Position" in "Fixes" by "ĐeäTh" does "Adjusts Sonic's grip position on the Upreel object's handle so that it lines up with the actual object."
+{
+    IntPtr gripOffsetPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(16);
+    *((float*)gripOffsetPtr + 0) = 0.0f;
+    *((float*)gripOffsetPtr + 1) = -1.025f;
+    *((float*)gripOffsetPtr + 2) = 0.0f;
+    *((float*)gripOffsetPtr + 3) = 0.0f;
+
+    WriteAsmHook
+    (
+        $@"
+            mov rax, {(long)gripOffsetPtr}
+            movups xmm15, [rax]
+            mulps xmm0, xmm15
+            lea rdx, [rbp - 0x39]
+            lea rcx, [rbp - 0x69]
+        ",
+
+        /* v1.10: 0x1498C86A7 */
+        ScanSignature
+        (
+            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xC7\x48\x8D\x4D\x97\x0F\x29\x45\xD7\xE8\xCC\xCC\xCC\xCC\x0F\x28\x45\xB7\x0F\x58\x00\x0F\x11\x46\x30\x0F\x28\x45\xC7\x0F\x11\x46\x40\xE9\xAF\x00\x00\x00\x0F\xB6\x81\xC8\x02\x00\x00\xA8\x01\x0F\x84\xA0\x00\x00\x00\x24\xFE\x31\xDB",
+            "xxx????xxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Force 4K Video Playback" in "Graphics" by "Hyper" does "Forces the game to use the pre-rendered cutscenes encoded at 4K, regardless of game resolution."
 {
     WriteNop
@@ -1959,31 +2093,40 @@ Patch "Infinite Quick Cyloop Gauge" in "Cheats" by "NM"
     );
 }
 
-Patch "Fix Upreel Grip Position" in "Fixes" by "ĐeäTh" does "Adjusts Sonic's grip position on the Upreel object's handle so that it lines up with the actual object."
+Patch "Play Random Mvt. Soundtrack on Islands" in "Audio" by "Hyper"
+//
+    static byte[] Format = System.Text.Encoding.UTF8.GetBytes("%s_%d");
+//
 {
-    IntPtr gripOffsetPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(16);
-    *((float*)gripOffsetPtr + 0) = 0.0f;
-    *((float*)gripOffsetPtr + 1) = -1.025f;
-    *((float*)gripOffsetPtr + 2) = 0.0f;
-    *((float*)gripOffsetPtr + 3) = 0.0f;
-
-    WriteAsmHook
-    (
-        $@"
-            mov rax, {(long)gripOffsetPtr}
-            movups xmm15, [rax]
-            mulps xmm0, xmm15
-            lea rdx, [rbp - 0x39]
-            lea rcx, [rbp - 0x69]
-        ",
-
-        /* v1.10: 0x1498C86A7 */
-        ScanSignature
+    fixed (byte* pFormat = Format)
+    {
+        WriteAsmHook
         (
-            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xC7\x48\x8D\x4D\x97\x0F\x29\x45\xD7\xE8\xCC\xCC\xCC\xCC\x0F\x28\x45\xB7\x0F\x58\x00\x0F\x11\x46\x30\x0F\x28\x45\xC7\x0F\x11\x46\x40\xE9\xAF\x00\x00\x00\x0F\xB6\x81\xC8\x02\x00\x00\xA8\x01\x0F\x84\xA0\x00\x00\x00\x24\xFE\x31\xDB",
-            "xxx????xxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        ),
+            @$"
+            rand:
+                rdrand rax
+                and    rax, 7
+                inc    rax
 
-        HookBehavior.Replace
-    );
+                ; Generate new random number if the result is greater than 7.
+                cmp rax, 7
+                jg  rand
+
+                mov r9d, eax
+
+                ; Load format string, since we overwrote the original instruction with the hook jump.
+                mov rax, {(long)pFormat}
+                lea rdx, [rax]
+            ",
+
+            /* 0x14C1A39AF */
+            ScanSignature
+            (
+                "\x45\x8B\x8E\xA4\x00\x00\x00",
+                "xxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
 }
