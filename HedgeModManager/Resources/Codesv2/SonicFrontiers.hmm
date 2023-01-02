@@ -1205,6 +1205,48 @@ Patch "Disable In-Game Letterboxing" in "Graphics" by "Hyper" does "Disables let
     );
 }
 
+Patch "Disable Menu Restrictions" in "UI" by "Hyper" does "Allows you to use the complete pause menu and map screen from anywhere, even when in combat."
+{
+    // Disable Lua callback function.
+    WriteProtected<byte>
+    (
+        /* 0x14BFF3E05 */
+        ScanSignature
+        (
+            "\x0F\x84\xDE\x00\x00\x00\x44\x0F\xBE\xC0",
+            "xxxxxxxxxx"
+        ),
+        
+        0xE9, 0xDF, 0x00, 0x00, 0x00
+    );
+
+    // Disable map screen restriction during combat.
+    WriteProtected<byte>
+    (
+        /* 0x14085FB8D */
+        ScanSignature
+        (
+            "\x0F\x94\x44\x24\x48\x89\x5C\x24\x44",
+            "xxxxxxxxx"
+        ),
+        
+        Assemble("mov byte ptr [rsp + 0x58 + 0xFFFFFFFFFFFFFFF0], 1")
+    );
+
+    /* 0x14088B496 */
+    long cyloopTutorialAddr = ScanSignature
+    (
+        "\x0F\x44\xD9\xBA\x06\x23\x00\x00",
+        "xxxxxxxx"
+    );
+
+    if (cyloopTutorialAddr != 0)
+    {
+        // Disable "Unlock Cyloop" tutorial to prevent softlock.
+        WriteNop(cyloopTutorialAddr, 3);
+    }
+}
+
 Patch "Disable Power Boost" in "Gameplay" by "Hyper"
 {
     WriteProtected<byte>
@@ -1255,9 +1297,6 @@ Patch "Disable Save/Load Deny" in "UI" by "Hyper" does
 Disables the permission change that prohibits you from being able to save and load during combat.
 
 This also allows you to save as soon as you have the Save Data menu within the tutorial area.
-
-Known issues;
-- Saving immediately after acquiring Cyloop will create a save file that softlocks upon loading - please progress further before saving.
 */
 {
     WriteProtected<byte>
@@ -1271,6 +1310,19 @@ Known issues;
         
         0xEB
     );
+
+    /* 0x14088B496 */
+    long cyloopTutorialAddr = ScanSignature
+    (
+        "\x0F\x44\xD9\xBA\x06\x23\x00\x00",
+        "xxxxxxxx"
+    );
+
+    if (cyloopTutorialAddr != 0)
+    {
+        // Disable "Unlock Cyloop" tutorial to prevent softlock.
+        WriteNop(cyloopTutorialAddr, 3);
+    }
 }
 
 Patch "Disable Sequence Colliders" in "Cheats" by "Hyper" does "Disables invisible walls that are usually removed by specific events. This will not remove invisible walls surrounding the islands."
