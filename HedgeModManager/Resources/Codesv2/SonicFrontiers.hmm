@@ -1,6 +1,15 @@
 !!VERSION 1.2
 
-Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M & Hyper" does "Dynamically adjusts the aspect ratio to match the game resolution (recommended for ultrawide)."
+Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M & Hyper" does
+/*
+Dynamically adjusts the aspect ratio to match the game resolution (recommended for non-16:9 resolutions).
+
+Known issues;
+- Certain HUD effects are rendered at the correct aspect ratio, but will misalign due to the main HUD still being 16:9.
+- Certain HUD elements are still rendered at 16:9 and will misalign or stretch.
+- Pre-rendered cutscenes will stretch to your aspect ratio.
+- Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
+*/
 //
     #load "System.Drawing.dll"
 
@@ -949,7 +958,14 @@ Patch "Disable Forced Weather for Bosses" in "Weather" by "Hyper" does "Disables
     );
 }
 
-Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M"
+Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M" does
+/*
+Disables the framerate limiter, allowing the game to run above its targeted 30/60FPS limit.
+
+Known issues;
+- The spawn point in Cyber Space 4-3 will throw you into an invisible wall.
+- The final QTE for Wyvern takes a long time to show up.
+*/
 {
     /*
         At the moment, this is the best method I have found for uncapping FPS.
@@ -1212,7 +1228,7 @@ Removes restrictions from accessing certain menu screens and options.
 Notes;
 - This grants you the full pause menu, including the Skills and Save Data menus, within reasonable areas (e.g. the tutorial).
 - This grants you permission to save and load anywhere, including during combat.
-- This will allow you to open the map screen whilst in combat.
+- This will allow you to open the map screen during combat.
 */
 {
     // Disable save/load deny.
