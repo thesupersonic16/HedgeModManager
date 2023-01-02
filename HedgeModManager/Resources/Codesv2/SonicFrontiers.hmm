@@ -111,6 +111,35 @@ Patch "Always Day on Islands" in "Time" by "NM"
     );
 }
 
+Patch "Always Have All Abilities" in "Gameplay" by "Hyper" does
+/*
+Always grants Sonic his abilities (not skills), even when scripted not to have them.
+
+Abilities;
+- Boost
+- Combos
+- Camera Control
+- Cyloop
+- Homing Attack
+- Jump
+- Lockon
+- Parry
+- Wall Climbing
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x14BF81B71 */
+        ScanSignature
+        (
+            "\x40\x0F\x95\xD5\x84\xD2",
+            "xxxxxx"
+        ),
+        
+        Assemble("mov bpl, 1; nop")
+    );
+}
+
 Patch "Always Have Phantom Rush" in "Cheats" by "NM"
 {
     WriteNop
