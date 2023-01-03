@@ -1404,7 +1404,7 @@ Patch "Disable Traversal Objects in Chests" in "Gameplay" by "Hyper" does
 /*
 Disables the hidden traversal objects in chests that require cyloop to reveal, making them always accessible.
 
-This only affects the following objects;
+Affected objects;
 - Dash Panels
 - Jump Boards
 - Springs
