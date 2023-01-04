@@ -232,7 +232,13 @@ namespace HedgeModManager
             if (modPair.Key == null)
                 return null;
 
-            return Mods.FirstOrDefault(t => Path.GetDirectoryName(modPair.Value).Equals(t.RootDirectory, StringComparison.OrdinalIgnoreCase));
+            string modPath = Path.GetDirectoryName(modPair.Value);
+
+            // If the path doesn't exist, check RootDirectory if the game was moved elsewhere.
+            if (!Directory.Exists(modPath))
+                modPath = Path.Combine(RootDirectory, Path.GetFileName(modPath));
+
+            return Mods.FirstOrDefault(t => modPath.Equals(t.RootDirectory, StringComparison.OrdinalIgnoreCase));
         }
 
         public void DeleteMod(ModInfo mod)
