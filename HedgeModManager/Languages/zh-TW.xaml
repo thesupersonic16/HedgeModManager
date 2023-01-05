@@ -69,11 +69,19 @@
     <system:String x:Key="CodesUIInfo"    >雙擊代碼去題示更多資料</system:String>
     <system:String x:Key="CodesUIInfoHint">把「鼠標」懸停在代碼上來顯示更多資料</system:String>
     <system:String x:Key="CodesUINoInfo"  >無資料</system:String>
+    <system:String x:Key="CodesUICopyCode">複製代碼到剪貼板</system:String>
     <system:String x:Key="CodesUIExpand"  >全部擴張</system:String>
     <system:String x:Key="CodesUICollapse">全部折疊</system:String>
     <system:String x:Key="CodesUINullCategory">未分類</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">已載入的代碼與代碼加載器不相容。&#x0a; 請更新代碼和代碼加載器。&#x0a; 警告：此動作會覆蓋所有自定義代碼。 </system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">正在下載代碼…</system:String>
+
+    <!-- Diff UI Strings -->
+    <system:String x:Key="DiffUITitle"   >更新日誌</system:String>
+    <system:String x:Key="DiffUIAdded"   >新增： {0}</system:String>
+    <system:String x:Key="DiffUIModified">修改： {0}</system:String>
+    <system:String x:Key="DiffUIRemoved" >刪除： {0}</system:String>
+    <system:String x:Key="DiffUIRenamed" >重新命名： {0}</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
