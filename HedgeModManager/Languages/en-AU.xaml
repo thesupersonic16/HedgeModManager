@@ -69,8 +69,19 @@
     <system:String x:Key="CodesUIInfo"    >Double-click this code for more information.</system:String>
     <system:String x:Key="CodesUIInfoHint">Hover over a code for more information.</system:String>
     <system:String x:Key="CodesUINoInfo"  >No information available.</system:String>
+    <system:String x:Key="CodesUICopyCode">Copy Code to Clipboard</system:String>
+    <system:String x:Key="CodesUIExpand"  >Expand All</system:String>
+    <system:String x:Key="CodesUICollapse">Collapse All</system:String>
+    <system:String x:Key="CodesUINullCategory">Uncategorised</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">The installed codes are incompatible with the code loader.&#x0a;Please update the codes and the code loader.&#x0a;WARNING: This will erase any custom codes.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">Fetching codes...</system:String>
+
+    <!-- Diff UI Strings -->
+    <system:String x:Key="DiffUITitle"   >Changelog</system:String>
+    <system:String x:Key="DiffUIAdded"   >Added: {0}</system:String>
+    <system:String x:Key="DiffUIModified">Modified: {0}</system:String>
+    <system:String x:Key="DiffUIRemoved" >Removed: {0}</system:String>
+    <system:String x:Key="DiffUIRenamed" >Renamed: {0}</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
@@ -88,16 +99,17 @@
     <system:String x:Key="SettingsUILabelProfile"   >Profile:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Mods Directory:</system:String>
     <!--   Hedge Mod Manager -->
-    <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"  >Check for mod loader updates</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"  >Check for code loader updates</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates">Check for mod updates</system:String>
-    <system:String x:Key="SettingsUIKeepHMMOpen"    >Keep Hedge Mod Manager open after starting a game</system:String>
-    <system:String x:Key="SettingsUICheckHMMUpdate" >Check for Updates</system:String>
-    <system:String x:Key="SettingsUIAboutHMM"       >About Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUILanguage"       >Language:</system:String>
-    <system:String x:Key="SettingsUITheme"          >Theme:</system:String>
-    <system:String x:Key="SettingsUIReleaseChannel" >Update Channel:</system:String>
+    <system:String x:Key="SettingsUIHMMHeader"       >Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"   >Check for mod loader updates</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"   >Check for code loader updates</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates" >Check for mod updates</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"     >Keep Hedge Mod Manager open after starting a game</system:String>
+    <system:String x:Key="SettingsUICodesUseTreeView">Use tree view for codes list</system:String>
+    <system:String x:Key="SettingsUICheckHMMUpdate"  >Check for Updates</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"        >About Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUILanguage"        >Language:</system:String>
+    <system:String x:Key="SettingsUITheme"           >Theme:</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel"  >Update Channel:</system:String>
     <system:String x:Key="SettingsUIChangingChannelTitle" >Changing Release Channels</system:String>
     <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">You are about to change to the Release channel.&#x0a;&#x0a;Are you sure you want to continue? Hedge Mod Manager will need to restart to change channels.</system:String>
     <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">You are about to change to the Development channel. This channel may contain untested features and bugs.&#x0a;&#x0a;Are you sure you want to continue? Hedge Mod Manager will need to restart to change channels.</system:String>

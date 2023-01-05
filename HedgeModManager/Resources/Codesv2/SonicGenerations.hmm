@@ -645,7 +645,7 @@ Patch "Disable Spin Dash on Dash Panels" in "Gameplay" by "Hyper" does "Disables
 WriteProtected<byte>(0xE0AC1C, 0xE9, 0x27, 0x01, 0x00, 0x00);
 WriteProtected<byte>(0xE0C734, 0xE9, 0x27, 0x01, 0x00, 0x00);
 
-Patch "Disable Boost Gauge" in "Gameplay" by "Hyper"
+Patch "Disable Boost Gauge" in "UI" by "Hyper"
 WriteNop(0x109B8DD, 2);
 
 Patch "Disable Boost Button Prompt" in "UI" by "Hyper"

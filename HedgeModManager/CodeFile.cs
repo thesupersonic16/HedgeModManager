@@ -24,6 +24,13 @@ namespace HedgeModManager
         public Dictionary<string, string> Tags { get; set; } = new Dictionary<string, string>();
         public List<Code> Codes { get; set; } = new List<Code>();
 
+        public CodeFile() { }
+
+        public CodeFile(string codeFilePath)
+        {
+            ParseFile(codeFilePath);
+        }
+
         public Version FileVersion
         {
             get
@@ -41,6 +48,63 @@ namespace HedgeModManager
                 mFileVersion = value;
                 Tags[VersionTag] = mFileVersion.ToString();
             }
+        }
+
+        public List<CodeDiffResult> Diff(CodeFile old)
+        {
+            var diff       = new List<CodeDiffResult>();
+            var addedCodes = new List<string>();
+
+            foreach (var code in Codes)
+            {
+                // Added
+                if (!old.Codes.Where(x => x.Name == code.Name).Any())
+                {
+                    addedCodes.Add(code.Name);
+                    continue;
+                }
+            }
+
+            foreach (var code in old.Codes)
+            {
+                // Modified
+                if (Codes.Where(x => x.Name == code.Name).SingleOrDefault() is Code modified)
+                {
+                    if (code.Lines.ToString() != modified.Lines.ToString())
+                    {
+                        diff.Add(new CodeDiffResult(code.Name, CodeDiffResult.CodeDiffType.Modified));
+                        continue;
+                    }
+                }
+
+                // Renamed
+                if (Codes.Where(x => x.Lines.ToString() == code.Lines.ToString()).SingleOrDefault() is Code renamed)
+                {
+                    if (code.Name != renamed.Name)
+                    {
+                        diff.Add(new CodeDiffResult($"{code.Name} -> {renamed.Name}", CodeDiffResult.CodeDiffType.Renamed, code.Name, renamed.Name));
+
+                        /* Remove this code from the add list
+                           so we don't display it twice. */
+                        if (addedCodes.Contains(renamed.Name))
+                            addedCodes.Remove(renamed.Name);
+
+                        continue;
+                    }
+                }
+
+                // Removed
+                if (!Codes.Where(x => x.Name == code.Name).Any())
+                {
+                    diff.Add(new CodeDiffResult(code.Name, CodeDiffResult.CodeDiffType.Removed));
+                    continue;
+                }
+            }
+
+            foreach (string code in addedCodes)
+                diff.Add(new CodeDiffResult(code, CodeDiffResult.CodeDiffType.Added));
+
+            return diff.OrderBy(x => x.Type).ToList();
         }
 
         public void ParseFile(string path)
@@ -110,6 +174,64 @@ namespace HedgeModManager
         }
     }
 
+    public class CodeDiffResult
+    {
+        /// <summary>
+        /// The details about this change.
+        /// </summary>
+        public string Changelog { get; set; }
+
+        /// <summary>
+        /// The change made to this code.
+        /// </summary>
+        public CodeDiffType Type { get; set; }
+
+        /// <summary>
+        /// The original name of a code before renaming.
+        /// </summary>
+        public string OriginalName { get; set; }
+
+        /// <summary>
+        /// The new name of a code after renaming.
+        /// </summary>
+        public string NewName { get; set; }
+
+        public CodeDiffResult(string changelog, CodeDiffType type)
+        {
+            Changelog = changelog;
+            Type      = type;
+        }
+
+        public CodeDiffResult(string changelog, CodeDiffType type, string originalName, string newName)
+        {
+            Changelog    = changelog;
+            Type         = type;
+            OriginalName = originalName;
+            NewName      = newName;
+        }
+
+        public override string ToString()
+        {
+            string key = Type switch
+            {
+                CodeDiffType.Added   => "DiffUIAdded",
+                CodeDiffType.Removed => "DiffUIRemoved",
+                CodeDiffType.Renamed => "DiffUIRenamed",
+                _                    => "DiffUIModified",
+            };
+
+            return Lang.LocaliseFormat(key, Changelog);
+        }
+
+        public enum CodeDiffType
+        {
+            Added,
+            Modified,
+            Removed,
+            Renamed
+        }
+    }
+
     public class Code : INotifyPropertyChanged
     {
         public string Name { get; set; }
@@ -124,10 +246,21 @@ namespace HedgeModManager
 
         public bool Enabled { get; set; }
 
+        public StringBuilder Header { get; set; } = new StringBuilder();
         public StringBuilder Lines { get; set; } = new StringBuilder();
 
         protected SyntaxTree mCachedSyntaxTree;
         protected int mCachedHash;
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder(Header.ToString());
+            {
+                sb.AppendLine(Lines.ToString());
+            }
+
+            return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+        }
 
         public static List<Code> ParseFiles(params string[] paths)
         {
@@ -179,6 +312,8 @@ namespace HedgeModManager
                         currentCode = new Code();
                         codes.Add(currentCode);
 
+                        currentCode.Header.AppendLine(line);
+
                         var matches = Regex.Matches(line, "(\"[^\"]*\"|[^\"]+)(\\s+|$)");
                         currentCode.IsPatch = isPatch;
                         var name = matches[1].Value.Trim(' ', '"');
@@ -225,6 +360,8 @@ namespace HedgeModManager
                         bool lineContainsStartDelimiter = false;
                         bool lineContainsEndDelimiter   = false;
 
+                        currentCode.Header.AppendLine(line);
+
                         if (line.StartsWith(startDelimiter))
                         {
                             if (line == startDelimiter)
@@ -269,6 +406,10 @@ namespace HedgeModManager
 
                     currentCode?.Lines.AppendLine(line);
                 }
+
+                // Remove trailing line breaks.
+                if (currentCode != null)
+                    currentCode.Lines = new StringBuilder(currentCode.Lines.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
             }
 
             return codes;
