@@ -73,8 +73,17 @@
     <system:String x:Key="CodesUIInfo"    >双击本代码以获取更多信息。</system:String>
     <system:String x:Key="CodesUIInfoHint">光标悬浮在代码上以获取更多信息。</system:String>
     <system:String x:Key="CodesUINoInfo"  >暂无任何信息。</system:String>
+    <system:String x:Key="CodesUICopyCode">复制到剪切板</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">安装的代码与代码加载器不相容。&#x0a;请更新代码和代码加载器。&#x0a;警告: 这将删除所有自定义代码。</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">正在下载代码…</system:String>
+  
+    <!-- Diff UI Strings -->
+    <system:String x:Key="DiffUITitle"    >更新日志</system:String>
+    <system:String x:Key="DiffUIAdded"    >新增: {0}</system:String>
+    <system:String x:Key="DiffUIRemoved"  >修改: {0}</system:String>
+    <system:String x:Key="DiffUIRenamed"  >移除: {0}</system:String>
+    <system:String x:Key="DiffUIModified" >重命名: {0}</system:String>
+    
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
