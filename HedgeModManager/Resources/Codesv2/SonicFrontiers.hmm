@@ -1221,6 +1221,95 @@ Patch "Disable In-Game Letterboxing" in "Graphics" by "Hyper" does "Disables let
     );
 }
 
+Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
+//
+    static bool IsWorldIsland = false;
+//
+{
+    fixed (bool* pIsWorldIsland = &IsWorldIsland)
+    {
+        /* This hook checks if we're on an island
+            and stores that in a boolean. */
+        WriteAsmHook
+        (
+            $@"
+                push rdx
+
+                ; Restore original code.
+                mov qword ptr [rsp + 0x38 + 0x08], rdi
+                lea rbx, qword ptr [rsi + 0x50]
+                mov qword ptr [rsp + 0x28 + 0x10], r14
+
+                ; Check field for stage type.
+                test byte ptr [rcx + 0xB8], 0x2E
+                setz al
+                
+                ; Store result in our local boolean.
+                mov rdx, {(long)pIsWorldIsland}
+                mov byte ptr [rdx], al
+
+                pop rdx
+            ",
+
+            /* 0x1491B68E9 */
+            ScanSignature
+            (
+                "\x48\x89\x7C\x24\x30\x48\x8D\x5E\x50\x4C\x89\x74\x24\x38\x4C\x89\x7C\x24\x40\xE8\xCC\xCC\xCC\xCC\xBF\x03\x00\x00\x00\x84\xC0\x74\x62",
+                "xxxxxxxxxxxxxxxxxxxx????xxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        /* 0x1491B7A1A */
+        long callerFuncAddr = ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x80\x7D\x35\x00\x74\x67\xE8\xCC\xCC\xCC\xCC\x48\x89\xC2",
+            "x????xxxxxxx????xxx"
+        );
+
+        /* 0x140D1EAA0 */
+        long sendMsgFunc = callerFuncAddr + Read<int>(callerFuncAddr + 0x01) + 0x05;
+
+        /* This hook checks if we're on an island and calls
+            the message sender to enter Sonic into the jump
+            board path if we're in Cyber Space. */
+        WriteAsmHook
+        (
+            $@"
+                ; Check if we're on an island.
+                mov rbx, {(long)pIsWorldIsland}
+                cmp byte ptr [rbx], 0
+
+                ; Non-zero value means we're on an island - jump to end.
+                jnz ret
+
+                ; Set up message sender function call.
+                lea r8, qword ptr [rbp + 0x57 + 0xFFFFFFFFFFFFFF90]
+                lea rdx, qword ptr [rbp + 0x57 + 0x10]
+                mov ecx, [rax]
+                mov dword ptr [rbp + 0x57 + 0x10], ecx
+                mov rcx, rsi
+
+                ; We're not on an island - call message sender.
+                mov  r9, {(long)sendMsgFunc}
+                call r9
+
+            ret:
+            ",
+
+            /* 0x1491B7A0E */
+            ScanSignature
+            (
+                "\x48\x8D\x55\x67\x8B\x08\x89\x4D\x67\x48\x89\xF1",
+                "xxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
 Patch "Disable Menu Restrictions" in "UI" by "Hyper" does
 /*
 Removes restrictions from accessing certain menu screens and options.
