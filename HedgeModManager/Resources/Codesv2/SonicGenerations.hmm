@@ -781,7 +781,7 @@ WriteProtected<byte>(0x11D680E, 0xEB, 0x1D)
 // Classic
 WriteProtected<byte>(0x11D33BC, 0xC7, 0x47, 0x64)
 WriteProtected<float>(0x11D33BF, 1)
-WriteProtected<byte>(0x11D33C3, 0xEB, 0x1D)
+WriteProtected<byte>(0x11D33C3, 0xEB, 0x0C)
 
 Patch "Disable Super Sonic Floating Boost (Ground Boost)" in "Gameplay" by "Skyth"
 WriteProtected<byte>(0xDFF34C, 0xEB);
