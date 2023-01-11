@@ -1,4 +1,5 @@
 ﻿using HedgeModManager.UI;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -14,12 +15,17 @@ namespace HedgeModManager.CLI.Commands
 
             if (Directory.Exists(modPath))
             {
-                var config = new ModConfigWindow(new ModInfo(modPath));
-                {
-                    config.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                }
+                var modInfo = new ModInfo(modPath);
 
-                config.ShowDialog();
+                if (modInfo.HasSchema)
+                {
+                    var config = new ModConfigWindow(modInfo);
+                    {
+                        config.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    }
+
+                    config.ShowDialog();
+                }
 
                 HedgeApp.Current.Shutdown(0);
             }
