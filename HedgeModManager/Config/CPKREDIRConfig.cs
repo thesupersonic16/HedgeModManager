@@ -35,7 +35,7 @@ namespace HedgeModManager
         public bool EnableSaveFileRedirection { get; set; } = false;
 
         [IniField("CPKREDIR")]
-        public string SaveFileFallback { get; set; } = "cpkredir.sav";
+        public string SaveFileFallback { get; set; } = string.Empty;
 
         [IniField("CPKREDIR")]
         public string SaveFileOverride { get; set; } = string.Empty;
@@ -63,7 +63,7 @@ namespace HedgeModManager
         public string ModProfile { get; set; } = "Default";
 
         [IniField("HedgeModManager", "UseLauncher")]
-        public bool UseLauncher { get; set; } = false;
+        public bool UseLauncher { get; set; } = true;
 
         public bool EnableDebugConsole 
         { 

@@ -57,7 +57,7 @@ namespace HedgeModManager
                 {
                     using (var stream = File.OpenRead(iniPath))
                         IniSerializer.Deserialize(this, stream);
-
+                    
                     // Force load order to bottom to top
                     ReverseLoadOrder = false;
                 }
@@ -126,7 +126,7 @@ namespace HedgeModManager
             List<ModInfo> newMods = null;
             newMods = CheckDepends(Mods, enabledMods);
             while (newMods != null)
-                newMods = CheckDepends(newMods, enabledMods);
+                newMods = CheckDepends(Mods, enabledMods);
 
             return report;
 
@@ -135,9 +135,6 @@ namespace HedgeModManager
                 List<ModInfo> result = null;
                 foreach (var mod in mods)
                 {
-                    if (newMods != null && newMods.Contains(mod))
-                        continue;
-
                     if (mod.Enabled)
                     {
                         DependencyReport.ErrorInfo info = null;
@@ -235,7 +232,13 @@ namespace HedgeModManager
             if (modPair.Key == null)
                 return null;
 
-            return Mods.FirstOrDefault(t => Path.GetDirectoryName(modPair.Value) == t.RootDirectory);
+            string modPath = Path.GetDirectoryName(modPair.Value);
+
+            // If the path doesn't exist, check RootDirectory if the game was moved elsewhere.
+            if (!Directory.Exists(modPath))
+                modPath = Path.Combine(RootDirectory, Path.GetFileName(modPath));
+
+            return Mods.FirstOrDefault(t => modPath.Equals(t.RootDirectory, StringComparison.OrdinalIgnoreCase));
         }
 
         public void DeleteMod(ModInfo mod)
@@ -501,7 +504,7 @@ namespace HedgeModManager
 
             if (openFolder)
             {
-                Process.Start(path);
+                HedgeApp.StartURL(path);
             }
         }
 

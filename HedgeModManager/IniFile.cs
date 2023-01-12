@@ -15,6 +15,8 @@ namespace HedgeModManager
         // Should the file be rewritten if error was found
         private bool _rewrite = false;
 
+        public bool UseQuotes = true;
+
         public IniGroup this[string key]
         {
             get
@@ -121,7 +123,7 @@ namespace HedgeModManager
                 writer.WriteLine($"[{group.Key}]");
                 foreach (var val in group.Value.Params)
                 {
-                    if (int.TryParse(val.Value, out _) || bool.TryParse(val.Value, out _) || float.TryParse(val.Value, out _))
+                    if (int.TryParse(val.Value, out _) || bool.TryParse(val.Value, out _) || float.TryParse(val.Value, out _) || !UseQuotes)
                         writer.WriteLine($"{val.Key}={val.Value}");
                     else
                         writer.WriteLine($"{val.Key}=\"{val.Value}\"");

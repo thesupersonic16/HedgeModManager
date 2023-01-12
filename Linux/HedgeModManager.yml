@@ -1,0 +1,85 @@
+Arch: win64
+Creation_Date: '2022-07-12 18:17:51.251201'
+Custom_Path: false
+DLL_Overrides: {}
+DXVK: dxvk-1.10.1
+Environment: Custom
+Environment_Variables: {}
+External_Programs: {}
+Installed_Dependencies:
+- d3dx9
+- msls31
+- arial32
+- times32
+- courie32
+- d3dcompiler_47
+- dotnet40
+- dotnet48
+- gecko
+- vcredist2019
+- gdiplus
+- tahoma32
+Language: sys
+LatencyFleX: latencyflex-v0.1.0
+Latest_Executables: []
+NVAPI: dxvk-nvapi-v0.5.4
+Name: HedgeModManager
+Parameters:
+    custom_dpi: 96
+    discrete_gpu: true
+    dxvk: false
+    dxvk_hud: false
+    dxvk_nvapi: false
+    fixme_logs: false
+    fsr: false
+    fsr_level: 5
+    fullscreen_capture: false
+    gamemode: false
+    gamescope: false
+    gamescope_borderless: false
+    gamescope_fps: 0
+    gamescope_fps_no_focus: 0
+    gamescope_fullscreen: true
+    gamescope_game_height: 0
+    gamescope_game_width: 0
+    gamescope_scaling: false
+    gamescope_window_height: 0
+    gamescope_window_width: 0
+    latencyflex: false
+    mangohud: false
+    mouse_warp: true
+    obsvkc: false
+    pulseaudio_latency: true
+    renderer: gl
+    sync: futex2
+    take_focus: false
+    use_be_runtime: true
+    use_eac_runtime: true
+    use_runtime: false
+    use_steam_runtime: false
+    virtual_desktop: false
+    virtual_desktop_res: 1280x720
+    vkbasalt: false
+    vkd3d: false
+Path: HedgeModManager
+Runner: sys-wine-7.0
+State: 0
+Uninstallers:
+    arial32: false
+    courie32: false
+    d3dcompiler_47: false
+    d3dx9: false
+    dotnet40: Microsoft .NET Framework 4 Extended
+    dotnet48: true
+    gdiplus: false
+    gecko: true
+    msls31: false
+    tahoma32: false
+    times32: false
+    trebuc32: false
+    vcredist2019: true
+Update_Date: '2022-07-23 20:13:49.218554'
+VKD3D: vkd3d-proton-2.6
+Versioning: false
+Windows: win10
+WorkingDir: ''

@@ -1,32 +1,32 @@
 !!VERSION 1.0
 
-Patch "Locked 30 FPS" by "M&M"
+Patch "Locked 30 FPS" in "Graphics" by "M&M"
 WriteNop(ASLR(0x140A5A656), 5)
 Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 30.0f)
 
-Patch "Locked 60 FPS" by "M&M"
+Patch "Locked 60 FPS" in "Graphics" by "M&M"
 WriteNop(ASLR(0x140A5A656), 5)
 
-Patch "Locked 72 FPS" by "M&M"
+Patch "Locked 72 FPS" in "Graphics" by "M&M"
 WriteNop(ASLR(0x140A5A656), 5)
 Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 72.0f)
 
-Patch "Locked 75 FPS" by "M&M"
+Patch "Locked 75 FPS" in "Graphics" by "M&M"
 WriteNop(ASLR(0x140A5A656), 5)
 Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 75.0f)
 
-Patch "Locked 120 FPS" by "M&M"
+Patch "Locked 120 FPS" in "Graphics" by "M&M"
 WriteNop(ASLR(0x140A5A656), 5)
 Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 120.0f)
 
-Patch "Locked 144 FPS" by "M&M"
+Patch "Locked 144 FPS" in "Graphics" by "M&M"
 WriteNop(ASLR(0x140A5A656), 5)
 Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 144.0f)
 
-Patch "Locked 165 FPS" by "M&M"
+Patch "Locked 165 FPS" in "Graphics" by "M&M"
 WriteNop(ASLR(0x140A5A656), 5)
 Write<float>(GetPointer(ASLR(0x142AE0508), 0x1C), 165.0f)
 
-Patch "21:9 Ultrawide Support" by "M&M"
+Patch "21:9 Ultrawide Support" in "Graphics" by "M&M"
 Double aspect = 3440.0f / 1440.0f
 WriteProtected(ASLR(0x141030D4C), (float)aspect)

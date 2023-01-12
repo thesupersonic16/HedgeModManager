@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="{StaticResource AboutWindowUITitle}" Height="542" Width="720"
+        Title="{StaticResource AboutWindowUITitle}" Height="596" Width="720"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
     <Grid>
         <Grid.RowDefinitions>
@@ -63,8 +63,10 @@
                 <StackPanel Grid.Column="0">
                     <Label Content="PTKickass"/>
                     <Label Content="JoeyLaw"/>
+                    <Label Content="Wr (AlanYe-Dev)"/>
                     <Label Content="LJSTAR"/>
                     <Label Content="Nanoposan69"/>
+                    <Label Content="TheExentist151"/>
                     <Label Content="ricky-daniel13"/>
                     <Label Content="Proa"/>
                     <Label Content="Mario Tainaka"/>
@@ -76,8 +78,10 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Portuguese translations"/>
-                    <Label Content="Chinese translations"/>
+                    <Label Content="Chinese (Traditional) translation"/>
+                    <Label Content="Chinese (Simplified) translation"/>
                     <Label Content="French translation"/>
+                    <Label Content="Russian translation and reviewing"/>
                     <Label Content="Russian translation"/>
                     <Label Content="Spanish translation"/>
                     <Label Content="Spanish translation and reviewing"/>

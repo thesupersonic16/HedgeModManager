@@ -1,0 +1,2360 @@
+!!VERSION 1.2
+
+Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M & Hyper" does
+/*
+Dynamically adjusts the aspect ratio to match the game resolution (recommended for non-16:9 resolutions).
+
+Known issues;
+- Certain HUD effects are rendered at the correct aspect ratio, but will misalign due to the main HUD still being 16:9.
+- Certain HUD elements are still rendered at 16:9 and will misalign or stretch.
+- Pre-rendered cutscenes will stretch to your aspect ratio.
+- Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
+*/
+//
+    #load "System.Drawing.dll"
+
+    using System.Drawing;
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    static extern int GetSystemMetrics(int nIndex);
+
+    static Size GetScreenSize()
+        => new Size(GetSystemMetrics(0), GetSystemMetrics(1));
+//
+{
+    long instrAddr = ScanSignature
+    (
+        /* v1.01: 0x1401477CE */
+        "\xF3\x0F\x59\x05\x00\x00\x00\x00\x44\x8B\xC6\xF3\x0F\x2C\xD0\xEB\x07\x8B\xD3\xF3\x44\x0F\x2C\xC1\x3B\x54\x24\x78\x75\x07\x44\x3B\x44\x24\x00\x74\x0C\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x84\xC0\x75\x2B\x45\x84\xF6\x74\x26\x3B\x5F\x20\x75\x05\x3B\x77\x24\x74\x1C\x48\x8B\x07\x44\x8B\xCB\x44\x8B\x47\x2C\x48\x8B\xCF\x8B\x57\x28\xC6\x44\x24\x00\x00\x89\x74\x24\x20\xFF\x50\x58\x39\x5D\x20\x75\x05\x39\x75\x24\x74\x04\x48\x89\x5D\x20\x48\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x40\x41\x5E\x5D\x5B\xC3",
+        "xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxx?xxxxx????x????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxx?xxxx?xxxxxxxxx",
+
+        /* v1.10: 0x140147916 */
+        "\xF3\x0F\x59\x0D\x00\x00\x00\x00\x44\x8B\x84\x24\x00\x00\x00\x00\xF3\x0F\x2C\xD1\xEB\x0C\x8B\x94\x24\x00\x00\x00\x00\xF3\x44\x0F\x2C\xC0\x3B\x54\x24\x34\x75\x07\x44\x3B\x44\x24\x00\x74\x0C\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xCF",
+        "xxxx????xxxx????xxxxxxxxx????xxxxxxxxxxxxxxx?xxxxx????x????xxx"
+    );
+
+    long AspectRatio = instrAddr + Read<uint>(instrAddr + 4) + 8;
+
+    Size Screen = GetScreenSize();
+
+    WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
+}
+
+Patch "Always Cloudy on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Cloudy on supported islands.
+
+Supported islands;
+- Kronos
+- Ares
+- Chaos
+- Rhea
+- Ouranos
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB, 0x4E);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+}
+
+Patch "Always Day on Islands" in "Time" by "NM"
+{
+    /*
+        When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
+        At the moment, NOPing the JNE of these fixes this, and does not seem to cause any other issues.
+    */
+
+    /* 0x147E382AB */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x27\x41\x8B\x40\x08\x39\x42\x08\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C",
+            "x?xxx?xx?x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?"
+        ),
+
+        2
+    );
+
+    /* 0x147E382B4 */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C\xF3\x41\x0F\x10\x40\x0C\x0F\x2F\x42",
+            "x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?xxxxx?xxx"
+        ),
+
+        2
+    );
+
+    WriteAsmHook
+    (
+        @"
+            add dword ptr [rcx], edx
+            mov dword ptr [rcx+04h], 8h ; Hours
+            mov dword ptr [rcx+08h], 0h ; Minutes
+            mov dword ptr [rcx+0x0C], 0h ; Seconds
+        ",
+
+        /* 0x147E22D2B */
+        ScanSignature
+        (
+            "\x01\x11\x44\x01\x41\x04\x44\x01\x49\x08\xF3\x0F\x11\x41\x0C\xE9\x91\x12\x1F\xF8",
+            "xxxxx?xxx?xxxx?x????"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Always Have All Abilities" in "Gameplay" by "Hyper" does
+/*
+Always grants Sonic his abilities (not skills), even when scripted not to have them.
+
+Abilities;
+- Boost
+- Combos
+- Camera Control
+- Cyloop
+- Homing Attack
+- Jump
+- Lock-on
+- Parry
+- Wall Climbing
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x14BF81B71 */
+        ScanSignature
+        (
+            "\x40\x0F\x95\xD5\x84\xD2",
+            "xxxxxx"
+        ),
+        
+        Assemble("mov bpl, 1; nop")
+    );
+}
+
+Patch "Always Have Phantom Rush" in "Cheats" by "NM"
+{
+    WriteNop
+    (
+        /* 0x140779819 */
+        ScanSignature
+        (
+            "\x72\x09\x66\x83\x89\xF0\x00\x00\x00\x40\xC3\x0F\x2F\xC2\x77\x0C\xB8\xBF\xFF\x00\x00\x66\x21\x81\xF0\x00\x00\x00\xC3",
+            "x?xxx????xxxxxx?xxxxxxxx????x"
+        ),
+
+        2
+    );
+}
+
+Patch "Always Have Power Boost" in "Cheats" by "SuperSonic16"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14085047C */
+        ScanSignature
+        (
+            "\x74\x24\x0F\xBE\x4B\x30\x66\x0F\x6E\xC9\x0F\xBE\x4B\x31\x0F\x5B\xC9\x66\x0F\x6E\xC1\x0F\x5B\xC0\xF3\x0F\x5C\xC8\x41\x0F\x54\xC9\x41\x0F\x2F\xCA\x77\x16\xBA\x00\x00\x00\x00\x49\x8B\xCE\xE8\x00\x00\x00\x00\x84\xC0\x74\x05\x40\xB7\x01\xEB\x03\x40\x32\xFF\x8B\x43\x28\x0F\x57\xF6\x39\x43\x24",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Always Play 1st Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 1; nop")
+    );
+}
+
+Patch "Always Play 2nd Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 2; nop")
+    );
+}
+
+Patch "Always Play 3rd Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 3; nop")
+    );
+}
+
+Patch "Always Play 4th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 4; nop")
+    );
+}
+
+Patch "Always Play 5th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 5; nop")
+    );
+}
+
+Patch "Always Play 6th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 6; nop")
+    );
+}
+
+Patch "Always Play 7th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 7; nop")
+    );
+}
+
+Patch "Always Rainy on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Rainy on supported islands.
+
+Supported islands;
+- Kronos
+- Chaos
+- Rhea
+- Ouranos
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB, 0x38);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+}
+
+Patch "Always Run in the Background" in "System" by "NM" does "Stops the game from pausing when the window is unfocused."
+{
+    WriteProtected<byte>
+    (
+        /* 0x140BB8884 */
+        ScanSignature
+        (
+            "\x74\x2D\xC6\x02\x01\x41\xB0\x01\xEB\x1C\x84\xC0\x74\x21\x48\x8B\x53\x08\x48\x85\xD2\x74\x18\x48\x8B\x52\x28\x48\x85\xD2\x74\x0F\xC6\x02\x00\x45\x33\xC0\x48\x8D\x4A\x58\xE8\xFD\x60\x00\x00\x0F\xB7\x8B\x68\x01\x00\x00\xBA\xDF\xFF\x00\x00\x0F\xB7\xC1\x66\x83\xC9\x20\x66\x23\xC2\x83\xFF\x07\x66\x0F\x44\xC8\x33\xC0\x66\x89\x8B\x68\x01\x00\x00\x48\x8B\x5C\x24\x40\x48\x83\xC4\x30\x5F\xC3",
+            "x?xxxxxxx?xxx?xxx?xxxx?xxx?xxxx?xxxxxxxxx?x???????????xxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxx?xxxxxx"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Always Sandstorm on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Sandstorm on supported islands.
+
+Supported islands;
+- Ares
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB, 0x22);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+}
+
+Patch "Always Sunny on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Sunny on supported islands.
+
+Supported islands;
+- Kronos
+- Ares
+- Chaos
+- Rhea
+- Ouranos
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+}
+
+Patch "Always Trickable Dash Rings" in "Cheats" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x148DC6F4C */
+        ScanSignature
+        (
+            "\x0F\x44\xC8\x88\x8F\x00\x00\x00\x00\x41\x80\xBF\x00\x00\x00\x00\x00\x74\x0A\xF6\xC1\x02\x75\x05\x45\x31\xC0\xEB",
+            "xxxxx????xxx?????xxxxxxxxxxx"
+        ),
+
+        Assemble("mov cl, 2; nop")
+    );
+}
+
+Patch "Always Trickable Jump Boards" in "Cheats" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14037EAFA */
+        ScanSignature
+        (
+            "\x0F\x95\xC1\x88\x8F\x00\x00\x00\x00\x80\xB8\x00\x00\x00\x00\x00\x74\x1D\x45\x8B\xC5\xBA\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x45\x33\xC0\x33\xD2\x48\x8B\xCF\xE8\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x0F\x57\xDB\x48\x8D\x55\xB0\x48\x8B\xCF\x48\x8B\xD8\x4C\x8B\x80\x00\x00\x00\x00\x49\x81\xC0\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x0F\x57\xC0\x4C\x8D\x45\xC0\x0F\x5C\x05\x00\x00\x00\x00\x48\x8D\x55\xB0\x0F\x57\xFF\x48\x8D\x4C\x24\x00\x0F\x29\x45\xC0\xE8\x00\x00\x00\x00\x8B\x87\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00",
+            "xxxxx????xx?????xxxxxx????xxxx????xxxxxxxxx????x????xxxxxxx????xxxxxxxxxxxxxxxx????xxx????x????xxxxxxxxxx????xxxxxxxxxxx?xxxxx????xx????xxx????"
+        ),
+
+        Assemble("mov cl, 1; nop")
+    );
+}
+
+Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
+{
+    WriteNop
+    (
+        /* 0x14093DC8E */
+        ScanSignature
+        (
+            "\x74\x57\x48\x8B\x5F\x08\xBA\x00\x00\x00\x00\x41\xB8\x00\x00\x00\x00\x48\x8B\xCB\x48\x8B\x03\xFF\x50\x08\x48\x85\xC0\x74\x16\x41\xB8\x00\x00\x00\x00\x48\x8B\xD3\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\xD8\xEB\x03\x48\x8B\xDE\x4C\x8D\x05\x00\x00\x00\x00\x48\x8B\xCB\x48\x8D\x15\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD3\x49\x8B\xCE\xE8\x00\x00\x00\x00\x48\x8B\x5F\x08\xBA\x00\x00\x00\x00\x41\xB8\x00\x00\x00\x00\x48\x8B\xCB\x48\x8B\x03\xFF\x50\x08\x48\x85\xC0\x74\x16\x41\xB8\x00\x00\x00\x00\x48\x8B\xD3\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\xD8\xEB\x03",
+            "xxxxxxx????xx????xxxxxxxxxxxxxxxx????xxxxxxx????xxxxxxxxxxx????xxxxxx????x????xxxxxxx????xxxxx????xx????xxxxxxxxxxxxxxxx????xxxxxxx????xxxxx"
+        ),
+
+        2
+    );
+}
+
+Patch "Always Night on Islands" in "Time" by "NM"
+{
+    /*
+        When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
+        At the moment, NOPing the JNE of these fixes this, and does not seem to cause any other issues.
+    */
+
+    /* 0x147E382AB */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x27\x41\x8B\x40\x08\x39\x42\x08\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C",
+            "x?xxx?xx?x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?"
+        ),
+
+        2
+    );
+
+    /* 0x147E382B4 */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C\xF3\x41\x0F\x10\x40\x0C\x0F\x2F\x42",
+            "x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?xxxxx?xxx"
+        ),
+
+        2
+    );
+
+    WriteAsmHook
+    (
+        @"
+            add dword ptr [rcx], edx
+            mov dword ptr [rcx+04h], 0h ; Hours
+            mov dword ptr [rcx+08h], 0h ; Minutes
+            mov dword ptr [rcx+0x0C], 0h ; Seconds
+        ",
+
+        /* 0x147E22D2B */
+        ScanSignature
+        (
+            "\x01\x11\x44\x01\x41\x04\x44\x01\x49\x08\xF3\x0F\x11\x41\x0C\xE9\x91\x12\x1F\xF8",
+            "xxxxx?xxx?xxxx?x????"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Always Sunrise on Islands" in "Time" by "NM"
+{
+    /*
+        When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
+        At the moment, NOPing the JNE of these fixes this, and does not seem to cause any other issues.
+    */
+
+    /* 0x147E382AB */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x27\x41\x8B\x40\x08\x39\x42\x08\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C",
+            "x?xxx?xx?x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?"
+        ),
+
+        2
+    );
+
+    /* 0x147E382B4 */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C\xF3\x41\x0F\x10\x40\x0C\x0F\x2F\x42",
+            "x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?xxxxx?xxx"
+        ),
+
+        2
+    );
+
+    WriteAsmHook
+    (
+        @"
+            add dword ptr [rcx], edx
+            mov dword ptr [rcx+04h], 4h ; Hours
+            mov dword ptr [rcx+08h], 0h ; Minutes
+            mov dword ptr [rcx+0x0C], 0h ; Seconds
+        ",
+
+        /* 0x147E22D2B */
+        ScanSignature
+        (
+            "\x01\x11\x44\x01\x41\x04\x44\x01\x49\x08\xF3\x0F\x11\x41\x0C\xE9\x91\x12\x1F\xF8",
+            "xxxxx?xxx?xxxx?x????"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Always Sunset on Islands" in "Time" by "NM"
+{
+    /*
+        When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
+        At the moment, NOPing the JNE of these fixes this, and does not seem to cause any other issues.
+    */
+
+    /* 0x147E382AB */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x27\x41\x8B\x40\x08\x39\x42\x08\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C",
+            "x?xxx?xx?x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?"
+        ),
+
+        2
+    );
+
+    /* 0x147E382B4 */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x75\x1B\xF3\x0F\x10\x42\x0C\xF3\x41\x0F\x5C\x40\x0C\x0F\x54\x05\x78\xD7\x23\xF9\x0F\x2F\x05\x69\xD7\x23\xF9\x76\x5C\x45\x39\xD1\x72\x5A\x75\x17\x8B\x42\x08\x41\x3B\x40\x08\x72\x4F\x75\x0C\xF3\x41\x0F\x10\x40\x0C\x0F\x2F\x42",
+            "x?xxxx?xxxxx?xxx????xxx????x?xxxx?x?xx?xxx?x?x?xxxxx?xxx"
+        ),
+
+        2
+    );
+
+    WriteAsmHook
+    (
+        @"
+            add dword ptr [rcx], edx
+            mov dword ptr [rcx+04h], 14h ; Hours
+            mov dword ptr [rcx+08h], 19h ; Minutes
+            mov dword ptr [rcx+0x0C], 0h ; Seconds
+        ",
+
+        /* 0x147E22D2B */
+        ScanSignature
+        (
+            "\x01\x11\x44\x01\x41\x04\x44\x01\x49\x08\xF3\x0F\x11\x41\x0C\xE9\x91\x12\x1F\xF8",
+            "xxxxx?xxx?xxxx?x????"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Centre Game Window on Launch" in "Fixes" by "Hyper"
+//
+    #load "System.Drawing.dll"
+    #load "System.Xml.dll"
+
+    using System.Drawing;
+    using System.IO;
+    using System.Xml.Serialization;
+
+    [XmlRoot(ElementName = "ScreenSetting")]
+    public class ScreenSetting
+    {
+        [XmlAttribute(AttributeName = "left")]
+        public int Left { get; set; }
+
+        [XmlAttribute(AttributeName = "top")]
+        public int Top { get; set; }
+
+        [XmlAttribute(AttributeName = "width")]
+        public int Width { get; set; }
+
+        [XmlAttribute(AttributeName = "height")]
+        public int Height { get; set; }
+
+        [XmlAttribute(AttributeName = "resolutionWidth")]
+        public int ResolutionWidth { get; set; }
+
+        [XmlAttribute(AttributeName = "resolutionHeight")]
+        public int ResolutionHeight { get; set; }
+
+        [XmlAttribute(AttributeName = "fullscreenStyle")]
+        public int FullscreenStyle { get; set; }
+
+        [XmlAttribute(AttributeName = "fullscreenState")]
+        public int FullscreenState { get; set; }
+    }
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    static extern int GetSystemMetrics(int nIndex);
+
+    static Size GetScreenSize()
+        => new Size(GetSystemMetrics(0), GetSystemMetrics(1));
+
+    static int GetTitleBarHeight()
+        => GetSystemMetrics(31);
+//
+{
+    string xml = Path.Combine
+    (
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        @"SEGA\SonicFrontiers\steam\x64\screen_setting.xml"
+    );
+
+    if (!File.Exists(xml))
+    {
+        Console.WriteLine($"[Centre Game Window on Launch] Code halted, file not found: {xml}");
+        return;
+    }
+
+    try
+    {
+        using (StringReader reader = new StringReader(File.ReadAllText(xml)))
+        {
+            var screenSetting = (ScreenSetting)new XmlSerializer(typeof(ScreenSetting)).Deserialize(reader);
+
+            Size screen = GetScreenSize();
+
+            int left = (screen.Width / 2) - (screenSetting.Width / 2);
+            int top  = ((screen.Height / 2) - (screenSetting.Height / 2)) - GetTitleBarHeight();
+
+            if (left < 0)
+            {
+                Console.WriteLine("[Centre Game Window on Launch] Invalid X position! Defaulting to zero...");
+                left = 0;
+            }
+
+            if (top < 0)
+            {
+                Console.WriteLine("[Centre Game Window on Launch] Invalid Y position! Defaulting to zero...");
+                top = 0;
+            }
+
+            // Force new left value as default value.
+            WriteAsmHook
+            (
+                $"mov dword ptr [rbx], 0x{left:X}",
+
+                /* 0x150A0F546 */
+                ScanSignature
+                (
+                    "\x4D\x85\xFF\x74\x3A\x48\x85\xF6\x74\x35\x48\x85\xED\x74\x30\x48\x85\xC0\x74\x2B\x4C\x89\xF9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x03\xE8\x00\x00\x00\x00\x48\x89\xE9\x89\x43\x04\xE8\x00\x00\x00\x00\x4C\x89\xF1\x89\x43\x08\xE8\x00\x00\x00\x00\x89\x43\x0C\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\x48\x89\xC5\xE8\x00\x00\x00\x00\x4C\x8B\xBC\x24\x00\x00\x00\x00\x48\x89\xC6\x4C\x8B\xB4\x24\x00\x00\x00\x00\x48\x85\xED\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14",
+                    "xxxxxxxxxxxxxxxxxxxxxxxx????xxxxxx????xxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxxxx????xxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxx????xxxxxxx????xxx"
+                ),
+
+                HookBehavior.Replace
+            );
+
+            // Force new top value as default value.
+            WriteAsmHook
+            (
+                $"mov dword ptr [rbx + 4], 0x{top:X}",
+
+                /* 0x150A0F555 */
+                ScanSignature
+                (
+                    "\x48\x85\xC0\x74\x2B\x4C\x89\xF9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x03\xE8\x00\x00\x00\x00\x48\x89\xE9\x89\x43\x04\xE8\x00\x00\x00\x00\x4C\x89\xF1\x89\x43\x08\xE8\x00\x00\x00\x00\x89\x43\x0C\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\x48\x89\xC5\xE8\x00\x00\x00\x00\x4C\x8B\xBC\x24\x00\x00\x00\x00\x48\x89\xC6\x4C\x8B\xB4\x24\x00\x00\x00\x00\x48\x85\xED\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14",
+                    "xxxxxxxxx????xxxxxx????xxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxxxx????xxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxx????xxxxxxx????xxx"
+                ),
+
+                HookBehavior.Replace
+            );
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[Centre Game Window on Launch] {ex}");
+        return;
+    }
+
+    // Kill XML value reading for left.
+    WriteNop
+    (
+        /* 0x150A0F565 */
+        ScanSignature
+        (
+            "\x89\x03\xE8\x00\x00\x00\x00\x48\x89\xE9\x89\x43\x04\xE8\x00\x00\x00\x00\x4C\x89\xF1\x89\x43\x08\xE8\x00\x00\x00\x00\x89\x43\x0C\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\x48\x89\xC5\xE8\x00\x00\x00\x00\x4C\x8B\xBC\x24\x00\x00\x00\x00\x48\x89\xC6\x4C\x8B\xB4\x24\x00\x00\x00\x00\x48\x85\xED\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x48\x8B\xAC\x24\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x20\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x24\x48\x8D\x4C\x24\x00\xB3\x01\xE8\x00\x00\x00\x00\x0F\xB6\xC3\x48\x81\xC4\x00\x00\x00\x00\x5F\x5B\xC3",
+            "xxx????xxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxxxx????xxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxx????xxxx????xxxxxxxxx????xxxxxxxxx????xxxx????xxxxxxxxx????xxxxxxx?xxx????xxxxxx????xxx"
+        ),
+
+        7
+    );
+
+    // Kill XML value reading for top.
+    WriteNop
+    (
+        /* 0x150A0F56F */
+        ScanSignature
+        (
+            "\x89\x43\x04\xE8\x00\x00\x00\x00\x4C\x89\xF1\x89\x43\x08\xE8\x00\x00\x00\x00\x89\x43\x0C\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\x48\x89\xC5\xE8\x00\x00\x00\x00\x4C\x8B\xBC\x24\x00\x00\x00\x00\x48\x89\xC6\x4C\x8B\xB4\x24\x00\x00\x00\x00\x48\x85\xED\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x48\x8B\xAC\x24\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x20\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x24\x48\x8D\x4C\x24\x00\xB3\x01\xE8\x00\x00\x00\x00\x0F\xB6\xC3\x48\x81\xC4\x00\x00\x00\x00\x5F\x5B\xC3",
+            "xxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxxxx????xxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxx????xxxx????xxxxxxxxx????xxxxxxxxx????xxxx????xxxxxxxxx????xxxxxxx?xxx????xxxxxx????xxx"
+        ),
+
+        3
+    );
+}
+
+Patch "Disable Automatic Boost Gauge Replenishment" in "Gameplay" by "Hyper" does "Prevents the boost gauge from refilling over time."
+{
+    WriteNop
+    (
+        /* 0x140850F46 */
+        ScanSignature
+        (
+            "\xF3\x0F\x11\x51\x00\xE8\x00\x00\x00\x00\x41\x0F\x2F\x47\x00\x72\x09\xB8\x00\x00\x00\x00\x66\x21\x46\x78\x48\x8B\x7E\x20\x48\x8B\xCF\xE8\x00\x00\x00\x00\x48\x8B\xD8\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\xCF\x48\x8B\xD8\xE8\x00\x00\x00\x00\x4C\x8B\xBC\x24\x00\x00\x00\x00\x84\xC0\x74\x04\x48\x83\xC3\x04\x0F\x2F\x33\x73\x29\x48\x8B\x4E\x20\x33\xD2\xE8\x00\x00\x00\x00\x84\xC0\x75\x14\xF3\x0F\x10\x46\x00\xF3\x0F\x5C\x46\x00\x41\x0F\x54\xC1\x41\x0F\x2F\xC2\x76\x06",
+            "xxxx?x????xxxx?xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxx????xxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxx????xxxxxxxx?xxxx?xxxxxxxxxx"
+        ),
+
+        5
+    );
+}
+
+Patch "Disable Boost Audio Filter" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14B9F24E4 */
+        ScanSignature
+        (
+            "\x74\x48\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x89\xC3\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xD9\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x28\xF3\x0F\x10\x05\x00\x00\x00\x00\x4C\x8D\x05\x00\x00\x00\x00\xF3\x0F\x10\x1D\x00\x00\x00\x00\x48\x89\xF2\x48\x89\xC1\xF3\x0F\x11\x44\x24\x00\xE8\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x48\x8B\x9C\x24\x00\x00\x00\x00\x84\xC0\x74\x08\x48\x89\xF9\xE8\x00\x00\x00\x00",
+            "xxxxxx????xxxx????xxxxxxx????xxxxxxxxx????xxx????xxxx????xxxxxxxxxxx?x????xxxx????xxxx????xxxx????xxxxxxxx????"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Disable Camera Shake" in "Graphics" by "Hyper" does "Disables camera shake during combat."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1400B1AF4 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x49\x89\x5B\x08\x48\x8D\x04\x40\x48\x8B\x59\x20\x49\x89\x7B\x10\x45\x0F\x29\x53\x00\x45\x0F\x29\x5B\x00\x45\x0F\x57\xDB\x48\xC1\xE0\x05\x45\x0F\x29\x63\x00\x48\x03\xC3\x44\x0F\x29\x6C\x24\x00\x45\x0F\x57\xE4\x44\x0F\x28\x2D\x00\x00\x00\x00\x45\x0F\x28\xD5\x48\x3B\xD8\x0F\x84\x00\x00\x00\x00\x44\x0F\x29\x74\x24\x00\xF3\x44\x0F\x10\x35\x00\x00\x00\x00\x44\x0F\x29\x7C\x24\x00\xF3\x44\x0F\x10\x3D\x00\x00\x00\x00\x41\x0F\x29\x73\x00\x41\x0F\x29\x7B\x00\x45\x0F\x29\x43\x00\x45\x0F\x29\x4B\x00\x66\x66\x66\x0F\x1F\x84\x00\x00\x00\x00\x00",
+            "xx????xxxxxxxxxxxxxxxxxxxx?xxxx?xxxxxxxxxxxx?xxxxxxxx?xxxxxxxx????xxxxxxxxx????xxxxx?xxxxx????xxxxx?xxxxx????xxxx?xxxx?xxxx?xxxx?xxxxxxx????"
+        ),
+
+        0xE9, 0x07, 0x03, 0x00, 0x00
+    );
+}
+
+Patch "Disable Challenge Marker Scanner" in "Gameplay" by "Hyper" does "Disables the scanning event and map transition after completing challenges."
+{
+    WriteProtected<byte>
+    (
+        /* 0x149477152 */
+        ScanSignature
+        (
+            "\x74\x1E\x41\x83\xF8\x01\x75\x70",
+            "xxxxxxxx"
+        ),
+
+        0xEB, 0x76
+    );
+}
+
+Patch "Disable Chromatic Aberration" in "Graphics" by "Luig & Hyper" does "Disables the RGB separation effect at edges of the screen in certain scenarios."
+{
+    WriteNop
+    (
+        /* 0x140B428ED */
+        ScanSignature
+        (
+            "\x0F\x11\x43\x0C\x41\x0F\x10\x8E\x00\x00\x00\x00\x0F\x11\x4B\x1C\x41\x8B\x86\x00\x00\x00\x00\x89\x43\x2C\xE8\x00\x00\x00\x00\x48\x8B\xD8\x4D\x8D\xA6\x00\x00\x00\x00\x48\x8B\x08\x48\x85\xC9\x74\x0E\x4C\x8B\x09\x4C\x8D\x40\x10\x49\x8B\xD4\x41\xFF\x51\x08\x41\x0F\x28\x04\x24\x49\x8B\xCD\x0F\x29\x43\x10\x41\x0F\x28\x4C\x24\x00\x0F\x29\x4B\x20\x41\x0F\x28\x44\x24\x00\x0F\x29\x43\x30\x41\x0F\x28\x4C\x24\x00\x0F\x29\x4B\x40\x41\x0F\x28\x44\x24\x00\x0F\x29\x43\x50\x41\x0F\x28\x4C\x24\x00\x0F\x29\x4B\x60\x41\x0F\x28\x44\x24\x00\x0F\x29\x43\x70\x41\x0F\x28\x4C\x24\x00\x0F\x29\x8B\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x84\xC0\x0F\x85\x00\x00\x00\x00\xB9\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD8\x48\x85\xC0\x0F\x84\x00\x00\x00\x00\x0F\x28\x05\x00\x00\x00\x00\x49\x8B\xCD\x0F\x28\x0D\x00\x00\x00\x00",
+            "xxxxxxxx????xxxxxxx????xxxx????xxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx?xxxxxxxxx?xxxxxxxxx?xxxxxxxxx?xxxxxxxxx?xxxxxxxxx?xxxxxxxxx?xxx????x????xxxx????x????x????xxxxxxxx????xxx????xxxxxx????"
+        ),
+
+        4
+    );
+}
+
+Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables the animations for when Sonic becomes increasingly more corrupted in the later islands."
+{
+    // LANDING_CORRUPTION_WEAK
+    WriteProtected<byte>
+    (
+        /* 0x140830C7D */
+        ScanSignature
+        (
+            "\x74\x15\xB8\x04\x00\x00\x00\x48\x8B\x5C\x24\x30",
+            "xxxxxxxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // LANDING_CORRUPTION_STRONG
+    WriteNop
+    (
+        /* 0x140830CA8 */
+        ScanSignature
+        (
+            "\xBA\x05\x00\x00\x00\x0F\x45\xCA\x8B\xC1",
+            "xxxxxxxxxx"
+        ),
+        
+        8
+    );
+
+    // IDLE_CORRUPTION_WEAK_LOOP
+    WriteProtected<byte>
+    (
+        /* 0x140830DB4 */
+        ScanSignature
+        (
+            "\x74\x15\xB8\x0B\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // IDLE_CORRUPTION_STRONG_LOOP
+    WriteProtected<byte>
+    (
+        /* 0x140830DDA */
+        ScanSignature
+        (
+            "\x74\x15\xB8\x0C\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
+Patch "Disable Cyber Space CRT Effects" in "Graphics" by "Hyper & PTKickass" does "Disables the CRT scanline effect on distant terrain models in Cyber Space."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1401DDC5E */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x41\x0F\x29\x73\x00\x48\xBF\x00\x00\x00\x00\x00\x00\x00\x00\x0F\x57\xF6\x66\x66\x0F\x1F\x84\x00\x00\x00\x00\x00\xF3\x0F\x10\x4B\x00\x32\xC9\x0F\x28\xC1\x41\x0F\x54\xC1\x41\x0F\x2F\xC0\x0F\x86\x00\x00\x00\x00\xF3\x41\x0F\x59\xCA\xC7\x84\x24\x00\x00\x00\x00\x00\x00\x00\x00\x44\x89\xA4\x24\x00\x00\x00\x00\xF3\x0F\x58\x4B\x00\x0F\x2F\xCF\xF3\x0F\x11\x8C\x24\x00\x00\x00\x00\x76\x05\x0F\x28\xC7\xEB\x1B\x0F\x2F\xCE\x48\x8D\x84\x24\x00\x00\x00\x00\x48\x8D\x94\x24\x00\x00\x00\x00\x48\x0F\x43\xC2\xF3\x0F\x10\x00\xF3\x0F\x11\x43\x00\xC7\x86\x00\x00\x00\x00\x00\x00\x00\x00\xF3\x0F\x10\x43\x00\x0F\x2F\xC6\x73\x0A\x44\x0F\x2F\x43\x00\x0F\x93\xC1\xEB\x1D\x76\x1B\xF3\x0F\x10\x43\x00\xF3\x0F\x5C\xC7\x41\x0F\x54\xC1\x41\x0F\x2F\xC0\x77\x08\x48\xC7\x43\x00\x00\x00\x00\x00\x8B\x43\x58\x85\xC0\x78\x14\x83\xE8\x01\x89\x43\x58\x79\x0C\xC7\x86\x00\x00\x00\x00\x00\x00\x00\x00\xEB\x04\x84\xC9\x74\x45\x48\xFF\x4E\x30",
+            "xx????xxxx?xx????????xxxxxxxxx????xxxx?xxxxxxxxxxxxxxx????xxxxxxxx????????xxxx????xxxx?xxxxxxxx????xxxxxxxxxxxxxx????xxxx????xxxxxxxxxxxx?xx????????xxxx?xxxxxxxxx?xxxxxxxxxxx?xxxxxxxxxxxxxxxxx?????xxxxxxxxxxxxxxxxx????????xxxxxxxxxx"
+        ),
+
+        0xE9, 0xDA, 0x02, 0x00, 0x00
+    );
+}
+
+Patch "Disable Drift Input Prompt" in "UI" by "Hyper" does "Disables the input prompt that covers up Sonic when using drift dash panels."
+{
+    WriteNop
+    (
+        /* 0x14081E868 */
+        ScanSignature
+        (
+            "\xE8\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x4C\x8D\x05\x00\x00\x00\x00\x48\x8B\xD6\x48\x8D\x8C\x24\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8D\x8D\x00\x00\x00\x00\x48\x8B\xD0\xE8\x00\x00\x00\x00\x41\xB0\x01\xBA\x00\x00\x00\x00\x48\x8B\xCE\xE8\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x48\x8B\xCE\xE8\x00\x00\x00\x00\xB2\x01\x48\x8B\xCE\x48\x8B\x9C\x24\x00\x00\x00\x00\x48\x81\xC4\x00\x00\x00\x00\x41\x5E\x5E\x5D\xE9\x00\x00\x00\x00",
+            "x????xxxx?x????xxx????xxxxxxx????x????xxx????xxxx????xxxx????xxxx????x????xxxx????xxxxxxxxx????xxx????xxxxx????"
+        ),
+
+        5
+    );
+}
+
+Patch "Disable Dropped Rings" in "Gameplay" by "Hyper" does "Removes the bouncing rings when taking damage."
+{
+    WriteNop
+    (
+        /* 0x14086AF2A */
+        ScanSignature
+        (
+            "\xE8\x00\x00\x00\x00\x4C\x8D\x05\x00\x00\x00\x00\x48\x8B\xD7\x48\x8D\x4D\x77\xE8\x00\x00\x00\x00\x4C\x8B\xAC\x24\x00\x00\x00\x00\x48\x8B\x9C\x24\x00\x00\x00\x00\x0F\x28\xB4\x24\x00\x00\x00\x00\x48\x81\xC4\x00\x00\x00\x00\x41\x5E\x41\x5C\x5F\x5D\xC3",
+            "x????xxx????xxxxxxxx????xxxx????xxxx????xxxx????xxx????xxxxxxx"
+        ),
+
+        5
+    );
+}
+
+Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the fixed camera icon at the top-right of the screen, as well as the tutorial about it at the beginning of the game."
+{
+    // Disable fixed camera UI element.
+    WriteProtected<byte>
+    (
+        /* 0x1408D0A2B */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x83\xF8\xFD\x0F\x84\x00\x00\x00\x00\x48\x8D\x35\x00\x00\x00\x00\x83\xF8\x04\x74\x2D\x48\xC7\x42\x00\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x72\x10\xC6\x42\x18\x01\x48\x89\x02\x48\x8B\xC2\x48\x8B\x5C\x24\x00\x48\x8B\x6C\x24\x00\x48\x83\xC4\x50\x5E\xC3\xF3\x41\x0F\x10\x40\x00\xF3\x0F\x58\x41\x00\x0F\x2F\x05\x00\x00\x00\x00",
+            "xx????xxxxx????xxx????xxxxxxxx?????xxx????xxxxxxxxxxxxxxxxxx?xxxx?xxxxxxxxxxx?xxxx?xxx????"
+        ),
+
+        0xEB, 0x0D
+    );
+
+    // Disable guide regarding fixed camera.
+    WriteProtected<byte>
+    (
+        /* 0x148C69FB1 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x4C\x89\xB4\x24\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x4C\x8B\x76\x08\x8B\x0D\x00\x00\x00\x00\x81\xF1\x00\x00\x00\x00\x41\x89\xC8\x4C\x89\xF1\x49\x8B\x06\xFF\x50\x08\x02\x15\x00\x00\x00\x00\x48\x89\xC3\x48\x85\xC0\x0F\x84\x00\x00\x00\x00\x4C\x89\x70\x08\xB9\x00\x00\x00\x00\xC6\x40\x10\x01\x89\x78\x14\xC7\x40\x00\x00\x00\x00\x00\x40\x88\x78\x1C\x48\x89\x48\x30\x48\x89\x78\x20\x48\x89\x78\x28\x4C\x89\x70\x38\x48\x8D\x05\x00\x00\x00\x00\x48\x89\x03\x66\xC7\x43\x00\x00\x00\x48\x89\x7B\x48\x89\x7B\x50\x89\x4B\x54\x4C\x89\x73\x58\x48\x89\x7B\x60\x89\x7B\x68\x89\x4B\x6C\x4C\x89\x73\x70\x48\x89\x7B\x78\x48\x89\xBB\x00\x00\x00\x00\x48\x89\x8B\x00\x00\x00\x00\x4C\x89\xB3\x00\x00\x00\x00\x8B\x15\x00\x00\x00\x00\x81\xF2\x00\x00\x00\x00\x89\x93\x00\x00\x00\x00\x66\xC7\x83\x00\x00\x00\x00\x00\x00\x8A\x15\x00\x00\x00\x00\x80\xF2\x40\x88\x93\x00\x00\x00\x00\xEB\x03",
+            "xx????xxxx????x????xxxxxx????xx????xxxxxxxxxxxxxx????xxxxxxxx????xxxxx????xxxxxxxxx?????xxxxxxxxxxxxxxxxxxxxxxx????xxxxxx???xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxx????xx????xx????xx????xxx??????xx????xxxxx????xx"
+        ),
+
+        0xE9, 0x5C, 0x01, 0x00, 0x00
+    );
+}
+
+Patch "Disable Forced Weather for Bosses" in "Weather" by "Hyper" does "Disables the weather being forced to Sunny for Giganto and Supreme."
+{
+    // Giganto
+    WriteProtected<byte>
+    (
+        /* 0x14024E456 */
+        ScanSignature
+        (
+            "\x74\x0A\x33\xD2\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x18\x48\x8B\x48\x28\x48\x8B\x59\x48\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8",
+            "xxxxxxxx????xxxxxxxxxxxxx????xxxxxxx????xxx"
+        ),
+        
+        0xEB
+    );
+
+    // Supreme
+    WriteProtected<byte>
+    (
+        /* 0x1402AFE04 */
+        ScanSignature
+        (
+            "\x74\x0A\x33\xD2\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x18\x48\x8B\x48\x28\x48\x8B\x59\x48\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x45\x33\xFF",
+            "xxxxxxxx????xxxxxxxxxxxxx????xxxxxxx????xxx"
+        ),
+        
+        0xEB
+    );
+}
+
+Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M" does
+/*
+Disables the framerate limiter, allowing the game to run above its targeted 30/60FPS limit.
+
+Known issues;
+- The spawn point in Cyber Space 4-3 will throw you into an invisible wall.
+- The final QTE for Wyvern takes a long time to show up.
+*/
+{
+    /*
+        At the moment, this is the best method I have found for uncapping FPS.
+        There are **most likely** much better ways of removing the FPS cap, and there is definitely room for improvement within this script.
+        This script utilizes two steps to eliminate the cap, all of which will be outlined below.
+    */
+
+    /*
+        Frontiers seemingly utilizes a sleep function when limiting FPS, and so we must first prevent that function from being called.
+        By NOPing these opcodes and not changing anything else, however, the game will speed up.
+    */
+    WriteNop
+    (
+        /* 0x140BB9FB0 */
+        ScanSignature
+        (
+            "\xE8\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\x4C\x24\x00\x48\x8B\x43\x20",
+            "x????xxxx?x????xxxx?xxxx"
+        ),
+
+        5
+    );
+
+    /*
+        The change in speed is seemingly caused by the cap not being in sync with the current FPS. To fix this, we must first uncap the value of a current FPS address.
+        The cap is controlled by the opcode "cmova rax, rdi," where RAX is the calculated current FPS and RDI is the user's set FPS cap. To remove this, we will be scanning for the opcode before it.
+        From 0x140BBA081 to 0x140BBA08A, there are 15 bytes. This will allow us to successfully write the hook, which is 14 bytes long.
+    */
+    WriteAsmHook
+    (
+        /*
+            To get rid of the opcode which enforces the cap, we simply do not include it. We can also remove "comiss xmm1, dword ptr [rdi]," which invokes the comparison.
+            With the current FPS address' value uncapped (EAX), we can now write it to the FPS cap address, which is stored in RDI. This will sync the FPS cap with the actual FPS, fixing the speedup issue.
+        */
+        @"
+            mov eax, dword ptr [rax]
+            mov dword ptr [rbx+00000144h], eax
+            mov dword ptr [rdi], eax
+        ",
+
+        /* 0x140BBA081 */
+        ScanSignature
+        (
+            "\x0F\x2F\x0F\x48\x0F\x47\xC7\x8B\x00\x89\x83\x00\x00\x00\x00",
+            "xxxxxxxxxxx????"
+        ),
+
+        HookBehavior.Replace
+    );
+
+    /*
+        This completely removes the framerate capping code for cutscenes, which prevents cutscenes from speeding up when they first play.
+    */
+    long instrAddr = ScanSignature
+    (
+        /* 0x140126D90 */
+        "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
+        "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
+    );
+
+    if (instrAddr != 0)
+        WriteProtected<byte>(instrAddr, 0xEB, 0x31);
+
+    /*
+        Frontiers limits the monitor refresh rate to 60hz and forces VSync when in fullscreen.
+        To prevent the game from doing this, we set both of these bytes to 0.
+    */
+    instrAddr = ScanSignature
+    (
+        /* 0x140F4198E */
+        "\xC7\x45\xF8\x3C\x00\x00\x00\xC7\x45\xFC\x01\x00\x00\x00\x41\x8B\x04\x24\x41\x0F\xB6\x4C\x24\x14\x41\x0F\xB6\x7C\x24\x1C\x89\x45\xF0\x41\x8B\x44\x24\x04\x89\x45\xF4\xE8\xCC\xCC\xCC\xCC\x40\x84\xFF\x74\x05\x8B\x40\x18\xEB\x03",
+        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxx"
+    );
+
+    WriteProtected<byte>(instrAddr + 3, 0);
+    WriteProtected<byte>(instrAddr + 10, 0);
+}
+
+Patch "Disable Framerate Limiter in Cutscenes" in "Graphics" by "M&M"
+{
+    long instrAddr = ScanSignature
+    (
+        /* 0x140126D90 */
+        "\x0F\xB7\x88\x00\x00\x00\x00\x66\xC1\xE9\x0E\xF6\xC1\x01\x74\x23\x48\x8B\x05\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\xC6\x40\x10\x01\x48\x8B\x0D\x00\x00\x00\x00\x48\x83\xC4\x28\xE9\x00\x00\x00\x00",
+        "xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxxx????"
+    );
+
+    if (instrAddr != 0)
+        WriteProtected<byte>(instrAddr, 0xEB, 0x31);
+}
+
+Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
+{
+    // Asura
+    WriteProtected<byte>
+    (
+        /* 0x14053025E */
+        ScanSignature
+        (
+            "\x74\x0A\xBA\x00\x00\x00\x00\xE9\x00\x00\x00\x00\x48\x8B\x5E\x18",
+            "xxx????x????xxxx"
+        )
+        + 2,
+
+        Assemble("mov edx, 7")
+    );
+
+    // Ninja
+    {
+        WriteNop
+        (
+            /* 0x140554199 */
+            ScanSignature
+            (
+                "\xE8\x00\x00\x00\x00\x4C\x8D\x0D\x00\x00\x00\x00\x4C\x8D\x44\x24\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\x5F\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8D\x54\x24\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5F\x18",
+                "x????xxx????xxxx?xxx????xxxx?x????xxxxx????xxxxxxx????xxxx?xxxx????xxxx"
+            ),
+
+            5
+        );
+
+        WriteProtected<byte>
+        (
+            /* 0x140554214 */
+            ScanSignature
+            (
+                "\x72\x27\x80\x7E\x34\x00",
+                "xxxxxx"
+            ),
+
+            0xEB, 0x31
+        );
+    }
+
+    // Caterpillar
+    WriteProtected<byte>
+    (
+        /* 0x14057528B */
+        ScanSignature
+        (
+            "\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5E\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x9C\x24\x00\x00\x00\x00\x84\xC0\x75\x12\x48\x8B\xCE\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x32\xC0\x48\x83\xC4\x78\xC3\x32\xC0\x48\x83\xC4\x78\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x48\x8B\xC4",
+            "x????xxxx????xxxxx????xxxxxxx????xxxx????xxxx????xxxxxxxx????xxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        Assemble("mov edx, 3")
+    );
+
+    // Tower
+    WriteProtected<byte>
+    (
+        /* 0x14059E877 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x48\x8B\x5E\x18\x0F\x29\x74\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\x88\x00\x00\x00\x00",
+            "xx????xxxxxxxx?x????xxxxxxx????xxx????"
+        ),
+
+        0xE9, 0xC7, 0x00, 0x00, 0x00
+    );
+
+    // Squid
+    WriteProtected<byte>
+    (
+        /* 0x1405B19AC */
+        ScanSignature
+        (
+            "\xBA\x00\x00\x00\x00\xEB\x2A\x48\x8B\x5E\x18",
+            "x????xxxxxx"
+        ),
+
+        Assemble("mov edx, 3")
+    );
+
+    // Shark
+    WriteProtected<byte>
+    (
+        /* 0x1405CB02E */
+        ScanSignature
+        (
+            "\x48\x8B\xE8\x0F\x84\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00",
+            "xxxxx????xxx????"
+        ),
+
+        0xE9, 0x00, 0x01, 0x00, 0x00
+    );
+
+    // Spider
+    WriteProtected<byte>
+    (
+        /* 0x1405E4186 */
+        ScanSignature
+        (
+            "\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5E\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x84\xC0\x75\x12\x48\x8B\xCE\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x0F\x28\x74\x24\x00\x4C\x8D\x5C\x24\x00\x49\x8B\x5B\x10\x32\xC0\x49\x8B\x73\x18\x49\x8B\xE3\x5F\xC3\xCC\xCC\x48\x89\x5C\x24\x00\x48\x89\x6C\x24\x00",
+            "x????xxxx????xxxxx????xxxxxxx????xxxx????xxxxxxxx????xxxxxx????xxxx?xxxx?xxxxxxxxxxxxxxxxxxxxx?xxxx?"
+        ),
+
+        Assemble("mov edx, 3")
+    );
+
+    // Strider
+    WriteProtected<byte>
+    (
+        /* 0x1405FE226 */
+        ScanSignature
+        (
+            "\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5E\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x84\xC0\x75\x15",
+            "x????xxxx????xxxxx????xxxxxxx????xxxx????xxxx"
+        ),
+
+        Assemble("mov edx, 2")
+    );
+
+    // Sumo
+    WriteProtected<byte>
+    (
+        /* 0x140617ADC */
+        ScanSignature
+        (
+            "\x74\x15\x48\x8B\xCE\xE8\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5E\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x84\xC0\x75\x12\x48\x8B\xCE\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x0F\x28\x74\x24\x00\x4C\x8D\x5C\x24\x00\x49\x8B\x5B\x10\x32\xC0\x49\x8B\x73\x18\x49\x8B\xE3\x5F\xC3\xCC\xCC\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00",
+            "xxxxxx????x????xxxx????xxxxx????xxxxxxx????xxxx????xxxxxxxx????xxxxxx????xxxx?xxxx?xxxxxxxxxxxxxxxxxxxxx?xxxx?"
+        ),
+
+        0xEB
+    );
+
+    // Tank
+    WriteProtected<byte>
+    (
+        /* 0x14065B0FB */
+        ScanSignature
+        (
+            "\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5E\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x9C\x24\x00\x00\x00\x00\x84\xC0\x75\x12\x48\x8B\xCE\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x32\xC0\x48\x83\xC4\x78\xC3\x32\xC0\x48\x83\xC4\x78\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x40\x56",
+            "x????xxxx????xxxxx????xxxxxxx????xxxx????xxxx????xxxxxxxx????xxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        Assemble("mov edx, 4")
+    );
+}
+
+Patch "Disable In-Game Letterboxing" in "Graphics" by "Hyper" does "Disables letterboxing for in-game cutscenes and Training Simulator. This will not work for pre-rendered cutscenes."
+{
+    WriteProtected<byte>
+    (
+        /* 0x14CAF3E2D */
+        ScanSignature
+        (
+            "\x48\x8D\x05\x00\x00\x00\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x48\x89\x45\xEF\x48\x89\xCB\x0F\xB6\x81\x00\x00\x00\x00\x31\xF6\x48\x8D\x0D\x00\x00\x00\x00\x88\x45\xFB\xB2\x01\x48\xC7\x45\x00\x00\x00\x00\x00\x89\x75\x0F\xC7\x45\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\x45\xE7\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xD9\xE8\x00\x00\x00\x00\x48\x89\xC7\x48\x85\xC0\x74\x17\x48\x8D\x55\xE7\x48\x89\xC1\xE8\x00\x00\x00\x00\x48\x89\xFA\x48\x89\xD9\xE8\x00\x00\x00\x00",
+            "xxx????xxx?????xxxxxxxxxx????xxxxx????xxxxxxxx?????xxxxx?????x????xxxxx????xxxxxxx????xxxxxxxxxxxxxxxx????xxxxxxx????"
+        )
+        + 257,
+
+        0xEB
+    );
+}
+
+Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
+//
+    static bool IsWorldIsland = false;
+//
+{
+    fixed (bool* pIsWorldIsland = &IsWorldIsland)
+    {
+        /* This hook checks if we're on an island
+            and stores that in a boolean. */
+        WriteAsmHook
+        (
+            $@"
+                push rdx
+
+                ; Restore original code.
+                mov qword ptr [rsp + 0x38 + 0x08], rdi
+                lea rbx, qword ptr [rsi + 0x50]
+                mov qword ptr [rsp + 0x28 + 0x10], r14
+
+                ; Check field for stage type.
+                test byte ptr [rcx + 0xB8], 0x2E
+                setz al
+                
+                ; Store result in our local boolean.
+                mov rdx, {(long)pIsWorldIsland}
+                mov byte ptr [rdx], al
+
+                pop rdx
+            ",
+
+            /* 0x1491B68E9 */
+            ScanSignature
+            (
+                "\x48\x89\x7C\x24\x30\x48\x8D\x5E\x50\x4C\x89\x74\x24\x38\x4C\x89\x7C\x24\x40\xE8\xCC\xCC\xCC\xCC\xBF\x03\x00\x00\x00\x84\xC0\x74\x62",
+                "xxxxxxxxxxxxxxxxxxxx????xxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        /* 0x1491B7A1A */
+        long callerFuncAddr = ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x80\x7D\x35\x00\x74\x67\xE8\xCC\xCC\xCC\xCC\x48\x89\xC2",
+            "x????xxxxxxx????xxx"
+        );
+
+        /* 0x140D1EAA0 */
+        long sendMsgFunc = callerFuncAddr + Read<int>(callerFuncAddr + 0x01) + 0x05;
+
+        /* This hook checks if we're on an island and calls
+            the message sender to enter Sonic into the jump
+            board path if we're in Cyber Space. */
+        WriteAsmHook
+        (
+            $@"
+                ; Check if we're on an island.
+                mov rbx, {(long)pIsWorldIsland}
+                cmp byte ptr [rbx], 0
+
+                ; Non-zero value means we're on an island - jump to end.
+                jnz ret
+
+                ; Set up message sender function call.
+                lea r8, qword ptr [rbp + 0x57 + 0xFFFFFFFFFFFFFF90]
+                lea rdx, qword ptr [rbp + 0x57 + 0x10]
+                mov ecx, [rax]
+                mov dword ptr [rbp + 0x57 + 0x10], ecx
+                mov rcx, rsi
+
+                ; We're not on an island - call message sender.
+                mov  r9, {(long)sendMsgFunc}
+                call r9
+
+            ret:
+            ",
+
+            /* 0x1491B7A0E */
+            ScanSignature
+            (
+                "\x48\x8D\x55\x67\x8B\x08\x89\x4D\x67\x48\x89\xF1",
+                "xxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
+Patch "Disable Menu Restrictions" in "UI" by "Hyper" does
+/*
+Removes restrictions from accessing certain menu screens and options.
+
+Notes;
+- This grants you the full pause menu, including the Skills and Save Data menus, within reasonable areas (e.g. the tutorial).
+- This grants you permission to save and load anywhere, including during combat.
+- This will allow you to open the map screen during combat.
+*/
+{
+    // Disable save/load deny.
+    WriteProtected<byte>
+    (
+        /* 0x14D10DF81 */
+        ScanSignature
+        (
+            "\x74\x0E\x83\xFE\x01",
+            "xxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // Disable "SetHUDEnabled" callback function.
+    WriteProtected<byte>
+    (
+        /* 0x14BFF3E05 */
+        ScanSignature
+        (
+            "\x0F\x84\xDE\x00\x00\x00\x44\x0F\xBE\xC0",
+            "xxxxxxxxxx"
+        ),
+        
+        0xE9, 0xDF, 0x00, 0x00, 0x00
+    );
+
+    // Disable map screen restriction during combat.
+    WriteProtected<byte>
+    (
+        /* 0x14085FB8D */
+        ScanSignature
+        (
+            "\x0F\x94\x44\x24\x48\x89\x5C\x24\x44",
+            "xxxxxxxxx"
+        ),
+        
+        Assemble("mov byte ptr [rsp + 0x58 + 0xFFFFFFFFFFFFFFF0], 1")
+    );
+
+    // Disable "Unlock Cyloop" tutorial to prevent softlock.
+    WriteNop
+    (
+        /* 0x14088B496 */
+        ScanSignature
+        (
+            "\x0F\x44\xD9\xBA\x06\x23\x00\x00",
+            "xxxxxxxx"
+        ),
+        
+        3
+    );
+}
+
+Patch "Disable Power Boost" in "Gameplay" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14085047C */
+        ScanSignature
+        (
+            "\x74\x24\x0F\xBE\x4B\x30\x66\x0F\x6E\xC9\x0F\xBE\x4B\x31\x0F\x5B\xC9\x66\x0F\x6E\xC1\x0F\x5B\xC0\xF3\x0F\x5C\xC8\x41\x0F\x54\xC9\x41\x0F\x2F\xCA\x77\x16\xBA\x00\x00\x00\x00\x49\x8B\xCE\xE8\x00\x00\x00\x00\x84\xC0\x74\x05\x40\xB7\x01\xEB\x03\x40\x32\xFF\x8B\x43\x28\x0F\x57\xF6\x39\x43\x24",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        0xEB, 0x3A
+    );
+}
+
+Patch "Disable Power Boost Cutscene" in "Gameplay" by "Hyper" does "Disables the pre-rendered cutscene that occurs every time you acquire Power Boost."
+{
+    WriteProtected<byte>
+    (
+        /* 0x140850738 */
+        ScanSignature
+        (
+            "\x74\x6E\x0F\xB7\x56\x78\x0F\xB7\xCA\x66\xC1\xE9\x08\xF6\xC1\x01\x74\x24\x0F\xB7\xCA\x66\xC1\xE9\x0A\xF6\xC1\x01\x75\x18\xB8\x00\x00\x00\x00\x48\x8B\xCB\x66\x0B\xD0\x66\x89\x56\x78\x48\x8D\x56\x28\xE8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x4D\x90\xE8\x00\x00\x00\x00\x80\x8D\x00\x00\x00\x00\x00\x48\x8D\x55\x90\xB8\x00\x00\x00\x00\xC7\x45\x00\x00\x00\x00\x00\x66\x21\x45\x14\x48\x8B\xCB\xC6\x85\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxx????xxx????xxxxx????xx?????xxxxx????xx?????xxxxxxxxx?????x????"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Disable Ring Loss" in "Cheats" by "M&M"
+{
+    WriteProtected<byte>
+    (
+        /* 0x140799210 */
+        ScanSignature
+        (
+            "\x4C\x8B\x49\x30\x44\x8B\xC2\x41\xF7\xD8\x45\x85\xC0\x7E\x1B\x41\x8B\x41\x24\x41\x2B\x41\x28\x44\x3B\xC0\x44\x0F\x4D\xC0\x45\x03\x41\x28\x41\x8B\xC0\x45\x89\x41\x28\xC3\x41\x8B\x49\x20\x41\x2B\x49\x28\x41\x3B\xC8\x44\x0F\x4D\xC1\x45\x03\x41\x28\x41\x8B\xC0\x45\x89\x41\x28\xC3",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        0xC3
+    );
+}
+
+Patch "Disable Sequence Colliders" in "Cheats" by "Hyper" does "Disables invisible walls that are usually removed by specific events. This will not remove invisible walls surrounding the islands."
+{
+    WriteProtected<byte>
+    (
+        ScanSignature
+        (
+            /* v1.01: 0x1496E4D08 */
+            "\x0F\x84\x00\x00\x00\x00\x83\xE9\x01\x0F\x84\x00\x00\x00\x00\x83\xF9\x01\x0F\x85\x00\x00\x00\x00\x8A\x0D\x00\x00\x00\x00\x80\xF1\x9F\x88\xCA\x48\x8D\x4D\xE7\xE8\x00\x00\x00\x00\xF3\x0F\x10\x47\x00\x48\x8D\x57\x10\xF3\x0F\x10\x4F\x00\x48\x8D\x4D\xE7\xF3\x0F\x11\x45\x00\xF3\x0F\x11\x4D\x00\xE8\x00\x00\x00\x00\x80\x7F\x38\x00\xB8\x00\x00\x00\x00\xB9\x00\x00\x00\x00\xC7\x45\x00\x00\x00\x00\x00\x66\x0F\x45\xC1\xC6\x45\xE8\x00\x66\x89\x45\xEB\xB8\x00\x00\x00\x00\x66\x09\x45\xED\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xD9\xE8\x00\x00\x00\x00\x48\x89\xC6\x48\x85\xC0\x0F\x84\x00\x00\x00\x00\x48\x8D\x55\xE7\x48\x89\xC1\xE8\x00\x00\x00\x00\xE9\x00\x00\x00\x00",
+            "xx????xxxxx????xxxxx????xx????xxxxxxxxxx????xxxx?xxxxxxxx?xxxxxxxx?xxxx?x????xxxxx????x????xx?????xxxxxxxxxxxxx????xxxxx????xxxxxxx????xxxxxxxx????xxxxxxxx????x????",
+
+            /* v1.10: 0x149520288 */
+            "\x0F\x84\x00\x00\x00\x00\x83\xE9\x01\x0F\x84\x00\x00\x00\x00\x83\xF9\x01\x0F\x85\x00\x00\x00\x00\xB2\x02\x48\x8D\x4D\xE7\xE8\x00\x00\x00\x00\xF3\x0F\x10\x47\x00\x48\x8D\x57\x10\xF3\x0F\x10\x4F\x00\x48\x8D\x4D\xE7\xF3\x0F\x11\x45\x00\xF3\x0F\x11\x4D\x00\xE8\x00\x00\x00\x00\x80\x7F\x38\x00\xB8\x00\x00\x00\x00\xB9\x00\x00\x00\x00\xC7\x45\x00\x00\x00\x00\x00\x66\x0F\x45\xC1\xC6\x45\xE8\x00\x66\x89\x45\xEB\xB8\x00\x00\x00\x00\x66\x09\x45\xED\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xD9\xE8\x00\x00\x00\x00\x48\x89\xC6\x48\x85\xC0\x0F\x84\x00\x00\x00\x00\x48\x8D\x55\xE7\x48\x89\xC1\xE8\x00\x00\x00\x00\xE9\x00\x00\x00\x00",
+            "xx????xxxxx????xxxxx????xxxxxxx????xxxx?xxxxxxxx?xxxxxxxx?xxxx?x????xxxxx????x????xx?????xxxxxxxxxxxxx????xxxxx????xxxxxxx????xxxxxxxx????xxxxxxxx????x????"
+        ),
+
+        0xEB, 0x16
+    );
+}
+
+Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x148236DF5 */
+        ScanSignature
+        (
+            "\x0F\xB6\x42\x01\x88\x41\x01\x0F\xB6\x42\x02\x88\x41\x02\x0F\xB6\x42\x03\x88\x41\x03\x0F\xB6\x42\x04\x88\x41\x04\x0F\xB6\x42\x05\x88\x41\x05\x0F\xB6\x42\x06\x88\x41\x06\x8B\x42\x08\x89\x41\x08\x8B\x42\x0C\x89\x41\x0C\x8B\x42\x10\x89\x41\x10\x8B\x42\x14\x89\x41\x14\x8B\x42\x18\x89\x41\x18\x8B\x42\x1C\x89\x41\x1C\x8B\x42\x20\x89\x41\x20\x8B\x42\x24\x89\x41\x24\x8B\x42\x28\x89\x41\x28\x8B\x42\x2C\x89\x41\x2C\x8B\x42\x30\x89\x41\x30\x8B\x42\x34\x89\x41\x34\x8B\x42\x38\x89\x41\x38\x8B\x42\x3C\x89\x41\x3C\x8B\x42\x40\x89\x41\x40\x8B\x42\x44\x89\x41\x44\x8B\x42\x48\x89\x41\x48\x8B\x42\x4C\x89\x41\x4C\x8B\x42\x50\x89\x41\x50\x8B\x42\x54\x89\x41\x54\x8B\x42\x58\x89\x41\x58\x8B\x42\x5C\x89\x41\x5C\x8B\x42\x60\x89\x41\x60\x8B\x42\x64\x89\x41\x64\x8B\x42\x68\x89\x41\x68\x8B\x42\x6C\x89\x41\x6C\x8B\x42\x70\x89\x41\x70",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        0xC6, 0x41, 0x01, 0x00, 0x90, 0x90, 0x90
+    );
+}
+
+Patch "Disable Skill Camera Events" in "Graphics" by "Hyper" does
+/*
+Disables the camera events for skills.
+
+Affected skills;
+- Cross Slash
+- Cyclone Kick
+- Grand Slam
+- Homing Shot
+- Loop Kick
+- Recovery Smash
+- Sonic Boom
+- Spin Slash
+- Stomp Attack
+- Wild Rush
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x1408520DD */
+        ScanSignature
+        (
+            "\x74\x7F\x44\x38\x36",
+            "xxxxx"
+        ),
+        
+        0xEB
+    );
+
+    WriteNop
+    (
+        /* 0x140808775 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x41\xC7\x86\xAC\x00\x00\x00\x03\x00\x00\x00",
+            "x????xxxxxxxxxxx"
+        ),
+        
+        5
+    );
+}
+
+Patch "Disable Starfall" in "Gameplay" by "Hyper" does "Disables the Starfall event that begins the meteor shower and slot machine."
+{
+    WriteAsmHook
+    (
+        @"
+            mov al, 1
+            add rsp, 70h
+            pop rdi
+            ret
+        ",
+
+        /* 0x1493544B9 */
+        ScanSignature
+        (
+            "\x8B\x4A\x08\x81\xE9\x00\x00\x00\x00\x0F\x84\x00\x00\x00\x00\x83\xE9\x0B",
+            "xxxxx????xx????xxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Disable Super Combat Particles" in "Graphics" by "Hyper" does "Disables the giant fist and foot particles during combat as Super Sonic."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1407B5BF2 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x0F\x1F\x84\x00\x00\x00\x00\x00\x48\x8D\x4B\x48\xE8\x00\x00\x00\x00\x84\xC0\x75\x0D\x48\x8D\x4B\x50\xE8\x00\x00\x00\x00\x84\xC0\x74\x0E\x48\x83\xC3\x60\x48\x3B\xDF\x75\xDD\xE9\x00\x00\x00\x00\x0F\x28\x45\x10\x48\x8D\x4B\x48\xF3\x0F\x10\x4D\x00\xF3\x0F\x10\x65\x00\xF3\x0F\x10\x5D\x00\x0F\x29\xB4\x24\x00\x00\x00\x00\xF3\x0F\x10\x75\x00\x66\x0F\x7F\x43\x00\x0F\x28\x55\x20\x66\x0F\x7F\x53\x00\xF3\x0F\x11\x5B\x00\xF3\x0F\x11\x63\x00\xE8\x00\x00\x00\x00\x48\x8D\x4B\x50\x0F\x28\xCE\xE8\x00\x00\x00\x00\xF3\x0F\x10\x05\x00\x00\x00\x00",
+            "xx????xxxx????xxxxx????xxxxxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxxx?xxxx?xxxx?xxxx????xxxx?xxxx?xxxxxxxx?xxxx?xxxx?x????xxxxxxxx????xxxx????"
+        ),
+
+        0xE9, 0x3C, 0x01, 0x00, 0x00
+    );
+}
+
+Patch "Disable Traversal Objects in Chests" in "Gameplay" by "Hyper" does
+/*
+Disables the hidden traversal objects in chests that require cyloop to reveal, making them always accessible.
+
+Affected objects;
+- Dash Panels
+- Jump Boards
+- Springs
+*/
+{
+    // Dash Panels
+    WriteProtected<byte>
+    (
+        /* 0x140335B1D */
+        ScanSignature
+        (
+            "\x75\x0D\x45\x38\xA7\xB8\x00\x00\x00",
+            "xxxxxxxxx"
+        ),
+
+        Assemble("nop; nop; mov byte ptr [r15 + 0xB8], 0; nop; nop; nop; nop; nop")
+    );
+
+    // Jump Boards
+    {
+        /* 0x14037F023 */
+        long instrAddr = ScanSignature
+        (
+            "\x80\xB8\xB8\x00\x00\x00\x00\x74\x1D",
+            "xxxxxxxxx"
+        );
+
+        WriteProtected<byte>(instrAddr, Assemble("mov byte ptr [rax + 0xB8], 0"));
+
+        /* 0x14037F02A */
+        WriteProtected<byte>(instrAddr + 0x07, 0xEB);
+    }
+
+    // Springs
+    {
+        /* 0x1403E83D0 */
+        long funcAddr = ScanSignature
+        (
+            "\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x48\x89\x7C\x24\x20\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\x6C\x24\xC9\x48\x81\xEC\xC0\x00\x00\x00\x4C",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        );
+
+        /* 0x1403E84E1 */
+        WriteProtected<byte>(funcAddr + 0x111, 0xEB);
+
+        /* 0x1403E862C */
+        WriteProtected<byte>(funcAddr + 0x25C, 0xEB);
+
+        /* 0x1403E8790 */
+        WriteProtected<byte>(funcAddr + 0x3C0, 0xEB);
+
+        /* 0x1403E89E9 */
+        WriteProtected<byte>(funcAddr + 0x619, 0xEB);
+
+        /* 0x1403E8B22 */
+        WriteProtected<byte>(funcAddr + 0x752, 0xEB);
+
+        /* 0x1403E8BCD */
+        WriteProtected<byte>(funcAddr + 0x7FD, 0xEB);
+
+        /* 0x1403E8C63 */
+        WriteProtected<byte>(funcAddr + 0x893, 0xEB);
+
+        /* 0x1403E8E21 */
+        WriteProtected<byte>(funcAddr + 0xA51, 0xE9, 0xED, 0x00, 0x00, 0x00);
+    }
+}
+
+Patch "Disable Trick Hint Particles" in "Graphics" by "Hyper" does "Disables the particles that hint at dash rings, jump boards and springs being trickable."
+{
+    // Dash Rings
+    WriteProtected<byte>
+    (
+        /* 0x14033752F */
+        ScanSignature
+        (
+            "\x74\x7C\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\x0F\xB6\x98\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x84\xDB\x74\x39\x84\xC0\x75\x47\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x4C\x8D\x87\x00\x00\x00\x00\x48\x8B\xC8\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xE9\x00\x00\x00\x00\x84\xC0\x74\x0E\x33\xD2\x48\x8D\x8F\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xC3\xCC\xCC\xCC\x48\x89\x5C\x24\x00",
+            "xxx????xxxxxxx????xxxxxx????xxx????xxx????x????xxxxxxxxx????xxxxxxx????xxx????xxxxxx????xxxx?xxxx?xxxxxx????xxxxxxxxx????x????xxxx?xxxx?xxxxxxxxxxxxx?"
+        ),
+
+        0xEB
+    );
+
+    // Jump Boards
+    WriteProtected<byte>
+    (
+        /* 0x140377917 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0",
+            "xx????xxxx?xxxx?x????xxx"
+        ),
+
+        0xE9, 0x84, 0x00, 0x00, 0x00
+    );
+
+    // Springs
+    WriteProtected<byte>
+    (
+        /* 0x1497E39EE */
+        ScanSignature
+        (
+            "\x48\x89\xC3\x85\xC9\x0F\x84\x00\x00\x00\x00\x83\xF9\x03\x0F\x84\x00\x00\x00\x00\x83\xF9\x02\x0F\x85\x00\x00\x00\x00\x80\xBF\x00\x00\x00\x00\x00\x0F\x29\xB4\x24\x00\x00\x00\x00\x0F\x85\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xF9\xE8\x00\x00\x00\x00\x31\xD2\x48\x89\xC1\xE8\x00\x00\x00\x00\x0F\x10\xB0\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xF9\xE8\x00\x00\x00\x00\x0F\xC6\xF6\x55\x48\x8B\x88\x00\x00\x00\x00\xF3\x0F\x5C\xB1\x00\x00\x00\x00\x0F\x54\x35\x00\x00\x00\x00\x0F\x2F\x35\x00\x00\x00\x00\x73\x2D\x48\x8B\x8F\x00\x00\x00\x00\xC6\x87\x00\x00\x00\x00\x00\x48\x85\xC9\x74\x07\xB2\x01\xE8\x00\x00\x00\x00",
+            "xxxxxxx????xxxxx????xxxxx????xx?????xxxx????xx????x????xxxxxxx????xxxxxx????xxx????x????xxxxxxx????xxxxxxx????xxxx????xxx????xxx????xxxxx????xx?????xxxxxxxx????"
+        ),
+
+        0xEB, 0x12
+    );
+}
+
+Patch "Disable Umbrella Camera Lock-On" in "Gameplay" by "Hyper" does "Disables the lock-on camera when the Umbrella enemy in Ares jumps into the sky."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1404EC078 */
+        ScanSignature
+        (
+            "\x75\x08\x48\x8B\xCE\xE8\x00\x00\x00\x00\x45\x33\xC0\x48\x8B\xCE\x41\x8D\x50\x01\xE8\x00\x00\x00\x00\x41\xB0\x01\x33\xD2\x48\x8B\xCE\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xE9\x00\x00\x00\x00",
+            "xxxxxx????xxxxxxxxxxx????xxxxxxxxxxxx?xxxx?xxxxxx????"
+        ),
+
+        0xEB
+    );
+
+    WriteNop
+    (
+        /* 0x1404ED414 */
+        ScanSignature
+        (
+            "\xE8\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\xC6\x46\x50\x01\x80\x7E\x50\x00\x74\x2E\x0F\x28\xD6\x33\xD2\x48\x8B\xCF\xE8\x00\x00\x00\x00\x84\xC0\x74\x1D\x48\x8B\xCF\xE8\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x32\xC0\x48\x8B\x6C\x24\x00\x48\x8B\x74\x24\x00\x0F\x28\x74\x24\x00\x48\x83\xC4\x30\x5F\xC3",
+            "x????xxxx????x????xxxx????xxxxxxxxxxxxxxxxxxx????xxxxxxxx????x????xxxx????xxxx????xxxx?xxxxxx?xxxx?xxxx?xxxxxx"
+        ),
+
+        5
+    );
+}
+
+Patch "Disable Vignette" in "Graphics" by "Hyper"
+{
+    WriteNop
+    (
+        /* 0x140B42934 */
+        ScanSignature
+        (
+            "\x0F\x29\x43\x10\x41\x0F\x28\x4C\x24\x00\x0F\x29\x4B\x20\x41\x0F\x28\x44\x24\x00\x0F\x29\x43\x30\x41\x0F\x28\x4C\x24\x00\x0F\x29\x4B\x40\x41\x0F\x28\x44\x24\x00\x0F\x29\x43\x50\x41\x0F\x28\x4C\x24\x00\x0F\x29\x4B\x60\x41\x0F\x28\x44\x24\x00\x0F\x29\x43\x70\x41\x0F\x28\x4C\x24\x00\x0F\x29\x8B\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x84\xC0\x0F\x85\x00\x00\x00\x00\xB9\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD8\x48\x85\xC0\x0F\x84\x00\x00\x00\x00\x0F\x28\x05\x00\x00\x00\x00\x49\x8B\xCD\x0F\x28\x0D\x00\x00\x00\x00",
+            "xxxxxxxxx?xxxxxxxxx?xxxxxxxxx?xxxxxxxxx?xxxxxxxxx?xxxxxxxxx?xxxxxxxxx?xxx????x????xxxx????x????x????xxxxxxxx????xxx????xxxxxx????"
+        ),
+
+        4
+    );
+}
+
+Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a bug that causes the internal resolution to reset to 1280x720 if the game is unfocused during boot."
+//
+    #load "System.Xml.dll"
+
+    using System.IO;
+    using System.Xml.Serialization;
+
+    [XmlRoot(ElementName = "ScreenSetting")]
+    public class ScreenSetting
+    {
+        [XmlAttribute(AttributeName = "left")]
+        public int Left { get; set; }
+
+        [XmlAttribute(AttributeName = "top")]
+        public int Top { get; set; }
+
+        [XmlAttribute(AttributeName = "width")]
+        public int Width { get; set; }
+
+        [XmlAttribute(AttributeName = "height")]
+        public int Height { get; set; }
+
+        [XmlAttribute(AttributeName = "resolutionWidth")]
+        public int ResolutionWidth { get; set; }
+
+        [XmlAttribute(AttributeName = "resolutionHeight")]
+        public int ResolutionHeight { get; set; }
+
+        [XmlAttribute(AttributeName = "fullscreenStyle")]
+        public int FullscreenStyle { get; set; }
+
+        [XmlAttribute(AttributeName = "fullscreenState")]
+        public int FullscreenState { get; set; }
+    }
+//
+{
+    string xml = Path.Combine
+    (
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        @"SEGA\SonicFrontiers\steam\x64\screen_setting.xml"
+    );
+
+    if (!File.Exists(xml))
+    {
+        Console.WriteLine($"[Fix Resolution Resetting on Launch] Code halted, file not found: {xml}");
+        return;
+    }
+
+    try
+    {
+        using (StringReader reader = new StringReader(File.ReadAllText(xml)))
+        {
+            var screenSetting = (ScreenSetting)new XmlSerializer(typeof(ScreenSetting)).Deserialize(reader);
+
+            if (screenSetting.ResolutionWidth <= 0 || screenSetting.ResolutionHeight <= 0)
+            {
+                Console.WriteLine("[Fix Resolution Resetting on Launch] Invalid screen parameters! Defaulting to 1280x720...");
+
+                screenSetting.ResolutionWidth  = 1280;
+                screenSetting.ResolutionHeight = 720;
+            }
+
+            // Force resolutionWidth from XML as default value.
+            WriteProtected<byte>
+            (
+                /* 0x140BB66B4 */
+                ScanSignature
+                (
+                    "\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01\x83\xB9\x00\x00\x00\x00\x00\x75\x41\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x0E\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01",
+                    "xx????????xxxxxxxxx?????xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxx"
+                ),
+
+                Assemble($"mov dword ptr [rcx + 0xF0], 0x{screenSetting.ResolutionWidth:X}")
+            );
+
+            // Force resolutionHeight from XML as default value.
+            WriteProtected<byte>
+            (
+                /* 0x140BB66FE */
+                ScanSignature
+                (
+                    "\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01\x41\x0F\xB6\xC7\x34\x01\x88\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x40\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x10\x8B\x81\x00\x00\x00\x00\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20",
+                    "xx????????xxxxxxxxxxxxxxx????xxxxxx?????xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????xx????xxxx"
+                ),
+
+                Assemble($"mov dword ptr [rcx + 0xF4], 0x{screenSetting.ResolutionHeight:X}")
+            );
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[Fix Resolution Resetting on Launch] {ex}");
+        return;
+    }
+
+    // Kill XML value reading for resolutionWidth and resolutionHeight.
+    WriteProtected<byte>
+    (
+        /* 0x150A0F5C2 */
+        ScanSignature
+        (
+            "\x74\x1B\x48\x85\xC0\x74\x16\x48\x89\xE9\xE8\x00\x00\x00\x00\x48\x89\xF1\x89\x43\x10\xE8\x00\x00\x00\x00\x89\x43\x14\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x8B\xB4\x24\x00\x00\x00\x00\x48\x8B\xAC\x24\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x20\x45\x31\xC0\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xF9\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x0B\x48\x89\xC1\xE8\x00\x00\x00\x00\x89\x43\x24\x48\x8D\x4C\x24\x00\xB3\x01\xE8\x00\x00\x00\x00\x0F\xB6\xC3\x48\x81\xC4\x00\x00\x00\x00\x5F\x5B\xC3",
+            "xxxxxxxxxxx????xxxxxxx????xxxxxxxxx????xxxx????xxxx????xxxx????xxxxxxxxx????xxxxxxxxx????xxxx????xxxxxxxxx????xxxxxxx?xxx????xxxxxx????xxx"
+        ),
+
+        0xEB
+    );
+
+    // Always pass resolutionWidth -1 check so we can force new value.
+    WriteProtected<byte>
+    (
+        /* 0x140BB6682 */
+        ScanSignature
+        (
+            "\x75\x41\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x0E\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01\x83\xB9\x00\x00\x00\x00\x00\x75\x41\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x0E\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01",
+            "xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxxxx?????xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxx"
+        ),
+
+        0xEB, 0x30
+    );
+
+    // Always pass resolutionHeight -1 check so we can force new value.
+    WriteProtected<byte>
+    (
+        /* 0x140BB66CC */
+        ScanSignature
+        (
+            "\x75\x41\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x0E\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8B\x4B\x20\x41\xB7\x01\x41\x0F\xB6\xC7\x34\x01\x88\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x40\x41\xB8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x4B\x20\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20\x83\xB9\x00\x00\x00\x00\x00\x75\x10\x8B\x81\x00\x00\x00\x00\x89\x81\x00\x00\x00\x00\x48\x8B\x4B\x20",
+            "xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????????xxxxxxxxxxxxxxx????xxxxxx?????xxxx????xxx????xxx????x????xxxxxx????xxxxxx?????xxxx????xx????xxxx"
+        ),
+
+        0xEB, 0x30
+    );
+}
+
+Patch "Fix Upreel Grip Position" in "Fixes" by "ĐeäTh" does "Adjusts Sonic's grip position on the Upreel object's handle so that it lines up with the actual object."
+{
+    IntPtr gripOffsetPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(16);
+    *((float*)gripOffsetPtr + 0) = 0.0f;
+    *((float*)gripOffsetPtr + 1) = -1.025f;
+    *((float*)gripOffsetPtr + 2) = 0.0f;
+    *((float*)gripOffsetPtr + 3) = 0.0f;
+
+    WriteAsmHook
+    (
+        $@"
+            mov rax, {(long)gripOffsetPtr}
+            movups xmm15, [rax]
+            mulps xmm0, xmm15
+            lea rdx, [rbp - 0x39]
+            lea rcx, [rbp - 0x69]
+        ",
+
+        /* v1.10: 0x1498C86A7 */
+        ScanSignature
+        (
+            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xC7\x48\x8D\x4D\x97\x0F\x29\x45\xD7\xE8\xCC\xCC\xCC\xCC\x0F\x28\x45\xB7\x0F\x58\x00\x0F\x11\x46\x30\x0F\x28\x45\xC7\x0F\x11\x46\x40\xE9\xAF\x00\x00\x00\x0F\xB6\x81\xC8\x02\x00\x00\xA8\x01\x0F\x84\xA0\x00\x00\x00\x24\xFE\x31\xDB",
+            "xxx????xxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Force 4K Video Playback" in "Graphics" by "Hyper" does "Forces the game to use the pre-rendered cutscenes encoded at 4K, regardless of game resolution."
+{
+    WriteNop
+    (
+        /* 0x14011FC4B */
+        ScanSignature
+        (
+            "\x0F\x85\x00\x00\x00\x00\x48\x85\xC9\x74\x05\xE8\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x45\x33\xC9\x48\x89\x44\x24\x00\x48\x8D\x55\x37\x48\xC7\x44\x24\x00\x00\x00\x00\x00\x48\x8D\x4D\x17\x45\x8D\x41\x20\xE8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x4C\x89\x7D\x17\x48\x8D\x4D\x17\xE8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x4D\x17\xE8\x00\x00\x00\x00\x48\x8D\x77\x70\x4C\x8B\xC6\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x4D\x17\xE8\x00\x00\x00\x00\x48\x8B\x0D\x00\x00\x00\x00\x48\x8D\x55\x17\x48\x8B\x01\xFF\x90\x00\x00\x00\x00\x48\x8D\x4D\x17\x0F\xB6\xD8\xE8\x00\x00\x00\x00\x84\xDB\x74\x1A\x81\x8F\x00\x00\x00\x00\x00\x00\x00\x00\xEB\x0E",
+            "xx????xxxxxx????x????xxxxxxx?xxxxxxxx?????xxxxxxxxx????xxx????xxxxxxxxx????xxx????xxxxx????xxxxxxxxxx????xxxxx????xxx????xxxxxxxxx????xxxxxxxx????xxxxxx????????xx"
+        ),
+
+        6
+    );
+
+    WriteProtected<byte>
+    (
+        /* 0x140935909 */
+        ScanSignature
+        (
+            "\x48\x0F\x45\xD9\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8D\x4D\xD8\xC7\x45\x00\x00\x00\x00\x00\x48\x89\x4D\xC0\x48\x8D\x15\x00\x00\x00\x00\x45\x33\xF6\x48\x89\x45\xD0\x48\x8D\x4D\xC0\x44\x89\x75\xC8\x4C\x8B\xC3\xE8\x00\x00\x00\x00\xF3\x0F\x10\x0D\x00\x00\x00\x00\x4C\x8D\x05\x00\x00\x00\x00\x48\xB8\x00\x00\x00\x00\x00\x00\x00\x00\x48\xC7\x44\x24\x00\x00\x00\x00\x00\x48\x89\x44\x24\x00\x4C\x8D\x4C\x24\x00\x89\x44\x24\x78\x48\x8D\x95\x00\x00\x00\x00\xB8\x00\x00\x00\x00\x44\x89\x74\x24\x00\x66\x89\x45\x98\x0F\x57\xC0\xB8\x00\x00\x00\x00\xC6\x44\x24\x00\x00\x66\x44\x23\xF0\xF3\x0F\x11\x4D\x00\x48\x8B\x47\x08\x66\x41\x83\xCE\x00\x83\x7D\xC8\x00\x49\x8B\xCF\x66\x0F\x7F\x45\x00\x4C\x0F\x45\x45\x00\xC7\x45\x00\x00\x00\x00\x00\x48\xC7\x45\x00\x00\x00\x00\x00\xC7\x45\x00\x00\x00\x00\x00\xC7\x45\x00\x00\x00\x00\x00\x66\x44\x89\x75\x00\x48\x89\x44\x24\x00\xE8\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\x48\x8B\xD0\xE8\x00\x00\x00\x00",
+            "xxxxx????xxxx????xxxxxx?????xxxxxxx????xxxxxxxxxxxxxxxxxxx????xxxx????xxx????xx????????xxxx?????xxxx?xxxx?xxxxxxx????x????xxxx?xxxxxxxx????xxx??xxxxxxxx?xxxxxxxx?xxxxxxxxxxx?xxxx?xx?????xxx?????xx?????xx?????xxxx?xxxx?x????xxx????xxxx????"
+        ),
+
+        0x48, 0x89, 0xCB, 0x90
+    );
+}
+
+Patch "Force PlayStation 4 Controller UI" in "UI" by "Hyper"
+{
+    WriteAsmHook
+    (
+        @"
+            mov al, 0
+            add rsp, 20h
+            pop rbx
+            ret
+        ",
+
+        /* v1.01: 0x1409501E6 */
+        /* v1.10: 0x140950A80 */
+        ScanSignature
+        (
+            "\x80\xF9\x02\x75\x60\x8B\xCA\xE8\x00\x00\x00\x00\x48\x8B\xD8\x48\x85\xC0\x74\x51\x48\x8B\x10\x48\x8B\xC8\xFF\x52\x38\x84\xC0\x74\x44\x48\x8B\xCB\xE8\x00\x00\x00\x00\x8B\x50\x54\x83\xEA\x01\x74\x2C\x83\xEA\x01\x74\x1F\x83\xEA\x01\x74\x2A\x83\xEA\x01\x74\x0D\x83\xFA\x01\x75\x20\xB0\x04\x48\x83\xC4\x20\x5B\xC3\xB0\x03\x48\x83\xC4\x20\x5B\xC3\xB0\x01\x48\x83\xC4\x20\x5B\xC3\x32\xC0\x48\x83\xC4\x20\x5B\xC3\xB0\x02\x48\x83\xC4\x20\x5B\xC3",
+            "xxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+
+    // Swap Share and Touchpad icons.
+    WriteProtected<byte>
+    (
+        /* 0x140951B39 */
+        ScanSignature
+        (
+            "\x74\x1F\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x12\x80\x78\x4C\x02",
+            "xxxxxx????xxxxxxxxx"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Force PlayStation 5 Controller UI" in "UI" by "Hyper"
+{
+    WriteAsmHook
+    (
+        @"
+            mov al, 1
+            add rsp, 20h
+            pop rbx
+            ret
+        ",
+
+        /* v1.01: 0x1409501E6 */
+        /* v1.10: 0x140950A80 */
+        ScanSignature
+        (
+            "\x80\xF9\x02\x75\x60\x8B\xCA\xE8\x00\x00\x00\x00\x48\x8B\xD8\x48\x85\xC0\x74\x51\x48\x8B\x10\x48\x8B\xC8\xFF\x52\x38\x84\xC0\x74\x44\x48\x8B\xCB\xE8\x00\x00\x00\x00\x8B\x50\x54\x83\xEA\x01\x74\x2C\x83\xEA\x01\x74\x1F\x83\xEA\x01\x74\x2A\x83\xEA\x01\x74\x0D\x83\xFA\x01\x75\x20\xB0\x04\x48\x83\xC4\x20\x5B\xC3\xB0\x03\x48\x83\xC4\x20\x5B\xC3\xB0\x01\x48\x83\xC4\x20\x5B\xC3\x32\xC0\x48\x83\xC4\x20\x5B\xC3\xB0\x02\x48\x83\xC4\x20\x5B\xC3",
+            "xxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+
+    // Swap Share and Touchpad icons.
+    WriteProtected<byte>
+    (
+        /* 0x140951B39 */
+        ScanSignature
+        (
+            "\x74\x1F\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x85\xC0\x74\x12\x80\x78\x4C\x02",
+            "xxxxxx????xxxxxxxxx"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Force Switch Controller UI" in "UI" by "Hyper"
+{
+    WriteAsmHook
+    (
+        @"
+            mov al, 4
+            add rsp, 20h
+            pop rbx
+            ret
+        ",
+
+        /* v1.01: 0x1409501E6 */
+        /* v1.10: 0x140950A80 */
+        ScanSignature
+        (
+            "\x80\xF9\x02\x75\x60\x8B\xCA\xE8\x00\x00\x00\x00\x48\x8B\xD8\x48\x85\xC0\x74\x51\x48\x8B\x10\x48\x8B\xC8\xFF\x52\x38\x84\xC0\x74\x44\x48\x8B\xCB\xE8\x00\x00\x00\x00\x8B\x50\x54\x83\xEA\x01\x74\x2C\x83\xEA\x01\x74\x1F\x83\xEA\x01\x74\x2A\x83\xEA\x01\x74\x0D\x83\xFA\x01\x75\x20\xB0\x04\x48\x83\xC4\x20\x5B\xC3\xB0\x03\x48\x83\xC4\x20\x5B\xC3\xB0\x01\x48\x83\xC4\x20\x5B\xC3\x32\xC0\x48\x83\xC4\x20\x5B\xC3\xB0\x02\x48\x83\xC4\x20\x5B\xC3",
+            "xxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Force Xbox One Controller UI" in "UI" by "Hyper"
+{
+    WriteAsmHook
+    (
+        @"
+            mov al, 2
+            add rsp, 20h
+            pop rbx
+            ret
+        ",
+
+        /* v1.01: 0x1409501E6 */
+        /* v1.10: 0x140950A80 */
+        ScanSignature
+        (
+            "\x80\xF9\x02\x75\x60\x8B\xCA\xE8\x00\x00\x00\x00\x48\x8B\xD8\x48\x85\xC0\x74\x51\x48\x8B\x10\x48\x8B\xC8\xFF\x52\x38\x84\xC0\x74\x44\x48\x8B\xCB\xE8\x00\x00\x00\x00\x8B\x50\x54\x83\xEA\x01\x74\x2C\x83\xEA\x01\x74\x1F\x83\xEA\x01\x74\x2A\x83\xEA\x01\x74\x0D\x83\xFA\x01\x75\x20\xB0\x04\x48\x83\xC4\x20\x5B\xC3\xB0\x03\x48\x83\xC4\x20\x5B\xC3\xB0\x01\x48\x83\xC4\x20\x5B\xC3\x32\xC0\x48\x83\xC4\x20\x5B\xC3\xB0\x02\x48\x83\xC4\x20\x5B\xC3",
+            "xxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Force Xbox Series Controller UI" in "UI" by "Hyper"
+{
+    WriteAsmHook
+    (
+        @"
+            mov al, 3
+            add rsp, 20h
+            pop rbx
+            ret
+        ",
+
+        /* v1.01: 0x1409501E6 */
+        /* v1.10: 0x140950A80 */
+        ScanSignature
+        (
+            "\x80\xF9\x02\x75\x60\x8B\xCA\xE8\x00\x00\x00\x00\x48\x8B\xD8\x48\x85\xC0\x74\x51\x48\x8B\x10\x48\x8B\xC8\xFF\x52\x38\x84\xC0\x74\x44\x48\x8B\xCB\xE8\x00\x00\x00\x00\x8B\x50\x54\x83\xEA\x01\x74\x2C\x83\xEA\x01\x74\x1F\x83\xEA\x01\x74\x2A\x83\xEA\x01\x74\x0D\x83\xFA\x01\x75\x20\xB0\x04\x48\x83\xC4\x20\x5B\xC3\xB0\x03\x48\x83\xC4\x20\x5B\xC3\xB0\x01\x48\x83\xC4\x20\x5B\xC3\x32\xC0\x48\x83\xC4\x20\x5B\xC3\xB0\x02\x48\x83\xC4\x20\x5B\xC3",
+            "xxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Hide Boost Gauge" in "UI" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x1408F1250 */
+        ScanSignature
+        (
+            "\x74\x1C\xE8\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\x48\x89\x4D\xF0\x48\x8D\x0D\x00\x00\x00\x00\xE9\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\x48\x89\x4D\xF0\x48\x8D\x0D\x00\x00\x00\x00\xEB\x74",
+            "xxx????xxx????xxxxxxx????x????x????xxx????xxxxxxx????xx"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Hide Challenge Markers" in "Graphics" by "Hyper" does "Hides the markers that appear next to challenges on the islands."
+{
+    // Hide map sensor visual.
+    WriteProtected<byte>
+    (
+        /* 0x1403BF63B */
+        ScanSignature
+        (
+            "\x74\x17\x48\x8D\x55\xD7\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD3\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8B\x8F\x58\x02\x00\x00",
+            "xxxxxxxxxx????xxxxxxx????xxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // Hide map sensor prerequisite marker.
+    WriteProtected<byte>
+    (
+        /* 0x1403BF6B3 */
+        ScanSignature
+        (
+            "\x0F\x85\xE5\x00\x00\x00\xE8",
+            "xxxxxxx"
+        ),
+        
+        0xE9, 0xE6, 0x00, 0x00, 0x00
+    );
+
+    // Hide map sensor name.
+    WriteProtected<byte>
+    (
+        /* 0x1408D128F */
+        ScanSignature
+        (
+            "\x0F\x8E\x47\x02\x00\x00\x4C\x89\xA4\x24\x58\x01\x00\x00",
+            "xxxxxxxxxxxxxx"
+        ),
+        
+        0xE9, 0x48, 0x02, 0x00, 0x00
+    );
+}
+
+Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift dash panels, but still allows them to function, similarly to drift zones in Sonic Colours."
+{
+    // Remove model.
+    WriteNop
+    (
+        /* 0x140432970 */
+        ScanSignature
+        (
+            "\x48\x89\x47\x38\x48\x8D\x1D\x00\x00\x00\x00",
+            "xxxxxxx????"
+        ),
+
+        4
+    );
+
+    // Remove sound.
+    WriteNop
+    (
+        /* 0x140432AEC */
+        ScanSignature
+        (
+            "\xE8\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\xB0\x01\x48\x81\xC4\x00\x00\x00\x00\x5E",
+            "x????xxxx?x????xxxxx????x"
+        ),
+
+        5
+    );
+}
+
+Patch "Hide Enemy Health Gauge" in "UI" by "Hyper & Gordon Ramsay" does "Hides the health gauge for standard enemies and guardians."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1404FC4CB */
+        ScanSignature
+        (
+            "\x0F\x84\xF7\x00\x00\x00\xBA\x44\x23\x00\x00",
+            "xxxxxxxxxxx"
+        ),
+
+        0xE9, 0xF8, 0x00, 0x00, 0x00
+    );
+}
+
+Patch "Hide Homing Reticle" in "UI" by "Hyper"
+{
+    // Disable sound and main reticle.
+    WriteProtected<byte>
+    (
+        /* 0x1408BCE17 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x49\x8D\x7D\x50",
+            "xx????xxxx"
+        ),
+
+        0xE9, 0xB1, 0x00, 0x00, 0x00
+    );
+
+    // Disable lock-on triangle.
+    WriteProtected<byte>
+    (
+        /* 0x14C6A0C48 */
+        ScanSignature
+        (
+            "\x74\x17\x48\x8D\x55\x17\x48\x89\xC1\xE8\x00\x00\x00\x00\x48\x89\xFA\x48\x89\xD9\xE8\x00\x00\x00\x00\x4C\x8D\x9C\x24\x00\x00\x00\x00\x49\x8B\x5B\x10\x49\x8B\x73\x18\x49\x8B\x7B\x20\x4C\x89\xDC\x5D\xC3\xCC\x0F\x1F\x44\x00\x00",
+            "xxxxxxxxxx????xxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Hide Oxygen Gauge" in "UI" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x1408E2DB0 */
+        ScanSignature
+        (
+            "\x74\x1C\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x85\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xEB\x6C\x3D\x7E\x23\x00\x00\x0F\x85\x98\x00\x00\x00\x0F\xB6\x42\x20",
+            "xxx????xxx????xxxxxxx????xxxxxx????xxx????xxxxxxx????xxxxxxxxxxxxxxxxx"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Hide Skill Piece Transition" in "UI" by "Hyper" does "Removes the transition when picking up skill pieces to put them into the skill points display."
+{
+    WriteNop
+    (
+        /* 0x1407F0906 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x50\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x80\xE8\xCC\xCC\xCC\xCC\x45\x84\xFF",
+            "x????xxxxxx????xxxxx????xxx"
+        ),
+
+        5
+    );
+
+    WriteNop
+    (
+        /* 0x14084A7AB */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\xB7\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x17\xE8",
+            "x????xxxxx????xxxxx"
+        ),
+
+        5
+    );
+}
+
+Patch "Hide Skip Button in Cutscenes" in "UI" by "Hyper" does "Hides the button prompt at the bottom-right to skip cutscenes. This does not disable the ability to skip cutscenes."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1408BE1E8 */
+        ScanSignature
+        (
+            "\x74\x71\x48\x8D\x5C\x24\x00\xBF\x00\x00\x00\x00\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x83\xC3\x18\x48\x83\xEF\x01\x75\xEE\x0F\x57\xC0\xC7\x84\x24\x00\x00\x00\x00\x00\x00\x00\x00\x4C\x8D\x05\x00\x00\x00\x00\x0F\x29\x84\x24\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x40\x88\xBC\x24\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x48\x8D\x54\x24\x00\x66\xC7\x84\x24\x00\x00\x00\x00\x00\x00\x48\x8B\xCD\xC6\x84\x24\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xAC\x24\x00\x00\x00\x00\xC6\x86\x00\x00\x00\x00\x00\x48\x81\xC4\x00\x00\x00\x00\x5F\x5E\x5B\xC3",
+            "xxxxxx?x????xxxx????xxxxxxxxxxxxxxxx????????xxx????xxxx????xxx????xxxx????xxxx?x????xxxx?xxxx??????xxxxxx?????x????xxxx????xx?????xxx????xxxx"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Hide Titan Health Gauge" in "UI" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* v1.01: 0x14C76211A */
+        /* v1.10: 0x14C6036DB */
+        ScanSignature
+        (
+            "\x74\x18\x48\x8D\x54\x24\x70\x48\x89\xC1\xE8\xCC\xCC\xCC\xCC\x48\x89\xFA",
+            "xxxxxxxxxxx????xxx"
+        ),
+
+        0xEB
+    );
+}
+
+Patch "Infinite Boost Gauge" in "Cheats" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x140850D99 */
+        ScanSignature
+        (
+            "\x0F\x83\x00\x00\x00\x00\xF3\x0F\x10\x46\x00\x0F\x2F\xC6\x76\x56\xF3\x41\x0F\x5C\xC0\x0F\x2F\xC6\xF3\x0F\x11\x46\x00\x77\x47\xBA\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\xC6\x44\x24\x00\x00\x49\x8B\xCE\x48\x89\x44\x24\x00\xC7\x44\x24\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xC8\x48\x8D\x54\x24\x00\xE8\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\x4E\x20\x33\xD2\xE8\x00\x00\x00\x00\x84\xC0\x74\x67\x0F\x2F\x76\x54\x72\x61\x49\x8B\xCE\xE8\x00\x00\x00\x00\x84\xC0\x49\x8D\x47\x04\x75\x03\x49\x8B\xC7",
+            "xx????xxxx?xxxxxxxxxxxxxxxxx?xxx????xxxx?x????xxx????xxx??xxxxxxx?xxx?????x????xxxxxxx?x????xxxx?x????xxxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxx"
+        ),
+
+        0xE9, 0xC2, 0x01, 0x00, 0x00
+    );
+}
+
+Code "Infinite Skill Points" in "Cheats" by "Hyper"
+//
+    static bool Initialised = false;
+
+    static long Pointer = 0;
+//
+{
+    if (!Initialised)
+    {
+        fixed (long* pPointer = &Pointer)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    mov rax, {(long)pPointer}
+                    mov [rax], rbx
+                ",
+
+                /* 0x14014425D */
+                ScanSignature
+                (
+                    "\x0F\x85\x6D\x01\x00\x00\x83\x79\x0C\x00",
+                    "xxxxxxxxxx"
+                ),
+
+                HookBehavior.Replace
+            );
+        }
+
+        Initialised = true;
+    }
+
+    if (Pointer != 0)
+        *(short*)((Pointer - 0x70) + 0x84) = 999;
+}
+
+Patch "Infinite Training Simulator Timer" in "Cheats" by "Hyper" does "Allows the timer in Training Simulator to drop below zero and continue uninterrupted."
+{
+    WriteProtected<byte>
+    (
+        /* 0x14018C55C */
+        ScanSignature
+        (
+            "\x0F\x87\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x48\x89\x45\xE8\x48\x8D\x4E\x20\x48\x8D\x05\x00\x00\x00\x00\xC6\x45\xF0\x01\x4C\x8D\x45\xD8\x48\x89\x45\xD8\x48\x8B\xD6\xE8\x00\x00\x00\x00\xE9\x00\x00\x00\x00\x48\x8B\x59\x10\xBA\x00\x00\x00\x00\x48\x8D\x4D\xD8\xE8\x00\x00\x00\x00\x48\x8B\x53\x30\x48\x8D\x05\x00\x00\x00\x00\x4C\x8D\x45\xD8\x48\x89\x45\xD8\x48\x8B\xCB\xC7\x45\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8D\x4D\xD8\xE8\x00\x00\x00\x00\xBA\x00\x00\x00\x00\x48\x8D\x4D\xD8\xE8\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00",
+            "xx????xxx????xxx?????xxxxxxxxxxx????xxxxxxxxxxxxxxxx????x????xxxxx????xxxxx????xxxxxxx????xxxxxxxxxxxxx?????x????xxxxx????x????xxxxx????xxx????"
+        ),
+
+        0xE9, 0x56, 0x01, 0x00, 0x00
+    );
+}
+
+Patch "Infinite Quick Cyloop Gauge" in "Cheats" by "NM"
+{
+    WriteAsmHook
+    (
+        @"
+            mov dword ptr [rcx+0x000000B8], 0x42F00000 ; 120.0f, the max value of the gauge
+            movss xmm0, dword ptr [rcx+0x000000B4]
+        ",
+
+        /* 0x14AA2A749 */
+        ScanSignature
+        (
+            "\xF3\x0F\x11\x91\xB8\x00\x00\x00\xF3\x0F\x10\x81\xB4\x00\x00\x00\xF3\x0F\x5C\xC2\x0F\x54\x05\xDC\xA2\x64\xF6\x0F\x2F\x05\xCD\xA2\x64\xF6\x0F\x96\xD0\xC3",
+            "xxxx????xxxx????xxxxxxx????xxx????xxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
+Patch "Play Random Mvt. Soundtrack on Islands" in "Audio" by "Hyper" does
+/*
+Plays a random movement every time you switch to any of the supported islands.
+
+Supported islands;
+- Kronos
+- Ares
+- Chaos
+
+Rhea only has one soundtrack and will not change.
+
+Ouranos only has one soundtrack, but will play Kronos Island: 2nd Mvt. if the random number is greater than 3.
+*/
+//
+    static byte[] Format = System.Text.Encoding.UTF8.GetBytes("%s_%d");
+//
+{
+    fixed (byte* pFormat = Format)
+    {
+        WriteAsmHook
+        (
+            @$"
+            rand:
+                rdrand rax
+                and    rax, 7
+                inc    rax
+
+                ; Generate new random number if the result is greater than 7.
+                cmp rax, 7
+                jg  rand
+
+                mov r9d, eax
+
+                ; Load format string, since we overwrote the original instruction with the hook jump.
+                mov rax, {(long)pFormat}
+                lea rdx, [rax]
+            ",
+
+            /* 0x14C1A39AF */
+            ScanSignature
+            (
+                "\x45\x8B\x8E\xA4\x00\x00\x00",
+                "xxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}

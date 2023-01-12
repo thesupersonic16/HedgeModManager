@@ -31,6 +31,10 @@ using GameBananaAPI;
 using HedgeModManager.GitHub;
 using HedgeModManager.Misc;
 using HedgeModManager.Exceptions;
+using System.Windows.Media;
+using System.Windows.Documents;
+using System.Xml.Linq;
+using GongSolutions.Wpf.DragDrop.Utilities;
 
 namespace HedgeModManager
 {
@@ -53,6 +57,9 @@ namespace HedgeModManager
         public bool CheckingForUpdates = false;
         public ModProfile SelectedModProfile = null;
         public CancellationTokenSource ContextCancelSource { get; set; }
+
+        public List<string> ExpandedCodeCategories = new List<string>();
+        public bool IsCodesTreeView = true;
 
         protected List<Task> Tasks { get; set; } = new List<Task>(4);
         protected Timer StatusTimer;
@@ -144,6 +151,99 @@ namespace HedgeModManager
             }
         }
 
+        private void SortCodesList(int index = -1)
+        {
+            // Set toggle checkbox and switch to user view.
+            InvokeChangeCodesView((CheckBox_CodesUseTreeView.IsChecked = RegistryConfig.CodesUseTreeView).Value);
+
+            if (IsCodesTreeView)
+            {
+                ExpandedCodeCategories.Clear();
+
+                // Cache expanded tree nodes.
+                foreach (CodeHierarchyViewModel item in CodesTree.Items)
+                {
+                    if
+                    (                                                   /* yes I have to do "== true" because nullable */
+                        (CodesTree.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem)?.IsExpanded == true &&
+                        !ExpandedCodeCategories.Contains(item.Name)
+                    )
+                    {
+                        ExpandedCodeCategories.Add(item.Name);
+                    }
+                }
+
+                CodesTree.ItemsSource = CodesDatabase.Codes.OrderBy(x => x.Category).ThenBy(x => x.Name).GroupBy(x => x.Category).Select
+                (
+                    (cat) =>
+                    {
+                        string name = string.IsNullOrEmpty(cat.Key)
+                                ? Localise("CodesUINullCategory")
+                                : cat.Key;
+
+                        var codes = cat.ToList();
+
+                        return new CodeHierarchyViewModel()
+                        {
+                            Name       = name,
+                            IsExpanded = ExpandedCodeCategories.Contains(name),
+                            IsRoot     = true,
+
+                            Children = cat.Select
+                            (
+                                y => new CodeHierarchyViewModel()
+                                {
+                                    Name = y.Name,
+                                    Code = codes[codes.IndexOf(y)]
+                                }
+                            )
+                            .ToArray()
+                        };
+                    }
+                )
+                .ToArray();
+            }
+            else
+            {
+                CodesList.Items.Clear();
+
+                switch (index == -1 ? RegistryConfig.CodesSortingColumnIndex : index)
+                {
+                    // Name
+                    case 0:
+                        CodesDatabase.Codes.Sort((x, y) => x.Name.CompareTo(y.Name));
+                        break;
+
+                    // Category
+                    case 1:
+                        CodesDatabase.Codes = CodesDatabase.Codes.OrderBy(x => x.Category).ThenBy(x => x.Name).ToList();
+                        break;
+
+                    // Author
+                    case 2:
+                        CodesDatabase.Codes = CodesDatabase.Codes.OrderBy(x => x.Author).ThenBy(x => x.Name).ToList();
+                        break;
+                }
+
+                for (int i = CodesDatabase.Codes.Count - 1; i >= 0; i--)
+                {
+                    var code = CodesDatabase.Codes[i];
+
+                    if (code.Enabled)
+                        CodesList.Items.Insert(0, code);
+                }
+
+                CodesDatabase.Codes.ForEach
+                (
+                    (code) =>
+                    {
+                        if (!code.Enabled)
+                            CodesList.Items.Add(code);
+                    }
+                );
+            }
+        }
+
         public void RefreshMods()
         {
             // Don't refresh when there is no games
@@ -163,27 +263,7 @@ namespace HedgeModManager
                     code.Enabled = true;
             });
 
-            CodesDatabase.Codes.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-            // Sort enabled codes in alphabetical order.
-            {
-                for (int i = CodesDatabase.Codes.Count - 1; i >= 0; i--)
-                {
-                    var code = CodesDatabase.Codes[i];
-
-                    if (code.Enabled)
-                        CodesList.Items.Insert(0, code);
-                }
-
-                CodesDatabase.Codes.ForEach
-                (
-                    (code) =>
-                    {
-                        if (!code.Enabled)
-                            CodesList.Items.Add(code);
-                    }
-                );
-            }
+            SortCodesList();
 
             UpdateStatus(LocaliseFormat("StatusUILoadedMods", ModsDatabase.Mods.Count));
             CheckCodeCompatibility();
@@ -214,12 +294,36 @@ namespace HedgeModManager
             }
         }
 
+        public void InvokeChangeCodesView(bool useTreeView = true)
+        {
+            /* Using an argument to switch view, rather than the registry
+               config value, so we don't change any settings when switching
+               views temporarily. */
+            if (!useTreeView)
+            {
+                IsCodesTreeView = false;
+                CodesListContainer.Visibility = Visibility.Visible;
+                CodesTreeContainer.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            if (RegistryConfig.CodesUseTreeView)
+            {
+                IsCodesTreeView = true;
+                CodesListContainer.Visibility = Visibility.Collapsed;
+                CodesTreeContainer.Visibility = Visibility.Visible;
+                return;
+            }
+        }
+
         public void RefreshUI()
         {
             ModsTab.IsEnabled = CodesTab.IsEnabled = ComboBox_ModProfile.IsEnabled = MLSettingsGrid.IsEnabled
                 = HMMSettingsSackPanel.IsEnabled = SaveButton.IsEnabled = SavePlayButton.IsEnabled = HedgeApp.CurrentGame != Games.Unknown;
             // I am lazy
             ComboBox_ModProfile.Visibility = HedgeApp.CurrentGame != Games.Unknown ? Visibility.Visible : Visibility.Collapsed;
+
+            CodesTree.ClearSelectedItems();
 
             if (HedgeApp.AprilFools)
                 SavePlayButton.Content = "Save & Pay";
@@ -263,6 +367,9 @@ namespace HedgeModManager
                 ModsDatabase.Mods.Insert(ModsDatabase.ActiveMods.Count, mod);
             }
 
+            // Clear the code description and use default text.
+            UpdateCodeDescription(null);
+
             // Sets the DataContext for all the Components
             ViewModel = new MainWindowViewModel
             {
@@ -301,13 +408,22 @@ namespace HedgeModManager
         public void FilterCodes(string text)
         {
             CodesList.Items.Clear();
+
+            int enabledIndex = 0;
             foreach (Code code in CodesDatabase.Codes)
-                if (code.Name.ToLowerInvariant().Contains(text) ||
-                    (code.Author != null && code.Author.ToLowerInvariant().Contains(text)))
+            {
+                if
+                (
+                    code.Name.ToLowerInvariant().Contains(text) ||
+                    (code.Author != null && code.Author.ToLowerInvariant().Contains(text))
+                )
+                {
                     if (code.Enabled)
-                        CodesList.Items.Insert(0, code);
+                        CodesList.Items.Insert(enabledIndex++, code);
                     else
                         CodesList.Items.Add(code);
+                }
+            }
         }
 
         public void FilterMods(string text)
@@ -801,6 +917,8 @@ namespace HedgeModManager
 
         public void EnableSaveRedirIfUsed()
         {
+            HedgeApp.Config.SaveFileFallback = HedgeApp.CurrentGame.SaveName;
+
             if (HedgeApp.Config.EnableFallbackSaveRedirection)
             {
                 HedgeApp.Config.EnableSaveFileRedirection = true;
@@ -905,7 +1023,7 @@ namespace HedgeModManager
                                 {
                                     var gbItem = await GBAPI.PopulateItemDataAsync(new GBAPIItemDataBasic("Mod", id));
                                     var file = gbItem.Files.FirstOrDefault(t =>
-                                        t.Value.FileMetadata.Files.Any(s => s.Contains("mod.ini"))).Value;
+                                        t.Value.Files.Any(s => s.Contains("mod.ini"))).Value;
                                     if (file != null)
                                         updateInfo.Add(
                                             new ModUpdateGameBanana(depend.Title, gbItem, file, ModsDatabase));
@@ -1188,7 +1306,7 @@ namespace HedgeModManager
 
         private void UI_Open_Folder(object sender, RoutedEventArgs e)
         {
-            Process.Start(ViewModel.SelectedMod.RootDirectory);
+            HedgeApp.StartURL(ViewModel.SelectedMod.RootDirectory);
         }
 
         private void UI_Install_Mod(object sender, RoutedEventArgs e)
@@ -1272,6 +1390,8 @@ namespace HedgeModManager
         {
             if (ComboBox_GameStatus.SelectedItem != null && ComboBox_GameStatus.SelectedItem != HedgeApp.CurrentGameInstall)
             {
+                SetCodesTreeExpandedState(false);
+
                 ContextCancelSource?.Cancel();
                 ContextCancelSource = new CancellationTokenSource();
 
@@ -1311,22 +1431,60 @@ namespace HedgeModManager
             UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGame));
             try
             {
-                var downloader = new DownloadWindow($"Downloading codes for {HedgeApp.CurrentGame}", HedgeApp.CurrentGame.CodesURL, CodeProvider.CodesTextPath)
+                string codesFilePath = CodeProvider.CodesTextPath;
+                bool codesFileExists = File.Exists(codesFilePath);
+
+                /* Parse current codes list, since ModsDB.CodesDatabase
+                   is contaminated with codes from ExtraCodes.hmm */
+                var oldCodes = codesFileExists ? new CodeFile(codesFilePath) : null;
+
+                var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGame), HedgeApp.CurrentGame.CodesURL, codesFilePath)
                 {
                     DownloadCompleted = () =>
                     {
                         Refresh();
+
+                        CodesOutdated = false;
+
                         UpdateStatus(Localise("StatusUIDownloadFinished"));
+                        Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
 
-                        // Update button visual.
+                        // Don't display diff for initial download.
+                        if (!codesFileExists)
+                            return;
+
+                        var diff = new CodeFile(codesFilePath).Diff(oldCodes);
                         {
-                            CodesOutdated = false;
+                            var sb = new StringBuilder();
 
-                            // Reset button text if there was an update that was just downloaded.
-                            Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
+                            foreach (var code in diff)
+                            {
+                                sb.AppendLine($"- {code}");
+
+                                if (code.Type == CodeDiffResult.CodeDiffType.Renamed)
+                                {
+                                    // Restore enabled state of renamed code.
+                                    if (ViewModel.ModsDB.Codes.Contains(code.OriginalName))
+                                        ViewModel.ModsDB.CodesDatabase.Codes.Find(x => x.Name == code.NewName).Enabled = true;
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(sb.ToString()))
+                            {
+                                var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+                                {
+                                    box.AddButton(Localise("CommonUIOK"), () => box.Close());
+                                    box.ShowDialog();
+                                }
+                            }
+                            else
+                            {
+                                UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
+                            }
                         }
                     }
                 };
+
                 downloader.Start();
             }
             catch
@@ -1337,12 +1495,12 @@ namespace HedgeModManager
 
         private void UI_OpenMods_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(HedgeApp.ModsDbPath);
+            HedgeApp.StartURL(HedgeApp.ModsDbPath);
         }
 
         private void UI_OpenGameDir_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(HedgeApp.CurrentGameInstall.GameDirectory);
+            HedgeApp.StartURL(HedgeApp.CurrentGameInstall.GameDirectory);
         }
 
         private void UI_ChangeDatabasePath_Click(object sender, RoutedEventArgs e)
@@ -1492,15 +1650,16 @@ namespace HedgeModManager
 
         private void CodesList_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (ViewModel.SelectedCode == null)
+            Code code = GetCodeFromView(sender);
+
+            if (code == null)
                 return;
 
-            var code = ViewModel.SelectedCode;
-
             if (Keyboard.IsKeyDown(Key.Space))
-            {
                 code.Enabled = !code.Enabled;
-            }
+
+            if (Keyboard.IsKeyDown(Key.Enter))
+                OpenAboutCodeWindow(code);
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1575,11 +1734,17 @@ namespace HedgeModManager
                     {
                         if (CodesFind.Visibility == Visibility.Visible)
                         {
+                            // Switch to user view.
+                            InvokeChangeCodesView(RegistryConfig.CodesUseTreeView);
+
                             CodesFind.Visibility = Visibility.Collapsed;
                             FilterCodes("");
                         }
                         else
                         {
+                            // Switch to list view for search.
+                            InvokeChangeCodesView(false);
+
                             CodesFind.Visibility = Visibility.Visible;
                             FilterCodes(TextBox_CodesSearch.Text.ToLowerInvariant());
                             TextBox_CodesSearch.Focus();
@@ -1762,6 +1927,7 @@ namespace HedgeModManager
 
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            InvokeChangeCodesView(RegistryConfig.CodesUseTreeView);
             if (RefreshButton != null)
             {
                 RefreshButton.IsEnabled = MainTabControl.SelectedItem != SettingsTab;
@@ -1788,11 +1954,12 @@ namespace HedgeModManager
 
         private void CodesList_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double minWidth = 16 + 370 + 152;
+            double minWidth = 16 + 285 + 85 + 125;
             double extra = Math.Max(0, e.NewSize.Width - minWidth);
             var view = CodesList.View as GridView;
-            view.Columns[0].Width = 370 + extra * 0.70;
-            view.Columns[1].Width = 152 + extra * 0.30;
+            view.Columns[0].Width = 285 + extra * 0.75;
+            view.Columns[1].Width = 85 + extra * 0.10;
+            view.Columns[2].Width = 125 + extra * 0.15;
         }
 
         class StatusLogger : ILogger
@@ -1801,6 +1968,275 @@ namespace HedgeModManager
             public StatusLogger(MainWindow window) => Window = window;
             public void Write(string str) => Window.UpdateStatus(str);
             public void WriteLine(string str) => Window.UpdateStatus(str);
+        }
+
+        private void OpenAboutCodeWindow(Code code)
+        {
+            if (!string.IsNullOrEmpty(code?.Description))
+                new AboutCodeWindow(code).ShowDialog();
+        }
+
+        private Code GetCodeFromView(object sender)
+        {
+            if (sender is ListViewItem lvItem)
+                return lvItem.Content as Code;
+            else if (sender is ListView lv)
+                return lv.SelectedItem as Code;
+            else if (sender is TreeViewItem tvItem)
+                return (tvItem.DataContext as CodeHierarchyViewModel)?.Code;
+            else if (sender is TreeView tv)
+                return (tv.SelectedItem as CodeHierarchyViewModel)?.Code;
+
+            return null;
+        }
+
+        private void CodesView_Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var code = GetCodeFromView(sender);
+
+            if (code == null)
+                return;
+
+            OpenAboutCodeWindow(code);
+        }
+
+        private void CodesList_GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            var header = e.OriginalSource as GridViewColumnHeader;
+
+            if (header != null)
+            {
+                GridViewHeaderRowPresenter headerRowPresenter = header.Parent as GridViewHeaderRowPresenter;
+
+                if (headerRowPresenter != null)
+                {
+                    /* The world if GridViewColumnHeader.ActualIndex was public;
+                       https://i.kym-cdn.com/entries/icons/mobile/000/026/738/future.jpg */
+                    int index = headerRowPresenter.Columns.IndexOf(header.Column);
+
+                    RegistryConfig.CodesSortingColumnIndex = index;
+                    RegistryConfig.Save();
+
+                    SortCodesList(index);
+                }
+            }
+        }
+
+        private void UpdateCodeDescription(Code code)
+        {
+            var fgBrush = (SolidColorBrush)HedgeApp.Current.FindResource("HMM.Window.ForegroundBrush");
+            var noBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF646464");
+
+            TextBlock textBlock;
+            {
+                if (IsCodesTreeView)
+                    textBlock = CodesTreeDescription;
+                else
+                    textBlock = CodesListDescription;
+            }
+
+            if (textBlock == null)
+                return;
+
+            textBlock.Inlines.Clear();
+
+            if (code != null)
+            {
+                string description = string.IsNullOrEmpty(code.Description)
+                        ? Localise("CodesUINoInfo")
+                        : code.Description;
+
+                if (IsCodesTreeView)
+                {
+                    textBlock.Inlines.Add
+                    (
+                        new Run(code.Name)
+                        {
+                            FontStyle       = FontStyles.Normal,
+                            FontWeight      = FontWeights.Bold,
+                            Foreground      = fgBrush
+                        }
+                    );
+
+                    if (!string.IsNullOrEmpty(code.Author))
+                    {
+                        textBlock.Inlines.Add
+                        (
+                            new Run($"\n{Localise("ModDescriptionUIMadeBy")} {code.Author}")
+                            {
+                                FontStyle  = FontStyles.Italic,
+                                FontWeight = FontWeights.Normal,
+                                Foreground = noBrush
+                            }
+                        );
+                    }
+
+                    textBlock.Inlines.Add("\n\n");
+                }
+
+                textBlock.Inlines.Add
+                (
+                    new Run(description)
+                    {
+                        FontStyle  = FontStyles.Normal,
+                        FontWeight = FontWeights.Normal,
+                        Foreground = fgBrush
+                    }
+                );
+
+                return;
+            }
+
+            textBlock.Inlines.Add
+            (
+                new Run(Localise("CodesUIInfoHint"))
+                {
+                    FontStyle  = FontStyles.Italic,
+                    FontWeight = FontWeights.Normal,
+                    Foreground = noBrush
+                }
+            );
+        }
+
+        private void CodesView_Item_MouseEnter(object sender, MouseEventArgs e)
+        {
+            UpdateCodeDescription(GetCodeFromView(sender));
+        }
+
+        private void CodesView_Item_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (IsCodesTreeView)
+            {
+                if (CodesTree.SelectedItem != null)
+                {
+                    UpdateCodeDescription((CodesTree.SelectedItem as CodeHierarchyViewModel).Code);
+                    return;
+                }
+            }
+            else
+            {
+                if (CodesList.SelectedItems.Count == 1)
+                {
+                    UpdateCodeDescription(CodesList.SelectedItem as Code);
+                    return;
+                }
+            }
+
+            UpdateCodeDescription(null);
+        }
+
+        private void CodesView_Item_Selected(object sender, RoutedEventArgs e)
+        {
+            UpdateCodeDescription(GetCodeFromView(sender));
+        }
+
+        private void CodesTreeDescription_GridSplitter_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            CodesTreeDescriptionColumn.Width = GridLength.Auto;
+        }
+
+        private void CodesListDescription_GridSplitter_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            CodesListDescriptionRow.Height = GridLength.Auto;
+        }
+
+        private void CodesViewDescription_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (IsCodesTreeView)
+            {
+                if (CodesTree.SelectedItem != null)
+                    OpenAboutCodeWindow((CodesTree.SelectedItem as CodeHierarchyViewModel).Code);
+            }
+            else
+            {
+                if (CodesList.SelectedItems.Count == 1)
+                    OpenAboutCodeWindow(CodesList.SelectedItem as Code);
+            }
+        }
+
+        private void CheckBox_CodesUseTreeView_Checked(object sender, RoutedEventArgs e)
+        {
+            RegistryConfig.CodesUseTreeView = CheckBox_CodesUseTreeView.IsChecked.Value;
+            RegistryConfig.Save();
+
+            Refresh();
+        }
+
+        private void CodesTree_ViewItem_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+        {
+            /* Prevents the tree view from scrolling
+               horizontally automatically if an item
+               is slightly out of view. */
+            e.Handled = true;
+        }
+
+        private void SetCodesTreeExpandedState(bool expand)
+        {
+            foreach (var item in CodesTree.Items)
+            {
+                if (CodesTree.ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem tvItem)
+                    tvItem.IsExpanded = expand;
+            }
+        }
+
+        private void UI_CodesTree_ExpandAll_Click(object sender, RoutedEventArgs e)
+        {
+            SetCodesTreeExpandedState(true);
+        }
+
+        private void UI_CodesTree_CollapseAll_Click(object sender, RoutedEventArgs e)
+        {
+            SetCodesTreeExpandedState(false);
+        }
+
+        private void CodesTree_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            if (CodesTree.SelectedItem != null)
+            {
+                foreach (var item in CodesTree.ContextMenu.Items)
+                {
+                    var codeVM = CodesTree.SelectedItem as CodeHierarchyViewModel;
+
+                    if (codeVM == null)
+                        continue;
+
+                    var visibility = codeVM.IsRoot
+                        ? Visibility.Collapsed
+                        : Visibility.Visible;
+
+                    if (item is Separator separator && separator?.Tag as string == "Item")
+                        separator.Visibility = visibility;
+
+                    if (item is MenuItem menuItem && menuItem?.Tag as string == "Item")
+                        menuItem.Visibility = visibility;
+                }
+            }
+        }
+
+        private void CodesTree_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+
+            if (treeViewItem != null)
+            {
+                // Select the hovered item upon right-clicking.
+                treeViewItem.Focus();
+
+                e.Handled = true;
+            }
+
+            static TreeViewItem VisualUpwardSearch(DependencyObject source)
+            {
+                while (source != null && source is not TreeViewItem)
+                    source = VisualTreeHelper.GetParent(source);
+
+                return source as TreeViewItem;
+            }
+        }
+
+        private void UI_CodesView_CopyToClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(GetCodeFromView(IsCodesTreeView ? CodesTree : CodesList)?.ToString());
         }
     }
 }
