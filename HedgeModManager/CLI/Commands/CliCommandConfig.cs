@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace HedgeModManager.CLI.Commands
 {
-    [CliCommand("config", "c", new[] { typeof(string) }, "Open config window for a mod", "--config \"{ModPath}\"", "--config \"C:\\Example Mod\\\"")]
+    [CliCommand("config", "c", new[] { typeof(string) }, "Open config window for a mod", "--config {ModPath}", "--config \"C:\\Example Mod\\\"")]
     public class CliCommandConfig : ICliCommand
     {
         public void Execute(List<CommandLine.Command> commands, CommandLine.Command command)
