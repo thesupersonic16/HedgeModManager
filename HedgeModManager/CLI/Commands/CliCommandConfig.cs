@@ -1,5 +1,4 @@
 ﻿using HedgeModManager.UI;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -22,12 +21,11 @@ namespace HedgeModManager.CLI.Commands
 
                 if (modInfo.HasSchema)
                 {
-                    var config = new ModConfigWindow(modInfo);
+                    new ModConfigWindow(modInfo)
                     {
-                        config.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen
                     }
-
-                    config.ShowDialog();
+                    .ShowDialog();
                 }
             }
 
