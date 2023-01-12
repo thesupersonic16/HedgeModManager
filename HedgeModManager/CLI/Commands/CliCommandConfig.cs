@@ -13,6 +13,9 @@ namespace HedgeModManager.CLI.Commands
         {
             string modPath = (string)command.Inputs[0];
 
+            if (File.Exists(modPath) && Path.GetExtension(modPath) == ".ini")
+                modPath = Path.GetDirectoryName(modPath);
+
             if (Directory.Exists(modPath))
             {
                 var modInfo = new ModInfo(modPath);
@@ -26,9 +29,9 @@ namespace HedgeModManager.CLI.Commands
 
                     config.ShowDialog();
                 }
-
-                HedgeApp.Current.Shutdown(0);
             }
+
+            HedgeApp.Current.Shutdown(0);
         }
     }
 }
