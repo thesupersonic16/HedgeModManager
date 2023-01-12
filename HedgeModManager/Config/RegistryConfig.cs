@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.Reflection;
 
 namespace HedgeModManager
 {
@@ -24,6 +25,7 @@ namespace HedgeModManager
         public static void Save()
         {
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
+            key.SetValue("ExecutablePath", Assembly.GetExecutingAssembly().Location);
             key.SetValue("LastGame", LastGameDirectory);
             key.SetValue(nameof(ExtraGameDirectories), ExtraGameDirectories);
             key.SetValue(nameof(UILanguage), UILanguage);
