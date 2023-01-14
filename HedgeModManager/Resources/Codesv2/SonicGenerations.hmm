@@ -1214,3 +1214,6 @@ Code "Disable Light Shafts" in "Graphics" by "Skyth"
 
 Code "Disable Planar Reflections" in "Graphics" by "Skyth"
 *(bool*)0x1B22E78 = false;
+
+Patch "Restart Doesn't Reduce Life Count" in "Cheats" by "M&M"
+WriteNop(0xD59A67, 6);
