@@ -2358,3 +2358,42 @@ Ouranos only has one soundtrack, but will play Kronos Island: 2nd Mvt. if the ra
         );
     }
 }
+
+Code "Play Random Soundtrack in Cyber Space" in "Audio" by "Hyper" does "Plays a random soundtrack every time you enter Cyber Space."
+//
+    static long Address = 0;
+
+    static string[] BgmList = new[]
+    {
+        /* Kronos */
+        "bgm_w6d01", "bgm_w6d02", "bgm_w6d03", "bgm_w6d04", "bgm_w6d05",
+        "bgm_w6d06", "bgm_w6d07", "bgm_w6d08", "bgm_w6d09", "bgm_w6d10",
+
+        /* Ares */
+        "bgm_w7d01", "bgm_w7d02", "bgm_w7d03", "bgm_w7d04", "bgm_w7d05",
+        "bgm_w7d06", "bgm_w7d07", "bgm_w7d08",
+
+        /* Chaos */
+        "bgm_w8d01", "bgm_w8d02", "bgm_w8d03", "bgm_w8d04", "bgm_w8d05",
+        "bgm_w8d06",
+
+        /* Ouranos */
+        "bgm_w9d02", "bgm_w9d03", "bgm_w9d04", "bgm_w9d05", "bgm_w9d06",
+        "bgm_w9d07"
+    };
+//
+{
+    if (Address == 0)
+    {
+        /* 0x14132A3C0 */
+        Address = ScanSignature
+        (
+            "bgm_%s",
+            "xxxxxx"
+        );
+    }
+    else
+    {
+        WriteProtected<byte>(Address, System.Text.Encoding.UTF8.GetBytes(BgmList[new Random().Next(0, 30)]));
+    }
+}
