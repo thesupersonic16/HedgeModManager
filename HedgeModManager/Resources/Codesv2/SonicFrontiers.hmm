@@ -1646,6 +1646,78 @@ Patch "Disable Trick Hint Particles" in "Graphics" by "Hyper" does "Disables the
     );
 }
 
+Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all intrusive tutorial messages that appear under certain conditions for the first time."
+{
+    // Hide hint rings.
+    WriteProtected<byte>
+    (
+        /* 0x14910B23F */
+        ScanSignature
+        (
+            "\x48\x89\xCF\xB2\x01\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE8\xCC\xCC\xCC\xCC\xB2\x01\x48\x89\x47\x38\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE8\xCC\xCC\xCC\xCC\x48\x89\x47\x40",
+            "xxxxxxxx????x????xxxxxxxxx????x????xxxx"
+        ),
+        
+        0xEB, 0x63
+    );
+
+    WriteAsmHook
+    (
+        @"
+            ; Restore original code.
+            mov qword ptr [rsp + 0x08], rbx
+            mov qword ptr [rsp + 0x10], rbp
+            mov qword ptr [rsp + 0x18], rsi
+
+            push rax
+
+            ; Checks the overlay type, expected 1.
+            mov eax, dword ptr [rdx + 0x18]
+            cmp eax, 1
+            jne ret
+
+            ; Checks if the string field is null.
+            mov rax, qword ptr [rdx + 0x48]
+            cmp rax, 0
+            jz end
+
+            ; Checks the first two characters of the input string.
+            mov ax, word ptr [rax]
+            cmp ax, 0x7574 ; tu (endian-swapped)
+            jne ret
+            
+            ; Exclusions, in the event that a softlock occurs.
+            mov rax, qword ptr [rdx + 0x48]
+            mov eax, dword ptr [rax + 0x07]
+            cmp eax, 0x303032 ; tu1000_200
+            je ret
+            cmp eax, 0x303335 ; tu1000_530
+            je ret
+            cmp eax, 0x303735 ; tu1000_570
+            je ret
+            cmp eax, 0x303935 ; tu1000_590
+            je ret
+
+        end:
+            ; Immediately return if the input string begins with 0x7475.
+            pop rax
+            ret
+
+        ret:
+            pop rax
+        ",
+
+        /* 0x14093AFB0 */
+        ScanSignature
+        (
+            "\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x10\x48\x89\x74\x24\x18\x57\x41\x56\x41\x57\x48\x83\xEC\x20\x4C\x8B\xF1\x48\x8B\xEA",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Disable Umbrella Camera Lock-On" in "Gameplay" by "Hyper" does "Disables the lock-on camera when the Umbrella enemy in Ares jumps into the sky."
 {
     WriteProtected<byte>
