@@ -1699,7 +1699,6 @@ Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all in
             je ret
 
         end:
-            ; Immediately return if the input string begins with 0x7475.
             pop rax
             ret
 
