@@ -2498,3 +2498,66 @@ This replaces the basic X button QTE to dodge the rifle projectile in the final 
         System.Text.Encoding.UTF8.GetBytes("zev_rfl_shoot01")
     );
 }
+
+Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid" does
+//
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    static extern bool SetWindowText(IntPtr hWnd, String lpString);
+
+    static bool Initialised = false;
+
+    static float* pFramerate;
+
+    static IntPtr HWND = IntPtr.Zero;
+//
+{
+    if (!Initialised)
+    {
+        fixed (float** ppFramerate = &pFramerate)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    ; Restore original code.
+                    movss  xmm0, dword ptr [rcx + 0x14]
+                    lea    rdi, qword ptr [rcx + 0x14]
+                    movaps xmmword ptr [rsp + 0x58 + 0xFFFFFFFFFFFFFFE8], xmm6
+
+                    ; Get float pointer.
+                    mov r9, {(long)ppFramerate}
+                    mov [r9], rcx
+                    add qword ptr [r9], 0x14
+                ",
+
+                /* 0x140BB9EDF */
+                ScanSignature
+                (
+                    "\xF3\x0F\x10\x41\x14\x48\x8D\x79\x14",
+                    "xxxxxxxxx"
+                ),
+                
+                HookBehavior.Replace
+            );
+        }
+
+        Initialised = true;
+    }
+
+    if (pFramerate != null)
+    {
+        if (HWND == IntPtr.Zero)
+        {
+            HWND = Process.GetCurrentProcess().MainWindowHandle;
+        }
+        else
+        {
+            float framerate = *pFramerate;
+            float frametime = 1.0f / framerate;
+
+            SetWindowText(HWND, $"Sonic Frontiers - {framerate:0} FPS ({frametime} ms)");
+        }
+    }
+}
