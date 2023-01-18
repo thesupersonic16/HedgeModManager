@@ -2499,7 +2499,7 @@ This replaces the basic X button QTE to dodge the rifle projectile in the final 
     );
 }
 
-Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid" does
+Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
 //
     using System.Diagnostics;
     using System.Runtime.InteropServices;
