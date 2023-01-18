@@ -1788,6 +1788,50 @@ Patch "Disable Vignette" in "Graphics" by "Hyper"
     );
 }
 
+Patch "Fix Empty Messages" in "Fixes" by "Hyper" does "Removes the empty messages that occur when the game is in an unsafe state."
+{
+    WriteAsmHook
+    (
+        @"
+            push rax
+
+            ; Checks the overlay type, expected 1.
+            mov eax, dword ptr [rdx + 0x18]
+            cmp eax, 1
+            jne ret
+
+            ; Checks if the string field is null.
+            mov rax, qword ptr [rdx + 0x48]
+            cmp rax, 0
+            jnz ret
+
+            ; Immediately return if the string field is null.
+            pop rax
+            ret
+
+        ret:
+            pop rax
+
+            ; Restore original code.
+            push rdi
+            push r14
+            push r15
+            sub  rsp, 0x20
+            mov  r14, rcx
+            mov  rbp, rdx
+        ",
+
+        /* 0x14093AFBF */
+        ScanSignature
+        (
+            "\x57\x41\x56\x41\x57\x48\x83\xEC\x20\x4C\x8B\xF1\x48\x8B\xEA",
+            "xxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a bug that causes the internal resolution to reset to 1280x720 if the game is unfocused during boot."
 //
     #load "System.Xml.dll"
