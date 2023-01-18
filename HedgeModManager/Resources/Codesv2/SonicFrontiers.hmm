@@ -179,6 +179,35 @@ Patch "Always Have Power Boost" in "Cheats" by "SuperSonic16"
     );
 }
 
+Code "Always Hide Mouse Cursor" in "System" by "Hyper & Sajid" does
+/*
+Keeps the mouse cursor hidden at all times when the game window is focused.
+
+This prevents the mouse cursor appearing under certain conditions, even if the primary input method is a controller.
+*/
+//
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+
+    [DllImport("user32.dll")]
+    static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    static extern int ShowCursor(bool bShow);
+
+    static IntPtr HWND = IntPtr.Zero;
+//
+{
+    if (HWND == IntPtr.Zero)
+    {
+        HWND = Process.GetCurrentProcess().MainWindowHandle;
+    }
+    else
+    {
+        ShowCursor(GetForegroundWindow() != HWND);
+    }
+}
+
 Patch "Always Play 1st Mvt. on Islands" in "Audio" by "Hyper"
 {
     WriteProtected<byte>
