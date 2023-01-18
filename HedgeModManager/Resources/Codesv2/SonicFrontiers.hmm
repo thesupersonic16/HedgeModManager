@@ -1679,7 +1679,7 @@ Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all in
             ; Checks if the string field is null.
             mov rax, qword ptr [rdx + 0x48]
             cmp rax, 0
-            jz end
+            jz  end
 
             ; Checks the first two characters of the input string.
             mov ax, word ptr [rax]
@@ -1690,13 +1690,13 @@ Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all in
             mov rax, qword ptr [rdx + 0x48]
             mov eax, dword ptr [rax + 0x07]
             cmp eax, 0x303032 ; tu1000_200
-            je ret
+            je  ret
             cmp eax, 0x303335 ; tu1000_530
-            je ret
+            je  ret
             cmp eax, 0x303735 ; tu1000_570
-            je ret
+            je  ret
             cmp eax, 0x303935 ; tu1000_590
-            je ret
+            je  ret
 
         end:
             pop rax
@@ -2448,4 +2448,24 @@ Code "Play Random Soundtrack in Cyber Space" in "Audio" by "Hyper" does "Plays a
     {
         WriteProtected<byte>(Address, System.Text.Encoding.UTF8.GetBytes(BgmList[new Random().Next(0, 30)]));
     }
+}
+
+Patch "Restore Unused Supreme QTE" in "Gameplay" by "Gordon Ramsay" does
+/*
+Restores an unused quick time event for the final blow to Supreme.
+
+This replaces the basic X button QTE to dodge the rifle projectile in the final game.
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x14125C830 */
+        ScanSignature
+        (
+            "zev_rfl_shoot02",
+            "xxxxxxxxxxxxxxx"
+        ),
+
+        System.Text.Encoding.UTF8.GetBytes("zev_rfl_shoot01")
+    );
 }
