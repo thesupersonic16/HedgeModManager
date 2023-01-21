@@ -2383,6 +2383,360 @@ Unsupported objects;
     }
 }
 
+Patch "Force Island Objects in Cyber Space" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
+/*
+Replaces all supported objects on the islands with their Cyber Space counterparts.
+
+Unsupported objects;
+- Checkpoints
+- Up-reel Carriers
+*/
+//
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+
+    static byte WorldType = 2;
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    public delegate IntPtr TGetAssetName(IntPtr originalName, IntPtr assetType);
+
+    static TGetAssetName Del_GetAssetName = new TGetAssetName(GetAssetName);
+
+    static IntPtr fpGetAssetName = Marshal.GetFunctionPointerForDelegate(Del_GetAssetName);
+
+    public static IntPtr GetAssetName(IntPtr originalName, IntPtr assetType)
+    {
+        if (WorldType == 1)
+            return originalName;
+
+        string assetName     = Marshal.PtrToStringAnsi(originalName);
+        string assetTypeName = Marshal.PtrToStringAnsi(assetType);
+
+        List<string> objects = new List<string>()
+        {
+            "cmn_obj_balloonB",
+            "cmn_obj_balloonG",
+            "cmn_obj_balloonR",
+            "cmn_obj_balloonY",
+            "cmn_obj_dashpanel",
+            "cmn_obj_dashpanel_arrow",
+            "cmn_obj_dashpanel_belt",
+            "cmn_obj_dashring",
+            "cmn_obj_dashring_body",
+            "cmn_obj_dashroller",
+            "cmn_obj_dashroller_GR",
+            "cmn_obj_dashroller_SV",
+            "cmn_obj_fan_fly",
+            "cmn_obj_fan_ground",
+            "cmn_obj_fan_top",
+            "cmn_obj_grindbooster",
+            "cmn_obj_grindbooster_arrow",
+            "cmn_obj_grindbooster_arrow_stop",
+            "cmn_obj_grindbooster_light_stop",
+            "cmn_obj_jumppanel_arrow",
+            "cmn_obj_jumppanel_belt",
+            "cmn_obj_jumppanel30L",
+            "cmn_obj_jumppanel30M",
+            "cmn_obj_jumppanel30S",
+            "cmn_obj_jumpselector",
+            "cmn_obj_jumpselector@correct",
+            "cmn_obj_jumpselector@miss",
+            "cmn_obj_jumpselector_arrow",
+            "cmn_obj_jumpselector_gauge_correct",
+            "cmn_obj_jumpselector_gauge_in",
+            "cmn_obj_jumpselector_gauge_miss",
+            "cmn_obj_laserfence",
+            "cmn_obj_pole_fvA",
+            "cmn_obj_pole_fvB",
+            "cmn_obj_pole_guide",
+            "cmn_obj_pole_guide_meter",
+            "cmn_obj_pole_guide_meterB",
+            "cmn_obj_pole_svA",
+            "cmn_obj_pole_svB",
+            "cmn_obj_pole_svC",
+            "cmn_obj_pole_svD",
+            "cmn_obj_propellerspring_body_limit",
+            "cmn_obj_propellerspring_bottom",
+            "cmn_obj_propellerspring_top",
+            "cmn_obj_pulley",
+            "cmn_obj_pulleystandA",
+            "cmn_obj_pulleystandB",
+            "cmn_obj_pulleystandC",
+            "cmn_obj_rainbowring",
+            "cmn_obj_rainbowring_body",
+            "cmn_obj_spring",
+            "cmn_obj_springair_bottom",
+            "cmn_obj_springair_top",
+            "cmn_obj_springC",
+            "cmn_obj_springC_red",
+            "cmn_obj_springC_yellow",
+            "cmn_obj_springegg",
+            "cmn_obj_springpole",
+            "cmn_obj_springpole_L",
+            "cmn_obj_springpole_M",
+            "cmn_obj_springpole_S",
+            "cmn_obj_upreel_handle",
+            "cmn_obj_upreel_stand",
+            "cmn_obj_upreel_wire",
+            "cmn_obj_walljumpblock01",
+            "cmn_obj_walljumpblock02",
+            "cmn_obj_walljumpblock03",
+            "cmn_obj_widespring",
+            "cmn_obj_wjblock_arrow"
+        };
+
+        switch (assetTypeName)
+        {
+            case "ResModel":
+            case "ResSkeleton":
+            {
+                if (assetName == "cmn_obj_switch")
+                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual");
+
+                break;
+            }
+
+            case "ResAnimation":
+            {
+                if (assetName == "cmn_obj_switch_on")
+                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual_on");
+
+                break;
+            }
+
+            case "ResPhysicsMesh":
+            {
+                switch (assetName)
+                {
+                    case "cmn_obj_jumppanel30S_col":
+                        return Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30S");
+
+                    case "cmn_obj_jumppanel30M_col":
+                        return Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30M");
+
+                    case "cmn_obj_jumppanel30L_col":
+                        return Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30L");
+
+                    case "col_cmn_obj_switch":
+                        return Marshal.StringToHGlobalAnsi("col_cmnisl_obj_switchusual");
+                }
+
+                break;
+            }
+
+            case "ResAnimTexSrt":
+            {
+                if (assetName == "cmn_obj_switch03_on")
+                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual03_on");
+
+                break;
+            }
+
+            case "ResAnimMaterial":
+            {
+                if (assetName == "cmn_obj_switch03")
+                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual03");
+
+                break;
+            }
+        }
+
+        if (objects.Contains(assetName))
+            originalName = Marshal.StringToHGlobalAnsi(assetName.Replace("cmn_obj_", "cmnisl_obj_"));
+
+        return originalName;
+    }
+//
+{
+    // Allow loading open zone asset archive.
+    WriteNop
+    (
+        /* 0x14019B9DA */
+        ScanSignature
+        (
+            "\x74\x54\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCF",
+            "xxxxx????xxx"
+        ),
+        
+        2
+    );
+
+    fixed (byte* pWorldType = &WorldType)
+    {
+        // Set if we're currently in Cyber Space.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                xor ecx, 0x489C051F
+                mov r8d, ecx
+                mov [rsi], rax
+                lea rcx, qword ptr [rsi + 0x100]
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 0
+
+                pop rax
+            ",
+
+            /* 0x1473F9B7A */
+            ScanSignature
+            (
+                "\x81\xF1\x1F\x05\x9C\x48",
+                "xxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're currently on an island.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                mov r8d, 0x10
+                mov [rsi], rax
+                lea rcx, qword ptr [rsi + 0x160]
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 1
+
+                pop rax
+            ",
+
+            /* 0x147A0FE49 */
+            ScanSignature
+            (
+                "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x60\x01\x00\x00",
+                "xxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're entering Cyber Space from Training Simulator.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                movups xmm0, xmmword ptr [rsp + 0x2E0 + 0xFFFFFFFFFFFFFD40]
+                mov    qword ptr [rbp + 0x1E0 + 0xFFFFFFFFFFFFFDF0], rax
+                mov    word ptr [rdi + 0x120], 0x100
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 0
+
+                pop rax
+            ",
+
+            /* 0x14014B542 */
+            ScanSignature
+            (
+                "\x0F\x10\x44\x24\x20\x48\x89\x45\xD0\x66\xC7\x87\x20\x01\x00\x00\x00\x01",
+                "xxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're returning to an island from Training Simulator after quitting Cyber Space.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                movups xmmword ptr [rdi + 0x80], xmm0
+                movups xmm0, xmmword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFFA0]
+                
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 1
+
+                pop rax
+            ",
+
+            /* 0x140149F2E */
+            ScanSignature
+            (
+                "\x0F\x11\x87\x80\x00\x00\x00\x0F\x10\x85\xB0\x00\x00\x00\xEB\x34",
+                "xxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're returning to an island from Training Simulator after completing Cyber Space.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                movups xmm0, xmmword ptr [rsp + 0x210 + 0xFFFFFFFFFFFFFE10]
+                mov    qword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFF40], rax
+                mov    word ptr [rdi + 0x120], 0x101
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 1
+
+                pop rax
+            ",
+
+            /* 0x140149DE8 */
+            ScanSignature
+            (
+                "\x0F\x10\x44\x24\x20\x48\x89\x45\x50\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
+                "xxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                lea rcx, [rsp + 0xD8 + 0xFFFFFFFFFFFFFF70]
+                mov [rsp + 0xD8 + 0xFFFFFFFFFFFFFF60], 0
+                mov [rsp + 0xD8 + 0xFFFFFFFFFFFFFF58], rcx
+
+                push rax
+                push rcx
+
+                mov rax, {(long)pWorldType}
+                cmp byte ptr [rax], 2
+                jz ret
+
+                mov  rax, {(long)fpGetAssetName}
+                mov  rcx, rdx
+                mov  rdx, [rdi]
+                call rax
+                mov  rdx, [rcx]
+                mov  rbx, rdx
+
+            ret:
+                pop rcx
+                pop rax
+            ",
+
+            /* 0x140D4079A */
+            ScanSignature
+            (
+                "\x48\x8D\x4C\x24\x48\xC7\x44\x24\x38\x00\x00\x00\x00\x48\x89\x4C\x24\x30\x49\xC7\xC0\xFF\xFF\xFF\xFF\xC7\x44\x24\x3C\x7F\x00\x00\x80\x48\x89\x44\x24\x40\x49\xFF\xC0\x42\x80\x3C\x03\x00\x75\xF6\x45\x33\xC9",
+                "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
 Patch "Force PlayStation 4 Controller UI" in "UI" by "Hyper"
 {
     WriteAsmHook
