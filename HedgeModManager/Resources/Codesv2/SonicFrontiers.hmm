@@ -2351,6 +2351,20 @@ Patch "Hide Skip Button in Cutscenes" in "UI" by "Hyper" does "Hides the button 
     );
 }
 
+Patch "Hide Star Beacons" in "Graphics" by "Hyper" does "Hides the beacons that emit from the stars during Starfall."
+{
+    WriteProtected<byte>
+    (
+        ScanSignature
+        (
+            "cmnisl_obj_slotstarpillar",
+            "xxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        0x00
+    );
+}
+
 Patch "Hide Titan Health Gauge" in "UI" by "Hyper"
 {
     WriteProtected<byte>
