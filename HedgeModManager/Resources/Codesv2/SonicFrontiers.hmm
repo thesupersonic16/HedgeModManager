@@ -1560,6 +1560,33 @@ Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper"
     );
 }
 
+Patch "Disable Starfall Slot Machine" in "Gameplay" by "Hyper" does "Disables the slot machine during Starfall, including any rewards for collecting stars."
+{
+    WriteNop
+    (
+        /* 0x1408CF4C9 */
+        ScanSignature
+        (
+            "\x74\x60\x83\xF8\x04\x0F\x85\x38\x03\x00\x00",
+            "xxxxxxxxxxx"
+        ),
+        
+        2
+    );
+
+    WriteNop
+    (
+        /* 0x1408CF864 */
+        ScanSignature
+        (
+            "\x74\x6D\x83\xF8\x04\x0F\x85\xB1\x00\x00\x00",
+            "xxxxxxxxxxx"
+        ),
+        
+        2
+    );
+}
+
 Patch "Disable Super Combat Particles" in "Graphics" by "Hyper" does "Disables the giant fist and foot particles during combat as Super Sonic."
 {
     WriteProtected<byte>
