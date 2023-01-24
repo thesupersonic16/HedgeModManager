@@ -3351,6 +3351,13 @@ Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
 //
     using System.Diagnostics;
     using System.Runtime.InteropServices;
+    using System.Text;
+    
+    [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+    static extern int GetWindowTextLength(IntPtr hWnd);
+
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
 
     [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
     static extern bool SetWindowText(IntPtr hWnd, String lpString);
@@ -3360,6 +3367,8 @@ Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
     static float* pFramerate;
 
     static IntPtr HWND = IntPtr.Zero;
+
+    static string OriginalTitle;
 //
 {
     if (!Initialised)
@@ -3399,13 +3408,20 @@ Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
         if (HWND == IntPtr.Zero)
         {
             HWND = Process.GetCurrentProcess().MainWindowHandle;
+
+            StringBuilder title = new StringBuilder();
+            {
+                GetWindowText(HWND, title, GetWindowTextLength(HWND));
+
+                OriginalTitle = title.ToString();
+            }
         }
         else
         {
             float framerate = *pFramerate;
             float frametime = 1.0f / framerate;
 
-            SetWindowText(HWND, $"Sonic Frontiers - {framerate:0} FPS ({frametime} ms)");
+            SetWindowText(HWND, $"{OriginalTitle} - {framerate:0} FPS ({frametime} ms)");
         }
     }
 }
