@@ -899,7 +899,7 @@ Patch "Disable Cyber Space CRT Effects" in "Graphics" by "Hyper & PTKickass" doe
     );
 }
 
-Patch "Disable Drift Input Prompt" in "UI" by "Hyper" does "Disables the input prompt that covers up Sonic when using drift dash panels."
+Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt that covers up Sonic when using drift dash panels."
 {
     WriteNop
     (
@@ -929,7 +929,7 @@ Patch "Disable Dropped Rings" in "Gameplay" by "Hyper" does "Removes the bouncin
     );
 }
 
-Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the fixed camera icon at the top-right of the screen, as well as the tutorial about it at the beginning of the game."
+Patch "Hide Fixed Camera Notifications" in "UI" by "Hyper" does "Hides the fixed camera icon at the top-right of the screen, as well as the tutorial about it at the beginning of the game."
 {
     // Disable fixed camera UI element.
     WriteProtected<byte>
