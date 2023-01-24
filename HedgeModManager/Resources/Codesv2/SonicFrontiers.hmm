@@ -3425,3 +3425,16 @@ Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
         }
     }
 }
+
+Patch "Show Missions in Arcade Mode" in "UI" by "Hyper" does "Shows the missions in the results screen when completing Cyber Space in Arcade Mode."
+{
+    /* 0x14093798D */
+    long addr = ScanSignature
+    (
+        "\x44\x38\xBB\x6C\x02\x00\x00",
+        "xxxxxxx"
+    );
+
+    WriteProtected<byte>(addr, Assemble("mov byte ptr [rbx + 0x26C], 0"));
+    WriteProtected<byte>(addr + 7, 0xEB);
+}
