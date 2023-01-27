@@ -1,6 +1,15 @@
 !!VERSION 1.2
 
-Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M & Hyper" does "Dynamically adjusts the aspect ratio to match the game resolution (recommended for ultrawide)."
+Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M & Hyper" does
+/*
+Dynamically adjusts the aspect ratio to match the game resolution (recommended for non-16:9 resolutions).
+
+Known issues;
+- Certain HUD effects are rendered at the correct aspect ratio, but will misalign due to the main HUD still being 16:9.
+- Certain HUD elements are still rendered at 16:9 and will misalign or stretch.
+- Pre-rendered cutscenes will stretch to your aspect ratio.
+- Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
+*/
 //
     #load "System.Drawing.dll"
 
@@ -29,6 +38,35 @@ Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M &
     Size Screen = GetScreenSize();
 
     WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
+}
+
+Patch "Always Cloudy on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Cloudy on supported islands.
+
+Supported islands;
+- Kronos
+- Ares
+- Chaos
+- Rhea
+- Ouranos
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB, 0x4E);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
 }
 
 Patch "Always Day on Islands" in "Time" by "NM"
@@ -82,6 +120,35 @@ Patch "Always Day on Islands" in "Time" by "NM"
     );
 }
 
+Patch "Always Have All Abilities" in "Gameplay" by "Hyper" does
+/*
+Always grants Sonic his abilities (not skills), even when scripted not to have them.
+
+Abilities;
+- Boost
+- Combos
+- Camera Control
+- Cyloop
+- Homing Attack
+- Jump
+- Lock-on
+- Parry
+- Wall Climbing
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x14BF81B71 */
+        ScanSignature
+        (
+            "\x40\x0F\x95\xD5\x84\xD2",
+            "xxxxxx"
+        ),
+        
+        Assemble("mov bpl, 1; nop")
+    );
+}
+
 Patch "Always Have Phantom Rush" in "Cheats" by "NM"
 {
     WriteNop
@@ -112,6 +179,168 @@ Patch "Always Have Power Boost" in "Cheats" by "SuperSonic16"
     );
 }
 
+Code "Always Hide Mouse Cursor" in "System" by "Hyper & Sajid" does
+/*
+Keeps the mouse cursor hidden at all times when the game window is focused.
+
+This prevents the mouse cursor appearing under certain conditions, even if the primary input method is a controller.
+*/
+//
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+
+    [DllImport("user32.dll")]
+    static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    static extern int ShowCursor(bool bShow);
+
+    static IntPtr HWND = IntPtr.Zero;
+//
+{
+    if (HWND == IntPtr.Zero)
+    {
+        HWND = Process.GetCurrentProcess().MainWindowHandle;
+    }
+    else
+    {
+        ShowCursor(GetForegroundWindow() != HWND);
+    }
+}
+
+Patch "Always Play 1st Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 1; nop")
+    );
+}
+
+Patch "Always Play 2nd Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 2; nop")
+    );
+}
+
+Patch "Always Play 3rd Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 3; nop")
+    );
+}
+
+Patch "Always Play 4th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 4; nop")
+    );
+}
+
+Patch "Always Play 5th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 5; nop")
+    );
+}
+
+Patch "Always Play 6th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 6; nop")
+    );
+}
+
+Patch "Always Play 7th Mvt. on Islands" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14C1A39AF */
+        ScanSignature
+        (
+            "\x45\x8B\x8E\xA4\x00\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        Assemble("mov r9d, 7; nop")
+    );
+}
+
+Patch "Always Rainy on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Rainy on supported islands.
+
+Supported islands;
+- Kronos
+- Chaos
+- Rhea
+- Ouranos
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB, 0x38);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+}
+
 Patch "Always Run in the Background" in "System" by "NM" does "Stops the game from pausing when the window is unfocused."
 {
     WriteProtected<byte>
@@ -125,6 +354,60 @@ Patch "Always Run in the Background" in "System" by "NM" does "Stops the game fr
 
         0xEB
     );
+}
+
+Patch "Always Sandstorm on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Sandstorm on supported islands.
+
+Supported islands;
+- Ares
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB, 0x22);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+}
+
+Patch "Always Sunny on Islands" in "Weather" by "Hyper" does
+/*
+Forces the weather to Sunny on supported islands.
+
+Supported islands;
+- Kronos
+- Ares
+- Chaos
+- Rhea
+- Ouranos
+*/
+{
+    void NOP(long addr)
+        => WriteProtected<byte>(addr, 0xEB);
+
+    /* 0x1401EE652 */
+    long callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x8B\xF8",
+        "x????xxxxxx????xx"
+    );
+
+    /* 0x1401EE3ED */
+    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+
+    /* 0x1401EE4DD */
+    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
 }
 
 Patch "Always Trickable Dash Rings" in "Cheats" by "Hyper"
@@ -616,7 +899,7 @@ Patch "Disable Cyber Space CRT Effects" in "Graphics" by "Hyper & PTKickass" doe
     );
 }
 
-Patch "Disable Drift Input Prompt" in "UI" by "Hyper" does "Disables the input prompt that covers up Sonic when using drift dash panels."
+Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt that covers up Sonic when using drift dash panels."
 {
     WriteNop
     (
@@ -646,7 +929,7 @@ Patch "Disable Dropped Rings" in "Gameplay" by "Hyper" does "Removes the bouncin
     );
 }
 
-Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the fixed camera icon at the top-right of the screen, as well as the tutorial about it at the beginning of the game."
+Patch "Hide Fixed Camera Notifications" in "UI" by "Hyper" does "Hides the fixed camera icon at the top-right of the screen, as well as the tutorial about it at the beginning of the game."
 {
     // Disable fixed camera UI element.
     WriteProtected<byte>
@@ -675,7 +958,43 @@ Patch "Disable Fixed Camera Notifications" in "UI" by "Hyper" does "Disables the
     );
 }
 
-Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M"
+Patch "Disable Forced Weather for Bosses" in "Weather" by "Hyper" does "Disables the weather being forced to Sunny for Giganto and Supreme."
+{
+    // Giganto
+    WriteProtected<byte>
+    (
+        /* 0x14024E456 */
+        ScanSignature
+        (
+            "\x74\x0A\x33\xD2\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x18\x48\x8B\x48\x28\x48\x8B\x59\x48\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8",
+            "xxxxxxxx????xxxxxxxxxxxxx????xxxxxxx????xxx"
+        ),
+        
+        0xEB
+    );
+
+    // Supreme
+    WriteProtected<byte>
+    (
+        /* 0x1402AFE04 */
+        ScanSignature
+        (
+            "\x74\x0A\x33\xD2\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x18\x48\x8B\x48\x28\x48\x8B\x59\x48\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x45\x33\xFF",
+            "xxxxxxxx????xxxxxxxxxxxxx????xxxxxxx????xxx"
+        ),
+        
+        0xEB
+    );
+}
+
+Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M" does
+/*
+Disables the framerate limiter, allowing the game to run above its targeted 30/60FPS limit.
+
+Known issues;
+- The spawn point in Cyber Space 4-3 will throw you into an invisible wall.
+- The final QTE for Wyvern takes a long time to show up.
+*/
 {
     /*
         At the moment, this is the best method I have found for uncapping FPS.
@@ -931,6 +1250,158 @@ Patch "Disable In-Game Letterboxing" in "Graphics" by "Hyper" does "Disables let
     );
 }
 
+Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
+//
+    static bool IsWorldIsland = false;
+//
+{
+    fixed (bool* pIsWorldIsland = &IsWorldIsland)
+    {
+        /* This hook checks if we're on an island
+            and stores that in a boolean. */
+        WriteAsmHook
+        (
+            $@"
+                push rdx
+
+                ; Restore original code.
+                mov qword ptr [rsp + 0x38 + 0x08], rdi
+                lea rbx, qword ptr [rsi + 0x50]
+                mov qword ptr [rsp + 0x28 + 0x10], r14
+
+                ; Check field for stage type.
+                test byte ptr [rcx + 0xB8], 0x2E
+                setz al
+                
+                ; Store result in our local boolean.
+                mov rdx, {(long)pIsWorldIsland}
+                mov byte ptr [rdx], al
+
+                pop rdx
+            ",
+
+            /* 0x1491B68E9 */
+            ScanSignature
+            (
+                "\x48\x89\x7C\x24\x30\x48\x8D\x5E\x50\x4C\x89\x74\x24\x38\x4C\x89\x7C\x24\x40\xE8\xCC\xCC\xCC\xCC\xBF\x03\x00\x00\x00\x84\xC0\x74\x62",
+                "xxxxxxxxxxxxxxxxxxxx????xxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        /* 0x1491B7A1A */
+        long callerFuncAddr = ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x80\x7D\x35\x00\x74\x67\xE8\xCC\xCC\xCC\xCC\x48\x89\xC2",
+            "x????xxxxxxx????xxx"
+        );
+
+        /* 0x140D1EAA0 */
+        long sendMsgFunc = callerFuncAddr + Read<int>(callerFuncAddr + 0x01) + 0x05;
+
+        /* This hook checks if we're on an island and calls
+            the message sender to enter Sonic into the jump
+            board path if we're in Cyber Space. */
+        WriteAsmHook
+        (
+            $@"
+                ; Check if we're on an island.
+                mov rbx, {(long)pIsWorldIsland}
+                cmp byte ptr [rbx], 0
+
+                ; Non-zero value means we're on an island - jump to end.
+                jnz ret
+
+                ; Set up message sender function call.
+                lea r8, qword ptr [rbp + 0x57 + 0xFFFFFFFFFFFFFF90]
+                lea rdx, qword ptr [rbp + 0x57 + 0x10]
+                mov ecx, [rax]
+                mov dword ptr [rbp + 0x57 + 0x10], ecx
+                mov rcx, rsi
+
+                ; We're not on an island - call message sender.
+                mov  r9, {(long)sendMsgFunc}
+                call r9
+
+            ret:
+            ",
+
+            /* 0x1491B7A0E */
+            ScanSignature
+            (
+                "\x48\x8D\x55\x67\x8B\x08\x89\x4D\x67\x48\x89\xF1",
+                "xxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
+Patch "Disable Menu Restrictions" in "UI" by "Hyper" does
+/*
+Removes restrictions from accessing certain menu screens and options.
+
+Notes;
+- This grants you the full pause menu, including the Skills and Save Data menus, within reasonable areas (e.g. the tutorial).
+- This grants you permission to save and load anywhere, including during combat.
+- This will allow you to open the map screen during combat.
+*/
+{
+    // Disable save/load deny.
+    WriteProtected<byte>
+    (
+        /* 0x14D10DF81 */
+        ScanSignature
+        (
+            "\x74\x0E\x83\xFE\x01",
+            "xxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // Disable "SetHUDEnabled" callback function.
+    WriteProtected<byte>
+    (
+        /* 0x14BFF3E05 */
+        ScanSignature
+        (
+            "\x0F\x84\xDE\x00\x00\x00\x44\x0F\xBE\xC0",
+            "xxxxxxxxxx"
+        ),
+        
+        0xE9, 0xDF, 0x00, 0x00, 0x00
+    );
+
+    // Disable map screen restriction during combat.
+    WriteProtected<byte>
+    (
+        /* 0x14085FB8D */
+        ScanSignature
+        (
+            "\x0F\x94\x44\x24\x48\x89\x5C\x24\x44",
+            "xxxxxxxxx"
+        ),
+        
+        Assemble("mov byte ptr [rsp + 0x58 + 0xFFFFFFFFFFFFFFF0], 1")
+    );
+
+    // Disable "Unlock Cyloop" tutorial to prevent softlock.
+    WriteNop
+    (
+        /* 0x14088B496 */
+        ScanSignature
+        (
+            "\x0F\x44\xD9\xBA\x06\x23\x00\x00",
+            "xxxxxxxx"
+        ),
+        
+        3
+    );
+}
+
 Patch "Disable Power Boost" in "Gameplay" by "Hyper"
 {
     WriteProtected<byte>
@@ -1010,25 +1481,143 @@ Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
     );
 }
 
-Patch "Disable Starfall" in "Gameplay" by "Hyper" does "Disables the Starfall event that begins the meteor shower and slot machine."
-{
-    WriteAsmHook
-    (
-        @"
-            mov al, 1
-            add rsp, 70h
-            pop rdi
-            ret
-        ",
+Patch "Disable Skill Camera Events" in "Graphics" by "Hyper" does
+/*
+Disables the camera events for skills.
 
-        /* 0x1493544B9 */
+Affected skills;
+- Cross Slash
+- Cyclone Kick
+- Grand Slam
+- Homing Shot
+- Loop Kick
+- Recovery Smash
+- Sonic Boom
+- Spin Slash
+- Stomp Attack
+- Wild Rush
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x1408520DD */
         ScanSignature
         (
-            "\x8B\x4A\x08\x81\xE9\x00\x00\x00\x00\x0F\x84\x00\x00\x00\x00\x83\xE9\x0B",
-            "xxxxx????xx????xxx"
+            "\x74\x7F\x44\x38\x36",
+            "xxxxx"
         ),
+        
+        0xEB
+    );
 
-        HookBehavior.Replace
+    WriteNop
+    (
+        /* 0x140808775 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x41\xC7\x86\xAC\x00\x00\x00\x03\x00\x00\x00",
+            "x????xxxxxxxxxxx"
+        ),
+        
+        5
+    );
+}
+
+Patch "Disable Starfall" in "Gameplay" by "Hyper" does "Disables the Starfall event entirely."
+{
+    // Disable stars.
+    WriteProtected<byte>
+    (
+        /* 0x14038E943 */
+        ScanSignature
+        (
+            "\x0F\x85\xB7\x03\x00\x00\xF3\x0F\x10\x0D",
+            "xxxxxxxxxx"
+        ),
+        
+        0xE9, 0xB8, 0x03, 0x00, 0x00
+    );
+
+    // Disable cutscene.
+    WriteProtected<byte>
+    (
+        /* 0x14038BC78 */
+        ScanSignature
+        (
+            "\x0F\x84\x8F\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x85\xC0",
+            "xxxxxxx????xxxxxxx????xxx"
+        ),
+        
+        0xE9, 0x90, 0x00, 0x00, 0x00
+    );
+
+    // Disable slot machine.
+    {
+        WriteNop
+        (
+            /* 0x1408CF4C9 */
+            ScanSignature
+            (
+                "\x74\x60\x83\xF8\x04\x0F\x85\x38\x03\x00\x00",
+                "xxxxxxxxxxx"
+            ),
+            
+            2
+        );
+
+        WriteNop
+        (
+            /* 0x1408CF864 */
+            ScanSignature
+            (
+                "\x74\x6D\x83\xF8\x04\x0F\x85\xB1\x00\x00\x00",
+                "xxxxxxxxxxx"
+            ),
+            
+            2
+        );
+    }
+}
+
+Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cutscene that occurs before Starfall."
+{
+    WriteProtected<byte>
+    (
+        /* 0x14038BC78 */
+        ScanSignature
+        (
+            "\x0F\x84\x8F\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x85\xC0",
+            "xxxxxxx????xxxxxxx????xxx"
+        ),
+        
+        0xE9, 0x90, 0x00, 0x00, 0x00
+    );
+}
+
+Patch "Disable Starfall Slot Machine" in "Gameplay" by "Hyper" does "Disables the slot machine during Starfall, including any rewards for collecting stars."
+{
+    WriteNop
+    (
+        /* 0x1408CF4C9 */
+        ScanSignature
+        (
+            "\x74\x60\x83\xF8\x04\x0F\x85\x38\x03\x00\x00",
+            "xxxxxxxxxxx"
+        ),
+        
+        2
+    );
+
+    WriteNop
+    (
+        /* 0x1408CF864 */
+        ScanSignature
+        (
+            "\x74\x6D\x83\xF8\x04\x0F\x85\xB1\x00\x00\x00",
+            "xxxxxxxxxxx"
+        ),
+        
+        2
     );
 }
 
@@ -1051,7 +1640,7 @@ Patch "Disable Traversal Objects in Chests" in "Gameplay" by "Hyper" does
 /*
 Disables the hidden traversal objects in chests that require cyloop to reveal, making them always accessible.
 
-This only affects the following objects;
+Affected objects;
 - Dash Panels
 - Jump Boards
 - Springs
@@ -1162,6 +1751,77 @@ Patch "Disable Trick Hint Particles" in "Graphics" by "Hyper" does "Disables the
     );
 }
 
+Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all intrusive tutorial messages that appear under certain conditions for the first time."
+{
+    // Hide hint rings.
+    WriteProtected<byte>
+    (
+        /* 0x14910B23F */
+        ScanSignature
+        (
+            "\x48\x89\xCF\xB2\x01\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE8\xCC\xCC\xCC\xCC\xB2\x01\x48\x89\x47\x38\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE8\xCC\xCC\xCC\xCC\x48\x89\x47\x40",
+            "xxxxxxxx????x????xxxxxxxxx????x????xxxx"
+        ),
+        
+        0xEB, 0x63
+    );
+
+    WriteAsmHook
+    (
+        @"
+            ; Restore original code.
+            mov qword ptr [rsp + 0x08], rbx
+            mov qword ptr [rsp + 0x10], rbp
+            mov qword ptr [rsp + 0x18], rsi
+
+            push rax
+
+            ; Checks the overlay type, expected 1.
+            mov eax, dword ptr [rdx + 0x18]
+            cmp eax, 1
+            jne ret
+
+            ; Checks if the string field is null.
+            mov rax, qword ptr [rdx + 0x48]
+            cmp rax, 0
+            jz  end
+
+            ; Checks the first two characters of the input string.
+            mov ax, word ptr [rax]
+            cmp ax, 0x7574 ; tu (endian-swapped)
+            jne ret
+            
+            ; Exclusions, in the event that a softlock occurs.
+            mov rax, qword ptr [rdx + 0x48]
+            mov eax, dword ptr [rax + 0x07]
+            cmp eax, 0x303032 ; tu1000_200
+            je  ret
+            cmp eax, 0x303335 ; tu1000_530
+            je  ret
+            cmp eax, 0x303735 ; tu1000_570
+            je  ret
+            cmp eax, 0x303935 ; tu1000_590
+            je  ret
+
+        end:
+            pop rax
+            ret
+
+        ret:
+            pop rax
+        ",
+
+        /* 0x14093AFB0 */
+        ScanSignature
+        (
+            "\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x10\x48\x89\x74\x24\x18\x57\x41\x56\x41\x57\x48\x83\xEC\x20\x4C\x8B\xF1\x48\x8B\xEA",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Disable Umbrella Camera Lock-On" in "Gameplay" by "Hyper" does "Disables the lock-on camera when the Umbrella enemy in Ares jumps into the sky."
 {
     WriteProtected<byte>
@@ -1201,6 +1861,50 @@ Patch "Disable Vignette" in "Graphics" by "Hyper"
         ),
 
         4
+    );
+}
+
+Patch "Fix Empty Messages" in "Fixes" by "Hyper" does "Removes the empty messages that occur when the game is in an unsafe state."
+{
+    WriteAsmHook
+    (
+        @"
+            push rax
+
+            ; Checks the overlay type, expected 1.
+            mov eax, dword ptr [rdx + 0x18]
+            cmp eax, 1
+            jne ret
+
+            ; Checks if the string field is null.
+            mov rax, qword ptr [rdx + 0x48]
+            cmp rax, 0
+            jnz ret
+
+            ; Immediately return if the string field is null.
+            pop rax
+            ret
+
+        ret:
+            pop rax
+
+            ; Restore original code.
+            push rdi
+            push r14
+            push r15
+            sub  rsp, 0x20
+            mov  r14, rcx
+            mov  rbp, rdx
+        ",
+
+        /* 0x14093AFBF */
+        ScanSignature
+        (
+            "\x57\x41\x56\x41\x57\x48\x83\xEC\x20\x4C\x8B\xF1\x48\x8B\xEA",
+            "xxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
     );
 }
 
@@ -1339,6 +2043,35 @@ Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a b
     );
 }
 
+Patch "Fix Upreel Grip Position" in "Fixes" by "ĐeäTh" does "Adjusts Sonic's grip position on the Upreel object's handle so that it lines up with the actual object."
+{
+    IntPtr gripOffsetPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(16);
+    *((float*)gripOffsetPtr + 0) = 0.0f;
+    *((float*)gripOffsetPtr + 1) = -1.025f;
+    *((float*)gripOffsetPtr + 2) = 0.0f;
+    *((float*)gripOffsetPtr + 3) = 0.0f;
+
+    WriteAsmHook
+    (
+        $@"
+            mov rax, {(long)gripOffsetPtr}
+            movups xmm15, [rax]
+            mulps xmm0, xmm15
+            lea rdx, [rbp - 0x39]
+            lea rcx, [rbp - 0x69]
+        ",
+
+        /* v1.10: 0x1498C86A7 */
+        ScanSignature
+        (
+            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xC7\x48\x8D\x4D\x97\x0F\x29\x45\xD7\xE8\xCC\xCC\xCC\xCC\x0F\x28\x45\xB7\x0F\x58\x00\x0F\x11\x46\x30\x0F\x28\x45\xC7\x0F\x11\x46\x40\xE9\xAF\x00\x00\x00\x0F\xB6\x81\xC8\x02\x00\x00\xA8\x01\x0F\x84\xA0\x00\x00\x00\x24\xFE\x31\xDB",
+            "xxx????xxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Force 4K Video Playback" in "Graphics" by "Hyper" does "Forces the game to use the pre-rendered cutscenes encoded at 4K, regardless of game resolution."
 {
     WriteNop
@@ -1364,6 +2097,720 @@ Patch "Force 4K Video Playback" in "Graphics" by "Hyper" does "Forces the game t
 
         0x48, 0x89, 0xCB, 0x90
     );
+}
+
+Patch "Force Cyber Space Objects on Islands" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
+/*
+Replaces all supported objects in Cyber Space with their island counterparts.
+
+Unsupported objects;
+- Jump Selectors (Generations-style)
+*/
+//
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+
+    static byte WorldType = 2;
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    public delegate IntPtr TGetAssetName(IntPtr originalName, IntPtr assetType);
+
+    static TGetAssetName Del_GetAssetName = new TGetAssetName(GetAssetName);
+
+    static IntPtr fpGetAssetName = Marshal.GetFunctionPointerForDelegate(Del_GetAssetName);
+
+    public static IntPtr GetAssetName(IntPtr originalName, IntPtr assetType)
+    {
+        if (WorldType == 0)
+            return originalName;
+
+        string assetName     = Marshal.PtrToStringAnsi(originalName);
+        string assetTypeName = Marshal.PtrToStringAnsi(assetType);
+
+        List<string> objects = new List<string>()
+        {
+            "cmnisl_obj_balloonB",
+            "cmnisl_obj_balloonG",
+            "cmnisl_obj_balloonR",
+            "cmnisl_obj_balloonY",
+            "cmnisl_obj_dashpanel",
+            "cmnisl_obj_dashpanel_arrow",
+            "cmnisl_obj_dashpanel_belt",
+            "cmnisl_obj_dashring",
+            "cmnisl_obj_dashring_body",
+            "cmnisl_obj_dashroller",
+            "cmnisl_obj_dashroller_GR",
+            "cmnisl_obj_dashroller_SV",
+            "cmnisl_obj_fan_fly",
+            "cmnisl_obj_fan_ground",
+            "cmnisl_obj_fan_top",
+            "cmnisl_obj_grindbooster",
+            "cmnisl_obj_grindbooster_arrow",
+            "cmnisl_obj_grindbooster_arrow_stop",
+            "cmnisl_obj_grindbooster_light_stop",
+            "cmnisl_obj_jumppanel_arrow",
+            "cmnisl_obj_jumppanel_belt",
+            "cmnisl_obj_jumppanel30L",
+            "cmnisl_obj_jumppanel30M",
+            "cmnisl_obj_jumppanel30S",
+            "cmnisl_obj_jumpselector",
+            "cmnisl_obj_jumpselector@correct",
+            "cmnisl_obj_jumpselector@miss",
+            "cmnisl_obj_jumpselector_arrow",
+            "cmnisl_obj_jumpselector_gauge_correct",
+            "cmnisl_obj_jumpselector_gauge_in",
+            "cmnisl_obj_jumpselector_gauge_miss",
+            "cmnisl_obj_laserfence",
+            "cmnisl_obj_pole_fvA",
+            "cmnisl_obj_pole_fvB",
+            "cmnisl_obj_pole_guide",
+            "cmnisl_obj_pole_guide_meter",
+            "cmnisl_obj_pole_guide_meterB",
+            "cmnisl_obj_pole_svA",
+            "cmnisl_obj_pole_svB",
+            "cmnisl_obj_pole_svC",
+            "cmnisl_obj_pole_svD",
+            "cmnisl_obj_propellerspring_body_limit",
+            "cmnisl_obj_propellerspring_bottom",
+            "cmnisl_obj_propellerspring_top",
+            "cmnisl_obj_pulley",
+            "cmnisl_obj_pulleystandA",
+            "cmnisl_obj_pulleystandB",
+            "cmnisl_obj_pulleystandC",
+            "cmnisl_obj_rainbowring",
+            "cmnisl_obj_rainbowring_body",
+            "cmnisl_obj_spring",
+            "cmnisl_obj_springair_bottom",
+            "cmnisl_obj_springair_top",
+            "cmnisl_obj_springC",
+            "cmnisl_obj_springC_red",
+            "cmnisl_obj_springC_yellow",
+            "cmnisl_obj_springegg",
+            "cmnisl_obj_springpole",
+            "cmnisl_obj_springpole_L",
+            "cmnisl_obj_springpole_M",
+            "cmnisl_obj_springpole_S",
+            "cmnisl_obj_upreel_handle",
+            "cmnisl_obj_upreel_stand",
+            "cmnisl_obj_upreel_wire",
+            "cmnisl_obj_walljumpblock01",
+            "cmnisl_obj_walljumpblock02",
+            "cmnisl_obj_walljumpblock03",
+            "cmnisl_obj_widespring",
+            "cmnisl_obj_wjblock_arrow"
+        };
+
+        switch (assetTypeName)
+        {
+            case "ResModel":
+            case "ResSkeleton":
+            {
+                if (assetName == "cmnisl_obj_switchusual")
+                    return Marshal.StringToHGlobalAnsi("cmn_obj_switch");
+
+                break;
+            }
+
+            case "ResAnimation":
+            {
+                if (assetName == "cmnisl_obj_switchusual_on")
+                    return Marshal.StringToHGlobalAnsi("cmn_obj_switch_on");
+
+                break;
+            }
+
+            case "ResPhysicsMesh":
+            {
+                switch (assetName)
+                {
+                    case "cmnisl_obj_jumppanel30S":
+                        return Marshal.StringToHGlobalAnsi("cmn_obj_jumppanel30S_col");
+
+                    case "cmnisl_obj_jumppanel30M":
+                        return Marshal.StringToHGlobalAnsi("cmn_obj_jumppanel30M_col");
+
+                    case "cmnisl_obj_jumppanel30L":
+                        return Marshal.StringToHGlobalAnsi("cmn_obj_jumppanel30L_col");
+
+                    case "col_cmnisl_obj_switchusual":
+                        return Marshal.StringToHGlobalAnsi("col_cmn_obj_switch");
+                }
+                
+                break;
+            }
+
+            case "ResAnimTexSrt":
+            {
+                if (assetName == "cmnisl_obj_switchusual03_on")
+                    return Marshal.StringToHGlobalAnsi("cmn_obj_switch03_on");
+
+                break;
+            }
+
+            case "ResAnimMaterial":
+            {
+                if (assetName == "cmnisl_obj_switchusual03")
+                    return Marshal.StringToHGlobalAnsi("cmn_obj_switch03");
+
+                break;
+            }
+        }
+
+        if (objects.Contains(assetName))
+            originalName = Marshal.StringToHGlobalAnsi(assetName.Replace("cmnisl_obj_", "cmn_obj_"));
+
+        return originalName;
+    }
+//
+{
+    // Allow loading Cyber Space asset archive.
+    WriteNop
+    (
+        /* 0x14019B9C5 */
+        ScanSignature
+        (
+            "\x74\x0F\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x40\x38\x75\x68",
+            "xxxxx????xxxx????xxxx"
+        ),
+        
+        2
+    );
+
+    fixed (byte* pWorldType = &WorldType)
+    {
+        // Set if we're currently in Cyber Space.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                push rdi
+                sub  rsp, 0x20
+                mov  rbx, r8
+                mov  rdi, rdx
+                mov  rsi, rcx
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 0
+
+                pop rax
+            ",
+
+            /* 0x1473F9B5A */
+            ScanSignature
+            (
+                "\x57\x48\x83\xEC\x20\x4C\x89\xC3\x48\x89\xD7\x48\x89\xCE\xE8\xCC\xCC\xCC\xCC\x48\x8D\x05\xCC\xCC\xCC\xCC\x8B\x0D",
+                "xxxxxxxxxxxxxxx????xxx????xx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're currently on an island.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                mov qword ptr [rsi + 0x1A8], rdi
+                xor ebp, ebp
+                mov qword ptr [rsi + 0x190], rbp
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 1
+
+                pop rax
+            ",
+
+            /* 0x147A0FF7B */
+            ScanSignature
+            (
+                "\x48\x89\xBE\xA8\x01\x00\x00\x31\xED",
+                "xxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're entering Cyber Space from Training Simulator.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                movups xmm0, xmmword ptr [rax]
+                movups xmmword ptr [rdi + 0xA0], xmm0
+                movaps xmm0, xmmword ptr [rax + 0x10]
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 0
+
+                pop rax
+            ",
+
+            /* 0x14014B49F */
+            ScanSignature
+            (
+                "\x0F\x10\x00\x0F\x11\x87\xA0\x00\x00\x00\x0F\x28\x40\x10\x0F\x29\x87\xD0\x00\x00\x00\x0F\x28\x48\x20\x0F\x29\x8F\xE0\x00\x00\x00\x0F\x28\x40\x30\x0F\x29\x87\xF0\x00\x00\x00\x0F\x28\x48\x40\x0F\x29\x8F\x00\x01\x00\x00\x0F\x28\x40\x50\x48\x8B\x47\x10",
+                "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're returning to an island from Training Simulator after quitting Cyber Space.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                movups xmm0, xmmword ptr [rsp + 0x210 + 0xFFFFFFFFFFFFFE10]
+                mov    qword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFFA0], rax
+                mov    word ptr [rdi + 0x120], 0x101
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 1
+
+                pop rax
+            ",
+
+            /* 0x140149F19 */
+            ScanSignature
+            (
+                "\x0F\x10\x44\x24\x20\x48\x89\x85\xB0\x00\x00\x00\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
+                "xxxxxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        fixed (byte* pWorld = System.Text.Encoding.UTF8.GetBytes("w6d01"))
+        {
+            // Set if we're returning to an island from Training Simulator after completing Cyber Space.
+            WriteAsmHook
+            (
+                $@"
+                    ; Restore original code.
+                    xor ebx, ebx
+                    lea rcx, {(long)pWorld}
+                    mov edx, ebx
+                    nop dword ptr [rax]
+
+                    push rax
+
+                    mov rax, {(long)pWorldType}
+                    mov byte ptr [rax], 1
+
+                    pop rax
+                ",
+
+                /* 0x140149CE2 */
+                ScanSignature
+                (
+                    "\x33\xDB\x48\x8D\x0D\xCC\xCC\xCC\xCC\x8B\xD3",
+                    "xxxxx????xx"
+                ),
+
+                HookBehavior.Replace
+            );
+        }
+
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                sub rsp, 0xD0
+                mov rdi, r8
+                mov rbx, rdx
+                mov rsi, rcx
+
+                push rax
+                push rcx
+
+                mov rax, {(long)pWorldType}
+                cmp byte ptr [rax], 2
+                jz  ret
+
+                mov  rax, {(long)fpGetAssetName}
+                mov  rcx, rdx
+                mov  rdx, [rdi]
+                call rax
+                mov  rdx, [rcx]
+                mov  rbx, rdx
+
+            ret:
+                pop rcx
+                pop rax
+            ",
+
+            /* 0x140D4076B */
+            ScanSignature
+            (
+                "\x48\x81\xEC\xD0\x00\x00\x00\x49\x8B\xF8\x48\x8B\xDA",
+                "xxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
+Patch "Force Island Objects in Cyber Space" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
+/*
+Replaces all supported objects on the islands with their Cyber Space counterparts.
+
+Unsupported objects;
+- Checkpoints
+- Up-reel Carriers
+*/
+//
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+
+    static byte WorldType = 2;
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    public delegate IntPtr TGetAssetName(IntPtr originalName, IntPtr assetType);
+
+    static TGetAssetName Del_GetAssetName = new TGetAssetName(GetAssetName);
+
+    static IntPtr fpGetAssetName = Marshal.GetFunctionPointerForDelegate(Del_GetAssetName);
+
+    public static IntPtr GetAssetName(IntPtr originalName, IntPtr assetType)
+    {
+        if (WorldType == 1)
+            return originalName;
+
+        string assetName     = Marshal.PtrToStringAnsi(originalName);
+        string assetTypeName = Marshal.PtrToStringAnsi(assetType);
+
+        List<string> objects = new List<string>()
+        {
+            "cmn_obj_balloonB",
+            "cmn_obj_balloonG",
+            "cmn_obj_balloonR",
+            "cmn_obj_balloonY",
+            "cmn_obj_dashpanel",
+            "cmn_obj_dashpanel_arrow",
+            "cmn_obj_dashpanel_belt",
+            "cmn_obj_dashring",
+            "cmn_obj_dashring_body",
+            "cmn_obj_dashroller",
+            "cmn_obj_dashroller_GR",
+            "cmn_obj_dashroller_SV",
+            "cmn_obj_fan_fly",
+            "cmn_obj_fan_ground",
+            "cmn_obj_fan_top",
+            "cmn_obj_grindbooster",
+            "cmn_obj_grindbooster_arrow",
+            "cmn_obj_grindbooster_arrow_stop",
+            "cmn_obj_grindbooster_light_stop",
+            "cmn_obj_jumppanel_arrow",
+            "cmn_obj_jumppanel_belt",
+            "cmn_obj_jumppanel30L",
+            "cmn_obj_jumppanel30M",
+            "cmn_obj_jumppanel30S",
+            "cmn_obj_jumpselector",
+            "cmn_obj_jumpselector@correct",
+            "cmn_obj_jumpselector@miss",
+            "cmn_obj_jumpselector_arrow",
+            "cmn_obj_jumpselector_gauge_correct",
+            "cmn_obj_jumpselector_gauge_in",
+            "cmn_obj_jumpselector_gauge_miss",
+            "cmn_obj_laserfence",
+            "cmn_obj_pole_fvA",
+            "cmn_obj_pole_fvB",
+            "cmn_obj_pole_guide",
+            "cmn_obj_pole_guide_meter",
+            "cmn_obj_pole_guide_meterB",
+            "cmn_obj_pole_svA",
+            "cmn_obj_pole_svB",
+            "cmn_obj_pole_svC",
+            "cmn_obj_pole_svD",
+            "cmn_obj_propellerspring_body_limit",
+            "cmn_obj_propellerspring_bottom",
+            "cmn_obj_propellerspring_top",
+            "cmn_obj_pulley",
+            "cmn_obj_pulleystandA",
+            "cmn_obj_pulleystandB",
+            "cmn_obj_pulleystandC",
+            "cmn_obj_rainbowring",
+            "cmn_obj_rainbowring_body",
+            "cmn_obj_spring",
+            "cmn_obj_springair_bottom",
+            "cmn_obj_springair_top",
+            "cmn_obj_springC",
+            "cmn_obj_springC_red",
+            "cmn_obj_springC_yellow",
+            "cmn_obj_springegg",
+            "cmn_obj_springpole",
+            "cmn_obj_springpole_L",
+            "cmn_obj_springpole_M",
+            "cmn_obj_springpole_S",
+            "cmn_obj_upreel_handle",
+            "cmn_obj_upreel_stand",
+            "cmn_obj_upreel_wire",
+            "cmn_obj_walljumpblock01",
+            "cmn_obj_walljumpblock02",
+            "cmn_obj_walljumpblock03",
+            "cmn_obj_widespring",
+            "cmn_obj_wjblock_arrow"
+        };
+
+        switch (assetTypeName)
+        {
+            case "ResModel":
+            case "ResSkeleton":
+            {
+                if (assetName == "cmn_obj_switch")
+                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual");
+
+                break;
+            }
+
+            case "ResAnimation":
+            {
+                if (assetName == "cmn_obj_switch_on")
+                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual_on");
+
+                break;
+            }
+
+            case "ResPhysicsMesh":
+            {
+                switch (assetName)
+                {
+                    case "cmn_obj_jumppanel30S_col":
+                        return Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30S");
+
+                    case "cmn_obj_jumppanel30M_col":
+                        return Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30M");
+
+                    case "cmn_obj_jumppanel30L_col":
+                        return Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30L");
+
+                    case "col_cmn_obj_switch":
+                        return Marshal.StringToHGlobalAnsi("col_cmnisl_obj_switchusual");
+                }
+
+                break;
+            }
+
+            case "ResAnimTexSrt":
+            {
+                if (assetName == "cmn_obj_switch03_on")
+                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual03_on");
+
+                break;
+            }
+
+            case "ResAnimMaterial":
+            {
+                if (assetName == "cmn_obj_switch03")
+                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual03");
+
+                break;
+            }
+        }
+
+        if (objects.Contains(assetName))
+            originalName = Marshal.StringToHGlobalAnsi(assetName.Replace("cmn_obj_", "cmnisl_obj_"));
+
+        return originalName;
+    }
+//
+{
+    // Allow loading open zone asset archive.
+    WriteNop
+    (
+        /* 0x14019B9DA */
+        ScanSignature
+        (
+            "\x74\x54\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCF",
+            "xxxxx????xxx"
+        ),
+        
+        2
+    );
+
+    fixed (byte* pWorldType = &WorldType)
+    {
+        // Set if we're currently in Cyber Space.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                xor ecx, 0x489C051F
+                mov r8d, ecx
+                mov [rsi], rax
+                lea rcx, qword ptr [rsi + 0x100]
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 0
+
+                pop rax
+            ",
+
+            /* 0x1473F9B7A */
+            ScanSignature
+            (
+                "\x81\xF1\x1F\x05\x9C\x48",
+                "xxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're currently on an island.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                mov r8d, 0x10
+                mov [rsi], rax
+                lea rcx, qword ptr [rsi + 0x160]
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 1
+
+                pop rax
+            ",
+
+            /* 0x147A0FE49 */
+            ScanSignature
+            (
+                "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x60\x01\x00\x00",
+                "xxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're entering Cyber Space from Training Simulator.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                movups xmm0, xmmword ptr [rsp + 0x2E0 + 0xFFFFFFFFFFFFFD40]
+                mov    qword ptr [rbp + 0x1E0 + 0xFFFFFFFFFFFFFDF0], rax
+                mov    word ptr [rdi + 0x120], 0x100
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 0
+
+                pop rax
+            ",
+
+            /* 0x14014B542 */
+            ScanSignature
+            (
+                "\x0F\x10\x44\x24\x20\x48\x89\x45\xD0\x66\xC7\x87\x20\x01\x00\x00\x00\x01",
+                "xxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're returning to an island from Training Simulator after quitting Cyber Space.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                movups xmmword ptr [rdi + 0x80], xmm0
+                movups xmm0, xmmword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFFA0]
+                
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 1
+
+                pop rax
+            ",
+
+            /* 0x140149F2E */
+            ScanSignature
+            (
+                "\x0F\x11\x87\x80\x00\x00\x00\x0F\x10\x85\xB0\x00\x00\x00\xEB\x34",
+                "xxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Set if we're returning to an island from Training Simulator after completing Cyber Space.
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                movups xmm0, xmmword ptr [rsp + 0x210 + 0xFFFFFFFFFFFFFE10]
+                mov    qword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFF40], rax
+                mov    word ptr [rdi + 0x120], 0x101
+
+                push rax
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 1
+
+                pop rax
+            ",
+
+            /* 0x140149DE8 */
+            ScanSignature
+            (
+                "\x0F\x10\x44\x24\x20\x48\x89\x45\x50\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
+                "xxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        WriteAsmHook
+        (
+            $@"
+                ; Restore original code.
+                lea rcx, [rsp + 0xD8 + 0xFFFFFFFFFFFFFF70]
+                mov [rsp + 0xD8 + 0xFFFFFFFFFFFFFF60], 0
+                mov [rsp + 0xD8 + 0xFFFFFFFFFFFFFF58], rcx
+
+                push rax
+                push rcx
+
+                mov rax, {(long)pWorldType}
+                cmp byte ptr [rax], 2
+                jz ret
+
+                mov  rax, {(long)fpGetAssetName}
+                mov  rcx, rdx
+                mov  rdx, [rdi]
+                call rax
+                mov  rdx, [rcx]
+                mov  rbx, rdx
+
+            ret:
+                pop rcx
+                pop rax
+            ",
+
+            /* 0x140D4079A */
+            ScanSignature
+            (
+                "\x48\x8D\x4C\x24\x48\xC7\x44\x24\x38\x00\x00\x00\x00\x48\x89\x4C\x24\x30\x49\xC7\xC0\xFF\xFF\xFF\xFF\xC7\x44\x24\x3C\x7F\x00\x00\x80\x48\x89\x44\x24\x40\x49\xFF\xC0\x42\x80\x3C\x03\x00\x75\xF6\x45\x33\xC9",
+                "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
 }
 
 Patch "Force PlayStation 4 Controller UI" in "UI" by "Hyper"
@@ -1537,6 +2984,19 @@ Patch "Hide Challenge Markers" in "Graphics" by "Hyper" does "Hides the markers 
         0xEB
     );
 
+    // Hide map sensor prerequisite marker.
+    WriteProtected<byte>
+    (
+        /* 0x1403BF6B3 */
+        ScanSignature
+        (
+            "\x0F\x85\xE5\x00\x00\x00\xE8",
+            "xxxxxxx"
+        ),
+        
+        0xE9, 0xE6, 0x00, 0x00, 0x00
+    );
+
     // Hide map sensor name.
     WriteProtected<byte>
     (
@@ -1577,6 +3037,21 @@ Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift da
         ),
 
         5
+    );
+}
+
+Patch "Hide Enemy Health Gauge" in "UI" by "Hyper & Gordon Ramsay" does "Hides the health gauge for standard enemies and guardians."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1404FC4CB */
+        ScanSignature
+        (
+            "\x0F\x84\xF7\x00\x00\x00\xBA\x44\x23\x00\x00",
+            "xxxxxxxxxxx"
+        ),
+
+        0xE9, 0xF8, 0x00, 0x00, 0x00
     );
 }
 
@@ -1666,6 +3141,20 @@ Patch "Hide Skip Button in Cutscenes" in "UI" by "Hyper" does "Hides the button 
     );
 }
 
+Patch "Hide Star Beacons" in "Graphics" by "Hyper" does "Hides the beacons that emit from the stars during Starfall."
+{
+    WriteProtected<byte>
+    (
+        ScanSignature
+        (
+            "cmnisl_obj_slotstarpillar",
+            "xxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        0x00
+    );
+}
+
 Patch "Hide Titan Health Gauge" in "UI" by "Hyper"
 {
     WriteProtected<byte>
@@ -1694,6 +3183,23 @@ Patch "Infinite Boost Gauge" in "Cheats" by "Hyper"
         ),
 
         0xE9, 0xC2, 0x01, 0x00, 0x00
+    );
+}
+
+Patch "Infinite Skill Points" in "Cheats" by "Hyper"
+{
+    WriteAsmHook
+    (
+        "mov qword ptr [rbx - 0x70 + 0x84], 999",
+
+        /* 0x14014425D */
+        ScanSignature
+        (
+            "\x0F\x85\x6D\x01\x00\x00\x83\x79\x0C\x00",
+            "xxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
     );
 }
 
@@ -1730,4 +3236,205 @@ Patch "Infinite Quick Cyloop Gauge" in "Cheats" by "NM"
 
         HookBehavior.Replace
     );
+}
+
+Patch "Play Random Mvt. Soundtrack on Islands" in "Audio" by "Hyper" does
+/*
+Plays a random movement every time you switch to any of the supported islands.
+
+Supported islands;
+- Kronos
+- Ares
+- Chaos
+
+Rhea only has one soundtrack and will not change.
+
+Ouranos only has one soundtrack, but will play Kronos Island: 2nd Mvt. if the random number is greater than 3.
+*/
+//
+    static byte[] Format = System.Text.Encoding.UTF8.GetBytes("%s_%d");
+//
+{
+    fixed (byte* pFormat = Format)
+    {
+        WriteAsmHook
+        (
+            @$"
+            rand:
+                rdrand rax
+                and    rax, 7
+                inc    rax
+
+                ; Generate new random number if the result is greater than 7.
+                cmp rax, 7
+                jg  rand
+
+                mov r9d, eax
+
+                ; Load format string, since we overwrote the original instruction with the hook jump.
+                mov rax, {(long)pFormat}
+                lea rdx, [rax]
+            ",
+
+            /* 0x14C1A39AF */
+            ScanSignature
+            (
+                "\x45\x8B\x8E\xA4\x00\x00\x00",
+                "xxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
+Code "Play Random Soundtrack in Cyber Space" in "Audio" by "Hyper" does "Plays a random soundtrack every time you enter Cyber Space."
+//
+    static long Address = 0;
+
+    static string[] BgmList = new[]
+    {
+        /* Kronos */
+        "bgm_w6d01", "bgm_w6d02", "bgm_w6d03", "bgm_w6d04", "bgm_w6d05",
+        "bgm_w6d06", "bgm_w6d07", "bgm_w6d08", "bgm_w6d09", "bgm_w6d10",
+
+        /* Ares */
+        "bgm_w7d01", "bgm_w7d02", "bgm_w7d03", "bgm_w7d04", "bgm_w7d05",
+        "bgm_w7d06", "bgm_w7d07", "bgm_w7d08",
+
+        /* Chaos */
+        "bgm_w8d01", "bgm_w8d02", "bgm_w8d03", "bgm_w8d04", "bgm_w8d05",
+        "bgm_w8d06",
+
+        /* Ouranos */
+        "bgm_w9d02", "bgm_w9d03", "bgm_w9d04", "bgm_w9d05", "bgm_w9d06",
+        "bgm_w9d07"
+    };
+//
+{
+    if (Address == 0)
+    {
+        /* 0x14132A3C0 */
+        Address = ScanSignature
+        (
+            "bgm_%s",
+            "xxxxxx"
+        );
+    }
+    else
+    {
+        WriteProtected<byte>(Address, System.Text.Encoding.UTF8.GetBytes(BgmList[new Random().Next(0, 30)]));
+    }
+}
+
+Patch "Restore Unused Supreme QTE" in "Gameplay" by "Gordon Ramsay" does
+/*
+Restores an unused quick time event for the final blow to Supreme.
+
+This replaces the basic X button QTE to dodge the rifle projectile in the final game.
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x14125C830 */
+        ScanSignature
+        (
+            "zev_rfl_shoot02",
+            "xxxxxxxxxxxxxxx"
+        ),
+
+        System.Text.Encoding.UTF8.GetBytes("zev_rfl_shoot01")
+    );
+}
+
+Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
+//
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    
+    [DllImport("user32.dll", SetLastError=true, CharSet=CharSet.Auto)]
+    static extern int GetWindowTextLength(IntPtr hWnd);
+
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    static extern bool SetWindowText(IntPtr hWnd, String lpString);
+
+    static bool Initialised = false;
+
+    static float* pFramerate;
+
+    static IntPtr HWND = IntPtr.Zero;
+
+    static string OriginalTitle;
+//
+{
+    if (!Initialised)
+    {
+        fixed (float** ppFramerate = &pFramerate)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    ; Restore original code.
+                    movss  xmm0, dword ptr [rcx + 0x14]
+                    lea    rdi, qword ptr [rcx + 0x14]
+                    movaps xmmword ptr [rsp + 0x58 + 0xFFFFFFFFFFFFFFE8], xmm6
+
+                    ; Get float pointer.
+                    mov r9, {(long)ppFramerate}
+                    mov [r9], rcx
+                    add qword ptr [r9], 0x14
+                ",
+
+                /* 0x140BB9EDF */
+                ScanSignature
+                (
+                    "\xF3\x0F\x10\x41\x14\x48\x8D\x79\x14",
+                    "xxxxxxxxx"
+                ),
+                
+                HookBehavior.Replace
+            );
+        }
+
+        Initialised = true;
+    }
+
+    if (pFramerate != null)
+    {
+        if (HWND == IntPtr.Zero)
+        {
+            HWND = Process.GetCurrentProcess().MainWindowHandle;
+
+            StringBuilder title = new StringBuilder();
+            {
+                GetWindowText(HWND, title, GetWindowTextLength(HWND));
+
+                OriginalTitle = title.ToString();
+            }
+        }
+        else
+        {
+            float framerate = *pFramerate;
+            float frametime = 1.0f / framerate;
+
+            SetWindowText(HWND, $"{OriginalTitle} - {framerate:0} FPS ({frametime} ms)");
+        }
+    }
+}
+
+Patch "Show Missions in Arcade Mode" in "UI" by "Hyper" does "Shows the missions in the results screen when completing Cyber Space in Arcade Mode."
+{
+    /* 0x14093798D */
+    long addr = ScanSignature
+    (
+        "\x44\x38\xBB\x6C\x02\x00\x00",
+        "xxxxxxx"
+    );
+
+    WriteProtected<byte>(addr, Assemble("mov byte ptr [rbx + 0x26C], 0"));
+    WriteProtected<byte>(addr + 7, 0xEB);
 }

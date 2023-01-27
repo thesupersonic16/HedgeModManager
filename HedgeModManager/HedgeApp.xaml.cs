@@ -298,20 +298,6 @@ namespace HedgeModManager
                 $"https://raw.githubusercontent.com/{RepoOwner}/{RepoName}/{RepoBranch}/HMMNetworkConfig.json"));
         }
 
-        public static void ShowHelp()
-        {
-            Console.WriteLine();
-            Console.WriteLine($"HedgeModManager {VersionString}\n");
-
-            Console.WriteLine("Commands:");
-
-            Console.WriteLine("    -encrypt");
-            Console.WriteLine("        Usage: filename [output]");
-
-            Console.WriteLine("    -decrypt");
-            Console.WriteLine("        Usage: filename [output]");
-        }
-
         public static Uri GetResourceUri(string path)
         {
             return new Uri(@"pack://application:,,,/" + Assembly.GetExecutingAssembly().GetName().Name + ";component/" + path, UriKind.Absolute);
@@ -538,6 +524,7 @@ namespace HedgeModManager
             builder.AppendLine();
             new ExceptionWindow(new Exception(builder.ToString())).ShowDialog();
         }
+
         public static void SetupThemes()
         {
             var resource = Current.TryFindResource("Themes");

@@ -1431,22 +1431,60 @@ namespace HedgeModManager
             UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGame));
             try
             {
-                var downloader = new DownloadWindow($"Downloading codes for {HedgeApp.CurrentGame}", HedgeApp.CurrentGame.CodesURL, CodeProvider.CodesTextPath)
+                string codesFilePath = CodeProvider.CodesTextPath;
+                bool codesFileExists = File.Exists(codesFilePath);
+
+                /* Parse current codes list, since ModsDB.CodesDatabase
+                   is contaminated with codes from ExtraCodes.hmm */
+                var oldCodes = codesFileExists ? new CodeFile(codesFilePath) : null;
+
+                var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGame), HedgeApp.CurrentGame.CodesURL, codesFilePath)
                 {
                     DownloadCompleted = () =>
                     {
                         Refresh();
+
+                        CodesOutdated = false;
+
                         UpdateStatus(Localise("StatusUIDownloadFinished"));
+                        Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
 
-                        // Update button visual.
+                        // Don't display diff for initial download.
+                        if (!codesFileExists)
+                            return;
+
+                        var diff = new CodeFile(codesFilePath).Diff(oldCodes);
                         {
-                            CodesOutdated = false;
+                            var sb = new StringBuilder();
 
-                            // Reset button text if there was an update that was just downloaded.
-                            Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
+                            foreach (var code in diff)
+                            {
+                                sb.AppendLine($"- {code}");
+
+                                if (code.Type == CodeDiffResult.CodeDiffType.Renamed)
+                                {
+                                    // Restore enabled state of renamed code.
+                                    if (ViewModel.ModsDB.Codes.Contains(code.OriginalName))
+                                        ViewModel.ModsDB.CodesDatabase.Codes.Find(x => x.Name == code.NewName).Enabled = true;
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(sb.ToString()))
+                            {
+                                var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+                                {
+                                    box.AddButton(Localise("CommonUIOK"), () => box.Close());
+                                    box.ShowDialog();
+                                }
+                            }
+                            else
+                            {
+                                UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
+                            }
                         }
                     }
                 };
+
                 downloader.Start();
             }
             catch
@@ -1952,7 +1990,7 @@ namespace HedgeModManager
             return null;
         }
 
-        private void CodesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void CodesView_Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var code = GetCodeFromView(sender);
 
@@ -2060,12 +2098,12 @@ namespace HedgeModManager
             );
         }
 
-        private void CodesView_MouseEnter(object sender, MouseEventArgs e)
+        private void CodesView_Item_MouseEnter(object sender, MouseEventArgs e)
         {
             UpdateCodeDescription(GetCodeFromView(sender));
         }
 
-        private void CodesView_MouseLeave(object sender, MouseEventArgs e)
+        private void CodesView_Item_MouseLeave(object sender, MouseEventArgs e)
         {
             if (IsCodesTreeView)
             {
@@ -2087,7 +2125,7 @@ namespace HedgeModManager
             UpdateCodeDescription(null);
         }
 
-        private void CodesView_ViewItem_Selected(object sender, RoutedEventArgs e)
+        private void CodesView_Item_Selected(object sender, RoutedEventArgs e)
         {
             UpdateCodeDescription(GetCodeFromView(sender));
         }
@@ -2149,6 +2187,56 @@ namespace HedgeModManager
         private void UI_CodesTree_CollapseAll_Click(object sender, RoutedEventArgs e)
         {
             SetCodesTreeExpandedState(false);
+        }
+
+        private void CodesTree_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            if (CodesTree.SelectedItem != null)
+            {
+                foreach (var item in CodesTree.ContextMenu.Items)
+                {
+                    var codeVM = CodesTree.SelectedItem as CodeHierarchyViewModel;
+
+                    if (codeVM == null)
+                        continue;
+
+                    var visibility = codeVM.IsRoot
+                        ? Visibility.Collapsed
+                        : Visibility.Visible;
+
+                    if (item is Separator separator && separator?.Tag as string == "Item")
+                        separator.Visibility = visibility;
+
+                    if (item is MenuItem menuItem && menuItem?.Tag as string == "Item")
+                        menuItem.Visibility = visibility;
+                }
+            }
+        }
+
+        private void CodesTree_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+
+            if (treeViewItem != null)
+            {
+                // Select the hovered item upon right-clicking.
+                treeViewItem.Focus();
+
+                e.Handled = true;
+            }
+
+            static TreeViewItem VisualUpwardSearch(DependencyObject source)
+            {
+                while (source != null && source is not TreeViewItem)
+                    source = VisualTreeHelper.GetParent(source);
+
+                return source as TreeViewItem;
+            }
+        }
+
+        private void UI_CodesView_CopyToClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(GetCodeFromView(IsCodesTreeView ? CodesTree : CodesList)?.ToString());
         }
     }
 }
