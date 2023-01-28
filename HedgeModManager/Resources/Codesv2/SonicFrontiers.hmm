@@ -440,6 +440,21 @@ Patch "Always Trickable Jump Boards" in "Cheats" by "Hyper"
     );
 }
 
+Patch "Always Trickable Springs" in "Cheats" by "Hyper"
+{
+    WriteNop
+    (
+        /* 0x1403E849D */
+        ScanSignature
+        (
+            "\x0F\x44\xD0\x88\x93\x00\x03\x00\x00\x0F\xB6\xC2\x80\xCA\x10",
+            "xxxxxxxxxxxxxxx"
+        ),
+        
+        3
+    );
+}
+
 Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
 {
     WriteNop
