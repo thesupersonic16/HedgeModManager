@@ -2115,9 +2115,9 @@ Unsupported objects;
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public delegate IntPtr TGetAssetName(IntPtr originalName, IntPtr assetType);
 
-    static TGetAssetName Del_GetAssetName = new TGetAssetName(GetAssetName);
+    static TGetAssetName delGetAssetName = new TGetAssetName(GetAssetName);
 
-    static IntPtr fpGetAssetName = Marshal.GetFunctionPointerForDelegate(Del_GetAssetName);
+    static IntPtr fpGetAssetName = Marshal.GetFunctionPointerForDelegate(delGetAssetName);
 
     public static IntPtr GetAssetName(IntPtr originalName, IntPtr assetType)
     {
@@ -2202,11 +2202,19 @@ Unsupported objects;
 
         switch (assetTypeName)
         {
+            case "ResEffect":
+            {
+                if (assetName == "ef_ob_dashring02")
+                    return originalName = Marshal.StringToHGlobalAnsi("ef_ob_dashring01");
+
+                break;
+            }
+
             case "ResModel":
             case "ResSkeleton":
             {
                 if (assetName == "cmnisl_obj_switchusual")
-                    return Marshal.StringToHGlobalAnsi("cmn_obj_switch");
+                    return originalName = Marshal.StringToHGlobalAnsi("cmn_obj_switch");
 
                 break;
             }
@@ -2214,7 +2222,7 @@ Unsupported objects;
             case "ResAnimation":
             {
                 if (assetName == "cmnisl_obj_switchusual_on")
-                    return Marshal.StringToHGlobalAnsi("cmn_obj_switch_on");
+                    return originalName = Marshal.StringToHGlobalAnsi("cmn_obj_switch_on");
 
                 break;
             }
@@ -2224,16 +2232,16 @@ Unsupported objects;
                 switch (assetName)
                 {
                     case "cmnisl_obj_jumppanel30S":
-                        return Marshal.StringToHGlobalAnsi("cmn_obj_jumppanel30S_col");
+                        return originalName = Marshal.StringToHGlobalAnsi("cmn_obj_jumppanel30S_col");
 
                     case "cmnisl_obj_jumppanel30M":
-                        return Marshal.StringToHGlobalAnsi("cmn_obj_jumppanel30M_col");
+                        return originalName = Marshal.StringToHGlobalAnsi("cmn_obj_jumppanel30M_col");
 
                     case "cmnisl_obj_jumppanel30L":
-                        return Marshal.StringToHGlobalAnsi("cmn_obj_jumppanel30L_col");
+                        return originalName = Marshal.StringToHGlobalAnsi("cmn_obj_jumppanel30L_col");
 
                     case "col_cmnisl_obj_switchusual":
-                        return Marshal.StringToHGlobalAnsi("col_cmn_obj_switch");
+                        return originalName = Marshal.StringToHGlobalAnsi("col_cmn_obj_switch");
                 }
                 
                 break;
@@ -2242,7 +2250,7 @@ Unsupported objects;
             case "ResAnimTexSrt":
             {
                 if (assetName == "cmnisl_obj_switchusual03_on")
-                    return Marshal.StringToHGlobalAnsi("cmn_obj_switch03_on");
+                    return originalName = Marshal.StringToHGlobalAnsi("cmn_obj_switch03_on");
 
                 break;
             }
@@ -2250,7 +2258,7 @@ Unsupported objects;
             case "ResAnimMaterial":
             {
                 if (assetName == "cmnisl_obj_switchusual03")
-                    return Marshal.StringToHGlobalAnsi("cmn_obj_switch03");
+                    return originalName = Marshal.StringToHGlobalAnsi("cmn_obj_switch03");
 
                 break;
             }
@@ -2388,36 +2396,34 @@ Unsupported objects;
             HookBehavior.Replace
         );
 
-        fixed (byte* pWorld = System.Text.Encoding.UTF8.GetBytes("w6d01"))
-        {
-            // Set if we're returning to an island from Training Simulator after completing Cyber Space.
-            WriteAsmHook
+        // Set if we're returning to an island from Training Simulator after completing Cyber Space.
+        WriteAsmHook
+        (
+            $@"
+                push rax
+
+                ; Restore original code.
+                xor ebx, ebx
+                mov rax, {(long)Marshal.StringToHGlobalAnsi("w6d01")}
+                lea rcx, qword ptr [rax]
+                mov edx, ebx
+                nop dword ptr [rax]
+
+                mov rax, {(long)pWorldType}
+                mov byte ptr [rax], 1
+
+                pop rax
+            ",
+
+            /* 0x140149CE2 */
+            ScanSignature
             (
-                $@"
-                    ; Restore original code.
-                    xor ebx, ebx
-                    lea rcx, {(long)pWorld}
-                    mov edx, ebx
-                    nop dword ptr [rax]
+                "\x33\xDB\x48\x8D\x0D\xCC\xCC\xCC\xCC\x8B\xD3",
+                "xxxxx????xx"
+            ),
 
-                    push rax
-
-                    mov rax, {(long)pWorldType}
-                    mov byte ptr [rax], 1
-
-                    pop rax
-                ",
-
-                /* 0x140149CE2 */
-                ScanSignature
-                (
-                    "\x33\xDB\x48\x8D\x0D\xCC\xCC\xCC\xCC\x8B\xD3",
-                    "xxxxx????xx"
-                ),
-
-                HookBehavior.Replace
-            );
-        }
+            HookBehavior.Replace
+        );
 
         WriteAsmHook
         (
@@ -2563,11 +2569,19 @@ Unsupported objects;
 
         switch (assetTypeName)
         {
+            case "ResEffect":
+            {
+                if (assetName == "ef_ob_dashring01")
+                    return originalName = Marshal.StringToHGlobalAnsi("ef_ob_dashring02");
+
+                break;
+            }
+
             case "ResModel":
             case "ResSkeleton":
             {
                 if (assetName == "cmn_obj_switch")
-                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual");
+                    return originalName = Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual");
 
                 break;
             }
@@ -2575,7 +2589,7 @@ Unsupported objects;
             case "ResAnimation":
             {
                 if (assetName == "cmn_obj_switch_on")
-                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual_on");
+                    return originalName = Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual_on");
 
                 break;
             }
@@ -2585,16 +2599,16 @@ Unsupported objects;
                 switch (assetName)
                 {
                     case "cmn_obj_jumppanel30S_col":
-                        return Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30S");
+                        return originalName = Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30S");
 
                     case "cmn_obj_jumppanel30M_col":
-                        return Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30M");
+                        return originalName = Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30M");
 
                     case "cmn_obj_jumppanel30L_col":
-                        return Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30L");
+                        return originalName = Marshal.StringToHGlobalAnsi("cmnisl_obj_jumppanel30L");
 
                     case "col_cmn_obj_switch":
-                        return Marshal.StringToHGlobalAnsi("col_cmnisl_obj_switchusual");
+                        return originalName = Marshal.StringToHGlobalAnsi("col_cmnisl_obj_switchusual");
                 }
 
                 break;
@@ -2603,7 +2617,7 @@ Unsupported objects;
             case "ResAnimTexSrt":
             {
                 if (assetName == "cmn_obj_switch03_on")
-                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual03_on");
+                    return originalName = Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual03_on");
 
                 break;
             }
@@ -2611,7 +2625,7 @@ Unsupported objects;
             case "ResAnimMaterial":
             {
                 if (assetName == "cmn_obj_switch03")
-                    return Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual03");
+                    return originalName = Marshal.StringToHGlobalAnsi("cmnisl_obj_switchusual03");
 
                 break;
             }
