@@ -3488,20 +3488,25 @@ Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
         if (HWND == IntPtr.Zero)
         {
             HWND = Process.GetCurrentProcess().MainWindowHandle;
-
-            StringBuilder title = new StringBuilder();
-            {
-                GetWindowText(HWND, title, GetWindowTextLength(HWND));
-
-                OriginalTitle = title.ToString();
-            }
         }
         else
         {
             float framerate = *pFramerate;
             float frametime = 1.0f / framerate;
 
-            SetWindowText(HWND, $"{OriginalTitle} - {framerate:0} FPS ({frametime} ms)");
+            if (string.IsNullOrEmpty(OriginalTitle))
+            {
+                StringBuilder title = new StringBuilder(GetWindowTextLength(HWND) + 1);
+                {
+                    GetWindowText(HWND, title, title.Capacity);
+
+                    OriginalTitle = title.ToString();
+                }
+            }
+            else
+            {
+                SetWindowText(HWND, $"{OriginalTitle} - {framerate:0} FPS ({frametime} ms)");
+            }
         }
     }
 }
