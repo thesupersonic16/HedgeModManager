@@ -422,12 +422,10 @@ Patch "Fix Input Delay with Arbitrary Framerates (experimental)" in "Fixes" by "
 WriteProtected<byte>(0xD6CBCA, 0xF3, 0x0F, 0x10, 0x44, 0x24, 0x24);
 WriteNop(0xD6CBD0, 14);
 
-Patch "Longer Blue Trail" in "Graphics" by "N69, Nekit & Kagenoki"
+Patch "Longer Blue Trail" in "Graphics" by "N69 & Nekit"
 WriteNop(0xE5FB17, 6)
 WriteProtected<byte>(0xE5FE10, 0x48)
 WriteProtected<byte>(0xE5FE70, 0x48)
-WriteProtected<byte>(0x53AEC2, 0xB8, 0x64, 0x00, 0x00, 0x00)
-WriteNop(0x53AEC7, 20)
 
 Patch "Fix Homing Trail Position" in "Fixes" by "Ahremic"
 WriteProtected<byte>(0xE4F442, 0xF0); // Replaces "UpVector" (0x450), i.e. the floor normal,
