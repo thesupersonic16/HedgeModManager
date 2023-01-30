@@ -980,6 +980,21 @@ Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt 
     );
 }
 
+Patch "Disable Damage" in "Cheats" by "Hyper" does "Disables damage completely and makes Sonic invulnerable."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1407EE68A */
+        ScanSignature
+        (
+            "\x0F\x84\x2C\x01\x00\x00\x83\xEA\x02",
+            "xxxxxxxxx"
+        ),
+
+        0xE9, 0x1A, 0x02, 0x00, 0x00
+    );
+}
+
 Patch "Disable Dropped Rings" in "Gameplay" by "Hyper" does "Removes the bouncing rings when taking damage."
 {
     WriteNop
