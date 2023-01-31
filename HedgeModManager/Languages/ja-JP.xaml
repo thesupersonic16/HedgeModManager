@@ -62,7 +62,7 @@
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >名前</system:String>
-    <system:String x:Key="CodesUICategory">Category</system:String>
+    <system:String x:Key="CodesUICategory">カテゴリ</system:String>
     <system:String x:Key="CodesUIDownload">コミュニティコードをダウンロード</system:String>
     <system:String x:Key="CodesUIUpdate"  >コミュニティコードをアップデート</system:String>
     <system:String x:Key="CodesUISearch"  >検索:</system:String>
