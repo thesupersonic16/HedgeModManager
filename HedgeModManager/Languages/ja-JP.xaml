@@ -56,17 +56,32 @@
     <system:String x:Key="ModsUIFeatureCode"         >このMODにはカスタムコードが含まれています。</system:String>
     <system:String x:Key="ModsUIFeatureCodeDisable"  >このMODにはカスタムコードが含まれていません。</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >ドラッグ&amp;ドロップでMODのロード順を変更できます。</system:String>
-    <system:String x:Key="ModsUISearch"         >検索: </system:String>
+    <system:String x:Key="ModsUISearch"         >検索:</system:String>
     <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Managerは、1つまたは複数のMODのインクルードフォルダが無効であることを検出しました。&#x0a;Hedge Mod Managerがこれを修正してもよろしいですか？</system:String>
     <system:String xml:space="preserve" x:Key="ModsUINoMods">...何も無いようです。&#x0a;MODを入手しましょう！</system:String>
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >名前</system:String>
+    <system:String x:Key="CodesUICategory">カテゴリ</system:String>
     <system:String x:Key="CodesUIDownload">コミュニティコードをダウンロード</system:String>
     <system:String x:Key="CodesUIUpdate"  >コミュニティコードをアップデート</system:String>
-    <system:String x:Key="CodesUISearch"  >検索: </system:String>
+    <system:String x:Key="CodesUISearch"  >検索:</system:String>
+    <system:String x:Key="CodesUIInfo"    >このコードをダブルクリックすると、詳細が表示されます。</system:String>
+    <system:String x:Key="CodesUIInfoHint">コードにカーソルを合わせると詳細が表示されます。</system:String>
+    <system:String x:Key="CodesUINoInfo"  >情報がありません。</system:String>
+    <system:String x:Key="CodesUICopyCode">コードをクリップボードにコピー</system:String>
+    <system:String x:Key="CodesUIExpand"  >すべて展開</system:String>
+    <system:String x:Key="CodesUICollapse">すべて縮小</system:String>
+    <system:String x:Key="CodesUINullCategory">未分類</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">インストールされているコードは、コードローダーと互換性がありません。&#x0a;コードとコードローダーを更新してください。&#x0a;警告：この操作を行うと、カスタムコードはすべて削除されます。</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">コードを取得中...</system:String>
+
+    <!-- Diff UI Strings -->
+    <system:String x:Key="DiffUITitle"   >変更履歴</system:String>
+    <system:String x:Key="DiffUIAdded"   >追加: {0}</system:String>
+    <system:String x:Key="DiffUIModified">変更: {0}</system:String>
+    <system:String x:Key="DiffUIRemoved" >削除: {0}</system:String>
+    <system:String x:Key="DiffUIRenamed" >改名: {0}</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
@@ -79,21 +94,22 @@
     <system:String x:Key="SettingsUIEnableDebug"    >デバッグコンソールを有効にする</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >セーブファイルリダイレクトを有効にする</system:String>
     <system:String x:Key="SettingsUIUseLauncher"    >ゲームランチャーを使用する</system:String>
-    <system:String x:Key="SettingsUILabelLoaders"   >Loader:</system:String>
+    <system:String x:Key="SettingsUILabelLoaders"   >ローダー:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >ゲーム:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >プロファイル:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >MODフォルダ:</system:String>
     <!--   Hedge Mod Manager -->
-    <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"  >MODローダーのアップデートを確認する</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"  >コードローダーのアップデートを確認する</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates">MODのアップデートを確認する</system:String>
-    <system:String x:Key="SettingsUIKeepHMMOpen"    >ゲーム起動後もHedge Mod Managerを開いたままにする</system:String>
-    <system:String x:Key="SettingsUICheckHMMUpdate" >アップデートを確認する</system:String>
-    <system:String x:Key="SettingsUIAboutHMM"       >Hedge Mod Managerについて</system:String>
-    <system:String x:Key="SettingsUILanguage"       >言語:</system:String>
-    <system:String x:Key="SettingsUITheme"          >UIテーマ:</system:String>
-    <system:String x:Key="SettingsUIReleaseChannel" >アップデートチャネル:</system:String>
+    <system:String x:Key="SettingsUIHMMHeader"       >Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"   >MODローダーのアップデートを確認する</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"   >コードローダーのアップデートを確認する</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates" >MODのアップデートを確認する</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"     >ゲーム起動後もHedge Mod Managerを開いたままにする</system:String>
+    <system:String x:Key="SettingsUICodesUseTreeView">コード一覧にツリービューを使用</system:String>
+    <system:String x:Key="SettingsUICheckHMMUpdate"  >アップデートを確認する</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"        >Hedge Mod Managerについて</system:String>
+    <system:String x:Key="SettingsUILanguage"        >言語:</system:String>
+    <system:String x:Key="SettingsUITheme"           >UIテーマ:</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel"  >アップデートチャネル:</system:String>
     <system:String x:Key="SettingsUIChangingChannelTitle" >チャネルの変更</system:String>
     <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Releaseチャネルに変更しようとしています。&#x0a;&#x0a;本当に続行しますか？ チャネルの変更にはHedge Mod Managerの再起動が必要です。</system:String>
     <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Developmentチャネルに変更しようとしています。 このチャネルには未検証の機能やバグが含まれている可能性があります。&#x0a;&#x0a;本当に続行しますか？ チャネルの変更にはHedge Mod Managerの再起動が必要です。</system:String>

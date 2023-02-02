@@ -75,6 +75,7 @@
                     <Label Content="Kitzu"/>
                     <Label Content="tuanpingas"/>
                     <Label Content="NextinHKRY"/>
+                    <Label Content="OctSquid"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Portuguese translations"/>
@@ -91,6 +92,7 @@
                     <Label Content="German translation"/>
                     <Label Content="Vietnamese translation"/>
                     <Label Content="Italian translation"/>
+                    <Label Content="Japanese translation"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
