@@ -41,6 +41,8 @@ using HedgeModManager.Themes;
 using HedgeModManager.UI.Models;
 using HedgeModManager.Updates;
 using System.Security;
+using System.Windows.Interop;
+using System.Windows.Shell;
 using static HedgeModManager.Lang;
 using Microsoft.Win32;
 using HedgeModManager.CLI;
@@ -1126,10 +1128,30 @@ namespace HedgeModManager
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var window = sender as Window;
+            if (window == null)
+            {
+                return;
+            }
+
             var minbtn = (Button)window.Template.FindName("MinBtn", window);
             var maxbtn = (Button)window.Template.FindName("MaxBtn", window);
             maxbtn.IsEnabled = window.ResizeMode is ResizeMode.CanResizeWithGrip or ResizeMode.CanResize;
             minbtn.IsEnabled = window.ResizeMode is not ResizeMode.NoResize;
+
+            var handle = new WindowInteropHelper(window).Handle;
+            int cornerPreference = 0;
+            if (Win32.DwmGetWindowAttribute(handle, Win32.DwmWindowAttribute.WindowCornerPreference,
+                    ref cornerPreference, sizeof(int)) == 0 && cornerPreference != 1) // DWMWCP_DONOTROUND
+            {
+                var outlineBorder = (Border)window.Template.FindName("OutlineBorder", window);
+                var windowGrid = (Grid)window.Template.FindName("WindowGrid", window);
+
+                // Push the window in a bit so the outline border is visible
+                outlineBorder.BorderThickness = new Thickness(outlineBorder.BorderThickness.Left + 1,
+                    outlineBorder.BorderThickness.Top + 1, outlineBorder.BorderThickness.Right + 1, outlineBorder.BorderThickness.Bottom + 1);
+
+                outlineBorder.CornerRadius = (CornerRadius)window.FindResource("HedgeWindowRoundedCornerRadius");
+            }
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

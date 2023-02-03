@@ -135,6 +135,7 @@
                 <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
             </Style>
 
+            <CornerRadius x:Key="HedgeWindowRoundedCornerRadius">8</CornerRadius>
             <Style x:Key="HedgeWindow" TargetType="{x:Type Window}">
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
                 <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
@@ -144,7 +145,7 @@
                         <WindowChrome 
                             CaptionHeight="22"
                             CornerRadius="0"
-                            GlassFrameThickness="0"
+                            GlassFrameThickness="0,0,0,1"
                             NonClientFrameEdges="None"
                             ResizeBorderThickness="5"
                             UseAeroCaptionButtons="False"/>

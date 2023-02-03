@@ -200,7 +200,10 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized string similar to using System;
         ///using System.Collections.Generic;
+        ///using System.IO;
         ///using System.Linq;
+        ///using System.Reflection;
+        ///using System.Runtime.CompilerServices;
         ///using System.Text;
         ///using System.Threading.Tasks;
         ///using System.Runtime.InteropServices;
@@ -213,8 +216,7 @@ namespace HedgeModManager.Properties {
         ///        public static extern bool VirtualProtect(IntPtr lpAddress,
         ///                IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
         ///
-        ///        [DllImport(&quot;kernel32.dll&quot;, CharSet = CharSet.Auto)]
-        ///        public static extern  [rest of string was truncated]&quot;;.
+        ///       [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MemoryService {
             get {
