@@ -1144,13 +1144,15 @@ namespace HedgeModManager
                     ref cornerPreference, sizeof(int)) == 0 && cornerPreference != 1) // DWMWCP_DONOTROUND
             {
                 var outlineBorder = (Border)window.Template.FindName("OutlineBorder", window);
-                var windowGrid = (Grid)window.Template.FindName("WindowGrid", window);
 
-                // Push the window in a bit so the outline border is visible
+                // Push the window in a bit
                 outlineBorder.BorderThickness = new Thickness(outlineBorder.BorderThickness.Left + 1,
                     outlineBorder.BorderThickness.Top + 1, outlineBorder.BorderThickness.Right + 1, outlineBorder.BorderThickness.Bottom + 1);
 
                 outlineBorder.CornerRadius = (CornerRadius)window.FindResource("HedgeWindowRoundedCornerRadius");
+                
+                // Cursed
+                Unsafe.Unbox<Thickness>(window.FindResource("HedgeWindowGridMargin")) = new Thickness(2);
             }
         }
 
