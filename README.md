@@ -14,7 +14,7 @@ A mod manager for Hedgehog Engine games on PC.
 - [Sonic Forces](https://store.steampowered.com/app/637100)
 - [Puyo Puyo Tetris 2](https://store.steampowered.com/app/1259790)
 - [Olympic Games Tokyo 2020](https://store.steampowered.com/app/981890)
-- [Sonic Colours: Ultimate](https://www.epicgames.com/store/p/sonic-colors-ultimate)
+- Sonic Colours: Ultimate ([Steam](https://store.steampowered.com/app/2055290), [Epic Games Store](https://www.epicgames.com/store/p/sonic-colors-ultimate))
 - Sonic Origins ([Steam](https://store.steampowered.com/app/1794960), [Epic Games Store](https://store.epicgames.com/en-US/p/sonic-origins))
 - [Sonic Frontiers](https://store.steampowered.com/app/1237320)
 

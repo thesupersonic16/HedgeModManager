@@ -105,12 +105,14 @@ namespace HedgeModManager
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
             Folders = new[] { "PCCriPak" },
+            AppID = "2055290",
             EGSID = "e5071e19d08c45a6bdda5d92fbd0a03e",
             GBProtocol = "hedgemmrainbow",
             Is64Bit = true,
             ModLoader = ModLoaders.RainbowModLoader,
             CodesURL = Resources.URL_RAINBOW_CODES,
-            GamePath = Path.Combine("SonicColorsUltimate", "rainbow Shipping", "Sonic Colors - Ultimate.exe")
+            GamePath = Path.Combine("SonicColorsUltimate", "exec", "SonicColorsUltimate.exe"),
+            GamePathEGS = Path.Combine("SonicColorsUltimate", "rainbow Shipping", "Sonic Colors - Ultimate.exe")
         };
 
         public static Game SonicOrigins = new Game()
@@ -207,6 +209,7 @@ namespace HedgeModManager
         public bool Is64Bit = false;
         public string CodesURL;
         public string GamePath = string.Empty;
+        public string GamePathEGS = string.Empty;
 
         public override string ToString() => Localise("Game" + GameName, GameName);
     }
