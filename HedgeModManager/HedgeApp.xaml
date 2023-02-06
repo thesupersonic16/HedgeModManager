@@ -164,18 +164,18 @@
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
                                     <Image Width="24" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8,4,0,0" Source="Resources/Graphics/icon256.png"/>
-                                    <Label Height="33" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="38,8,112,0" Foreground="#E9E9E9">
+                                    <Label Height="33" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="38,10,112,0" Foreground="#E9E9E9">
                                         <TextBlock TextTrimming="CharacterEllipsis" Text="{TemplateBinding Title}"/>
                                     </Label>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Button x:Name="MinBtn" Style="{DynamicResource WindowFrameButton}" Click="Minimize_Click"
-                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="30">
                                             <Border BorderThickness="0,0,0,3" Padding="0,0,10,0" Margin="12,10,12,0" 
                                                     BorderBrush="{DynamicResource HMM.Button.ForegroundBrush}" Background="Transparent"/>
                                         </Button>
 
                                         <Button x:Name="MaxBtn" Style="{DynamicResource WindowFrameButton}" Click="MaxBtn_Click"
-                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="30">
                                             <Border BorderThickness="2.5" Padding="3" Margin="0,4,0,2"
                                                     BorderBrush="{DynamicResource HMM.Button.ForegroundBrush}" Background="Transparent"/>
                                         </Button>
