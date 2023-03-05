@@ -1498,6 +1498,21 @@ Patch "Disable Power Boost" in "Gameplay" by "Hyper"
     );
 }
 
+Patch "Disable Power Boost Audio" in "Audio" by "NM"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14B89D797 */
+        ScanSignature
+        (
+            "\x74\x26\xE8\x62\xB4\xEF\xF4\x48\x89\xC1\xE8\x3A\x79\x87\xF4\x3C\x01\x75\x0C\xB9\x03\x00\x00\x00\xE8\xAC\x65\x87\xF4\xEB\x34\x48\x8D\x05\x73\x42\xA8\xF5\xEB\x2B\xE8\x3C\xB4\xEF\xF4\x48\x89\xC1\xE8\x14\x79\x87\xF4",
+            "x?x????xxxx????xxx?x????x????x?xxx????x?x????xxxx????"
+        ),
+
+        0xEB
+    );
+}
+
 Patch "Disable Power Boost Cutscene" in "Gameplay" by "Hyper" does "Disables the pre-rendered cutscene that occurs every time you acquire Power Boost."
 {
     WriteProtected<byte>
@@ -1510,6 +1525,35 @@ Patch "Disable Power Boost Cutscene" in "Gameplay" by "Hyper" does "Disables the
         ),
 
         0xEB
+    );
+}
+
+Patch "Disable Power Boost Effects" in "Graphics" by "NM"
+{
+    /* Activation FX */
+    WriteProtected<byte>
+    (
+        /* 0x14B89D738 */
+        ScanSignature
+        (
+            "\x74\x09\x4C\x8D\x05\x87\x42\xA8\xF5\xEB\x34\x48\x89\xF9\xE8\xF5\xBF\xFC\xF4\x84\xC0\x74\x09\x4C\x8D\x05\x92\x42\xA8\xF5\xEB\x1F\xBA\x11\x00\x00\x00",
+            "x?xxx????x?xxxx????xxx?xxx????x?x????"
+        ),
+
+        0xEB
+    );
+
+    /* Trail FX */
+    WriteProtected<byte>
+    (
+        /* 0x14077F32C */
+        ScanSignature
+        (
+            "\xFE\xC2\xEB\x02\x32\xD2\x48\x8B\x74\x24\x38\x38\x57\x4C\x75\xA1\x48\x8B\xCB\xE8\x0C\xE5\x01\x00\x39\x47\x48\x74\x42\x48\x8B\x5F\x18\x89\x47\x48\xE8\x3B\x02\x01\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\xC0\xBD\x40\x00\x0F\xB6\x57\x4C\x48\x8B\xD8",
+            "xxx?xxxxxx?xx?x?xxxx????xx?x?xxx?xx?x????xxxxxxx????xxx?xxx"
+        ),
+
+        Assemble("mov dl, 1")
     );
 }
 
