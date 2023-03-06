@@ -980,6 +980,21 @@ Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt 
     );
 }
 
+Patch "Disable Cyloop Camera" in "Gameplay" by "Hyper"
+{
+    WriteNop
+    (
+        /* 0x1408577FE */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x4C\x8D\x05\xCC\xCC\xCC\xCC\x48\x8B\xD3\x48\x8D\x4D\x40",
+            "x????xxx????xxxxxxx"
+        ),
+
+        5
+    );
+}
+
 Patch "Disable Damage" in "Cheats" by "Hyper" does "Disables damage completely and makes Sonic invulnerable."
 {
     WriteProtected<byte>
