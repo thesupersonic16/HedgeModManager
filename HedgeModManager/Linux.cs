@@ -30,9 +30,11 @@ namespace HedgeModManager
                 if (program == null)
                     return false;
 
-                ExtractIcon(icon = Path.Combine(program.folder, "icon.png"));
+                string iconFolder = Path.Combine(ConvertToUnix(GetHomeDirectory()), ".local/share/icons/hicolor/256x256/apps");
 
-                baseExec = $"flatpak run --command=bottles-cli com.usebottles.bottles run -b {config.Name} -e \"{program.path}\" -a";
+                ExtractIcon(icon = Path.Combine(iconFolder, "hedgemodmanager_icon.png"));
+
+                baseExec = $"flatpak run --command=bottles-cli com.usebottles.bottles run -b {config.Name} -e \"{program.path}\" --args";
             }
 
             if (baseExec != null)
@@ -99,6 +101,8 @@ namespace HedgeModManager
         // Wine
         public static string GetHomeDirectory() => Environment.GetEnvironmentVariable("WINEHOMEDIR").Replace("\\??\\", "");
         public static string GetPrefixDirectory() => Environment.GetEnvironmentVariable("WINEPREFIX").Replace("\\??\\", "");
+
+        public static string ConvertToUnix(string windowsPath) => windowsPath.Replace('\\', '/').Replace("Z:", "");
 
         // Bottles
         public static string GetBottleConfigPath() => Path.Combine(GetPrefixDirectory(), "bottle.yml");
