@@ -1330,6 +1330,21 @@ Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops
     }
 }
 
+Patch "Disable Loop Kick on Slide" in "Gameplay" by "Hyper"
+{
+    WriteNop
+    (
+        /* 0x14082EB20 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8B\xC8\x45\x33\xC0\xB2\x1C",
+            "x????xxxx????xxxxxxxx"
+        ),
+        
+        5
+    );
+}
+
 Patch "Disable Menu Restrictions" in "UI" by "Hyper" does
 /*
 Removes restrictions from accessing certain menu screens and options.
