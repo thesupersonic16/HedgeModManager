@@ -1819,6 +1819,12 @@ Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all in
             cmp eax, 0x303935 ; tu1000_590
             je  ret
 
+            ; Exclude DLC messages.
+            mov rax, qword ptr [rdx + 0x48]
+            mov eax, dword ptr [rax + 0x06]
+            cmp eax, 0x5F636C64 ; dlc_
+            je ret
+
         end:
             pop rax
             ret
@@ -1827,7 +1833,8 @@ Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all in
             pop rax
         ",
 
-        /* 0x14093AFB0 */
+        /* v1.10: 0x14093AFB0 */
+        /* v1.20: 0x14096E8A0 */
         ScanSignature
         (
             "\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x10\x48\x89\x74\x24\x18\x57\x41\x56\x41\x57\x48\x83\xEC\x20\x4C\x8B\xF1\x48\x8B\xEA",
