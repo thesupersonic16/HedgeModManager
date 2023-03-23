@@ -2494,7 +2494,7 @@ Unsupported objects;
     }
 }
 
-Patch "Force Island Objects in Cyber Space (v1.10)" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
+Patch "Force Island Objects in Cyber Space" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
 /*
 Replaces all supported objects on the islands with their Cyber Space counterparts.
 
@@ -2670,10 +2670,10 @@ Unsupported objects;
     // Allow loading open zone asset archive.
     WriteNop
     (
-        /* 0x14019B9DA */
+        /* 0x1401AF6C0 */
         ScanSignature
         (
-            "\x74\x54\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCF",
+            "\x74\x62\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCF",
             "xxxxx????xxx"
         ),
         
@@ -2687,8 +2687,7 @@ Unsupported objects;
         (
             $@"
                 ; Restore original code.
-                xor ecx, 0x489C051F
-                mov r8d, ecx
+                mov r8d, 0x10
                 mov [rsi], rax
                 lea rcx, qword ptr [rsi + 0x100]
 
@@ -2700,11 +2699,11 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x1473F9B7A */
+            /* 0x1473C0234 */
             ScanSignature
             (
-                "\x81\xF1\x1F\x05\x9C\x48",
-                "xxxxxx"
+                "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x00\x01\x00\x00\x0F\x10\x03\x0F\x11\x86\xE0\x00\x00\x00\x0F\x10\x4B\x10\x0F\x11\x8E\xF0\x00\x00\x00\x48\x8B\x13\xE8\xCC\xCC\xCC\xCC\x4C\x89\x05",
+                "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx"
             ),
 
             HookBehavior.Replace
@@ -2727,7 +2726,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x147A0FE49 */
+            /* 0x1479E9C99 */
             ScanSignature
             (
                 "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x60\x01\x00\x00",
@@ -2754,7 +2753,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x14014B542 */
+            /* 0x1401502E2 */
             ScanSignature
             (
                 "\x0F\x10\x44\x24\x20\x48\x89\x45\xD0\x66\xC7\x87\x20\x01\x00\x00\x00\x01",
@@ -2780,7 +2779,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x140149F2E */
+            /* 0x14014E6FC */
             ScanSignature
             (
                 "\x0F\x11\x87\x80\x00\x00\x00\x0F\x10\x85\xB0\x00\x00\x00\xEB\x34",
@@ -2807,7 +2806,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x140149DE8 */
+            /* 0x14014E5B8 */
             ScanSignature
             (
                 "\x0F\x10\x44\x24\x20\x48\x89\x45\x50\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
@@ -2844,7 +2843,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x140D4079A */
+            /* 0x140D81C8A */
             ScanSignature
             (
                 "\x48\x8D\x4C\x24\x48\xC7\x44\x24\x38\x00\x00\x00\x00\x48\x89\x4C\x24\x30\x49\xC7\xC0\xFF\xFF\xFF\xFF\xC7\x44\x24\x3C\x7F\x00\x00\x80\x48\x89\x44\x24\x40\x49\xFF\xC0\x42\x80\x3C\x03\x00\x75\xF6\x45\x33\xC9",
