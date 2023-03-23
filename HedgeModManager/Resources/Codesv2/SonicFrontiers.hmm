@@ -1572,62 +1572,6 @@ Affected skills;
     );
 }
 
-Patch "Disable Starfall (v1.10)" in "Gameplay" by "Hyper" does "Disables the Starfall event entirely."
-{
-    // Disable stars.
-    WriteProtected<byte>
-    (
-        /* 0x14038E943 */
-        ScanSignature
-        (
-            "\x0F\x85\xB7\x03\x00\x00\xF3\x0F\x10\x0D",
-            "xxxxxxxxxx"
-        ),
-        
-        0xE9, 0xB8, 0x03, 0x00, 0x00
-    );
-
-    // Disable cutscene.
-    WriteProtected<byte>
-    (
-        /* 0x14038BC78 */
-        ScanSignature
-        (
-            "\x0F\x84\x8F\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x85\xC0",
-            "xxxxxxx????xxxxxxx????xxx"
-        ),
-        
-        0xE9, 0x90, 0x00, 0x00, 0x00
-    );
-
-    // Disable slot machine.
-    {
-        WriteNop
-        (
-            /* 0x1408CF4C9 */
-            ScanSignature
-            (
-                "\x74\x60\x83\xF8\x04\x0F\x85\x38\x03\x00\x00",
-                "xxxxxxxxxxx"
-            ),
-            
-            2
-        );
-
-        WriteNop
-        (
-            /* 0x1408CF864 */
-            ScanSignature
-            (
-                "\x74\x6D\x83\xF8\x04\x0F\x85\xB1\x00\x00\x00",
-                "xxxxxxxxxxx"
-            ),
-            
-            2
-        );
-    }
-}
-
 Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cutscene that occurs before Starfall."
 {
     WriteProtected<byte>
