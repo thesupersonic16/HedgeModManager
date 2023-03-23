@@ -2128,7 +2128,7 @@ Patch "Force 4K Video Playback" in "Graphics" by "Hyper" does "Forces the game t
     );
 }
 
-Patch "Force Cyber Space Objects on Islands (v1.10)" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
+Patch "Force Cyber Space Objects on Islands" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
 /*
 Replaces all supported objects in Cyber Space with their island counterparts.
 
@@ -2303,7 +2303,7 @@ Unsupported objects;
     // Allow loading Cyber Space asset archive.
     WriteNop
     (
-        /* 0x14019B9C5 */
+        /* 0x1401AF6AB */
         ScanSignature
         (
             "\x74\x0F\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x40\x38\x75\x68",
@@ -2334,11 +2334,11 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x1473F9B5A */
+            /* 0x1473C021A */
             ScanSignature
             (
-                "\x57\x48\x83\xEC\x20\x4C\x89\xC3\x48\x89\xD7\x48\x89\xCE\xE8\xCC\xCC\xCC\xCC\x48\x8D\x05\xCC\xCC\xCC\xCC\x8B\x0D",
-                "xxxxxxxxxxxxxxx????xxx????xx"
+                "\x57\x48\x83\xEC\x20\x4C\x89\xC3\x48\x89\xD7\x48\x89\xCE\xE8\xCC\xCC\xCC\xCC\x48\x8D\x05\xCC\xCC\xCC\xCC\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x00\x01\x00\x00",
+                "xxxxxxxxxxxxxxx????xxx????xxxxxxxxxxxxxxxx"
             ),
 
             HookBehavior.Replace
@@ -2361,7 +2361,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x147A0FF7B */
+            /* 0x1479E9DD1 */
             ScanSignature
             (
                 "\x48\x89\xBE\xA8\x01\x00\x00\x31\xED",
@@ -2388,7 +2388,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x14014B49F */
+            /* 0x14015023F */
             ScanSignature
             (
                 "\x0F\x10\x00\x0F\x11\x87\xA0\x00\x00\x00\x0F\x28\x40\x10\x0F\x29\x87\xD0\x00\x00\x00\x0F\x28\x48\x20\x0F\x29\x8F\xE0\x00\x00\x00\x0F\x28\x40\x30\x0F\x29\x87\xF0\x00\x00\x00\x0F\x28\x48\x40\x0F\x29\x8F\x00\x01\x00\x00\x0F\x28\x40\x50\x48\x8B\x47\x10",
@@ -2415,7 +2415,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x140149F19 */
+            /* 0x14014E6E7 */
             ScanSignature
             (
                 "\x0F\x10\x44\x24\x20\x48\x89\x85\xB0\x00\x00\x00\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
@@ -2444,7 +2444,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x140149CE2 */
+            /* 0x14014E4B0 */
             ScanSignature
             (
                 "\x33\xDB\x48\x8D\x0D\xCC\xCC\xCC\xCC\x8B\xD3",
@@ -2482,7 +2482,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x140D4076B */
+            /* 0x140D81C5B */
             ScanSignature
             (
                 "\x48\x81\xEC\xD0\x00\x00\x00\x49\x8B\xF8\x48\x8B\xDA",
