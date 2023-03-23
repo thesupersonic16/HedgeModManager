@@ -726,14 +726,20 @@ Patch "Disable Camera Shake" in "Graphics" by "Hyper" does "Disables camera shak
     );
 }
 
-Patch "Disable Challenge Marker Scanner (v1.10)" in "Gameplay" by "Hyper" does "Disables the scanning event and map transition after completing challenges."
+Patch "Disable Challenge Marker Scanner" in "Gameplay" by "Hyper" does
+/*
+Disables the scanning event and map transition after completing challenges.
+
+Known issues;
+- Map completion percentage does not increase after completing challenges.
+*/
 {
     WriteProtected<byte>
     (
-        /* 0x149477152 */
+        /* 0x149465412 */
         ScanSignature
         (
-            "\x74\x1E\x41\x83\xF8\x01\x75\x70",
+            "\x74\x1E\x41\x83\xF8\x01\x75\x71",
             "xxxxxxxx"
         ),
 
