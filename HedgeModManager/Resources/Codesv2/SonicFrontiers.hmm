@@ -1896,6 +1896,21 @@ Patch "Fix Empty Messages" in "Fixes" by "Hyper" does "Removes the empty message
     );
 }
 
+Patch "Fix Photo Mode Camera Collision" in "Fixes" by "Hyper" does "Allows the camera in Photo Mode to slide against collision, rather than freezing in place."
+{
+    WriteNop
+    (
+        /* 0x1400A6D0F */
+        ScanSignature
+        (
+            "\x73\x3B\x0F\x28\x64\x24\x40",
+            "xxxxxxx"
+        ),
+
+        2
+    );
+}
+
 Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a bug that causes the internal resolution to reset to 1280x720 if the game is unfocused during boot."
 //
     #load "System.Xml.dll"
