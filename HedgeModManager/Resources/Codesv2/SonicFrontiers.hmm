@@ -1227,17 +1227,23 @@ Patch "Disable Guardian Introductions (v1.10)" in "Gameplay" by "Hyper" does "Di
     );
 }
 
-Patch "Disable In-Game Letterboxing (v1.10)" in "Graphics" by "Hyper" does "Disables letterboxing for in-game cutscenes and Training Simulator. This will not work for pre-rendered cutscenes."
+Patch "Disable In-Game Letterboxing" in "Graphics" by "Hyper" does
+/*
+Disables letterboxing for in-game cutscenes and Training Simulator. This will not work for pre-rendered cutscenes.
+
+Known issues;
+- Filter 7 in Photo Mode utilises this letterbox element, so it doesn't show up there.
+*/
 {
     WriteProtected<byte>
     (
-        /* 0x14CAF3E2D */
+        /* 0x14C90D06D */
         ScanSignature
         (
-            "\x48\x8D\x05\x00\x00\x00\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x48\x89\x45\xEF\x48\x89\xCB\x0F\xB6\x81\x00\x00\x00\x00\x31\xF6\x48\x8D\x0D\x00\x00\x00\x00\x88\x45\xFB\xB2\x01\x48\xC7\x45\x00\x00\x00\x00\x00\x89\x75\x0F\xC7\x45\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\x45\xE7\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xD9\xE8\x00\x00\x00\x00\x48\x89\xC7\x48\x85\xC0\x74\x17\x48\x8D\x55\xE7\x48\x89\xC1\xE8\x00\x00\x00\x00\x48\x89\xFA\x48\x89\xD9\xE8\x00\x00\x00\x00",
-            "xxx????xxx?????xxxxxxxxxx????xxxxx????xxxxxxxx?????xxxxx?????x????xxxxx????xxxxxxx????xxxxxxxxxxxxxxxx????xxxxxxx????"
+            "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x48\x89\x7C\x24\x18\x55\x48\x8D\x6C\x24\xA9\x48\x81\xEC\x90\x00\x00\x00\x48\x8D\x05\xCC\xCC\xCC\xCC\x48\x8B\x1D\xCC\xCC\xCC\xCC\x48\xBE\x5B",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxx"
         )
-        + 257,
+        + 0x12D,
 
         0xEB
     );
