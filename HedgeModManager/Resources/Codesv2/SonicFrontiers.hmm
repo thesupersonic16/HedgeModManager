@@ -1545,7 +1545,7 @@ Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
     );
 }
 
-Patch "Disable Skill Camera Events" in "Graphics" by "Hyper" does
+Patch "Disable Skill Camera Events" in "Camera" by "Hyper" does
 /*
 Disables the camera events for skills.
 
