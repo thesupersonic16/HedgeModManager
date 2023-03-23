@@ -711,7 +711,7 @@ Patch "Disable Boost Audio Filter" in "Audio" by "Hyper"
     );
 }
 
-Patch "Disable Camera Shake" in "Graphics" by "Hyper" does "Disables camera shake during combat."
+Patch "Disable Camera Shake" in "Camera" by "Hyper" does "Disables camera shake during combat."
 {
     WriteProtected<byte>
     (
@@ -883,7 +883,7 @@ Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt 
     );
 }
 
-Patch "Disable Cyloop Camera" in "Gameplay" by "Hyper"
+Patch "Disable Cyloop Camera" in "Camera" by "Hyper"
 {
     WriteNop
     (
