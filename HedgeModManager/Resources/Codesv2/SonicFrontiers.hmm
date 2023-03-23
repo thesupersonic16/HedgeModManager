@@ -1438,21 +1438,6 @@ Patch "Disable Power Boost Audio" in "Audio" by "NM"
     );
 }
 
-Patch "Disable Power Boost Cutscene" in "Gameplay" by "Hyper" does "Disables the pre-rendered cutscene that occurs every time you acquire Power Boost."
-{
-    WriteProtected<byte>
-    (
-        /* 0x140850738 */
-        ScanSignature
-        (
-            "\x74\x6E\x0F\xB7\x56\x78\x0F\xB7\xCA\x66\xC1\xE9\x08\xF6\xC1\x01\x74\x24\x0F\xB7\xCA\x66\xC1\xE9\x0A\xF6\xC1\x01\x75\x18\xB8\x00\x00\x00\x00\x48\x8B\xCB\x66\x0B\xD0\x66\x89\x56\x78\x48\x8D\x56\x28\xE8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x4D\x90\xE8\x00\x00\x00\x00\x80\x8D\x00\x00\x00\x00\x00\x48\x8D\x55\x90\xB8\x00\x00\x00\x00\xC7\x45\x00\x00\x00\x00\x00\x66\x21\x45\x14\x48\x8B\xCB\xC6\x85\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00",
-            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxx????xxx????xxxxx????xx?????xxxxx????xx?????xxxxxxxxx?????x????"
-        ),
-
-        0xEB
-    );
-}
-
 Patch "Disable Power Boost Effects" in "Graphics" by "NM"
 {
     /* Activation FX */
@@ -1641,33 +1626,6 @@ Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cu
         ),
         
         0xE9, 0x90, 0x00, 0x00, 0x00
-    );
-}
-
-Patch "Disable Starfall Slot Machine" in "Gameplay" by "Hyper" does "Disables the slot machine during Starfall, including any rewards for collecting stars."
-{
-    WriteNop
-    (
-        /* 0x1408CF4C9 */
-        ScanSignature
-        (
-            "\x74\x60\x83\xF8\x04\x0F\x85\x38\x03\x00\x00",
-            "xxxxxxxxxxx"
-        ),
-        
-        2
-    );
-
-    WriteNop
-    (
-        /* 0x1408CF864 */
-        ScanSignature
-        (
-            "\x74\x6D\x83\xF8\x04\x0F\x85\xB1\x00\x00\x00",
-            "xxxxxxxxxxx"
-        ),
-        
-        2
     );
 }
 
