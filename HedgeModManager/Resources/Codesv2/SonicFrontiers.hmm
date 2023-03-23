@@ -1249,7 +1249,7 @@ Known issues;
     );
 }
 
-Patch "Disable Jump Board Paths on Islands (v1.10)" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
+Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
 //
     static bool IsWorldIsland = false;
 //
@@ -1279,24 +1279,24 @@ Patch "Disable Jump Board Paths on Islands (v1.10)" in "Gameplay" by "Hyper" doe
                 pop rdx
             ",
 
-            /* 0x1491B68E9 */
+            /* 0x1491AC2C9 */
             ScanSignature
             (
-                "\x48\x89\x7C\x24\x30\x48\x8D\x5E\x50\x4C\x89\x74\x24\x38\x4C\x89\x7C\x24\x40\xE8\xCC\xCC\xCC\xCC\xBF\x03\x00\x00\x00\x84\xC0\x74\x62",
-                "xxxxxxxxxxxxxxxxxxxx????xxxxxxxxx"
+                "\x48\x89\x7C\x24\x30\x48\x8D\x5E\x50\x4C\x89\x74\x24\x38\x4C\x89\x7C\x24\x40\xE8\xCC\xCC\xCC\xCC\xBF\x03\x00\x00\x00\x84\xC0\x74\x56\x4C\x8D\x35\xCC\xCC\xCC\xCC\x49\x29\xF6",
+                "xxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxx????xxx"
             ),
 
             HookBehavior.Replace
         );
 
-        /* 0x1491B7A1A */
+        /* 0x1491B3960 */
         long callerFuncAddr = ScanSignature
         (
             "\xE8\xCC\xCC\xCC\xCC\x80\x7D\x35\x00\x74\x67\xE8\xCC\xCC\xCC\xCC\x48\x89\xC2",
             "x????xxxxxxx????xxx"
         );
 
-        /* 0x140D1EAA0 */
+        /* 0x140D5FF90 */
         long sendMsgFunc = callerFuncAddr + Read<int>(callerFuncAddr + 0x01) + 0x05;
 
         /* This hook checks if we're on an island and calls
@@ -1326,7 +1326,7 @@ Patch "Disable Jump Board Paths on Islands (v1.10)" in "Gameplay" by "Hyper" doe
             ret:
             ",
 
-            /* 0x1491B7A0E */
+            /* 0x1491B3954 */
             ScanSignature
             (
                 "\x48\x8D\x55\x67\x8B\x08\x89\x4D\x67\x48\x89\xF1",
