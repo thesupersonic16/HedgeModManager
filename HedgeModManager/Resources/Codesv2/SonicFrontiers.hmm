@@ -1425,18 +1425,18 @@ Patch "Disable Power Boost (v1.10)" in "Gameplay" by "Hyper"
     );
 }
 
-Patch "Disable Power Boost Audio (v1.10)" in "Audio" by "NM"
+Patch "Disable Power Boost Audio" in "Audio" by "NM"
 {
     WriteProtected<byte>
     (
-        /* 0x14B89D797 */
+        /* 0x140874567 */
         ScanSignature
         (
-            "\x74\x26\xE8\x62\xB4\xEF\xF4\x48\x89\xC1\xE8\x3A\x79\x87\xF4\x3C\x01\x75\x0C\xB9\x03\x00\x00\x00\xE8\xAC\x65\x87\xF4\xEB\x34\x48\x8D\x05\x73\x42\xA8\xF5\xEB\x2B\xE8\x3C\xB4\xEF\xF4\x48\x89\xC1\xE8\x14\x79\x87\xF4",
-            "x?x????xxxx????xxx?x????x????x?xxx????x?x????xxxx????"
+            "\x75\x5A\x48\x8B\x4E\x20",
+            "xxxxxx"
         ),
 
-        0xEB
+        0xEB, 0x12
     );
 }
 
