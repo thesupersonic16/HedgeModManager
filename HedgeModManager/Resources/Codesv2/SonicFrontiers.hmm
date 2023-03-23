@@ -1440,29 +1440,29 @@ Patch "Disable Power Boost Audio" in "Audio" by "NM"
     );
 }
 
-Patch "Disable Power Boost Effects (v1.10)" in "Graphics" by "NM"
+Patch "Disable Power Boost Effects" in "Graphics" by "NM"
 {
     /* Activation FX */
     WriteProtected<byte>
     (
-        /* 0x14B89D738 */
+        /* 0x1408744D4 */
         ScanSignature
         (
-            "\x74\x09\x4C\x8D\x05\x87\x42\xA8\xF5\xEB\x34\x48\x89\xF9\xE8\xF5\xBF\xFC\xF4\x84\xC0\x74\x09\x4C\x8D\x05\x92\x42\xA8\xF5\xEB\x1F\xBA\x11\x00\x00\x00",
-            "x?xxx????x?xxxx????xxx?xxx????x?x????"
+            "\x75\x6D\x48\x8B\x4E\x20",
+            "xxxxxx"
         ),
 
-        0xEB
+        0xEB, 0x12
     );
 
     /* Trail FX */
     WriteProtected<byte>
     (
-        /* 0x14077F32C */
+        /* 0x1407A0E88 */
         ScanSignature
         (
-            "\xFE\xC2\xEB\x02\x32\xD2\x48\x8B\x74\x24\x38\x38\x57\x4C\x75\xA1\x48\x8B\xCB\xE8\x0C\xE5\x01\x00\x39\x47\x48\x74\x42\x48\x8B\x5F\x18\x89\x47\x48\xE8\x3B\x02\x01\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\xC0\xBD\x40\x00\x0F\xB6\x57\x4C\x48\x8B\xD8",
-            "xxx?xxxxxx?xx?x?xxxx????xx?x?xxx?xx?x????xxxxxxx????xxx?xxx"
+            "\xB2\x02\xEB\x02\x32\xD2",
+            "xxxxxx"
         ),
 
         Assemble("mov dl, 1")
