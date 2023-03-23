@@ -1422,6 +1422,21 @@ Notes;
     );
 }
 
+Patch "Disable Photo Mode Distance Limit" in "Camera" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x1400A6B33 */
+        ScanSignature
+        (
+            "\x76\x79\x0F\x10\x23",
+            "xxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
 Patch "Disable Power Boost" in "Gameplay" by "Hyper"
 {
     WriteProtected<byte>
@@ -1795,7 +1810,7 @@ Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all in
     );
 }
 
-Patch "Disable Umbrella Camera Lock-On" in "Gameplay" by "Hyper" does "Disables the lock-on camera when the Umbrella enemy in Ares jumps into the sky."
+Patch "Disable Umbrella Camera Lock-On" in "Camera" by "Hyper" does "Disables the lock-on camera when the Umbrella enemy in Ares jumps into the sky."
 {
     WriteProtected<byte>
     (
