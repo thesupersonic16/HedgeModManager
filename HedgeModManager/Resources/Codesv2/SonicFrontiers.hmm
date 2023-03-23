@@ -1079,7 +1079,7 @@ Patch "Disable Framerate Limiter in Cutscenes" in "Graphics" by "M&M"
         WriteProtected<byte>(instrAddr, 0xEB, 0x31);
 }
 
-Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
+Patch "Disable Guardian Introductions (v1.10)" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
 {
     // Asura
     WriteProtected<byte>
