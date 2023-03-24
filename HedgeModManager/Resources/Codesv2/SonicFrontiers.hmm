@@ -1479,6 +1479,19 @@ Patch "Disable Photo Mode Distance Limit" in "Camera" by "Hyper"
     );
 }
 
+Patch "Disable Photo Mode Zoom Limit" in "Camera" by "Hyper"
+{
+    /* 0x1400A5D69 */
+    var addr = ScanSignature
+    (
+        "\x72\x1C\x41\x0F\x2F\xF0",
+        "xxxxxx"
+    );
+
+    WriteNop(addr, 2);
+    WriteProtected<byte>(addr + 0x16, Assemble("mov rax, rcx; nop"));
+}
+
 Patch "Disable Photo Mode Orbit Camera" in "Camera" by "Hyper" does "Makes the camera in Photo Mode control more like a first-person camera, rather than orbiting a specific point."
 //
     static float Distance = 0.1f;
