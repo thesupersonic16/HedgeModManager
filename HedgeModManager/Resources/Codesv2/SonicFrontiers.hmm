@@ -1449,6 +1449,19 @@ Patch "Disable Photo Mode Camera Collision" in "Camera" by "Hyper"
         
         0xE9, 0xAB, 0x01, 0x00, 0x00
     );
+
+    // Water collision
+    WriteProtected<byte>
+    (
+        /* 0x1400A6EC6 */
+        ScanSignature
+        (
+            "\x73\x33\x48\x8D\x55\x80",
+            "xxxxxx"
+        ),
+
+        0xEB
+    );
 }
 
 Patch "Disable Photo Mode Distance Limit" in "Camera" by "Hyper"
