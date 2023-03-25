@@ -1583,6 +1583,19 @@ Patch "Disable Photo Mode Distance Limit" in "Camera" by "Hyper"
     );
 }
 
+Patch "Disable Photo Mode Tilt Limit" in "Camera" by "Hyper"
+{
+    /* 0x1400A5F66 */
+    var addr = ScanSignature
+    (
+        "\x72\x1D\x41\x0F\x2F\xC2",
+        "xxxxxx"
+    );
+
+    WriteNop(addr, 2);
+    WriteProtected<byte>(addr + 0x16, Assemble("mov rax, rcx; nop"));
+}
+
 Patch "Disable Photo Mode Zoom Limit" in "Camera" by "Hyper"
 {
     /* 0x1400A5D69 */
