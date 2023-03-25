@@ -184,55 +184,55 @@
     <system:String x:Key="StatusUIDownloadingCodes"       >Завантаження кодів для {0}</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >Завантаження завершено</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >Помилка завантаження</system:String>
-    <system:String x:Key="StatusUICodeUpdatesAvailable"   >Доступні оновлення   !</system:String>
-    <system:String x:Key="StatusUINoCodeUpdatesFound"     >No code updates found</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >Доступні оновлення кодів!</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >Не знайдено оновлень кодів</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager could not access the game directory.&#x0a;Please ensure the Users group has &quot;Write&quot; set to Allow on the directory below and all of its files and folders.&#x0a;&#x0a;{0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >Are you sure you want to delete &quot;{0}&quot;?&#x0a;This action cannot be undone!</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} is already up to date.</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >A newer version of {0} available! ({1})</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Are you sure you want to cancel updating?&#x0a;This may corrupt {0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Could not find 7-Zip or WinRAR!&#x0a;This is required to extract the mod data&#x0a;&#x0a;Please make sure you have either one installed on your system.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager не зміг отримати доступ до каталогу гри.&#x0a;Будь ласка, переконайтеся, що для групи користувачів &quot;Запис&quot; встановлено значення Дозволити для наведеного нижче каталогу та всіх його файлів і папок.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >Ви впевнені, що хочете видалити &quot;{0}&quot;?&#x0a;Цю дію не можна скасувати!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} вже оновлений.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >Доступна нова версія {0}! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Ви впевнені, що хочете скасувати оновлення?&#x0a;Це може призвести до пошкодження {0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Не вдалося знайти 7-Zip або WinRAR!&#x0a;Це потрібно для вилучення даних мода&#x0a;&#x0a;Будь ласка, переконайтеся, що у вашій системі встановлені ці програми.</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
-    <system:String x:Key="StatusUIUpdateCompletedSingular"      >completed</system:String>
-    <system:String x:Key="StatusUIUpdateCompletedPlural"        >completed</system:String>
-    <system:String x:Key="StatusUIUpdateFailedSingular"         >failed</system:String>
-    <system:String x:Key="StatusUIUpdateFailedPlural"           >failed</system:String>
+    <system:String x:Key="StatusUIUpdateCompletedSingular"      >виконано</system:String>
+    <system:String x:Key="StatusUIUpdateCompletedPlural"        >виконано</system:String>
+    <system:String x:Key="StatusUIUpdateFailedSingular"         >не вдалось</system:String>
+    <system:String x:Key="StatusUIUpdateFailedPlural"           >не вдалось</system:String>
 
     <!-- Mod Config UI Strings -->
-    <system:String x:Key="ModConfigUITitle">Configure {0}</system:String>
+    <system:String x:Key="ModConfigUITitle">Налаштувати {0}</system:String>
 
     <!-- Mod Description UI Strings -->
-    <system:String x:Key="ModDescriptionUIAbout">About {0}</system:String>
-    <system:String x:Key="ModDescriptionUIMadeBy">Made by</system:String>
-    <system:String x:Key="ModDescriptionUIMadeOn">Made on</system:String>
-    <system:String x:Key="ModDescriptionUIDate">on</system:String>
+    <system:String x:Key="ModDescriptionUIAbout">Про {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">Зробив</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">Зроблено на</system:String>
+    <system:String x:Key="ModDescriptionUIDate">на</system:String>
 
     <!-- Mod Downloader Strings -->
-    <system:String x:Key="ModDownloaderFailed">Failed to Download Mod</system:String>
-    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">An error has occurred during the download. Servers might be down or overloaded. Please try again later. &#x0a;&#x0a;Details: {0}</system:String>
-    <system:String x:Key="ModDownloaderNoGame">Failed to Find Game</system:String>
-    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager was unable to find an installation of {0}</system:String>
+    <system:String x:Key="ModDownloaderFailed">Не Вдалося Завантажити Мод</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Під час завантаження сталася помилка. Сервери можуть бути непрацюючими або перевантаженими. Будь ласка, спробуйте пізніше. &#x0a;&#x0a;Деталі: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">Не вдалось знайти гру</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager не вдалося знайти інсталяцію {0}</system:String>
 
     <!-- Mod Updates Window Strings -->
-    <system:String x:Key="ModUpdatesChangelog"    >Changelog</system:String>
-    <system:String x:Key="ModDownloadsDescription">Description</system:String>
-    <system:String x:Key="ModUpdatesTitle"        >Mod Updates</system:String>
-    <system:String x:Key="ModDownloadsTitle"      >Mod Downloads</system:String>
+    <system:String x:Key="ModUpdatesChangelog"    >Список змін</system:String>
+    <system:String x:Key="ModDownloadsDescription">Опис</system:String>
+    <system:String x:Key="ModUpdatesTitle"        >Оновлення модів</system:String>
+    <system:String x:Key="ModDownloadsTitle"      >Завантаження модів</system:String>
 
     <!-- Exception Window Strings -->
-    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Crash</system:String>
-    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager Has Thrown an Exception!</system:String>
-    <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager Has Ran Into an Error!</system:String>
-    <system:String x:Key="ExceptionWindowButtonCopyLog"   >Copy Log to Clipboard</system:String>
-    <system:String x:Key="ExceptionWindowButtonIgnore"    >Ignore and Close</system:String>
-    <system:String x:Key="ExceptionWindowButtonReport"    >Submit Report on GitHub</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >New Update Available!</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >It appears this version of Hedge Mod Manager is out of date.&#x0a;It is highly recommended to first update and see if the issue still occurs.&#x0a;Would you like to update now?</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorTitle">Update Error!</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager could not update!&#x0a;Please manually download the lastest release.</system:String>
+    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Вилетів</system:String>
+    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager зробив виключення!</system:String>
+    <system:String x:Key="ExceptionWindowUnhandled"       >Виникла помилка у Hedge Mod Manager</system:String>
+    <system:String x:Key="ExceptionWindowButtonCopyLog"   >Копіювання журналу до буфера обміну</system:String>
+    <system:String x:Key="ExceptionWindowButtonIgnore"    >Ігнорувати та закрити</system:String>
+    <system:String x:Key="ExceptionWindowButtonReport"    >Надіслати звіт на GitHub</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Доступне нове оновлення!</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Схоже, що ця версія Hedge Mod Manager застаріла.&#x0a;Наполегливо рекомендується спочатку оновити програму і перевірити, чи проблема все ще виникає.&#x0a;Бажаєте оновити програму зараз?</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorTitle">Помилка оновлення!</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager не вдалося оновити!&#x0a;Будь ласка, завантажте останню версію вручну.</system:String>
 
     <!-- Themes -->
     <system:String x:Key="ThemeDark"  >Темна</system:String>
