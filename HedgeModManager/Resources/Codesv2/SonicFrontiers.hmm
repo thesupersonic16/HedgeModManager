@@ -1554,7 +1554,7 @@ Patch "Disable Photo Mode Camera Collision" in "Camera" by "Hyper"
         0xE9, 0xAB, 0x01, 0x00, 0x00
     );
 
-    // Water collision
+    // Camera position (water)
     WriteProtected<byte>
     (
         /* 0x1400A6EC6 */
@@ -1565,6 +1565,19 @@ Patch "Disable Photo Mode Camera Collision" in "Camera" by "Hyper"
         ),
 
         0xEB
+    );
+
+    // Camera rotation (water)
+    WriteProtected<byte>
+    (
+        /* 0x1400A661E */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\xF3\x0F\x10\x40\x14\x0F\x2F\xC7\x73\x04",
+            "x????xxxxxxxxxx"
+        ),
+
+        0xEB, 0x11
     );
 }
 
