@@ -821,7 +821,7 @@ Disables the scanning event and map transition after completing challenges.
 
 Known issues;
 - Map completion percentage does not increase after completing challenges.
-- The option to place markers on the map will not appear after completing your first challenge.
+- The option to place markers on the map will not appear after completing your first challenge (use Disable Menu Restrictions as a workaround).
 */
 {
     WriteProtected<byte>
@@ -1457,6 +1457,7 @@ Notes;
 - This grants you the full pause menu, including the Skills and Save Data menus, within reasonable areas (e.g. the tutorial).
 - This grants you permission to save and load anywhere, including during combat.
 - This will allow you to open the map screen during combat.
+- This will allow you to place map markers before having completed any challenges.
 */
 {
     // Disable save/load deny.
@@ -1496,6 +1497,19 @@ Notes;
         ),
         
         Assemble("mov byte ptr [rsp + 0x58 + 0xFFFFFFFFFFFFFFF0], 1")
+    );
+
+    // Disable map marker lock.
+    WriteProtected<byte>
+    (
+        /* 0x140960789 */
+        ScanSignature
+        (
+            "\xF6\x86\x1C\x04\x00\x00\x02\x74\x2C",
+            "xxxxxxxxx"
+        ),
+
+        Assemble("mov byte ptr [rsi + 0x41C], 2; nop; nop")
     );
 
     // Disable "Unlock Cyloop" tutorial to prevent softlock.
