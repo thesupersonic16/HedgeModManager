@@ -1672,11 +1672,12 @@ Affected skills;
     );
 }
 
-Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cutscene that occurs before Starfall."
+Patch "Disable Starfall Cutscene (v1.10)" in "Gameplay" by "Hyper" does "Disables the cutscene that occurs before Starfall."
 {
     WriteProtected<byte>
     (
-        /* 0x14038BC78 */
+        /* v1.10: 0x14038BC78 */
+        /* v1.20: 0x1403A52D8 */
         ScanSignature
         (
             "\x0F\x84\x8F\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x85\xC0",
