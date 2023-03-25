@@ -165,7 +165,7 @@ Patch "Always Have Phantom Rush" in "Cheats" by "NM"
     );
 }
 
-Patch "Always Have Power Boost" in "Cheats" by "SuperSonic16"
+Patch "Always Have Power Boost on Islands" in "Cheats" by "SuperSonic16"
 {
     WriteProtected<byte>
     (
@@ -177,6 +177,21 @@ Patch "Always Have Power Boost" in "Cheats" by "SuperSonic16"
         ),
 
         0xEB
+    );
+}
+
+Patch "Always Have Power Boost in Cyber Space" in "Cheats" by "Hyper"
+{
+    WriteNop
+    (
+        /* 0x14087553C */
+        ScanSignature
+        (
+            "\x74\x05\x40\xB7\x01\xEB\x03\x40\x32\xFF\x8B\x43\x28",
+            "xxxxxxxxxxxxx"
+        ),
+
+        2
     );
 }
 
