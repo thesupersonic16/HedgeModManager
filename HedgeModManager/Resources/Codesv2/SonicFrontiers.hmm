@@ -1567,9 +1567,18 @@ Patch "Disable Power Boost Audio" in "Audio" by "NM"
     );
 }
 
-Patch "Disable Power Boost Effects" in "Graphics" by "NM"
+Patch "Disable Power Boost Effects" in "Graphics" by "NM & Hyper"
 {
     /* Activation FX */
+    WriteProtected<byte>
+    (
+        /* 0x1408758BB */
+        0x1408758BB,
+
+        0xEB, 0x32
+    );
+
+    /* Boost Activation FX */
     WriteProtected<byte>
     (
         /* 0x1408744D4 */
