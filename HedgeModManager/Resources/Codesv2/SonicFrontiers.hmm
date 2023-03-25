@@ -917,11 +917,11 @@ Patch "Disable Dropped Rings" in "Gameplay" by "Hyper" does "Removes the bouncin
 {
     WriteNop
     (
-        /* 0x14086AF2A */
+        /* 0x14089024B */
         ScanSignature
         (
-            "\xE8\x00\x00\x00\x00\x4C\x8D\x05\x00\x00\x00\x00\x48\x8B\xD7\x48\x8D\x4D\x77\xE8\x00\x00\x00\x00\x4C\x8B\xAC\x24\x00\x00\x00\x00\x48\x8B\x9C\x24\x00\x00\x00\x00\x0F\x28\xB4\x24\x00\x00\x00\x00\x48\x81\xC4\x00\x00\x00\x00\x41\x5E\x41\x5C\x5F\x5D\xC3",
-            "x????xxx????xxxxxxxx????xxxx????xxxx????xxxx????xxx????xxxxxxx"
+            "\xE8\xCC\xCC\xCC\xCC\x4C\x8D\x05\xCC\xCC\xCC\xCC\x48\x8B\xD7\x48\x8D\x4D\x77",
+            "x????xxx????xxxxxxx"
         ),
 
         5
@@ -1775,7 +1775,7 @@ Affected objects;
     }
 }
 
-Patch "Disable Trick Hint Particles" in "Graphics" by "Hyper" does "Disables the particles that hint at dash rings, jump boards and springs being trickable."
+Patch "Hide Air Trick Hint Particles" in "Graphics" by "Hyper" does "Hides the particles that hint at dash rings, jump boards and springs being air trickable."
 {
     // Dash Rings
     WriteProtected<byte>
