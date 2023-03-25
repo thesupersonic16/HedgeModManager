@@ -1672,20 +1672,17 @@ Affected skills;
     );
 }
 
-Patch "Disable Starfall Cutscene (v1.10)" in "Gameplay" by "Hyper" does "Disables the cutscene that occurs before Starfall."
+Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cutscene that occurs before Starfall."
 {
-    WriteProtected<byte>
+    /* 0x1403A5330 */
+    var addr = ScanSignature
     (
-        /* v1.10: 0x14038BC78 */
-        /* v1.20: 0x1403A52D8 */
-        ScanSignature
-        (
-            "\x0F\x84\x8F\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x85\xC0",
-            "xxxxxxx????xxxxxxx????xxx"
-        ),
-        
-        0xE9, 0x90, 0x00, 0x00, 0x00
+        "\xE8\xCC\xCC\xCC\xCC\x33\xC9\xC6\x84\x24\x10\x01\x00\x00\x02",
+        "x????xxxxxxxxxx"
     );
+    
+    WriteNop(addr, 5);
+    WriteNop(addr + 0x38, 5);
 }
 
 Patch "Disable Super Combat Particles" in "Graphics" by "Hyper" does "Disables the giant fist and foot particles during combat as Super Sonic."
