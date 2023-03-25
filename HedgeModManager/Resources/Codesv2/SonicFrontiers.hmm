@@ -697,7 +697,7 @@ Patch "Disable Air Tricks from Traversal Objects" in "Gameplay" by "Hyper" does 
 
 Patch "Disable Telemetry" in "System" by "M&M & Still" does
 /*
-Prevents the game from sending telemetry and crash data to Sega.
+Prevents the game from sending telemetry and crash data to SEGA.
 
 This data can include, but is not limited to;
 - motherboard information
@@ -821,6 +821,7 @@ Disables the scanning event and map transition after completing challenges.
 
 Known issues;
 - Map completion percentage does not increase after completing challenges.
+- The option to place markers on the map will not appear after completing your first challenge.
 */
 {
     WriteProtected<byte>
