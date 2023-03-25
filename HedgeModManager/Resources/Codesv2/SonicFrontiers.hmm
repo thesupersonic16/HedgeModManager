@@ -1573,7 +1573,11 @@ Patch "Disable Power Boost Effects" in "Graphics" by "NM & Hyper"
     WriteProtected<byte>
     (
         /* 0x1408758BB */
-        0x1408758BB,
+        ScanSignature
+        (
+            "\x41\xB9\x11\x00\x00\x00\xC6\x44\x24\x20\x00\x4C\x8D\x05\xCC\xCC\xCC\xCC\x49\x8B\xD6",
+            "xxxxxxxxxxxxxx????xxx"
+        ),
 
         0xEB, 0x32
     );
