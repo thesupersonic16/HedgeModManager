@@ -6,6 +6,7 @@
     <local:LanguageList x:Key="Languages">
         <local:LangEntry FileName="en-AU" Name="English (Australia)"/>
         <local:LangEntry FileName="en-US" Name="English (United States)"/>
+        <local:LangEntry FileName="uk-UA" Name="Українська (Ukrainian)"/>
         <local:LangEntry FileName="nl-NL" Name="Dutch (Netherlands)"/>
         <local:LangEntry FileName="de-DE" Name="Deutsch (German)"/>
         <local:LangEntry FileName="fr-FR" Name="Français (France)"/>
