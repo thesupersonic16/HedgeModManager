@@ -23,12 +23,12 @@
 Це просто, просто завантажте [останню версію з GitHub](https://github.com/thesupersonic16/HedgeModManager/releases/latest) (або завантажте останню збірку з [GitHub Actions](https://nightly.link/thesupersonic16/HedgeModManager/workflows/build/rewrite/HedgeModManager-Release.zip)), потім розпакуйте всі файли де завгодно і запустіть `HedgeModManager.exe`.
 
 ### Linux/Steam Deck
-Якщо ви хочете використовувати HedgeModManager на Linux/Steam Deck, процес налаштування буде трохи складнішим. Ознайомтеся з [цим посібником] (https://github.com/thesupersonic16/HedgeModManager/wiki/Running-on-Linux-(Wine)) на вікі.
+Якщо ви хочете використовувати HedgeModManager на Linux/Steam Deck, процес налаштування буде трохи складнішим. Ознайомтеся з [цим посібником](https://github.com/thesupersonic16/HedgeModManager/wiki/Running-on-Linux-(Wine)) на вікі.
 
 ## Як встановити моди?
 Існує декілька способів встановлення модів, один з найпростіших - перетягнути його zip/7z/rar/теку до списку модів або перетягнути декілька файлів та/або тек.
 
-Ви також можете встановити модифікації за допомогою кнопки "Встановити в 1 клік" на [GameBanana] (https://gamebanana.com). 
+Ви також можете встановити модифікації за допомогою кнопки "Встановити в 1 клік" на [GameBanana](https://gamebanana.com). 
 
 Закінчивши, ви можете почати встановлювати прапорці для модів і кодів, які ви хочете відтворити, і натиснути "Зберегти та Запустити Гру".
 
