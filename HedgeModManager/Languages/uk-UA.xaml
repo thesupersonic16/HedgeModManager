@@ -26,7 +26,7 @@
     <system:String x:Key="MainUIAddMod"        >Додати Мод</system:String>
     <system:String x:Key="MainUIRefreshModList">Оновити Список</system:String>
     <system:String x:Key="MainUISave"          >Зберегти</system:String>
-    <system:String x:Key="MainUISaveAndPlay"   >Зберегти та Запустити Гру</system:String>
+    <system:String x:Key="MainUISaveAndPlay"   >Зберегти та Запустити</system:String>
     <system:String x:Key="MainUIConfigureMod"  >Налаштування Мода</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Не вдалося завантажити завантажувач модів.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Не вдалося встановити завантажувач модів.&#x0a;Будь ласка, переконайтеся, що у вас є права на запис ігрових файлів.</system:String>
