@@ -1083,6 +1083,7 @@ Disables the framerate limiter, allowing the game to run above its targeted 30/6
 Known issues;
 - The spawn point in Cyber Space 4-3 will throw you into an invisible wall.
 - The final QTE for Wyvern takes a long time to show up.
+- The game speed can fluctuate.
 */
 {
     /*
