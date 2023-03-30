@@ -815,7 +815,7 @@ Patch "Disable Camera Shake" in "Camera" by "Hyper" does "Disables camera shake 
     );
 }
 
-Patch "Disable Challenge Marker Scanner" in "Gameplay" by "Hyper" does
+Patch "Disable Challenge Marker Scanner (experimental)" in "Gameplay" by "Hyper" does
 /*
 Disables the scanning event and map transition after completing challenges.
 
@@ -988,7 +988,13 @@ Patch "Disable Cyloop Camera" in "Camera" by "Hyper"
     );
 }
 
-Patch "Disable Damage" in "Cheats" by "Hyper" does "Disables damage completely and makes Sonic invulnerable."
+Patch "Disable Damage (experimental)" in "Cheats" by "Hyper" does
+/*
+Disables damage completely and makes Sonic invulnerable.
+
+Known issues;
+- Asura will softlock when Sonic is supposed to take damage after taking out one of the arms.
+*/
 {
     WriteProtected<byte>
     (
@@ -1163,7 +1169,7 @@ Known issues;
     WriteProtected<byte>(instrAddr + 10, 0);
 }
 
-Patch "Disable Framerate Limiter in Cutscenes" in "Graphics" by "M&M" does
+Patch "Disable Framerate Limiter in Cutscenes (experimental)" in "Graphics" by "M&M" does
 /*
 Disables the framerate limiter for (most) cutscenes, allowing them to run at 60 FPS.
 
@@ -1331,11 +1337,12 @@ Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables t
     );
 }
 
-Patch "Disable In-Game Letterboxing" in "Graphics" by "Hyper" does
+Patch "Disable In-Game Letterboxing (experimental)" in "Graphics" by "Hyper" does
 /*
-Disables letterboxing for in-game cutscenes and Training Simulator. This will not work for pre-rendered cutscenes.
+Disables letterboxing for in-game cutscenes and Training Simulator.
 
 Known issues;
+- This does not work for pre-rendered cutscenes.
 - Filter 7 in Photo Mode utilises this letterbox element, so it doesn't show up there.
 */
 {
@@ -2280,7 +2287,13 @@ Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a b
     );
 }
 
-Patch "Fix Upreel Grip Position (experimental)" in "Fixes" by "ĐeäTh" does "Adjusts Sonic's grip position on the Upreel object's handle so that it lines up with the actual object."
+Patch "Fix Upreel Grip Position (experimental)" in "Fixes" by "ĐeäTh" does
+/*
+Adjusts Sonic's grip position on the Upreel object's handle so that it lines up with the actual object.
+
+Known issues;
+- Some upreels are temperamental with this fix, leaving the position unchanged from the default.
+*/
 {
     IntPtr gripOffsetPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(16);
     *((float*)gripOffsetPtr + 0) = 0.0f;
