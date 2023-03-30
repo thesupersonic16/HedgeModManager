@@ -104,7 +104,7 @@
     <system:String x:Key="SettingsUICheckCLUpdate"   >Перевірити наявність оновлень кодів</system:String>
     <system:String x:Key="SettingsUICheckModUpdates" >Перевірити наявність оновлень модів</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"     >Тримати Hedge Mod Manager відкритим після запуску гри</system:String>
-    <system:String x:Key="SettingsUICodesUseTreeView">Використовуйте деревоподібний список кодів</system:String>
+    <system:String x:Key="SettingsUICodesUseTreeView">Використовувати деревоподібний список кодів</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate"  >Перевірити наявність оновлень</system:String>
     <system:String x:Key="SettingsUIAboutHMM"        >Про Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"        >Мова (Language):</system:String>
@@ -168,7 +168,7 @@
     <system:String x:Key="StatusUILoadedMods"             >Завантажено {0} модів</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >Перевірка наявності оновлень для {0}</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >Не вдалося оновити {0}! {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Завершено перевірку на наявність оновлень мода: {0} виконано, {1} не виконано</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Перевірка на наявність оновлень мода: {0} виконано, {1} не виконано</system:String>
     <system:String x:Key="StatusUIStartingGame"           >Запуск {0}</system:String>
     <system:String x:Key="StatusUICheckingForUpdates"     >Перевірка оновлень</system:String>
     <system:String x:Key="StatusUINoUpdatesFound"         >Оновлень не знайдено</system:String>
