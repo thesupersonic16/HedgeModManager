@@ -1931,6 +1931,21 @@ Affected objects;
     }
 }
 
+Patch "Disable Water Audio Filter" in "Audio" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x1408B5626 */
+        ScanSignature
+        (
+            "\x74\x65\x84\xC9\x0F\x85\x31\x01\x00\x00",
+            "xxxxxxxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
 Patch "Hide Air Trick Hint Particles" in "Graphics" by "Hyper" does "Hides the particles that hint at dash rings, jump boards and springs being air trickable."
 {
     // Dash Rings
