@@ -1078,12 +1078,12 @@ Patch "Disable Forced Weather for Bosses" in "Weather" by "Hyper" does "Disables
 
 Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M" does
 /*
-Disables the framerate limiter, allowing the game to run above its targeted 30/60FPS limit.
+Disables the framerate limiter, allowing the game to run above its targeted 30/60 FPS limit.
 
 Known issues;
-- The spawn point in Cyber Space 4-3 will throw you into an invisible wall.
-- The final QTE for Wyvern takes a long time to show up.
 - The game speed can fluctuate.
+- The final QTE for Wyvern takes a long time to show up.
+- The spawn point in Cyber Space 4-3 will throw you into an invisible wall.
 */
 {
     /*
@@ -1136,7 +1136,7 @@ Known issues;
     );
 
     /*
-        This completely removes the framerate capping code for cutscenes, which prevents cutscenes from speeding up when they first play.
+        This removes the framerate limiting code for cutscenes.
     */
     long instrAddr = ScanSignature
     (
@@ -1163,7 +1163,13 @@ Known issues;
     WriteProtected<byte>(instrAddr + 10, 0);
 }
 
-Patch "Disable Framerate Limiter in Cutscenes" in "Graphics" by "M&M"
+Patch "Disable Framerate Limiter in Cutscenes" in "Graphics" by "M&M" does
+/*
+Disables the framerate limiter for (most) cutscenes, allowing them to run at 60 FPS.
+
+Known issues;
+- Certain cutscenes will still operate at 30 FPS due to how this game syncs cutscene audio.
+*/
 {
     long instrAddr = ScanSignature
     (
