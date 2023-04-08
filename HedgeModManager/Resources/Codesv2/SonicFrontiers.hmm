@@ -2337,6 +2337,20 @@ Known issues;
     );
 }
 
+Patch "Flail Falling" in "Animation" by "Hyper" does "Replaces the spinning animation when flinging off terrain with a flailing animation."
+{
+    WriteProtected<byte>
+    (
+        ScanSignature
+        (
+            "BUMP_JUMP_START",
+            "xxxxxxxxxxxxxxx"
+        ),
+
+        System.Text.Encoding.UTF8.GetBytes("BUMP_JUMP\0")
+    );
+}
+
 Patch "Force 4K Video Playback" in "Graphics" by "Hyper" does "Forces the game to use the pre-rendered cutscenes encoded at 4K, regardless of game resolution."
 {
     WriteNop
