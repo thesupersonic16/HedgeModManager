@@ -1577,7 +1577,13 @@ Patch "Disable Photo Mode Zoom Limit" in "Camera" by "Hyper"
     WriteProtected<byte>(addr + 0x16, Assemble("mov rax, rcx; nop"));
 }
 
-Patch "Disable Photo Mode Orbit Camera" in "Camera" by "Hyper" does "Makes the camera in Photo Mode control more like a first-person camera, rather than orbiting a specific point."
+Patch "Disable Photo Mode Orbit Camera (experimental)" in "Camera" by "Hyper" does
+/*
+Makes the camera in Photo Mode control more like a first-person camera, rather than orbiting a specific point.
+
+Known issues;
+- The camera will always point up in Supreme's arena.
+*/
 //
     static float Distance = 0.1f;
 //
