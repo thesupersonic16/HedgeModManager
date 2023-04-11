@@ -3119,6 +3119,80 @@ Unsupported objects;
     }
 }
 
+Patch "Force Maximum Geometry Detail" in "Graphics" by "Hyper" does
+/*
+Forces terrain, object and rail geometry to always render at the highest detail.
+
+This does not address pop-in issues.
+*/
+//
+    using System.Runtime.InteropServices;
+
+    static float Range = 10000.0f;
+
+    /* This array is actually 32 in length, but the game
+       accesses an array with tons of padding at the start. */
+    static float[] LayerRange = new float[36];
+//
+{
+    // Geometry LODs
+    IntPtr pLayerRange = Marshal.AllocHGlobal(LayerRange.Length * sizeof(float));
+    {
+        for (int i = 0; i < LayerRange.Length; i++)
+            LayerRange[i] = Range;
+
+        Marshal.Copy(LayerRange, 0, pLayerRange, LayerRange.Length);
+
+        WriteAsmHook
+        (
+            $@"
+                mov rcx, {(long)pLayerRange}
+
+                ; Restore original code.
+                movups xmm0, xmmword ptr [rcx + 0x0C]
+                lea    rdx, qword ptr [rbp + 0xB0 + 0xFFFFFFFFFFFFFF34]
+                movaps xmmword ptr [rbp - 0x20], xmm0
+                movups xmm1, xmmword ptr [rcx + 0x1C]
+            ",
+
+            /* 0x140EDEAAE */
+            ScanSignature
+            (
+                "\x0F\x10\x41\x0C\x48\x8D\x55\xE4",
+                "xxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+
+    // Rail LODs
+    fixed (float* pRange = &Range)
+    {
+        WriteAsmHook
+        (
+            $@"
+                push rax
+
+                mov   rax, {(long)pRange}
+                movss xmm0, dword ptr [rax]
+                mulss xmm0, xmm0
+
+                pop rax
+            ",
+
+            /* 0x140160930 */
+            ScanSignature
+            (
+                "\x81\xF9\xFF\xFF\xFF\x7F\x74\x1C",
+                "xxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
 Patch "Force PlayStation 4 Controller UI" in "UI" by "Hyper"
 {
     WriteAsmHook
