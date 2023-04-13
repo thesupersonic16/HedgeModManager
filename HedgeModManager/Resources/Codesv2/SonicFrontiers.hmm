@@ -2130,29 +2130,15 @@ Patch "Disable Vignette" in "Graphics" by "Hyper"
 
 Patch "Drop Dash on Double Jump" in "Gameplay" by "Hyper" does "Allows you to drop dash immediately after double jumping, making it require only two presses."
 {
-    WriteNop
+    /* 0x14B484CC8 */
+    var sig = ScanSignature
     (
-        /* 0x14B484C1A */
-        ScanSignature
-        (
-            "\x0F\x84\x9C\x00\x00\x00\x48\x89\xF9",
-            "xxxxxxxxx"
-        ),
-        
-        6
+        "\x74\x49\x48\x89\xF9\xE8\xCC\xCC\xCC\xCC\x48\x89\xF9",
+        "xxxxxx????xxx"
     );
 
-    WriteNop
-    (
-        /* 0x14B484CC8 */
-        ScanSignature
-        (
-            "\x74\x49\x48\x89\xF9\xE8\xCC\xCC\xCC\xCC\x48\x89\xF9",
-            "xxxxxx????xxx"
-        ),
-        
-        2
-    );
+    WriteNop(sig, 2);
+    WriteProtected<byte>(sig + 0x0F, 0xEB);
 }
 
 Patch "Fix Empty Messages" in "Fixes" by "Hyper" does "Removes the empty messages that occur when the game is in an unsafe state."
