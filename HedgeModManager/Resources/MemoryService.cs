@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
@@ -26,32 +23,6 @@ namespace HMMCodes
 
         public static dynamic MemoryProvider;
 
-        public static List<Assembly> Assemblies { get; set; } = new List<Assembly>();
-
-        static MemoryService()
-        {
-            Assemblies.Add(Assembly.Load(StreamToBytes(Assembly.GetExecutingAssembly().GetManifestResourceStream("HMMCodes.Unsafe.dll"))));
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-            {
-                foreach (var assembly in Assemblies)
-                {
-                    if (assembly.FullName == args.Name)
-                    {
-                        return assembly;
-                    }
-                }
-                return null;
-            };
-        }
-
-        public static byte[] StreamToBytes(Stream stream)
-        {
-            var buffer = new byte[stream.Length];
-            stream.Read(buffer, 0, buffer.Length);
-
-            return buffer;
-        }
-
         public static void RegisterProvider(object provider)
         {
             MemoryProvider = provider;
@@ -61,26 +32,22 @@ namespace HMMCodes
              => ModuleBase + (address - (IntPtr.Size == 8 ? 0x140000000 : 0x400000));
 
         public static void Write(IntPtr address, IntPtr dataPtr, IntPtr length)
-            => Unsafe.CopyBlock((void*)address, (void*)dataPtr, (uint)length);
+            => MemoryProvider.WriteMemory(address, dataPtr, length);
 
         public static void Write<T>(IntPtr address, T data)
-            => Unsafe.CopyBlock((void*)address, Unsafe.AsPointer<T>(ref data), Unsafe.SizeOf<T>());
+            => MemoryProvider.WriteMemory<T>(address, data);
 
         public static void Write<T>(long address, params T[] data)
-            => Unsafe.CopyBlock((void*)address, Unsafe.AsPointer<T>(ref data[0]), (uint)(Unsafe.SizeOf<T>() * data.Length));
+            => MemoryProvider.WriteMemory<T>((IntPtr)address, data);
 
         public static void Write<T>(long address, T data)
-            => Unsafe.CopyBlock((void*)address, Unsafe.AsPointer<T>(ref data), Unsafe.SizeOf<T>());
+            => Write<T>((IntPtr)address, data);
 
-        public static byte[] Read(IntPtr address, int length)
-        {
-            byte[] buffer = new byte[length];
-            Unsafe.CopyBlockUnaligned(Unsafe.AsPointer<byte>(ref buffer[0]), (void*)address, (uint)length);
-            return buffer;
-        }
+        public static char[] Read(IntPtr address, IntPtr length)
+            => MemoryProvider.ReadMemory(address, length);
 
         public static T Read<T>(IntPtr address) where T : unmanaged
-            => Unsafe.AsRef<T>((void*)address);
+            => MemoryProvider.ReadMemory<T>(address);
 
         public static T Read<T>(long address) where T : unmanaged
             => Read<T>((IntPtr)address);

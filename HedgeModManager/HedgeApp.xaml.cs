@@ -26,7 +26,6 @@ using System.Windows.Media.Animation;
 using GameBananaAPI;
 using System.IO.Compression;
 using System.Reflection;
-using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -201,7 +200,7 @@ namespace HedgeModManager
             CountLanguages();
 #if DEBUG
             // Find a Steam Game
-            GameInstalls = GameInstall.SearchForGames("SonicFrontiers");
+            GameInstalls = GameInstall.SearchForGames("SonicGenerations");
             var steamGame = GameInstalls.FirstOrDefault();
             SelectGameInstall(steamGame);
             StartDirectory = steamGame.GameDirectory;

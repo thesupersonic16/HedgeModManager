@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -52,23 +51,15 @@ namespace HedgeModManager
             CSharpSyntaxTree.ParseText(Resources.Keys)
         };
 
-        public static ResourceDescription[] EmbeddedResources =
-        {
-            new ResourceDescription("HMMCodes.Unsafe.dll", () => new MemoryStream(Resources.HMMCodes_Unsafe), true)
-        };
-
         public static void TryLoadRoslyn()
         {
             new Thread(() =>
             {
                 try
                 {
-                    CompileCodes(Array.Empty<Code>(), Stream.Null);
+                    CompileCodes(new Code[0], Stream.Null);
                 }
-                catch
-                {
-                    // ignored
-                }
+                catch { }
             }).Start();
         }
 
@@ -76,8 +67,10 @@ namespace HedgeModManager
         {
             lock (mLockContext)
             {
-                using var stream = File.Create(assemblyPath);
-                return CompileCodes(sources, stream, loadsPaths);
+                using (var stream = File.Create(assemblyPath))
+                {
+                    return CompileCodes(sources, stream, loadsPaths);
+                }
             }
         }
 
@@ -89,16 +82,15 @@ namespace HedgeModManager
                 var trees = from source in sources select source.CreateSyntaxTree();
 
                 var loads = GetLoadAssemblies(sources, loadPaths);
-                
+
                 loads.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
                 loads.Add(MetadataReference.CreateFromFile(typeof(Binder).Assembly.Location));
                 loads.Add(MetadataReference.CreateFromFile(typeof(Component).Assembly.Location));
                 loads.Add(MetadataReference.CreateFromFile(typeof(DynamicAttribute).Assembly.Location));
-                loads.Add(MetadataReference.CreateFromImage(Resources.HMMCodes_Unsafe));
-                
+
                 var compiler = CSharpCompilation.Create("HMMCodes", trees, loads, options).AddSyntaxTrees(PredefinedClasses);
 
-                var result = compiler.Emit(resultStream, manifestResources: EmbeddedResources);
+                var result = compiler.Emit(resultStream);
                 if (!result.Success)
                 {
                     var builder = new StringBuilder();
