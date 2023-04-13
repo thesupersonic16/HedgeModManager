@@ -100,9 +100,9 @@
     <system:String x:Key="SettingsUILabelMDir"      >Mods Directory:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"       >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"   >Check for mod loader updates</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"   >Check for code loader updates</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates" >Check for mod updates</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"   >Automatically check for Hedge Mod Manager updates</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"   >Automatically check for mod loader updates</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates" >Automatically check for mod updates</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"     >Keep Hedge Mod Manager open after starting a game</system:String>
     <system:String x:Key="SettingsUICodesUseTreeView">Use tree view for codes list</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate"  >Check for Updates</system:String>
