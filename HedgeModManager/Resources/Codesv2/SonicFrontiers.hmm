@@ -3890,3 +3890,35 @@ Patch "Show Missions in Arcade Mode" in "UI" by "Hyper" does "Shows the missions
     WriteProtected<byte>(addr, Assemble("mov byte ptr [rbx + 0x26C], 0"));
     WriteProtected<byte>(addr + 7, 0xEB);
 }
+
+Patch "Tighter Jump Rotation" in "Gameplay" by "Hyper" does "Allows for tighter mid-air control for more precise movements when jumping, similar to SONIC THE HEDGEHOG (2006)."
+//
+    static float Threshold = 0.05f;
+//
+{
+    fixed (float* pThreshold = &Threshold)
+    {
+        WriteAsmHook
+        (
+            $@"
+                push rax
+
+                mov   rax, {(long)pThreshold}
+                mulss xmm7, cs:[rax]
+                maxss xmm0, xmm6
+                mulss xmm0, dword ptr [rsp + 0x140 + 0xFFFFFFFFFFFFFF30]
+
+                pop rax
+            ",
+
+            /* 0x1407F562A */
+            ScanSignature
+            (
+                "\xF3\x0F\x59\x3D\xCC\xCC\xCC\xCC\xF3\x0F\x5F\xC6",
+                "xxxx????xxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
