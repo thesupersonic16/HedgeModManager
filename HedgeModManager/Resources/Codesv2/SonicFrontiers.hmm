@@ -1148,6 +1148,21 @@ This will cause the game to become blurry without TAA enabled, but will remove s
     );
 }
 
+Patch "Disable Grass" in "Graphics" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x140F1A7C0 */
+        ScanSignature
+        (
+            "\x0F\x84\xE4\x12\x00\x00",
+            "xxxxxx"
+        ),
+
+        0xE9, 0xE5, 0x12, 0x00, 0x00
+    );
+}
+
 Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
 {
     // Asura
