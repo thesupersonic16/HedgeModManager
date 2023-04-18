@@ -1719,6 +1719,59 @@ Patch "Disable Sequence Colliders" in "Cheats" by "Hyper" does "Disables invisib
     );
 }
 
+Patch "Disable Shadow Angle Limit" by "Hyper" in "Graphics" does
+/*
+Disables the limit that prevents long shadows from being drawn against parallel global light.
+
+In simpler terms, shadows will line up correctly with the sun and moon.
+
+This will be particularly noticeable during sunrise and sunset hours.
+*/
+{
+    /*
+        The game has a strange optimisation that loads the RFL struct
+        we're modifying into the FPU as xmmwords, so 16 bytes at a time.
+
+        This hook is a *hack* that checks the last entry in the xmmword
+        before it gets written to the xmm0 register, which we then replace
+        with zero if equal to 50.0f.
+        
+        The value in RAX is different per cycle of this function (it is
+        run every frame), so we must check this value first to verify
+        we're modifying the right struct before writing to it.
+
+        All islands use a value of 50.0f for "minLightElevationAngle",
+        so checking for this is not an issue (other than when people
+        change this value for their own use, but it's better not to
+        force this change for user values anyway).
+    */
+
+    WriteAsmHook
+    (
+        $@"
+            cmp dword ptr [rax + 0x0C], 0x42480000
+            jne exit
+
+            mov dword ptr [rax + 0x0C], 0
+
+        exit:
+            ; Restore original code.
+            movups xmm0, xmmword ptr [rax]
+            movups xmm1, xmmword ptr [rax + 0x10]
+            lea    rax, [rax + 0x80]
+        ",
+
+        /* 0x140B83937 */
+        ScanSignature
+        (
+            "\x0F\x10\x00\x0F\x10\x48\x10\x48\x8D\x80\x80\x00\x00\x00\x0F\x11\x41\x80\x0F\x10\x40\xA0\x0F\x11\x49\x90\x0F\x10\x48\xB0\x0F\x11\x41\xA0\x0F\x10\x40\xC0\x0F\x11\x49\xB0\x0F\x10\x48\xD0\x0F\x11\x41\xC0\x0F\x10\x40\xE0\x0F\x11\x49\xD0\x0F\x10\x48\xF0\x0F\x11\x41\xE0\x0F\x11\x49\xF0\x48\x83\xEA\x01\x75\xAD\x0F\x10\x00\x0F\x10\x48\x10\x0F\x11\x01\x0F\x10\x40\x20\x0F\x11\x49\x10\x0F\x10\x48\x30\x0F\x11\x41\x20\x0F\x10\x40\x40\x0F\x11\x49\x30\x0F\x11\x41\x40",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
 {
     WriteProtected<byte>
