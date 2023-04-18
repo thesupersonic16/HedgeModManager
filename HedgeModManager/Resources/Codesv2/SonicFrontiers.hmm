@@ -1877,6 +1877,21 @@ Patch "Disable Super Combat Particles" in "Graphics" by "Hyper" does "Disables t
     );
 }
 
+Patch "Disable Time Velocity Multiplier" in "Time" by "Hyper" does "Disables the time rate increasing based on how fast Sonic is moving."
+{
+    WriteNop
+    (
+        /* 0x1401D4B64 */
+        ScanSignature
+        (
+            "\xF3\x0F\x10\x78\x04\xF3\x0F\x59\x75\x04",
+            "xxxxxxxxxx"
+        ),
+
+        5
+    );
+}
+
 Patch "Disable Telemetry" in "System" by "M&M & Still" does
 /*
 Prevents the game from sending telemetry and crash data to SEGA.
