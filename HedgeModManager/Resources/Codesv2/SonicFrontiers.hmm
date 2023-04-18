@@ -1128,6 +1128,26 @@ Known issues;
         WriteProtected<byte>(instrAddr, 0xEB, 0x31);
 }
 
+Patch "Disable FidelityFX Super Resolution" in "Graphics" by "Hyper" does
+/*
+Disables the upsampling post-processing applied to the game.
+
+This will cause the game to become blurry without TAA enabled, but will remove sharpening artefacts like subtle haloing around geometry.
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x140EFCEB7 */
+        ScanSignature
+        (
+            "\x41\x0F\xBE\x56\x0D",
+            "xxxxx"
+        ),
+
+        Assemble("mov edx, 0")
+    );
+}
+
 Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
 {
     // Asura
