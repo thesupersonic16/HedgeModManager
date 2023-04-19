@@ -1,5 +1,107 @@
 !!VERSION 1.2
 
+Patch "2x Extended Grass Draw Distance" in "Graphics" by "Hyper" does "Extends the draw distance of the grass past the visible horizon."
+//
+    static float Range = 3.0f;
+//
+{
+    fixed (float* pRange = &Range)
+    {
+        WriteAsmHook
+        (
+            $@"
+                push  rax
+                mov   rax, {(long)pRange}
+                movss xmm0, dword ptr [rax]
+                movss dword ptr [rbp + 0x290 + 0xFFFFFFFFFFFFFDD0 + 0x08], xmm2
+                pop   rax
+            ",
+
+            /* 0x140F1A885 */
+            ScanSignature
+            (
+                "\xF3\x41\x0F\x10\x87\xB8\x02\x00\x00\xF3\x0F\x11\x55\x68",
+                "xxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
+Patch "2x Extended Foliage Draw Distance" in "Graphics" by "Hyper" does "Extends the draw distance of foliage (trees, bushes, etc.) past the visible horizon."
+//
+    static float Range = 3.0f;
+//
+{
+    /* 0x140F16DB7 */
+    var sig = ScanSignature
+    (
+        "\xF3\x41\x0F\x10\x87\xB8\x02\x00\x00\xF3\x0F\x11\x95\x98\x00\x00\x00",
+        "xxxxxxxxxxxxxxxxx"
+    );
+
+    if (sig == 0)
+        return;
+
+    fixed (float* pRange = &Range)
+    {
+        WriteAsmHook
+        (
+            $@"
+                push  rax
+                mov   rax, {(long)pRange}
+                movss xmm0, dword ptr [rax]
+                movss dword ptr [rbp + 0x290 + 0xFFFFFFFFFFFFFE00 + 0x08], xmm2
+                pop   rax
+            ",
+
+            sig,
+
+            HookBehavior.Replace
+        );
+    }
+}
+
+Patch "4x Extended Foliage Draw Distance" in "Graphics" by "Hyper" does
+/*
+Extends the draw distance of foliage (trees, bushes, etc.) past the visible horizon.
+
+WARNING: this will almost definitely cause performance issues, especially if you're already extending the grass draw distance.
+*/
+//
+    static float Range = 5.0f;
+//
+{
+    /* 0x140F16DB7 */
+    var sig = ScanSignature
+    (
+        "\xF3\x41\x0F\x10\x87\xB8\x02\x00\x00\xF3\x0F\x11\x95\x98\x00\x00\x00",
+        "xxxxxxxxxxxxxxxxx"
+    );
+
+    if (sig == 0)
+        return;
+
+    fixed (float* pRange = &Range)
+    {
+        WriteAsmHook
+        (
+            $@"
+                push  rax
+                mov   rax, {(long)pRange}
+                movss xmm0, dword ptr [rax]
+                movss dword ptr [rbp + 0x290 + 0xFFFFFFFFFFFFFE00 + 0x08], xmm2
+                pop   rax
+            ",
+
+            sig,
+
+            HookBehavior.Replace
+        );
+    }
+}
+
 Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M & Hyper" does
 /*
 Dynamically adjusts the aspect ratio to match the game resolution (recommended for non-16:9 resolutions).
