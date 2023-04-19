@@ -1856,13 +1856,15 @@ Patch "Disable Sequence Colliders" in "Cheats" by "Hyper" does "Disables invisib
     );
 }
 
-Patch "Disable Shadow Angle Limit" by "Hyper" in "Graphics" does
+Patch "Disable Shadow Angle Limit" by "Hyper & GamingLeroy" in "Graphics" does
 /*
 Disables the limit that prevents long shadows from being drawn against parallel global light.
 
 In simpler terms, shadows will line up correctly with the sun and moon.
 
 This will be particularly noticeable during sunrise and sunset hours.
+
+RFL research by GamingLeroy.
 */
 {
     /*
