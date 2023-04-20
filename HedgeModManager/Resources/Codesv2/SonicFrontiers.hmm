@@ -1131,6 +1131,7 @@ Disables the framerate limiter, allowing the game to run above its targeted 30/6
 Known issues;
 - The game speed can fluctuate.
 - The final QTE for Wyvern takes a long time to show up.
+- The falling platforms in Cyber Space levels 2-5, 2-7, and 3-3 will activate more quickly.
 - The spawn point in Cyber Space 4-3 will throw you into an invisible wall.
 */
 {
@@ -1230,11 +1231,14 @@ Known issues;
         WriteProtected<byte>(instrAddr, 0xEB, 0x31);
 }
 
-Patch "Disable FidelityFX Super Resolution" in "Graphics" by "Hyper" does
+Patch "Disable FidelityFX Super Resolution (experimental)" in "Graphics" by "Hyper" does
 /*
 Disables the upsampling post-processing applied to the game.
 
-This will cause the game to become blurry without TAA enabled, but will remove sharpening artefacts like subtle haloing around geometry.
+This will reduce sharpening artefacts like subtle haloing around geometry.
+
+Known issues;
+- The game will be blurry when anything other than TAA is used.
 */
 {
     WriteProtected<byte>
