@@ -1,3 +1,5 @@
+(this is a fork of HedgeModManager that only changes the icon for Sonic Colors Ultimate to match what's used in the game's actual executable instead of a crop of the box art because the inconsistency annoys me.)
+
 <h1>
     <a href="#--------------------hedge-mod-manager">
         <img width="48" align="left" src="https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/Graphics/icon256.png">
