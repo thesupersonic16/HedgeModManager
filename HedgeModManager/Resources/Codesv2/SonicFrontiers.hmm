@@ -1418,6 +1418,69 @@ Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables t
     );
 }
 
+Patch "Disable Guardian Music (experimental)" in "Audio" by "Hyper" does
+/*
+Disables the music specific to each guardian on the islands.
+
+Known issues;
+- Jukebox will persist during Battle Rush if you previously used it on the islands before entering it.
+- Sumo will sometimes stop music playback entirely when shocked by the walls (a fix will be delivered soon).
+*/
+{
+    /* 0x1408BAE10 */
+    long fpGetBgmInfo = ScanSignature
+    (
+        "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x63\xDA\x48\x8B\xF9\x48\x8B",
+        "xxxxxxxxxxxxxxxxxx"
+    );
+
+    WriteAsmHook
+    (
+        $@"
+            push r13
+            push r14
+            push r15
+
+            mov  edx, [rdi]
+            mov  rcx, rbx
+            mov  rax, {fpGetBgmInfo}
+            call rax
+
+            mov r13, qword ptr [rax]     ; store pointer to cue name
+            mov r14, qword ptr [r13 + 4] ; read cue name without prefix (8 characters)
+
+            ; world's fastest strcmp
+            mov r15, 0x73736F62696E696D ; miniboss
+            cmp r14, r15
+            je  setBgmInfo
+            mov r15, 0x655F656C676E696A ; jingle_e
+            cmp r14, r15
+            je  setBgmInfo
+            jmp exit
+
+        setBgmInfo:
+            mov byte ptr [rax + 0x39], 1  ; set isOverlapPlay to 1
+            mov byte ptr [rax + 0x3A], -1 ; set priority to -1
+            mov byte ptr [rax + 0x3B], -1 ; set interruptType to -1
+
+        exit:
+            cmp byte ptr [rax + 0x39], 0
+            pop r13
+            pop r14
+            pop r15
+        ",
+
+        /* 0x1408BA310 */
+        ScanSignature
+        (
+            "\x8B\x17\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x80\x78\x39\x00",
+            "xxxxxx????xxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Disable In-Game Letterboxing (experimental)" in "Graphics" by "Hyper" does
 /*
 Disables letterboxing for in-game cutscenes and Training Simulator.
