@@ -1481,6 +1481,21 @@ Known issues;
     );
 }
 
+Patch "Disable Idle Music Volume Reduction" in "Audio" by "Hyper" does "Disables the timer that lowers the game's music volume when idle for too long."
+{
+    WriteNop
+    (
+        /* 0x1408BEE05 */
+        ScanSignature
+        (
+            "\x89\x03\x8B\x41\x04",
+            "xxxxx"
+        ),
+
+        2
+    );
+}
+
 Patch "Disable In-Game Letterboxing (experimental)" in "Graphics" by "Hyper" does
 /*
 Disables letterboxing for in-game cutscenes and Training Simulator.
