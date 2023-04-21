@@ -1424,7 +1424,6 @@ Disables the music specific to each guardian on the islands.
 
 Known issues;
 - Jukebox will persist during Battle Rush if you previously used it on the islands before entering it.
-- Sumo will sometimes stop music playback entirely when shocked by the walls (a fix will be delivered soon).
 */
 {
     /* 0x1408BAE10 */
@@ -1478,6 +1477,19 @@ Known issues;
         ),
 
         HookBehavior.Replace
+    );
+
+    // Fix Sumo stopping music playback when damaged.
+    WriteNop
+    (
+        /* 0x1406312EA */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\xBA\x10\x00\x00\x00\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x84\xC0\x0F\x84\x10\x04\x00\x00",
+            "x????xxxxxxxxx????xxxxxxxx"
+        ),
+
+        5
     );
 }
 
