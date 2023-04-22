@@ -1095,6 +1095,46 @@ Patch "Hide Fixed Camera Notifications" in "UI" by "Hyper" does "Hides the fixed
     );
 }
 
+Patch "Disable Forced Time" in "Time" by "Hyper" does "Disables the time being forced to specific values during events, sequences and bosses."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1401D56DA */
+        ScanSignature
+        (
+            "\x48\x8B\xF9\x45\x0F\xB6\xF0\x48\x81\xC1\x88\x00\x00\x00",
+            "xxxxxxxxxxxxxx"
+        ),
+
+        0xE9, 0xB4, 0x00, 0x00, 0x00
+    );
+
+    WriteProtected<byte>
+    (
+        /* 0x1401D5797 */
+        ScanSignature
+        (
+            "\x74\x0B\x0F\xB6\xD3\x48\x8B\xCF",
+            "xxxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // Disable time pausing.
+    WriteProtected<byte>
+    (
+        /* 0x14BD4C70E */
+        ScanSignature
+        (
+            "\x74\x15\x45\x31\xC0\xE8",
+            "xxxxxx"
+        ),
+
+        0xEB
+    );
+}
+
 Patch "Disable Forced Weather for Bosses" in "Weather" by "Hyper" does "Disables the weather being forced to Sunny for Giganto and Supreme."
 {
     // Giganto
