@@ -1445,15 +1445,21 @@ Known issues;
             mov  rax, {fpGetBgmInfo}
             call rax
 
+            cmp qword ptr [rax], 0       ; check if cue name is null
+            jz  exit
             mov r13, qword ptr [rax]     ; store pointer to cue name
-            mov r14, qword ptr [r13 + 4] ; read cue name without prefix (8 characters)
 
             ; world's fastest strcmp
-            mov r15, 0x73736F62696E696D ; miniboss
+            mov r14, qword ptr [r13 + 4] ; read cue name without prefix (8 characters)
+            mov r15, 0x73736F62696E696D  ; miniboss
             cmp r14, r15
             je  setBgmInfo
-            mov r15, 0x655F656C676E696A ; jingle_e
+            mov r15, 0x655F656C676E696A  ; jingle_e
             cmp r14, r15
+            je  setBgmInfo
+            mov r14d, dword ptr [r13 + 4] ; read cue name without prefix (4 characters)
+            mov r15d, 0x6D656E65          ; enem
+            cmp r14d, r15d
             je  setBgmInfo
             jmp exit
 
