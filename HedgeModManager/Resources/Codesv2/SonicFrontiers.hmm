@@ -1000,6 +1000,21 @@ Patch "Disable Cyber Space CRT Effects" in "Graphics" by "Hyper & PTKickass" doe
     );
 }
 
+Patch "Disable TAA Sharpness" in "Graphics" by "Hyper" does "Disables the sharpening filter applied when TAA is enabled."
+{
+    WriteProtected<byte>
+    (
+        /* 0x140F2B602 */
+        ScanSignature
+        (
+            "\x0F\x83\x86\x02\x00\x00",
+            "xxxxxx"
+        ),
+
+        0xE9, 0x87, 0x02, 0x00, 0x00
+    );
+}
+
 Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt that covers up Sonic when using drift dash panels."
 {
     WriteNop
