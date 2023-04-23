@@ -1541,16 +1541,16 @@ Known issues;
     );
 
     // Fix Sumo stopping music playback when damaged.
-    WriteNop
+    WriteProtected<byte>
     (
-        /* 0x1406312EA */
+        /* 0x14062B57A */
         ScanSignature
         (
-            "\xE8\xCC\xCC\xCC\xCC\xBA\x10\x00\x00\x00\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x84\xC0\x0F\x84\x10\x04\x00\x00",
-            "x????xxxxxxxxx????xxxxxxxx"
+            "\x75\x05\x40\x84\xFF\x74\x13",
+            "xxxxxxx"
         ),
 
-        5
+        0xEB, 0x18
     );
 }
 
