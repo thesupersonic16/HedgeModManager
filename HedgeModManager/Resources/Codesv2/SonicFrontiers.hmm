@@ -1051,6 +1051,21 @@ Known issues;
     );
 }
 
+Patch "Disable Drop Dash Turning Delay" in "Physics" by "Hyper" does "Disables the out of control timer that determines when Sonic can start turning whilst drop dashing."
+{
+    WriteNop
+    (
+        /* 0x14084323B */
+        ScanSignature
+        (
+            "\x73\x19\x48\x8B\x47\x40",
+            "xxxxxx"
+        ),
+        
+        2
+    );
+}
+
 Patch "Disable Dropped Rings" in "Gameplay" by "Hyper" does "Removes the bouncing rings when taking damage."
 {
     WriteNop
@@ -4165,7 +4180,7 @@ Patch "Show Missions in Arcade Mode" in "UI" by "Hyper" does "Shows the missions
     WriteProtected<byte>(addr + 7, 0xEB);
 }
 
-Patch "Tighter Jump Rotation" in "Gameplay" by "Hyper" does "Allows for tighter mid-air control for more precise movements when jumping, similar to SONIC THE HEDGEHOG (2006)."
+Patch "Tighter Jump Rotation" in "Physics" by "Hyper" does "Allows for tighter mid-air control for more precise movements when jumping, similar to SONIC THE HEDGEHOG (2006)."
 //
     static float Threshold = 0.05f;
 //
