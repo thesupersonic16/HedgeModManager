@@ -4180,6 +4180,55 @@ Patch "Show Missions in Arcade Mode" in "UI" by "Hyper" does "Shows the missions
     WriteProtected<byte>(addr + 7, 0xEB);
 }
 
+Patch "Tighter Drop Dash Rotation" in "Physics" by "Hyper" does "Allows for tighter steering whilst rolling for more precise movement."
+{
+    // steeringSpeed#
+    WriteAsmHook
+    (
+        $@"
+            mov dword ptr [rax + 0x20], 0x43C80000 ; 400.0f
+            mov dword ptr [rax + 0x24], 0x43480000 ; 200.0f
+
+            ; Restore original code.
+            mov   rbx, rax
+            movss xmm9, dword ptr [rax + 0x20] ; steeringSpeed1
+            movss xmm8, dword ptr [rax + 0x24] ; steeringSpeed2
+        ",
+
+        /* 0x1407EC02A */
+        ScanSignature
+        (
+            "\x48\x8B\xD8\xF3\x44\x0F\x10\x48\x20",
+            "xxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+
+    // brake
+    WriteAsmHook
+    (
+        $@"
+            mov dword ptr [rbx + 0x1C], 0x40200000 ; 2.5f
+
+            ; Restore original code.
+            mulss xmm10, dword ptr [rbx + 0x1C]
+            lea   rdx, [rbp + 0x57 + 0xFFFFFFFFFFFFFF80]
+            mov   rcx, rsi
+            subss xmm7, xmm10
+        ",
+
+        /* 0x1407EC263 */
+        ScanSignature
+        (
+            "\xF3\x44\x0F\x59\x53\x1C",
+            "xxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Tighter Jump Rotation" in "Physics" by "Hyper" does "Allows for tighter mid-air control for more precise movements when jumping, similar to SONIC THE HEDGEHOG (2006)."
 //
     static float Threshold = 0.05f;
