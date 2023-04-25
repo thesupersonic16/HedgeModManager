@@ -1081,6 +1081,21 @@ Known issues;
     );
 }
 
+Patch "Disable Drop Dash Camera Delay" in "Camera" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x140843092 */
+        ScanSignature
+        (
+            "\x73\x2A\xF3\x0F\x10\x05\xCC\xCC\xCC\xCC\x45\x33\xC9",
+            "xxxxxx????xxx"
+        ),
+
+        0xEB
+    );
+}
+
 Patch "Disable Drop Dash Turning Delay" in "Physics" by "Hyper" does "Disables the out of control timer that determines when Sonic can start turning whilst drop dashing."
 {
     WriteNop
