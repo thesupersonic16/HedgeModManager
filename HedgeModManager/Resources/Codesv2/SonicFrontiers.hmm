@@ -4120,8 +4120,24 @@ Code "Play Random Soundtrack in Cyber Space" in "Audio" by "Hyper" does "Plays a
     }
 }
 
-Patch "Replace Slide with Drop Dash (v1.20)" in "Gameplay" by "M&M"
-WriteProtected<byte>(0x14004DA6A, 0x4C, 0x8D, 0x05, 0x5F, 0x54, 0x7F, 0x00);
+Patch "Replace Slide with Drop Dash (v1.20)" in "Gameplay" by "M&M & Hyper"
+{
+    // State swap (not sig-scanable)
+    WriteProtected<byte>(0x14004DA6A, 0x4C, 0x8D, 0x05, 0x5F, 0x54, 0x7F, 0x00);
+
+    // Prevent squat to slide (workaround for drop dash staying on the spot from standstill)
+    WriteProtected<byte>
+    (
+        /* 0x14B52A432 */
+        ScanSignature
+        (
+            "\x75\x27\x45\x31\xC0\x48\x89\xF9",
+            "xxxxxxxx"
+        ),
+
+        0xEB
+    );
+}
 
 Patch "Restore Unused Supreme QTE" in "Gameplay" by "Gordon Ramsay" does
 /*
