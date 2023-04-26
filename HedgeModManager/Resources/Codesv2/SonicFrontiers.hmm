@@ -1045,6 +1045,21 @@ Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt 
     );
 }
 
+Patch "Disable Cyloop Aura" in "Graphics" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14080F16D */
+        ScanSignature
+        (
+            "\x74\x16\x3C\x08\x74\x12",
+            "xxxxxx"
+        ),
+        
+        0xEB
+    );
+}
+
 Patch "Disable Cyloop Camera" in "Camera" by "Hyper"
 {
     WriteNop
