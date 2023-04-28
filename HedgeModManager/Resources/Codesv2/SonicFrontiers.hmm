@@ -1401,31 +1401,17 @@ Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables t
     );
 
     // Ninja
-    {
-        WriteNop
+    WriteProtected<byte>
+    (
+        /* 0x14056EA88 */
+        ScanSignature
         (
-            /* 0x140554199 */
-            ScanSignature
-            (
-                "\xE8\x00\x00\x00\x00\x4C\x8D\x0D\x00\x00\x00\x00\x4C\x8D\x44\x24\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\x5F\x18\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8D\x54\x24\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\x5F\x18",
-                "x????xxx????xxxx?xxx????xxxx?x????xxxxx????xxxxxxx????xxxx?xxxx????xxxx"
-            ),
+            "\xBA\x02\x00\x00\x00\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\x5F\x18\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8B\xC8",
+            "xxxxxxxxx????xxxxx????xxxxxxx????xxx"
+        ),
 
-            5
-        );
-
-        WriteProtected<byte>
-        (
-            /* 0x140554214 */
-            ScanSignature
-            (
-                "\x72\x27\x80\x7E\x34\x00",
-                "xxxxxx"
-            ),
-
-            0xEB, 0x31
-        );
-    }
+        Assemble("mov edx, 3")
+    );
 
     // Caterpillar
     WriteProtected<byte>
