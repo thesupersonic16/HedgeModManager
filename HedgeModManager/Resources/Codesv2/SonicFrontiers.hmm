@@ -2182,6 +2182,21 @@ Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cu
     WriteNop(addr + 0x38, 5);
 }
 
+Patch "Disable Stomp Bounce" in "Gameplay" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x140858B31 */
+        ScanSignature
+        (
+            "\x74\x1D\xBA\x09\x00\x00\x00\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x84\xC0\x74\x0C\xB8\xFF\xFD\x00\x00",
+            "xxxxxxxxxxx????xxxxxxxxx"
+        ),
+
+        0xEB, 0x11
+    )
+}
+
 Patch "Disable Super Combat Particles" in "Graphics" by "Hyper" does "Disables the giant fist and foot particles during combat as Super Sonic."
 {
     WriteProtected<byte>
