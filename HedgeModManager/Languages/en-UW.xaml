@@ -94,7 +94,7 @@
     <system:String x:Key="SettingsUIOpenGameDir"    >open game diwectowy</system:String>
     <system:String x:Key="SettingsUIEnableML"       >enabwe mod woadew</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >enabwe d-debug consowe</system:String>
-    <system:String x:Key="SettingsUIEnableSRedir"   >enabwe save fiwe wediwection</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >w-wediwect defauwt save fiwe</system:String>
     <system:String x:Key="SettingsUIUseLauncher"    >use game w-waunchew</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >woadews:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >game:</system:String>
