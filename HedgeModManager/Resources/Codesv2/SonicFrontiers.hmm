@@ -4143,6 +4143,22 @@ This replaces the basic X button QTE to dodge the rifle projectile in the final 
     );
 }
 
+Patch "Retain Ground Velocity for Jump" in "Physics" by "Hyper"
+{
+    /* v1.20: 0x1407F44EF */
+    var callerFuncAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x20\xBA\x20\x16\x1E\x71",
+        "x????xxxxxxxxx"
+    );
+
+    /* v1.20: 0x1407C3B50 */
+    var mainFuncAddr = callerFuncAddr + Read<int>(callerFuncAddr + 0x01) + 0x05;
+
+    /* v1.20: 0x1407C3B66 */
+    WriteNop(mainFuncAddr + 0x16, 2);
+}
+
 Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
 //
     using System.Diagnostics;
