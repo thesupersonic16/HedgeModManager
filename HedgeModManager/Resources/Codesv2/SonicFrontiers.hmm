@@ -797,6 +797,21 @@ Patch "Centre Game Window on Launch" in "Fixes" by "Hyper"
     );
 }
 
+Patch "Disable Air Trick" in "Gameplay" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14B3D1F11 */
+        ScanSignature
+        (
+            "\x74\x10\x41\xB0\x01\xBA\x28\x00\x00\x00",
+            "xxxxxxxxxx"
+        ),
+
+        0xEB
+    );
+}
+
 Patch "Disable Air Tricks from Traversal Objects" in "Gameplay" by "Hyper" does "Disables the ability to air trick when using Dash Rings, Jump Boards and Springs."
 {
     WriteNop
