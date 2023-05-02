@@ -2197,6 +2197,28 @@ Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cu
     WriteNop(addr + 0x38, 5);
 }
 
+Patch "Disable Subsurface Scattering" in "Graphics" by "Hyper"
+{
+    WriteAsmHook
+    (
+        $@"
+            mov    byte ptr [rbx], 0
+            movups xmm0, xmmword ptr [rbx]
+            lea    rbx, [rbx + 0x80]
+            movups xmmword ptr [rax - 0x80], xmm0
+        ",
+
+        /* 0x140B84139 */
+        ScanSignature
+        (
+            "\x0F\x10\x03\x48\x8D\x9B\x80\x00\x00\x00\x0F\x11\x40\x80\x0F\x10\x4B\x90\x0F\x11\x48\x90\x0F\x10\x43\xA0\x0F\x11\x40\xA0\x0F\x10\x4B\xB0\x0F\x11\x48\xB0\x0F\x10\x43\xC0\x0F\x11\x40\xC0\x0F\x10\x4B\xD0\x0F\x11\x48\xD0\x0F\x10\x43\xE0\x0F\x11\x40\xE0\x0F\x10\x4B\xF0\x0F\x11\x48\xF0\x48\x83\xE9\x01\x75\xAD\x0F\x10\x03\x48\x8B\xCE",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Disable Super Combat Particles" in "Graphics" by "Hyper" does "Disables the giant fist and foot particles during combat as Super Sonic."
 {
     WriteProtected<byte>
