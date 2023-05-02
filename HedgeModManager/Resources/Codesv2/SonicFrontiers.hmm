@@ -3238,6 +3238,38 @@ Unsupported objects;
     }
 }
 
+Patch "Force Higher Detail Reflections" in "Graphics" by "Hyper" does
+/*
+Forces real-time local reflections to render at a higher resolution and reduces artefacting around Sonic and other nearby objects.
+*/
+{
+    WriteAsmHook
+    (
+        $@"
+            mov byte ptr [r14 + 0x269], 1           ; enable traceSky to fix reflections for near objects (e.g. Sonic)
+            mov byte ptr [r14 + 0x26C], 0           ; disable useQuat for full resolution reflections
+            mov byte ptr [r14 + 0x26D], 1           ; enable useNormal to apply normal maps to reflections
+            mov dword ptr [r14 + 0x270], 0x44000000 ; set rayMarchingCount to 512.0f to improve reflection quality
+            mov dword ptr [r14 + 0x280], 0x3FC00000 ; set overrideRatio to 1.5f to reduce artefacting
+            mov dword ptr [r14 + 0x28C], 0x3E800000 ; set uvOffsetScale to 0.25f to improve reflection quality whilst retaining normal map detail
+
+            ; Restore original code.
+            movups xmm0, xmmword ptr [r14 + 0x268]
+            mov    rcx, rsi
+            movups xmmword ptr [rbx + 0x0C], xmm0
+        ",
+
+        /* 0x140B83CF1 */
+        ScanSignature
+        (
+            "\x41\x0F\x10\x86\x68\x02\x00\x00\x48\x8B\xCE",
+            "xxxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Force Island Objects in Cyber Space" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
 /*
 Replaces all supported objects on the islands with their Cyber Space counterparts.
