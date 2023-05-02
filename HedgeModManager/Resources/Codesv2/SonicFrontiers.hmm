@@ -2202,7 +2202,7 @@ Patch "Disable Subsurface Scattering" in "Graphics" by "Hyper"
     WriteAsmHook
     (
         $@"
-            mov    byte ptr [rbx], 0
+            mov    dword ptr [rbx + 4], 0x461C4000 ; okay well it's not really disabled otherwise we get some messy colour banding, so lets just make the width gigantic so it's practically gone
             movups xmm0, xmmword ptr [rbx]
             lea    rbx, [rbx + 0x80]
             movups xmmword ptr [rax - 0x80], xmm0
