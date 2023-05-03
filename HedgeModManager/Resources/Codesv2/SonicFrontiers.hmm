@@ -797,7 +797,7 @@ Patch "Centre Game Window on Launch" in "Fixes" by "Hyper"
     );
 }
 
-Patch "Disable Air Trick" in "Gameplay" by "Hyper"
+Patch "Disable Air Tricks from Terrain" in "Gameplay" by "Hyper" does "Disables the ability to air trick when flinging off terrain."
 {
     WriteProtected<byte>
     (
