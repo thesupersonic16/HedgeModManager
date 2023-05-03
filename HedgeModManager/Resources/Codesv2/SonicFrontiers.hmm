@@ -153,18 +153,17 @@ Affected skills;
 - Cross Slash
 */
 //
-    static int CurrentSkill = 0;
+    static int Seek = 0;
 //
 {
-    fixed (int* pCurrentSkill = &CurrentSkill)
+    fixed (int* pSeek = &Seek)
     {
         WriteAsmHook
         (
             $@"
                 push  rax
                 push  rbx
-                push  rcx
-                mov   rax, {(long)pCurrentSkill}
+                mov   rax, {(long)pSeek}
             iterate: 
                 cmp   dword ptr [rax], 0x3C ; 60 (fixed array size of 20 elements, each are 3 bytes total)
                 jge   exit
@@ -179,7 +178,6 @@ Affected skills;
                 jmp   iterate
             exit:
                 mov   dword ptr [rax], 0    ; reset incrementation, this code runs every time the skill tree opens, so we'll be back
-                pop   rcx
                 pop   rbx
                 pop   rax
                 movzx edi, byte ptr [r14 + rax * 8 + 0x30]
