@@ -143,6 +143,63 @@ Known issues;
     WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
 }
 
+Patch "Always Allow Unlocking Story Skills" in "Cheats" by "Hyper" does
+/*
+Allows the skills typically obtained through story progression to be unlocked as regular skills for free.
+
+Affected skills;
+- Grand Slam
+- Cyclone Kick
+- Cross Slash
+*/
+//
+    static int CurrentSkill = 0;
+//
+{
+    fixed (int* pCurrentSkill = &CurrentSkill)
+    {
+        WriteAsmHook
+        (
+            $@"
+                push  rax
+                push  rbx
+                push  rcx
+                mov   rax, {(long)pCurrentSkill}
+            iterate: 
+                cmp   dword ptr [rax], 0x3C ; 60 (fixed array size of 20 elements, each are 3 bytes total)
+                jge   exit
+                mov   ebx, dword ptr [rax]
+                add   rbx, rdx
+                cmp   byte ptr [rbx], 0xFF  ; check 'unlockPoint' field, 0xFF is reserved for story skills
+                jne   notStorySkill         ; not 0xFF, so don't perform any operations on this element
+                mov   byte ptr [rbx], 0     ; set 'unlockPoint' to zero, who needs skill points anyway?
+                mov   byte ptr [rbx + 2], 0 ; set 'present' field to zero, this'll treat the skill as a normal one
+            notStorySkill:
+                add   dword ptr [rax], 3    ; increment by three to reach the next element in the next iteration
+                jmp   iterate
+            exit:
+                mov   dword ptr [rax], 0    ; reset incrementation, this code runs every time the skill tree opens, so we'll be back
+                pop   rcx
+                pop   rbx
+                pop   rax
+                movzx edi, byte ptr [r14 + rax * 8 + 0x30]
+                movzx ecx, byte ptr [rdx + 1]
+                imul  edi, ecx
+                add   dil, [rdx]
+            ",
+
+            /* 0x1409507C0 */
+            ScanSignature
+            (
+                "\x41\x0F\xB6\x7C\xC6\x30",
+                "xxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
 Patch "Always Cloudy on Islands" in "Weather" by "Hyper" does
 /*
 Forces the weather to Cloudy on supported islands.
