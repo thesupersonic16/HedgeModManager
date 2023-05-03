@@ -2184,6 +2184,21 @@ Affected skills;
     );
 }
 
+Patch "Disable Spin Slash on Drop Dash" in "Gameplay" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14BA71EE6 */
+        ScanSignature
+        (
+            "\x74\x79\xBA\x2D\x00\x00\x00",
+            "xxxxxxx"
+        ),
+
+        0xEB
+    );
+}
+
 Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cutscene that occurs before Starfall."
 {
     /* 0x1403A5330 */
