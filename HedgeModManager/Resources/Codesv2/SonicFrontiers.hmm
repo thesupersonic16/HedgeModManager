@@ -2131,6 +2131,21 @@ Patch "Disable Ring Loss" in "Cheats" by "M&M"
     );
 }
 
+Patch "Disable Running Fall" in "Animation" by "Hyper" does "Disables the animation where Sonic continues running when falling off a platform, forcing him into the proper falling animation."
+{
+    WriteNop
+    (
+        /* 0x14B49D733 */
+        ScanSignature
+        (
+            "\xF3\x0F\x10\x40\x30\xF3\x0F\x59\x05\xCC\xCC\xCC\xCC\x0F\x2F\xF0\x0F\x28\x74\x24\x40\x73\x0D\xBA\x01\x00\x00\x00\x48\x89\xF1",
+            "xxxxxxxxx????xxxxxxxxxxxxxxxxxx"
+        ),
+
+        5
+    );
+}
+
 Patch "Disable Sequence Colliders" in "Cheats" by "Hyper" does "Disables invisible walls that are usually removed by specific events. This will not remove invisible walls surrounding the islands."
 {
     WriteProtected<byte>
