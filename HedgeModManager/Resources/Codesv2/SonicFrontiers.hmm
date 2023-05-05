@@ -1123,6 +1123,21 @@ Patch "Disable TAA Sharpness" in "Graphics" by "Hyper" does "Disables the sharpe
     );
 }
 
+Patch "Disable Thorn Cylinders" in "Gameplay" by "Hyper" does "Disables the cylindrical thorn objects placed at the most inconvenient locations in Cyber Space."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1404119C4 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCB\x4C\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x49\x0F\xBE\x16",
+            "x????xxxxxxx????xxx????xxxxxxx????xxxx"
+        ),
+        
+        0xE9, 0x4A, 0x04, 0x00, 0x00
+    );
+}
+
 Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt that covers up Sonic when using drift dash panels."
 {
     WriteNop
