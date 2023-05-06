@@ -1204,6 +1204,71 @@ Known issues;
     );
 }
 
+Patch "Disable Decelerate Collision" in "Gameplay" by "Hyper" does
+/*
+Disables the collision flag that kills all horizontal velocity when jumping.
+
+Example usage;
+- The bridge in Kronos above the river.
+- The cliffsides in Ares.
+*/
+//
+    static int Seek = 0;
+//
+{
+    fixed (int* pSeek = &Seek)
+    {
+        WriteAsmHook
+        (
+            $@"
+                mov  r14, qword ptr [rsp + 0x48 + 0xFFFFFFFFFFFFFFD8]
+                mov  rdi, qword ptr [rsp + 0x48 + 0xFFFFFFFFFFFFFFE0]
+                mov  rsi, qword ptr [rsp + 0x48 + 0xFFFFFFFFFFFFFFE8]
+                push rbx
+                push rcx
+                push rdx
+                push r11
+                push r15
+                mov  rdx, {(long)pSeek}
+                mov  rbx, rax
+                mov  rbx, [rbx]               ; dereference pointer to collision info map [int64, int32]
+                test rbx, rbx                 ; check if null
+                jz   exit
+                mov  ecx, dword ptr [rbx + 8] ; store vertex count
+                imul ecx, 4                   ; multiply vertex count by 4 to get an appropriate iteration size
+                mov  rbx, [rbx]               ; dereference pointer to collision info
+            iterate:
+                cmp  dword ptr [rdx], ecx     ; iterate through vertices to set info for each
+                jge  exit
+                mov  r15d, dword ptr [rdx]    ; store current iteration
+                mov  r11, rbx
+                add  r11, r15                 ; add offset to address
+                mov  r15d, dword ptr [r11]    ; store current collision info for modification
+                and  r15d, 0xFFFFFDFF         ; clear 9th bit
+                mov  dword ptr [r11], r15d    ; store modified collision info in original array
+                add  dword ptr [rdx], 4       ; increment by 4 (32-bit integers)
+                jmp  iterate
+            exit:
+                mov  dword ptr [rdx], 0       ; reset incrementation
+                pop  r15
+                pop  r11
+                pop  rdx
+                pop  rcx
+                pop  rbx
+            ",
+
+            /* 0x140A9FBF3 */
+            ScanSignature
+            (
+                "\x4C\x8B\x74\x24\x20\x48\x8B\x7C\x24\x28\x48\x8B\x74\x24\x30\x48\x8B\x00",
+                "xxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
 Patch "Disable Drop Dash Camera Delay" in "Camera" by "Hyper"
 {
     WriteProtected<byte>
@@ -1356,6 +1421,7 @@ Known issues;
 - The final QTE for Wyvern takes a long time to show up.
 - The falling platforms in Cyber Space levels 2-5, 2-7, and 3-3 will activate more quickly.
 - The spawn point in Cyber Space 4-3 will throw you into an invisible wall.
+- The light dash may disconnect from the path in some cases.
 */
 {
     /*
@@ -2707,6 +2773,30 @@ Patch "Drop Dash on Double Jump" in "Gameplay" by "Hyper" does "Allows you to dr
 
     WriteNop(sig, 2);
     WriteProtected<byte>(sig + 0x0F, 0xEB);
+}
+
+Patch "Fix Air Boost Reset" in "Fixes" by "Hyper"
+//
+    static bool CanAirBoost = true;
+//
+{
+    fixed (bool* pCanAirBoost = &CanAirBoost)
+    {
+        // Check if we can perform air boost.
+        WriteAsmHook
+        (
+            $@"
+                push rcx
+                mov  rcx, {(long)pCanAirBoost}
+                mov  al, byte ptr [rcx]
+                pop  rcx
+            ",
+
+            0x14088B249,
+
+            HookBehavior.Replace
+        );
+    }
 }
 
 Patch "Fix Empty Messages" in "Fixes" by "Hyper" does "Removes the empty messages that occur when the game is in an unsafe state."
