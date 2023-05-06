@@ -2775,30 +2775,6 @@ Patch "Drop Dash on Double Jump" in "Gameplay" by "Hyper" does "Allows you to dr
     WriteProtected<byte>(sig + 0x0F, 0xEB);
 }
 
-Patch "Fix Air Boost Reset" in "Fixes" by "Hyper"
-//
-    static bool CanAirBoost = true;
-//
-{
-    fixed (bool* pCanAirBoost = &CanAirBoost)
-    {
-        // Check if we can perform air boost.
-        WriteAsmHook
-        (
-            $@"
-                push rcx
-                mov  rcx, {(long)pCanAirBoost}
-                mov  al, byte ptr [rcx]
-                pop  rcx
-            ",
-
-            0x14088B249,
-
-            HookBehavior.Replace
-        );
-    }
-}
-
 Patch "Fix Empty Messages" in "Fixes" by "Hyper" does "Removes the empty messages that occur when the game is in an unsafe state."
 {
     WriteAsmHook
