@@ -1774,6 +1774,29 @@ Known issues;
     );
 }
 
+Patch "Disable Hit Stop" in "Gameplay" by "Hyper" does "Disables the slow motion effect after performing attacks."
+{
+    WriteAsmHook
+    (
+        $@"
+            xorps  xmm3, xmm3
+            movaps xmm7, xmm3
+            mov    r8, [rcx + 0xB0]
+            mov    esi, edx
+            add    rax, r8
+        ",
+
+        /* 0x147689E7F */
+        ScanSignature
+        (
+            "\x0F\x28\xFB\x4C\x8B\x81\xB0\x00\x00\x00",
+            "xxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Disable Idle Music Volume Reduction" in "Audio" by "Hyper" does "Disables the timer that lowers the game's music volume when idle for too long."
 {
     WriteNop
