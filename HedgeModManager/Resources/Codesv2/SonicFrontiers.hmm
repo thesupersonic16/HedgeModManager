@@ -110,7 +110,7 @@ Known issues;
 - Certain HUD effects are rendered at the correct aspect ratio, but will misalign due to the main HUD still being 16:9.
 - Certain HUD elements are still rendered at 16:9 and will misalign or stretch.
 - The Jukebox menu is cut off almost half-way.
-- Pre-rendered cutscenes will stretch to your aspect ratio.
+- Cutscenes will stretch to your aspect ratio.
 - Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
 */
 //
