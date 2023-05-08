@@ -4503,6 +4503,37 @@ Patch "Rebind Quick Restart to Back" in "Gameplay" by "Hyper" does "Rebinds the 
     );
 }
 
+Patch "Reduced Homing Delay" in "Physics" by "Hyper" does "Reduces the delay after performing a homing attack, allowing you to perform chained homing attacks much quicker."
+//
+    static float Delay = 0.2f;
+//
+{
+    fixed (float* pDelay = &Delay)
+    {
+        WriteAsmHook
+        (
+            $@"
+                push  rbx
+                mov   rbx, {(long)pDelay}
+                movss xmm2, dword ptr [rbx]
+                mov   edx, eax
+                mov   rcx, r13
+                mov   dword ptr [rbp + 0x57 + 0x28], eax
+                pop   rbx
+            ",
+
+            /* 0x14082379C */
+            ScanSignature
+            (
+                "\xF3\x41\x0F\x10\x54\x3F\x18",
+                "xxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
 Patch "Restore Unused Supreme QTE" in "Gameplay" by "Gordon Ramsay" does
 /*
 Restores an unused quick time event for the final blow to Supreme.
