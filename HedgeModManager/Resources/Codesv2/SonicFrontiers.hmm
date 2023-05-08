@@ -2707,6 +2707,80 @@ Patch "Hide Air Trick Hint Particles" in "Graphics" by "Hyper" does "Hides the p
     );
 }
 
+Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "Replaces the homing attack finish animation with randomised trick animations."
+//
+    using System.Runtime.InteropServices;
+
+    static bool Initialised = false;
+
+    static Random Random = new Random();
+
+    static string[] AnimVariations = new[] { "U", "D", "L", "R" };
+
+    static float AnimSpeed = 0.5f;
+
+    static IntPtr pAnimName = Marshal.AllocHGlobal(14);
+//
+{
+    string randAnimName = $"JUMP_TRICK_{AnimVariations[Random.Next(0, 4)]}{Random.Next(0, 3)}\0";
+
+    Marshal.Copy(System.Text.Encoding.UTF8.GetBytes(randAnimName), 0, pAnimName, randAnimName.Length);
+
+    if (!Initialised)
+    {
+        /* 0x140823825 */
+        long playAnimCallerAddr = ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x33\xD2\x49\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x41\xB8\x74\x00\x00\x00",
+            "x????xxxxxx????xxxxxx"
+        );
+
+        /* 0x14086F023 */
+        long setAnimSpeedCallerAddr = ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x05\xCC\xCC\xCC\xCC\xB9\x03\x00\x00\x00",
+            "x????xxx????xxxxx"
+        );
+
+        /* 0x1407C9DB0 */
+        long setAnimSpeedFuncAddr = setAnimSpeedCallerAddr + Read<int>(setAnimSpeedCallerAddr + 0x01) + 0x05;
+
+        /* 0x1407C9300 */
+        long playAnimFuncAddr = playAnimCallerAddr + Read<int>(playAnimCallerAddr + 0x01) + 0x05;
+
+        fixed (float* pAnimSpeed = &AnimSpeed)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    push  rax
+                    mov   rax, {(long)pAnimSpeed}
+                    movss xmm2, dword ptr [rax]
+                    pop   rax
+                    mov   rdx, {(long)Marshal.StringToHGlobalAnsi("SPEED_RATIO")}
+                    lea   rdx, [rdx]
+                    mov   rcx, rax
+                    mov   rax, {setAnimSpeedFuncAddr}
+                    mov   rbx, rcx
+                    call  rax
+                    mov   rdx, {pAnimName}
+                    lea   rdx, [rdx]
+                    mov   rcx, rbx
+                    mov   rax, {playAnimFuncAddr}
+                    call  rax
+                ",
+
+                /* 0x14082381B */
+                playAnimCallerAddr - 0x0A,
+
+                HookBehavior.Replace
+            );
+        }
+
+        Initialised = true;
+    }
+}
+
 Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all intrusive tutorial messages that appear under certain conditions for the first time."
 {
     // Hide hint rings.
