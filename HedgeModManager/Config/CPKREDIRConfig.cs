@@ -53,6 +53,9 @@ namespace HedgeModManager
         [IniField("HedgeModManager", "CheckModUpdates")]
         public bool CheckForModUpdates { get; set; } = true;
 
+        [IniField("HedgeModManager", "UpdateCodesOnLaunch")]
+        public bool UpdateCodesOnLaunch { get; set; } = true;
+
         [IniField("HedgeModManager", "KeepModLoaderOpen")]
         public bool KeepOpen { get; set; } = true;
 

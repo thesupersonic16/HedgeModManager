@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
-        MinHeight="640" MinWidth="580" Height="640" Width="580" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
+        MinHeight="662" MinWidth="585" Height="662" Width="585" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
@@ -409,11 +409,12 @@
                             <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2">
                                 <Grid>
                                     <StackPanel x:Name="HMMSettingsSackPanel" Margin="10,10,0,0">
-                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"    IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"    IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"  IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"      IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}" Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"       IsChecked="{Binding CPKREDIR.CheckForUpdates}"     Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"       IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}"  Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"     IsChecked="{Binding CPKREDIR.CheckForModUpdates}"  Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIUpdateCodesOnLaunch}" IsChecked="{Binding CPKREDIR.UpdateCodesOnLaunch}" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"         IsChecked="{Binding CPKREDIR.KeepOpen}"            Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView"/>
                                     </StackPanel>
 
                                     <Grid>
