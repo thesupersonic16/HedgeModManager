@@ -482,7 +482,7 @@ namespace HedgeModManager
 
             try
             {
-                await Singleton.GetInstance<HttpClient>().DownloadFileAsync(HedgeApp.CurrentGame.CodesURL,
+                await Singleton.GetInstance<HttpClient>().DownloadFileAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}",
                     CodeProvider.CodesTextPath, null, token);
 
                 Dispatcher.Invoke(Refresh);
@@ -513,7 +513,7 @@ namespace HedgeModManager
             {
                 // Codes from disk.
                 string localCodes = File.ReadAllText(CodeProvider.CodesTextPath);
-                string repoCodes = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGame.CodesURL);
+                string repoCodes = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}");
 
                 if (ViewModel.CPKREDIR.UpdateCodesOnLaunch && localCodes != repoCodes)
                 {
@@ -1439,7 +1439,8 @@ namespace HedgeModManager
                    is contaminated with codes from ExtraCodes.hmm */
                 var oldCodes = codesFileExists ? new CodeFile(codesFilePath) : null;
 
-                var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGame), HedgeApp.CurrentGame.CodesURL, codesFilePath)
+                var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGame),
+                    HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}", codesFilePath)
                 {
                     DownloadCompleted = () =>
                     {
