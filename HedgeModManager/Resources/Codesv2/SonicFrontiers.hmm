@@ -724,10 +724,7 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
     WriteAsmHook
     (
         $@"
-            mov  cl, 0x48
-            xor  cl, 0xB6
-            mov  r8b, cl
-            mov  rcx, rax
+            mov  r14, rax
             test dil, dil
             jnz  exit
             push rax
@@ -741,6 +738,8 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
             pop  rdx
             pop  rax
         exit:
+            mov  r8b, 0xFE
+            mov  rcx, r14
         ",
 
         /* 0x14B4627AD */
