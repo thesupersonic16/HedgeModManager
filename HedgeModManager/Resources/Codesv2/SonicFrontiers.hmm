@@ -706,6 +706,75 @@ Patch "Always Sunset on Islands" in "Time" by "NM"
     );
 }
 
+Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball animations when jumping and double jumping, similar to Sonic Forces."
+{
+    long SPINJUMP = (long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPINJUMP");
+
+    /* 0x14B45836F */
+    long playParticleCallerAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x0D\xBA\x8E\xB4\x47\x3B",
+        "x????xxxxxxxxxxxxxxxxxxxxx"
+    );
+
+    /* 0x1408981D0 */
+    long playParticleFuncAddr = playParticleCallerAddr + Read<int>(playParticleCallerAddr + 0x01) + 0x05;
+
+    // StateJump
+    WriteAsmHook
+    (
+        $@"
+            mov  cl, 0x48
+            xor  cl, 0xB6
+            mov  r8b, cl
+            mov  rcx, rax
+            test dil, dil
+            jnz  exit
+            push rax
+            push rdx
+            mov  r8b, 1
+            mov  rdx, {SPINJUMP}
+            lea  rdx, [rdx]
+            mov  rcx, rsi
+            mov  rax, {playParticleFuncAddr}
+            call rax
+            pop  rdx
+            pop  rax
+        exit:
+        ",
+
+        /* 0x14B4627AD */
+        ScanSignature
+        (
+            "\x8A\x0D\xCC\xCC\xCC\xCC\x80\xF1\xB6\x41\x88\xC8\x48\x89\xC1",
+            "xx????xxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+    
+    // StateDoubleJump
+    WriteAsmHook
+    (
+        $@"
+            mov  rdx, {SPINJUMP}
+            lea  rdx, [rdx]
+            mov  rcx, rbx
+            mov  rax, {playParticleFuncAddr}
+            call rax
+        ",
+
+        /* 0x14B458365 */
+        ScanSignature
+        (
+            "\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x89\xD9\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x38",
+            "xxx????xxxx????xxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Centre Game Window on Launch" in "Fixes" by "Hyper"
 //
     #load "System.Drawing.dll"
@@ -2742,11 +2811,11 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
             "x????xxx????xxxxx"
         );
 
-        /* 0x1407C9DB0 */
-        long setAnimSpeedFuncAddr = setAnimSpeedCallerAddr + Read<int>(setAnimSpeedCallerAddr + 0x01) + 0x05;
-
         /* 0x1407C9300 */
         long playAnimFuncAddr = playAnimCallerAddr + Read<int>(playAnimCallerAddr + 0x01) + 0x05;
+
+        /* 0x1407C9DB0 */
+        long setAnimSpeedFuncAddr = setAnimSpeedCallerAddr + Read<int>(setAnimSpeedCallerAddr + 0x01) + 0x05;
 
         fixed (float* pAnimSpeed = &AnimSpeed)
         {
