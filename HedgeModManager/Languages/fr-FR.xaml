@@ -123,13 +123,6 @@
     <system:String x:Key="MainUIMissingLoaderHeader"  >Mod Loader n&apos;est pas installé!</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Pour que {0} puisse charger des mods, le mod loader a besoin d&apos;être installé.&#x0a;Voullez vous l&apos;installer maintenant?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"    >Choisissez l&apos;emplacement des mods...</system:String>
-    <system:String x:Key="MainUIRuntimeMissingTitle"  >Missing Runtime Detected!</system:String>
-    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} requires {1} to be installed for mods &#x0a;to function properly, would you like HMM to install this runtime?</system:String>
-    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">One or more enabled mods require save file redirection to work properly. Enable this feature?&#x0a;Click no only if you know what you are doing.</system:String>
-    <system:String x:Key="MainUIMissingDependsHeader" >Failed to resolve mod dependencies</system:String>
-    <system:String x:Key="MainUIMissingDepends"       >The following mods have missing dependencies:</system:String>
-    <system:String x:Key="MainUIMissingDependsResolve">Resolve GB Mods</system:String>
-    <system:String x:Key="MainUIResolvable" xml:space="preserve">One or more dependencies can be automatically resolved&#x0a;from GameBanana by clicking "Resolve GB Mods".</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Veuillez choisir une option!</system:String>
@@ -213,7 +206,6 @@
 
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Échec du téléchargement du mod</system:String>
-    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">An error has occurred during the download. Servers might be down or overloaded. Please try again later. &#x0a;&#x0a;Details: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Échec de la recherche du jeu</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager n'a pas pu trouver l'installation de {0}</system:String>
 
@@ -225,15 +217,9 @@
 
     <!-- Exception Window Strings -->
     <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Crash</system:String>
-    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager Has Thrown an Exception!</system:String>
-    <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager Has Ran Into an Error!</system:String>
-    <system:String x:Key="ExceptionWindowButtonCopyLog"   >Copy Log to Clipboard</system:String>
-    <system:String x:Key="ExceptionWindowButtonIgnore"    >Ignore and Close</system:String>
-    <system:String x:Key="ExceptionWindowButtonReport"    >Submit Report on GitHub</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Nouvelle mise à jour disponible!</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Apparemment, cette version de Hedge Mod Manager n&apos;est pas à jour.&#x0a;Il est fortement recommandé de procéder d&apos;abord à une mise à jour et de vérifier si le problème persiste.&#x0a;Souhaitez-vous faire la mise à jour maintenant?</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">Erreur de mise à jour!</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager could not update!&#x0a;Please manually download the lastest release.</system:String>
 
     <!-- Themes -->
     <system:String x:Key="ThemeDark"  >Sombre</system:String>
