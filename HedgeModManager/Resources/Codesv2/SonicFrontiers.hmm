@@ -409,6 +409,21 @@ Supported islands;
     NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
 }
 
+Patch "Always Respawn Enemies" in "Gameplay" by "Hyper" does "Always respawns enemies and guardians when loading back into islands."
+{
+    WriteProtected<byte>
+    (
+        /* 0x14922FB24 */
+        ScanSignature
+        (
+            "\x0F\x88\x6D\x01\x00\x00\xE8",
+            "xxxxxxx"
+        ),
+
+        0xE9, 0x6E, 0x01, 0x00, 0x00
+    );
+}
+
 Patch "Always Run in the Background" in "System" by "NM" does "Stops the game from pausing when the window is unfocused."
 {
     WriteProtected<byte>
