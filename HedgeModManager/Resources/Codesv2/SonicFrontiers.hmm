@@ -110,7 +110,7 @@ Known issues;
 - Certain HUD effects are rendered at the correct aspect ratio, but will misalign due to the main HUD still being 16:9.
 - Certain HUD elements are still rendered at 16:9 and will misalign or stretch.
 - The Jukebox menu is cut off almost half-way.
-- Pre-rendered cutscenes will stretch to your aspect ratio.
+- Cutscenes will stretch to your aspect ratio.
 - Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
 */
 //
@@ -706,6 +706,75 @@ Patch "Always Sunset on Islands" in "Time" by "NM"
     );
 }
 
+Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball animations when jumping and double jumping, similar to Sonic Forces."
+{
+    long SPINJUMP = (long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPINJUMP");
+
+    /* 0x14B45836F */
+    long playParticleCallerAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x0D\xBA\x8E\xB4\x47\x3B",
+        "x????xxxxxxxxxxxxxxxxxxxxx"
+    );
+
+    /* 0x1408981D0 */
+    long playParticleFuncAddr = playParticleCallerAddr + Read<int>(playParticleCallerAddr + 0x01) + 0x05;
+
+    // StateJump
+    WriteAsmHook
+    (
+        $@"
+            mov  cl, 0x48
+            xor  cl, 0xB6
+            mov  r8b, cl
+            mov  rcx, rax
+            test dil, dil
+            jnz  exit
+            push rax
+            push rdx
+            mov  r8b, 1
+            mov  rdx, {SPINJUMP}
+            lea  rdx, [rdx]
+            mov  rcx, rsi
+            mov  rax, {playParticleFuncAddr}
+            call rax
+            pop  rdx
+            pop  rax
+        exit:
+        ",
+
+        /* 0x14B4627AD */
+        ScanSignature
+        (
+            "\x8A\x0D\xCC\xCC\xCC\xCC\x80\xF1\xB6\x41\x88\xC8\x48\x89\xC1",
+            "xx????xxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+    
+    // StateDoubleJump
+    WriteAsmHook
+    (
+        $@"
+            mov  rdx, {SPINJUMP}
+            lea  rdx, [rdx]
+            mov  rcx, rbx
+            mov  rax, {playParticleFuncAddr}
+            call rax
+        ",
+
+        /* 0x14B458365 */
+        ScanSignature
+        (
+            "\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x89\xD9\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x38",
+            "xxx????xxxx????xxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Centre Game Window on Launch" in "Fixes" by "Hyper"
 //
     #load "System.Drawing.dll"
@@ -1123,6 +1192,21 @@ Patch "Disable TAA Sharpness" in "Graphics" by "Hyper" does "Disables the sharpe
     );
 }
 
+Patch "Disable Thorn Cylinders" in "Gameplay" by "Hyper" does "Disables the cylindrical thorn objects placed at the most inconvenient locations in Cyber Space."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1404119C4 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCB\x4C\x8B\xF0\xE8\xCC\xCC\xCC\xCC\x49\x0F\xBE\x16",
+            "x????xxxxxxx????xxx????xxxxxxx????xxxx"
+        ),
+        
+        0xE9, 0x4A, 0x04, 0x00, 0x00
+    );
+}
+
 Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt that covers up Sonic when using drift dash panels."
 {
     WriteNop
@@ -1186,6 +1270,113 @@ Known issues;
         ),
 
         0xE9, 0x1A, 0x02, 0x00, 0x00
+    );
+}
+
+Patch "Disable Decelerate Collision" in "Gameplay" by "Hyper" does
+/*
+Disables the collision flag that kills all horizontal velocity when jumping.
+
+Example usage;
+- The bridge in Kronos above the river.
+- The cliffsides in Ares.
+*/
+//
+    static int Seek = 0;
+//
+{
+    fixed (int* pSeek = &Seek)
+    {
+        WriteAsmHook
+        (
+            $@"
+                mov  r14, qword ptr [rsp + 0x48 + 0xFFFFFFFFFFFFFFD8]
+                mov  rdi, qword ptr [rsp + 0x48 + 0xFFFFFFFFFFFFFFE0]
+                mov  rsi, qword ptr [rsp + 0x48 + 0xFFFFFFFFFFFFFFE8]
+                push rbx
+                push rcx
+                push rdx
+                push r11
+                push r15
+                mov  rdx, {(long)pSeek}
+                mov  rbx, rax
+                mov  rbx, [rbx]               ; dereference pointer to collision info map [int64, int32]
+                test rbx, rbx                 ; check if null
+                jz   exit
+                mov  ecx, dword ptr [rbx + 8] ; store vertex count
+                imul ecx, 4                   ; multiply vertex count by 4 to get an appropriate iteration size
+                mov  rbx, [rbx]               ; dereference pointer to collision info
+            iterate:
+                cmp  dword ptr [rdx], ecx     ; iterate through vertices to set info for each
+                jge  exit
+                mov  r15d, dword ptr [rdx]    ; store current iteration
+                mov  r11, rbx
+                add  r11, r15                 ; add offset to address
+                mov  r15d, dword ptr [r11]    ; store current collision info for modification
+                and  r15d, 0xFFFFFDFF         ; clear 9th bit
+                mov  dword ptr [r11], r15d    ; store modified collision info in original array
+                add  dword ptr [rdx], 4       ; increment by 4 (32-bit integers)
+                jmp  iterate
+            exit:
+                mov  dword ptr [rdx], 0       ; reset incrementation
+                pop  r15
+                pop  r11
+                pop  rdx
+                pop  rcx
+                pop  rbx
+            ",
+
+            /* 0x140A9FBF3 */
+            ScanSignature
+            (
+                "\x4C\x8B\x74\x24\x20\x48\x8B\x7C\x24\x28\x48\x8B\x74\x24\x30\x48\x8B\x00",
+                "xxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
+Patch "Disable Drop Dash" in "Gameplay" by "Hyper"
+{
+    // Disable drop dash charge from StateDoubleJump.
+    WriteProtected<byte>
+    (
+        /* 0x14B484C1A */
+        ScanSignature
+        (
+            "\x0F\x84\x9C\x00\x00\x00\x48\x89\xF9",
+            "xxxxxxxxx"
+        ),
+        
+        0xE9, 0x9D, 0x00, 0x00, 0x00
+    );
+
+    // Disable drop dash from StateDoubleJump.
+    WriteProtected<byte>
+    (
+        /* 0x14B43C9B8 */
+        ScanSignature
+        (
+            "\x74\x14\xF3\x0F\x10\x8F\xB4\x00\x00\x00",
+            "xxxxxxxxxx"
+        ),
+        
+        0xEB
+    );
+
+    // Disable drop dash charge from StateRecoveryJump.
+    WriteProtected<byte>
+    (
+        /* 0x14084CD97 */
+        ScanSignature
+        (
+            "\x0F\x84\xB7\x00\x00\x00\x80\xBE\xC4\x00\x00\x00\x00",
+            "xxxxxxxxxxxxx"
+        ),
+        
+        0xE9, 0xB8, 0x00, 0x00, 0x00
     );
 }
 
@@ -1341,6 +1532,7 @@ Known issues;
 - The final QTE for Wyvern takes a long time to show up.
 - The falling platforms in Cyber Space levels 2-5, 2-7, and 3-3 will activate more quickly.
 - The spawn point in Cyber Space 4-3 will throw you into an invisible wall.
+- The light dash may disconnect from the path in some cases.
 */
 {
     /*
@@ -1690,6 +1882,29 @@ Known issues;
         ),
 
         0xEB, 0x18
+    );
+}
+
+Patch "Disable Hit Stop" in "Gameplay" by "Hyper" does "Disables the slow motion effect after performing attacks."
+{
+    WriteAsmHook
+    (
+        $@"
+            xorps  xmm3, xmm3
+            movaps xmm7, xmm3
+            mov    r8, [rcx + 0xB0]
+            mov    esi, edx
+            add    rax, r8
+        ",
+
+        /* 0x147689E7F */
+        ScanSignature
+        (
+            "\x0F\x28\xFB\x4C\x8B\x81\xB0\x00\x00\x00",
+            "xxxxxxxxxx"
+        ),
+
+        HookBehavior.Replace
     );
 }
 
@@ -2561,6 +2776,80 @@ Patch "Hide Air Trick Hint Particles" in "Graphics" by "Hyper" does "Hides the p
     );
 }
 
+Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "Replaces the homing attack finish animation with randomised trick animations."
+//
+    using System.Runtime.InteropServices;
+
+    static bool Initialised = false;
+
+    static Random Random = new Random();
+
+    static string[] AnimVariations = new[] { "U", "D", "L", "R" };
+
+    static float AnimSpeed = 0.5f;
+
+    static IntPtr pAnimName = Marshal.AllocHGlobal(14);
+//
+{
+    string randAnimName = $"JUMP_TRICK_{AnimVariations[Random.Next(0, 4)]}{Random.Next(0, 3)}\0";
+
+    Marshal.Copy(System.Text.Encoding.UTF8.GetBytes(randAnimName), 0, pAnimName, randAnimName.Length);
+
+    if (!Initialised)
+    {
+        /* 0x140823825 */
+        long playAnimCallerAddr = ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x33\xD2\x49\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x41\xB8\x74\x00\x00\x00",
+            "x????xxxxxx????xxxxxx"
+        );
+
+        /* 0x14086F023 */
+        long setAnimSpeedCallerAddr = ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x05\xCC\xCC\xCC\xCC\xB9\x03\x00\x00\x00",
+            "x????xxx????xxxxx"
+        );
+
+        /* 0x1407C9300 */
+        long playAnimFuncAddr = playAnimCallerAddr + Read<int>(playAnimCallerAddr + 0x01) + 0x05;
+
+        /* 0x1407C9DB0 */
+        long setAnimSpeedFuncAddr = setAnimSpeedCallerAddr + Read<int>(setAnimSpeedCallerAddr + 0x01) + 0x05;
+
+        fixed (float* pAnimSpeed = &AnimSpeed)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    push  rax
+                    mov   rax, {(long)pAnimSpeed}
+                    movss xmm2, dword ptr [rax]
+                    pop   rax
+                    mov   rdx, {(long)Marshal.StringToHGlobalAnsi("SPEED_RATIO")}
+                    lea   rdx, [rdx]
+                    mov   rcx, rax
+                    mov   rax, {setAnimSpeedFuncAddr}
+                    mov   rbx, rcx
+                    call  rax
+                    mov   rdx, {pAnimName}
+                    lea   rdx, [rdx]
+                    mov   rcx, rbx
+                    mov   rax, {playAnimFuncAddr}
+                    call  rax
+                ",
+
+                /* 0x14082381B */
+                playAnimCallerAddr - 0x0A,
+
+                HookBehavior.Replace
+            );
+        }
+
+        Initialised = true;
+    }
+}
+
 Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all intrusive tutorial messages that appear under certain conditions for the first time."
 {
     // Hide hint rings.
@@ -2909,6 +3198,21 @@ Patch "Fix Shadow Stutter" in "Fixes" by "Hyper" does "Fixes shadows not interpo
     );
 }
 
+Patch "Fix Stomp Reset" in "Fixes" by "Hyper" does "Fixes the stomp attack only resetting once you hit the ground, allowing you to perform multiple stomps whilst still airborne."
+{
+    WriteNop
+    (
+        /* 0x140895AC0 */
+        ScanSignature
+        (
+            "\x74\x1C\x45\x33\xC0\x48\x8B\xCB\x41\x8D\x50\x34",
+            "xxxxxxxxxxxx"
+        ),
+
+        2
+    );
+}
+
 Patch "Fix Upreel Grip Position" in "Fixes" by "ĐeäTh" does
 /*
 Adjusts Sonic's grip position on the Upreel object's handle so that it lines up with the actual object.
@@ -3004,7 +3308,7 @@ Patch "Force 4K Video Playback" in "Graphics" by "Hyper" does "Forces the game t
 
 Patch "Force Cyber Space Objects on Islands" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
 /*
-Replaces all supported objects in Cyber Space with their island counterparts.
+Replaces all supported objects on the islands with their Cyber Space counterparts.
 
 Unsupported objects;
 - Jump Selectors (Generations-style)
@@ -3402,7 +3706,7 @@ Forces real-time local reflections to render at a higher resolution and reduces 
 
 Patch "Force Island Objects in Cyber Space" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
 /*
-Replaces all supported objects on the islands with their Cyber Space counterparts.
+Replaces all supported objects in Cyber Space with their island counterparts.
 
 Unsupported objects;
 - Checkpoints
@@ -4340,6 +4644,37 @@ Patch "Rebind Quick Restart to Back" in "Gameplay" by "Hyper" does "Rebinds the 
 
         0xEB, 0x0A
     );
+}
+
+Patch "Reduced Homing Delay" in "Physics" by "Hyper" does "Reduces the delay after performing a homing attack, allowing you to perform chained homing attacks much quicker."
+//
+    static float Delay = 0.2f;
+//
+{
+    fixed (float* pDelay = &Delay)
+    {
+        WriteAsmHook
+        (
+            $@"
+                push  rbx
+                mov   rbx, {(long)pDelay}
+                movss xmm2, dword ptr [rbx]
+                mov   edx, eax
+                mov   rcx, r13
+                mov   dword ptr [rbp + 0x57 + 0x28], eax
+                pop   rbx
+            ",
+
+            /* 0x14082379C */
+            ScanSignature
+            (
+                "\xF3\x41\x0F\x10\x54\x3F\x18",
+                "xxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
 }
 
 Patch "Restore Unused Supreme QTE" in "Gameplay" by "Gordon Ramsay" does
