@@ -1537,6 +1537,21 @@ Patch "Disable Forced Weather for Bosses" in "Weather" by "Hyper" does "Disables
     );
 }
 
+Patch "Disable Fortress" in "Gameplay" by "Hyper"
+{
+    WriteNop
+    (
+        /* 0x140677B6D */
+        ScanSignature
+        (
+            "\x75\x2B\x45\x33\xC0\x33\xD2\x48\x8B\xCB",
+            "xxxxxxxxxx"
+        ),
+
+        2
+    );
+}
+
 Patch "Disable Framerate Limiter (experimental)" in "Graphics" by "NM & M&M" does
 /*
 Disables the framerate limiter, allowing the game to run above its targeted 30/60 FPS limit.
