@@ -1537,7 +1537,13 @@ Patch "Disable Forced Weather for Bosses" in "Weather" by "Hyper" does "Disables
     );
 }
 
-Patch "Disable Fortress" in "Gameplay" by "Hyper"
+Patch "Disable Fortress (experimental)" in "Gameplay" by "Hyper" does
+/*
+Disables the Fortress guardian on Chaos Island.
+
+Known issues;
+- This also affects Battle Rush and causes a softlock.
+*/
 {
     WriteNop
     (
