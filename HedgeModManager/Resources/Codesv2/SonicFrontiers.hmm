@@ -2109,6 +2109,7 @@ Notes;
 - This grants you permission to save and load anywhere, including during combat.
 - This will allow you to open the map screen during combat.
 - This will allow you to place map markers before having completed any challenges.
+- This will allow you to enter Photo Mode during inaccessible parts of the game where Photo Mode is usually accessible.
 */
 {
     // Disable save/load deny.
@@ -2174,6 +2175,19 @@ Notes;
         ),
         
         3
+    );
+
+    // Disable Photo Mode check.
+    WriteProtected<byte>
+    (
+        /* 0x14094C162 */
+        ScanSignature
+        (
+            "\x0F\x84\xED\x00\x00\x00\x48\x8B\x5F\x18\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x33\xD2",
+            "xxxxxxxxxxx????xxxxxxx????xx"
+        ),
+
+        0xE9, 0xEE, 0x00, 0x00, 0x00
     );
 }
 
