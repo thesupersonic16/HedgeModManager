@@ -3091,6 +3091,36 @@ Patch "Fix Empty Messages" in "Fixes" by "Hyper" does "Removes the empty message
     );
 }
 
+Patch "Fix Grind Leaning" in "Fixes" by "Hyper" does "Fixes the grind leaning animations always leaning left and ending prematurely when leaning right."
+//
+    static float Bias = 1.0f;
+//
+{
+    fixed (float* pBias = &Bias)
+    {
+        WriteAsmHook
+        (
+            $@"
+                push  rax
+                mov   rax, {(long)pBias}
+                movss xmm2, dword ptr [rax]
+                mov   rax, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPEED_RATIO")}
+                lea   rdx, [rax]
+                pop   rax
+            ",
+
+            /* 0x14084AD71 */
+            ScanSignature
+            (
+                "\x0F\x28\xD0\xF3\x0F\x11\x86\xD8\x00\x00\x00",
+                "xxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
 Patch "Fix Photo Mode Camera Collision" in "Fixes" by "Hyper" does "Allows the camera in Photo Mode to slide against collision, rather than freezing in place."
 {
     WriteNop
