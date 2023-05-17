@@ -4209,6 +4209,35 @@ This does not address pop-in issues.
     // Rail LODs
     fixed (float* pRange = &Range)
     {
+        /* 0x140B840F1 */
+        var trrBlendRangeAddr = ScanSignature
+        (
+            "\x0F\x10\x00\x48\x8B\xCE\x0F\x11\x43\x0C\xE8",
+            "xxxxxxxxxxx"
+        );
+
+        // Terrain Material Blending Range
+        WriteAsmHook
+        (
+            $@"
+                push   rcx
+                mov    rcx, {(long)pRange}
+                mov    ecx, dword ptr [rcx]
+                mov    dword ptr [rax + 0x0C], ecx
+                pop    rcx
+                movups xmm0, xmmword ptr [rax]
+                mov    rcx, rsi
+                movups xmmword ptr [rbx + 0x0C], xmm0
+                mov    rax, {((trrBlendRangeAddr + 10) + Read<int>(trrBlendRangeAddr + 11) + 0x05)} ; 0x140B81190
+                call   rax
+            ",
+
+            trrBlendRangeAddr,
+
+            HookBehavior.Replace
+        );
+
+        // Rail LODs
         WriteAsmHook
         (
             $@"
