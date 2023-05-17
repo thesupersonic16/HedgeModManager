@@ -789,7 +789,7 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
     );
 }
 
-Patch "Centre Game Window on Launch" in "Fixes" by "Hyper"
+Patch "Centre Game Window on Launch" in "System" by "Hyper"
 //
     #load "System.Drawing.dll"
     #load "System.Xml.dll"
