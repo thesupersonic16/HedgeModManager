@@ -2191,6 +2191,27 @@ Notes;
     );
 }
 
+Patch "Disable Monologue Restrictions" in "Audio" by "WasifBoomz" does
+/*
+Removes restrictions for random monologue playback during gameplay.
+
+Notes;
+- This allows monologues to play anywhere, rather than only on heightmap terrain
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x1401CA016 */
+        ScanSignature
+        (
+			"\x74\x0E\x8B\x47\x48",
+			"xxxxx"
+        ),
+
+        0xEB, 0x0E
+    );
+}
+
 Patch "Disable Photo Mode Camera Collision" in "Camera" by "Hyper"
 {
     // Camera position
@@ -4685,26 +4706,6 @@ Patch "Infinite Quick Cyloop Gauge" in "Cheats" by "NM"
         ),
 
         HookBehavior.Replace
-    );
-}
-
-Patch "Play Monologues Unconditionally" in "Audio" by "WasifBoomz" does
-/*
-The random voice clips around the island are played no matter what.
-
-Previously, they would not play if Sonic was not on regular terrain.
-*/
-{
-    WriteProtected<byte>
-    (
-        /* 0x1401CA014 */
-        ScanSignature
-        (
-            "\x84\xC0\x74\x0E\x8B\x47\x48",
-            "xxxxxxx"
-        ),
-
-        Assemble("test al, 2")
     );
 }
 
