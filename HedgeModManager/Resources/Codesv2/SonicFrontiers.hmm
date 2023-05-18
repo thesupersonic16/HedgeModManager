@@ -4695,16 +4695,16 @@ The random voice clips around the island are played no matter what.
 Previously, they would not play if Sonic was not on regular terrain.
 */
 {
-	WriteProtected<byte>
+    WriteProtected<byte>
     (
         /* 0x1401CA014 */
         ScanSignature
         (
-			"\x84\xC0\x74\x0E\x8B\x47\x48",
-			"xxxxxxx"
+            "\x84\xC0\x74\x0E\x8B\x47\x48",
+            "xxxxxxx"
         ),
-		
-		Assemble("test al, 2")
+
+        Assemble("test al, 2")
     );
 }
 
