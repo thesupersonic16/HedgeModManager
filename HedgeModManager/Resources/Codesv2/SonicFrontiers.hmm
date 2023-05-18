@@ -2211,7 +2211,7 @@ Notes;
         0xEB, 0x0E
     );
 }
-
+ 
 Patch "Disable Photo Mode Camera Collision" in "Camera" by "Hyper"
 {
     // Camera position
