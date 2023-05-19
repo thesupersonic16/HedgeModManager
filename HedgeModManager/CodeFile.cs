@@ -12,6 +12,8 @@ using Markdig.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace HedgeModManager
 {
@@ -23,6 +25,7 @@ namespace HedgeModManager
 
         public Dictionary<string, string> Tags { get; set; } = new Dictionary<string, string>();
         public List<Code> Codes { get; set; } = new List<Code>();
+        public IEnumerable<Code> ExecutableCodes => Codes.Where(x => x.IsExecutable());
 
         public CodeFile() { }
 
@@ -52,7 +55,7 @@ namespace HedgeModManager
 
         public List<CodeDiffResult> Diff(CodeFile old)
         {
-            var diff       = new List<CodeDiffResult>();
+            var diff = new List<CodeDiffResult>();
             var addedCodes = new List<string>();
 
             foreach (var code in Codes)
@@ -199,25 +202,25 @@ namespace HedgeModManager
         public CodeDiffResult(string changelog, CodeDiffType type)
         {
             Changelog = changelog;
-            Type      = type;
+            Type = type;
         }
 
         public CodeDiffResult(string changelog, CodeDiffType type, string originalName, string newName)
         {
-            Changelog    = changelog;
-            Type         = type;
+            Changelog = changelog;
+            Type = type;
             OriginalName = originalName;
-            NewName      = newName;
+            NewName = newName;
         }
 
         public override string ToString()
         {
             string key = Type switch
             {
-                CodeDiffType.Added   => "DiffUIAdded",
+                CodeDiffType.Added => "DiffUIAdded",
                 CodeDiffType.Removed => "DiffUIRemoved",
                 CodeDiffType.Renamed => "DiffUIRenamed",
-                _                    => "DiffUIModified",
+                _ => "DiffUIModified",
             };
 
             return Lang.LocaliseFormat(key, Changelog);
@@ -232,6 +235,11 @@ namespace HedgeModManager
         }
     }
 
+    public enum CodeType
+    {
+        Code, Patch, Library, Unknown
+    }
+
     public class Code : INotifyPropertyChanged
     {
         public string Name { get; set; }
@@ -242,14 +250,14 @@ namespace HedgeModManager
 
         public string Description { get; set; }
 
-        public bool IsPatch { get; set; }
+        public CodeType Type { get; set; }
 
         public bool Enabled { get; set; }
 
         public StringBuilder Header { get; set; } = new StringBuilder();
         public StringBuilder Lines { get; set; } = new StringBuilder();
 
-        protected SyntaxTree mCachedSyntaxTree;
+        protected SyntaxTreeEx mCachedSyntaxTree;
         protected int mCachedHash;
 
         public override string ToString()
@@ -305,60 +313,64 @@ namespace HedgeModManager
                     if (line == null)
                         continue;
 
-                    bool isCode = line.StartsWith("Code");
-                    bool isPatch = line.StartsWith("Patch");
-                    if (isPatch || isCode)
+                    var firstSpace = line.IndexOf(' ');
+                    if (firstSpace > 0)
                     {
-                        currentCode = new Code();
-                        codes.Add(currentCode);
+                        var type = line.Substring(0, firstSpace);
 
-                        currentCode.Header.AppendLine(line);
-
-                        var matches = Regex.Matches(line, "(\"[^\"]*\"|[^\"]+)(\\s+|$)");
-                        currentCode.IsPatch = isPatch;
-                        var name = matches[1].Value.Trim(' ', '"');
-
-                        currentCode.Name = name;
-
-                        for (int i = 2; i < matches.Count; i++)
+                        if (CodeTypeFromString(type, out var codeType))
                         {
-                            var match = matches[i].Value;
+                            currentCode = new Code();
+                            currentCode.Type = codeType;
+                            codes.Add(currentCode);
 
-                            if (match.Trim().Equals("in", StringComparison.OrdinalIgnoreCase))
+                            currentCode.Header.AppendLine(line);
+
+                            var matches = Regex.Matches(line, "(\"[^\"]*\"|[^\"]+)(\\s+|$)");
+                            var name = matches[1].Value.Trim(' ', '"');
+
+                            currentCode.Name = name;
+
+                            for (int i = 2; i < matches.Count; i++)
                             {
-                                i++;
-                                currentCode.Category = matches[i].Value.Trim(' ', '"');
+                                var match = matches[i].Value;
+
+                                if (match.Trim().Equals("in", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    i++;
+                                    currentCode.Category = matches[i].Value.Trim(' ', '"');
+                                }
+
+                                if (match.Trim().Equals("by", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    i++;
+                                    currentCode.Author = matches[i].Value.Trim(' ', '"');
+                                }
+
+                                if (match.Trim().Equals("does", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    i++;
+
+                                    /* If the line ends with "does" on its own,
+                                       the description will be on the next line. */
+                                    if (line.EndsWith("does"))
+                                        isMultilineDescription = true;
+                                    else
+                                        currentCode.Description = matches[i].Value.Trim(' ', '"');
+                                }
                             }
 
-                            if (match.Trim().Equals("by", StringComparison.OrdinalIgnoreCase))
-                            {
-                                i++;
-                                currentCode.Author = matches[i].Value.Trim(' ', '"');
-                            }
-
-                            if (match.Trim().Equals("does", StringComparison.OrdinalIgnoreCase))
-                            {
-                                i++;
-
-                                /* If the line ends with "does" on its own,
-                                   the description will be on the next line. */
-                                if (line.EndsWith("does"))
-                                    isMultilineDescription = true;
-                                else
-                                    currentCode.Description = matches[i].Value.Trim(' ', '"');
-                            }
+                            continue;
                         }
-
-                        continue;
                     }
 
                     if (isMultilineDescription)
                     {
                         string startDelimiter = "/*";
-                        string endDelimiter   = "*/";
+                        string endDelimiter = "*/";
 
                         bool lineContainsStartDelimiter = false;
-                        bool lineContainsEndDelimiter   = false;
+                        bool lineContainsEndDelimiter = false;
 
                         currentCode.Header.AppendLine(line);
 
@@ -369,7 +381,7 @@ namespace HedgeModManager
 
                             lineContainsStartDelimiter = true;
                         }
-                        
+
                         if (line.EndsWith(endDelimiter))
                         {
                             isMultilineDescription = false;
@@ -415,15 +427,27 @@ namespace HedgeModManager
             return codes;
         }
 
-        public SyntaxTree ParseSyntaxTree()
+        public List<string> GetReferences()
+        {
+            var references = new List<string>();
+
+            var tree = ParseSyntaxTree();
+
+            foreach (var reference in tree.PreprocessorDirectives.Where(x => x.Kind == SyntaxKind.ReferenceDirectiveTrivia))
+            {
+                references.Add(reference.Value);
+            }
+
+            return references;
+        }
+
+        public SyntaxTreeEx ParseSyntaxTree()
         {
             var hash = Lines.ToString().GetHashCode();
-
+            
             if (hash != mCachedHash)
             {
-                mCachedHash = hash;
-                mCachedSyntaxTree = CSharpSyntaxTree.ParseText(Lines.ToString(),
-                    new CSharpParseOptions(kind: SourceCodeKind.Script));
+                return SyntaxTreeEx.Parse(Lines.ToString());
             }
 
             return mCachedSyntaxTree;
@@ -434,43 +458,83 @@ namespace HedgeModManager
             var tree = ParseSyntaxTree();
 
             var unit = tree.GetCompilationUnitRoot();
-            unit = (CompilationUnitSyntax)new OptionalColonRewriter().Visit(unit);
-
-            var allowedMembers = new List<StatementSyntax>();
-            var disallowedMembers = new List<MemberDeclarationSyntax>();
-
-            foreach (MemberDeclarationSyntax member in unit.Members)
+            if (IsExecutable())
             {
-                if (member is GlobalStatementSyntax globalStatement)
+                unit = (CompilationUnitSyntax)new OptionalColonRewriter().Visit(unit);
+            }
+
+            var classUnit = SyntaxFactory
+                .ClassDeclaration(MakeInternalName())
+                .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.UnsafeKeyword)));
+
+            if (IsExecutable())
+            {
+                var localMembers = new List<StatementSyntax>();
+                var globalMembers = new List<MemberDeclarationSyntax>();
+
+                foreach (var member in unit.Members)
                 {
-                    allowedMembers.Add(globalStatement.Statement);
-                }
-                else if (member is FieldDeclarationSyntax fieldDeclaration)
-                {
-                    if (!member.Modifiers.Any(SyntaxKind.StaticKeyword))
+                    if (member is GlobalStatementSyntax globalStatement)
                     {
-                        allowedMembers.Add(SyntaxFactory.LocalDeclarationStatement(member.Modifiers, fieldDeclaration.Declaration));
+                        localMembers.Add(globalStatement.Statement);
+                    }
+                    else if (member is FieldDeclarationSyntax fieldDeclaration)
+                    {
+                        if (!member.Modifiers.Any(SyntaxKind.StaticKeyword))
+                        {
+                            localMembers.Add(SyntaxFactory.LocalDeclarationStatement(member.Modifiers, fieldDeclaration.Declaration));
+                        }
+                        else
+                        {
+                            globalMembers.Add(member);
+                        }
                     }
                     else
                     {
-                        disallowedMembers.Add(member);
+                        globalMembers.Add(member);
                     }
                 }
-                else
-                {
-                    disallowedMembers.Add(member);
-                }
+
+                var funcUnit = SyntaxFactoryEx.MethodDeclaration(Type == CodeType.Patch ? "Init" : "OnFrame", "void",
+                    SyntaxFactory.Block(localMembers), "public");
+
+                classUnit = classUnit
+                    .WithMembers(SyntaxFactory.List(globalMembers))
+                    .AddMembers(CodeProvider.LoaderExecutableMethod)
+                    .AddMembers(funcUnit);
             }
+            else if (Type == CodeType.Library)
+            {
+                var filteredMembers = new List<MemberDeclarationSyntax>(unit.Members.Count);
 
-            var funcUnit = SyntaxFactoryEx.MethodDeclaration(IsPatch ? "Init" : "OnFrame", "void",
-                SyntaxFactory.Block(allowedMembers), "public");
+                foreach (var member in unit.Members)
+                {
+                    if (member is MethodDeclarationSyntax method)
+                    {
+                        method = method.AddModifiers(SyntaxFactory.Token(SyntaxKind.StaticKeyword));
+                        filteredMembers.Add(method);
+                        continue;
+                    }
 
-            var classUnit = SyntaxFactory
-                .ClassDeclaration(Regex.Replace($"{Name}_{Guid.NewGuid()}", "[^a-z_0-9]", string.Empty, RegexOptions.IgnoreCase))
-                .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.UnsafeKeyword)))
-                .WithMembers(SyntaxFactory.List(disallowedMembers))
-                .AddMembers(funcUnit)
-                .AddMembers(CodeProvider.LoaderExecutableMethod);
+                    if (member is FieldDeclarationSyntax field)
+                    {
+                        field = field.WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
+                        filteredMembers.Add(field);
+                        continue;
+                    }
+                    
+                    if (member is PropertyDeclarationSyntax property)
+                    {
+                        property = property.WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
+                        filteredMembers.Add(property);
+                        continue;
+                    }
+
+                    filteredMembers.Add(member);
+                }
+
+                classUnit = classUnit.WithMembers(SyntaxFactory.List(filteredMembers));
+            }
 
             return SyntaxFactory.CompilationUnit()
                 .AddMembers(classUnit)
@@ -478,11 +542,43 @@ namespace HedgeModManager
                 .AddUsings(CodeProvider.PredefinedUsingDirectives);
         }
 
+        public bool IsExecutable()
+            => Type == CodeType.Patch || Type == CodeType.Code;
+
         public SyntaxTree CreateSyntaxTree()
         {
             return SyntaxFactory.SyntaxTree(CreateCompilationUnit());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private string MakeInternalName()
+        {
+            if (Type == CodeType.Library)
+            {
+                return Name;
+            }
+
+            return Regex.Replace($"{Name}_{Guid.NewGuid()}", "[^a-z_0-9]", string.Empty, RegexOptions.IgnoreCase);
+        }
+
+        public static bool CodeTypeFromString(string text, out CodeType type)
+        {
+            switch (text)
+            {
+                case "Code":
+                    type = CodeType.Code;
+                    return true;
+                case "Patch":
+                    type = CodeType.Patch;
+                    return true;
+                case "Library":
+                    type = CodeType.Library;
+                    return true;
+            }
+
+            type = CodeType.Unknown;
+            return false;
+        }
     }
 }
