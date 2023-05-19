@@ -6,7 +6,7 @@ WriteNop(ASLR(0x00866900), 2)
 Patch "Disable Super Music" in "Audio" by "Sajid" does "Prevents the Super Sonic theme from overwriting the stage music."
 WriteNop(ASLR(0x0091ABAD), 6)
 
-Patch "Invisible Cloak Sonic" in "Graphics" by "Muzzarino" does "Turns Sonic's textures into a highly reflective material to blend in (requires the Jump or Spin button to be pressed to enable it).
+Patch "Invisible Cloak Sonic" in "Graphics" by "Muzzarino" does "Turns Sonic's textures into a highly reflective material to blend in (requires the Jump or Spin button to be pressed to enable it)."
 WriteNop(ASLR(0x0085C68E), 6)
 
 Patch "Enable Stage Retry Option" in "UI" by "Sajid" does "Enables the Retry option from the game's time attack mode in normal play."
