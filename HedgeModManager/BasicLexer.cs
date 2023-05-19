@@ -52,10 +52,6 @@ namespace HedgeModManager
                         {
                             directive.Kind = SyntaxKind.LoadDirectiveTrivia;
                         }
-                        else if (directive.Name is "r" or "ref")
-                        {
-                            directive.Kind = SyntaxKind.ReferenceDirectiveTrivia;
-                        }
                         else if (directive.Name is "lib")
                         {
                             directive.Kind = SyntaxKind.ReferenceDirectiveTrivia;
