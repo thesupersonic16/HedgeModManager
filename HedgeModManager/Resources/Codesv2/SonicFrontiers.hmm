@@ -2196,7 +2196,7 @@ Patch "Disable Monologue Restrictions" in "Audio" by "WasifBoomz" does
 Removes restrictions for random monologue playback during gameplay.
 
 Notes;
-- This allows monologues to play anywhere, rather than only on heightmap terrain
+- This allows monologues to play anywhere, rather than only on heightmap terrain.
 */
 {
     WriteProtected<byte>
