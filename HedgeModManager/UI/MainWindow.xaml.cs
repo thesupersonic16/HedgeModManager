@@ -173,7 +173,7 @@ namespace HedgeModManager
                     }
                 }
 
-                CodesTree.ItemsSource = CodesDatabase.Codes.OrderBy(x => x.Category).ThenBy(x => x.Name).GroupBy(x => x.Category).Select
+                CodesTree.ItemsSource = CodesDatabase.ExecutableCodes.OrderBy(x => x.Category).ThenBy(x => x.Name).GroupBy(x => x.Category).Select
                 (
                     (cat) =>
                     {
@@ -233,14 +233,11 @@ namespace HedgeModManager
                         CodesList.Items.Insert(0, code);
                 }
 
-                CodesDatabase.Codes.ForEach
-                (
-                    (code) =>
-                    {
-                        if (!code.Enabled)
-                            CodesList.Items.Add(code);
-                    }
-                );
+                foreach (var code in CodesDatabase.ExecutableCodes)
+                {
+                    if (!code.Enabled)
+                        CodesList.Items.Add(code);
+                }
             }
         }
 
@@ -410,7 +407,7 @@ namespace HedgeModManager
             CodesList.Items.Clear();
 
             int enabledIndex = 0;
-            foreach (Code code in CodesDatabase.Codes)
+            foreach (var code in CodesDatabase.ExecutableCodes)
             {
                 if
                 (

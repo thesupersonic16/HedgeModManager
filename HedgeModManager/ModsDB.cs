@@ -211,7 +211,7 @@ namespace HedgeModManager
 
                 foreach (var code in CodesDatabase.Codes)
                 {
-                    if (code.Enabled)
+                    if (code.Enabled || code.Type == CodeType.Library)
                         codes.Add(code);
                 }
 
