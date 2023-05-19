@@ -102,45 +102,86 @@ WARNING: this will almost definitely cause performance issues, especially if you
     }
 }
 
-Patch "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M & Hyper" does
+Code "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M & Hyper" does
 /*
 Dynamically adjusts the aspect ratio to match the game resolution (recommended for non-16:9 resolutions).
 
 Known issues;
 - Certain HUD effects are rendered at the correct aspect ratio, but will misalign due to the main HUD still being 16:9.
 - Certain HUD elements are still rendered at 16:9 and will misalign or stretch.
-- The Jukebox menu is cut off almost half-way.
 - Cutscenes will stretch to your aspect ratio.
+- Text will be truncated at square or vertical resolutions.
+- The expected aspect ratio will only apply to a newly set resolution when you re-enter the resolution list and select the same resolution again.
 - Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
 */
 //
     #load "System.Drawing.dll"
 
+    using System.Diagnostics;
     using System.Drawing;
+    using System.Runtime.InteropServices;
 
-    [System.Runtime.InteropServices.DllImport("user32.dll")]
-    static extern int GetSystemMetrics(int nIndex);
+    [StructLayout(LayoutKind.Sequential)]
+    struct RECT
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
 
-    static Size GetScreenSize()
-        => new Size(GetSystemMetrics(0), GetSystemMetrics(1));
+    [DllImport("user32.dll")]
+    static extern bool GetClientRect(IntPtr hWnd, ref RECT lpRect);
+
+    static bool Initialised = false;
+
+    static long AspectRatioAddr = 0;
 //
 {
-    long instrAddr = ScanSignature
-    (
-        /* v1.01: 0x1401477CE */
-        "\xF3\x0F\x59\x05\x00\x00\x00\x00\x44\x8B\xC6\xF3\x0F\x2C\xD0\xEB\x07\x8B\xD3\xF3\x44\x0F\x2C\xC1\x3B\x54\x24\x78\x75\x07\x44\x3B\x44\x24\x00\x74\x0C\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x84\xC0\x75\x2B\x45\x84\xF6\x74\x26\x3B\x5F\x20\x75\x05\x3B\x77\x24\x74\x1C\x48\x8B\x07\x44\x8B\xCB\x44\x8B\x47\x2C\x48\x8B\xCF\x8B\x57\x28\xC6\x44\x24\x00\x00\x89\x74\x24\x20\xFF\x50\x58\x39\x5D\x20\x75\x05\x39\x75\x24\x74\x04\x48\x89\x5D\x20\x48\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x40\x41\x5E\x5D\x5B\xC3",
-        "xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxx?xxxxx????x????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxx?xxxx?xxxxxxxxx",
+    if (!Initialised)
+    {
+        long instrAddr = ScanSignature
+        (
+            /* v1.01: 0x1401477CE */
+            "\xF3\x0F\x59\x05\x00\x00\x00\x00\x44\x8B\xC6\xF3\x0F\x2C\xD0\xEB\x07\x8B\xD3\xF3\x44\x0F\x2C\xC1\x3B\x54\x24\x78\x75\x07\x44\x3B\x44\x24\x00\x74\x0C\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x84\xC0\x75\x2B\x45\x84\xF6\x74\x26\x3B\x5F\x20\x75\x05\x3B\x77\x24\x74\x1C\x48\x8B\x07\x44\x8B\xCB\x44\x8B\x47\x2C\x48\x8B\xCF\x8B\x57\x28\xC6\x44\x24\x00\x00\x89\x74\x24\x20\xFF\x50\x58\x39\x5D\x20\x75\x05\x39\x75\x24\x74\x04\x48\x89\x5D\x20\x48\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x40\x41\x5E\x5D\x5B\xC3",
+            "xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxx?xxxxx????x????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxx?xxxx?xxxxxxxxx",
 
-        /* v1.10: 0x140147916 */
-        "\xF3\x0F\x59\x0D\x00\x00\x00\x00\x44\x8B\x84\x24\x00\x00\x00\x00\xF3\x0F\x2C\xD1\xEB\x0C\x8B\x94\x24\x00\x00\x00\x00\xF3\x44\x0F\x2C\xC0\x3B\x54\x24\x34\x75\x07\x44\x3B\x44\x24\x00\x74\x0C\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xCF",
-        "xxxx????xxxx????xxxxxxxxx????xxxxxxxxxxxxxxx?xxxxx????x????xxx"
-    );
+            /* v1.10: 0x140147916, v1.20: 0x14014BD46 */
+            "\xF3\x0F\x59\x0D\x00\x00\x00\x00\x44\x8B\x84\x24\x00\x00\x00\x00\xF3\x0F\x2C\xD1\xEB\x0C\x8B\x94\x24\x00\x00\x00\x00\xF3\x44\x0F\x2C\xC0\x3B\x54\x24\x34\x75\x07\x44\x3B\x44\x24\x00\x74\x0C\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xCF",
+            "xxxx????xxxx????xxxxxxxxx????xxxxxxxxxxxxxxx?xxxxx????x????xxx"
+        );
 
-    long AspectRatio = instrAddr + Read<uint>(instrAddr + 4) + 8;
+        // Disable letterboxing for square/portrait resolutions.
+        WriteNop
+        (
+            /* 0x14014BD44 */
+            ScanSignature
+            (
+                "\x76\x16\xF3\x0F\x59\x0D",
+                "xxxxxx"
+            ),
+            
+            2
+        );
 
-    Size Screen = GetScreenSize();
+        /* v1.20: 0x14126A22C */
+        AspectRatioAddr = instrAddr + Read<uint>(instrAddr + 4) + 8;
 
-    WriteProtected<float>(AspectRatio, (float)Screen.Width / (float)Screen.Height); // 0x141222F9C
+        Initialised = true;
+    }
+
+    if (AspectRatioAddr == 0)
+        return;
+
+    RECT clientRect = new RECT();
+
+    if (!GetClientRect(Process.GetCurrentProcess().MainWindowHandle, ref clientRect))
+        return;
+
+    float width = (float)(clientRect.Right - clientRect.Left);
+    float height = (float)(clientRect.Bottom - clientRect.Top);
+    
+    WriteProtected<float>(AspectRatioAddr, width / height);
 }
 
 Patch "Always Allow Unlocking Story Skills" in "Cheats" by "Hyper" does
