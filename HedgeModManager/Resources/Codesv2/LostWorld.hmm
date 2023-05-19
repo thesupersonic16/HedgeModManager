@@ -1,13 +1,13 @@
 !!VERSION 1.0
 
 Patch "Disable Ring Loss" in "Cheats" by "Sajid" does "Disables the loss of rings upon being damaged by an enemy."
-WriteNop(ASLR(0x866900), 2)
+WriteNop(ASLR(0x00866900), 2)
 
 Patch "Disable Super Music" in "Audio" by "Sajid" does "Prevents the Super Sonic theme from overwriting the stage music."
-WriteNop(ASLR(0x91ABAD), 6)
+WriteNop(ASLR(0x0091ABAD), 6)
 
 Patch "Invisible Cloak Sonic" in "Graphics" by "Muzzarino" does "Turns Sonic's textures into a highly reflective material to blend in (requires the Jump or Spin button to be pressed to enable it).
-WriteNop(ASLR(0x85C68E), 6)
+WriteNop(ASLR(0x0085C68E), 6)
 
 Patch "Enable Stage Retry Option" in "UI" by "Sajid" does "Enables the Retry option from the game's time attack mode in normal play."
 WriteAsmHook
@@ -18,34 +18,34 @@ WriteAsmHook
 )
 
 Patch "16:10 In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 16:10 aspect ratio. Perfect for the Steam Deck."
-WriteProtected<int>(ASLR(0xD56D30), 0x3FCCCCCD)
+WriteProtected<int>(ASLR(0x00D56D30), 0x3FCCCCCD)
 
 Patch "21:9 (2560x1080) In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 21:9 (2560x1080) aspect ratio."
-WriteProtected<int>(ASLR(0xD56D30), 0x4017B426)
+WriteProtected<int>(ASLR(0x00D56D30), 0x4017B426)
 
 Patch "21:9 (3440x1440) In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 21:9 (3440x1440) aspect ratio."
-WriteProtected<int>(ASLR(0xD56D30), 0x4018E38E)
+WriteProtected<int>(ASLR(0x00D56D30), 0x4018E38E)
 
 Patch "21:9 (3840x1600) In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 21:9 (3840x1600) aspect ratio."
-WriteProtected<int>(ASLR(0xD56D30), 0x4019999A)
+WriteProtected<int>(ASLR(0x00D56D30), 0x4019999A)
 
 Patch "32:9 In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 32:9 aspect ratio."
-WriteProtected<int>(ASLR(0xD56D30), 0x40638E39)
+WriteProtected<int>(ASLR(0x00D56D30), 0x40638E39)
 
 Code "Widescreen Support" in "Graphics" by "Muzzarino" does "Dynamically adjusts the aspect ratio to match the game resolution (recommended for ultrawide)."
-var ptr = GetPointer(ASLR(0xFD3CA8))
-WriteProtected<float>(ASLR(0xD56D30), ptr != 0 ? (float)(Read<uint>(ptr + 0xF8)) / (float)(Read<uint>(ptr + 0xFC)) : 16f / 9f)
-WriteProtected<double>(ASLR(0xEB2E00), (Double)Read<float>(ASLR(0xD56D30)))
-WriteProtected<float>(ASLR(0xFB6AF0), 2f * (float)Math.Atan((float)Math.Tan(60f * 0.00872664625997164788461845384244) / (Read<float>(ASLR(0xD56D30)) < 16f / 9f ? Read<float>(ASLR(0xD56D30)) : 16f / 9f) * (16f / 9f)))
-WriteProtected<float>(ASLR(0xD6F364), 720f / (Read<float>(ASLR(0xD56D30)) < 16f / 9f ? Read<float>(ASLR(0xD56D30)) : 16f / 9f) * (16f / 9f)))
-WriteProtected<float>(ASLR(0xD6F360), Read<float>(ASLR(0xD6F364)) * Read<float>(ASLR(0xD56D30)))
+var ptr = GetPointer(ASLR(0x00FD3CA8))
+WriteProtected<float>(ASLR(0x00D56D30), ptr != 0 ? (float)(Read<uint>(ptr + 0xF8)) / (float)(Read<uint>(ptr + 0xFC)) : 16f / 9f)
+WriteProtected<double>(ASLR(0x00EB2E00), (Double)Read<float>(ASLR(0x00D56D30)))
+WriteProtected<float>(ASLR(0x00FB6AF0), 2f * (float)Math.Atan((float)Math.Tan(60f * 0.00872664625997164788461845384244) / (Read<float>(ASLR(0x00D56D30)) < 16f / 9f ? Read<float>(ASLR(0x00D56D30)) : 16f / 9f) * (16f / 9f)))
+WriteProtected<float>(ASLR(0x00D6F364), 720f / (Read<float>(ASLR(0x00D56D30)) < 16f / 9f ? Read<float>(ASLR(0x00D56D30)) : 16f / 9f) * (16f / 9f)))
+WriteProtected<float>(ASLR(0x00D6F360), Read<float>(ASLR(0x00D6F364)) * Read<float>(ASLR(0x00D56D30)))
 
-string code = $@"mulss xmm0,[{ASLR(0xE737E4)}]
+string code = $@"mulss xmm0,[{ASLR(0x00E737E4)}]
 cvtps2pd xmm0,xmm0
 pushad
-mov eax,{ASLR(0xC76D12)}
+mov eax,{ASLR(0x00C76D12)}
 call eax
-mov eax,{ASLR(0xC64010)}
+mov eax,{ASLR(0x00C64010)}
 call eax
 cvtsi2sd xmm2,eax
 cvtsi2sd xmm1,edx
@@ -62,17 +62,17 @@ fld qword ptr [esp]
 add esp,0x8
 fld1
 fpatan
-fdiv dword ptr [{ASLR(0xE737E4)}]
+fdiv dword ptr [{ASLR(0x00E737E4)}]
 fstp dword ptr [esp]
-mov eax,{ASLR(0x8FF5B0)}
+mov eax,{ASLR(0x008FF5B0)}
 call eax"
 
-string code2 = $@"mulss xmm0,[{ASLR(0xE737E4)}]
+string code2 = $@"mulss xmm0,[{ASLR(0x00E737E4)}]
 cvtps2pd xmm0,xmm0
 pushad
-mov eax,{ASLR(0xC76D12)}
+mov eax,{ASLR(0x00C76D12)}
 call eax
-mov eax,{ASLR(0xC64010)}
+mov eax,{ASLR(0x00C64010)}
 call eax
 cvtsi2sd xmm2,eax
 cvtsi2sd xmm1,edx
@@ -89,12 +89,12 @@ fld qword ptr [esp]
 add esp,0x8
 fld1
 fpatan
-fdiv dword ptr [{ASLR(0xE737E4)}]
+fdiv dword ptr [{ASLR(0x00E737E4)}]
 fstp dword ptr [esp+0x4]
-mov eax,{ASLR(0x967820)}
+mov eax,{ASLR(0x00967820)}
 call eax"
 
-string code3 = $@"mov eax,[{ASLR(0xFD3CA8)}]
+string code3 = $@"mov eax,[{ASLR(0x00FD3CA8)}]
 test eax,eax
 je NoVPaddress
 mov edx,[eax+0xFC]
@@ -106,10 +106,10 @@ cvtdq2ps xmm1,xmm1
 sub esp,0x8
 movss [esp],xmm0
 movss [esp+0x4],xmm1
-mov eax,[{ASLR(0xFD3CA8)}]
+mov eax,[{ASLR(0x00FD3CA8)}]
 movd xmm0,[eax+0xF8]
 movd xmm1,[eax+0xFC]
-mov eax,{ASLR(0xC64010)}
+mov eax,{ASLR(0x00C64010)}
 call eax
 sar eax,1
 sar edx,1
@@ -143,72 +143,72 @@ add esp,0x8
 cvtps2dq xmm0,xmm0
 cvtps2dq xmm1,xmm1"
 
-string code5 = $@"mov eax,{ASLR(0xC64010)}
+string code5 = $@"mov eax,{ASLR(0x00C64010)}
 call eax
 cvtsi2ss xmm3,eax
 cvtsi2ss xmm2,edx
 divss xmm3,xmm2"
 
-string code6 = $@"mov eax,{ASLR(0xC76F67)}
+string code6 = $@"mov eax,{ASLR(0x00C76F67)}
 call eax
 movss xmm1,xmm0
-divss xmm0,[{ASLR(0xD56D30)}]
-divss xmm0,[{ASLR(0xD56D2C)}]
+divss xmm0,[{ASLR(0x00D56D30)}]
+divss xmm0,[{ASLR(0x00D56D2C)}]
 maxss xmm0,xmm1"
 
 string code7 = $@"movss xmm0,xmm5
 divss xmm0,[edi+0x1B4]
-minss xmm0,[{ASLR(0xD56D30)}]
-divss xmm0,[{ASLR(0xD56D30)}]
+minss xmm0,[{ASLR(0x00D56D30)}]
+divss xmm0,[{ASLR(0x00D56D30)}]
 mulss xmm5,xmm0"
 
 string code8 = $@"movss xmm4,[edi+0x1B0]
 divss xmm4,[edi+0x1B4]
-maxss xmm4,[{ASLR(0xD56D30)}]
-divss xmm4,[{ASLR(0xD56D30)}]
+maxss xmm4,[{ASLR(0x00D56D30)}]
+divss xmm4,[{ASLR(0x00D56D30)}]
 divss xmm7,xmm4"
 
-string code9 = $@"movss xmm6,[{ASLR(0xD56D30)}]
-divss xmm0,[{ASLR(0xD56D2C)}]
+string code9 = $@"movss xmm6,[{ASLR(0x00D56D30)}]
+divss xmm0,[{ASLR(0x00D56D2C)}]
 minss xmm6,xmm0
 divss xmm6,xmm0
 movss xmm0,xmm6"
 
-string code10 = $@"movss xmm5,[{ASLR(0xE72E24)}]
-divss xmm5,[{ASLR(0xD56D2C)}]
-minss xmm5,[{ASLR(0xD56D30)}]
+string code10 = $@"movss xmm5,[{ASLR(0x00E72E24)}]
+divss xmm5,[{ASLR(0x00D56D2C)}]
+minss xmm5,[{ASLR(0x00D56D30)}]
 divss xmm2,xmm5
-mulss xmm2,[{ASLR(0xD56D30)}]"
+mulss xmm2,[{ASLR(0x00D56D30)}]"
 
-string code11 = $@"movss xmm5,[{ASLR(0xE72E24)}]
-divss xmm5,[{ASLR(0xD56D2C)}]
-maxss xmm5,[{ASLR(0xD56D30)}]
+string code11 = $@"movss xmm5,[{ASLR(0x00E72E24)}]
+divss xmm5,[{ASLR(0x00D56D2C)}]
+maxss xmm5,[{ASLR(0x00D56D30)}]
 mulss xmm1,xmm5
-divss xmm1,[{ASLR(0xD56D30)}]"
+divss xmm1,[{ASLR(0x00D56D30)}]"
 
-if (Read<byte>(ASLR(0x4178AB)) == 0xE8)
+if (Read<byte>(ASLR(0x004178AB)) == 0xE8)
 {
-    WriteAsmHook(code, ASLR(0x4178AB), HookBehavior.Replace)
-    WriteAsmHook(code, ASLR(0x419601), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x41E9D0), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x42589C), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x4272F5), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x427DF0), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x428878), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x4292FE), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x437490), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x43CB11), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x530664), HookBehavior.Replace)
-    WriteAsmHook(code3, ASLR(0x5305F9), HookBehavior.Replace)
-    WriteAsmHook(code4, ASLR(0x4A824C), HookBehavior.Before)
-    WriteAsmHook(code5, ASLR(0x401737), HookBehavior.Replace)
-    WriteAsmHook(code6, ASLR(0x43D41E), HookBehavior.Replace)
-    WriteAsmHook(code6, ASLR(0x441D41), HookBehavior.Replace)
-    WriteAsmHook(code7, ASLR(0x49C380), HookBehavior.Before)
-    WriteAsmHook(code8, ASLR(0x49C3BA), HookBehavior.Before)
-    WriteAsmHook(code9, ASLR(0x41EA22), HookBehavior.Before)
-    WriteAsmHook(code10, ASLR(0x8FF420), HookBehavior.Before)
-    WriteAsmHook(code11, ASLR(0x8FF456), HookBehavior.Before)
+    WriteAsmHook(code, ASLR(0x004178AB), HookBehavior.Replace)
+    WriteAsmHook(code, ASLR(0x00419601), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x0041E9D0), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x0042589C), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x004272F5), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x00427DF0), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x00428878), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x004292FE), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x00437490), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x0043CB11), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x00530664), HookBehavior.Replace)
+    WriteAsmHook(code3, ASLR(0x005305F9), HookBehavior.Replace)
+    WriteAsmHook(code4, ASLR(0x004A824C), HookBehavior.Before)
+    WriteAsmHook(code5, ASLR(0x00401737), HookBehavior.Replace)
+    WriteAsmHook(code6, ASLR(0x0043D41E), HookBehavior.Replace)
+    WriteAsmHook(code6, ASLR(0x00441D41), HookBehavior.Replace)
+    WriteAsmHook(code7, ASLR(0x0049C380), HookBehavior.Before)
+    WriteAsmHook(code8, ASLR(0x0049C3BA), HookBehavior.Before)
+    WriteAsmHook(code9, ASLR(0x0041EA22), HookBehavior.Before)
+    WriteAsmHook(code10, ASLR(0x008FF420), HookBehavior.Before)
+    WriteAsmHook(code11, ASLR(0x008FF456), HookBehavior.Before)
 }
 
 Patch "Disable Lockon (Except for Unbeatable Bosses)" in "Gameplay" by "Sajid" does "Disables the player's ability to Homing Attack or Kick enemies and objects. Enabled for a few bosses to prevent softlocks."
@@ -221,7 +221,7 @@ WriteProtected<uint>(ASLR(0x0059889A), 0x5005)
 WriteProtected<uint>(ASLR(0x0058FDC1), 0x1003)
 
 Patch "Disable Voice Option Completely" in "Audio" by "M&M"
-WriteNop(ASLR(0x4A3D82), 5)
+WriteNop(ASLR(0x004A3D82), 5)
 
 Patch "Enable DLC Music in Battle Mode" in "Audio" by "ĐeäTh" does "Enables the level music of the DLC levels to play during the game's multiplayer mode."
 WriteNop(ASLR(0x0095B570), 6)
@@ -488,7 +488,7 @@ WriteAsmHook
 )
 
 Patch "Fix Depth Effects On Intel GPUs" in "Fixes" by "Skyth"
-WriteAsmHook(ASLR(0xC2B233), HookBehavior.Replace, @"
+WriteAsmHook(ASLR(0x00C2B233), HookBehavior.Replace, @"
 mov eax, dword ptr [ebp + 8]
 
 loop:
