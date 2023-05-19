@@ -48,11 +48,15 @@ namespace HedgeModManager
                     if (token.Kind == SyntaxKind.IdentifierToken)
                     {
                         var directive = new DirectiveSyntax { FullSpan = new TextSpan(start, 1), Name = token.Text };
-                        if (directive.Name == "load")
+                        if (directive.Name is "load")
                         {
                             directive.Kind = SyntaxKind.LoadDirectiveTrivia;
                         }
-                        else if (directive.Name == "r")
+                        else if (directive.Name is "r" or "ref")
+                        {
+                            directive.Kind = SyntaxKind.ReferenceDirectiveTrivia;
+                        }
+                        else if (directive.Name is "lib")
                         {
                             directive.Kind = SyntaxKind.ReferenceDirectiveTrivia;
                         }
