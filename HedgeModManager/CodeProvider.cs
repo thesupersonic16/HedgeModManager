@@ -101,7 +101,7 @@ namespace HedgeModManager
                     var libSource = sources.FirstOrDefault(x => x.Name == lib);
                     if (libSource == null)
                     {
-                        continue;
+                        throw new Exception($"Unable to find dependency library {lib}");
                     }
 
                     trees.Add(libSource.CreateSyntaxTree());
