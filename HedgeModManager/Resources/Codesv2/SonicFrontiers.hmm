@@ -2191,6 +2191,27 @@ Notes;
     );
 }
 
+Patch "Disable Monologue Restrictions" in "Audio" by "WasifBoomz" does
+/*
+Removes restrictions for random monologue playback during gameplay.
+
+Notes;
+- This allows monologues to play anywhere, rather than only on heightmap terrain.
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x1401CA016 */
+        ScanSignature
+        (
+            "\x74\x0E\x8B\x47\x48",
+            "xxxxx"
+        ),
+
+        0xEB
+    );
+}
+ 
 Patch "Disable Photo Mode Camera Collision" in "Camera" by "Hyper"
 {
     // Camera position
