@@ -448,22 +448,45 @@ namespace HedgeModManager
 
             if (hash != mCachedHash)
             {
+                var lines = Lines.ToString();
                 mCachedHash = hash;
-                mCachedSyntaxTree = CSharpSyntaxTree.ParseText(Lines.ToString(),
-                    new CSharpParseOptions(kind: SourceCodeKind.Script));
 
-                var unit = mCachedSyntaxTree.GetCompilationUnitRoot();
-                if (unit.Members.FirstOrDefault() is GlobalStatementSyntax { Statement: BlockSyntax block })
+                var tokens = SyntaxFactory.ParseTokens(Lines.ToString());
+                using var enumerator = tokens.GetEnumerator();
+                enumerator.MoveNext();
+
+                var first = enumerator.Current;
+                if (first.IsKind(SyntaxKind.OpenBraceToken))
                 {
-                    var start = block.OpenBraceToken.SpanStart + 1;
-                    var end = block.CloseBraceToken.SpanStart - 1;
+                    var braces = new List<SyntaxToken>(32) { first };
+                    while (enumerator.MoveNext())
+                    {
+                        if (enumerator.Current.IsKind(SyntaxKind.OpenBraceToken) ||
+                            enumerator.Current.IsKind(SyntaxKind.CloseBraceToken))
+                        {
+                            braces.Add(enumerator.Current);
+                        }
+                    }
 
-                    var text = mCachedSyntaxTree.GetText().GetSubText(new TextSpan(start, end - start));
-                    mCachedSyntaxTree = mCachedSyntaxTree.WithChangedText(text);
+                    if (braces.Count == 0 || braces.Count % 2 != 0 || !braces.Last().IsKind(SyntaxKind.CloseBraceToken))
+                    {
+                        return MakeSyntaxTree(lines);
+                    }
+
+                    return MakeSyntaxTree(lines.Substring(braces[0].Span.End, braces.Last().SpanStart - braces[0].Span.End));
                 }
+
+                return MakeSyntaxTree(lines);
             }
 
             return mCachedSyntaxTree;
+
+            SyntaxTree MakeSyntaxTree(string body)
+            {
+                mCachedSyntaxTree = CSharpSyntaxTree.ParseText(body,
+                    new CSharpParseOptions(kind: SourceCodeKind.Script));
+                return mCachedSyntaxTree;
+            }
         }
 
         public CompilationUnitSyntax CreateCompilationUnit()
