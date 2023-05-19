@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace HedgeModManager
 {
@@ -256,7 +257,7 @@ namespace HedgeModManager
         public StringBuilder Header { get; set; } = new StringBuilder();
         public StringBuilder Lines { get; set; } = new StringBuilder();
 
-        protected SyntaxTree mCachedSyntaxTree;
+        protected SyntaxTreeEx mCachedSyntaxTree;
         protected int mCachedHash;
 
         public override string ToString()
@@ -432,61 +433,24 @@ namespace HedgeModManager
 
             var tree = ParseSyntaxTree();
 
-            var unit = tree.GetCompilationUnitRoot();
-
-            foreach (var reference in unit.GetReferenceDirectives())
+            foreach (var reference in tree.PreprocessorDirectives.Where(x => x.Kind == SyntaxKind.ReferenceDirectiveTrivia))
             {
-                references.Add(reference.File.ValueText);
+                references.Add(reference.Value);
             }
 
             return references;
         }
 
-        public SyntaxTree ParseSyntaxTree()
+        public SyntaxTreeEx ParseSyntaxTree()
         {
             var hash = Lines.ToString().GetHashCode();
-
+            
             if (hash != mCachedHash)
             {
-                var lines = Lines.ToString();
-                mCachedHash = hash;
-
-                var tokens = SyntaxFactory.ParseTokens(Lines.ToString());
-                using var enumerator = tokens.GetEnumerator();
-                enumerator.MoveNext();
-
-                var first = enumerator.Current;
-                if (first.IsKind(SyntaxKind.OpenBraceToken))
-                {
-                    var braces = new List<SyntaxToken>(32) { first };
-                    while (enumerator.MoveNext())
-                    {
-                        if (enumerator.Current.IsKind(SyntaxKind.OpenBraceToken) ||
-                            enumerator.Current.IsKind(SyntaxKind.CloseBraceToken))
-                        {
-                            braces.Add(enumerator.Current);
-                        }
-                    }
-
-                    if (braces.Count == 0 || braces.Count % 2 != 0 || !braces.Last().IsKind(SyntaxKind.CloseBraceToken))
-                    {
-                        return MakeSyntaxTree(lines);
-                    }
-
-                    return MakeSyntaxTree(lines.Substring(braces[0].Span.End, braces.Last().SpanStart - braces[0].Span.End));
-                }
-
-                return MakeSyntaxTree(lines);
+                return SyntaxTreeEx.Parse(Lines.ToString());
             }
 
             return mCachedSyntaxTree;
-
-            SyntaxTree MakeSyntaxTree(string body)
-            {
-                mCachedSyntaxTree = CSharpSyntaxTree.ParseText(body,
-                    new CSharpParseOptions(kind: SourceCodeKind.Script));
-                return mCachedSyntaxTree;
-            }
         }
 
         public CompilationUnitSyntax CreateCompilationUnit()

@@ -136,18 +136,15 @@ namespace HedgeModManager
         public static List<MetadataReference> GetLoadAssemblies<TCollection>(TCollection sources, params string[] lookupPaths) where TCollection : IEnumerable<Code>
         {
             var meta = new List<MetadataReference>();
-
-            var trees = from source in sources select source.ParseSyntaxTree();
+            
             var basePath = Path.GetDirectoryName(typeof(object).Assembly.Location);
             var wpfPath = Path.Combine(basePath, "WPF");
 
-            foreach (var tree in trees)
+            foreach (var source in sources)
             {
-                var unit = tree.GetCompilationUnitRoot();
-                var loads = unit.GetLoadDirectives();
-                foreach (var load in loads)
+                foreach (var load in source.ParseSyntaxTree().PreprocessorDirectives.Where(x => x.Kind == SyntaxKind.LoadDirectiveTrivia))
                 {
-                    var value = load.File.ValueText;
+                    var value = load.Value;
                     var path = Path.Combine(basePath, value);
                     if (File.Exists(path))
                     {
