@@ -12,6 +12,7 @@ using Markdig.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace HedgeModManager
 {
@@ -450,6 +451,16 @@ namespace HedgeModManager
                 mCachedHash = hash;
                 mCachedSyntaxTree = CSharpSyntaxTree.ParseText(Lines.ToString(),
                     new CSharpParseOptions(kind: SourceCodeKind.Script));
+
+                var unit = mCachedSyntaxTree.GetCompilationUnitRoot();
+                if (unit.Members.FirstOrDefault() is GlobalStatementSyntax { Statement: BlockSyntax block })
+                {
+                    var start = block.OpenBraceToken.SpanStart + 1;
+                    var end = block.CloseBraceToken.SpanStart - 1;
+
+                    var text = mCachedSyntaxTree.GetText().GetSubText(new TextSpan(start, end - start));
+                    mCachedSyntaxTree = mCachedSyntaxTree.WithChangedText(text);
+                }
             }
 
             return mCachedSyntaxTree;
@@ -460,7 +471,10 @@ namespace HedgeModManager
             var tree = ParseSyntaxTree();
 
             var unit = tree.GetCompilationUnitRoot();
-            unit = (CompilationUnitSyntax)new OptionalColonRewriter().Visit(unit);
+            if (IsExecutable())
+            {
+                unit = (CompilationUnitSyntax)new OptionalColonRewriter().Visit(unit);
+            }
 
             var classUnit = SyntaxFactory
                 .ClassDeclaration(MakeInternalName())
