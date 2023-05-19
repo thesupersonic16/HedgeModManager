@@ -521,6 +521,13 @@ namespace HedgeModManager
                         filteredMembers.Add(field);
                         continue;
                     }
+                    
+                    if (member is PropertyDeclarationSyntax property)
+                    {
+                        property = property.WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
+                        filteredMembers.Add(property);
+                        continue;
+                    }
 
                     filteredMembers.Add(member);
                 }
