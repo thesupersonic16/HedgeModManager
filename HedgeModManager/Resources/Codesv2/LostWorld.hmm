@@ -1,15 +1,15 @@
 !!VERSION 1.0
 
-Patch "Don't Lose Rings" in "Cheats" by "Sajid"
+Patch "Disable Ring Loss" in "Cheats" by "Sajid" does "Disables the loss of rings upon being damaged by an enemy."
 WriteNop(ASLR(0x866900), 2)
 
-Patch "Disable Super Music" in "Audio" by "Sajid"
+Patch "Disable Super Music" in "Audio" by "Sajid" does "Prevents the Super Sonic theme from overwriting the stage music."
 WriteNop(ASLR(0x91ABAD), 6)
 
-Patch "Invisible Cloak Sonic (Requires jump or spin)" in "Graphics" by "Muzzarino"
+Patch "Invisible Cloak Sonic" in "Graphics" by "Muzzarino" does "Turns Sonic's textures into a highly reflective material to blend in (requires the Jump or Spin button to be pressed to enable it).
 WriteNop(ASLR(0x85C68E), 6)
 
-Patch "Enable Stage Retry Option" in "UI" by "Sajid"
+Patch "Enable Stage Retry Option" in "UI" by "Sajid" does "Enables the Retry option from the game's time attack mode in normal play."
 WriteAsmHook
 (
     ASLR(0x005169E3),
@@ -17,19 +17,19 @@ WriteAsmHook
     "mov DWORD PTR [ebp+8], 1"
 )
 
-Patch "16:10 In-Game Resolution" in "Graphics" by "ĐeäTh"
+Patch "16:10 In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 16:10 aspect ratio. Perfect for the Steam Deck."
 WriteProtected<int>(ASLR(0xD56D30), 0x3FCCCCCD)
 
-Patch "21:9 (2560x1080) In-Game Resolution" in "Graphics" by "ĐeäTh"
+Patch "21:9 (2560x1080) In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 21:9 (2560x1080) aspect ratio."
 WriteProtected<int>(ASLR(0xD56D30), 0x4017B426)
 
-Patch "21:9 (3440x1440) In-Game Resolution" in "Graphics" by "ĐeäTh"
+Patch "21:9 (3440x1440) In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 21:9 (3440x1440) aspect ratio."
 WriteProtected<int>(ASLR(0xD56D30), 0x4018E38E)
 
-Patch "21:9 (3840x1600) In-Game Resolution" in "Graphics" by "ĐeäTh"
+Patch "21:9 (3840x1600) In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 21:9 (3840x1600) aspect ratio."
 WriteProtected<int>(ASLR(0xD56D30), 0x4019999A)
 
-Patch "32:9 In-Game Resolution" in "Graphics" by "ĐeäTh"
+Patch "32:9 In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 32:9 aspect ratio."
 WriteProtected<int>(ASLR(0xD56D30), 0x40638E39)
 
 Code "Widescreen Support" in "Graphics" by "Muzzarino" does "Dynamically adjusts the aspect ratio to match the game resolution (recommended for ultrawide)."
@@ -211,7 +211,7 @@ if (Read<byte>(ASLR(0x4178AB)) == 0xE8)
     WriteAsmHook(code11, ASLR(0x8FF456), HookBehavior.Before)
 }
 
-Patch "Disable Lockon (Except for Unbeatable Bosses)" in "Gameplay" by "Sajid"
+Patch "Disable Lockon (Except for Unbeatable Bosses)" in "Gameplay" by "Sajid" does "Disables the player's ability to Homing Attack or Kick enemies and objects. Enabled for a few bosses to prevent softlocks."
 WriteProtected<uint>(ASLR(0x00537D15), 0x5005)
 WriteProtected<uint>(ASLR(0x0053AFD1), 0x1003)
 WriteProtected<uint>(ASLR(0x005A8121), 0x1003)
@@ -220,16 +220,16 @@ WriteProtected<uint>(ASLR(0x00587A71), 0x1003)
 WriteProtected<uint>(ASLR(0x0059889A), 0x5005)
 WriteProtected<uint>(ASLR(0x0058FDC1), 0x1003)
 
-Patch "Disable Voice Option Completely" in "UI" by "M&M"
+Patch "Disable Voice Option Completely" in "Audio" by "M&M"
 WriteNop(ASLR(0x4A3D82), 5)
 
-Patch "Enable DLC Music in Battle Mode" in "Audio" by "ĐeäTh"
+Patch "Enable DLC Music in Battle Mode" in "Audio" by "ĐeäTh" does "Enables the level music of the DLC levels to play during the game's multiplayer mode."
 WriteNop(ASLR(0x0095B570), 6)
 
 Patch "Sideways Wall Jump Fix" in "Fixes" by "Sajid"
 WriteNop(ASLR(0x008C142C), 2)
 
-Patch "DLC Stages Always Replayable" in "Cheats" by "ĐeäTh"
+Patch "DLC Stages Always Replayable" in "Cheats" by "ĐeäTh" does "Disables the 100000 score requirement for unlocking the DLC levels once they are completed. Instead they will always stay on the world map."
 WriteNop(ASLR(0x0090D2BC), 2);
 String code = $@"mov eax, {ASLR(0x0090D210)}
 push 0
@@ -269,11 +269,11 @@ WriteProtected<byte>(ASLR(0x00912338), 0x57);
 WriteProtected<byte>(ASLR(0x00912326), 0x6A, 0x00);
 WriteNop(ASLR(0x0094594F), 12);
 
-Patch "Disable DLC Prizes" in "Gameplay" by "ĐeäTh"
+Patch "Disable DLC Prizes" in "Gameplay" by "ĐeäTh" does "Disables the prizes given by the DLC levels (bomb wisp) upon completion."
 WriteNop(ASLR(0x0094595B), 12);
 WriteNop(ASLR(0x00945630), 5);
 
-Patch "Fix Depth Of Field Draw Order" in "Fixes" by "Sajid"
+Patch "Fix Depth Of Field Draw Order" in "Fixes" by "Sajid" does "Changes the pseudo-dof implementation of the game into the proper one seen on Wii U."
 static int p_DofRes = (int)ASLR(0x00FEFC7C);
 static int p_GrassRes = (int)ASLR(0x00FB6D1C);
 static int p_ShadowRes = (int)ASLR(0x00FB6D1D);
@@ -449,7 +449,7 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 5120);
 WriteProtected<float>(ASLR(0x00D593B0), 2160);
 
-Patch "Force Language to Japanese" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to Japanese" in "UI" by "M&M & ĐeäTh" does
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 0");
 
 Patch "Force Language to English" in "UI" by "M&M & ĐeäTh"
@@ -470,7 +470,7 @@ WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 5");
 Patch "Disable Wisp Hints" in "UI" by "Sajid"
 WriteNop(ASLR(0x0091AAF8), 6)
 
-Patch "Fix Rigid Bodies Falling Through Collision" in "Fixes" by "ĐeäTh & Darío"
+Patch "Fix Rigid Bodies Falling Through Collision" in "Fixes" by "ĐeäTh & Darío" does "Fixes enemies falling through the collision of the level ocassionally." 
 static int p_updateBroadphaseAndResetCollisionInformationOfWarpedBody = (int)ASLR(0x00AED500);
 static int p_setLinearVelocity = (int)ASLR(0x00B88220);
 
@@ -516,16 +516,16 @@ mov eax, [ecx + 0x64]
 mov ecx, [eax]
 ");
 
-Patch "Fix Pull Switch Grip Height" in "Fixes" by "ĐeäTh"
+Patch "Fix Pull Switch Grip Height" in "Fixes" by "ĐeäTh" does "Fixes the position of Sonic's grip compared to the light switches found in Silent Forest Act 4."
 WriteProtected<float>(ASLR(0x00DF2D14), -10.5f)
 
 Patch "No Instant Death Bomb Carts" in "Cheats" by "ĐeäTh"
 WriteNop(ASLR(0x007D82A2), 3);
 
-Patch "Infinite Bounce Attacks" in "Gameplay" by "ĐeäTh"
+Patch "Infinite Bounce Attacks" in "Cheats" by "ĐeäTh" does "Disables the 3 times limit on the bounce attack."
 WriteNop(ASLR(0x008CA177), 4);
 
-Patch "Traditional Countdown Timer" in "UI" by "ĐeäTh" does "Displays the timer in the typical 00:00.00 format, rather than counting down in seconds."
+Patch "Traditional Countdown Timer" in "UI" by "ĐeäTh" does "Displays the timer in the typical 00:00.00 format instead of the 000 format found in the game. The timer's functionality is not changed."
 // Allow bigger time constraints to be displayed on HUD
 WriteProtected<int>(ASLR(0x00501CC5), 3599);
 WriteProtected<int>(ASLR(0x00501CCC), 3599);
