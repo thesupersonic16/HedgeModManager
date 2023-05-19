@@ -449,7 +449,7 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 5120);
 WriteProtected<float>(ASLR(0x00D593B0), 2160);
 
-Patch "Force Language to Japanese" in "UI" by "M&M & ĐeäTh" does
+Patch "Force Language to Japanese" in "UI" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 0");
 
 Patch "Force Language to English" in "UI" by "M&M & ĐeäTh"
@@ -526,7 +526,6 @@ Patch "Infinite Bounce Attacks" in "Cheats" by "ĐeäTh" does "Disables the 3 ti
 WriteNop(ASLR(0x008CA177), 4);
 
 Patch "Traditional Countdown Timer" in "UI" by "ĐeäTh" does "Displays the timer in the typical 00:00.00 format instead of the 000 format found in the game. The timer's functionality is not changed."
-
 // Allow bigger time constraints to be displayed on HUD
 WriteProtected<int>(ASLR(0x00501CC5), 3599);
 WriteProtected<int>(ASLR(0x00501CCC), 3599);
@@ -590,7 +589,6 @@ fixed(int* millisecondsPtr = &ms_milliseconds)
 }
 
 Patch "Disable Player Model Scaling" by "ĐeäTh" in "Graphics" does "Disables the scaling applied to Sonic's model during gameplay (includes a version of the 'Fix Pull Switch Grip Height' code in it, the use of the two together is unnecessary)."
-
 // Nop out the app::GOCVisualTransformed::SetLocalScale(0.9f, 0.9f, 0.9f); in app::Player::RegisterBodyModel()
 WriteNop(ASLR(0x008FE046), 41);
 
