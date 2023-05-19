@@ -2204,11 +2204,11 @@ Notes;
         /* 0x1401CA016 */
         ScanSignature
         (
-			"\x74\x0E\x8B\x47\x48",
-			"xxxxx"
+            "\x74\x0E\x8B\x47\x48",
+            "xxxxx"
         ),
 
-        0xEB, 0x0E
+        0xEB
     );
 }
  
