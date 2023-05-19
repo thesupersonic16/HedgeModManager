@@ -56,26 +56,39 @@ namespace HedgeModManager
         public List<CodeDiffResult> Diff(CodeFile old)
         {
             var diff = new List<CodeDiffResult>();
-            var addedCodes = new List<string>();
+            var addedCodes = new List<Code>();
+
+            string GetCodeDiffName(Code code)
+            {
+                return !string.IsNullOrEmpty(code.Category)
+                    ? $"[{code.Category}] {code.Name}"
+                    : code.Name;
+            }
 
             foreach (var code in Codes)
             {
+                if (code.Type == CodeType.Library)
+                    continue;
+
                 // Added
                 if (!old.Codes.Where(x => x.Name == code.Name).Any())
                 {
-                    addedCodes.Add(code.Name);
+                    addedCodes.Add(code);
                     continue;
                 }
             }
 
             foreach (var code in old.Codes)
             {
+                if (code.Type == CodeType.Library)
+                    continue;
+
                 // Modified
                 if (Codes.Where(x => x.Name == code.Name).SingleOrDefault() is Code modified)
                 {
                     if (code.Lines.ToString() != modified.Lines.ToString())
                     {
-                        diff.Add(new CodeDiffResult(code.Name, CodeDiffResult.CodeDiffType.Modified));
+                        diff.Add(new CodeDiffResult(GetCodeDiffName(code), CodeDiffResult.CodeDiffType.Modified));
                         continue;
                     }
                 }
@@ -85,12 +98,11 @@ namespace HedgeModManager
                 {
                     if (code.Name != renamed.Name)
                     {
-                        diff.Add(new CodeDiffResult($"{code.Name} -> {renamed.Name}", CodeDiffResult.CodeDiffType.Renamed, code.Name, renamed.Name));
+                        diff.Add(new CodeDiffResult($"[{code.Category}] {code.Name} -> [{renamed.Category}] {renamed.Name}", CodeDiffResult.CodeDiffType.Renamed, code.Name, renamed.Name));
 
-                        /* Remove this code from the add list
-                           so we don't display it twice. */
-                        if (addedCodes.Contains(renamed.Name))
-                            addedCodes.Remove(renamed.Name);
+                        // Remove this code from the added list so we don't display it twice.
+                        if (addedCodes.Where(x => x.Name == renamed.Name).SingleOrDefault() is Code duplicate)
+                            addedCodes.Remove(duplicate);
 
                         continue;
                     }
@@ -99,13 +111,13 @@ namespace HedgeModManager
                 // Removed
                 if (!Codes.Where(x => x.Name == code.Name).Any())
                 {
-                    diff.Add(new CodeDiffResult(code.Name, CodeDiffResult.CodeDiffType.Removed));
+                    diff.Add(new CodeDiffResult(GetCodeDiffName(code), CodeDiffResult.CodeDiffType.Removed));
                     continue;
                 }
             }
 
-            foreach (string code in addedCodes)
-                diff.Add(new CodeDiffResult(code, CodeDiffResult.CodeDiffType.Added));
+            foreach (var code in addedCodes)
+                diff.Add(new CodeDiffResult(GetCodeDiffName(code), CodeDiffResult.CodeDiffType.Added));
 
             return diff.OrderBy(x => x.Type).ToList();
         }
