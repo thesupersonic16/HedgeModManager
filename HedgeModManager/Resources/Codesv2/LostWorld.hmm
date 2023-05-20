@@ -220,7 +220,7 @@ WriteProtected<uint>(ASLR(0x00587A71), 0x1003)
 WriteProtected<uint>(ASLR(0x0059889A), 0x5005)
 WriteProtected<uint>(ASLR(0x0058FDC1), 0x1003)
 
-Patch "Disable Voice Option Completely" in "Audio" by "M&M"
+Patch "Disable Voice Option Completely" in "Audio" by "M&M" does "Prevents any sound considered as 'Voice' from playing, which in result prevents the music from lowering in volume. This is preferable over lowering the 'Voice' volume to 0 in the game's settings."
 WriteNop(ASLR(0x004A3D82), 5)
 
 Patch "Enable DLC Music in Battle Mode" in "Audio" by "ĐeäTh" does "Enables the level music of the DLC levels to play during the game's multiplayer mode."
@@ -449,22 +449,22 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 5120);
 WriteProtected<float>(ASLR(0x00D593B0), 2160);
 
-Patch "Force Language to Japanese" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to Japanese" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 0");
 
-Patch "Force Language to English" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to English" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 1");
 
-Patch "Force Language to French" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to French" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 2");
 
-Patch "Force Language to German" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to German" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 3");
 
-Patch "Force Language to Italian" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to Italian" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 4");
 
-Patch "Force Language to Spanish" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to Spanish" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 5");
 
 Patch "Disable Wisp Hints" in "UI" by "Sajid"
