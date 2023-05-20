@@ -112,7 +112,8 @@ Notes;
 Known issues;
 - Certain UI effects are rendered at the correct aspect ratio, but will misalign due to the main UI still being 16:9.
 - Certain UI elements are still rendered at 16:9 and will misalign or stretch.
-- Pre-rendered cutscenes will stretch to your aspect ratio.
+- Certain UI elements will be cut off incorrectly at wider aspect ratios. (ex. Jukebox)
+- Pre-rendered cutscenes and some real-time ones will stretch to your aspect ratio.
 - The expected aspect ratio will only apply to a newly set resolution when you re-enter the resolution list and select the same resolution again.
 - Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
 */
