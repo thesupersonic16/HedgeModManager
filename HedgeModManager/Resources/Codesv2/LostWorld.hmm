@@ -592,5 +592,8 @@ Patch "Disable Player Model Scaling" by "ĐeäTh" in "Graphics" does "Disables t
 // Nop out the app::GOCVisualTransformed::SetLocalScale(0.9f, 0.9f, 0.9f); in app::Player::RegisterBodyModel()
 WriteNop(ASLR(0x008FE046), 41);
 
+// Adjust Spin Model Spin Scale
+WriteProtected<float>(ASLR(0x00E03670), 1.5f * 1.0f / 0.9f, 1.5f * 1.0f / 0.9f, 1.5f * 1.0f / 0.9f)
+
 // Adjust Grip Position for Light Switches in Silent Forest Act 4
 WriteProtected<float>(ASLR(0x00DF2D14), -11.7f)
