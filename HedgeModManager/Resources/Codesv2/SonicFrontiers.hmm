@@ -109,7 +109,7 @@ Dynamically adjusts the aspect ratio to match the game resolution (recommended f
 Known issues;
 - Certain HUD effects are rendered at the correct aspect ratio, but will misalign due to the main HUD still being 16:9.
 - Certain HUD elements are still rendered at 16:9 and will misalign or stretch.
-- Cutscenes will stretch to your aspect ratio.
+- Pre-rendered cutscenes will stretch to your aspect ratio.
 - Text will be truncated at square or vertical resolutions.
 - The expected aspect ratio will only apply to a newly set resolution when you re-enter the resolution list and select the same resolution again.
 - Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
@@ -135,12 +135,14 @@ Known issues;
 
     static bool Initialised = false;
 
-    static long AspectRatioAddr = 0;
+    static float AspectRatio = 1920.0f / 1080.0f;
+
+    static long MainAspectRatioAddr = 0;
 //
 {
     if (!Initialised)
     {
-        long instrAddr = ScanSignature
+        long mainAspectRatioInstrAddr = ScanSignature
         (
             /* v1.01: 0x1401477CE */
             "\xF3\x0F\x59\x05\x00\x00\x00\x00\x44\x8B\xC6\xF3\x0F\x2C\xD0\xEB\x07\x8B\xD3\xF3\x44\x0F\x2C\xC1\x3B\x54\x24\x78\x75\x07\x44\x3B\x44\x24\x00\x74\x0C\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x84\xC0\x75\x2B\x45\x84\xF6\x74\x26\x3B\x5F\x20\x75\x05\x3B\x77\x24\x74\x1C\x48\x8B\x07\x44\x8B\xCB\x44\x8B\x47\x2C\x48\x8B\xCF\x8B\x57\x28\xC6\x44\x24\x00\x00\x89\x74\x24\x20\xFF\x50\x58\x39\x5D\x20\x75\x05\x39\x75\x24\x74\x04\x48\x89\x5D\x20\x48\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x40\x41\x5E\x5D\x5B\xC3",
@@ -150,6 +152,36 @@ Known issues;
             "\xF3\x0F\x59\x0D\x00\x00\x00\x00\x44\x8B\x84\x24\x00\x00\x00\x00\xF3\x0F\x2C\xD1\xEB\x0C\x8B\x94\x24\x00\x00\x00\x00\xF3\x44\x0F\x2C\xC0\x3B\x54\x24\x34\x75\x07\x44\x3B\x44\x24\x00\x74\x0C\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xCF",
             "xxxx????xxxx????xxxxxxxxx????xxxxxxxxxxxxxxx?xxxxx????x????xxx"
         );
+
+        /* v1.20: 0x14126A22C */
+        MainAspectRatioAddr = mainAspectRatioInstrAddr + Read<uint>(mainAspectRatioInstrAddr + 4) + 8;
+
+        fixed (float* pAspectRatio = &AspectRatio)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    push   r9
+                    mov    r9, {(long)pAspectRatio}
+                    mov    r9d, dword ptr [r9]
+                    mov    dword ptr [rbx + 0x58], r9d
+                    pop    r9
+                    movups xmm0, xmmword ptr [rbx + 0x4C]
+                    movups xmmword ptr [r13], xmm0
+                    movups xmm1, xmmword ptr [rbx + 0x5C]
+                    movups xmmword ptr [r13 + 0x10], xmm1
+                ",
+
+                /* 0x140FB1CF0 */
+                ScanSignature
+                (
+                    "\x0F\x10\x43\x4C\x41\x0F\x11\x45\x00",
+                    "xxxxxxxxx"
+                ),
+
+                HookBehavior.Replace
+            );
+        }
 
         // Disable letterboxing for square/portrait resolutions.
         WriteNop
@@ -164,13 +196,10 @@ Known issues;
             2
         );
 
-        /* v1.20: 0x14126A22C */
-        AspectRatioAddr = instrAddr + Read<uint>(instrAddr + 4) + 8;
-
         Initialised = true;
     }
 
-    if (AspectRatioAddr == 0)
+    if (MainAspectRatioAddr == 0)
         return;
 
     RECT clientRect = new RECT();
@@ -178,10 +207,12 @@ Known issues;
     if (!GetClientRect(Process.GetCurrentProcess().MainWindowHandle, ref clientRect))
         return;
 
-    float width = (float)(clientRect.Right - clientRect.Left);
+    float width  = (float)(clientRect.Right - clientRect.Left);
     float height = (float)(clientRect.Bottom - clientRect.Top);
+
+    AspectRatio = width / height;
     
-    WriteProtected<float>(AspectRatioAddr, width / height);
+    WriteProtected<float>(MainAspectRatioAddr, AspectRatio);
 }
 
 Patch "Always Allow Unlocking Story Skills" in "Cheats" by "Hyper" does
