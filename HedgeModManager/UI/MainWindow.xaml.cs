@@ -446,6 +446,7 @@ namespace HedgeModManager
 
         private void UI_CodesTab_Click(object sender, RoutedEventArgs e)
         {
+            InvokeChangeCodesView(RegistryConfig.CodesUseTreeView);
             if (CodesDatabase == null || CodesDatabase.Codes.Count == 0)
             {
                 CodesStatusLbl.Visibility = Visibility.Visible;
@@ -1931,7 +1932,6 @@ namespace HedgeModManager
 
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            InvokeChangeCodesView(RegistryConfig.CodesUseTreeView);
             if (RefreshButton != null)
             {
                 RefreshButton.IsEnabled = MainTabControl.SelectedItem != SettingsTab;
