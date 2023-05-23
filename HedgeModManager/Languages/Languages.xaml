@@ -19,6 +19,7 @@
         <local:LangEntry FileName="vi-VN" Name="Tiếng Việt (Vietnamese)"/>
         <local:LangEntry FileName="it-IT" Name="Italiano (Italy)"/>
         <local:LangEntry FileName="ja-JP" Name="日本語 (Japanese)"/>
+        <local:LangEntry FileName="ko-KR" Name="한국어 (Korean)"/>
     </local:LanguageList>
     
 </ResourceDictionary>
