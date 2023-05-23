@@ -208,7 +208,7 @@
     <!-- Mod Description UI Strings -->
     <system:String x:Key="ModDescriptionUIAbout">{0}에 대하여</system:String>
     <system:String x:Key="ModDescriptionUIMadeBy">제작자</system:String>
-    <system:String x:Key="ModDescriptionUIMadeOn">Made on</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">제작일</system:String>
     <system:String x:Key="ModDescriptionUIDate">제작일</system:String>
 
     <!-- Mod Downloader Strings -->
