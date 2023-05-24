@@ -2093,6 +2093,21 @@ Known issues;
     );
 }
 
+Patch "Disable Jellyman Eggs" in "Gameplay" by "Hyper" does "Disables the egg spawners for the Jellyman enemy, allowing them to spawn instantly."
+{
+    WriteNop
+    (
+        /* 0x1404C542D */
+        ScanSignature
+        (
+            "\x75\x07\x44\x88\xA5\x50\x04\x00\x00",
+            "xxxxxxxxx"
+        ),
+
+        2
+    );
+}
+
 Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
 //
     static bool IsWorldIsland = false;
