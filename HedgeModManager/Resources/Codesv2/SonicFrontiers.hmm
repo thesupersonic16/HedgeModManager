@@ -2702,6 +2702,44 @@ Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cu
     WriteNop(addr + 0x38, 5);
 }
 
+Patch "Disable Stomp Flip" in "Gameplay" by "Hyper" does
+/*
+Disables the flip Sonic does when performing a stomp attack under certain conditions.
+
+Notes;
+- This will allow you to stomp and land firmly on guardians and titans.
+- This will allow you to stomp bounce to kill enemies with the shockwave without doing a flip.
+*/
+{
+    byte[] asm = Assemble("lea edx, [r8 + 0x37]");
+
+    // Flip for collision types (e.g. Asura body)
+    WriteProtected<byte>
+    (
+        /* 0x140858ABE */
+        ScanSignature
+        (
+            "\x41\x8D\x50\x38\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x17",
+            "xxxxx????xxxx"
+        ),
+        
+        asm
+    );
+
+    // Flip for stomp shockwave kill
+    {
+        /* 0x14B5B9E5C */
+        var sig = ScanSignature
+        (
+            "\x41\x8D\x50\x38\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x20\xC6\x87\xB8\x00\x00\x00\x01",
+            "xxxxx????xxxxxxxxxxxx"
+        );
+
+        WriteProtected<byte>(sig, asm);
+        WriteNop(sig + 14, 7);
+    }
+}
+
 Patch "Disable Subsurface Scattering" in "Graphics" by "Hyper"
 {
     WriteAsmHook
