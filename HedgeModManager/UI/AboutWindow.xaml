@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="{StaticResource AboutWindowUITitle}" Height="596" Width="720"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource HedgeWindow}">
+        Title="{StaticResource AboutWindowUITitle}" MinHeight="600" MinWidth="720"
+        Height="600" Width="720"
+        WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -55,46 +56,50 @@
             </Grid>
         </GroupBox>
         <GroupBox Header="{StaticResource AboutWindowUITranslators}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="1" Margin="5,8,8,16">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
-                    <Label Content="PTKickass"/>
-                    <Label Content="JoeyLaw"/>
-                    <Label Content="Wr (AlanYe-Dev)"/>
-                    <Label Content="LJSTAR"/>
-                    <Label Content="Nanoposan69"/>
-                    <Label Content="TheExentist151"/>
-                    <Label Content="ricky-daniel13"/>
-                    <Label Content="Proa"/>
-                    <Label Content="Mario Tainaka"/>
-                    <Label Content="Lady Luna"/>
-                    <Label Content="KyRuS"/>
-                    <Label Content="Kitzu"/>
-                    <Label Content="tuanpingas"/>
-                    <Label Content="NextinHKRY"/>
-                    <Label Content="OctSquid"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1">
-                    <Label Content="Portuguese translations"/>
-                    <Label Content="Chinese (Traditional) translation"/>
-                    <Label Content="Chinese (Simplified) translation"/>
-                    <Label Content="French translation"/>
-                    <Label Content="Russian translation and reviewing"/>
-                    <Label Content="Russian translation"/>
-                    <Label Content="Spanish translation"/>
-                    <Label Content="Spanish translation and reviewing"/>
-                    <Label Content="Dutch translation"/>
-                    <Label Content="Dutch translation reviewing"/>
-                    <Label Content="German translation"/>
-                    <Label Content="German translation"/>
-                    <Label Content="Vietnamese translation"/>
-                    <Label Content="Italian translation"/>
-                    <Label Content="Japanese translation"/>
-                </StackPanel>
-            </Grid>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <Label Content="PTKickass"/>
+                        <Label Content="JoeyLaw"/>
+                        <Label Content="Wr (AlanYe-Dev)"/>
+                        <Label Content="LJSTAR"/>
+                        <Label Content="Nanoposan69"/>
+                        <Label Content="TheExentist151"/>
+                        <Label Content="ricky-daniel13"/>
+                        <Label Content="Proa"/>
+                        <Label Content="Mario Tainaka"/>
+                        <Label Content="Lady Luna"/>
+                        <Label Content="KyRuS"/>
+                        <Label Content="Kitzu"/>
+                        <Label Content="tuanpingas"/>
+                        <Label Content="NextinHKRY"/>
+                        <Label Content="OctSquid"/>
+                        <Label Content="teabarley"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <Label Content="Portuguese translations"/>
+                        <Label Content="Chinese (Traditional) translation"/>
+                        <Label Content="Chinese (Simplified) translation"/>
+                        <Label Content="French translation"/>
+                        <Label Content="Russian translation and reviewing"/>
+                        <Label Content="Russian translation"/>
+                        <Label Content="Spanish translation"/>
+                        <Label Content="Spanish translation and reviewing"/>
+                        <Label Content="Dutch translation"/>
+                        <Label Content="Dutch translation reviewing"/>
+                        <Label Content="German translation"/>
+                        <Label Content="German translation"/>
+                        <Label Content="Vietnamese translation"/>
+                        <Label Content="Italian translation"/>
+                        <Label Content="Japanese translation"/>
+                        <Label Content="Korean translation"/>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
         </GroupBox>
         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="-4" Grid.Row="3" Grid.ColumnSpan="2" Background="{StaticResource HMM.Window.DialogBottom}">
             <Button Content="{StaticResource CommonUIClose}" Margin="8,0,0,0" VerticalAlignment="Center" Width="75" Height="23" Click="UI_Close_Click" IsCancel="True" />

@@ -173,7 +173,7 @@ namespace HedgeModManager
                     }
                 }
 
-                CodesTree.ItemsSource = CodesDatabase.Codes.OrderBy(x => x.Category).ThenBy(x => x.Name).GroupBy(x => x.Category).Select
+                CodesTree.ItemsSource = CodesDatabase.ExecutableCodes.OrderBy(x => x.Category).ThenBy(x => x.Name).GroupBy(x => x.Category).Select
                 (
                     (cat) =>
                     {
@@ -233,14 +233,11 @@ namespace HedgeModManager
                         CodesList.Items.Insert(0, code);
                 }
 
-                CodesDatabase.Codes.ForEach
-                (
-                    (code) =>
-                    {
-                        if (!code.Enabled)
-                            CodesList.Items.Add(code);
-                    }
-                );
+                foreach (var code in CodesDatabase.ExecutableCodes)
+                {
+                    if (!code.Enabled)
+                        CodesList.Items.Add(code);
+                }
             }
         }
 
@@ -410,7 +407,7 @@ namespace HedgeModManager
             CodesList.Items.Clear();
 
             int enabledIndex = 0;
-            foreach (Code code in CodesDatabase.Codes)
+            foreach (var code in CodesDatabase.ExecutableCodes)
             {
                 if
                 (
@@ -449,6 +446,7 @@ namespace HedgeModManager
 
         private void UI_CodesTab_Click(object sender, RoutedEventArgs e)
         {
+            InvokeChangeCodesView(RegistryConfig.CodesUseTreeView);
             if (CodesDatabase == null || CodesDatabase.Codes.Count == 0)
             {
                 CodesStatusLbl.Visibility = Visibility.Visible;
@@ -1934,7 +1932,6 @@ namespace HedgeModManager
 
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            InvokeChangeCodesView(RegistryConfig.CodesUseTreeView);
             if (RefreshButton != null)
             {
                 RefreshButton.IsEnabled = MainTabControl.SelectedItem != SettingsTab;
