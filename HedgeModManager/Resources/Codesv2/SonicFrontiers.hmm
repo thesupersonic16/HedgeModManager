@@ -3085,7 +3085,7 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
     }
 }
 
-Patch "Disable Quick Cyloop Target Override" in "Gameplay" by "WasifBoomz & The Duck Dealer" does "Disables the lock-on change following a Quick Cyloop."
+Patch "Disable Quick Cyloop Target Override" in "Gameplay" by "WasifBoomz & The Duck Dealer" does "Disables the target change that under certain conditions prevents you from attacking an enemy after a Quick Cyloop."
 {
     WriteProtected<byte>
     (
@@ -3093,7 +3093,7 @@ Patch "Disable Quick Cyloop Target Override" in "Gameplay" by "WasifBoomz & The 
         ScanSignature
         (
             "\x76\x12\x8B\x46\x28\x48\x8D\x55\x97\x48\x8B\xCB\x89\x45\x97\xE8\xCC\xCC\xCC\xCC\x48\x8B\x47\x38",
-			"xxxxxxxxxxxxxxxx????xxxx"
+	    "xxxxxxxxxxxxxxxx????xxxx"
         ),
 
         0xEB
