@@ -5352,6 +5352,149 @@ static float value10 = 10.0f;
     }
 }
 
+Patch "Super Stomp" in "Gameplay" by "Hyper & Yosho" does
+/*
+Sends a powerful shockwave when landing a stomp from a great height.
+
+Idea by Yosho.
+*/
+//
+    static float StompingTime = 0.0f;
+    static float SuperStompThreshold = 0.35f;
+//
+{
+    fixed (float* pStompingTime = &StompingTime)
+    fixed (float* pSuperStompThreshold = &SuperStompThreshold)
+    {
+        // Create timer for stomping.
+        WriteAsmHook
+        (
+            $@"
+                mov    r15, [rcx + 0x18]
+                mov    rdi, rcx
+                mov    rcx, {(long)pStompingTime}
+                movss  xmm8, dword ptr [rcx]
+                addss  xmm8, xmm1
+                movss  dword ptr [rcx], xmm8
+                mov    rcx, r15
+                movaps xmmword ptr [rsp + 0xA0 + 0xFFFFFFFFFFFFFFD0], xmm7
+            ",
+
+            /* 0x140801905 */
+            ScanSignature
+            (
+                "\x4C\x8B\x79\x18\x48\x8B\xF9\x49\x8B\xCF",
+                "xxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        /* 0x140857928 */
+        long shockwaveCondAddr = ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x83\xBE\xB0\x00\x00\x00\x02\x48\x8B\xE8",
+            "x????xxxxxxxxxx"
+        );
+
+        /* 0x1407C2050 */
+        long getParameterFuncAddr = shockwaveCondAddr + Read<int>(shockwaveCondAddr + 1) + 5;
+
+        // Set stomp shockwave condition.
+        WriteAsmHook
+        (
+            $@"
+                mov    rax, {getParameterFuncAddr}
+                call   rax
+                mov    rbp, {(long)pStompingTime}
+                movss  xmm8, dword ptr [rbp]
+                mov    rbp, {(long)pSuperStompThreshold}
+                movss  xmm9, dword ptr [rbp]
+                comiss xmm8, xmm9
+                mov    ebp, dword ptr [rsi + 0xB0] ; preserve stomp bounce count
+                jna    exit
+                mov    dword ptr [rsi + 0xB0], 2   ; force stomp bounce count to meet condition requirements
+            exit:
+                cmp    dword ptr [rsi + 0xB0], 2
+                mov    dword ptr [rsi + 0xB0], ebp ; restore stomp bounce count
+                mov    rbp, {(long)pStompingTime}
+                mov    dword ptr [rbp], 0
+                mov    rbp, rax
+            ",
+
+            shockwaveCondAddr,
+
+            HookBehavior.Replace
+        );
+
+        /* TODO: create a library for checking Sonic flags (e.g. IsGrounded)
+           and use that for resetting the timer instead. */
+
+        // Reset stomping timer for successful stomp attacks.
+        WriteAsmHook
+        (
+            $@"
+                mov edx, 0x0C
+                mov rcx, {(long)pStompingTime}
+                mov dword ptr [rcx], 0
+                mov rcx, rsi
+            ",
+
+            /* 0x14B5B7C8B */
+            ScanSignature
+            (
+                "\x8B\x0D\xCC\xCC\xCC\xCC\x81\xF1\x44\x8B\x8A\xE9",
+                "xx????xxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Reset stomping timer when grinding.
+        WriteAsmHook
+        (
+            $@"
+                mov    rcx, {(long)pStompingTime}
+                mov    dword ptr [rcx], 0
+                movaps xmmword ptr [rsp + 0x68 + 0xFFFFFFFFFFFFFFC8], xmm8
+                mov    rcx, rdx
+                movaps xmm8, xmm2
+                mov    rbx, rdx
+            ",
+
+            /* 0x14B42EA3D */
+            ScanSignature
+            (
+                "\x44\x0F\x29\x44\x24\x30\x48\x89\xD1",
+                "xxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        // Reset stomping timer if taking damage.
+        WriteAsmHook
+        (
+            $@"
+                mov  rax, {(long)pStompingTime}
+                mov  dword ptr [rax], 0
+                mov  rax, [rbx + 0x38]
+                mov  rcx, [rax + 0x108]
+                test rcx, rcx
+            ",
+
+            /* 0x140839E8D */
+            ScanSignature
+            (
+                "\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x1C\xBA\xDC\x40\x0E\x2D",
+                "xxxxxxxxxxxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+    }
+}
+
 Patch "Tighter Drop Dash Rotation" in "Physics" by "Hyper" does "Allows for tighter steering whilst rolling for more precise movement."
 {
     // steeringSpeed#
