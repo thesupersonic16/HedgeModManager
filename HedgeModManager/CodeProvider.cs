@@ -78,7 +78,7 @@ namespace HedgeModManager
             {
                 var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true);
                 var trees = new List<SyntaxTree>();
-                var libs = new HashSet<string>();
+                var newLibs = new HashSet<string>();
                 var loads = GetLoadAssemblies(sources, loadPaths);
                 
                 foreach (var source in sources)
@@ -92,19 +92,38 @@ namespace HedgeModManager
 
                     foreach (string reference in source.GetReferences())
                     {
-                        libs.Add(reference);
+                        newLibs.Add(reference);
                     }
                 }
 
-                foreach (string lib in libs)
+                var libs = new HashSet<string>();
+                while (newLibs.Count != 0)
                 {
-                    var libSource = sources.FirstOrDefault(x => x.Name == lib);
-                    if (libSource == null)
+                    var addedLibs = new List<string>(newLibs.Count);
+                    foreach (string lib in newLibs)
                     {
-                        throw new Exception($"Unable to find dependency library {lib}");
+                        if (libs.Contains(lib))
+                        {
+                            continue;
+                        }
+
+                        var libSource = sources.FirstOrDefault(x => x.Name == lib);
+                        if (libSource == null)
+                        {
+                            throw new Exception($"Unable to find dependency library {lib}");
+                        }
+
+                        trees.Add(libSource.CreateSyntaxTree());
+                        libs.Add(lib);
+
+                        foreach (string reference in libSource.GetReferences())
+                        {
+                            addedLibs.Add(reference);
+                        }
                     }
 
-                    trees.Add(libSource.CreateSyntaxTree());
+                    newLibs.Clear();
+                    newLibs.UnionWith(addedLibs);
                 }
 
                 loads.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
