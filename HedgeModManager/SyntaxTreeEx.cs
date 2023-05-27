@@ -27,12 +27,9 @@ namespace HedgeModManager
 
             foreach (var directive in directives)
             {
-                if (directive.Kind == SyntaxKind.LoadDirectiveTrivia)
+                for (int i = 0; i < directive.FullSpan.Length; i++)
                 {
-                    for (int i = 0; i < directive.FullSpan.Length; i++)
-                    {
-                        body[directive.FullSpan.Start + i] = ' ';
-                    }
+                    body[directive.FullSpan.Start + i] = ' ';
                 }
             }
 

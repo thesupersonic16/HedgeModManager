@@ -2093,21 +2093,6 @@ Known issues;
     );
 }
 
-Patch "Disable Jellyman Eggs" in "Gameplay" by "Hyper" does "Disables the egg spawners for the Jellyman enemy, allowing them to spawn instantly."
-{
-    WriteNop
-    (
-        /* 0x1404C542D */
-        ScanSignature
-        (
-            "\x75\x07\x44\x88\xA5\x50\x04\x00\x00",
-            "xxxxxxxxx"
-        ),
-
-        2
-    );
-}
-
 Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
 //
     static bool IsWorldIsland = false;
@@ -2686,6 +2671,21 @@ Affected skills;
         ),
         
         5
+    );
+}
+
+Patch "Disable Soldier Eggs" in "Gameplay" by "Hyper" does "Disables the egg spawners for the Soldier enemy, allowing them to spawn instantly."
+{
+    WriteNop
+    (
+        /* 0x1404C542D */
+        ScanSignature
+        (
+            "\x75\x07\x44\x88\xA5\x50\x04\x00\x00",
+            "xxxxxxxxx"
+        ),
+
+        2
     );
 }
 
@@ -4643,6 +4643,21 @@ Patch "Hide Challenge Markers" in "Graphics" by "Hyper" does "Hides the markers 
         ),
         
         0xE9, 0x48, 0x02, 0x00, 0x00
+    );
+}
+
+Patch "Hide Cyber Space Timer" in "UI" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x14091D370 */
+        ScanSignature
+        (
+            "\x74\x1C\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x85\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xEB\x6C\x3D\x8B\x23\x00\x00\x0F\x85\x98\x00\x00\x00\x8B\x42\x20\x48\xC1\xE8\x1E",
+            "xxx????xxx????xxxxxxx????xxxxxx????xxx????xxxxxxx????xxxxxxxxxxxxxxxxxxxx"
+        ),
+
+        0xEB
     );
 }
 
