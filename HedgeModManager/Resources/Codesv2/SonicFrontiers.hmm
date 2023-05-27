@@ -3085,7 +3085,7 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
     }
 }
 
-Patch "Disable Quick Cyloop Target Override" in "Gameplay" by "WasifBoomz & The Duck Dealer" does "Disables the target change that under certain conditions prevents you from attacking an enemy after a Quick Cyloop."
+Patch "Fix Quick Cyloop Lock-On" in "Fixes" by "WasifBoomz & The Duck Dealer" does "Fixes the lock-on target changing whenever Sonic performs a Quick Cyloop, allowing for consistent attacks during combat."
 {
     WriteProtected<byte>
     (
