@@ -139,6 +139,7 @@ Known issues;
     static bool Initialised = false;
 
     static float AspectRatio = 1920.0f / 1080.0f;
+    static float EventFieldOfView = 0.0f;
 
     static long MainAspectRatioAddr = 0;
     static long SurfRideAspectRatioAddr = 0;
@@ -168,11 +169,36 @@ Known issues;
         SurfRideAspectRatioJumpAddr = SurfRideAspectRatioAddr + Read<int>(SurfRideAspectRatioAddr + 2) + 6;
 
         fixed (float* pAspectRatio = &AspectRatio)
+        fixed (float* pEventFieldOfView = &EventFieldOfView)
         {
             WriteAsmHook
             (
                 $@"
                     push   r9
+
+                    ; check if current event field of view has been modified
+                    mov    r9, {(long)pEventFieldOfView}
+                    movss  xmm0, dword ptr [r9]
+                    movss  xmm1, dword ptr [rbx + 0x54]
+                    comiss xmm0, xmm1
+                    je     exit
+
+                    ; multiply original aspect ratio by new aspect ratio
+                    movss  xmm0, dword ptr [rbx + 0x58]
+                    mov    r9, {(long)pAspectRatio}
+                    movss  xmm1, dword ptr [r9]
+                    divps  xmm0, xmm1
+                    movss  xmm1, xmm0
+
+                    ; compute new field of view from aspect ratio difference
+                    movss  xmm0, dword ptr [rbx + 0x54]
+                    mulps  xmm0, xmm1
+                    movss  dword ptr [rbx + 0x54], xmm0
+                    mov    r9, {(long)pEventFieldOfView}
+                    movss  dword ptr [r9], xmm0
+
+                exit:
+                    ; set new aspect ratio
                     mov    r9, {(long)pAspectRatio}
                     mov    r9d, dword ptr [r9]
                     mov    dword ptr [rbx + 0x58], r9d
