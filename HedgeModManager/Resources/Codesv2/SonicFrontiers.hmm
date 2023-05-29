@@ -176,10 +176,10 @@ Known issues;
                 $@"
                     push   r9
 
-                    ; check if current event field of view has been modified
-                    mov    r9, {(long)pEventFieldOfView}
+                    ; check if current event aspect ratio has been modified
+                    mov    r9, {(long)pAspectRatio}
                     movss  xmm0, dword ptr [r9]
-                    movss  xmm1, dword ptr [rbx + 0x54]
+                    movss  xmm1, dword ptr [rbx + 0x58]
                     comiss xmm0, xmm1
                     je     exit
 
@@ -197,11 +197,11 @@ Known issues;
                     mov    r9, {(long)pEventFieldOfView}
                     movss  dword ptr [r9], xmm0
 
-                exit:
                     ; set new aspect ratio
                     mov    r9, {(long)pAspectRatio}
                     mov    r9d, dword ptr [r9]
                     mov    dword ptr [rbx + 0x58], r9d
+                exit:
                     pop    r9
                     movups xmm0, xmmword ptr [rbx + 0x4C]
                     movups xmmword ptr [r13], xmm0
