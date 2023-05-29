@@ -114,6 +114,7 @@ Known issues;
 - Certain UI elements are still rendered at 16:9 and will misalign or stretch.
 - Certain UI elements will be cut off incorrectly at wider aspect ratios. (ex. Jukebox)
 - Pre-rendered cutscenes and some real-time ones will stretch to your aspect ratio.
+- The letterboxing during cutscenes will end up blocking the view at wider aspect ratios, it is highly recommended to use the Disable In-Game Letterboxing code to remove it.
 - The expected aspect ratio will only apply to a newly set resolution when you re-enter the resolution list and select the same resolution again.
 - Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
 */
