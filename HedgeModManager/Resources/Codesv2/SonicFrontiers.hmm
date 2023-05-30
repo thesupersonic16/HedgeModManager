@@ -113,7 +113,7 @@ Known issues;
 - Certain UI effects are rendered at the correct aspect ratio, but will misalign due to the main UI still being 16:9.
 - Certain UI elements are still rendered at 16:9 and will misalign or stretch.
 - Certain UI elements will be cut off incorrectly at wider aspect ratios. (ex. Jukebox)
-- Pre-rendered cutscenes and some real-time ones will stretch to your aspect ratio.
+- Pre-rendered cutscenes will stretch to your aspect ratio.
 - The letterboxing during cutscenes will end up blocking the view at wider aspect ratios, it is highly recommended to use the Disable In-Game Letterboxing code to remove it.
 - The expected aspect ratio will only apply to a newly set resolution when you re-enter the resolution list and select the same resolution again.
 - Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
@@ -145,6 +145,7 @@ Known issues;
     static long MainAspectRatioAddr = 0;
     static long SurfRideAspectRatioAddr = 0;
     static long SurfRideAspectRatioJumpAddr = 0;
+    static long DVSceneAspectRatioAddr = 0;
 //
 {
     if (!Initialised)
@@ -168,6 +169,13 @@ Known issues;
 
         /* 0x140A41709 */
         SurfRideAspectRatioJumpAddr = SurfRideAspectRatioAddr + Read<int>(SurfRideAspectRatioAddr + 2) + 6;
+
+        /* 0x140C33A2C */
+        DVSceneAspectRatioAddr = ScanSignature
+        (
+            "\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x0F\x28\x05\x00\x00\x00\x00\x0F\x29\x81\x00\x00\x00\x00\x0F\x28\x0D\x00\x00\x00\x00",
+            "xx????????xxx????xxx????xxx????"
+        );
 
         fixed (float* pAspectRatio = &AspectRatio)
         fixed (float* pEventFieldOfView = &EventFieldOfView)
@@ -230,7 +238,7 @@ Known issues;
                 "\x76\x16\xF3\x0F\x59\x0D",
                 "xxxxxx"
             ),
-            
+
             2
         );
 
@@ -263,8 +271,11 @@ Known issues;
             WriteProtected<int>(SurfRideAspectRatioAddr + 2, (int)(SurfRideAspectRatioJumpAddr - SurfRideAspectRatioAddr) - 6);
         }
     }
-    
+
     WriteProtected<float>(MainAspectRatioAddr, AspectRatio);
+
+    if (DVSceneAspectRatioAddr != 0)
+        WriteProtected<float>(DVSceneAspectRatioAddr + 6, AspectRatio);
 }
 
 Patch "Always Allow Unlocking Story Skills" in "Cheats" by "Hyper" does
