@@ -3325,12 +3325,10 @@ Patch "Fix Grind Leaning" in "Fixes" by "Hyper" does "Fixes the grind leaning an
         WriteAsmHook
         (
             $@"
-                push  rax
-                mov   rax, {(long)pBias}
-                movss xmm2, dword ptr [rax]
-                mov   rax, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPEED_RATIO")}
-                lea   rdx, [rax]
-                pop   rax
+                mov   rdx, {(long)pBias}
+                movss xmm2, dword ptr [rdx]
+                movss dword ptr [rsi + 0xD8], xmm0
+                mov   rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPEED_RATIO")}
             ",
 
             /* 0x14084AD71 */
