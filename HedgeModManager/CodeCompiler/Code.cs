@@ -1,0 +1,351 @@
+﻿using HedgeModManager.Misc;
+using Markdig.Helpers;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace HedgeModManager.CodeCompiler
+{
+    public class Code : INotifyPropertyChanged
+    {
+        public string Name { get; set; }
+
+        public string Category { get; set; }
+
+        public string Author { get; set; }
+
+        public string Description { get; set; }
+
+        public CodeType Type { get; set; }
+
+        public bool Enabled { get; set; }
+        
+        public List<BasicLexer.Token> Header { get; set; } = new List<BasicLexer.Token>();
+        public StringBuilder Lines { get; set; } = new StringBuilder();
+
+        protected SyntaxTreeEx mCachedSyntaxTree;
+        protected int mCachedHash;
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            {
+                foreach (var token in Header)
+                {
+                    sb.Append(token.Text);
+                    sb.Append(' ');
+                }
+
+                sb.AppendLine();
+                sb.AppendLine(Lines.ToString());
+            }
+
+            return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+        }
+
+        public static List<Code> ParseFiles(params string[] paths)
+        {
+            var list = new List<Code>();
+
+            foreach (var path in paths)
+            {
+                if (File.Exists(path))
+                    list.AddRange(ParseFile(path));
+            }
+
+            return list;
+        }
+
+        public static List<Code> ParseFile(string path)
+        {
+            using (var stream = File.OpenRead(path))
+            {
+                return ParseFile(stream);
+            }
+        }
+
+        public static List<Code> ParseFile(Stream stream)
+        {
+            using (var reader = new StreamReader(stream))
+            {
+                return ParseFile(reader);
+            }
+        }
+
+        public static List<Code> ParseFile(StreamReader reader)
+        {
+            var codes = new List<Code>();
+            Code currentCode = null;
+            {
+                bool isMultilineDescription = false;
+
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+
+                    if (line == null)
+                        continue;
+
+                    var firstSpace = line.IndexOf(' ');
+                    if (firstSpace > 0)
+                    {
+                        var type = line.AsSpan(0, firstSpace);
+
+                        if (CodeTypeFromString(type, out var codeType))
+                        {
+                            // Parse description of the last code
+                            if (currentCode != null && isMultilineDescription)
+                            {
+                                currentCode.Description = DescriptionFromBody(currentCode);
+                            }
+
+                            isMultilineDescription = false;
+                            currentCode = new Code
+                            {
+                                Type = codeType
+                            };
+
+                            codes.Add(currentCode);
+
+                            var tokens = BasicLexer.ParseTokens(line, x => !x.IsKind(SyntaxKind.WhitespaceTrivia)).ToList();
+                            currentCode.Header = tokens;
+
+                            currentCode.Name = tokens[1].ValueOrText().ToString();
+
+                            for (int i = 2; i < tokens.Count; i++)
+                            {
+                                var text = tokens[i].ValueOrText();
+
+                                if (text.Span.Equals("in".AsSpan(), StringComparison.OrdinalIgnoreCase))
+                                {
+                                    i++;
+                                    currentCode.Category = tokens[i].ValueOrText().ToString();
+                                }
+
+                                if (text.Span.Equals("by".AsSpan(), StringComparison.OrdinalIgnoreCase))
+                                {
+                                    i++;
+                                    currentCode.Author = tokens[i].ValueOrText().ToString();
+                                }
+
+                                if (text.Span.Equals("does".AsSpan(), StringComparison.OrdinalIgnoreCase))
+                                {
+                                    i++;
+
+                                    /* If the line ends with "does" on its own,
+                                       the description will be on the next line. */
+                                    if (i >= tokens.Count)
+                                        isMultilineDescription = true;
+                                    else
+                                        currentCode.Description = tokens[i].ValueOrText().ToString();
+                                }
+                            }
+
+                            continue;
+                        }
+                    }
+
+                    currentCode?.Lines.AppendLine(line);
+                }
+
+                // Parse the last one
+                if (currentCode != null && isMultilineDescription)
+                {
+                    currentCode.Description = DescriptionFromBody(currentCode);
+                }
+            }
+
+            return codes;
+
+            string DescriptionFromBody(Code code)
+            {
+                var body = code.Lines.ToString();
+                var offset = 0;
+                var commentToken = BasicLexer.ParseToken(body, offset);
+                while (commentToken.IsKind(SyntaxKind.WhitespaceTrivia) && !commentToken.IsKind(SyntaxKind.EndOfFileToken))
+                {
+                    offset += commentToken.Span.Length;
+                    commentToken = BasicLexer.ParseToken(body, offset);
+                }
+
+                if (commentToken.IsKind(SyntaxKind.SingleLineCommentTrivia) || commentToken.IsKind(SyntaxKind.MultiLineCommentTrivia))
+                {
+                    return commentToken.ValueOrText().ToString().Trim('\r', '\n', ' ');
+                }
+
+                return string.Empty;
+            }
+        }
+
+        public List<string> GetReferences()
+        {
+            var references = new List<string>();
+
+            var tree = ParseSyntaxTree();
+
+            foreach (var reference in tree.PreprocessorDirectives.Where(x => x.Kind == SyntaxKind.ReferenceDirectiveTrivia))
+            {
+                references.Add(reference.Value.ToString());
+            }
+
+            return references;
+        }
+
+        public SyntaxTreeEx ParseSyntaxTree()
+        {
+            var hash = Lines.ToString().GetHashCode();
+
+            if (hash != mCachedHash)
+            {
+                return SyntaxTreeEx.Parse(Lines.ToString());
+            }
+
+            return mCachedSyntaxTree;
+        }
+
+        public CompilationUnitSyntax CreateCompilationUnit()
+        {
+            var tree = ParseSyntaxTree();
+
+            var unit = tree.GetCompilationUnitRoot();
+            if (IsExecutable())
+            {
+                unit = (CompilationUnitSyntax)new OptionalColonRewriter().Visit(unit);
+            }
+
+            var classUnit = SyntaxFactory
+                .ClassDeclaration(MakeInternalName())
+                .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.UnsafeKeyword)));
+
+            if (IsExecutable())
+            {
+                var localMembers = new List<StatementSyntax>();
+                var globalMembers = new List<MemberDeclarationSyntax>();
+
+                foreach (var member in unit.Members)
+                {
+                    if (member is GlobalStatementSyntax globalStatement)
+                    {
+                        localMembers.Add(globalStatement.Statement);
+                    }
+                    else if (member is FieldDeclarationSyntax fieldDeclaration)
+                    {
+                        if (!member.Modifiers.Any(SyntaxKind.StaticKeyword))
+                        {
+                            localMembers.Add(SyntaxFactory.LocalDeclarationStatement(member.Modifiers, fieldDeclaration.Declaration));
+                        }
+                        else
+                        {
+                            globalMembers.Add(member);
+                        }
+                    }
+                    else
+                    {
+                        globalMembers.Add(member);
+                    }
+                }
+
+                var funcUnit = SyntaxFactoryEx.MethodDeclaration(Type == CodeType.Patch ? "Init" : "OnFrame", "void",
+                    SyntaxFactory.Block(localMembers), "public");
+
+                classUnit = classUnit
+                    .WithMembers(SyntaxFactory.List(globalMembers))
+                    .AddMembers(CodeProvider.LoaderExecutableMethod)
+                    .AddMembers(funcUnit);
+            }
+            else if (Type == CodeType.Library)
+            {
+                var filteredMembers = new List<MemberDeclarationSyntax>(unit.Members.Count);
+
+                foreach (var member in unit.Members)
+                {
+                    if (member is MethodDeclarationSyntax method)
+                    {
+                        method = method.AddModifiers(SyntaxFactory.Token(SyntaxKind.StaticKeyword));
+                        filteredMembers.Add(method);
+                        continue;
+                    }
+
+                    if (member is FieldDeclarationSyntax field)
+                    {
+                        field = field.WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
+                        filteredMembers.Add(field);
+                        continue;
+                    }
+
+                    if (member is PropertyDeclarationSyntax property)
+                    {
+                        property = property.WithModifiers(SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
+                        filteredMembers.Add(property);
+                        continue;
+                    }
+
+                    filteredMembers.Add(member);
+                }
+
+                classUnit = classUnit.WithMembers(SyntaxFactory.List(filteredMembers));
+            }
+
+            return SyntaxFactory.CompilationUnit()
+                .AddMembers(classUnit)
+                .WithUsings(unit.Usings)
+                .AddUsings(CodeProvider.PredefinedUsingDirectives);
+        }
+
+        public bool IsExecutable()
+            => Type == CodeType.Patch || Type == CodeType.Code;
+
+        public SyntaxTree CreateSyntaxTree()
+        {
+            return SyntaxFactory.SyntaxTree(CreateCompilationUnit());
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private string MakeInternalName()
+        {
+            if (Type == CodeType.Library)
+            {
+                return Name;
+            }
+
+            return Regex.Replace($"{Name}_{Guid.NewGuid()}", "[^a-z_0-9]", string.Empty, RegexOptions.IgnoreCase);
+        }
+
+        public static bool CodeTypeFromString(ReadOnlySpan<char> text, out CodeType type)
+        {
+            if (text.Equals("Code".AsSpan(), StringComparison.Ordinal))
+            {
+                type = CodeType.Code;
+                return true;
+            }
+            else if (text.Equals("Patch".AsSpan(), StringComparison.Ordinal))
+            {
+                type = CodeType.Patch;
+                return true;
+            }
+            else if (text.Equals("Library".AsSpan(), StringComparison.Ordinal))
+            {
+                type = CodeType.Library;
+                return true;
+            }
+
+            type = CodeType.Unknown;
+            return false;
+        }
+    }
+
+    public enum CodeType
+    {
+        Code, Patch, Library, Unknown
+    }
+}

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using HedgeModManager.CodeCompiler;
 
 namespace HedgeModManager.UI.Models
 {

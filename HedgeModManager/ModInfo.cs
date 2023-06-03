@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using HedgeModManager.CodeCompiler;
 using HedgeModManager.Misc;
 using HedgeModManager.Serialization;
 using HedgeModManager.UI;
@@ -156,7 +157,7 @@ namespace HedgeModManager
                     var codesPath = Path.Combine(RootDirectory, CodeFile);
                     if (File.Exists(codesPath))
                     {
-                        Codes = HedgeModManager.CodeFile.FromFile(codesPath);
+                        Codes = CodeCompiler.CodeFile.FromFile(codesPath);
                     }
                 }
 

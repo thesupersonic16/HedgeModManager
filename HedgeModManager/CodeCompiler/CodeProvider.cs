@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Binder = Microsoft.CSharp.RuntimeBinder.Binder;
 
-namespace HedgeModManager
+namespace HedgeModManager.CodeCompiler
 {
     public class CodeProvider
     {
@@ -73,14 +73,14 @@ namespace HedgeModManager
         }
 
         public static Task CompileCodes<TCollection>(TCollection sources, Stream resultStream, params string[] loadPaths) where TCollection : IEnumerable<Code>
-        {
+        { 
             lock (mLockContext)
             {
                 var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true);
                 var trees = new List<SyntaxTree>();
                 var newLibs = new HashSet<string>();
                 var loads = GetLoadAssemblies(sources, loadPaths);
-                
+
                 foreach (var source in sources)
                 {
                     if (!source.IsExecutable())
@@ -155,7 +155,7 @@ namespace HedgeModManager
         public static List<MetadataReference> GetLoadAssemblies<TCollection>(TCollection sources, params string[] lookupPaths) where TCollection : IEnumerable<Code>
         {
             var meta = new List<MetadataReference>();
-            
+
             var basePath = Path.GetDirectoryName(typeof(object).Assembly.Location);
             var wpfPath = Path.Combine(basePath, "WPF");
 
@@ -163,7 +163,7 @@ namespace HedgeModManager
             {
                 foreach (var load in source.ParseSyntaxTree().PreprocessorDirectives.Where(x => x.Kind == SyntaxKind.LoadDirectiveTrivia))
                 {
-                    var value = load.Value;
+                    var value = load.Value.ToString();
                     var path = Path.Combine(basePath, value);
                     if (File.Exists(path))
                     {
@@ -189,7 +189,7 @@ namespace HedgeModManager
                     }
                 }
             }
-            
+
             return meta;
         }
     }

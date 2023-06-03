@@ -35,6 +35,7 @@ using System.Windows.Media;
 using System.Windows.Documents;
 using System.Xml.Linq;
 using GongSolutions.Wpf.DragDrop.Utilities;
+using HedgeModManager.CodeCompiler;
 
 namespace HedgeModManager
 {

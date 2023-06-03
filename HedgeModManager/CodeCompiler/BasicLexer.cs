@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace HedgeModManager
+namespace HedgeModManager.CodeCompiler
 {
     public class BasicLexer
     {
@@ -48,11 +47,11 @@ namespace HedgeModManager
                     if (token.Kind == SyntaxKind.IdentifierToken)
                     {
                         var directive = new DirectiveSyntax { FullSpan = new TextSpan(start, 1), Name = token.Text };
-                        if (directive.Name is "load")
+                        if (directive.Name.Span.Equals("load".AsSpan(), StringComparison.Ordinal))
                         {
                             directive.Kind = SyntaxKind.LoadDirectiveTrivia;
                         }
-                        else if (directive.Name is "lib")
+                        else if (directive.Name.Span.Equals("lib".AsSpan(), StringComparison.Ordinal))
                         {
                             directive.Kind = SyntaxKind.ReferenceDirectiveTrivia;
                         }
@@ -71,8 +70,8 @@ namespace HedgeModManager
                     if (token.Kind != SyntaxKind.WhitespaceTrivia)
                     {
                         var directive = directives[directives.Count - 1];
-                        directive.FullSpan = new TextSpan(directive.FullSpan.Start, (offset + token.Span.Length) - directive.FullSpan.Start);
-                        directive.Value = string.IsNullOrEmpty(token.ValueText) ? token.Text : token.ValueText;
+                        directive.FullSpan = new TextSpan(directive.FullSpan.Start, offset + token.Span.Length - directive.FullSpan.Start);
+                        directive.Value = token.ValueOrText();
                         directives[directives.Count - 1] = directive;
 
                         parserState = 0;
@@ -107,7 +106,34 @@ namespace HedgeModManager
                 while (offset + l < text.Length && IsWhitespace(text[offset + l]))
                     l++;
 
-                return Token.Create(text, SyntaxKind.WhitespaceTrivia, 0, l);
+                return Token.Create(text, SyntaxKind.WhitespaceTrivia, offset, l);
+            }
+
+            if (CharEquals('/') && CharEquals('/', 1))
+            {
+                int l = 2;
+                while (offset + l < text.Length && text[offset + l] != '\r' && text[offset + l] != '\n')
+                {
+                    l++;
+                }
+                return Token.Create(text, SyntaxKind.SingleLineCommentTrivia, offset, l, 2, l - 2);
+            }
+            else if (CharEquals('/') && CharEquals('*', 1))
+            {
+                var l = 2;
+
+                while (offset + l < text.Length && (!CharEquals('*', l) || !CharEquals('/', l + 1)))
+                {
+                    l++;
+                }
+
+                var valueEnd = l - 2;
+                if (CharEquals('*', l) && CharEquals('/', l + 1))
+                {
+                    l += 2;
+                }
+
+                return Token.Create(text, SyntaxKind.MultiLineCommentTrivia, offset, l, 2, valueEnd);
             }
 
             if (IsAlphabet(c))
@@ -121,7 +147,7 @@ namespace HedgeModManager
             else if (c == '"')
             {
                 int l = 1;
-                while (offset + l < text.Length && (text[offset + l] != '"' && text[offset + l - 1] != '\\'))
+                while (offset + l < text.Length && text[offset + l] != '"' && text[offset + l - 1] != '\\')
                     l++;
 
                 return Token.Create(text, SyntaxKind.StringLiteralToken, offset, l + 1, 1, l - 1);
@@ -132,19 +158,48 @@ namespace HedgeModManager
                 case '#':
                     return Token.Create(text, SyntaxKind.HashToken, 0, 1);
 
+                case '{':
+                    return Token.Create(text, SyntaxKind.OpenBraceToken, 0, 1);
+
+                case '}':
+                    return Token.Create(text, SyntaxKind.CloseBraceToken, 0, 1);
+
                 default:
                     break;
             }
 
-            return Token.Create(text, SyntaxKind.None, 0, 1);
+            return Token.Create(text, SyntaxKind.None, offset, 1);
+
+            bool CharEquals(char c, int o = 0)
+            {
+                return offset + o < text.Length && text[offset + o] == c;
+            }
+        }
+
+        public static IEnumerable<Token> ParseTokens(string text) => ParseTokens(text, _ => true);
+
+        public static IEnumerable<Token> ParseTokens(string text, Predicate<Token> filter)
+        {
+            int offset = 0;
+            while (offset < text.Length)
+            {
+                var token = ParseToken(text, offset);
+                if (token.Kind == SyntaxKind.EndOfFileToken)
+                    break;
+
+                if (filter(token))
+                    yield return token;
+
+                offset += token.Span.Length;
+            }
         }
 
         public struct DirectiveSyntax
         {
-            public string Name = string.Empty;
-            public string Value = string.Empty;
-            public SyntaxKind Kind;
-            public TextSpan FullSpan;
+            public ReadOnlyMemory<char> Name = ReadOnlyMemory<char>.Empty;
+            public ReadOnlyMemory<char> Value = ReadOnlyMemory<char>.Empty;
+            public SyntaxKind Kind = new();
+            public TextSpan FullSpan = new ();
 
             public DirectiveSyntax()
             {
@@ -153,20 +208,20 @@ namespace HedgeModManager
 
         public struct Token
         {
-            public string Text;
+            public ReadOnlyMemory<char> Text;
             public TextSpan Span;
             public TextSpan ValueSpan;
             public SyntaxKind Kind;
 
-            public string ValueText => ValueSpan.Length > 0 ? Text.Substring(ValueSpan.Start, ValueSpan.Length) : string.Empty;
+            public ReadOnlyMemory<char> ValueText => ValueSpan.Length > 0 ? Text.Slice(ValueSpan.Start, ValueSpan.Length) : Memory<char>.Empty;
 
-            public bool HasNewLine => Text.Contains('\n') || Text.Contains('\r');
+            public bool HasNewLine => Text.Span.IndexOf('\n') >= 0 || Text.Span.IndexOf('\r') >= 0;
 
             public static Token Create(string text, SyntaxKind kind, int o, int l)
             {
                 return new Token()
                 {
-                    Text = o + l <= text.Length ? text.Substring(o, l) : string.Empty,
+                    Text = o + l <= text.Length ? text.AsMemory(o, l) : Memory<char>.Empty,
                     Span = new TextSpan(o, l),
                     Kind = kind
                 };
@@ -176,11 +231,26 @@ namespace HedgeModManager
             {
                 return new Token()
                 {
-                    Text = o + l <= text.Length ? text.Substring(o, l) : string.Empty,
+                    Text = o + l <= text.Length ? text.AsMemory(o, l) : Memory<char>.Empty,
                     Span = new TextSpan(o, l),
                     ValueSpan = new TextSpan(vo, vl),
                     Kind = kind,
                 };
+            }
+
+            public bool IsKind(SyntaxKind kind)
+            {
+                return Kind == kind;
+            }
+
+            public ReadOnlyMemory<char> ValueOrText()
+            {
+                return ValueSpan.Length > 0 ? ValueText : Text;
+            }
+
+            public override string ToString()
+            {
+                return Text.ToString();
             }
         }
     }

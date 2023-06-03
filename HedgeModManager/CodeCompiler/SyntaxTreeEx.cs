@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
-namespace HedgeModManager
+namespace HedgeModManager.CodeCompiler
 {
     public class SyntaxTreeEx : CSharpSyntaxTree
     {
         public List<BasicLexer.DirectiveSyntax> PreprocessorDirectives { get; set; } = new();
         private CSharpSyntaxTree mBaseSyntaxTree;
-        
+
         private SyntaxTreeEx(CSharpSyntaxTree baseTree)
         {
             mBaseSyntaxTree = baseTree;
