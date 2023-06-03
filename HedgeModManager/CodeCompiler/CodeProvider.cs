@@ -28,21 +28,12 @@ namespace HedgeModManager.CodeCompiler
             SyntaxFactory.MethodDeclaration(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.BoolKeyword)), "IsLoaderExecutable")
                 .WithExpressionBody(SyntaxFactory.ArrowExpressionClause(SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression)))
                 .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
-
+        
         public static UsingDirectiveSyntax[] PredefinedUsingDirectives =
         {
-            SyntaxFactory.UsingDirective(
-                SyntaxFactory.Token(SyntaxKind.UsingKeyword),
-                SyntaxFactory.Token(SyntaxKind.None), null,
-                SyntaxFactory.ParseName("System"), SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
-            SyntaxFactory.UsingDirective(
-                SyntaxFactory.Token(SyntaxKind.UsingKeyword),
-                SyntaxFactory.Token(SyntaxKind.None), null,
-                SyntaxFactory.ParseName("HMMCodes"), SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
-            SyntaxFactory.UsingDirective(
-                SyntaxFactory.Token(SyntaxKind.UsingKeyword),
-                SyntaxFactory.Token(SyntaxKind.StaticKeyword), null,
-                SyntaxFactory.ParseName("HMMCodes.MemoryService"), SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+            SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("System")),
+            SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("HMMCodes")),
+            SyntaxFactory.UsingDirective(SyntaxFactory.Token(SyntaxKind.StaticKeyword), null, SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName("HMMCodes"), SyntaxFactory.IdentifierName("MemoryService"))),
         };
 
         public static SyntaxTree[] PredefinedClasses =

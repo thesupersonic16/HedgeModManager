@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace HedgeModManager.CodeCompiler
 {
-    public class Code : INotifyPropertyChanged
+    public class Code
     {
         public string Name { get; set; }
 
@@ -28,7 +28,7 @@ namespace HedgeModManager.CodeCompiler
         public CodeType Type { get; set; }
 
         public bool Enabled { get; set; }
-        
+
         public List<BasicLexer.Token> Header { get; set; } = new List<BasicLexer.Token>();
         public StringBuilder Lines { get; set; } = new StringBuilder();
 
@@ -49,7 +49,7 @@ namespace HedgeModManager.CodeCompiler
                 sb.AppendLine(Lines.ToString());
             }
 
-            return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
+            return sb.ToString().Trim('\r', '\n', ' ');
         }
 
         public static List<Code> ParseFiles(params string[] paths)
@@ -118,7 +118,6 @@ namespace HedgeModManager.CodeCompiler
 
                             var tokens = BasicLexer.ParseTokens(line, x => !x.IsKind(SyntaxKind.WhitespaceTrivia)).ToList();
                             currentCode.Header = tokens;
-
                             currentCode.Name = tokens[1].ValueOrText().ToString();
 
                             for (int i = 2; i < tokens.Count; i++)
@@ -222,8 +221,28 @@ namespace HedgeModManager.CodeCompiler
                 unit = (CompilationUnitSyntax)new OptionalColonRewriter().Visit(unit);
             }
 
+            var libNamespace = string.Empty;
+            var name = string.Empty;
+            if (Type == CodeType.Library)
+            {
+                var dotIdx = Name.LastIndexOf('.');
+                if (dotIdx > 0)
+                {
+                    name = Name.Substring(dotIdx + 1);
+                    libNamespace = Name.Substring(0, dotIdx);
+                }
+                else
+                {
+                    name = Name;
+                }
+            }
+            else
+            {
+                name = Regex.Replace($"{Name}_{Guid.NewGuid()}", "[^a-z_0-9]", string.Empty, RegexOptions.IgnoreCase);
+            }
+
             var classUnit = SyntaxFactory
-                .ClassDeclaration(MakeInternalName())
+                .ClassDeclaration(name)
                 .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.UnsafeKeyword)));
 
             if (IsExecutable())
@@ -295,30 +314,57 @@ namespace HedgeModManager.CodeCompiler
                 classUnit = classUnit.WithMembers(SyntaxFactory.List(filteredMembers));
             }
 
-            return SyntaxFactory.CompilationUnit()
-                .AddMembers(classUnit)
+            var compileUnit = SyntaxFactory.CompilationUnit()
+                .AddMembers(MakeRootMember())
                 .WithUsings(unit.Usings)
                 .AddUsings(CodeProvider.PredefinedUsingDirectives);
+
+            foreach (var reference in GetReferences())
+            {
+                var dotIndex = reference.LastIndexOf('.');
+                if (dotIndex < 0)
+                    continue;
+
+                var namespaceRef = reference.Substring(0, dotIndex);
+                if (string.IsNullOrEmpty(namespaceRef))
+                {
+                    continue;
+                }
+
+                var names = namespaceRef.Split('.');
+                NameSyntax nameSyntax = SyntaxFactory.IdentifierName(names[0]);
+
+                for (var i = 1; i < names.Length; i++)
+                {
+                    if (string.IsNullOrEmpty(names[i]))
+                        continue;
+
+                    nameSyntax = SyntaxFactory.QualifiedName(nameSyntax, SyntaxFactory.IdentifierName(names[i]));
+                }
+                
+                compileUnit = compileUnit.AddUsings(SyntaxFactory.UsingDirective(nameSyntax));
+            }
+
+            return compileUnit;
+
+
+            MemberDeclarationSyntax MakeRootMember()
+            {
+                if (string.IsNullOrEmpty(libNamespace))
+                {
+                    return classUnit;
+                }
+
+                return SyntaxFactory.NamespaceDeclaration(SyntaxFactory.IdentifierName(libNamespace)).AddMembers(classUnit);
+            }
         }
 
         public bool IsExecutable()
-            => Type == CodeType.Patch || Type == CodeType.Code;
+            => Type is CodeType.Patch or CodeType.Code;
 
         public SyntaxTree CreateSyntaxTree()
         {
             return SyntaxFactory.SyntaxTree(CreateCompilationUnit());
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private string MakeInternalName()
-        {
-            if (Type == CodeType.Library)
-            {
-                return Name;
-            }
-
-            return Regex.Replace($"{Name}_{Guid.NewGuid()}", "[^a-z_0-9]", string.Empty, RegexOptions.IgnoreCase);
         }
 
         public static bool CodeTypeFromString(ReadOnlySpan<char> text, out CodeType type)

@@ -70,7 +70,8 @@ namespace HedgeModManager.CodeCompiler
                     if (token.Kind != SyntaxKind.WhitespaceTrivia)
                     {
                         var directive = directives[directives.Count - 1];
-                        directive.FullSpan = new TextSpan(directive.FullSpan.Start, offset + token.Span.Length - directive.FullSpan.Start);
+                        directive.FullSpan = new TextSpan(directive.FullSpan.Start,
+                            offset + token.Span.Length - directive.FullSpan.Start);
                         directive.Value = token.ValueOrText();
                         directives[directives.Count - 1] = directive;
 
@@ -116,6 +117,7 @@ namespace HedgeModManager.CodeCompiler
                 {
                     l++;
                 }
+
                 return Token.Create(text, SyntaxKind.SingleLineCommentTrivia, offset, l, 2, l - 2);
             }
             else if (CharEquals('/') && CharEquals('*', 1))
@@ -164,8 +166,71 @@ namespace HedgeModManager.CodeCompiler
                 case '}':
                     return Token.Create(text, SyntaxKind.CloseBraceToken, 0, 1);
 
-                default:
-                    break;
+                case '(':
+                    return Token.Create(text, SyntaxKind.OpenParenToken, 0, 1);
+
+                case ')':
+                    return Token.Create(text, SyntaxKind.CloseParenToken, 0, 1);
+
+                case '[':
+                    return Token.Create(text, SyntaxKind.OpenBracketToken, 0, 1);
+
+                case ']':
+                    return Token.Create(text, SyntaxKind.CloseBracketToken, 0, 1);
+
+                case ',':
+                    return Token.Create(text, SyntaxKind.CommaToken, 0, 1);
+
+                case ';':
+                    return Token.Create(text, SyntaxKind.SemicolonToken, 0, 1);
+
+                case '+':
+                    return Token.Create(text, SyntaxKind.PlusToken, 0, 1);
+
+                case '-':
+                    return Token.Create(text, SyntaxKind.MinusToken, 0, 1);
+
+                case '*':
+                    return Token.Create(text, SyntaxKind.AsteriskToken, 0, 1);
+
+                case '/':
+                    return Token.Create(text, SyntaxKind.SlashToken, 0, 1);
+
+                case '%':
+                    return Token.Create(text, SyntaxKind.PercentToken, 0, 1);
+
+                case '^':
+                    return Token.Create(text, SyntaxKind.CaretToken, 0, 1);
+
+                case '~':
+                    return Token.Create(text, SyntaxKind.TildeToken, 0, 1);
+
+                case '?':
+                    return Token.Create(text, SyntaxKind.QuestionToken, 0, 1);
+
+                case ':':
+                    return Token.Create(text, SyntaxKind.ColonToken, 0, 1);
+
+                case '&':
+                    return Token.Create(text, SyntaxKind.AmpersandToken, 0, 1);
+
+                case '|':
+                    return Token.Create(text, SyntaxKind.BarToken, 0, 1);
+
+                case '=':
+                    return Token.Create(text, SyntaxKind.EqualsToken, 0, 1);
+
+                case '<':
+                    return Token.Create(text, SyntaxKind.LessThanToken, 0, 1);
+
+                case '>':
+                    return Token.Create(text, SyntaxKind.GreaterThanToken, 0, 1);
+
+                case '!':
+                    return Token.Create(text, SyntaxKind.ExclamationToken, 0, 1);
+
+                case '.':
+                    return Token.Create(text, SyntaxKind.DotToken, 0, 1);
             }
 
             return Token.Create(text, SyntaxKind.None, offset, 1);
@@ -199,7 +264,7 @@ namespace HedgeModManager.CodeCompiler
             public ReadOnlyMemory<char> Name = ReadOnlyMemory<char>.Empty;
             public ReadOnlyMemory<char> Value = ReadOnlyMemory<char>.Empty;
             public SyntaxKind Kind = new();
-            public TextSpan FullSpan = new ();
+            public TextSpan FullSpan = new();
 
             public DirectiveSyntax()
             {
@@ -213,7 +278,9 @@ namespace HedgeModManager.CodeCompiler
             public TextSpan ValueSpan;
             public SyntaxKind Kind;
 
-            public ReadOnlyMemory<char> ValueText => ValueSpan.Length > 0 ? Text.Slice(ValueSpan.Start, ValueSpan.Length) : Memory<char>.Empty;
+            public ReadOnlyMemory<char> ValueText => ValueSpan.Length > 0
+                ? Text.Slice(ValueSpan.Start, ValueSpan.Length)
+                : Memory<char>.Empty;
 
             public bool HasNewLine => Text.Span.IndexOf('\n') >= 0 || Text.Span.IndexOf('\r') >= 0;
 
