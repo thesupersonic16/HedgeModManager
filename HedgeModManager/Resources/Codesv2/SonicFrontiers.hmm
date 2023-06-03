@@ -113,7 +113,8 @@ Known issues;
 - Certain UI effects are rendered at the correct aspect ratio, but will misalign due to the main UI still being 16:9.
 - Certain UI elements are still rendered at 16:9 and will misalign or stretch.
 - Certain UI elements will be cut off incorrectly at wider aspect ratios. (ex. Jukebox)
-- Pre-rendered cutscenes and some real-time ones will stretch to your aspect ratio.
+- Pre-rendered cutscenes will stretch to your aspect ratio.
+- The letterboxing during cutscenes will end up blocking the view at wider aspect ratios, it is highly recommended to use the Disable In-Game Letterboxing code to remove it.
 - The expected aspect ratio will only apply to a newly set resolution when you re-enter the resolution list and select the same resolution again.
 - Vignette (the circular shadowing effect on the screen) is still rendered at 16:9, it is highly recommended to use the Disable Vignette code to remove it.
 */
@@ -139,10 +140,12 @@ Known issues;
     static bool Initialised = false;
 
     static float AspectRatio = 1920.0f / 1080.0f;
+    static float EventFieldOfView = 0.0f;
 
     static long MainAspectRatioAddr = 0;
     static long SurfRideAspectRatioAddr = 0;
     static long SurfRideAspectRatioJumpAddr = 0;
+    static long DVSceneAspectRatioAddr = 0;
 //
 {
     if (!Initialised)
@@ -167,15 +170,47 @@ Known issues;
         /* 0x140A41709 */
         SurfRideAspectRatioJumpAddr = SurfRideAspectRatioAddr + Read<int>(SurfRideAspectRatioAddr + 2) + 6;
 
+        /* 0x140C33A2C */
+        DVSceneAspectRatioAddr = ScanSignature
+        (
+            "\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\x0F\x28\x05\x00\x00\x00\x00\x0F\x29\x81\x00\x00\x00\x00\x0F\x28\x0D\x00\x00\x00\x00",
+            "xx????????xxx????xxx????xxx????"
+        );
+
         fixed (float* pAspectRatio = &AspectRatio)
+        fixed (float* pEventFieldOfView = &EventFieldOfView)
         {
             WriteAsmHook
             (
                 $@"
                     push   r9
+
+                    ; check if current event aspect ratio has been modified
+                    mov    r9, {(long)pAspectRatio}
+                    movss  xmm0, dword ptr [r9]
+                    movss  xmm1, dword ptr [rbx + 0x58]
+                    comiss xmm0, xmm1
+                    je     exit
+
+                    ; multiply original aspect ratio by new aspect ratio
+                    movss  xmm0, dword ptr [rbx + 0x58]
+                    mov    r9, {(long)pAspectRatio}
+                    movss  xmm1, dword ptr [r9]
+                    divps  xmm0, xmm1
+                    movss  xmm1, xmm0
+
+                    ; compute new field of view from aspect ratio difference
+                    movss  xmm0, dword ptr [rbx + 0x54]
+                    mulps  xmm0, xmm1
+                    movss  dword ptr [rbx + 0x54], xmm0
+                    mov    r9, {(long)pEventFieldOfView}
+                    movss  dword ptr [r9], xmm0
+
+                    ; set new aspect ratio
                     mov    r9, {(long)pAspectRatio}
                     mov    r9d, dword ptr [r9]
                     mov    dword ptr [rbx + 0x58], r9d
+                exit:
                     pop    r9
                     movups xmm0, xmmword ptr [rbx + 0x4C]
                     movups xmmword ptr [r13], xmm0
@@ -203,7 +238,7 @@ Known issues;
                 "\x76\x16\xF3\x0F\x59\x0D",
                 "xxxxxx"
             ),
-            
+
             2
         );
 
@@ -236,8 +271,11 @@ Known issues;
             WriteProtected<int>(SurfRideAspectRatioAddr + 2, (int)(SurfRideAspectRatioJumpAddr - SurfRideAspectRatioAddr) - 6);
         }
     }
-    
+
     WriteProtected<float>(MainAspectRatioAddr, AspectRatio);
+
+    if (DVSceneAspectRatioAddr != 0)
+        WriteProtected<float>(DVSceneAspectRatioAddr + 6, AspectRatio);
 }
 
 Patch "Always Allow Unlocking Story Skills" in "Cheats" by "Hyper" does
@@ -3085,6 +3123,21 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
     }
 }
 
+Patch "Fix Quick Cyloop Lock-On" in "Fixes" by "WasifBoomz & The Duck Dealer" does "Fixes the lock-on target changing whenever Sonic performs a Quick Cyloop, allowing for consistent attacks during combat."
+{
+    WriteProtected<byte>
+    (
+        /* 0x14088D334 */
+        ScanSignature
+        (
+            "\x76\x12\x8B\x46\x28\x48\x8D\x55\x97\x48\x8B\xCB\x89\x45\x97\xE8\xCC\xCC\xCC\xCC\x48\x8B\x47\x38",
+	    "xxxxxxxxxxxxxxxx????xxxx"
+        ),
+
+        0xEB
+    );
+}
+
 Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all intrusive tutorial messages that appear under certain conditions for the first time."
 {
     // Hide hint rings.
@@ -3272,12 +3325,10 @@ Patch "Fix Grind Leaning" in "Fixes" by "Hyper" does "Fixes the grind leaning an
         WriteAsmHook
         (
             $@"
-                push  rax
-                mov   rax, {(long)pBias}
-                movss xmm2, dword ptr [rax]
-                mov   rax, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPEED_RATIO")}
-                lea   rdx, [rax]
-                pop   rax
+                mov   rdx, {(long)pBias}
+                movss xmm2, dword ptr [rdx]
+                movss dword ptr [rsi + 0xD8], xmm0
+                mov   rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPEED_RATIO")}
             ",
 
             /* 0x14084AD71 */
