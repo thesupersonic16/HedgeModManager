@@ -55,6 +55,10 @@ namespace HedgeModManager.CodeCompiler
                         {
                             directive.Kind = SyntaxKind.ReferenceDirectiveTrivia;
                         }
+                        else if (directive.Name.Span.Equals("import".AsSpan(), StringComparison.Ordinal))
+                        {
+                            directive.Kind = SyntaxKind.UsingDirective;
+                        }
 
                         directives[directives.Count - 1] = directive;
                         parserState = 2;

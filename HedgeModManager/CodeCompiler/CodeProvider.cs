@@ -85,6 +85,11 @@ namespace HedgeModManager.CodeCompiler
                     {
                         newLibs.Add(reference);
                     }
+
+                    foreach (string reference in source.GetImports())
+                    {
+                        newLibs.Add(reference);
+                    }
                 }
 
                 var libs = new HashSet<string>();
@@ -108,6 +113,11 @@ namespace HedgeModManager.CodeCompiler
                         libs.Add(lib);
 
                         foreach (string reference in libSource.GetReferences())
+                        {
+                            addedLibs.Add(reference);
+                        }
+
+                        foreach (string reference in libSource.GetImports())
                         {
                             addedLibs.Add(reference);
                         }

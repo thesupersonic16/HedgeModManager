@@ -199,6 +199,20 @@ namespace HedgeModManager.CodeCompiler
             return references;
         }
 
+        public List<string> GetImports()
+        {
+            var imports = new List<string>();
+
+            var tree = ParseSyntaxTree();
+
+            foreach (var import in tree.PreprocessorDirectives.Where(x => x.Kind == SyntaxKind.UsingDirective))
+            {
+                imports.Add(import.Value.ToString());
+            }
+
+            return imports;
+        }
+
         public SyntaxTreeEx ParseSyntaxTree()
         {
             var hash = Lines.ToString().GetHashCode();
@@ -330,19 +344,13 @@ namespace HedgeModManager.CodeCompiler
                 {
                     continue;
                 }
-
-                var names = namespaceRef.Split('.');
-                NameSyntax nameSyntax = SyntaxFactory.IdentifierName(names[0]);
-
-                for (var i = 1; i < names.Length; i++)
-                {
-                    if (string.IsNullOrEmpty(names[i]))
-                        continue;
-
-                    nameSyntax = SyntaxFactory.QualifiedName(nameSyntax, SyntaxFactory.IdentifierName(names[i]));
-                }
                 
-                compileUnit = compileUnit.AddUsings(SyntaxFactory.UsingDirective(nameSyntax));
+                compileUnit = compileUnit.AddUsings(MakeUsingDirective(namespaceRef));
+            }
+
+            foreach (var import in GetImports())
+            {
+                compileUnit = compileUnit.AddUsings(MakeUsingDirective(import, true));
             }
 
             return compileUnit;
@@ -356,6 +364,28 @@ namespace HedgeModManager.CodeCompiler
                 }
 
                 return SyntaxFactory.NamespaceDeclaration(SyntaxFactory.IdentifierName(libNamespace)).AddMembers(classUnit);
+            }
+
+            UsingDirectiveSyntax MakeUsingDirective(string usingName, bool isStatic = false)
+            {
+                var names = usingName.Split('.');
+                NameSyntax nameSyntax = SyntaxFactory.IdentifierName(names[0]);
+
+                for (var i = 1; i < names.Length; i++)
+                {
+                    if (string.IsNullOrEmpty(names[i]))
+                        continue;
+
+                    nameSyntax = SyntaxFactory.QualifiedName(nameSyntax, SyntaxFactory.IdentifierName(names[i]));
+                }
+
+                if (isStatic)
+                {
+                    return SyntaxFactory.UsingDirective(SyntaxFactory.Token(SyntaxKind.StaticKeyword), null,
+                        nameSyntax);
+                }
+
+                return SyntaxFactory.UsingDirective(nameSyntax);
             }
         }
 
