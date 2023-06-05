@@ -162,7 +162,7 @@ namespace HedgeModManager.CodeCompiler
 
             foreach (var source in sources)
             {
-                foreach (var load in source.ParseSyntaxTree().PreprocessorDirectives.Where(x => x.Kind == SyntaxKind.LoadDirectiveTrivia))
+                foreach (var load in source.ParseSyntaxTree().PreprocessorDirectives.Where(x => x.Kind == SyntaxTokenKind.LoadDirectiveTrivia))
                 {
                     var value = load.Value.ToString();
                     var path = Path.Combine(basePath, value);

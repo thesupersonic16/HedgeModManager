@@ -116,7 +116,7 @@ namespace HedgeModManager.CodeCompiler
 
                             codes.Add(currentCode);
 
-                            var tokens = BasicLexer.ParseTokens(line, x => !x.IsKind(SyntaxKind.WhitespaceTrivia)).ToList();
+                            var tokens = BasicLexer.ParseTokens(line.AsMemory(), x => !x.IsKind(SyntaxTokenKind.WhitespaceTrivia)).ToList();
                             currentCode.Header = tokens;
                             currentCode.Name = tokens[1].ValueOrText().ToString();
 
@@ -169,14 +169,14 @@ namespace HedgeModManager.CodeCompiler
             {
                 var body = code.Lines.ToString();
                 var offset = 0;
-                var commentToken = BasicLexer.ParseToken(body, offset);
-                while (commentToken.IsKind(SyntaxKind.WhitespaceTrivia) && !commentToken.IsKind(SyntaxKind.EndOfFileToken))
+                var commentToken = BasicLexer.ParseToken(body.AsMemory(), offset);
+                while (commentToken.IsKind(SyntaxTokenKind.WhitespaceTrivia) && !commentToken.IsKind(SyntaxTokenKind.EndOfFileToken))
                 {
                     offset += commentToken.Span.Length;
-                    commentToken = BasicLexer.ParseToken(body, offset);
+                    commentToken = BasicLexer.ParseToken(body.AsMemory(), offset);
                 }
 
-                if (commentToken.IsKind(SyntaxKind.SingleLineCommentTrivia) || commentToken.IsKind(SyntaxKind.MultiLineCommentTrivia))
+                if (commentToken.IsKind(SyntaxTokenKind.SingleLineCommentTrivia) || commentToken.IsKind(SyntaxTokenKind.MultiLineCommentTrivia))
                 {
                     return commentToken.ValueOrText().ToString().Trim('\r', '\n', ' ');
                 }
@@ -191,7 +191,7 @@ namespace HedgeModManager.CodeCompiler
 
             var tree = ParseSyntaxTree();
 
-            foreach (var reference in tree.PreprocessorDirectives.Where(x => x.Kind == SyntaxKind.ReferenceDirectiveTrivia))
+            foreach (var reference in tree.PreprocessorDirectives.Where(x => x.Kind == SyntaxTokenKind.LibDirectiveTrivia))
             {
                 references.Add(reference.Value.ToString());
             }
@@ -205,7 +205,7 @@ namespace HedgeModManager.CodeCompiler
 
             var tree = ParseSyntaxTree();
 
-            foreach (var import in tree.PreprocessorDirectives.Where(x => x.Kind == SyntaxKind.UsingDirective))
+            foreach (var import in tree.PreprocessorDirectives.Where(x => x.Kind == SyntaxTokenKind.ImportDirectiveTrivia))
             {
                 imports.Add(import.Value.ToString());
             }
