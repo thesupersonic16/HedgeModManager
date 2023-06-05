@@ -126,7 +126,7 @@ namespace HedgeModManager.CodeCompiler.PreProcessor
                                     if (!BasicLexer.FunctionLike(bodyMemory, ref macroName, token.Span.Start).IsKind(SyntaxTokenKind.None) && Defines.ContainsKey(macroName))
                                     {
                                         var macroFunc = SyntaxParser.ParseFunctionCall(bodyMemory, token.Span.Start);
-                                        pos += macroFunc.WholeText.Length;
+                                        pos = token.Span.Start + macroFunc.WholeText.Length;
 
                                         for (int i = 0; i < macroFunc.Arguments.Count; i++)
                                         {
