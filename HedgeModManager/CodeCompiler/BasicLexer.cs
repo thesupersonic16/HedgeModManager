@@ -106,12 +106,20 @@ namespace HedgeModManager.CodeCompiler
             else if (c == '"')
             {
                 int l = 1;
-                while (offset + l < text.Length && span[offset + l] != '"' && span[offset + l - 1] != '\\')
+                int vl = 0;
+                while (offset + l < text.Length)
                 {
+                    if (CharEquals('"', l) && !CharEquals('\\', l - 1))
+                    {
+                        l++;
+                        break;
+                    }
+
+                    vl++;
                     l++;
                 }
 
-                return Token.Create(text, SyntaxTokenKind.StringLiteralToken, offset, l + 1, 1, l - 1);
+                return Token.Create(text, SyntaxTokenKind.StringLiteralToken, offset, l, 1, vl);
             }
 
             switch (c)
