@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Binder = Microsoft.CSharp.RuntimeBinder.Binder;
 
-namespace HedgeModManager
+namespace HedgeModManager.CodeCompiler
 {
     public class CodeProvider
     {
@@ -28,21 +28,12 @@ namespace HedgeModManager
             SyntaxFactory.MethodDeclaration(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.BoolKeyword)), "IsLoaderExecutable")
                 .WithExpressionBody(SyntaxFactory.ArrowExpressionClause(SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression)))
                 .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
-
+        
         public static UsingDirectiveSyntax[] PredefinedUsingDirectives =
         {
-            SyntaxFactory.UsingDirective(
-                SyntaxFactory.Token(SyntaxKind.UsingKeyword),
-                SyntaxFactory.Token(SyntaxKind.None), null,
-                SyntaxFactory.ParseName("System"), SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
-            SyntaxFactory.UsingDirective(
-                SyntaxFactory.Token(SyntaxKind.UsingKeyword),
-                SyntaxFactory.Token(SyntaxKind.None), null,
-                SyntaxFactory.ParseName("HMMCodes"), SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
-            SyntaxFactory.UsingDirective(
-                SyntaxFactory.Token(SyntaxKind.UsingKeyword),
-                SyntaxFactory.Token(SyntaxKind.StaticKeyword), null,
-                SyntaxFactory.ParseName("HMMCodes.MemoryService"), SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+            SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("System")),
+            SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("HMMCodes")),
+            SyntaxFactory.UsingDirective(SyntaxFactory.Token(SyntaxKind.StaticKeyword), null, SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName("HMMCodes"), SyntaxFactory.IdentifierName("MemoryService"))),
         };
 
         public static SyntaxTree[] PredefinedClasses =
@@ -73,14 +64,14 @@ namespace HedgeModManager
         }
 
         public static Task CompileCodes<TCollection>(TCollection sources, Stream resultStream, params string[] loadPaths) where TCollection : IEnumerable<Code>
-        {
+        { 
             lock (mLockContext)
             {
                 var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true);
                 var trees = new List<SyntaxTree>();
                 var newLibs = new HashSet<string>();
                 var loads = GetLoadAssemblies(sources, loadPaths);
-                
+
                 foreach (var source in sources)
                 {
                     if (!source.IsExecutable())
@@ -91,6 +82,11 @@ namespace HedgeModManager
                     trees.Add(source.CreateSyntaxTree());
 
                     foreach (string reference in source.GetReferences())
+                    {
+                        newLibs.Add(reference);
+                    }
+
+                    foreach (string reference in source.GetImports())
                     {
                         newLibs.Add(reference);
                     }
@@ -117,6 +113,11 @@ namespace HedgeModManager
                         libs.Add(lib);
 
                         foreach (string reference in libSource.GetReferences())
+                        {
+                            addedLibs.Add(reference);
+                        }
+
+                        foreach (string reference in libSource.GetImports())
                         {
                             addedLibs.Add(reference);
                         }
@@ -155,15 +156,15 @@ namespace HedgeModManager
         public static List<MetadataReference> GetLoadAssemblies<TCollection>(TCollection sources, params string[] lookupPaths) where TCollection : IEnumerable<Code>
         {
             var meta = new List<MetadataReference>();
-            
+
             var basePath = Path.GetDirectoryName(typeof(object).Assembly.Location);
             var wpfPath = Path.Combine(basePath, "WPF");
 
             foreach (var source in sources)
             {
-                foreach (var load in source.ParseSyntaxTree().PreprocessorDirectives.Where(x => x.Kind == SyntaxKind.LoadDirectiveTrivia))
+                foreach (var load in source.ParseSyntaxTree().PreprocessorDirectives.Where(x => x.Kind == SyntaxTokenKind.LoadDirectiveTrivia))
                 {
-                    var value = load.Value;
+                    var value = load.Value.ToString();
                     var path = Path.Combine(basePath, value);
                     if (File.Exists(path))
                     {
@@ -189,7 +190,7 @@ namespace HedgeModManager
                     }
                 }
             }
-            
+
             return meta;
         }
     }

@@ -45,6 +45,7 @@ using System.Windows.Shell;
 using static HedgeModManager.Lang;
 using Microsoft.Win32;
 using HedgeModManager.CLI;
+using HedgeModManager.CodeCompiler;
 
 namespace HedgeModManager
 {

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
+using HedgeModManager.CodeCompiler;
 using HedgeModManager.Exceptions;
 using Newtonsoft.Json;
 using static HedgeModManager.Lang;

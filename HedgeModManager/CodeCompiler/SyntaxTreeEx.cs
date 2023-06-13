@@ -4,34 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using HedgeModManager.CodeCompiler.PreProcessor;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
-namespace HedgeModManager
+namespace HedgeModManager.CodeCompiler
 {
     public class SyntaxTreeEx : CSharpSyntaxTree
     {
-        public List<BasicLexer.DirectiveSyntax> PreprocessorDirectives { get; set; } = new();
+        public TextProcessor PreProcessor { get; private set; }
+        public List<BasicLexer.DirectiveSyntax> PreprocessorDirectives => PreProcessor.Directives;
         private CSharpSyntaxTree mBaseSyntaxTree;
-        
+
         private SyntaxTreeEx(CSharpSyntaxTree baseTree)
         {
             mBaseSyntaxTree = baseTree;
         }
 
-        private static string ProcessText(string text, out List<BasicLexer.DirectiveSyntax> directives)
+        private static string ProcessText(string text, out TextProcessor preprocessor)
         {
-            directives = BasicLexer.ParseDirectives(text);
-            var body = new StringBuilder(text);
-
-            foreach (var directive in directives)
-            {
-                for (int i = 0; i < directive.FullSpan.Length; i++)
-                {
-                    body[directive.FullSpan.Start + i] = ' ';
-                }
-            }
+            preprocessor = new TextProcessor();
+            var body = new StringBuilder(preprocessor.Process(text));
 
             var tokens = SyntaxFactory.ParseTokens(body.ToString(), options: new CSharpParseOptions(kind: SourceCodeKind.Script, documentationMode: DocumentationMode.Parse));
             using var enumerator = tokens.GetEnumerator();
@@ -63,8 +57,10 @@ namespace HedgeModManager
 
         public static SyntaxTreeEx Parse(string text)
         {
-            var tree = new SyntaxTreeEx(ParseText(ProcessText(text, out var directives), new CSharpParseOptions(kind: SourceCodeKind.Script)) as CSharpSyntaxTree);
-            tree.PreprocessorDirectives = directives;
+            var tree = new SyntaxTreeEx(ParseText(ProcessText(text, out var processor), new CSharpParseOptions(kind: SourceCodeKind.Script)) as CSharpSyntaxTree)
+                {
+                    PreProcessor = processor
+                };
             return tree;
         }
 

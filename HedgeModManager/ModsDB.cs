@@ -15,6 +15,7 @@ using HedgeModManager.Serialization;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
 using static HedgeModManager.Lang;
+using HedgeModManager.CodeCompiler;
 
 namespace HedgeModManager
 {
