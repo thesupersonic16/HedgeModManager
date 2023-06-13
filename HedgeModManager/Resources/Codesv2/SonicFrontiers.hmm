@@ -3988,6 +3988,64 @@ Unsupported objects;
     }
 }
 
+Patch "Force Depth of Field" in "Graphics" by "WasifBoomz & Dicey" does "Forces Depth of Field to render, causing objects very close and very far from the camera to blur."
+{
+    //FxDOFParameter
+    WriteAsmHook
+    (
+        $@"
+            ;Enable DOF
+            mov  byte ptr [r8], 1
+            
+            ;Set foreground bokeh depth to end at 3 and start at 0
+            mov  dword ptr [r8+4], 0x40400000
+            mov  dword ptr [r8+8], 0x00000000
+			
+            ;Set background bokeh depth to start at 4000 and end at 50
+            mov  dword ptr [r8+12], 0x42480000
+            mov  dword ptr [r8+16], 0x457A0000
+			
+            ;Increase sample count to 20
+            mov  dword ptr [r8+32], 20
+			
+            ;Set render target size to full
+            mov  byte ptr [r8+48], 0
+        ",
+			
+        /* 0x1482689B8 */
+        ScanSignature
+        (
+            "\x45\x0F\x10\x08\x89\x84\x24\x90\x00\x00\x00",
+            "xxxxxxxxxxx"
+        ),
+			
+        HookBehavior.After
+    );
+	
+    //FxRenderTargetSetting
+    WriteAsmHook
+    (
+        $@"
+            ;Original code
+            lea rbp, [rsp-400h]
+            sub rsp, 500h
+            mov r15, rcx
+		
+            ;Set render target size to full
+            mov dword ptr [rdx], 0
+        ",
+			
+        /* 0x140B83134 */
+        ScanSignature
+        (
+            "\x48\x8D\xAC\x24\x00\xFC\xFF\xFF\x48\x81\xEC\x00\x05\x00\x00\x4C\x8B\xF9",
+            "xxxxxxxxxxxxxxxxxx"
+        ),
+			
+        HookBehavior.Replace
+    );
+}
+
 Patch "Force Higher Detail Reflections" in "Graphics" by "Hyper" does
 /*
 Forces real-time local reflections to render at a higher resolution and reduces artefacting around Sonic and other nearby objects.
