@@ -118,79 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="DAT_CPKREDIR_DLL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\cpkredir.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="DAT_CPKREDIR_TXT" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\cpkredir.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="DAT_LOADERS_ZIP" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ModLoader\EmbeddedLoaders.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="GBStyleSheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GBStyleSheet.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="ICO_HedgeModManager" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Graphics\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="IMG_HEDGEMODMANAGER" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Graphics\icon256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Keys" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Keys.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="MemoryService" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MemoryService.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="STR_MSG_NOGAME" xml:space="preserve">
-    <value>HedgeModManager could not detect any supported games
-in the current directory!
-
-Do you want run the HMM Auto Installer?</value>
+  <data name="Microsoft_CSharp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Microsoft.CSharp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="URL_FML_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicForces.hmm</value>
-  </data>
-  <data name="URL_GCL_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicGenerations.hmm</value>
-  </data>
-  <data name="URL_GCL_DL" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/SonicGenerationsCodeLoader.dll</value>
-  </data>
-  <data name="URL_HE2ML_DL" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HE2ModLoader.dll</value>
-  </data>
-  <data name="URL_HMM_DEV" xml:space="preserve">
-    <value>https://nightly.link/thesupersonic16/HedgeModManager/suites/{0}/artifacts/{1}</value>
-  </data>
-  <data name="URL_HMM_GITHUB" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager</value>
-  </data>
-  <data name="URL_HMM_LOADERS" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini</value>
-  </data>
-  <data name="URL_LCL_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/LostWorld.hmm</value>
-  </data>
-  <data name="URL_LCL_DL" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/LostCodeLoader.dll</value>
-  </data>
-  <data name="URL_LOADERS_INI" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini</value>
-  </data>
-  <data name="URL_MML_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/TokyoOlympics2020.hmm</value>
-  </data>
-  <data name="URL_RML_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicColorsUltimate.hmm</value>
-  </data>
-  <data name="URL_RML_DL" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/RainbowModLoader.dll</value>
-  </data>
-  <data name="URL_TML_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/PuyoPuyoTetris2.hmm</value>
-  </data>
-  <data name="Version" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\version.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="netstandard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\netstandard.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

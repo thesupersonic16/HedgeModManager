@@ -61,109 +61,6 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DAT_CPKREDIR_DLL {
-            get {
-                object obj = ResourceManager.GetObject("DAT_CPKREDIR_DLL", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DAT_CPKREDIR_TXT {
-            get {
-                object obj = ResourceManager.GetObject("DAT_CPKREDIR_TXT", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DAT_LOADERS_ZIP {
-            get {
-                object obj = ResourceManager.GetObject("DAT_LOADERS_ZIP", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to body {
-        ///    background-color: transparent;
-        ///    /*color: #e2e2e2;*/
-        ///    color: $FORECOLOR;
-        ///    font-family: &apos;Open Sans&apos;, sans-serif;
-        ///}
-        ///
-        ///h1
-        ///{
-        ///    font-size: 18px;
-        ///    /*margin: 0 0 0.75em;
-        ///    padding: 0 0 0.25em 0;*/
-        ///}
-        ///
-        ///li
-        ///{
-        ///    list-style-type: disc;
-        ///}
-        ///
-        ///span.RedColor
-        ///{
-        ///    color: #FF4E4E;
-        ///}
-        ///
-        ///span.GreenColor
-        ///{
-        ///    color: #6EE16C;
-        ///}
-        ///
-        ///table {
-        ///    border-spacing: 5px;
-        ///}
-        ///
-        ///table, th, td {
-        ///    border: 1px solid darkgray;
-        ///    border-collapse: collapse;
-        ///}
-        ///
-        ///th, td {
-        ///    padding: 2px;
-        ///}
-        ///
-        ///th {
-        ///    text-align: left;
-        ///}.
-        /// </summary>
-        internal static string GBStyleSheet {
-            get {
-                return ResourceManager.GetString("GBStyleSheet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon ICO_HedgeModManager {
-            get {
-                object obj = ResourceManager.GetObject("ICO_HedgeModManager", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap IMG_HEDGEMODMANAGER {
-            get {
-                object obj = ResourceManager.GetObject("IMG_HEDGEMODMANAGER", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to namespace HMMCodes
         ///{
         ///    public enum Keys
@@ -219,149 +116,22 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HedgeModManager could not detect any supported games
-        ///in the current directory!
-        ///
-        ///Do you want run the HMM Auto Installer?.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static string STR_MSG_NOGAME {
+        internal static byte[] Microsoft_CSharp {
             get {
-                return ResourceManager.GetString("STR_MSG_NOGAME", resourceCulture);
+                object obj = ResourceManager.GetObject("Microsoft_CSharp", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicForces.hmm.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static string URL_FML_CODES {
+        internal static byte[] netstandard {
             get {
-                return ResourceManager.GetString("URL_FML_CODES", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicGenerations.hmm.
-        /// </summary>
-        internal static string URL_GCL_CODES {
-            get {
-                return ResourceManager.GetString("URL_GCL_CODES", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/SonicGenerationsCodeLoader.dll.
-        /// </summary>
-        internal static string URL_GCL_DL {
-            get {
-                return ResourceManager.GetString("URL_GCL_DL", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HE2ModLoader.dll.
-        /// </summary>
-        internal static string URL_HE2ML_DL {
-            get {
-                return ResourceManager.GetString("URL_HE2ML_DL", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://nightly.link/thesupersonic16/HedgeModManager/suites/{0}/artifacts/{1}.
-        /// </summary>
-        internal static string URL_HMM_DEV {
-            get {
-                return ResourceManager.GetString("URL_HMM_DEV", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager.
-        /// </summary>
-        internal static string URL_HMM_GITHUB {
-            get {
-                return ResourceManager.GetString("URL_HMM_GITHUB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini.
-        /// </summary>
-        internal static string URL_HMM_LOADERS {
-            get {
-                return ResourceManager.GetString("URL_HMM_LOADERS", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/LostWorld.hmm.
-        /// </summary>
-        internal static string URL_LCL_CODES {
-            get {
-                return ResourceManager.GetString("URL_LCL_CODES", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/LostCodeLoader.dll.
-        /// </summary>
-        internal static string URL_LCL_DL {
-            get {
-                return ResourceManager.GetString("URL_LCL_DL", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini.
-        /// </summary>
-        internal static string URL_LOADERS_INI {
-            get {
-                return ResourceManager.GetString("URL_LOADERS_INI", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/TokyoOlympics2020.hmm.
-        /// </summary>
-        internal static string URL_MML_CODES {
-            get {
-                return ResourceManager.GetString("URL_MML_CODES", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicColorsUltimate.hmm.
-        /// </summary>
-        internal static string URL_RML_CODES {
-            get {
-                return ResourceManager.GetString("URL_RML_CODES", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/RainbowModLoader.dll.
-        /// </summary>
-        internal static string URL_RML_DL {
-            get {
-                return ResourceManager.GetString("URL_RML_DL", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/PuyoPuyoTetris2.hmm.
-        /// </summary>
-        internal static string URL_TML_CODES {
-            get {
-                return ResourceManager.GetString("URL_TML_CODES", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string Version {
-            get {
-                return ResourceManager.GetString("Version", resourceCulture);
+                object obj = ResourceManager.GetObject("netstandard", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }
