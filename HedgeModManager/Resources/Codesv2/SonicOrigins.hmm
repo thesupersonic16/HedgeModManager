@@ -4,15 +4,7 @@ Patch "Disable Auto Save Icon" in "UI" by "Hyper"
 // 1.0.0: 0x140403FAC
 WriteProtected<byte>(ScanSignature("\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x48\x8D\x6C\x24\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\xDA\x48\x8B\xF9\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x33\xF6\x48\x85\xC0\x74\x16\x48\x85\xFF\x48\x8D\x97\x00\x00\x00\x00\x48\x8B\xC8\x48\x0F\x44\xD6\xE8\x00\x00\x00\x00\x0F\x57\xC0\xC7\x45\x00\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\xC6\x45\xBB\x80\xF3\x0F\x7F\x45\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x89\x75\xCF\xE8\x00\x00\x00\x00\x48\x8B\x15\x00\x00\x00\x00\x48\x8D\x4D\xA7\x48\x89\x45\xAF\xC7\x45\x00\x00\x00\x00\x00\xC6\x45\xBB\x15\xE8\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x48\x8B\xD8", "xxxx?xxxx?xxxx?xxxxx?xxx????xxxxxxx????xxxxxxx????xxxxxxxxxxxxx????xxxxxxxx????xxxxx?????xxx????xxxxxxxx?xxx?????xxx?????xxxx????xxx????xxxxxxxxxx?????xxxxx????x????xxxxxxx????xxx") + 0x1C, 0xE9, 0x94, 0x01, 0x00, 0x00);
 
-Code "Enable Lives in Anniversary Mode (experimental)" in "Gameplay" by "ĐeäTh" does
-/*
-Enabling this code will cause Anniversary Mode to use a different set of saves from normal, and your regular Anniversary Mode saves will be inaccessible.
-
-Known issues;
-- Doesn't work in Sonic 1 and Sonic 3 & Knuckles
-- Possibly issues with Amy in all Games.
-- Possibly issues with Knuckles in CD.
-*/
+Code "Enable Lives in Anniversary Mode" in "Gameplay" by "ĐeäTh" does "Enabling this code will cause Anniversary Mode to use a different set of saves from normal, and your regular Anniversary Mode saves will be inaccessible."
 static long rsdkV3Flags;
 static long rsdkV4Flags;
 static long rsdkGlobals;
@@ -44,10 +36,11 @@ if (rsdkGlobals == 0)
 }
 
 // Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-if (*(byte*)(rsdkV4Flags + 0x1A4) == 1)
+// Version 1.00 and 1.04: rsdkV4Flags + 0x1A4
+if (*(byte*)(rsdkV4Flags + 0x1FC) == 1)
 {
     // Sonic 1 Coin Mode
-    WriteProtected<byte>(rsdkV4Flags + 0x1F4, 0x00);
+    WriteProtected<byte>(rsdkV4Flags + 0x1FC, 0x00);
 }
 
 // Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
@@ -70,7 +63,8 @@ if (*(long*)rsdkGlobals != 0)
     // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
     // Version 1.00: rsdkGlobals + 0x447D08
     // Version 1.04: rsdkGlobals + 0x4C3508 (Thanks to RDC)
-    if (*(byte*)(*(long*)rsdkGlobals + rsdkGOffset + 0x104) == 1)
+    // Version 2.00: rsdkGlobals + rsdkGOffset + 0x104
+    if (*(byte*)(*(long*)rsdkGlobals + rsdkGOffset + 0x10C) == 1)
     {
         // HUD Update
         // Version 1.00: rsdkGlobals + 0x447D20
@@ -80,19 +74,12 @@ if (*(long*)rsdkGlobals != 0)
         // Coin Mode
         // Version 1.00: rsdkGlobals + 0x447CD4
         // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
-        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x11C, 0x00);
+        // Version 2.00: rsdkGlobals + rsdkGOffset + 0x124
+        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x124, 0x00);
     }
 }
 
-Code "Enable Lives in Mirror Mode (experimental)" in "Gameplay" by "ĐeäTh" does
-/*
-Enabling this code will cause Mirror Mode to use a different set of saves from normal, and your regular Mirror Mode saves will be inaccessible.
-
-Known issues;
-- Doesn't work in Sonic 1 and Sonic 3 & Knuckles
-- Possibly issues with Amy in all Games.
-- Possibly issues with Knuckles in CD.
-*/
+Code "Enable Lives in Mirror Mode" in "Gameplay" by "ĐeäTh" does "Enabling this code will cause Mirror Mode to use a different set of saves from normal, and your regular Mirror Mode saves will be inaccessible."
 static long rsdkV3Flags;
 static long rsdkV4Flags;
 static long rsdkGlobals;
@@ -124,10 +111,11 @@ if (rsdkGlobals == 0)
 }
 
 // Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_MIRRORING
-if (*(byte*)(rsdkV4Flags + 0x1A4) == 3)
+// Version 1.00 and 1.04: rsdkV4Flags + 0x1A4
+if (*(byte*)(rsdkV4Flags + 0x1FC) == 3)
 {
     // Sonic 1 Coin Mode
-    WriteProtected<byte>(rsdkV4Flags + 0x1F4, 0x00);
+    WriteProtected<byte>(rsdkV4Flags + 0x1FC, 0x00);
 }
 
 // Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_MIRRORING
@@ -147,10 +135,11 @@ if (*(byte*)(rsdkV3Flags + 0x1DC) == 3)
 // Sonic 3&K Coin Mode and HUD Update
 if (*(long*)rsdkGlobals != 0)
 {
-    // Check if game.playMode is set to BOOT_PLAYMODE_MIRRORING
+    // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
     // Version 1.00: rsdkGlobals + 0x447D08
     // Version 1.04: rsdkGlobals + 0x4C3508 (Thanks to RDC)
-    if (*(byte*)(*(long*)rsdkGlobals + rsdkGOffset + 0x104) == 3)
+    // Version 2.00: rsdkGlobals + rsdkGOffset + 0x104
+    if (*(byte*)(*(long*)rsdkGlobals + rsdkGOffset + 0x10C) == 3)
     {
         // HUD Update
         // Version 1.00: rsdkGlobals + 0x447D20
@@ -160,7 +149,8 @@ if (*(long*)rsdkGlobals != 0)
         // Coin Mode
         // Version 1.00: rsdkGlobals + 0x447CD4
         // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
-        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x11C, 0x00);
+        // Version 2.00: rsdkGlobals + rsdkGOffset + 0x124
+        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x124, 0x00);
     }
 }
 
