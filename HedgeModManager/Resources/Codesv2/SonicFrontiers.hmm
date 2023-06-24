@@ -632,7 +632,7 @@ Supported islands;
     NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
 }
 
-Patch "Always Trickable Dash Rings" in "Cheats" by "Hyper"
+Patch "Always Trickable Dash Rings" in "Gameplay" by "Hyper"
 {
     WriteProtected<byte>
     (
@@ -647,7 +647,7 @@ Patch "Always Trickable Dash Rings" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Trickable Jump Boards" in "Cheats" by "Hyper"
+Patch "Always Trickable Jump Boards" in "Gameplay" by "Hyper"
 {
     WriteProtected<byte>
     (
@@ -662,7 +662,30 @@ Patch "Always Trickable Jump Boards" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Trickable Springs" in "Cheats" by "Hyper"
+Patch "Always Trickable Spin Dash Exit (experimental)" in "Gameplay" by "Hyper" does
+/*
+Allows Sonic to always trick when exiting out of Spin Dash whilst in the air.
+
+By default, exiting Spin Dash without boosting will make Sonic fall.
+
+Known issues;
+- Sonic will not retain momentum if you're not holding the analog stick in any direction (this happens in the base game too).
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x1408FD158 */
+        ScanSignature
+        (
+            "\x41\x8D\x50\x0F\xE8\xCC\xCC\xCC\xCC\xB0\x01\xEB\x02\x32\xC0\x48\x8B\x5C\x24\x58",
+            "xxxxx????xxxxxxxxxxx"
+        ),
+
+        Assemble("lea edx, dword ptr [r8 + 0x10]")
+    );
+}
+
+Patch "Always Trickable Springs" in "Gameplay" by "Hyper"
 {
     WriteNop
     (
