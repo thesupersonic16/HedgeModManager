@@ -3534,13 +3534,11 @@ Patch "Fix Stomp Reset (v1.20)" in "! Incompatible - awaiting fixes for v1.30" b
     );
 }
 
-Patch "Fix Upreel Grip Position (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "ĐeäTh" does
+Patch "Fix Upreel Grip Position" in "Fixes" by "ĐeäTh" does
 /*
 Adjusts Sonic's grip position on the Upreel object's handle so that it lines up with the actual object.
 */
 {
-    // Original category: Fixes
-
     IntPtr gripOffsetPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(16);
     *((float*)gripOffsetPtr + 0) = 0.0f;
     *((float*)gripOffsetPtr + 1) = -1.025f;
@@ -3553,15 +3551,16 @@ Adjusts Sonic's grip position on the Upreel object's handle so that it lines up 
             mov rax, {(long)gripOffsetPtr}
             movups xmm15, [rax]
             mulps xmm0, xmm15
-            lea rdx, [rbp - 0x39]
-            lea rcx, [rbp - 0x69]
+            lea rdx, [rsp + 0x60]
+            lea rcx, [rsp + 0x30]
         ",
 
         /* v1.10: 0x1498C86A7 */
+        /* v1.30: 0x14983C900 */
         ScanSignature
         (
-            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xC7\x48\x8D\x4D\x97\x0F\x29\x45\xD7\xE8\xCC\xCC\xCC\xCC\x0F\x28\x45\xB7\x0F\x58\x00\x0F\x11\x46\x30\x0F\x28\x45\xC7\x0F\x11\x46\x40\xE9\xAF\x00\x00\x00\x0F\xB6\x81\xC8\x02\x00\x00\xA8\x01\x0F\x84\xA0\x00\x00\x00\x24\xFE\x31\xDB",
-            "xxx????xxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x54\x24\x60\x48\x8D\x4C\x24\x30",
+            "xxx????xxxxxxxxxx"
         ),
 
         HookBehavior.Replace
@@ -3573,15 +3572,16 @@ Adjusts Sonic's grip position on the Upreel object's handle so that it lines up 
             mov rax, {(long)gripOffsetPtr}
             movups xmm15, [rax]
             mulps xmm0, xmm15
-            lea rdx, [rbp - 0x49]
-            lea rcx, [rbp - 0x39]
+            lea rdx, [rbp - 0x10]
+            lea rcx, [rbp - 0x30]
         ",
 
         /* v1.20: 0x1403973ED */
+        /* v1.30: 0x1403C7A3C */
         ScanSignature
         (
-            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xB7",
-            "xxx????xxxx"
+            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xF0\x48\x8D\x4D\xD0",
+            "xxx????xxxxxxxx"
         ),
 
         HookBehavior.Replace
