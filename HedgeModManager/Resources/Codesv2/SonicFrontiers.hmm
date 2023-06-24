@@ -2260,7 +2260,7 @@ Patch "Disable Loop Kick on Slide" in "Gameplay" by "Hyper"
     );
 }
 
-Patch "Disable Menu Restrictions" in "UI" by "Hyper" does
+Patch "Disable Menu Restrictions (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
 /*
 Removes restrictions from accessing certain menu screens and options.
 
@@ -2272,6 +2272,8 @@ Notes;
 - This will allow you to enter Photo Mode during inaccessible parts of the game where Photo Mode is usually accessible.
 */
 {
+    // Original category: UI
+    
     // Disable save/load deny.
     WriteProtected<byte>
     (
@@ -4692,8 +4694,10 @@ Patch "Force Xbox Series Controller UI" in "UI" by "Hyper"
     );
 }
 
-Patch "Hide Boost Gauge" in "UI" by "Hyper"
+Patch "Hide Boost Gauge (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: UI
+
     WriteProtected<byte>
     (
         /* 0x1408F1250 */
@@ -4749,8 +4753,10 @@ Patch "Hide Challenge Markers" in "Graphics" by "Hyper" does "Hides the markers 
     );
 }
 
-Patch "Hide Cyber Space Timer" in "UI" by "Hyper"
+Patch "Hide Cyber Space Timer (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: UI
+    
     WriteProtected<byte>
     (
         /* 0x14091D370 */
@@ -4793,8 +4799,10 @@ Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift da
     );
 }
 
-Patch "Hide Enemy Health Gauge" in "UI" by "Hyper & Gordon Ramsay" does "Hides the health gauge for standard enemies and guardians."
+Patch "Hide Enemy Health Gauge (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper & Gordon Ramsay" does "Hides the health gauge for standard enemies and guardians."
 {
+    // Original category: UI
+
     WriteProtected<byte>
     (
         /* 0x14051735B */
@@ -4808,8 +4816,10 @@ Patch "Hide Enemy Health Gauge" in "UI" by "Hyper & Gordon Ramsay" does "Hides t
     );
 }
 
-Patch "Hide Homing Reticle" in "UI" by "Hyper"
+Patch "Hide Homing Reticle (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: UI
+
     // Disable sound and main reticle.
     WriteProtected<byte>
     (
@@ -4838,8 +4848,10 @@ Patch "Hide Homing Reticle" in "UI" by "Hyper"
     );
 }
 
-Patch "Hide Oxygen Gauge" in "UI" by "Hyper"
+Patch "Hide Oxygen Gauge (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: UI
+    
     WriteProtected<byte>
     (
         /* 0x14090CF20 */
