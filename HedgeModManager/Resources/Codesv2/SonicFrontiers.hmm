@@ -1107,17 +1107,20 @@ Patch "Centre Game Window on Launch" in "System" by "Hyper"
     );
 }
 
-Patch "Disable Air Tricks from Terrain (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Disables the ability to air trick when flinging off terrain."
-{
-    // Original category: Gameplay
+Patch "Disable Air Tricks from Terrain" in "Gameplay" by "Hyper" does
+/*
+Disables the ability to air trick when flinging off terrain.
 
+This also applies to boosting out of Spin Dash in the air.
+*/
+{
     WriteProtected<byte>
     (
-        /* 0x14B3D1F11 */
+        /* 0x14B3E755A */
         ScanSignature
         (
-            "\x74\x10\x41\xB0\x01\xBA\x28\x00\x00\x00",
-            "xxxxxxxxxx"
+            "\x74\x19\x41\xB0\x01\x8B\x0D",
+            "xxxxxxx"
         ),
 
         0xEB
