@@ -879,53 +879,65 @@ Patch "Always Sunset on Islands" in "Time" by "NM"
     );
 }
 
-Patch "Bouncy Jump Ball (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Uses bouncy jump ball animations when jumping and double jumping, similar to Sonic Forces."
+Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball animations when jumping and double jumping, similar to Sonic Forces."
 {
-    // Original category: Animation
-
     long SPINJUMP = (long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPINJUMP");
 
-    /* 0x14B45836F */
+    /* 0x14B4D4603 */
     long playParticleCallerAddr = ScanSignature
     (
-        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x0D\xBA\x8E\xB4\x47\x3B",
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x14\xBA\x8E\xB4\x47\x3B",
         "x????xxxxxxxxxxxxxxxxxxxxx"
     );
 
-    /* 0x1408981D0 */
+    /* 0x140901E20 */
     long playParticleFuncAddr = playParticleCallerAddr + Read<int>(playParticleCallerAddr + 0x01) + 0x05;
 
-    // StateJump
-    WriteAsmHook
+    /* 0x14B4DB1CF */
+    var sig = ScanSignature
     (
-        $@"
-            mov  r14, rax
-            test dil, dil
-            jnz  exit
-            push rax
-            push rdx
-            mov  r8b, 1
-            mov  rdx, {SPINJUMP}
-            lea  rdx, [rdx]
-            mov  rcx, rsi
-            mov  rax, {playParticleFuncAddr}
-            call rax
-            pop  rdx
-            pop  rax
-        exit:
-            mov  r8b, 0xFE
-            mov  rcx, r14
-        ",
-
-        /* 0x14B4627AD */
-        ScanSignature
-        (
-            "\x8A\x0D\xCC\xCC\xCC\xCC\x80\xF1\xB6\x41\x88\xC8\x48\x89\xC1",
-            "xx????xxxxxxxxx"
-        ),
-
-        HookBehavior.Replace
+        "\xE8\xCC\xCC\xCC\xCC\x41\xB0\xFE\x48\x89\xC1",
+        "x????xxxxxx"
     );
+
+    // StateJump
+    {
+        WriteAsmHook
+        (
+            $@"
+                mov  rax, {sig + Read<int>(sig + 0x01) + 0x05}
+                call rax
+                mov  r8b, 0xFE
+                mov  rcx, rax
+                test dil, dil
+                push rax
+                push rdx
+                mov  r8b, 1
+                mov  rdx, {SPINJUMP}
+                mov  rcx, rsi
+                mov  rax, {playParticleFuncAddr}
+                call rax
+                pop  rdx
+                pop  rax
+            ",
+
+            sig,
+
+            HookBehavior.Replace
+        );
+
+        WriteNop
+        (
+            /* 0x14B4DB1F8 */
+            ScanSignature
+            (
+                "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x0D\xBA\x8E\xB4\x47\x3B\xE8\xCC\xCC\xCC\xCC\x49\x89\xC6",
+                "x????xxxxxxxxxxxxxxxxxxxxxx????xxx"
+            ),
+
+            5
+        );
+    }
     
     // StateDoubleJump
     WriteAsmHook
@@ -938,7 +950,7 @@ Patch "Bouncy Jump Ball (v1.20)" in "! Incompatible - awaiting fixes for v1.30" 
             call rax
         ",
 
-        /* 0x14B458365 */
+        /* 0x14B4D45F9 */
         ScanSignature
         (
             "\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x89\xD9\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x38",
