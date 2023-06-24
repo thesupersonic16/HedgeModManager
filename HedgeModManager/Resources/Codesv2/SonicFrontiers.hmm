@@ -703,6 +703,25 @@ Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
     );
 }
 
+Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper"
+{
+    WriteAsmHook
+    (
+        $@"
+            mov al, 1
+            ret
+        ",
+
+        ScanSignature
+        (
+            "\x48\x8B\x41\x08\x8B\x40\x4C",
+            "xxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Always Night on Islands" in "Time" by "NM"
 {
     /*
