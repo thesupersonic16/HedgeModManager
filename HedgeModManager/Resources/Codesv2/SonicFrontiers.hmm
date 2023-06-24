@@ -457,8 +457,10 @@ Patch "Always Have Phantom Rush" in "Cheats" by "NM"
     );
 }
 
-Patch "Always Have Power Boost on Islands" in "Cheats" by "SuperSonic16"
+Patch "Always Have Power Boost on Islands (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "SuperSonic16"
 {
+    // Original category: Cheats
+
     WriteProtected<byte>
     (
         /* 0x140875507 */
@@ -472,8 +474,10 @@ Patch "Always Have Power Boost on Islands" in "Cheats" by "SuperSonic16"
     );
 }
 
-Patch "Always Have Power Boost in Cyber Space" in "Cheats" by "Hyper"
+Patch "Always Have Power Boost in Cyber Space (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: Cheats
+
     WriteNop
     (
         /* 0x14087553C */
@@ -628,8 +632,10 @@ Supported islands;
     NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
 }
 
-Patch "Always Trickable Dash Rings" in "Cheats" by "Hyper"
+Patch "Always Trickable Dash Rings (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: Cheats
+
     WriteProtected<byte>
     (
         /* 0x148DC6F4C */
@@ -643,8 +649,10 @@ Patch "Always Trickable Dash Rings" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Trickable Jump Boards" in "Cheats" by "Hyper"
+Patch "Always Trickable Jump Boards (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: Cheats
+
     WriteProtected<byte>
     (
         /* 0x14037EAFA */
@@ -658,8 +666,10 @@ Patch "Always Trickable Jump Boards" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Trickable Springs" in "Cheats" by "Hyper"
+Patch "Always Trickable Springs (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: Cheats
+
     WriteNop
     (
         /* 0x1403E849D */
@@ -875,8 +885,10 @@ Patch "Always Sunset on Islands" in "Time" by "NM"
     );
 }
 
-Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball animations when jumping and double jumping, similar to Sonic Forces."
+Patch "Bouncy Jump Ball (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Uses bouncy jump ball animations when jumping and double jumping, similar to Sonic Forces."
 {
+    // Original category: Animation
+
     long SPINJUMP = (long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPINJUMP");
 
     /* 0x14B45836F */
@@ -1089,8 +1101,10 @@ Patch "Centre Game Window on Launch" in "System" by "Hyper"
     );
 }
 
-Patch "Disable Air Tricks from Terrain" in "Gameplay" by "Hyper" does "Disables the ability to air trick when flinging off terrain."
+Patch "Disable Air Tricks from Terrain (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Disables the ability to air trick when flinging off terrain."
 {
+    // Original category: Gameplay
+
     WriteProtected<byte>
     (
         /* 0x14B3D1F11 */
@@ -1119,24 +1133,10 @@ Patch "Disable Air Tricks from Traversal Objects" in "Gameplay" by "Hyper" does 
     );
 }
 
-Patch "Disable Boost Audio Filter" in "Audio" by "Hyper"
+Patch "Disable Boost Replenishment from Timer (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Prevents the boost gauge from refilling over time."
 {
-    WriteProtected<byte>
-    (
-        /* v1.01: 0x14B9F24E4 */
-        /* v1.20: 0x140874766 */
-        ScanSignature
-        (
-            "\x74\x48\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x85\xC0",
-            "xxxxxx????xxxx????xxxxxxx????xxx"
-        ),
+    // Original category: Gameplay
 
-        0xEB
-    );
-}
-
-Patch "Disable Boost Replenishment from Timer" in "Gameplay" by "Hyper" does "Prevents the boost gauge from refilling over time."
-{
     WriteNop
     (
         /* 0x140850F46 */
@@ -1150,8 +1150,10 @@ Patch "Disable Boost Replenishment from Timer" in "Gameplay" by "Hyper" does "Pr
     );
 }
 
-Patch "Disable Boost Replenishment from Rings" in "Gameplay" by "Hyper" does "Prevents the boost gauge from refilling when collecting rings."
+Patch "Disable Boost Replenishment from Rings (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Prevents the boost gauge from refilling when collecting rings."
 {
+    // Original category: Gameplay
+
     WriteAsmHook
     (
         $@"
@@ -1188,7 +1190,7 @@ Patch "Disable Camera Shake" in "Camera" by "Hyper" does "Disables camera shake 
     );
 }
 
-Patch "Disable Challenge Marker Scanner (experimental)" in "Gameplay" by "Hyper" does
+Patch "Disable Challenge Marker Scanner (experimental) (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
 /*
 Disables the scanning event and map transition after completing challenges.
 
@@ -1197,6 +1199,8 @@ Known issues;
 - The option to place markers on the map will not appear after completing your first challenge (use Disable Menu Restrictions as a workaround).
 */
 {
+    // Original category: Gameplay
+    
     WriteProtected<byte>
     (
         /* 0x149465412 */
@@ -1280,7 +1284,7 @@ Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables t
     // LANDING_CORRUPTION_WEAK
     WriteProtected<byte>
     (
-        /* 0x140830C7D */
+        /* v1.10: 0x140830C7D */
         ScanSignature
         (
             "\x74\x15\xB8\x04\x00\x00\x00\x48\x8B\x5C\x24\x30",
@@ -1293,7 +1297,7 @@ Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables t
     // LANDING_CORRUPTION_STRONG
     WriteNop
     (
-        /* 0x140830CA8 */
+        /* v1.10: 0x140830CA8 */
         ScanSignature
         (
             "\xBA\x05\x00\x00\x00\x0F\x45\xCA\x8B\xC1",
@@ -1306,7 +1310,7 @@ Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables t
     // IDLE_CORRUPTION_WEAK_LOOP
     WriteProtected<byte>
     (
-        /* 0x140830DB4 */
+        /* v1.10: 0x140830DB4 */
         ScanSignature
         (
             "\x74\x15\xB8\x0B\x00\x00\x00",
@@ -1319,7 +1323,7 @@ Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables t
     // IDLE_CORRUPTION_STRONG_LOOP
     WriteProtected<byte>
     (
-        /* 0x140830DDA */
+        /* v1.10: 0x140830DDA */
         ScanSignature
         (
             "\x74\x15\xB8\x0C\x00\x00\x00",
@@ -1506,8 +1510,10 @@ Example usage;
     }
 }
 
-Patch "Disable Drop Dash" in "Gameplay" by "Hyper"
+Patch "Disable Drop Dash (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: Gameplay
+
     // Disable drop dash charge from StateDoubleJump.
     WriteProtected<byte>
     (
@@ -1993,7 +1999,7 @@ Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables t
     );
 }
 
-Patch "Disable Guardian Music (experimental)" in "Audio" by "Hyper" does
+Patch "Disable Guardian Music (experimental) (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
 /*
 Disables the music specific to each guardian on the islands.
 
@@ -2001,6 +2007,8 @@ Known issues;
 - Jukebox will persist during Battle Rush if you previously used it on the islands before entering it.
 */
 {
+    // Original category: Audio
+
     /* 0x1408BAE10 */
     long fpGetBgmInfo = ScanSignature
     (
@@ -2127,7 +2135,7 @@ Patch "Disable Idle Music Volume Reduction" in "Audio" by "Hyper" does "Disables
     );
 }
 
-Patch "Disable In-Game Letterboxing (experimental)" in "Graphics" by "Hyper" does
+Patch "Disable In-Game Letterboxing (experimental) (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
 /*
 Disables letterboxing for in-game cutscenes and Training Simulator.
 
@@ -2136,6 +2144,8 @@ Known issues;
 - Filter 7 in Photo Mode utilises this letterbox element, so it doesn't show up there.
 */
 {
+    // Original category: Graphics
+
     WriteProtected<byte>
     (
         /* 0x14C90D06D */
@@ -2150,11 +2160,13 @@ Known issues;
     );
 }
 
-Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
+Patch "Disable Jump Board Paths on Islands (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
 //
     static bool IsWorldIsland = false;
 //
 {
+    // Original category: Gameplay
+
     fixed (bool* pIsWorldIsland = &IsWorldIsland)
     {
         /* This hook checks if we're on an island
@@ -2498,8 +2510,10 @@ Known issues;
     }
 }
 
-Patch "Disable Power Boost" in "Gameplay" by "Hyper"
+Patch "Disable Power Boost (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: Gameplay
+
     WriteProtected<byte>
     (
         /* 0x140875507 */
@@ -2513,8 +2527,10 @@ Patch "Disable Power Boost" in "Gameplay" by "Hyper"
     );
 }
 
-Patch "Disable Power Boost Audio" in "Audio" by "NM"
+Patch "Disable Power Boost Audio (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "NM"
 {
+    // Original category: Audio
+
     WriteProtected<byte>
     (
         /* 0x140874567 */
@@ -2585,8 +2601,10 @@ Patch "Disable Ring Loss" in "Cheats" by "M&M"
     );
 }
 
-Patch "Disable Running Fall" in "Animation" by "Hyper" does "Disables the animation where Sonic continues running when falling off a platform, forcing him into the proper falling animation."
+Patch "Disable Running Fall (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Disables the animation where Sonic continues running when falling off a platform, forcing him into the proper falling animation."
 {
+    // Original category: Animation
+
     WriteNop
     (
         /* 0x14B49D733 */
@@ -2689,48 +2707,6 @@ Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
     );
 }
 
-Patch "Disable Skill Camera Events" in "Camera" by "Hyper" does
-/*
-Disables the camera events for skills.
-
-Affected skills;
-- Cross Slash
-- Cyclone Kick
-- Grand Slam
-- Homing Shot
-- Loop Kick
-- Recovery Smash
-- Sonic Boom
-- Spin Slash
-- Stomp Attack
-- Wild Rush
-*/
-{
-    WriteProtected<byte>
-    (
-        /* 0x1408520DD */
-        ScanSignature
-        (
-            "\x74\x7F\x44\x38\x36",
-            "xxxxx"
-        ),
-        
-        0xEB
-    );
-
-    WriteNop
-    (
-        /* 0x140808775 */
-        ScanSignature
-        (
-            "\xE8\xCC\xCC\xCC\xCC\x41\xC7\x86\xAC\x00\x00\x00\x03\x00\x00\x00",
-            "x????xxxxxxxxxxx"
-        ),
-        
-        5
-    );
-}
-
 Patch "Disable Soldier Eggs" in "Gameplay" by "Hyper" does "Disables the egg spawners for the Soldier enemy, allowing them to spawn instantly."
 {
     WriteNop
@@ -2746,8 +2722,10 @@ Patch "Disable Soldier Eggs" in "Gameplay" by "Hyper" does "Disables the egg spa
     );
 }
 
-Patch "Disable Spin Slash on Drop Dash" in "Gameplay" by "Hyper"
+Patch "Disable Spin Slash on Drop Dash (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: Gameplay
+
     WriteProtected<byte>
     (
         /* 0x14BA71EE6 */
@@ -2774,7 +2752,7 @@ Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cu
     WriteNop(addr + 0x38, 5);
 }
 
-Patch "Disable Stomp Flip" in "Gameplay" by "Hyper" does
+Patch "Disable Stomp Flip (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
 /*
 Disables the flip Sonic does when performing a stomp attack under certain conditions.
 
@@ -2783,6 +2761,8 @@ Notes;
 - This will allow you to stomp bounce to kill enemies with the shockwave without doing a flip.
 */
 {
+    // Original category: Gameplay
+
     byte[] asm = Assemble("lea edx, [r8 + 0x37]");
 
     // Flip for collision types (e.g. Asura body)
@@ -2938,7 +2918,7 @@ This data can include, but is not limited to;
     );
 }
 
-Patch "Disable Traversal Objects in Chests" in "Gameplay" by "Hyper" does
+Patch "Disable Traversal Objects in Chests (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
 /*
 Disables the hidden traversal objects in chests that require cyloop to reveal, making them always accessible.
 
@@ -2948,6 +2928,8 @@ Affected objects;
 - Springs
 */
 {
+    // Original category: Gameplay
+
     // Dash Panels
     WriteProtected<byte>
     (
@@ -3277,8 +3259,10 @@ Patch "Disable Vignette" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Drop Dash on Double Jump" in "Gameplay" by "Hyper" does "Allows you to drop dash immediately after double jumping, making it require only two presses."
+Patch "Drop Dash on Double Jump (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Allows you to drop dash immediately after double jumping, making it require only two presses."
 {
+    // Original category: Gameplay
+
     /* 0x14B484CC8 */
     var sig = ScanSignature
     (
@@ -3377,8 +3361,10 @@ Patch "Fix Photo Mode Camera Collision" in "Fixes" by "Hyper" does "Allows the c
     );
 }
 
-Patch "Fix RenderDoc Captures (v1.20)" in "Fixes" by "Skyth" does "Fixes RenderDoc being unable to hook to the game for capturing the graphics device."
+Patch "Fix RenderDoc Captures (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Skyth" does "Fixes RenderDoc being unable to hook to the game for capturing the graphics device."
 {
+    // Original category: Fixes
+
     WriteProtected<long>(0x1410A4B40, Read<long>(0x15611F168));
     WriteProtected<long>(0x1410A4B50, Read<long>(0x15611F188));
 }
@@ -3533,8 +3519,10 @@ Patch "Fix Shadow Stutter" in "Fixes" by "Hyper" does "Fixes shadows not interpo
     );
 }
 
-Patch "Fix Stomp Reset" in "Fixes" by "Hyper" does "Fixes the stomp attack only resetting once you hit the ground, allowing you to perform multiple stomps whilst still airborne."
+Patch "Fix Stomp Reset (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Fixes the stomp attack only resetting once you hit the ground, allowing you to perform multiple stomps whilst still airborne."
 {
+    // Original category: Fixes
+
     WriteNop
     (
         /* 0x140895AC0 */
@@ -3548,11 +3536,13 @@ Patch "Fix Stomp Reset" in "Fixes" by "Hyper" does "Fixes the stomp attack only 
     );
 }
 
-Patch "Fix Upreel Grip Position" in "Fixes" by "ĐeäTh" does
+Patch "Fix Upreel Grip Position (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "ĐeäTh" does
 /*
 Adjusts Sonic's grip position on the Upreel object's handle so that it lines up with the actual object.
 */
 {
+    // Original category: Fixes
+
     IntPtr gripOffsetPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(16);
     *((float*)gripOffsetPtr + 0) = 0.0f;
     *((float*)gripOffsetPtr + 1) = -1.025f;
@@ -3641,7 +3631,7 @@ Patch "Force 4K Video Playback" in "Graphics" by "Hyper" does "Forces the game t
     );
 }
 
-Patch "Force Cyber Space Objects on Islands" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
+Patch "Force Cyber Space Objects on Islands (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper, ĐeäTh & Sajid" does
 /*
 Replaces all supported objects on the islands with their Cyber Space counterparts.
 
@@ -3649,6 +3639,8 @@ Unsupported objects;
 - Jump Selectors (Generations-style)
 */
 //
+    // Original category: Graphics
+
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
 
@@ -4097,7 +4089,7 @@ Forces real-time local reflections to render at a higher resolution and reduces 
     );
 }
 
-Patch "Force Island Objects in Cyber Space" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
+Patch "Force Island Objects in Cyber Space (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper, ĐeäTh & Sajid" does
 /*
 Replaces all supported objects in Cyber Space with their island counterparts.
 
@@ -4106,6 +4098,8 @@ Unsupported objects;
 - Up-reel Carriers
 */
 //
+    // Original category: Graphics
+
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
 
@@ -4935,8 +4929,10 @@ Patch "Hide Titan Health Gauge" in "UI" by "Hyper"
     );
 }
 
-Patch "Infinite Boost Gauge" in "Cheats" by "Hyper"
+Patch "Infinite Boost Gauge (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
+    // Original category: Cheats
+
     WriteProtected<byte>
     (
         /* 0x140850D99 */
@@ -5334,7 +5330,8 @@ Patch "Show Missions in Arcade Mode" in "UI" by "Hyper" does "Shows the missions
     WriteProtected<byte>(addr + 7, 0xEB);
 }
 
-Patch "Smooth Camera (v1.20)" in "Camera" by "Ahremic" does "Replaces linear camera interpolation with a sigmoid solution, using Ken Perlin's ''Smoother Step'' second-order hermite polynomial."
+Patch "Smooth Camera (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Ahremic" does "Replaces linear camera interpolation with a sigmoid solution, using Ken Perlin's ''Smoother Step'' second-order hermite polynomial."
+// Original category: Camera
 static float value01 = 1.0f;
 static float value03 = 3.0f;
 static float value05 = 5.0f;
@@ -5510,13 +5507,15 @@ static float value10 = 10.0f;
     }
 }
 
-Patch "Super Stomp" in "Gameplay" by "Hyper & Yosho" does
+Patch "Super Stomp (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper & Yosho" does
 /*
 Sends a powerful shockwave when landing a stomp from a great height.
 
 Idea by Yosho.
 */
 //
+    // Original category: Gameplay
+    
     static float StompingTime = 0.0f;
     static float SuperStompThreshold = 0.35f;
 //
