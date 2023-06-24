@@ -2544,8 +2544,10 @@ Patch "Disable Power Boost Audio (v1.20)" in "! Incompatible - awaiting fixes fo
     );
 }
 
-Patch "Disable Power Boost Effects" in "Graphics" by "NM & Hyper"
+Patch "Disable Power Boost Effects (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "NM & Hyper"
 {
+    // Original category: Graphics
+
     /* Activation FX */
     WriteProtected<byte>
     (
