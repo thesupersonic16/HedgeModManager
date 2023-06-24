@@ -2555,40 +2555,38 @@ Patch "Disable Power Boost Audio (v1.20)" in "! Incompatible - awaiting fixes fo
     );
 }
 
-Patch "Disable Power Boost Effects (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "NM & Hyper"
+Patch "Disable Power Boost Effects" in "Graphics" by "NM & Hyper"
 {
-    // Original category: Graphics
-
     /* Activation FX */
-    WriteProtected<byte>
+    WriteNop
     (
-        /* 0x1408758BB */
+        /* 0x1408D2AE5 */
         ScanSignature
         (
-            "\x41\xB9\x11\x00\x00\x00\xC6\x44\x24\x20\x00\x4C\x8D\x05\xCC\xCC\xCC\xCC\x49\x8B\xD6",
-            "xxxxxxxxxxxxxx????xxx"
+            "\xE8\xCC\xCC\xCC\xCC\x83\x7D\x98\x00\x4C\x8D\x05\xCC\xCC\xCC\xCC\x41\xB9\x11\x00\x00\x00",
+            "x????xxxxxxx????xxxxxx"
         ),
 
-        0xEB, 0x32
+        5
     );
 
     /* Boost Activation FX */
     WriteProtected<byte>
     (
-        /* 0x1408744D4 */
+        /* 0x1408D1CD4 */
         ScanSignature
         (
-            "\x75\x6D\x48\x8B\x4E\x20",
-            "xxxxxx"
+            "\x74\x09\x4C\x8D\x05\xCC\xCC\xCC\xCC\xEB\x4F\x48\x8B\xCF",
+            "xxxxx????xxxxx"
         ),
 
-        0xEB, 0x12
+        0xEB, 0x09
     );
 
     /* Trail FX */
     WriteProtected<byte>
     (
-        /* 0x1407A0E88 */
+        /* 0x1407E931A */
         ScanSignature
         (
             "\xB2\x02\xEB\x02\x32\xD2",
