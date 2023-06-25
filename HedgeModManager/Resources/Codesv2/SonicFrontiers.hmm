@@ -2744,16 +2744,14 @@ Patch "Disable Soldier Eggs" in "Gameplay" by "Hyper" does "Disables the egg spa
     );
 }
 
-Patch "Disable Spin Slash on Drop Dash (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
+Patch "Disable Spin Slash on Drop Dash" in "Gameplay" by "Hyper"
 {
-    // Original category: Gameplay
-
     WriteProtected<byte>
     (
-        /* 0x14BA71EE6 */
+        /* 0x14BBB68A6 */
         ScanSignature
         (
-            "\x74\x79\xBA\x2D\x00\x00\x00",
+            "\x74\x79\xBA\x2E\x00\x00\x00",
             "xxxxxxx"
         ),
 
