@@ -1222,7 +1222,7 @@ Patch "Disable Camera Shake" in "Camera" by "Hyper" does "Disables camera shake 
     );
 }
 
-Patch "Disable Challenge Marker Scanner (experimental) (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
+Patch "Disable Challenge Marker Scanner (experimental)" in "Gameplay" by "Hyper" does
 /*
 Disables the scanning event and map transition after completing challenges.
 
@@ -1231,18 +1231,16 @@ Known issues;
 - The option to place markers on the map will not appear after completing your first challenge (use Disable Menu Restrictions as a workaround).
 */
 {
-    // Original category: Gameplay
-    
     WriteProtected<byte>
     (
-        /* 0x149465412 */
+        /* 0x1493E9B82 */
         ScanSignature
         (
-            "\x74\x1E\x41\x83\xF8\x01\x75\x71",
+            "\x74\x1E\x41\x83\xF8\x01\x75\x7E",
             "xxxxxxxx"
         ),
 
-        0xEB, 0x76
+        0xE9, 0x81, 0x00, 0x00, 0x00
     );
 }
 
