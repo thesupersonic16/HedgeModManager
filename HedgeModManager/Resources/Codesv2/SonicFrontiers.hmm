@@ -1463,7 +1463,7 @@ Known issues;
     );
 }
 
-Patch "Disable Decelerate Collision" in "Gameplay" by "Hyper" does
+Patch "Disable Decelerate Collision" in "Physics" by "Hyper" does
 /*
 Disables the collision flag that kills all horizontal velocity when jumping.
 
