@@ -3264,15 +3264,13 @@ Patch "Disable Vignette" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Drop Dash on Double Jump (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Allows you to drop dash immediately after double jumping, making it require only two presses."
+Patch "Drop Dash on Double Jump" in "Gameplay" by "Hyper" does "Allows you to drop dash immediately after double jumping, making it require only two presses."
 {
-    // Original category: Gameplay
-
-    /* 0x14B484CC8 */
+    /* 0x14B52AB4D */
     var sig = ScanSignature
     (
-        "\x74\x49\x48\x89\xF9\xE8\xCC\xCC\xCC\xCC\x48\x89\xF9",
-        "xxxxxx????xxx"
+        "\x74\x45\x48\x89\xF9\xE8",
+        "xxxxxx"
     );
 
     WriteNop(sig, 2);
