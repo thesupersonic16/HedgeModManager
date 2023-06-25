@@ -2186,13 +2186,11 @@ Known issues;
     );
 }
 
-Patch "Disable Jump Board Paths on Islands (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
+Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
 //
     static bool IsWorldIsland = false;
 //
 {
-    // Original category: Gameplay
-
     fixed (bool* pIsWorldIsland = &IsWorldIsland)
     {
         /* This hook checks if we're on an island
@@ -2218,29 +2216,29 @@ Patch "Disable Jump Board Paths on Islands (v1.20)" in "! Incompatible - awaitin
                 pop rdx
             ",
 
-            /* 0x1491AC2C9 */
+            /* 0x149122469 */
             ScanSignature
             (
-                "\x48\x89\x7C\x24\x30\x48\x8D\x5E\x50\x4C\x89\x74\x24\x38\x4C\x89\x7C\x24\x40\xE8\xCC\xCC\xCC\xCC\xBF\x03\x00\x00\x00\x84\xC0\x74\x56\x4C\x8D\x35\xCC\xCC\xCC\xCC\x49\x29\xF6",
-                "xxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxx????xxx"
+                "\x48\x89\x7C\x24\x30\x48\x8D\x5E\x50\x4C\x89\x74\x24\x38\x4C\x89\x7C\x24\x40\xE8\xCC\xCC\xCC\xCC\xBF\x03\x00\x00\x00\x84\xC0\x74\x64",
+                "xxxxxxxxxxxxxxxxxxxx????xxxxxxxxx"
             ),
 
             HookBehavior.Replace
         );
 
-        /* 0x1491B3960 */
+        /* 0x149127E03 */
         long callerFuncAddr = ScanSignature
         (
-            "\xE8\xCC\xCC\xCC\xCC\x80\x7D\x35\x00\x74\x67\xE8\xCC\xCC\xCC\xCC\x48\x89\xC2",
-            "x????xxxxxxx????xxx"
+            "\xE8\xCC\xCC\xCC\xCC\x80\x7D\xE5\x00\x0F\x84\xE4\x00\x00\x00",
+            "x????xxxxxxxxxx"
         );
 
-        /* 0x140D5FF90 */
+        /* 0x140DDDE40 */
         long sendMsgFunc = callerFuncAddr + Read<int>(callerFuncAddr + 0x01) + 0x05;
 
         /* This hook checks if we're on an island and calls
-            the message sender to enter Sonic into the jump
-            board path if we're in Cyber Space. */
+           the message sender to enter Sonic into the jump
+           board path if we're in Cyber Space. */
         WriteAsmHook
         (
             $@"
@@ -2252,7 +2250,7 @@ Patch "Disable Jump Board Paths on Islands (v1.20)" in "! Incompatible - awaitin
                 jnz ret
 
                 ; Set up message sender function call.
-                lea r8, qword ptr [rbp + 0x57 + 0xFFFFFFFFFFFFFF90]
+                lea r8, qword ptr [rbp + 0x57 + 0xFFFFFFFFFFFFFF40]
                 lea rdx, qword ptr [rbp + 0x57 + 0x10]
                 mov ecx, [rax]
                 mov dword ptr [rbp + 0x57 + 0x10], ecx
@@ -2265,7 +2263,7 @@ Patch "Disable Jump Board Paths on Islands (v1.20)" in "! Incompatible - awaitin
             ret:
             ",
 
-            /* 0x1491B3954 */
+            /* 0x149127DF7 */
             ScanSignature
             (
                 "\x48\x8D\x55\x67\x8B\x08\x89\x4D\x67\x48\x89\xF1",
