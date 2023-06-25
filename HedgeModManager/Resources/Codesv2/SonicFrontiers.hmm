@@ -2938,7 +2938,7 @@ Affected objects;
             movaps xmm2, xmm3
             mulps  xmm2, xmm3
             movaps xmm1, xmm2
-            shufps xmm1, xmm2 0x99
+            shufps xmm1, xmm2, 0x99
             addss  xmm2, xmm1
         ",
 
@@ -2968,23 +2968,16 @@ Affected objects;
     }
 
     // Springs
-    WriteAsmHook
+    WriteProtected<byte>
     (
-        $@"
-            mov   edx, 0
-            mov   byte ptr [rbx + 0x300], dl
-            movzx eax, dl
-            and   al, 0xF7
-        ",
-
         /* 0x140434C08 */
         ScanSignature
         (
             "\x0F\x44\xD0\x88\x93\x00\x03\x00\x00\x0F\xB6\xC2\x24\xF7",
             "xxxxxxxxxxxxxx"
         ),
-
-        HookBehavior.Replace
+        
+        Assemble("mov dl, 1; nop")
     );
 }
 
