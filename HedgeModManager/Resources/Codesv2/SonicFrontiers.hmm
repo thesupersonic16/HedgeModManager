@@ -739,6 +739,7 @@ Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper"
             ret
         ",
 
+        /* 0x140A15CD0 */
         ScanSignature
         (
             "\x48\x8B\x41\x08\x8B\x40\x4C",
@@ -2962,69 +2963,62 @@ Affected objects;
 - Springs
 */
 {
-    // Original category: Gameplay
-
     // Dash Panels
-    WriteProtected<byte>
+    WriteAsmHook
     (
-        /* 0x140335B1D */
+        $@"
+            mov byte ptr [rsi + 0xB8], 0
+            movaps xmm2, xmm3
+            mulps  xmm2, xmm3
+            movaps xmm1, xmm2
+            shufps xmm1, xmm2 0x99
+            addss  xmm2, xmm1
+        ",
+
+        /* 0x14037D693 */
         ScanSignature
         (
-            "\x75\x0D\x45\x38\xA7\xB8\x00\x00\x00",
-            "xxxxxxxxx"
+            "\x0F\x28\xD3\x0F\x59\xD3\x0F\x28\xCA\x0F\xC6\xCA\x99\xF3\x0F\x58\xD1\x0F\x28\xC1\x0F\xC6\xC1\x55\xF3\x0F\x58\xD0\x0F\x57\xC0\x0F\xC6\xD2\x00\x0F\x51\xCA\x0F\xC2\x15\xCC\xCC\xCC\xCC\xCC\x0F\x5E\xD9\x0F\xC2\xC8\x04\x0F\x54\xD9\xF3\x0F\x10\x0D\xCC\xCC\xCC\xCC\x0F\x54\xDA\x0F\x55\x15\xCC\xCC\xCC\xCC\x0F\x56\xDA\x0F\x29\x9D\x90\x00\x00\x00",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx?????xxxxxxxxxxxxxx????xxxxxx????xxxxxxxxxx"
         ),
 
-        Assemble("nop; nop; mov byte ptr [r15 + 0xB8], 0; nop; nop; nop; nop; nop")
+        HookBehavior.Replace
     );
 
     // Jump Boards
     {
-        /* 0x14037F023 */
+        /* 0x1403C8D03 */
         long instrAddr = ScanSignature
         (
-            "\x80\xB8\xB8\x00\x00\x00\x00\x74\x1D",
+            "\x80\xB8\xB8\x00\x00\x00\x00\x74\x12",
             "xxxxxxxxx"
         );
 
         WriteProtected<byte>(instrAddr, Assemble("mov byte ptr [rax + 0xB8], 0"));
 
-        /* 0x14037F02A */
+        /* 0x1403C8D0A */
         WriteProtected<byte>(instrAddr + 0x07, 0xEB);
     }
 
     // Springs
-    {
-        /* 0x1403E83D0 */
-        long funcAddr = ScanSignature
+    WriteAsmHook
+    (
+        $@"
+            mov   edx, 0
+            mov   byte ptr [rbx + 0x300], dl
+            movzx eax, dl
+            and   al, 0xF7
+        ",
+
+        /* 0x140434C08 */
+        ScanSignature
         (
-            "\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x48\x89\x7C\x24\x20\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\x6C\x24\xC9\x48\x81\xEC\xC0\x00\x00\x00\x4C",
-            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        );
+            "\x0F\x44\xD0\x88\x93\x00\x03\x00\x00\x0F\xB6\xC2\x24\xF7",
+            "xxxxxxxxxxxxxx"
+        ),
 
-        /* 0x1403E84E1 */
-        WriteProtected<byte>(funcAddr + 0x111, 0xEB);
-
-        /* 0x1403E862C */
-        WriteProtected<byte>(funcAddr + 0x25C, 0xEB);
-
-        /* 0x1403E8790 */
-        WriteProtected<byte>(funcAddr + 0x3C0, 0xEB);
-
-        /* 0x1403E89E9 */
-        WriteProtected<byte>(funcAddr + 0x619, 0xEB);
-
-        /* 0x1403E8B22 */
-        WriteProtected<byte>(funcAddr + 0x752, 0xEB);
-
-        /* 0x1403E8BCD */
-        WriteProtected<byte>(funcAddr + 0x7FD, 0xEB);
-
-        /* 0x1403E8C63 */
-        WriteProtected<byte>(funcAddr + 0x893, 0xEB);
-
-        /* 0x1403E8E21 */
-        WriteProtected<byte>(funcAddr + 0xA51, 0xE9, 0xED, 0x00, 0x00, 0x00);
-    }
+        HookBehavior.Replace
+    );
 }
 
 Patch "Disable Water Audio Filter" in "Audio" by "Hyper"
@@ -4887,7 +4881,7 @@ Patch "Hide Homing Reticle (v1.20)" in "! Incompatible - awaiting fixes for v1.3
 Patch "Hide Oxygen Gauge (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
 {
     // Original category: UI
-    
+
     WriteProtected<byte>
     (
         /* 0x14090CF20 */
