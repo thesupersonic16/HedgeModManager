@@ -544,7 +544,7 @@ Supported islands;
     NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
 }
 
-Patch "Always Respawn Enemies" in "Gameplay" by "Hyper" does "Always respawns enemies and guardians when loading back into islands."
+Patch "Always Respawn Enemies" in "Enemy" by "Hyper" does "Always respawns enemies and guardians when loading back into islands."
 {
     WriteProtected<byte>
     (
@@ -1713,7 +1713,7 @@ Patch "Disable Forced Weather for Bosses" in "Weather" by "Hyper" does "Disables
     );
 }
 
-Patch "Disable Fortress (experimental)" in "Gameplay" by "Hyper" does
+Patch "Disable Fortress (experimental)" in "Enemy" by "Hyper" does
 /*
 Disables the Fortress guardian on Chaos Island.
 
@@ -1880,7 +1880,7 @@ Patch "Disable Grass" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
+Patch "Disable Guardian Introductions" in "Enemy" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
 {
     // Asura
     WriteProtected<byte>
@@ -2713,7 +2713,7 @@ Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
     );
 }
 
-Patch "Disable Soldier Eggs" in "Gameplay" by "Hyper" does "Disables the egg spawners for the Soldier enemy, allowing them to spawn instantly."
+Patch "Disable Soldier Eggs" in "Enemy" by "Hyper" does "Disables the egg spawners for the Soldier enemy, allowing them to spawn instantly."
 {
     WriteNop
     (
@@ -3247,7 +3247,7 @@ Patch "Disable Vignette" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Disable Wolf (experimental)" in "Gameplay" by "Hyper" does
+Patch "Disable Wolf (experimental)" in "Enemy" by "Hyper" does
 /*
 Disables the Wolf enemy on Ouranos Island.
 
