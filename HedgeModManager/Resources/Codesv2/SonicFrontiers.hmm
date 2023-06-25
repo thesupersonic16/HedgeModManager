@@ -4695,17 +4695,15 @@ Patch "Force Xbox Series Controller UI" in "UI" by "Hyper"
     );
 }
 
-Patch "Hide Boost Gauge (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
+Patch "Hide Boost Gauge" in "UI" by "Hyper"
 {
-    // Original category: UI
-
     WriteProtected<byte>
     (
-        /* 0x1408F1250 */
+        /* 0x14098D3B4 */
         ScanSignature
         (
-            "\x74\x1C\xE8\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\x48\x89\x4D\xF0\x48\x8D\x0D\x00\x00\x00\x00\xE9\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\x48\x89\x4D\xF0\x48\x8D\x0D\x00\x00\x00\x00\xEB\x74",
-            "xxx????xxx????xxxxxxx????x????x????xxx????xxxxxxx????xx"
+            "\x74\x1D\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4C\x24\x30\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x8F\x00\x00\x00",
+            "xxx????xxx????xxxxxxxx????xxxxx"
         ),
 
         0xEB
