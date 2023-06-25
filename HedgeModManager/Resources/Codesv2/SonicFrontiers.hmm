@@ -5514,15 +5514,13 @@ Patch "Smooth Camera (v1.30)" in "Camera" by "Ahremic" does "Replaces linear cam
     }
 }
 
-Patch "Super Stomp (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper & Yosho" does
+Patch "Super Stomp" in "Gameplay" by "Hyper & Yosho" does
 /*
 Sends a powerful shockwave when landing a stomp from a great height.
 
 Idea by Yosho.
 */
 //
-    // Original category: Gameplay
-
     static float StompingTime = 0.0f;
     static float SuperStompThreshold = 0.35f;
 //
@@ -5541,10 +5539,10 @@ Idea by Yosho.
                 addss  xmm8, xmm1
                 movss  dword ptr [rcx], xmm8
                 mov    rcx, r15
-                movaps xmmword ptr [rsp + 0xA0 + 0xFFFFFFFFFFFFFFD0], xmm7
+                movaps xmmword ptr [rsp + 0x80 + 0xFFFFFFFFFFFFFFF0], xmm6
             ",
 
-            /* 0x140801905 */
+            /* 0x140850553 */
             ScanSignature
             (
                 "\x4C\x8B\x79\x18\x48\x8B\xF9\x49\x8B\xCF",
@@ -5554,21 +5552,18 @@ Idea by Yosho.
             HookBehavior.Replace
         );
 
-        /* 0x140857928 */
+        /* 0x1408ACA68 */
         long shockwaveCondAddr = ScanSignature
         (
             "\xE8\xCC\xCC\xCC\xCC\x83\xBE\xB0\x00\x00\x00\x02\x48\x8B\xE8",
             "x????xxxxxxxxxx"
         );
 
-        /* 0x1407C2050 */
-        long getParameterFuncAddr = shockwaveCondAddr + Read<int>(shockwaveCondAddr + 1) + 5;
-
         // Set stomp shockwave condition.
         WriteAsmHook
         (
             $@"
-                mov    rax, {getParameterFuncAddr}
+                mov    rax, {shockwaveCondAddr + Read<int>(shockwaveCondAddr + 1) + 5}
                 call   rax
                 mov    rbp, {(long)pStompingTime}
                 movss  xmm8, dword ptr [rbp]
@@ -5595,24 +5590,31 @@ Idea by Yosho.
            and use that for resetting the timer instead. */
 
         // Reset stomping timer for successful stomp attacks.
-        WriteAsmHook
-        (
-            $@"
-                mov edx, 0x0C
-                mov rcx, {(long)pStompingTime}
-                mov dword ptr [rcx], 0
-                mov rcx, rsi
-            ",
-
-            /* 0x14B5B7C8B */
-            ScanSignature
+        {
+            /* 0x14B6D58A3 */
+            var sig = ScanSignature
             (
-                "\x8B\x0D\xCC\xCC\xCC\xCC\x81\xF1\x44\x8B\x8A\xE9",
-                "xx????xxxxxx"
-            ),
+                "\xBA\x0D\x00\x00\x00\x48\x89\xF1\xE8\xCC\xCC\xCC\xCC\x84\xC0\x74\x7B",
+                "xxxxxxxxx????xxxx"
+            );
 
-            HookBehavior.Replace
-        );
+            WriteAsmHook
+            (
+                $@"
+                    mov  rcx, {(long)pStompingTime}
+                    mov  dword ptr [rcx], 0
+                    mov  edx, 0x0D
+                    mov  rcx, rsi
+                    mov  rax, {(sig + 8) + Read<int>(sig + 9) + 5}
+                    call rax
+                    test al, al
+                ",
+
+                sig,
+
+                HookBehavior.Replace
+            );
+        }
 
         // Reset stomping timer when grinding.
         WriteAsmHook
@@ -5626,7 +5628,7 @@ Idea by Yosho.
                 mov    rbx, rdx
             ",
 
-            /* 0x14B42EA3D */
+            /* 0x14B4BB01D */
             ScanSignature
             (
                 "\x44\x0F\x29\x44\x24\x30\x48\x89\xD1",
@@ -5647,7 +5649,7 @@ Idea by Yosho.
                 test rcx, rcx
             ",
 
-            /* 0x140839E8D */
+            /* 0x14088D7AD */
             ScanSignature
             (
                 "\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x1C\xBA\xDC\x40\x0E\x2D",
