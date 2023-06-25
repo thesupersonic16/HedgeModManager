@@ -3522,16 +3522,14 @@ Patch "Fix Shadow Stutter" in "Fixes" by "Hyper" does "Fixes shadows not interpo
     );
 }
 
-Patch "Fix Stomp Reset (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does "Fixes the stomp attack only resetting once you hit the ground, allowing you to perform multiple stomps whilst still airborne."
+Patch "Fix Stomp Reset" in "Fixes" by "Hyper" does "Fixes the stomp attack only resetting once you hit the ground, allowing you to perform multiple stomps whilst still airborne."
 {
-    // Original category: Fixes
-
     WriteNop
     (
-        /* 0x140895AC0 */
+        /* 0x1408FF6C0 */
         ScanSignature
         (
-            "\x74\x1C\x45\x33\xC0\x48\x8B\xCB\x41\x8D\x50\x34",
+            "\x74\x1C\x45\x33\xC0\x48\x8B\xCB\x41\x8D\x50\x36",
             "xxxxxxxxxxxx"
         ),
 
