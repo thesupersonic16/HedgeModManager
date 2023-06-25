@@ -3364,12 +3364,10 @@ Patch "Fix Photo Mode Camera Collision" in "Fixes" by "Hyper" does "Allows the c
     );
 }
 
-Patch "Fix RenderDoc Captures (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Skyth" does "Fixes RenderDoc being unable to hook to the game for capturing the graphics device."
+Patch "Fix RenderDoc Captures (v1.30)" in "Fixes" by "Skyth" does "Fixes RenderDoc being unable to hook to the game for capturing the graphics device."
 {
-    // Original category: Fixes
-
-    WriteProtected<long>(0x1410A4B40, Read<long>(0x15611F168));
-    WriteProtected<long>(0x1410A4B50, Read<long>(0x15611F188));
+    WriteProtected<long>(0x141123B40, Read<long>(0x156300168));
+    WriteProtected<long>(0x141123B50, Read<long>(0x156300188));
 }
 
 Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a bug that causes the internal resolution to reset to 1280x720 if the game is unfocused during boot."
