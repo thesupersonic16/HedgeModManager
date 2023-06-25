@@ -2920,7 +2920,7 @@ This data can include, but is not limited to;
     );
 }
 
-Patch "Disable Traversal Objects in Chests (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
+Patch "Disable Traversal Objects in Chests (v1.20)" in "Gameplay" by "Hyper" does
 /*
 Disables the hidden traversal objects in chests that require cyloop to reveal, making them always accessible.
 
