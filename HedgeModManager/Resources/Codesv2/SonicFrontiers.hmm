@@ -1540,27 +1540,25 @@ Example usage;
     }
 }
 
-Patch "Disable Drop Dash (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
+Patch "Disable Drop Dash" in "Gameplay" by "Hyper"
 {
-    // Original category: Gameplay
-
     // Disable drop dash charge from StateDoubleJump.
     WriteProtected<byte>
     (
-        /* 0x14B484C1A */
+        /* 0x14B52AAA7 */
         ScanSignature
         (
-            "\x0F\x84\x9C\x00\x00\x00\x48\x89\xF9",
+            "\x0F\x84\x94\x00\x00\x00\x48\x89\xF9",
             "xxxxxxxxx"
         ),
         
-        0xE9, 0x9D, 0x00, 0x00, 0x00
+        0xE9, 0x95, 0x00, 0x00, 0x00
     );
 
     // Disable drop dash from StateDoubleJump.
     WriteProtected<byte>
     (
-        /* 0x14B43C9B8 */
+        /* 0x14B4C1A03 */
         ScanSignature
         (
             "\x74\x14\xF3\x0F\x10\x8F\xB4\x00\x00\x00",
@@ -1573,7 +1571,7 @@ Patch "Disable Drop Dash (v1.20)" in "! Incompatible - awaiting fixes for v1.30"
     // Disable drop dash charge from StateRecoveryJump.
     WriteProtected<byte>
     (
-        /* 0x14084CD97 */
+        /* 0x1408A0A37 */
         ScanSignature
         (
             "\x0F\x84\xB7\x00\x00\x00\x80\xBE\xC4\x00\x00\x00\x00",
