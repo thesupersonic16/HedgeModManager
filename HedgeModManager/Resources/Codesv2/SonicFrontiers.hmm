@@ -2553,20 +2553,18 @@ Patch "Disable Power Boost (v1.20)" in "! Incompatible - awaiting fixes for v1.3
     );
 }
 
-Patch "Disable Power Boost Audio (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "NM"
+Patch "Disable Power Boost Audio" in "Audio" by "Hyper"
 {
-    // Original category: Audio
-
     WriteProtected<byte>
     (
-        /* 0x140874567 */
+        /* 0x141413C68 */
         ScanSignature
         (
-            "\x75\x5A\x48\x8B\x4E\x20",
-            "xxxxxx"
+            "sn_powerboost\0",
+            "xxxxxxxxxxxxxx"
         ),
 
-        0xEB, 0x12
+        System.Text.Encoding.UTF8.GetBytes("sn_boost_run\0")
     );
 }
 
