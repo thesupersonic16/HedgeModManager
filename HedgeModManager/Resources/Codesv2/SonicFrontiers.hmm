@@ -4796,16 +4796,14 @@ Patch "Hide Drift Dash Panels" in "Graphics" by "Hyper" does "Hides the drift da
     );
 }
 
-Patch "Hide Enemy Health Gauge (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper & Gordon Ramsay" does "Hides the health gauge for standard enemies and guardians."
+Patch "Hide Enemy Health Gauge" in "UI" by "Hyper & Gordon Ramsay" does "Hides the health gauge for standard enemies and guardians."
 {
-    // Original category: UI
-
     WriteProtected<byte>
     (
-        /* 0x14051735B */
+        /* 0x14054E7AB */
         ScanSignature
         (
-            "\x0F\x84\xF7\x00\x00\x00\xBA\x50\x23\x00\x00",
+            "\x0F\x84\xF7\x00\x00\x00\xBA\x82\x23\x00\x00",
             "xxxxxxxxxxx"
         ),
 
