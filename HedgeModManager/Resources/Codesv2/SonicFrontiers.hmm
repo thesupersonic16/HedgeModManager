@@ -4811,33 +4811,31 @@ Patch "Hide Enemy Health Gauge" in "UI" by "Hyper & Gordon Ramsay" does "Hides t
     );
 }
 
-Patch "Hide Homing Reticle (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
+Patch "Hide Homing Reticle" in "UI" by "Hyper"
 {
-    // Original category: UI
-
     // Disable sound and main reticle.
     WriteProtected<byte>
     (
-        /* 0x1408E5497 */
+        /* 0x1409526AA */
         ScanSignature
         (
-            "\x0F\x84\xB0\x00\x00\x00\x49\x8D\x7D\x50",
-            "xxxxxxxxxx"
+            "\x0F\x84\xB5\x00\x00\x00\x49\x8D\xBD\x10\x01\x00\x00",
+            "xxxxxxxxxxxxx"
         ),
 
-        0xE9, 0xB1, 0x00, 0x00, 0x00
+        0xE9, 0xB6, 0x00, 0x00, 0x00
     );
 
     // Disable lock-on triangle.
     WriteProtected<byte>
     (
-        /* 0x14C47C4A6 */
+        /* 0x14C5E45B2 */
         ScanSignature
         (
-            "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x48\x89\x7C\x24\x18\x55\x48\x8D\x6C\x24\xA9\x48\x81\xEC\x90\x00\x00\x00\x48\x89\xCB\x48\xC7\x45\xFF",
-            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x48\x89\x7C\x24\x18\x55\x48\x8D\x6C\x24\xA9\x48\x81\xEC\x90\x00\x00\x00\x48\x89\xCB\x48\xC7\x45\xFF\x02\x00\x00\x00",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         )
-        + 0x226,
+        + 0x232,
 
         0xEB
     );
