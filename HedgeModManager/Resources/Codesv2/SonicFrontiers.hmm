@@ -3622,7 +3622,7 @@ Patch "Force 4K Video Playback" in "Graphics" by "Hyper" does "Forces the game t
     );
 }
 
-Patch "Force Cyber Space Objects on Islands (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper, ĐeäTh & Sajid" does
+Patch "Force Cyber Space Objects on Islands" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
 /*
 Replaces all supported objects on the islands with their Cyber Space counterparts.
 
@@ -3630,8 +3630,6 @@ Unsupported objects;
 - Jump Selectors (Generations-style)
 */
 //
-    // Original category: Graphics
-
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
 
@@ -3799,7 +3797,7 @@ Unsupported objects;
     // Allow loading Cyber Space asset archive.
     WriteNop
     (
-        /* 0x1401AF6AB */
+        /* 0x1401C5BC7 */
         ScanSignature
         (
             "\x74\x0F\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x40\x38\x75\x68",
@@ -3823,14 +3821,12 @@ Unsupported objects;
                 mov  rsi, rcx
 
                 push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 0
-
-                pop rax
+                mov  rax, {(long)pWorldType}
+                mov  byte ptr [rax], 0
+                pop  rax
             ",
 
-            /* 0x1473C021A */
+            /* 0x14733424A */
             ScanSignature
             (
                 "\x57\x48\x83\xEC\x20\x4C\x89\xC3\x48\x89\xD7\x48\x89\xCE\xE8\xCC\xCC\xCC\xCC\x48\x8D\x05\xCC\xCC\xCC\xCC\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x00\x01\x00\x00",
@@ -3845,22 +3841,20 @@ Unsupported objects;
         (
             $@"
                 ; Restore original code.
-                mov qword ptr [rsi + 0x1A8], rdi
-                xor ebp, ebp
-                mov qword ptr [rsi + 0x190], rbp
+                mov  qword ptr [rsi + 0x1A8], rdi
+                xor  ebp, ebp
+                mov  qword ptr [rsi + 0x190], rbp
 
                 push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                mov  rax, {(long)pWorldType}
+                mov  byte ptr [rax], 1
+                pop  rax
             ",
 
-            /* 0x1479E9DD1 */
+            /* 0x147967172 */
             ScanSignature
             (
-                "\x48\x89\xBE\xA8\x01\x00\x00\x31\xED",
+                "\x48\x89\x9E\xA8\x01\x00\x00\x31\xED",
                 "xxxxxxxxx"
             ),
 
@@ -3876,15 +3870,13 @@ Unsupported objects;
                 movups xmmword ptr [rdi + 0xA0], xmm0
                 movaps xmm0, xmmword ptr [rax + 0x10]
 
-                push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 0
-
-                pop rax
+                push   rax
+                mov    rax, {(long)pWorldType}
+                mov    byte ptr [rax], 0
+                pop    rax
             ",
 
-            /* 0x14015023F */
+            /* 0x14015AA6F */
             ScanSignature
             (
                 "\x0F\x10\x00\x0F\x11\x87\xA0\x00\x00\x00\x0F\x28\x40\x10\x0F\x29\x87\xD0\x00\x00\x00\x0F\x28\x48\x20\x0F\x29\x8F\xE0\x00\x00\x00\x0F\x28\x40\x30\x0F\x29\x87\xF0\x00\x00\x00\x0F\x28\x48\x40\x0F\x29\x8F\x00\x01\x00\x00\x0F\x28\x40\x50\x48\x8B\x47\x10",
@@ -3903,15 +3895,13 @@ Unsupported objects;
                 mov    qword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFFA0], rax
                 mov    word ptr [rdi + 0x120], 0x101
 
-                push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                push   rax
+                mov    rax, {(long)pWorldType}
+                mov    byte ptr [rax], 1
+                pop    rax
             ",
 
-            /* 0x14014E6E7 */
+            /* 0x140158D07 */
             ScanSignature
             (
                 "\x0F\x10\x44\x24\x20\x48\x89\x85\xB0\x00\x00\x00\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
@@ -3926,21 +3916,17 @@ Unsupported objects;
         (
             $@"
                 push rax
-
-                ; Restore original code.
-                xor ebx, ebx
-                mov rax, {(long)Marshal.StringToHGlobalAnsi("w6d01")}
-                lea rcx, qword ptr [rax]
-                mov edx, ebx
-                nop dword ptr [rax]
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                xor  ebx, ebx
+                mov  rax, {(long)Marshal.StringToHGlobalAnsi("w6d01")}
+                lea  rcx, qword ptr [rax]
+                mov  edx, ebx
+                nop  dword ptr [rax]
+                mov  rax, {(long)pWorldType}
+                mov  byte ptr [rax], 1
+                pop  rax
             ",
 
-            /* 0x14014E4B0 */
+            /* 0x140158AD0 */
             ScanSignature
             (
                 "\x33\xDB\x48\x8D\x0D\xCC\xCC\xCC\xCC\x8B\xD3",
@@ -3950,21 +3936,22 @@ Unsupported objects;
             HookBehavior.Replace
         );
 
+        // TODO: create asset redirector library.
         WriteAsmHook
         (
             $@"
                 ; Restore original code.
-                sub rsp, 0xD0
-                mov rdi, r8
-                mov rbx, rdx
-                mov rsi, rcx
+                sub  rsp, 0xD0
+                mov  rdi, r8
+                mov  rbx, rdx
+                mov  rsi, rcx
 
                 push rax
                 push rcx
 
-                mov rax, {(long)pWorldType}
-                cmp byte ptr [rax], 2
-                jz  ret
+                mov  rax, {(long)pWorldType}
+                cmp  byte ptr [rax], 2
+                jz   ret
 
                 mov  rax, {(long)fpGetAssetName}
                 mov  rcx, rdx
@@ -3974,11 +3961,11 @@ Unsupported objects;
                 mov  rbx, rdx
 
             ret:
-                pop rcx
-                pop rax
+                pop  rcx
+                pop  rax
             ",
 
-            /* 0x140D81C5B */
+            /* 0x140DFFB0B */
             ScanSignature
             (
                 "\x48\x81\xEC\xD0\x00\x00\x00\x49\x8B\xF8\x48\x8B\xDA",
@@ -3990,27 +3977,27 @@ Unsupported objects;
     }
 }
 
-Patch "Force Depth of Field" in "Graphics" by "WasifBoomz & Dicey" does "Forces Depth of Field to render, causing objects very close and very far from the camera to blur."
+Patch "Force Depth of Field" in "Graphics" by "WasifBoomz & Dicey" does "Forces Depth of Field to render, blurring near and distant geometry."
 {
-    //FxDOFParameter
+    // FxDOFParameter
     WriteAsmHook
     (
         $@"
-            ;Enable DOF
+            ; Enable DOF
             mov  byte ptr [r8], 1
             
-            ;Set foreground bokeh depth to end at 3 and start at 0
+            ; Set foreground bokeh depth to end at 3 and start at 0
             mov  dword ptr [r8+4], 0x40400000
             mov  dword ptr [r8+8], 0x00000000
 			
-            ;Set background bokeh depth to start at 4000 and end at 50
+            ; Set background bokeh depth to start at 4000 and end at 50
             mov  dword ptr [r8+12], 0x42480000
             mov  dword ptr [r8+16], 0x457A0000
 			
-            ;Increase sample count to 20
+            ; Increase sample count to 20
             mov  dword ptr [r8+32], 20
 			
-            ;Set render target size to full
+            ; Set render target size to full
             mov  byte ptr [r8+48], 0
         ",
 			
@@ -4024,16 +4011,16 @@ Patch "Force Depth of Field" in "Graphics" by "WasifBoomz & Dicey" does "Forces 
         HookBehavior.After
     );
 	
-    //FxRenderTargetSetting
+    // FxRenderTargetSetting
     WriteAsmHook
     (
         $@"
-            ;Original code
+            ; Original code
             lea rbp, [rsp-400h]
             sub rsp, 500h
             mov r15, rcx
 		
-            ;Set render target size to full
+            ; Set render target size to full
             mov dword ptr [rdx], 0
         ",
 			
@@ -4080,7 +4067,7 @@ Forces real-time local reflections to render at a higher resolution and reduces 
     );
 }
 
-Patch "Force Island Objects in Cyber Space (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper, ĐeäTh & Sajid" does
+Patch "Force Island Objects in Cyber Space" in "Graphics" by "Hyper, ĐeäTh & Sajid" does
 /*
 Replaces all supported objects in Cyber Space with their island counterparts.
 
@@ -4089,8 +4076,6 @@ Unsupported objects;
 - Up-reel Carriers
 */
 //
-    // Original category: Graphics
-
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
 
@@ -4258,14 +4243,14 @@ Unsupported objects;
     // Allow loading open zone asset archive.
     WriteNop
     (
-        /* 0x1401AF6C0 */
+        /* 0x1401C5BDC */
         ScanSignature
         (
-            "\x74\x62\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCF",
-            "xxxxx????xxx"
+            "\x0F\x84\x36\x01\x00\x00\x48\x8D\x15",
+            "xxxxxxxxx"
         ),
         
-        2
+        6
     );
 
     fixed (byte* pWorldType = &WorldType)
@@ -4275,22 +4260,20 @@ Unsupported objects;
         (
             $@"
                 ; Restore original code.
-                mov r8d, 0x10
-                mov [rsi], rax
-                lea rcx, qword ptr [rsi + 0x100]
+                mov  r8d, 0x10
+                mov  [rsi], rax
+                lea  rcx, qword ptr [rsi + 0x100]
 
                 push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 0
-
-                pop rax
+                mov  rax, {(long)pWorldType}
+                mov  byte ptr [rax], 0
+                pop  rax
             ",
 
-            /* 0x1473C0234 */
+            /* 0x147334264 */
             ScanSignature
             (
-                "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x00\x01\x00\x00\x0F\x10\x03\x0F\x11\x86\xE0\x00\x00\x00\x0F\x10\x4B\x10\x0F\x11\x8E\xF0\x00\x00\x00\x48\x8B\x13\xE8\xCC\xCC\xCC\xCC\x4C\x89\x05",
+                "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x00\x01\x00\x00\x0F\x10\x03\x0F\x11\x86\xE0\x00\x00\x00\x0F\x10\x4B\x10\x0F\x11\x8E\xF0\x00\x00\x00\x48\x8B\x13\xE8\xCC\xCC\xCC\xCC\x4C\x31\x05",
                 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx"
             ),
 
@@ -4302,19 +4285,17 @@ Unsupported objects;
         (
             $@"
                 ; Restore original code.
-                mov r8d, 0x10
-                mov [rsi], rax
-                lea rcx, qword ptr [rsi + 0x160]
+                mov  r8d, 0x10
+                mov  [rsi], rax
+                lea  rcx, qword ptr [rsi + 0x160]
 
                 push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                mov  rax, {(long)pWorldType}
+                mov  byte ptr [rax], 1
+                pop  rax
             ",
 
-            /* 0x1479E9C99 */
+            /* 0x147967039 */
             ScanSignature
             (
                 "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x60\x01\x00\x00",
@@ -4333,15 +4314,13 @@ Unsupported objects;
                 mov    qword ptr [rbp + 0x1E0 + 0xFFFFFFFFFFFFFDF0], rax
                 mov    word ptr [rdi + 0x120], 0x100
 
-                push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 0
-
-                pop rax
+                push   rax
+                mov    rax, {(long)pWorldType}
+                mov    byte ptr [rax], 0
+                pop    rax
             ",
 
-            /* 0x1401502E2 */
+            /* 0x14015AB12 */
             ScanSignature
             (
                 "\x0F\x10\x44\x24\x20\x48\x89\x45\xD0\x66\xC7\x87\x20\x01\x00\x00\x00\x01",
@@ -4357,21 +4336,19 @@ Unsupported objects;
             $@"
                 ; Restore original code.
                 movups xmmword ptr [rdi + 0x80], xmm0
-                movups xmm0, xmmword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFFA0]
+                movups xmm0, xmmword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFF80]
                 
-                push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                push   rax
+                mov    rax, {(long)pWorldType}
+                mov    byte ptr [rax], 1
+                pop    rax
             ",
 
-            /* 0x14014E6FC */
+            /* 0x140158C7C */
             ScanSignature
             (
-                "\x0F\x11\x87\x80\x00\x00\x00\x0F\x10\x85\xB0\x00\x00\x00\xEB\x34",
-                "xxxxxxxxxxxxxxxx"
+                "\x0F\x11\x81\x80\x00\x00\x00\x0F\x10\x85\x90\x00\x00\x00\x0F\x11\x81\x90\x00\x00\x00\xE9\x06\x02\x00\x00",
+                "xxxxxxxxxxxxxxxxxxxxxxxxxx"
             ),
 
             HookBehavior.Replace
@@ -4386,15 +4363,13 @@ Unsupported objects;
                 mov    qword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFF40], rax
                 mov    word ptr [rdi + 0x120], 0x101
 
-                push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                push   rax
+                mov    rax, {(long)pWorldType}
+                mov    byte ptr [rax], 1
+                pop    rax
             ",
 
-            /* 0x14014E5B8 */
+            /* 0x140158BD8 */
             ScanSignature
             (
                 "\x0F\x10\x44\x24\x20\x48\x89\x45\x50\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
@@ -4431,7 +4406,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x140D81C8A */
+            /* 0x140DFFB3A */
             ScanSignature
             (
                 "\x48\x8D\x4C\x24\x48\xC7\x44\x24\x38\x00\x00\x00\x00\x48\x89\x4C\x24\x30\x49\xC7\xC0\xFF\xFF\xFF\xFF\xC7\x44\x24\x3C\x7F\x00\x00\x80\x48\x89\x44\x24\x40\x49\xFF\xC0\x42\x80\x3C\x03\x00\x75\xF6\x45\x33\xC9",
