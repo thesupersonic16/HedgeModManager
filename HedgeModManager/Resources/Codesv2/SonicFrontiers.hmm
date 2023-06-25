@@ -2766,7 +2766,7 @@ Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cu
     WriteNop(addr + 0x38, 5);
 }
 
-Patch "Disable Stomp Flip (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
+Patch "Disable Stomp Flip" in "Gameplay" by "Hyper" does
 /*
 Disables the flip Sonic does when performing a stomp attack under certain conditions.
 
@@ -2775,17 +2775,15 @@ Notes;
 - This will allow you to stomp bounce to kill enemies with the shockwave without doing a flip.
 */
 {
-    // Original category: Gameplay
-
-    byte[] asm = Assemble("lea edx, [r8 + 0x37]");
+    byte[] asm = Assemble("lea edx, [r8 + 0x39]");
 
     // Flip for collision types (e.g. Asura body)
     WriteProtected<byte>
     (
-        /* 0x140858ABE */
+        /* 0x1408ADA9E */
         ScanSignature
         (
-            "\x41\x8D\x50\x38\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x17",
+            "\x41\x8D\x50\x3A\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x17",
             "xxxxx????xxxx"
         ),
         
@@ -2794,10 +2792,10 @@ Notes;
 
     // Flip for stomp shockwave kill
     {
-        /* 0x14B5B9E5C */
+        /* 0x14B6E56E1 */
         var sig = ScanSignature
         (
-            "\x41\x8D\x50\x38\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x20\xC6\x87\xB8\x00\x00\x00\x01",
+            "\x41\x8D\x50\x3A\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x20\xC6\x87\xB8\x00\x00\x00\x01",
             "xxxxx????xxxxxxxxxxxx"
         );
 
