@@ -457,33 +457,29 @@ Patch "Always Have Phantom Rush" in "Cheats" by "NM"
     );
 }
 
-Patch "Always Have Power Boost on Islands (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "SuperSonic16"
+Patch "Always Have Power Boost on Islands" in "Cheats" by "SuperSonic16"
 {
-    // Original category: Cheats
-
     WriteProtected<byte>
     (
-        /* 0x140875507 */
+        /* 0x1408D27AA */
         ScanSignature
         (
-            "\x74\x24\x0F\xBE\x43\x30",
-            "xxxxxx"
+            "\x74\x2A\x0F\xBE\x43\x30\x66\x0F\x6E\xC8\x0F\xBE\x43\x31\x0F\x5B\xC9\x66\x0F\x6E\xC0\x0F\x5B\xC0\xF3\x0F\x5C\xC8\x0F\x54\x0D\xCC\xCC\xCC\xCC\x0F\x2F\x0D\xCC\xCC\xCC\xCC\x77\x15\xBA\x32\x00\x00\x00\x48\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x84\xC0\x74\x04\xB0\x01",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxxxxxxxxxx????xxxxxx"
         ),
 
         0xEB
     );
 }
 
-Patch "Always Have Power Boost in Cyber Space (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
+Patch "Always Have Power Boost in Cyber Space" in "Cheats" by "Hyper"
 {
-    // Original category: Cheats
-
     WriteNop
     (
-        /* 0x14087553C */
+        /* 0x1408D27E5 */
         ScanSignature
         (
-            "\x74\x05\x40\xB7\x01\xEB\x03\x40\x32\xFF\x8B\x43\x28",
+            "\x74\x04\xB0\x01\xEB\x02\x32\xC0\xF3\x0F\x10\x47\x50",
             "xxxxxxxxxxxxx"
         ),
 
@@ -2528,20 +2524,18 @@ Known issues;
     }
 }
 
-Patch "Disable Power Boost (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper"
+Patch "Disable Power Boost" in "Gameplay" by "Hyper"
 {
-    // Original category: Gameplay
-
     WriteProtected<byte>
     (
-        /* 0x140875507 */
+        /* 0x1408D27AA */
         ScanSignature
         (
-            "\x74\x24\x0F\xBE\x43\x30",
-            "xxxxxx"
+            "\x74\x2A\x0F\xBE\x43\x30\x66\x0F\x6E\xC8\x0F\xBE\x43\x31\x0F\x5B\xC9\x66\x0F\x6E\xC0\x0F\x5B\xC0\xF3\x0F\x5C\xC8\x0F\x54\x0D\xCC\xCC\xCC\xCC\x0F\x2F\x0D\xCC\xCC\xCC\xCC\x77\x15\xBA\x32\x00\x00\x00\x48\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x84\xC0\x74\x04\xB0\x01",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxxxxxxxxxx????xxxxxx"
         ),
 
-        0xEB, 0x3A
+        0xEB, 0x3F
     );
 }
 
