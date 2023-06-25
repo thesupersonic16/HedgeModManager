@@ -2163,7 +2163,7 @@ Patch "Disable Idle Music Volume Reduction" in "Audio" by "Hyper" does "Disables
     );
 }
 
-Patch "Disable In-Game Letterboxing (experimental) (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
+Patch "Disable In-Game Letterboxing (experimental)" in "Graphics" by "Hyper" does
 /*
 Disables letterboxing for in-game cutscenes and Training Simulator.
 
@@ -2172,17 +2172,15 @@ Known issues;
 - Filter 7 in Photo Mode utilises this letterbox element, so it doesn't show up there.
 */
 {
-    // Original category: Graphics
-
     WriteProtected<byte>
     (
-        /* 0x14C90D06D */
+        /* 0x14C9B8FA4 */
         ScanSignature
         (
-            "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x48\x89\x7C\x24\x18\x55\x48\x8D\x6C\x24\xA9\x48\x81\xEC\x90\x00\x00\x00\x48\x8D\x05\xCC\xCC\xCC\xCC\x48\x8B\x1D\xCC\xCC\xCC\xCC\x48\xBE\x5B",
-            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxx"
+            "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x48\x89\x7C\x24\x18\x55\x48\x8D\x6C\x24\xA9\x48\x81\xEC\x90\x00\x00\x00\x48\x8D\x05\xCC\xCC\xCC\xCC\x48\xC7",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xx"
         )
-        + 0x12D,
+        + 0x124,
 
         0xEB
     );
