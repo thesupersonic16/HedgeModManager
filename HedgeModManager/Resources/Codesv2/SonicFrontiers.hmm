@@ -917,23 +917,11 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
     /* 0x140901E20 */
     long playParticleFuncAddr = playParticleCallerAddr + Read<int>(playParticleCallerAddr + 0x01) + 0x05;
 
-    /* 0x14B4DB1CF */
-    var sig = ScanSignature
-    (
-        "\xE8\xCC\xCC\xCC\xCC\x41\xB0\xFE\x48\x89\xC1",
-        "x????xxxxxx"
-    );
-
     // StateJump
     {
         WriteAsmHook
         (
             $@"
-                mov  rax, {sig + Read<int>(sig + 0x01) + 0x05}
-                call rax
-                mov  r8b, 0xFE
-                mov  rcx, rax
-                test dil, dil
                 push rax
                 push rdx
                 mov  r8b, 1
@@ -943,9 +931,15 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
                 call rax
                 pop  rdx
                 pop  rax
+                mov  rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("JUMP_BALL")}
             ",
 
-            sig,
+            /* 0x14B4DB1D4 */
+            ScanSignature
+            (
+                "\x41\xB0\xFE\x48\x89\xC1\x40\x84\xFF",
+                "xxxxxxxxx"
+            ),
 
             HookBehavior.Replace
         );
