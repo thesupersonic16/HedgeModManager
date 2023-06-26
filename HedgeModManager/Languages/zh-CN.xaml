@@ -63,17 +63,16 @@
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >名称</system:String>
     <system:String x:Key="CodesUICategory">分类</system:String>
-    <system:String x:Key="CodesUIExpand"  >展开</system:String>
-    <system:String x:Key="CodesUICollapse">折叠</system:String>
-    <system:String x:Key="CodesUINullCategory">未分类</system:String>
-    <system:String x:Key="SettingsUICodesUseTreeView">使用树视图展示代码列表</system:String>
     <system:String x:Key="CodesUIDownload">下载社区代码</system:String>
     <system:String x:Key="CodesUIUpdate"  >更新社区代码</system:String>
     <system:String x:Key="CodesUISearch"  >搜索: </system:String>
     <system:String x:Key="CodesUIInfo"    >双击本代码以获取更多信息。</system:String>
     <system:String x:Key="CodesUIInfoHint">光标悬浮在代码上以获取更多信息。</system:String>
     <system:String x:Key="CodesUINoInfo"  >暂无任何信息。</system:String>
-    <system:String x:Key="CodesUICopyCode">复制到剪切板</system:String>
+    <system:String x:Key="CodesUICopyCode">复制代码到剪切板</system:String>
+    <system:String x:Key="CodesUIExpand"  >展开</system:String>
+    <system:String x:Key="CodesUICollapse">折叠</system:String>
+    <system:String x:Key="CodesUINullCategory">未分类</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">安装的代码与代码加载器不相容。&#x0a;请更新代码和代码加载器。&#x0a;警告: 这将删除所有自定义代码。</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">正在下载代码…</system:String>
   
@@ -83,7 +82,6 @@
     <system:String x:Key="DiffUIRemoved"  >修改: {0}</system:String>
     <system:String x:Key="DiffUIRenamed"  >移除: {0}</system:String>
     <system:String x:Key="DiffUIModified" >重命名: {0}</system:String>
-    
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
@@ -102,10 +100,12 @@
     <system:String x:Key="SettingsUILabelMDir"      >Mod 目录: </system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"  >查询 Mod 加载器是否有更新</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"  >查询代码是否有更新</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"  >启动时查询 Mod 加载器是否有更新</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"  >启动时查询代码是否有更新</system:String>
     <system:String x:Key="SettingsUICheckModUpdates">查询 Mod 是否有更新</system:String>
+    <system:String x:Key="SettingsUIUpdateCodesOnLaunch">启动时自动更新社区代码</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >开始游戏后并保持程序打开</system:String>
+    <system:String x:Key="SettingsUICodesUseTreeView"   >使用树视图分类代码列表</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate" >检查更新</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >关于 Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >语言: </system:String>
@@ -231,7 +231,7 @@
     <system:String x:Key="ExceptionWindowButtonIgnore"    >忽略并关闭</system:String>
     <system:String x:Key="ExceptionWindowButtonReport"    >在 GitHub 上提交报告</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >有新的更新可用！</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >这个版本的 Hedge Mod Manager 似乎已经过时了。&#x0a;強烈建議先更新，再看看問題是否仍然存在&#x0a;要更新吗？</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >这个版本的 Hedge Mod Manager 似乎已经过时了。&#x0a;强烈建议先更新，再看看问题是否仍然存在&#x0a;要更新吗？</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">更新错误！</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager 无法更新！&#x0a;请手动下载最新版本。</system:String>
 
