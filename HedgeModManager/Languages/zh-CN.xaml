@@ -231,7 +231,7 @@
     <system:String x:Key="ExceptionWindowButtonIgnore"    >忽略并关闭</system:String>
     <system:String x:Key="ExceptionWindowButtonReport"    >在 GitHub 上提交报告</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >有新的更新可用！</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >这个版本的 Hedge Mod Manager 似乎已经过时了。&#x0a;强烈建议先更新，再看看是否仍然存在&#x0a;要更新吗？</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >这个版本的 Hedge Mod Manager 似乎已经过时了。&#x0a;强烈建议先更新，再看看问题是否仍然存在&#x0a;要更新吗？</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">更新错误！</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager 无法更新！&#x0a;请手动下载最新版本。</system:String>
 
