@@ -36,10 +36,11 @@ if (rsdkGlobals == 0)
 }
 
 // Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-if (*(byte*)(rsdkV4Flags + 0x1A4) == 1)
+// Version 1.00 and 1.04: rsdkV4Flags + 0x1A4
+if (*(byte*)(rsdkV4Flags + 0x1FC) == 1)
 {
     // Sonic 1 Coin Mode
-    WriteProtected<byte>(rsdkV4Flags + 0x1F4, 0x00);
+    WriteProtected<byte>(rsdkV4Flags + 0x1FC, 0x00);
 }
 
 // Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
@@ -62,7 +63,8 @@ if (*(long*)rsdkGlobals != 0)
     // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
     // Version 1.00: rsdkGlobals + 0x447D08
     // Version 1.04: rsdkGlobals + 0x4C3508 (Thanks to RDC)
-    if (*(byte*)(*(long*)rsdkGlobals + rsdkGOffset + 0x104) == 1)
+    // Version 2.00: rsdkGlobals + rsdkGOffset + 0x104
+    if (*(byte*)(*(long*)rsdkGlobals + rsdkGOffset + 0x10C) == 1)
     {
         // HUD Update
         // Version 1.00: rsdkGlobals + 0x447D20
@@ -72,7 +74,8 @@ if (*(long*)rsdkGlobals != 0)
         // Coin Mode
         // Version 1.00: rsdkGlobals + 0x447CD4
         // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
-        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x11C, 0x00);
+        // Version 2.00: rsdkGlobals + rsdkGOffset + 0x124
+        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x124, 0x00);
     }
 }
 
@@ -108,10 +111,11 @@ if (rsdkGlobals == 0)
 }
 
 // Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_MIRRORING
-if (*(byte*)(rsdkV4Flags + 0x1A4) == 3)
+// Version 1.00 and 1.04: rsdkV4Flags + 0x1A4
+if (*(byte*)(rsdkV4Flags + 0x1FC) == 3)
 {
     // Sonic 1 Coin Mode
-    WriteProtected<byte>(rsdkV4Flags + 0x1F4, 0x00);
+    WriteProtected<byte>(rsdkV4Flags + 0x1FC, 0x00);
 }
 
 // Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_MIRRORING
@@ -131,10 +135,11 @@ if (*(byte*)(rsdkV3Flags + 0x1DC) == 3)
 // Sonic 3&K Coin Mode and HUD Update
 if (*(long*)rsdkGlobals != 0)
 {
-    // Check if game.playMode is set to BOOT_PLAYMODE_MIRRORING
+    // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
     // Version 1.00: rsdkGlobals + 0x447D08
     // Version 1.04: rsdkGlobals + 0x4C3508 (Thanks to RDC)
-    if (*(byte*)(*(long*)rsdkGlobals + rsdkGOffset + 0x104) == 3)
+    // Version 2.00: rsdkGlobals + rsdkGOffset + 0x104
+    if (*(byte*)(*(long*)rsdkGlobals + rsdkGOffset + 0x10C) == 3)
     {
         // HUD Update
         // Version 1.00: rsdkGlobals + 0x447D20
@@ -144,7 +149,8 @@ if (*(long*)rsdkGlobals != 0)
         // Coin Mode
         // Version 1.00: rsdkGlobals + 0x447CD4
         // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
-        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x11C, 0x00);
+        // Version 2.00: rsdkGlobals + rsdkGOffset + 0x124
+        WriteProtected<byte>(*(long*)rsdkGlobals + rsdkGOffset + 0x124, 0x00);
     }
 }
 

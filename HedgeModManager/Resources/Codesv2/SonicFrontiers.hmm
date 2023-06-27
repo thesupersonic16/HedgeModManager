@@ -461,11 +461,11 @@ Patch "Always Have Power Boost on Islands" in "Cheats" by "SuperSonic16"
 {
     WriteProtected<byte>
     (
-        /* 0x140875507 */
+        /* 0x1408D27AA */
         ScanSignature
         (
-            "\x74\x24\x0F\xBE\x43\x30",
-            "xxxxxx"
+            "\x74\x2A\x0F\xBE\x43\x30\x66\x0F\x6E\xC8\x0F\xBE\x43\x31\x0F\x5B\xC9\x66\x0F\x6E\xC0\x0F\x5B\xC0\xF3\x0F\x5C\xC8\x0F\x54\x0D\xCC\xCC\xCC\xCC\x0F\x2F\x0D\xCC\xCC\xCC\xCC\x77\x15\xBA\x32\x00\x00\x00\x48\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x84\xC0\x74\x04\xB0\x01",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxxxxxxxxxx????xxxxxx"
         ),
 
         0xEB
@@ -476,10 +476,10 @@ Patch "Always Have Power Boost in Cyber Space" in "Cheats" by "Hyper"
 {
     WriteNop
     (
-        /* 0x14087553C */
+        /* 0x1408D27E5 */
         ScanSignature
         (
-            "\x74\x05\x40\xB7\x01\xEB\x03\x40\x32\xFF\x8B\x43\x28",
+            "\x74\x04\xB0\x01\xEB\x02\x32\xC0\xF3\x0F\x10\x47\x50",
             "xxxxxxxxxxxxx"
         ),
 
@@ -544,7 +544,7 @@ Supported islands;
     NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
 }
 
-Patch "Always Respawn Enemies" in "Gameplay" by "Hyper" does "Always respawns enemies and guardians when loading back into islands."
+Patch "Always Respawn Enemies" in "Enemy" by "Hyper" does "Always respawns enemies and guardians when loading back into islands."
 {
     WriteProtected<byte>
     (
@@ -628,45 +628,68 @@ Supported islands;
     NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
 }
 
-Patch "Always Trickable Dash Rings" in "Cheats" by "Hyper"
+Patch "Always Trickable Dash Rings" in "Gameplay" by "Hyper"
 {
     WriteProtected<byte>
     (
-        /* 0x148DC6F4C */
+        /* 0x148CA72A7 */
         ScanSignature
         (
-            "\x0F\x44\xC8\x88\x8F\x00\x00\x00\x00\x41\x80\xBF\x00\x00\x00\x00\x00\x74\x0A\xF6\xC1\x02\x75\x05\x45\x31\xC0\xEB",
-            "xxxxx????xxx?????xxxxxxxxxxx"
+            "\x0F\x44\xC8\x88\x8F\xD0\x02\x00\x00",
+            "xxxxxxxxx"
         ),
 
         Assemble("mov cl, 2; nop")
     );
 }
 
-Patch "Always Trickable Jump Boards" in "Cheats" by "Hyper"
+Patch "Always Trickable Jump Boards" in "Gameplay" by "Hyper"
 {
     WriteProtected<byte>
     (
-        /* 0x14037EAFA */
+        /* 0x1403C8CFA */
         ScanSignature
         (
-            "\x0F\x95\xC1\x88\x8F\x00\x00\x00\x00\x80\xB8\x00\x00\x00\x00\x00\x74\x1D\x45\x8B\xC5\xBA\x00\x00\x00\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x45\x33\xC0\x33\xD2\x48\x8B\xCF\xE8\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x0F\x57\xDB\x48\x8D\x55\xB0\x48\x8B\xCF\x48\x8B\xD8\x4C\x8B\x80\x00\x00\x00\x00\x49\x81\xC0\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x0F\x57\xC0\x4C\x8D\x45\xC0\x0F\x5C\x05\x00\x00\x00\x00\x48\x8D\x55\xB0\x0F\x57\xFF\x48\x8D\x4C\x24\x00\x0F\x29\x45\xC0\xE8\x00\x00\x00\x00\x8B\x87\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00",
-            "xxxxx????xx?????xxxxxx????xxxx????xxxxxxxxx????x????xxxxxxx????xxxxxxxxxxxxxxxx????xxx????x????xxxxxxxxxx????xxxxxxxxxxx?xxxxx????xx????xxx????"
+            "\x0F\x95\xC1\x88\x8F\x90\x02\x00\x00\x80\xB8\xB8\x00\x00\x00\x00",
+            "xxxxxxxxxxxxxxxx"
         ),
 
         Assemble("mov cl, 1; nop")
     );
 }
 
-Patch "Always Trickable Springs" in "Cheats" by "Hyper"
+Patch "Always Trickable Spin Dash Exit (experimental)" in "Gameplay" by "Hyper" does
+/*
+Allows Sonic to always trick when exiting out of Spin Dash whilst in the air.
+
+By default, exiting Spin Dash without boosting will make Sonic fall.
+
+Known issues;
+- Sonic will not retain momentum if you're not holding the analog stick in any direction (this happens in the base game too).
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x1408FD158 */
+        ScanSignature
+        (
+            "\x41\x8D\x50\x0F\xE8\xCC\xCC\xCC\xCC\xB0\x01\xEB\x02\x32\xC0\x48\x8B\x5C\x24\x58",
+            "xxxxx????xxxxxxxxxxx"
+        ),
+
+        Assemble("lea edx, dword ptr [r8 + 0x10]")
+    );
+}
+
+Patch "Always Trickable Springs" in "Gameplay" by "Hyper"
 {
     WriteNop
     (
-        /* 0x1403E849D */
+        /* 0x140434C5C */
         ScanSignature
         (
-            "\x0F\x44\xD0\x88\x93\x00\x03\x00\x00\x0F\xB6\xC2\x80\xCA\x10",
-            "xxxxxxxxxxxxxxx"
+            "\x0F\x44\xC8\x0F\xB6\xC1\x88\x8B\x00\x03\x00\x00",
+            "xxxxxxxxxxxx"
         ),
         
         3
@@ -700,6 +723,26 @@ Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
         ),
 
         2
+    );
+}
+
+Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper"
+{
+    WriteAsmHook
+    (
+        $@"
+            mov al, 1
+            ret
+        ",
+
+        /* 0x140A15CD0 */
+        ScanSignature
+        (
+            "\x48\x8B\x41\x08\x8B\x40\x4C",
+            "xxxxxxx"
+        ),
+
+        HookBehavior.Replace
     );
 }
 
@@ -860,47 +903,55 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
 {
     long SPINJUMP = (long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPINJUMP");
 
-    /* 0x14B45836F */
+    /* 0x14B4D4603 */
     long playParticleCallerAddr = ScanSignature
     (
-        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x0D\xBA\x8E\xB4\x47\x3B",
+        "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x14\xBA\x8E\xB4\x47\x3B",
         "x????xxxxxxxxxxxxxxxxxxxxx"
     );
 
-    /* 0x1408981D0 */
+    /* 0x140901E20 */
     long playParticleFuncAddr = playParticleCallerAddr + Read<int>(playParticleCallerAddr + 0x01) + 0x05;
 
     // StateJump
-    WriteAsmHook
-    (
-        $@"
-            mov  r14, rax
-            test dil, dil
-            jnz  exit
-            push rax
-            push rdx
-            mov  r8b, 1
-            mov  rdx, {SPINJUMP}
-            lea  rdx, [rdx]
-            mov  rcx, rsi
-            mov  rax, {playParticleFuncAddr}
-            call rax
-            pop  rdx
-            pop  rax
-        exit:
-            mov  r8b, 0xFE
-            mov  rcx, r14
-        ",
-
-        /* 0x14B4627AD */
-        ScanSignature
+    {
+        WriteAsmHook
         (
-            "\x8A\x0D\xCC\xCC\xCC\xCC\x80\xF1\xB6\x41\x88\xC8\x48\x89\xC1",
-            "xx????xxxxxxxxx"
-        ),
+            $@"
+                push rax
+                push rdx
+                mov  r8b, 1
+                mov  rdx, {SPINJUMP}
+                mov  rcx, rsi
+                mov  rax, {playParticleFuncAddr}
+                call rax
+                pop  rdx
+                pop  rax
+                mov  rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("JUMP_BALL")}
+            ",
 
-        HookBehavior.Replace
-    );
+            /* 0x14B4DB1D4 */
+            ScanSignature
+            (
+                "\x41\xB0\xFE\x48\x89\xC1\x40\x84\xFF",
+                "xxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        WriteNop
+        (
+            /* 0x14B4DB1F8 */
+            ScanSignature
+            (
+                "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x0D\xBA\x8E\xB4\x47\x3B\xE8\xCC\xCC\xCC\xCC\x49\x89\xC6",
+                "x????xxxxxxxxxxxxxxxxxxxxxx????xxx"
+            ),
+
+            5
+        );
+    }
     
     // StateDoubleJump
     WriteAsmHook
@@ -913,7 +964,7 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
             call rax
         ",
 
-        /* 0x14B458365 */
+        /* 0x14B4D45F9 */
         ScanSignature
         (
             "\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x89\xD9\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x38",
@@ -1070,15 +1121,20 @@ Patch "Centre Game Window on Launch" in "System" by "Hyper"
     );
 }
 
-Patch "Disable Air Tricks from Terrain" in "Gameplay" by "Hyper" does "Disables the ability to air trick when flinging off terrain."
+Patch "Disable Air Tricks from Terrain" in "Gameplay" by "Hyper" does
+/*
+Disables the ability to air trick when flinging off terrain.
+
+This also applies to boosting out of Spin Dash in the air.
+*/
 {
     WriteProtected<byte>
     (
-        /* 0x14B3D1F11 */
+        /* 0x14B3E755A */
         ScanSignature
         (
-            "\x74\x10\x41\xB0\x01\xBA\x28\x00\x00\x00",
-            "xxxxxxxxxx"
+            "\x74\x19\x41\xB0\x01\x8B\x0D",
+            "xxxxxxx"
         ),
 
         0xEB
@@ -1100,31 +1156,15 @@ Patch "Disable Air Tricks from Traversal Objects" in "Gameplay" by "Hyper" does 
     );
 }
 
-Patch "Disable Boost Audio Filter" in "Audio" by "Hyper"
-{
-    WriteProtected<byte>
-    (
-        /* v1.01: 0x14B9F24E4 */
-        /* v1.20: 0x140874766 */
-        ScanSignature
-        (
-            "\x74\x48\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x85\xC0",
-            "xxxxxx????xxxx????xxxxxxx????xxx"
-        ),
-
-        0xEB
-    );
-}
-
 Patch "Disable Boost Replenishment from Timer" in "Gameplay" by "Hyper" does "Prevents the boost gauge from refilling over time."
 {
     WriteNop
     (
-        /* 0x140850F46 */
+        /* 0x1408D468C */
         ScanSignature
         (
-            "\xF3\x0F\x11\x51\x00\xE8\x00\x00\x00\x00\x41\x0F\x2F\x47\x00\x72\x09\xB8\x00\x00\x00\x00\x66\x21\x46\x78\x48\x8B\x7E\x20\x48\x8B\xCF\xE8\x00\x00\x00\x00\x48\x8B\xD8\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8B\xCF\x48\x8B\xD8\xE8\x00\x00\x00\x00\x4C\x8B\xBC\x24\x00\x00\x00\x00\x84\xC0\x74\x04\x48\x83\xC3\x04\x0F\x2F\x33\x73\x29\x48\x8B\x4E\x20\x33\xD2\xE8\x00\x00\x00\x00\x84\xC0\x75\x14\xF3\x0F\x10\x46\x00\xF3\x0F\x5C\x46\x00\x41\x0F\x54\xC1\x41\x0F\x2F\xC2\x76\x06",
-            "xxxx?x????xxxx?xxx????xxxxxxxxxxxx????xxxx????xxxxxxx????xxxx????xxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxx????xxxxxxxx?xxxx?xxxxxxxxxx"
+            "\xF3\x0F\x11\x4F\x3C\xEB\x4E",
+            "xxxxxxx"
         ),
 
         5
@@ -1137,21 +1177,22 @@ Patch "Disable Boost Replenishment from Rings" in "Gameplay" by "Hyper" does "Pr
     (
         $@"
             xorps    xmm1, xmm1
+            xor      r8d, r8d
             cvtsi2ss xmm1, rcx
             mov      rcx, rbx
             mov      dword ptr [rax + 0x14], 0
             mulss    xmm1, dword ptr [rax + 0x14]
         ",
 
-        /* 0x140813EED */
+        /* 0x140863E19 */
         ScanSignature
         (
-            "\x0F\x57\xC9\xF3\x48\x0F\x2A\xC9\x48\x8B\xCB\xF3\x0F\x59\x48\x14",
-            "xxxxxxxxxxxxxxxx"
+            "\x41\x8B\x4E\x24\x0F\x57\xC9\x45\x33\xC0\xF3\x48\x0F\x2A\xC9",
+            "xxxxxxxxxxxxxxx"
         ),
 
         HookBehavior.Replace
-    )
+    );
 }
 
 Patch "Disable Camera Shake" in "Camera" by "Hyper" does "Disables camera shake during combat."
@@ -1180,14 +1221,14 @@ Known issues;
 {
     WriteProtected<byte>
     (
-        /* 0x149465412 */
+        /* 0x1493E9B82 */
         ScanSignature
         (
-            "\x74\x1E\x41\x83\xF8\x01\x75\x71",
+            "\x74\x1E\x41\x83\xF8\x01\x75\x7E",
             "xxxxxxxx"
         ),
 
-        0xEB, 0x76
+        0xE9, 0x81, 0x00, 0x00, 0x00
     );
 }
 
@@ -1261,7 +1302,7 @@ Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables t
     // LANDING_CORRUPTION_WEAK
     WriteProtected<byte>
     (
-        /* 0x140830C7D */
+        /* v1.10: 0x140830C7D */
         ScanSignature
         (
             "\x74\x15\xB8\x04\x00\x00\x00\x48\x8B\x5C\x24\x30",
@@ -1274,7 +1315,7 @@ Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables t
     // LANDING_CORRUPTION_STRONG
     WriteNop
     (
-        /* 0x140830CA8 */
+        /* v1.10: 0x140830CA8 */
         ScanSignature
         (
             "\xBA\x05\x00\x00\x00\x0F\x45\xCA\x8B\xC1",
@@ -1287,7 +1328,7 @@ Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables t
     // IDLE_CORRUPTION_WEAK_LOOP
     WriteProtected<byte>
     (
-        /* 0x140830DB4 */
+        /* v1.10: 0x140830DB4 */
         ScanSignature
         (
             "\x74\x15\xB8\x0B\x00\x00\x00",
@@ -1300,7 +1341,7 @@ Patch "Disable Corruption Animations" in "Animation" by "Hyper" does "Disables t
     // IDLE_CORRUPTION_STRONG_LOOP
     WriteProtected<byte>
     (
-        /* 0x140830DDA */
+        /* v1.10: 0x140830DDA */
         ScanSignature
         (
             "\x74\x15\xB8\x0C\x00\x00\x00",
@@ -1422,7 +1463,7 @@ Known issues;
     );
 }
 
-Patch "Disable Decelerate Collision" in "Gameplay" by "Hyper" does
+Patch "Disable Decelerate Collision" in "Physics" by "Hyper" does
 /*
 Disables the collision flag that kills all horizontal velocity when jumping.
 
@@ -1492,20 +1533,20 @@ Patch "Disable Drop Dash" in "Gameplay" by "Hyper"
     // Disable drop dash charge from StateDoubleJump.
     WriteProtected<byte>
     (
-        /* 0x14B484C1A */
+        /* 0x14B52AAA7 */
         ScanSignature
         (
-            "\x0F\x84\x9C\x00\x00\x00\x48\x89\xF9",
+            "\x0F\x84\x94\x00\x00\x00\x48\x89\xF9",
             "xxxxxxxxx"
         ),
         
-        0xE9, 0x9D, 0x00, 0x00, 0x00
+        0xE9, 0x95, 0x00, 0x00, 0x00
     );
 
     // Disable drop dash from StateDoubleJump.
     WriteProtected<byte>
     (
-        /* 0x14B43C9B8 */
+        /* 0x14B4C1A03 */
         ScanSignature
         (
             "\x74\x14\xF3\x0F\x10\x8F\xB4\x00\x00\x00",
@@ -1518,7 +1559,7 @@ Patch "Disable Drop Dash" in "Gameplay" by "Hyper"
     // Disable drop dash charge from StateRecoveryJump.
     WriteProtected<byte>
     (
-        /* 0x14084CD97 */
+        /* 0x1408A0A37 */
         ScanSignature
         (
             "\x0F\x84\xB7\x00\x00\x00\x80\xBE\xC4\x00\x00\x00\x00",
@@ -1672,7 +1713,7 @@ Patch "Disable Forced Weather for Bosses" in "Weather" by "Hyper" does "Disables
     );
 }
 
-Patch "Disable Fortress (experimental)" in "Gameplay" by "Hyper" does
+Patch "Disable Fortress (experimental)" in "Enemy" by "Hyper" does
 /*
 Disables the Fortress guardian on Chaos Island.
 
@@ -1839,7 +1880,7 @@ Patch "Disable Grass" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
+Patch "Disable Guardian Introductions" in "Enemy" by "Hyper" does "Disables the sequence that zooms the camera into guardians and displays their name."
 {
     // Asura
     WriteProtected<byte>
@@ -1974,7 +2015,7 @@ Patch "Disable Guardian Introductions" in "Gameplay" by "Hyper" does "Disables t
     );
 }
 
-Patch "Disable Guardian Music (experimental)" in "Audio" by "Hyper" does
+Patch "Disable Guardian Music (experimental) (v1.20)" in "! Incompatible - awaiting fixes for v1.30" by "Hyper" does
 /*
 Disables the music specific to each guardian on the islands.
 
@@ -1982,11 +2023,13 @@ Known issues;
 - Jukebox will persist during Battle Rush if you previously used it on the islands before entering it.
 */
 {
-    /* 0x1408BAE10 */
+    // Original category: Audio
+
+    /* 0x140927340 */
     long fpGetBgmInfo = ScanSignature
     (
-        "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x63\xDA\x48\x8B\xF9\x48\x8B",
-        "xxxxxxxxxxxxxxxxxx"
+        "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x63\xDA\x48\x8B\xF9\x48\x8B\x49\x10",
+        "xxxxxxxxxxxxxxxxxxxx"
     );
 
     WriteAsmHook
@@ -2001,37 +2044,37 @@ Known issues;
             mov  rax, {fpGetBgmInfo}
             call rax
 
-            cmp qword ptr [rax], 0       ; check if cue name is null
-            jz  exit
-            mov r13, qword ptr [rax]     ; store pointer to cue name
+            cmp  qword ptr [rax], 0       ; check if cue name is null
+            jz   exit
+            mov  r13, qword ptr [rax]     ; store pointer to cue name
 
             ; world's fastest strcmp
-            mov r14, qword ptr [r13 + 4] ; read cue name without prefix (8 characters)
-            mov r15, 0x73736F62696E696D  ; miniboss
-            cmp r14, r15
-            je  setBgmInfo
-            mov r15, 0x655F656C676E696A  ; jingle_e
-            cmp r14, r15
-            je  setBgmInfo
-            mov r14d, dword ptr [r13 + 4] ; read cue name without prefix (4 characters)
-            mov r15d, 0x6D656E65          ; enem
-            cmp r14d, r15d
-            je  setBgmInfo
-            jmp exit
+            mov  r14, qword ptr [r13 + 4] ; read cue name without prefix (8 characters)
+            mov  r15, 0x73736F62696E696D  ; miniboss
+            cmp  r14, r15
+            je   setBgmInfo
+            mov  r15, 0x655F656C676E696A  ; jingle_e
+            cmp  r14, r15
+            je   setBgmInfo
+            mov  r14d, dword ptr [r13 + 4] ; read cue name without prefix (4 characters)
+            mov  r15d, 0x6D656E65          ; enem
+            cmp  r14d, r15d
+            je   setBgmInfo
+            jmp  exit
 
         setBgmInfo:
-            mov byte ptr [rax + 0x39], 1  ; set isOverlapPlay to 1
-            mov byte ptr [rax + 0x3A], -1 ; set priority to -1
-            mov byte ptr [rax + 0x3B], -1 ; set interruptType to -1
+            mov  byte ptr [rax + 0x39], 1  ; set isOverlapPlay to 1
+            mov  byte ptr [rax + 0x3A], -1 ; set priority to -1
+            mov  byte ptr [rax + 0x3B], -1 ; set interruptType to -1
 
         exit:
-            cmp byte ptr [rax + 0x39], 0
-            pop r13
-            pop r14
-            pop r15
+            cmp  byte ptr [rax + 0x39], 0
+            pop  r13
+            pop  r14
+            pop  r15
         ",
 
-        /* 0x1408BA310 */
+        /* 0x140926520 */
         ScanSignature
         (
             "\x8B\x17\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x80\x78\x39\x00",
@@ -2044,14 +2087,14 @@ Known issues;
     // Fix Sumo stopping music playback when damaged.
     WriteProtected<byte>
     (
-        /* 0x14062B57A */
+        /* 0x14066A4CA */
         ScanSignature
         (
-            "\x75\x05\x40\x84\xFF\x74\x13",
+            "\x75\x05\x40\x84\xFF\x74\x19",
             "xxxxxxx"
         ),
 
-        0xEB, 0x18
+        0xEB, 0x1E
     );
 }
 
@@ -2119,13 +2162,13 @@ Known issues;
 {
     WriteProtected<byte>
     (
-        /* 0x14C90D06D */
+        /* 0x14C9B8FA4 */
         ScanSignature
         (
-            "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x48\x89\x7C\x24\x18\x55\x48\x8D\x6C\x24\xA9\x48\x81\xEC\x90\x00\x00\x00\x48\x8D\x05\xCC\xCC\xCC\xCC\x48\x8B\x1D\xCC\xCC\xCC\xCC\x48\xBE\x5B",
-            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxx"
+            "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x48\x89\x7C\x24\x18\x55\x48\x8D\x6C\x24\xA9\x48\x81\xEC\x90\x00\x00\x00\x48\x8D\x05\xCC\xCC\xCC\xCC\x48\xC7",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xx"
         )
-        + 0x12D,
+        + 0x124,
 
         0xEB
     );
@@ -2161,29 +2204,29 @@ Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops
                 pop rdx
             ",
 
-            /* 0x1491AC2C9 */
+            /* 0x149122469 */
             ScanSignature
             (
-                "\x48\x89\x7C\x24\x30\x48\x8D\x5E\x50\x4C\x89\x74\x24\x38\x4C\x89\x7C\x24\x40\xE8\xCC\xCC\xCC\xCC\xBF\x03\x00\x00\x00\x84\xC0\x74\x56\x4C\x8D\x35\xCC\xCC\xCC\xCC\x49\x29\xF6",
-                "xxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxx????xxx"
+                "\x48\x89\x7C\x24\x30\x48\x8D\x5E\x50\x4C\x89\x74\x24\x38\x4C\x89\x7C\x24\x40\xE8\xCC\xCC\xCC\xCC\xBF\x03\x00\x00\x00\x84\xC0\x74\x64",
+                "xxxxxxxxxxxxxxxxxxxx????xxxxxxxxx"
             ),
 
             HookBehavior.Replace
         );
 
-        /* 0x1491B3960 */
+        /* 0x149127E03 */
         long callerFuncAddr = ScanSignature
         (
-            "\xE8\xCC\xCC\xCC\xCC\x80\x7D\x35\x00\x74\x67\xE8\xCC\xCC\xCC\xCC\x48\x89\xC2",
-            "x????xxxxxxx????xxx"
+            "\xE8\xCC\xCC\xCC\xCC\x80\x7D\xE5\x00\x0F\x84\xE4\x00\x00\x00",
+            "x????xxxxxxxxxx"
         );
 
-        /* 0x140D5FF90 */
+        /* 0x140DDDE40 */
         long sendMsgFunc = callerFuncAddr + Read<int>(callerFuncAddr + 0x01) + 0x05;
 
         /* This hook checks if we're on an island and calls
-            the message sender to enter Sonic into the jump
-            board path if we're in Cyber Space. */
+           the message sender to enter Sonic into the jump
+           board path if we're in Cyber Space. */
         WriteAsmHook
         (
             $@"
@@ -2195,7 +2238,7 @@ Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops
                 jnz ret
 
                 ; Set up message sender function call.
-                lea r8, qword ptr [rbp + 0x57 + 0xFFFFFFFFFFFFFF90]
+                lea r8, qword ptr [rbp + 0x57 + 0xFFFFFFFFFFFFFF40]
                 lea rdx, qword ptr [rbp + 0x57 + 0x10]
                 mov ecx, [rax]
                 mov dword ptr [rbp + 0x57 + 0x10], ecx
@@ -2208,7 +2251,7 @@ Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops
             ret:
             ",
 
-            /* 0x1491B3954 */
+            /* 0x149127DF7 */
             ScanSignature
             (
                 "\x48\x8D\x55\x67\x8B\x08\x89\x4D\x67\x48\x89\xF1",
@@ -2250,11 +2293,11 @@ Notes;
     // Disable save/load deny.
     WriteProtected<byte>
     (
-        /* 0x14CF932E1 */
+        /* 0x14D01D0E1 */
         ScanSignature
         (
-            "\x74\x0E\x83\xFE\x01",
-            "xxxxx"
+            "\x74\x19\x8B\x0D\xCC\xCC\xCC\xCC\x81\xF1\x49\x8D\x64\x24",
+            "xxxx????xxxxxx"
         ),
         
         0xEB
@@ -2263,20 +2306,20 @@ Notes;
     // Disable "SetHUDEnabled" callback function.
     WriteProtected<byte>
     (
-        /* 0x14BD66605 */
+        /* 0x14BE36C85 */
         ScanSignature
         (
-            "\x0F\x84\xE6\x00\x00\x00\x44\x0F\xBE\xC0",
+            "\x0F\x84\xE0\x00\x00\x00\x44\x0F\xBE\xC0",
             "xxxxxxxxxx"
         ),
         
-        0xE9, 0xE7, 0x00, 0x00, 0x00
+        0xE9, 0xE1, 0x00, 0x00, 0x00
     );
 
     // Disable map screen restriction during combat.
     WriteProtected<byte>
     (
-        /* 0x14088482D */
+        /* 0x1408E735D */
         ScanSignature
         (
             "\x0F\x94\x44\x24\x48\x89\x5C\x24\x44",
@@ -2289,10 +2332,10 @@ Notes;
     // Disable map marker lock.
     WriteProtected<byte>
     (
-        /* 0x140960789 */
+        /* 0x1409CFB91 */
         ScanSignature
         (
-            "\xF6\x86\x1C\x04\x00\x00\x02\x74\x2C",
+            "\xF6\x87\x1C\x04\x00\x00\x02\x74\x29",
             "xxxxxxxxx"
         ),
 
@@ -2302,10 +2345,10 @@ Notes;
     // Disable "Unlock Cyloop" tutorial to prevent softlock.
     WriteNop
     (
-        /* 0x1408B20D6 */
+        /* 0x14091E0B6 */
         ScanSignature
         (
-            "\x0F\x44\xD9\xBA\x0D\x23\x00\x00",
+            "\x0F\x44\xD9\xBA\x3D\x23\x00\x00",
             "xxxxxxxx"
         ),
         
@@ -2315,7 +2358,7 @@ Notes;
     // Disable Photo Mode check.
     WriteProtected<byte>
     (
-        /* 0x14094C162 */
+        /* 0x1409BF7A2 */
         ScanSignature
         (
             "\x0F\x84\xED\x00\x00\x00\x48\x8B\x5F\x18\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x33\xD2",
@@ -2483,64 +2526,64 @@ Patch "Disable Power Boost" in "Gameplay" by "Hyper"
 {
     WriteProtected<byte>
     (
-        /* 0x140875507 */
+        /* 0x1408D27AA */
         ScanSignature
         (
-            "\x74\x24\x0F\xBE\x43\x30",
-            "xxxxxx"
+            "\x74\x2A\x0F\xBE\x43\x30\x66\x0F\x6E\xC8\x0F\xBE\x43\x31\x0F\x5B\xC9\x66\x0F\x6E\xC0\x0F\x5B\xC0\xF3\x0F\x5C\xC8\x0F\x54\x0D\xCC\xCC\xCC\xCC\x0F\x2F\x0D\xCC\xCC\xCC\xCC\x77\x15\xBA\x32\x00\x00\x00\x48\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x84\xC0\x74\x04\xB0\x01",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxxxxxxxxxx????xxxxxx"
         ),
 
-        0xEB, 0x3A
+        0xEB, 0x3F
     );
 }
 
-Patch "Disable Power Boost Audio" in "Audio" by "NM"
+Patch "Disable Power Boost Audio" in "Audio" by "Hyper"
 {
     WriteProtected<byte>
     (
-        /* 0x140874567 */
+        /* 0x141413C68 */
         ScanSignature
         (
-            "\x75\x5A\x48\x8B\x4E\x20",
-            "xxxxxx"
+            "sn_powerboost\0",
+            "xxxxxxxxxxxxxx"
         ),
 
-        0xEB, 0x12
+        System.Text.Encoding.UTF8.GetBytes("sn_boost_run\0")
     );
 }
 
 Patch "Disable Power Boost Effects" in "Graphics" by "NM & Hyper"
 {
     /* Activation FX */
-    WriteProtected<byte>
+    WriteNop
     (
-        /* 0x1408758BB */
+        /* 0x1408D2AE5 */
         ScanSignature
         (
-            "\x41\xB9\x11\x00\x00\x00\xC6\x44\x24\x20\x00\x4C\x8D\x05\xCC\xCC\xCC\xCC\x49\x8B\xD6",
-            "xxxxxxxxxxxxxx????xxx"
+            "\xE8\xCC\xCC\xCC\xCC\x83\x7D\x98\x00\x4C\x8D\x05\xCC\xCC\xCC\xCC\x41\xB9\x11\x00\x00\x00",
+            "x????xxxxxxx????xxxxxx"
         ),
 
-        0xEB, 0x32
+        5
     );
 
     /* Boost Activation FX */
     WriteProtected<byte>
     (
-        /* 0x1408744D4 */
+        /* 0x1408D1CD4 */
         ScanSignature
         (
-            "\x75\x6D\x48\x8B\x4E\x20",
-            "xxxxxx"
+            "\x74\x09\x4C\x8D\x05\xCC\xCC\xCC\xCC\xEB\x4F\x48\x8B\xCF",
+            "xxxxx????xxxxx"
         ),
 
-        0xEB, 0x12
+        0xEB, 0x09
     );
 
     /* Trail FX */
     WriteProtected<byte>
     (
-        /* 0x1407A0E88 */
+        /* 0x1407E931A */
         ScanSignature
         (
             "\xB2\x02\xEB\x02\x32\xD2",
@@ -2570,11 +2613,11 @@ Patch "Disable Running Fall" in "Animation" by "Hyper" does "Disables the animat
 {
     WriteNop
     (
-        /* 0x14B49D733 */
+        /* 0x14B556BE2 */
         ScanSignature
         (
-            "\xF3\x0F\x10\x40\x30\xF3\x0F\x59\x05\xCC\xCC\xCC\xCC\x0F\x2F\xF0\x0F\x28\x74\x24\x40\x73\x0D\xBA\x01\x00\x00\x00\x48\x89\xF1",
-            "xxxxxxxxx????xxxxxxxxxxxxxxxxxx"
+            "\xF3\x0F\x10\x40\x30\xF3\x0F\x59\x05\xCC\xCC\xCC\xCC\x0F\x2F\xF0\x0F\x28\x74\x24\x40\x73\x14",
+            "xxxxxxxxx????xxxxxxxxxx"
         ),
 
         5
@@ -2670,49 +2713,7 @@ Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
     );
 }
 
-Patch "Disable Skill Camera Events" in "Camera" by "Hyper" does
-/*
-Disables the camera events for skills.
-
-Affected skills;
-- Cross Slash
-- Cyclone Kick
-- Grand Slam
-- Homing Shot
-- Loop Kick
-- Recovery Smash
-- Sonic Boom
-- Spin Slash
-- Stomp Attack
-- Wild Rush
-*/
-{
-    WriteProtected<byte>
-    (
-        /* 0x1408520DD */
-        ScanSignature
-        (
-            "\x74\x7F\x44\x38\x36",
-            "xxxxx"
-        ),
-        
-        0xEB
-    );
-
-    WriteNop
-    (
-        /* 0x140808775 */
-        ScanSignature
-        (
-            "\xE8\xCC\xCC\xCC\xCC\x41\xC7\x86\xAC\x00\x00\x00\x03\x00\x00\x00",
-            "x????xxxxxxxxxxx"
-        ),
-        
-        5
-    );
-}
-
-Patch "Disable Soldier Eggs" in "Gameplay" by "Hyper" does "Disables the egg spawners for the Soldier enemy, allowing them to spawn instantly."
+Patch "Disable Soldier Eggs" in "Enemy" by "Hyper" does "Disables the egg spawners for the Soldier enemy, allowing them to spawn instantly."
 {
     WriteNop
     (
@@ -2731,10 +2732,10 @@ Patch "Disable Spin Slash on Drop Dash" in "Gameplay" by "Hyper"
 {
     WriteProtected<byte>
     (
-        /* 0x14BA71EE6 */
+        /* 0x14BBB68A6 */
         ScanSignature
         (
-            "\x74\x79\xBA\x2D\x00\x00\x00",
+            "\x74\x79\xBA\x2E\x00\x00\x00",
             "xxxxxxx"
         ),
 
@@ -2764,15 +2765,15 @@ Notes;
 - This will allow you to stomp bounce to kill enemies with the shockwave without doing a flip.
 */
 {
-    byte[] asm = Assemble("lea edx, [r8 + 0x37]");
+    byte[] asm = Assemble("lea edx, [r8 + 0x39]");
 
     // Flip for collision types (e.g. Asura body)
     WriteProtected<byte>
     (
-        /* 0x140858ABE */
+        /* 0x1408ADA9E */
         ScanSignature
         (
-            "\x41\x8D\x50\x38\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x17",
+            "\x41\x8D\x50\x3A\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x17",
             "xxxxx????xxxx"
         ),
         
@@ -2781,10 +2782,10 @@ Notes;
 
     // Flip for stomp shockwave kill
     {
-        /* 0x14B5B9E5C */
+        /* 0x14B6E56E1 */
         var sig = ScanSignature
         (
-            "\x41\x8D\x50\x38\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x20\xC6\x87\xB8\x00\x00\x00\x01",
+            "\x41\x8D\x50\x3A\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x20\xC6\x87\xB8\x00\x00\x00\x01",
             "xxxxx????xxxxxxxxxxxx"
         );
 
@@ -2930,66 +2931,54 @@ Affected objects;
 */
 {
     // Dash Panels
-    WriteProtected<byte>
+    WriteAsmHook
     (
-        /* 0x140335B1D */
+        $@"
+            mov byte ptr [rsi + 0xB8], 0
+            movaps xmm2, xmm3
+            mulps  xmm2, xmm3
+            movaps xmm1, xmm2
+            shufps xmm1, xmm2, 0x99
+            addss  xmm2, xmm1
+        ",
+
+        /* 0x14037D693 */
         ScanSignature
         (
-            "\x75\x0D\x45\x38\xA7\xB8\x00\x00\x00",
-            "xxxxxxxxx"
+            "\x0F\x28\xD3\x0F\x59\xD3\x0F\x28\xCA\x0F\xC6\xCA\x99\xF3\x0F\x58\xD1\x0F\x28\xC1\x0F\xC6\xC1\x55\xF3\x0F\x58\xD0\x0F\x57\xC0\x0F\xC6\xD2\x00\x0F\x51\xCA\x0F\xC2\x15\xCC\xCC\xCC\xCC\xCC\x0F\x5E\xD9\x0F\xC2\xC8\x04\x0F\x54\xD9\xF3\x0F\x10\x0D\xCC\xCC\xCC\xCC\x0F\x54\xDA\x0F\x55\x15\xCC\xCC\xCC\xCC\x0F\x56\xDA\x0F\x29\x9D\x90\x00\x00\x00",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx?????xxxxxxxxxxxxxx????xxxxxx????xxxxxxxxxx"
         ),
 
-        Assemble("nop; nop; mov byte ptr [r15 + 0xB8], 0; nop; nop; nop; nop; nop")
+        HookBehavior.Replace
     );
 
     // Jump Boards
     {
-        /* 0x14037F023 */
+        /* 0x1403C8D03 */
         long instrAddr = ScanSignature
         (
-            "\x80\xB8\xB8\x00\x00\x00\x00\x74\x1D",
+            "\x80\xB8\xB8\x00\x00\x00\x00\x74\x12",
             "xxxxxxxxx"
         );
 
         WriteProtected<byte>(instrAddr, Assemble("mov byte ptr [rax + 0xB8], 0"));
 
-        /* 0x14037F02A */
+        /* 0x1403C8D0A */
         WriteProtected<byte>(instrAddr + 0x07, 0xEB);
     }
 
     // Springs
-    {
-        /* 0x1403E83D0 */
-        long funcAddr = ScanSignature
+    WriteProtected<byte>
+    (
+        /* 0x140434C08 */
+        ScanSignature
         (
-            "\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x48\x89\x7C\x24\x20\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\x6C\x24\xC9\x48\x81\xEC\xC0\x00\x00\x00\x4C",
-            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        );
-
-        /* 0x1403E84E1 */
-        WriteProtected<byte>(funcAddr + 0x111, 0xEB);
-
-        /* 0x1403E862C */
-        WriteProtected<byte>(funcAddr + 0x25C, 0xEB);
-
-        /* 0x1403E8790 */
-        WriteProtected<byte>(funcAddr + 0x3C0, 0xEB);
-
-        /* 0x1403E89E9 */
-        WriteProtected<byte>(funcAddr + 0x619, 0xEB);
-
-        /* 0x1403E8B22 */
-        WriteProtected<byte>(funcAddr + 0x752, 0xEB);
-
-        /* 0x1403E8BCD */
-        WriteProtected<byte>(funcAddr + 0x7FD, 0xEB);
-
-        /* 0x1403E8C63 */
-        WriteProtected<byte>(funcAddr + 0x893, 0xEB);
-
-        /* 0x1403E8E21 */
-        WriteProtected<byte>(funcAddr + 0xA51, 0xE9, 0xED, 0x00, 0x00, 0x00);
-    }
+            "\x0F\x44\xD0\x88\x93\x00\x03\x00\x00\x0F\xB6\xC2\x24\xF7",
+            "xxxxxxxxxxxxxx"
+        ),
+        
+        Assemble("mov dl, 1; nop")
+    );
 }
 
 Patch "Disable Water Audio Filter" in "Audio" by "Hyper"
@@ -3288,13 +3277,34 @@ Patch "Disable Vignette" in "Graphics" by "Hyper"
     );
 }
 
+Patch "Disable Wolf (experimental)" in "Enemy" by "Hyper" does
+/*
+Disables the Wolf enemy on Ouranos Island.
+
+Known issues;
+- This also affects Battle Rush and causes a softlock.
+*/
+{
+    WriteNop
+    (
+        /* 0x140540E0E */
+        ScanSignature
+        (
+            "\x75\x28\x45\x33\xC0\x33\xD2\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x45\x33\xC0\x48\x8B\xCF\x41\x8D\x50\x01\x48\x81\xC4\x88\x01\x00\x00",
+            "xxxxxxxxxxx????xxxxxxxxxxxxxxxxx"
+        ),
+
+        2
+    );
+}
+
 Patch "Drop Dash on Double Jump" in "Gameplay" by "Hyper" does "Allows you to drop dash immediately after double jumping, making it require only two presses."
 {
-    /* 0x14B484CC8 */
+    /* 0x14B52AB4D */
     var sig = ScanSignature
     (
-        "\x74\x49\x48\x89\xF9\xE8\xCC\xCC\xCC\xCC\x48\x89\xF9",
-        "xxxxxx????xxx"
+        "\x74\x45\x48\x89\xF9\xE8",
+        "xxxxxx"
     );
 
     WriteNop(sig, 2);
@@ -3388,10 +3398,10 @@ Patch "Fix Photo Mode Camera Collision" in "Fixes" by "Hyper" does "Allows the c
     );
 }
 
-Patch "Fix RenderDoc Captures (v1.20)" in "Fixes" by "Skyth" does "Fixes RenderDoc being unable to hook to the game for capturing the graphics device."
+Patch "Fix RenderDoc Captures (v1.30)" in "Fixes" by "Skyth" does "Fixes RenderDoc being unable to hook to the game for capturing the graphics device."
 {
-    WriteProtected<long>(0x1410A4B40, Read<long>(0x15611F168));
-    WriteProtected<long>(0x1410A4B50, Read<long>(0x15611F188));
+    WriteProtected<long>(0x141123B40, Read<long>(0x156300168));
+    WriteProtected<long>(0x141123B50, Read<long>(0x156300188));
 }
 
 Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a bug that causes the internal resolution to reset to 1280x720 if the game is unfocused during boot."
@@ -3548,10 +3558,10 @@ Patch "Fix Stomp Reset" in "Fixes" by "Hyper" does "Fixes the stomp attack only 
 {
     WriteNop
     (
-        /* 0x140895AC0 */
+        /* 0x1408FF6C0 */
         ScanSignature
         (
-            "\x74\x1C\x45\x33\xC0\x48\x8B\xCB\x41\x8D\x50\x34",
+            "\x74\x1C\x45\x33\xC0\x48\x8B\xCB\x41\x8D\x50\x36",
             "xxxxxxxxxxxx"
         ),
 
@@ -3576,15 +3586,16 @@ Adjusts Sonic's grip position on the Upreel object's handle so that it lines up 
             mov rax, {(long)gripOffsetPtr}
             movups xmm15, [rax]
             mulps xmm0, xmm15
-            lea rdx, [rbp - 0x39]
-            lea rcx, [rbp - 0x69]
+            lea rdx, [rsp + 0x60]
+            lea rcx, [rsp + 0x30]
         ",
 
         /* v1.10: 0x1498C86A7 */
+        /* v1.30: 0x14983C900 */
         ScanSignature
         (
-            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xC7\x48\x8D\x4D\x97\x0F\x29\x45\xD7\xE8\xCC\xCC\xCC\xCC\x0F\x28\x45\xB7\x0F\x58\x00\x0F\x11\x46\x30\x0F\x28\x45\xC7\x0F\x11\x46\x40\xE9\xAF\x00\x00\x00\x0F\xB6\x81\xC8\x02\x00\x00\xA8\x01\x0F\x84\xA0\x00\x00\x00\x24\xFE\x31\xDB",
-            "xxx????xxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x54\x24\x60\x48\x8D\x4C\x24\x30",
+            "xxx????xxxxxxxxxx"
         ),
 
         HookBehavior.Replace
@@ -3596,15 +3607,16 @@ Adjusts Sonic's grip position on the Upreel object's handle so that it lines up 
             mov rax, {(long)gripOffsetPtr}
             movups xmm15, [rax]
             mulps xmm0, xmm15
-            lea rdx, [rbp - 0x49]
-            lea rcx, [rbp - 0x39]
+            lea rdx, [rbp - 0x10]
+            lea rcx, [rbp - 0x30]
         ",
 
         /* v1.20: 0x1403973ED */
+        /* v1.30: 0x1403C7A3C */
         ScanSignature
         (
-            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xB7",
-            "xxx????xxxx"
+            "\x0F\x59\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\xF0\x48\x8D\x4D\xD0",
+            "xxx????xxxxxxxx"
         ),
 
         HookBehavior.Replace
@@ -3827,7 +3839,7 @@ Unsupported objects;
     // Allow loading Cyber Space asset archive.
     WriteNop
     (
-        /* 0x1401AF6AB */
+        /* 0x1401C5BC7 */
         ScanSignature
         (
             "\x74\x0F\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x40\x38\x75\x68",
@@ -3851,14 +3863,12 @@ Unsupported objects;
                 mov  rsi, rcx
 
                 push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 0
-
-                pop rax
+                mov  rax, {(long)pWorldType}
+                mov  byte ptr [rax], 0
+                pop  rax
             ",
 
-            /* 0x1473C021A */
+            /* 0x14733424A */
             ScanSignature
             (
                 "\x57\x48\x83\xEC\x20\x4C\x89\xC3\x48\x89\xD7\x48\x89\xCE\xE8\xCC\xCC\xCC\xCC\x48\x8D\x05\xCC\xCC\xCC\xCC\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x00\x01\x00\x00",
@@ -3873,22 +3883,20 @@ Unsupported objects;
         (
             $@"
                 ; Restore original code.
-                mov qword ptr [rsi + 0x1A8], rdi
-                xor ebp, ebp
-                mov qword ptr [rsi + 0x190], rbp
+                mov  qword ptr [rsi + 0x1A8], rdi
+                xor  ebp, ebp
+                mov  qword ptr [rsi + 0x190], rbp
 
                 push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                mov  rax, {(long)pWorldType}
+                mov  byte ptr [rax], 1
+                pop  rax
             ",
 
-            /* 0x1479E9DD1 */
+            /* 0x147967172 */
             ScanSignature
             (
-                "\x48\x89\xBE\xA8\x01\x00\x00\x31\xED",
+                "\x48\x89\x9E\xA8\x01\x00\x00\x31\xED",
                 "xxxxxxxxx"
             ),
 
@@ -3904,15 +3912,13 @@ Unsupported objects;
                 movups xmmword ptr [rdi + 0xA0], xmm0
                 movaps xmm0, xmmword ptr [rax + 0x10]
 
-                push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 0
-
-                pop rax
+                push   rax
+                mov    rax, {(long)pWorldType}
+                mov    byte ptr [rax], 0
+                pop    rax
             ",
 
-            /* 0x14015023F */
+            /* 0x14015AA6F */
             ScanSignature
             (
                 "\x0F\x10\x00\x0F\x11\x87\xA0\x00\x00\x00\x0F\x28\x40\x10\x0F\x29\x87\xD0\x00\x00\x00\x0F\x28\x48\x20\x0F\x29\x8F\xE0\x00\x00\x00\x0F\x28\x40\x30\x0F\x29\x87\xF0\x00\x00\x00\x0F\x28\x48\x40\x0F\x29\x8F\x00\x01\x00\x00\x0F\x28\x40\x50\x48\x8B\x47\x10",
@@ -3931,15 +3937,13 @@ Unsupported objects;
                 mov    qword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFFA0], rax
                 mov    word ptr [rdi + 0x120], 0x101
 
-                push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                push   rax
+                mov    rax, {(long)pWorldType}
+                mov    byte ptr [rax], 1
+                pop    rax
             ",
 
-            /* 0x14014E6E7 */
+            /* 0x140158D07 */
             ScanSignature
             (
                 "\x0F\x10\x44\x24\x20\x48\x89\x85\xB0\x00\x00\x00\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
@@ -3954,21 +3958,17 @@ Unsupported objects;
         (
             $@"
                 push rax
-
-                ; Restore original code.
-                xor ebx, ebx
-                mov rax, {(long)Marshal.StringToHGlobalAnsi("w6d01")}
-                lea rcx, qword ptr [rax]
-                mov edx, ebx
-                nop dword ptr [rax]
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                xor  ebx, ebx
+                mov  rax, {(long)Marshal.StringToHGlobalAnsi("w6d01")}
+                lea  rcx, qword ptr [rax]
+                mov  edx, ebx
+                nop  dword ptr [rax]
+                mov  rax, {(long)pWorldType}
+                mov  byte ptr [rax], 1
+                pop  rax
             ",
 
-            /* 0x14014E4B0 */
+            /* 0x140158AD0 */
             ScanSignature
             (
                 "\x33\xDB\x48\x8D\x0D\xCC\xCC\xCC\xCC\x8B\xD3",
@@ -3978,21 +3978,22 @@ Unsupported objects;
             HookBehavior.Replace
         );
 
+        // TODO: create asset redirector library.
         WriteAsmHook
         (
             $@"
                 ; Restore original code.
-                sub rsp, 0xD0
-                mov rdi, r8
-                mov rbx, rdx
-                mov rsi, rcx
+                sub  rsp, 0xD0
+                mov  rdi, r8
+                mov  rbx, rdx
+                mov  rsi, rcx
 
                 push rax
                 push rcx
 
-                mov rax, {(long)pWorldType}
-                cmp byte ptr [rax], 2
-                jz  ret
+                mov  rax, {(long)pWorldType}
+                cmp  byte ptr [rax], 2
+                jz   ret
 
                 mov  rax, {(long)fpGetAssetName}
                 mov  rcx, rdx
@@ -4002,11 +4003,11 @@ Unsupported objects;
                 mov  rbx, rdx
 
             ret:
-                pop rcx
-                pop rax
+                pop  rcx
+                pop  rax
             ",
 
-            /* 0x140D81C5B */
+            /* 0x140DFFB0B */
             ScanSignature
             (
                 "\x48\x81\xEC\xD0\x00\x00\x00\x49\x8B\xF8\x48\x8B\xDA",
@@ -4018,27 +4019,27 @@ Unsupported objects;
     }
 }
 
-Patch "Force Depth of Field" in "Graphics" by "WasifBoomz & Dicey" does "Forces Depth of Field to render, causing objects very close and very far from the camera to blur."
+Patch "Force Depth of Field" in "Graphics" by "WasifBoomz & Dicey" does "Forces Depth of Field to render, blurring near and distant geometry."
 {
-    //FxDOFParameter
+    // FxDOFParameter
     WriteAsmHook
     (
         $@"
-            ;Enable DOF
+            ; Enable DOF
             mov  byte ptr [r8], 1
             
-            ;Set foreground bokeh depth to end at 3 and start at 0
+            ; Set foreground bokeh depth to end at 3 and start at 0
             mov  dword ptr [r8+4], 0x40400000
             mov  dword ptr [r8+8], 0x00000000
 			
-            ;Set background bokeh depth to start at 4000 and end at 50
+            ; Set background bokeh depth to start at 4000 and end at 50
             mov  dword ptr [r8+12], 0x42480000
             mov  dword ptr [r8+16], 0x457A0000
 			
-            ;Increase sample count to 20
+            ; Increase sample count to 20
             mov  dword ptr [r8+32], 20
 			
-            ;Set render target size to full
+            ; Set render target size to full
             mov  byte ptr [r8+48], 0
         ",
 			
@@ -4052,16 +4053,16 @@ Patch "Force Depth of Field" in "Graphics" by "WasifBoomz & Dicey" does "Forces 
         HookBehavior.After
     );
 	
-    //FxRenderTargetSetting
+    // FxRenderTargetSetting
     WriteAsmHook
     (
         $@"
-            ;Original code
+            ; Original code
             lea rbp, [rsp-400h]
             sub rsp, 500h
             mov r15, rcx
 		
-            ;Set render target size to full
+            ; Set render target size to full
             mov dword ptr [rdx], 0
         ",
 			
@@ -4284,14 +4285,14 @@ Unsupported objects;
     // Allow loading open zone asset archive.
     WriteNop
     (
-        /* 0x1401AF6C0 */
+        /* 0x1401C5BDC */
         ScanSignature
         (
-            "\x74\x62\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8B\xCF",
-            "xxxxx????xxx"
+            "\x0F\x84\x36\x01\x00\x00\x48\x8D\x15",
+            "xxxxxxxxx"
         ),
         
-        2
+        6
     );
 
     fixed (byte* pWorldType = &WorldType)
@@ -4301,22 +4302,20 @@ Unsupported objects;
         (
             $@"
                 ; Restore original code.
-                mov r8d, 0x10
-                mov [rsi], rax
-                lea rcx, qword ptr [rsi + 0x100]
+                mov  r8d, 0x10
+                mov  [rsi], rax
+                lea  rcx, qword ptr [rsi + 0x100]
 
                 push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 0
-
-                pop rax
+                mov  rax, {(long)pWorldType}
+                mov  byte ptr [rax], 0
+                pop  rax
             ",
 
-            /* 0x1473C0234 */
+            /* 0x147334264 */
             ScanSignature
             (
-                "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x00\x01\x00\x00\x0F\x10\x03\x0F\x11\x86\xE0\x00\x00\x00\x0F\x10\x4B\x10\x0F\x11\x8E\xF0\x00\x00\x00\x48\x8B\x13\xE8\xCC\xCC\xCC\xCC\x4C\x89\x05",
+                "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x00\x01\x00\x00\x0F\x10\x03\x0F\x11\x86\xE0\x00\x00\x00\x0F\x10\x4B\x10\x0F\x11\x8E\xF0\x00\x00\x00\x48\x8B\x13\xE8\xCC\xCC\xCC\xCC\x4C\x31\x05",
                 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx"
             ),
 
@@ -4328,19 +4327,17 @@ Unsupported objects;
         (
             $@"
                 ; Restore original code.
-                mov r8d, 0x10
-                mov [rsi], rax
-                lea rcx, qword ptr [rsi + 0x160]
+                mov  r8d, 0x10
+                mov  [rsi], rax
+                lea  rcx, qword ptr [rsi + 0x160]
 
                 push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                mov  rax, {(long)pWorldType}
+                mov  byte ptr [rax], 1
+                pop  rax
             ",
 
-            /* 0x1479E9C99 */
+            /* 0x147967039 */
             ScanSignature
             (
                 "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x60\x01\x00\x00",
@@ -4359,15 +4356,13 @@ Unsupported objects;
                 mov    qword ptr [rbp + 0x1E0 + 0xFFFFFFFFFFFFFDF0], rax
                 mov    word ptr [rdi + 0x120], 0x100
 
-                push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 0
-
-                pop rax
+                push   rax
+                mov    rax, {(long)pWorldType}
+                mov    byte ptr [rax], 0
+                pop    rax
             ",
 
-            /* 0x1401502E2 */
+            /* 0x14015AB12 */
             ScanSignature
             (
                 "\x0F\x10\x44\x24\x20\x48\x89\x45\xD0\x66\xC7\x87\x20\x01\x00\x00\x00\x01",
@@ -4383,21 +4378,19 @@ Unsupported objects;
             $@"
                 ; Restore original code.
                 movups xmmword ptr [rdi + 0x80], xmm0
-                movups xmm0, xmmword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFFA0]
+                movups xmm0, xmmword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFF80]
                 
-                push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                push   rax
+                mov    rax, {(long)pWorldType}
+                mov    byte ptr [rax], 1
+                pop    rax
             ",
 
-            /* 0x14014E6FC */
+            /* 0x140158C7C */
             ScanSignature
             (
-                "\x0F\x11\x87\x80\x00\x00\x00\x0F\x10\x85\xB0\x00\x00\x00\xEB\x34",
-                "xxxxxxxxxxxxxxxx"
+                "\x0F\x11\x81\x80\x00\x00\x00\x0F\x10\x85\x90\x00\x00\x00\x0F\x11\x81\x90\x00\x00\x00\xE9\x06\x02\x00\x00",
+                "xxxxxxxxxxxxxxxxxxxxxxxxxx"
             ),
 
             HookBehavior.Replace
@@ -4412,15 +4405,13 @@ Unsupported objects;
                 mov    qword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFF40], rax
                 mov    word ptr [rdi + 0x120], 0x101
 
-                push rax
-
-                mov rax, {(long)pWorldType}
-                mov byte ptr [rax], 1
-
-                pop rax
+                push   rax
+                mov    rax, {(long)pWorldType}
+                mov    byte ptr [rax], 1
+                pop    rax
             ",
 
-            /* 0x14014E5B8 */
+            /* 0x140158BD8 */
             ScanSignature
             (
                 "\x0F\x10\x44\x24\x20\x48\x89\x45\x50\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
@@ -4457,7 +4448,7 @@ Unsupported objects;
                 pop rax
             ",
 
-            /* 0x140D81C8A */
+            /* 0x140DFFB3A */
             ScanSignature
             (
                 "\x48\x8D\x4C\x24\x48\xC7\x44\x24\x38\x00\x00\x00\x00\x48\x89\x4C\x24\x30\x49\xC7\xC0\xFF\xFF\xFF\xFF\xC7\x44\x24\x3C\x7F\x00\x00\x80\x48\x89\x44\x24\x40\x49\xFF\xC0\x42\x80\x3C\x03\x00\x75\xF6\x45\x33\xC9",
@@ -4755,11 +4746,11 @@ Patch "Hide Boost Gauge" in "UI" by "Hyper"
 {
     WriteProtected<byte>
     (
-        /* 0x1408F1250 */
+        /* 0x14098D3B4 */
         ScanSignature
         (
-            "\x74\x1C\xE8\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\x48\x89\x4D\xF0\x48\x8D\x0D\x00\x00\x00\x00\xE9\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8D\x0D\x00\x00\x00\x00\x48\x89\x4D\xF0\x48\x8D\x0D\x00\x00\x00\x00\xEB\x74",
-            "xxx????xxx????xxxxxxx????x????x????xxx????xxxxxxx????xx"
+            "\x74\x1D\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4C\x24\x30\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x8F\x00\x00\x00",
+            "xxx????xxx????xxxxxxxx????xxxxx"
         ),
 
         0xEB
@@ -4812,10 +4803,10 @@ Patch "Hide Cyber Space Timer" in "UI" by "Hyper"
 {
     WriteProtected<byte>
     (
-        /* 0x14091D370 */
+        /* 0x14098EE10 */
         ScanSignature
         (
-            "\x74\x1C\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x85\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xEB\x6C\x3D\x8B\x23\x00\x00\x0F\x85\x98\x00\x00\x00\x8B\x42\x20\x48\xC1\xE8\x1E",
+            "\x74\x1C\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x85\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xEB\x6C\x3D\xBF\x23\x00\x00\x0F\x85\x98\x00\x00\x00\x8B\x42\x20\x48\xC1\xE8\x1E",
             "xxx????xxx????xxxxxxx????xxxxxx????xxx????xxxxxxx????xxxxxxxxxxxxxxxxxxxx"
         ),
 
@@ -4856,10 +4847,10 @@ Patch "Hide Enemy Health Gauge" in "UI" by "Hyper & Gordon Ramsay" does "Hides t
 {
     WriteProtected<byte>
     (
-        /* 0x14051735B */
+        /* 0x14054E7AB */
         ScanSignature
         (
-            "\x0F\x84\xF7\x00\x00\x00\xBA\x50\x23\x00\x00",
+            "\x0F\x84\xF7\x00\x00\x00\xBA\x82\x23\x00\x00",
             "xxxxxxxxxxx"
         ),
 
@@ -4872,26 +4863,26 @@ Patch "Hide Homing Reticle" in "UI" by "Hyper"
     // Disable sound and main reticle.
     WriteProtected<byte>
     (
-        /* 0x1408E5497 */
+        /* 0x1409526AA */
         ScanSignature
         (
-            "\x0F\x84\xB0\x00\x00\x00\x49\x8D\x7D\x50",
-            "xxxxxxxxxx"
+            "\x0F\x84\xB5\x00\x00\x00\x49\x8D\xBD\x10\x01\x00\x00",
+            "xxxxxxxxxxxxx"
         ),
 
-        0xE9, 0xB1, 0x00, 0x00, 0x00
+        0xE9, 0xB6, 0x00, 0x00, 0x00
     );
 
     // Disable lock-on triangle.
     WriteProtected<byte>
     (
-        /* 0x14C47C4A6 */
+        /* 0x14C5E45B2 */
         ScanSignature
         (
-            "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x48\x89\x7C\x24\x18\x55\x48\x8D\x6C\x24\xA9\x48\x81\xEC\x90\x00\x00\x00\x48\x89\xCB\x48\xC7\x45\xFF",
-            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x48\x89\x7C\x24\x18\x55\x48\x8D\x6C\x24\xA9\x48\x81\xEC\x90\x00\x00\x00\x48\x89\xCB\x48\xC7\x45\xFF\x02\x00\x00\x00",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         )
-        + 0x226,
+        + 0x232,
 
         0xEB
     );
@@ -4901,10 +4892,10 @@ Patch "Hide Oxygen Gauge" in "UI" by "Hyper"
 {
     WriteProtected<byte>
     (
-        /* 0x14090CF20 */
+        /* 0x14097E4A0 */
         ScanSignature
         (
-            "\x74\x1C\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x85\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xEB\x6C\x3D\x8B\x23\x00\x00\x0F\x85\x98\x00\x00\x00\x0F\xB6\x42\x20",
+            "\x74\x1C\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x85\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\x48\x89\x4D\xF0\x48\x8D\x0D\xCC\xCC\xCC\xCC\xEB\x6C\x3D\xBF\x23\x00\x00\x0F\x85\x98\x00\x00\x00\x0F\xB6\x42\x20",
             "xxx????xxx????xxxxxxx????xxxxxx????xxx????xxxxxxx????xxxxxxxxxxxxxxxxx"
         ),
 
@@ -4986,16 +4977,16 @@ Patch "Hide Titan Health Gauge" in "UI" by "Hyper"
 
 Patch "Infinite Boost Gauge" in "Cheats" by "Hyper"
 {
-    WriteProtected<byte>
+    WriteNop
     (
-        /* 0x140850D99 */
+        /* 0x1408D45EA */
         ScanSignature
         (
-            "\x0F\x83\x00\x00\x00\x00\xF3\x0F\x10\x46\x00\x0F\x2F\xC6\x76\x56\xF3\x41\x0F\x5C\xC0\x0F\x2F\xC6\xF3\x0F\x11\x46\x00\x77\x47\xBA\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x48\x8D\x05\x00\x00\x00\x00\xC6\x44\x24\x00\x00\x49\x8B\xCE\x48\x89\x44\x24\x00\xC7\x44\x24\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xC8\x48\x8D\x54\x24\x00\xE8\x00\x00\x00\x00\x48\x8D\x4C\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\x4E\x20\x33\xD2\xE8\x00\x00\x00\x00\x84\xC0\x74\x67\x0F\x2F\x76\x54\x72\x61\x49\x8B\xCE\xE8\x00\x00\x00\x00\x84\xC0\x49\x8D\x47\x04\x75\x03\x49\x8B\xC7",
-            "xx????xxxx?xxxxxxxxxxxxxxxxx?xxx????xxxx?x????xxx????xxx??xxxxxxx?xxx?????x????xxxxxxx?x????xxxx?x????xxxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxx"
+            "\xF3\x0F\x11\x4F\x3C\x48\x8B\xCF",
+            "xxxxxxxx"
         ),
 
-        0xE9, 0xC2, 0x01, 0x00, 0x00
+        5
     );
 }
 
@@ -5183,106 +5174,6 @@ This replaces the basic X button QTE to dodge the rifle projectile in the final 
     );
 }
 
-Patch "Retain Ground Velocity for Jump" in "Physics" by "Hyper"
-//
-    static bool IsStateJump = false;
-//
-{
-    fixed (bool* pIsStateJump = &IsStateJump)
-    {
-        // StateJumpStart
-        WriteAsmHook
-        (
-            $@"
-                mov  rbx, [rdx + 0x48]
-                mov  rsi, rdx
-                mov  rbp, rcx
-                mov  edx, 0x25
-                push rax
-                mov  rax, {(long)pIsStateJump}
-                mov  byte ptr [rax], 1
-                pop  rax
-            ",
-
-            /* 0x14B462638 */
-            ScanSignature
-            (
-                "\x48\x8B\x5A\x48\x48\x89\xD6\x48\x89\xCD\xBA\x25\x00\x00\x00",
-                "xxxxxxxxxxxxxxx"
-            ),
-
-            HookBehavior.Replace
-        );
-        
-        /* v1.20: 0x1407F44EF */
-        var callerFuncAddr = ScanSignature
-        (
-            "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x20\xBA\x20\x16\x1E\x71",
-            "x????xxxxxxxxx"
-        );
-
-        /* v1.20: 0x1407C3B50 */
-        var mainFuncAddr = callerFuncAddr + Read<int>(callerFuncAddr + 0x01) + 0x05;
-
-        // Update posture to allow retaining ground velocity.
-        WriteAsmHook
-        (
-            $@"
-                mov rdi, rcx
-
-                ; Check if we're in the jump state
-                push r11
-                mov  r11, {(long)pIsStateJump}
-                mov  r11b, byte ptr [r11]
-                cmp  r11b, 0
-                jz   default
-                mov  al, 1
-                jmp  exit
-
-            default:
-                xor  edx, edx
-                mov  rcx, [rcx + 0x28] ; RCX = BlackboardStatus
-                mov  rax, [rcx + 0x38] ; RAX = bit flags
-                mov  edx, edx
-                bt   rax, rdx
-                setb al
-
-            exit:
-                pop r11
-            ",
-
-            /* 0x1407C3B56 */
-            mainFuncAddr + 6,
-
-            HookBehavior.Replace
-        );
-
-        // StateJumpEnd
-        WriteAsmHook
-        (
-            $@"
-                xor  ecx, 0x1B120AB6
-                mov  edx, ecx
-                mov  edi, r8d
-                mov  rcx, [rax + 0x80]
-                push rax
-                mov  rax, {(long)pIsStateJump}
-                mov  byte ptr [rax], 0
-                pop  rax
-            ",
-
-            /* 0x14B47F0A7 */
-            ScanSignature
-            (
-                "\x81\xF1\xB6\x0A\x12\x1B",
-                "xxxxxx"
-            ),
-
-            HookBehavior.Replace
-        );
-    }
-}
-
 Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
 //
     using System.Diagnostics;
@@ -5383,81 +5274,88 @@ Patch "Show Missions in Arcade Mode" in "UI" by "Hyper" does "Shows the missions
     WriteProtected<byte>(addr + 7, 0xEB);
 }
 
-Patch "Smooth Camera (v1.20)" in "Camera" by "Ahremic" does "Replaces linear camera interpolation with a sigmoid solution, using Ken Perlin's ''Smoother Step'' second-order hermite polynomial."
-static float value01 = 1.0f;
-static float value03 = 3.0f;
-static float value05 = 5.0f;
-static float value10 = 10.0f;
+Patch "Smooth Camera (v1.30)" in "Camera" by "Ahremic" does "Replaces linear camera interpolation with a sigmoid solution, using Ken Perlin's ''Smoother Step'' second-order hermite polynomial."
+//
+    static float value01 = 1.0f;
+    static float value03 = 3.0f;
+    static float value05 = 5.0f;
+    static float value10 = 10.0f;
+//
 {
     // Linear coordinate interpolator
-    WriteProtected<uint>(0x146407965, 0x60);
-    WriteProtected<uint>(0x1464079A4, 0x60);
+    WriteProtected<byte>(0x1463B282A, Assemble("mov edx, 0x60; nop"));
+    WriteProtected<byte>(0x1463B286A, Assemble("mov edx, 0x60"));
+
     // Target Base interpolator
-    WriteProtected<uint>(0x146407A5D, 0x100);
-    WriteProtected<uint>(0x146407A31, 0x100);
-    WriteProtected<uint>(0x1464079EA, 0x100);
+    WriteProtected<byte>(0x1463B2914, Assemble("mov edx, 0x100"));
+    WriteProtected<byte>(0x1463B28F0, Assemble("mov edx, 0x100"));
+    WriteProtected<byte>(0x1463B28A9, Assemble("mov edx, 0x100"));
 
     // Base Ctor type A
     WriteAsmHook
     (
-        $@"
-            movss dword ptr [rdi + 0xF0], xmm6
-        ",
-        0x1463C3A05,
+        "movss dword ptr [rdi + 0xF0], xmm6",
+
+        0x14636EF85,
+
         HookBehavior.After
     );
+
     // Base Ctor type B
     WriteAsmHook
     (
-        $@"
-            movss dword ptr [rdi + 0xF0], xmm6
-        ",
-        0x1400B643A,
+        "movss dword ptr [rdi + 0xF0], xmm6",
+
+        0x1400BA9AA,
+
         HookBehavior.After
     );
+
     // Linear Ctor
     WriteAsmHook
     (
-        $@"
-            movss dword ptr [rdi + 0x50], xmm6
-        ",
-        0x1400B5FE0,
+        "movss dword ptr [rdi + 0x50], xmm6",
+
+        0x1400BA550,
+
         HookBehavior.After
     );
 
     // Initialize our value in camera init/reset functions (whatever these are), just to be safe.
+
     // Base
     WriteAsmHook
     (
-        $@"
-            mov [rdi + 0xF0], eax
-        ",
-        0x1463C50D1,
+        "mov [rdi + 0xF0], eax",
+
+        0x146374FBC,
+
         HookBehavior.After
     );
+
     // Linear. This function can't use before/after because of a call being invoked, and a bug with how HMM interprets calls in x64 assembly, potentially.
     WriteAsmHook
     (
         $@"
             ; Prologue
-            mov     [rsp + 8], rbx
-            push    rdi
-            sub     rsp, 0x20
-            mov     eax, [rcx + 0x20]
-            mov     rdi, rcx
+            mov  [rsp + 8], rbx
+            push rdi
+            sub  rsp, 0x20
+            mov  eax, [rcx + 0x20]
+            mov  rdi, rcx
 
             ; Custom data
-            mov [rdi + 0x50], eax
+            mov  [rdi + 0x50], eax
 
         ",
-        0x1400B6380,
+
+        0x1400BA8F0,
+
         HookBehavior.Replace
     );
 
-
     // Smoother-step algorithm by Ken Perlin
     // https://en.wikipedia.org/wiki/Smoothstep
-
     fixed (float* pValue01 = &value01)
     fixed (float* pValue03 = &value03)
     fixed (float* pValue05 = &value05)
@@ -5467,46 +5365,48 @@ static float value10 = 10.0f;
         WriteAsmHook
         (
             $@"
-                movss xmm2, dword ptr [rcx + 0xF0]
-                xorps xmm0, xmm0
-                subss xmm2, dword ptr [rdx]
+                movss  xmm2, dword ptr [rcx + 0xF0]
+                xorps  xmm0, xmm0
+                subss  xmm2, dword ptr [rdx]
                 comiss xmm0, xmm2
-                movss dword ptr [rcx + 0xF0], xmm2
-                jb jumpA
-                mov dword ptr [rcx + 0xF0], 0
-                xorps xmm2, xmm2
+                movss  dword ptr [rcx + 0xF0], xmm2
+                jb     jumpA
+                mov    dword ptr [rcx + 0xF0], 0
+                xorps  xmm2, xmm2
 
             jumpA:
-                movss xmm3, dword ptr [rcx + 0xD0]
+                movss  xmm3, dword ptr [rcx + 0xD0]
                 comiss xmm3, xmm0
-                jbe jumpB
-                divss xmm2, xmm3
-                jmp jumpC
+                jbe    jumpB
+                divss  xmm2, xmm3
+                jmp    jumpC
 
             jumpB:
-                mov   rax, {(long)pValue01}
-                movss xmm2, dword ptr [rax]
+                mov    rax, {(long)pValue01}
+                movss  xmm2, dword ptr [rax]
 
             jumpC:
                 movaps xmm0, xmm2
                 movaps xmm1, xmm2
-                mov   rax, {(long)pValue03}
-                mulss xmm0, dword ptr [rax]
-                addss xmm1, xmm2
-                mov   rax, {(long)pValue05}
-                subss xmm1, dword ptr [rax]
-                mulss xmm1, xmm0
+                mov    rax, {(long)pValue03}
+                mulss  xmm0, dword ptr [rax]
+                addss  xmm1, xmm2
+                mov    rax, {(long)pValue05}
+                subss  xmm1, dword ptr [rax]
+                mulss  xmm1, xmm0
                 movaps xmm0, xmm2
-                mulss xmm0, xmm2
-                mov   rax, {(long)pValue10}
-                addss xmm1, dword ptr [rax]
-                mulss xmm0, xmm2
-                mulss xmm1, xmm0
-                mulss xmm1, xmm3
-                movss dword ptr [rcx + 0xD4], xmm1
+                mulss  xmm0, xmm2
+                mov    rax, {(long)pValue10}
+                addss  xmm1, dword ptr [rax]
+                mulss  xmm0, xmm2
+                mulss  xmm1, xmm0
+                mulss  xmm1, xmm3
+                movss  dword ptr [rcx + 0xD4], xmm1
                 ret
             ",
-            0x1400B6BB0,
+
+            0x1400BB120,
+
             HookBehavior.Replace
         );
 
@@ -5514,46 +5414,48 @@ static float value10 = 10.0f;
         WriteAsmHook
         (
             $@"
-                movss xmm2, dword ptr [rcx + 0x50]
-                xorps xmm0, xmm0
-                subss xmm2, dword ptr [rdx]
+                movss  xmm2, dword ptr [rcx + 0x50]
+                xorps  xmm0, xmm0
+                subss  xmm2, dword ptr [rdx]
                 comiss xmm0, xmm2
-                movss dword ptr [rcx + 0x50], xmm2
-                jb jumpA
-                mov dword ptr [rcx + 0x50], 0
-                xorps xmm2, xmm2
+                movss  dword ptr [rcx + 0x50], xmm2
+                jb     jumpA
+                mov    dword ptr [rcx + 0x50], 0
+                xorps  xmm2, xmm2
 
             jumpA:
-                movss xmm3, dword ptr [rcx + 0x20]
+                movss  xmm3, dword ptr [rcx + 0x20]
                 comiss xmm3, xmm0
-                jbe jumpB
-                divss xmm2, xmm3
-                jmp jumpC
+                jbe    jumpB
+                divss  xmm2, xmm3
+                jmp    jumpC
 
             jumpB:
-                mov   rax, {(long)pValue01}
-                movss xmm2, dword ptr [rax]
+                mov    rax, {(long)pValue01}
+                movss  xmm2, dword ptr [rax]
 
             jumpC:
                 movaps xmm0, xmm2
                 movaps xmm1, xmm2
-                mov   rax, {(long)pValue03}
-                mulss xmm0, dword ptr [rax]
-                addss xmm1, xmm2
-                mov   rax, {(long)pValue05}
-                subss xmm1, dword ptr [rax]
-                mulss xmm1, xmm0
+                mov    rax, {(long)pValue03}
+                mulss  xmm0, dword ptr [rax]
+                addss  xmm1, xmm2
+                mov    rax, {(long)pValue05}
+                subss  xmm1, dword ptr [rax]
+                mulss  xmm1, xmm0
                 movaps xmm0, xmm2
-                mulss xmm0, xmm2
-                mov   rax, {(long)pValue10}
-                addss xmm1, dword ptr [rax]
-                mulss xmm0, xmm2
-                mulss xmm1, xmm0
-                mulss xmm1, xmm3
-                movss dword ptr [rcx + 0x24], xmm1
+                mulss  xmm0, xmm2
+                mov    rax, {(long)pValue10}
+                addss  xmm1, dword ptr [rax]
+                mulss  xmm0, xmm2
+                mulss  xmm1, xmm0
+                mulss  xmm1, xmm3
+                movss  dword ptr [rcx + 0x24], xmm1
                 ret
             ",
-            0x1463C2A10,
+
+            0x146365B90,
+
             HookBehavior.Replace
         );
     }
@@ -5584,10 +5486,10 @@ Idea by Yosho.
                 addss  xmm8, xmm1
                 movss  dword ptr [rcx], xmm8
                 mov    rcx, r15
-                movaps xmmword ptr [rsp + 0xA0 + 0xFFFFFFFFFFFFFFD0], xmm7
+                movaps xmmword ptr [rsp + 0x80 + 0xFFFFFFFFFFFFFFF0], xmm6
             ",
 
-            /* 0x140801905 */
+            /* 0x140850553 */
             ScanSignature
             (
                 "\x4C\x8B\x79\x18\x48\x8B\xF9\x49\x8B\xCF",
@@ -5597,21 +5499,18 @@ Idea by Yosho.
             HookBehavior.Replace
         );
 
-        /* 0x140857928 */
+        /* 0x1408ACA68 */
         long shockwaveCondAddr = ScanSignature
         (
             "\xE8\xCC\xCC\xCC\xCC\x83\xBE\xB0\x00\x00\x00\x02\x48\x8B\xE8",
             "x????xxxxxxxxxx"
         );
 
-        /* 0x1407C2050 */
-        long getParameterFuncAddr = shockwaveCondAddr + Read<int>(shockwaveCondAddr + 1) + 5;
-
         // Set stomp shockwave condition.
         WriteAsmHook
         (
             $@"
-                mov    rax, {getParameterFuncAddr}
+                mov    rax, {shockwaveCondAddr + Read<int>(shockwaveCondAddr + 1) + 5}
                 call   rax
                 mov    rbp, {(long)pStompingTime}
                 movss  xmm8, dword ptr [rbp]
@@ -5638,24 +5537,31 @@ Idea by Yosho.
            and use that for resetting the timer instead. */
 
         // Reset stomping timer for successful stomp attacks.
-        WriteAsmHook
-        (
-            $@"
-                mov edx, 0x0C
-                mov rcx, {(long)pStompingTime}
-                mov dword ptr [rcx], 0
-                mov rcx, rsi
-            ",
-
-            /* 0x14B5B7C8B */
-            ScanSignature
+        {
+            /* 0x14B6D58A3 */
+            var sig = ScanSignature
             (
-                "\x8B\x0D\xCC\xCC\xCC\xCC\x81\xF1\x44\x8B\x8A\xE9",
-                "xx????xxxxxx"
-            ),
+                "\xBA\x0D\x00\x00\x00\x48\x89\xF1\xE8\xCC\xCC\xCC\xCC\x84\xC0\x74\x7B",
+                "xxxxxxxxx????xxxx"
+            );
 
-            HookBehavior.Replace
-        );
+            WriteAsmHook
+            (
+                $@"
+                    mov  rcx, {(long)pStompingTime}
+                    mov  dword ptr [rcx], 0
+                    mov  edx, 0x0D
+                    mov  rcx, rsi
+                    mov  rax, {(sig + 8) + Read<int>(sig + 9) + 5}
+                    call rax
+                    test al, al
+                ",
+
+                sig,
+
+                HookBehavior.Replace
+            );
+        }
 
         // Reset stomping timer when grinding.
         WriteAsmHook
@@ -5669,7 +5575,7 @@ Idea by Yosho.
                 mov    rbx, rdx
             ",
 
-            /* 0x14B42EA3D */
+            /* 0x14B4BB01D */
             ScanSignature
             (
                 "\x44\x0F\x29\x44\x24\x30\x48\x89\xD1",
@@ -5690,7 +5596,7 @@ Idea by Yosho.
                 test rcx, rcx
             ",
 
-            /* 0x140839E8D */
+            /* 0x14088D7AD */
             ScanSignature
             (
                 "\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x1C\xBA\xDC\x40\x0E\x2D",
