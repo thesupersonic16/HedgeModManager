@@ -5042,6 +5042,21 @@ Patch "Infinite Quick Cyloop Gauge" in "Cheats" by "NM"
     );
 }
 
+Patch "Keep Red Rings on Death" in "Cheats" by "WasifBoomz" does "Prevents you from losing Red Rings after dying in Cyber Space."
+{
+    WriteNop
+    (
+        /* 0x1401B12B4 */
+        ScanSignature
+        (
+            "\x88\x41\x1A\xC3\x0F\xB6\x41\x18",
+            "xxxxxxxx"
+        ),
+			
+        3
+    );
+}
+
 Code "Play Random Soundtrack in Cyber Space" in "Audio" by "Hyper" does "Plays a random soundtrack every time you enter Cyber Space."
 //
     static long Address = 0;
