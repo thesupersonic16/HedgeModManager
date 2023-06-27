@@ -2713,6 +2713,52 @@ Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
     );
 }
 
+Patch "Disable Skill Camera Events" in "Camera" by "Hyper" does
+/*
+Disables the camera events for skills.
+
+The "Dramatic Battle Skill Camera" option in the game settings must be enabled for this code to work.
+
+This code behaves the same as the option described above, but keeps the camera events for performing special attacks on titans, as well as the Quick Cyloop camera.
+
+Affected skills;
+- Cross Slash
+- Cyclone Kick
+- Grand Slam
+- Homing Shot
+- Loop Kick
+- Recovery Smash
+- Sonic Boom
+- Spin Slash
+- Stomp Attack
+- Wild Rush
+*/
+{
+    WriteProtected<byte>
+    (
+        /* 0x1408D5986 */
+        ScanSignature
+        (
+            "\x0F\x84\x83\x00\x00\x00\x44\x38\x36",
+            "xxxxxxxxx"
+        ),
+
+        0xE9, 0x84, 0x00, 0x00, 0x00
+    );
+
+    WriteNop
+    (
+        /* 0x14087F9E9 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x41\xC7\x86\xAC\x00\x00\x00\x03\x00\x00\x00",
+            "x????xxxxxxxxxxx"
+        ),
+
+        5
+    );
+}
+
 Patch "Disable Soldier Eggs" in "Enemy" by "Hyper" does "Disables the egg spawners for the Soldier enemy, allowing them to spawn instantly."
 {
     WriteNop
