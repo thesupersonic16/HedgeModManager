@@ -5144,6 +5144,27 @@ Patch "Reduced Homing Delay" in "Physics" by "Hyper" does "Reduces the delay aft
     }
 }
 
+Patch "Restore Unused Spin Charge Camera Shake" in "Camera" by "Hyper"
+{
+    WriteAsmHook
+    (
+        $@"
+            lea rbx, qword ptr [rax + 0xE8]
+            mov rax, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SpinBoostCharge")}
+            mov qword ptr [rbx], rax
+        ",
+
+        /* 0x1408A66FE */
+        ScanSignature
+        (
+            "\x48\x8D\x98\xE8\x00\x00\x00\x48\x8B\x03\x48\x85\xC0\x74\x77\x80\x38\x00\x74\x72\xBA\xC6\x22\x00\x00\x48\x8D\x4C\x24\x30\xE8\xCC\xCC\xCC\xCC\x0F\x28\x05\xCC\xCC\xCC\xCC\x48\x8D\x05\xCC\xCC\xCC\xCC\x48\x8B\xCB\x48\x89\x44\x24\x30\x66\x0F\x7F\x44\x24\x60\x48\xC7\x44\x24\x50\x00\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8D\x54\x24\x20\x48\x89\x44\x24\x50\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCF\x0F\x28\x00\x0F\x29\x44\x24\x60\xE8\xCC\xCC\xCC\xCC\x48\x8B\xC8\x48\x8D\x54\x24\x30\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x30\xE8\xCC\xCC\xCC\xCC\xBA\x12\x00\x00\x00",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxx????xxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxxx????xxxxxxxxx????xxxxxx????xxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+}
+
 Patch "Restore Unused Supreme QTE" in "Gameplay" by "Gordon Ramsay" does
 /*
 Restores an unused quick time event for the final blow to Supreme.
