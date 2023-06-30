@@ -4897,7 +4897,7 @@ Patch "Hide Skill Piece Transition" in "UI" by "Hyper" does "Removes the transit
 {
     WriteNop
     (
-        /* 0x1407F0906 */
+        /* 0x140864297 */
         ScanSignature
         (
             "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4C\x24\x50\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x80\xE8\xCC\xCC\xCC\xCC\x45\x84\xFF",
@@ -4909,11 +4909,11 @@ Patch "Hide Skill Piece Transition" in "UI" by "Hyper" does "Removes the transit
 
     WriteNop
     (
-        /* 0x14084A7AB */
+        /* 0x1408CCA29 */
         ScanSignature
         (
-            "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\xB7\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\x17\xE8",
-            "x????xxxxx????xxxxx"
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\xD7\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4D\xA7",
+            "x????xxxxx????xxxx"
         ),
 
         5
