@@ -516,6 +516,33 @@ This prevents the mouse cursor appearing under certain conditions, even if the p
     }
 }
 
+Patch "Always Play 'One Way Dream' During Credits" in "Audio" by "M&M"
+{
+    /* v1.30: 0x1401C8AF3 */
+    WriteProtected<byte>
+    (
+        ScanSignature
+        (
+            "\x3C\x02\x0F\x8D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0",
+            "xxxx????x????xxx"
+        ),
+
+        0xE9, 0xAF, 0x05, 0x00, 0x00
+    );
+
+    /* v1.30: 0x14092A2AD */
+    WriteNop
+    (
+        ScanSignature
+        (
+            "\x3C\x02\x7C\x3C\x0F\x28\x05\x00\x00\x00\x00\x48\x8D\x54\x24\x00",
+            "xxxxxxx????xxxx?"
+        ),
+
+        4
+    );
+}
+
 Patch "Always Rainy on Islands" in "Weather" by "Hyper" does
 /*
 Forces the weather to Rainy on supported islands.
