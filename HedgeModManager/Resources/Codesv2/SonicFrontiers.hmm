@@ -2842,16 +2842,16 @@ Patch "Disable Soldier Eggs" in "Enemy" by "Hyper" does "Disables the egg spawne
 
 Patch "Disable Spin Charge Camera" in "Camera" by "Hyper" does "Disables the zoom camera when charging a Spin Dash."
 {
-    WriteProtected<byte>
+    WriteNop
     (
-        /* 0x1408D5CEF */
+        /* 0x1408A67DC */
         ScanSignature
         (
-            "\x74\x25\x48\x8B\xD6\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x85\xC0\x74\x0E\x48\x81\xC3\xA0\x03\x00\x00\x48\x3B\xDD\x75\xE5\xEB\x08\x48\x89\x5F\x28\x4C\x89\x77\x30\x48\x8B\x6C\x24\x38\x48\x8B\x5C\x24\x30\x4C\x39\x77\x28\x74\x08\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8B\x74\x24\x40",
-            "xxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxx"
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x48\x8B\xC8\x45\x33\xC0\xB2\x24",
+            "x????xxxx????xxxxxxxx"
         ),
 
-        0xEB
+        5
     );
 }
 
