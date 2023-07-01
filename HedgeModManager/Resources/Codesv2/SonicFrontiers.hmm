@@ -1222,6 +1222,21 @@ Patch "Disable Boost Replenishment from Timer" in "Gameplay" by "Hyper" does "Pr
     );
 }
 
+Patch "Disable Birthday Party Decorations" in "UI" by "Hyper" does "Disables the birthday party decorations on the HUD when using the Party Details option for Island Appearance in Extras."
+{
+    WriteProtected<byte>
+    (
+        /* 0x140968F33 */
+        ScanSignature
+        (
+            "\x74\x0E\xE8\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\xEB\x0C",
+            "xxx????xxx????xx"
+        ),
+
+        0xEB
+    );
+}
+
 Patch "Disable Boost Replenishment from Rings" in "Gameplay" by "Hyper" does "Prevents the boost gauge from refilling when collecting rings."
 {
     WriteAsmHook
