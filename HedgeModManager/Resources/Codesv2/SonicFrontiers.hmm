@@ -3205,7 +3205,7 @@ Patch "Fix Quick Cyloop Lock-On" in "Fixes" by "WasifBoomz & The Duck Dealer" do
         ScanSignature
         (
             "\x76\x12\x8B\x46\x28\x48\x8D\x55\x97\x48\x8B\xCB\x89\x45\x97\xE8\xCC\xCC\xCC\xCC\x48\x8B\x47\x38",
-        "xxxxxxxxxxxxxxxx????xxxx"
+            "xxxxxxxxxxxxxxxx????xxxx"
         ),
 
         0xEB
