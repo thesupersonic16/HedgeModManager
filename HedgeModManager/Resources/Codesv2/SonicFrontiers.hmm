@@ -1235,6 +1235,18 @@ Patch "Disable Birthday Party Decorations" in "UI" by "Hyper" does "Disables the
 
         0xEB
     );
+
+    WriteProtected<byte>
+    (
+        /* 0x140969157 */
+        ScanSignature
+        (
+            "\x74\x04\x80\x4F\x28\x04",
+            "xxxxxx"
+        ),
+
+        0xEB
+    );
 }
 
 Patch "Disable Boost Replenishment from Rings" in "Gameplay" by "Hyper" does "Prevents the boost gauge from refilling when collecting rings."
