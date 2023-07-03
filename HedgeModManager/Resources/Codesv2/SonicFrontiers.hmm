@@ -1594,6 +1594,21 @@ Example usage;
     }
 }
 
+Patch "Disable Drift Dash Panels" in "Gameplay" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x140482A6E */
+        ScanSignature
+        (
+            "\x48\x8B\xC2\x48\x8B\xF9\x48\x8B\xC8\x48\x8D\x15\xCC\xCC\xCC\xCC\xE8\xCC\xCC\xCC\xCC\x4C\x8B\xF8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x4C\x8B\xE8",
+            "xxxxxxxxxxxx????x????xxxx????xxxxxxx????xxx"
+        ),
+
+        0xE9, 0x24, 0x03, 0x00, 0x00
+    );
+}
+
 Patch "Disable Drop Dash" in "Gameplay" by "Hyper"
 {
     // Disable drop dash charge from StateDoubleJump.
