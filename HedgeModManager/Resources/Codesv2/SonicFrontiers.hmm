@@ -1,5 +1,726 @@
 !!VERSION 1.2
 
+Library "Bitwise" by "Hyper"
+{
+    public long Set(long @base, uint offset, bool isOffsetBitIndex = true)
+    {
+        return @base | (isOffsetBitIndex ? (1L << (int)offset) : offset);
+    }
+
+    public long Reset(long @base, uint offset, bool isOffsetBitIndex = true)
+    {
+        return @base & (isOffsetBitIndex ? (1L << (int)offset) : offset);
+    }
+
+    public bool Test(long @base, uint offset, bool isOffsetBitIndex = true)
+    {
+        return (@base & (isOffsetBitIndex ? (1L << (int)offset) : offset)) != 0;
+    }
+}
+
+Library "Blackboard" by "Hyper, ĐeäTh & Sajid"
+{
+    #lib "Collections"
+    #lib "StringMapOperation"
+
+    using System.Runtime.InteropServices;
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    private delegate uint _tGetNameHash();
+
+    public long GetBlackboardFromPlayer(long player)
+    {
+        if (player == 0)
+            return 0;
+
+        long gocPlayerBlackboard = GameObject.GetGOC(player, "GOCPlayerBlackboard");
+
+        if (gocPlayerBlackboard == 0)
+            return 0;
+
+        // app::player::GOCPlayerBlackboard->pBlackboard = 0x80
+        return Read<long>(gocPlayerBlackboard + 0x80);
+    }
+
+    public long GetBlackboardContent(long blackboard, string name)
+    {
+        if (blackboard == 0)
+            return 0;
+
+        // csl::ut::MoveArray<BlackboardContent*> m_Blackboards = 0x18
+        var blackboards = Read<Collections.MoveArray<IntPtr>>(blackboard + 0x18);
+
+        for (int i = 0; i < blackboards.Length; i++)
+        {
+            IntPtr blackboardContent = blackboards[i];
+
+            var fpGetNameHash = Marshal.GetDelegateForFunctionPointer<_tGetNameHash>(Read<IntPtr>(Read<IntPtr>(blackboardContent) + 1 * IntPtr.Size));
+            
+            if (fpGetNameHash.Invoke() == StringMapOperation.ComputeHash(name))
+            {
+                return (long)blackboardContent;
+            }
+        }
+
+        return 0;
+    }
+}
+
+Library "BlackboardStatus" by "Hyper"
+{
+    #lib "Bitwise"
+    #lib "Blackboard"
+    #lib "GameDocument"
+    #lib "GameObject"
+
+    public enum StateFlags
+    {
+        IsBoost = 0x00,
+        IsRecoveryJump = 0x02,
+        IsAirBoost = 0x04,
+        IsGrindJump = 0x06,
+        IsGrind = 0x07,
+        IsJump = 0x08,
+        IsDoubleJump = 0x09,
+        IsBounceJump = 0x0A,
+        IsFall = 0x0B,
+        IsStomp = 0x0C,
+        IsDiving = 0x0D,
+        IsDivingBoost = 0x0E,
+        IsCyloop = 0x11,
+        IsCyloopEnd = 0x12,
+        IsDrift = 0x13,
+        IsDriftDash = 0x14,
+        IsHoming = 0x17,
+        IsParry = 0x18,
+        IsWallClimb = 0x19,
+        IsIdle = 0x1A,
+        IsBoarding = 0x1E,
+        IsSpringJump = 0x21,
+        IsPhantomRush = 0x26
+    }
+
+    public enum WorldFlags
+    {
+		IsCyberSpace = 0x1D,
+		IsPowerBoost = 0x26,
+		IsHeightMapCollision = 0x31
+    }
+
+    public long Get(long blackboard = 0)
+    {
+        if (blackboard == 0)
+        {
+            long sonic = GameDocument.GetGameObject("Sonic");
+            
+            if (sonic == 0)
+                return 0;
+
+            blackboard = Blackboard.GetBlackboardFromPlayer(sonic);
+
+            if (blackboard == 0)
+                return 0;
+        }
+
+        return Blackboard.GetBlackboardContent(blackboard, "BlackboardStatus");
+    }
+
+    public long* GetFieldPointer(long blackboardStatus = 0, long fieldOffset = 0)
+    {
+        if (blackboardStatus == 0 && (blackboardStatus = Get()) == 0)
+            return null;
+
+        return (long*)new IntPtr(blackboardStatus + fieldOffset).ToPointer();
+    }
+
+    public long* GetStateFlags(long blackboardStatus = 0)
+    {
+        return GetFieldPointer(blackboardStatus, 0x30);
+    }
+
+    public long* GetWorldFlags(long blackboardStatus = 0)
+    {
+        return GetFieldPointer(blackboardStatus, 0x38);
+    }
+}
+
+Library "Collections" by "Sajid & Hyper"
+{
+    public unsafe struct MoveArray<T> where T : unmanaged
+    {
+        public T* Items;
+        public int Length;
+        public int Capacity;
+        public void* Allocator;
+        
+        public int Count => Length;    
+
+        public ref T this[int index]
+        {
+            get => ref Items[index];
+        }
+    }
+}
+
+Library "GameDocument" by "Hyper, ĐeäTh & Sajid"
+{
+    #lib "Collections"
+
+    using System.Runtime.InteropServices;
+
+    /* 0x140C478D8 */
+    private static long gameDocumentUsageSig = ScanSignature
+    (
+        "\x48\x89\x2D\xCC\xCC\xCC\xCC\x8D\x75\x20",
+        "xxx????xxx"
+    );
+
+    public long Get()
+    {
+        if (gameDocumentUsageSig == 0)
+            return 0;
+
+        return Read<long>(gameDocumentUsageSig + Read<int>(gameDocumentUsageSig + 3) + 7);
+    }
+
+    public long GetService(long gameDocument, string name)
+    {
+        if (gameDocument == 0)
+            return 0;
+            
+        // csl::ut::MoveArray<hh::game::GameService*> m_Services = 0x150
+        var services = Read<Collections.MoveArray<IntPtr>>(gameDocument + 0x150);
+
+        for (int i = 0; i < services.Length; i++)
+        {
+            IntPtr service = services[i];
+
+            // hh::game::GameService->pStaticClass = 0x38
+            // hh::game::GameServiceClass->pName   = 0x00
+            if (Marshal.PtrToStringAnsi(Read<IntPtr>(Read<IntPtr>(service + 0x38))) == name)
+            {
+                return (long)service;
+            }
+        }
+
+        return 0;
+    }
+
+    public long GetService(string name)
+    {
+        return GetService(Get(), name);
+    }
+
+    public long GetGameObject(long gameDocument, string name)
+    {
+        if (gameDocument == 0)
+            return 0;
+            
+        // csl::ut::MoveArray<hh::game::GameObject*> m_Objects = 0x130
+        var gameObjects = Read<Collections.MoveArray<IntPtr>>(gameDocument + 0x130);
+
+        for (int i = 0; i < gameObjects.Length; i++)
+        {
+            IntPtr gameObject = gameObjects[i];
+
+            // hh::game::GameObject->pObjectName = 0xB8
+            if (Marshal.PtrToStringAnsi(Read<IntPtr>(gameObject + 0xB8)) == name)
+            {
+                return (long)gameObject;
+            }
+        }
+
+        return 0;
+    }
+
+    public long GetGameObject(string name)
+    {
+        return GetGameObject(Get(), name);
+    }
+}
+
+Library "GameObject" by "Hyper, ĐeäTh & Sajid"
+{
+    #lib "Collections"
+
+    #load "System.Numerics.dll"
+
+    using System.Numerics;
+    using System.Runtime.InteropServices;
+
+    public long GetGOC(long gameObject, string name)
+    {
+        if (gameObject == 0)
+            return 0;
+
+        // csl::ut::MoveArray<hh::game::GOComponent*> m_Components = 0x58
+        var components = Read<Collections.MoveArray<IntPtr>>(gameObject + 0x58);
+
+        for (int i = 0; i < components.Length; i++)
+        {
+            IntPtr component = components[i];
+            
+            // hh::game::GOComponent->pStaticClass = 0x48
+            // hh::game::ComponentClass->pName     = 0x00
+            if (Marshal.PtrToStringAnsi(Read<IntPtr>(Read<IntPtr>(component + 0x48))) == name)
+            {
+                return (long)component;
+            }
+        }
+
+        return 0;
+    }
+
+    public class Transform
+    {
+        public Vector3* Position;
+        public Quaternion* Rotation;
+        public Vector3* Scale;
+
+        public Transform(long gocTransform)
+        {
+            Position = (Vector3*)(gocTransform + 0xC0);
+            Rotation = (Quaternion*)(gocTransform + 0xD0);
+            Scale    = (Vector3*)(gocTransform + 0xE0);
+        }
+
+        public static Transform Get(long gameObject)
+        {
+            if (gameObject == 0)
+                return null;
+
+            long gocTransform = GameObject.GetGOC(gameObject, "GOCTransform");
+
+            if (gocTransform == 0)
+                return null;
+
+            return new Transform(gocTransform);
+        }
+    }
+}
+
+Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
+{
+    #lib "Collections"
+    #lib "GameDocument"
+
+    public long GetLevelInfo(long gameDocument = 0)
+    {
+        if (gameDocument == 0 && (gameDocument = GameDocument.Get()) == 0)
+            return 0;
+
+        return GameDocument.GetService(gameDocument, "LevelInfo");
+    }
+    
+    public long GetPlayerInformation(long levelInfo = 0, int playerIndex = 0)
+    {
+        if (levelInfo == 0 && (levelInfo = GetLevelInfo()) == 0)
+            return 0;
+
+        return Read<long>((levelInfo + 0xC8) + (playerIndex * IntPtr.Size));
+    }
+}
+
+Library "Sonic" by "Hyper, NM & Ahremic"
+{
+    #lib "GameDocument"
+    #lib "GameObject"
+    #lib "LevelInfo"
+
+    #load "System.Numerics.dll"
+
+    using System.Collections.Generic;
+    using System.Numerics;
+    using System.Runtime.InteropServices;
+
+    public long GetSonic()
+    {
+        return GameDocument.GetGameObject("Sonic");
+    }
+
+    public long GetSonicContext(long sonic = 0)
+    {
+        if (sonic == 0 && (sonic = GetSonic()) == 0)
+            return 0;
+
+        return Read<long>(sonic + 0x2E0);
+    }
+
+    public bool IsGrounded()
+    {
+        long playerInfo = LevelInfo.GetPlayerInformation();
+
+        if (playerInfo == 0)
+            return false;
+
+        return Read<bool>(playerInfo + 0x2EE);
+    }
+
+    public static class Animation
+    {
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void _tChangeAnimation(long gocPlayerVisual, long animationNamePtr, byte a3);
+        private static long _sigChangeAnimation = 0;
+
+        public static void ChangeAnimation(string destination)
+        {
+            if (_sigChangeAnimation == 0)
+            {
+                /* 0x1408122E0 */
+                _sigChangeAnimation = ScanSignature
+                (
+                    "\x40\x53\x48\x83\xEC\x20\xF6\x81\x78\x01\x00\x00\x10\x48\x8B\xDA",
+                    "xxxxxxxxxxxxxxxx"
+                );
+
+                if (_sigChangeAnimation == 0)
+                    return;
+            }
+
+            var fpChangeAnimation = Marshal.GetDelegateForFunctionPointer<_tChangeAnimation>((IntPtr)_sigChangeAnimation);
+
+            if (fpChangeAnimation == null)
+                return;
+
+            long sonic = GetSonic();
+
+            if (sonic == 0)
+                return;
+
+            long gocPlayerVisual = GameObject.GetGOC(sonic, "GOCPlayerVisual");
+
+            if (gocPlayerVisual == 0)
+                return;
+
+            fpChangeAnimation.Invoke(gocPlayerVisual, (long)Marshal.StringToHGlobalAnsi(destination), 0xFE);
+        }
+    }
+
+    public enum CollisionType : byte
+    {
+        Default,
+        Hit = 2
+    }
+
+    public static class Collision
+    {
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate long _tGetStatePluginCollision(long sonicContext);
+        private static long _sigGetStatePluginCollision = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate long _tSetCollisionSphere(long statePluginCollision, CollisionType type, float radius);
+        private static long _sigSetCollisionSphere = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void _tToggleEntityCollision(long sonicContext, bool enabled);
+        private static long _sigToggleEntityCollision = 0;
+
+        public static long GetPlugin()
+        {
+            if (_sigGetStatePluginCollision == 0)
+            {
+                /* 0x14086A0B0 */
+                _sigGetStatePluginCollision = ScanSignature
+                (
+                    "\x40\x56\x48\x83\xEC\x20\x48\x8B\x41\x38\x48\x8B\xB0\x08\x01\x00\x00\x48\x85\xF6\x74\x65\x48\x8B\x46\x20\x48\x89\x5C\x24\x30\x48\x8B\x5E\x18\x48\x89\x7C\x24\x38\x48\x8D\x3C\xC3\x48\x3B\xDF\x74\x19\x48\x8B\x0B\x48\x8B\x01\xFF\x50\xCC\x3D\x8E\xB4\x47\x3B",
+                    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx?xxxxx"
+                );
+
+                if (_sigGetStatePluginCollision == 0)
+                    return 0;
+            }
+
+            var fpGetStatePluginCollision = Marshal.GetDelegateForFunctionPointer<_tGetStatePluginCollision>((IntPtr)_sigGetStatePluginCollision);
+
+            if (fpGetStatePluginCollision == null)
+                return 0;
+
+            long sonicContext = GetSonicContext();
+
+            if (sonicContext == 0)
+                return 0;
+
+            return fpGetStatePluginCollision.Invoke(sonicContext);
+        }
+
+        public static long SetCollisionSphere(CollisionType type, float radius)
+        {
+            if (_sigSetCollisionSphere == 0)
+            {
+                /* 0x1408ED200 */
+                _sigSetCollisionSphere = ScanSignature
+                (
+                    "\x40\x53\x48\x83\xEC\x50\x0F\x28\x05\xCC\xCC\xCC\xCC\x48\x8B\xD9\x88\x54\x24\x20",
+                    "xxxxxxxxx????xxxxxxx"
+                );
+
+                if (_sigSetCollisionSphere == 0)
+                    return 0;
+            }
+
+            var fpSetCollisionSphere = Marshal.GetDelegateForFunctionPointer<_tSetCollisionSphere>((IntPtr)_sigSetCollisionSphere);
+
+            if (fpSetCollisionSphere == null)
+                return 0;
+
+            long statePluginCollision = GetPlugin();
+
+            if (statePluginCollision == 0)
+                return 0;
+
+            return fpSetCollisionSphere.Invoke(statePluginCollision, type, radius);
+        }
+
+        public static void ToggleEntityCollision(bool enabled)
+        {
+            if (_sigToggleEntityCollision == 0)
+            {
+                /* 0x14BB87C00 */
+                _sigToggleEntityCollision = ScanSignature
+                (
+                    "\x40\x53\x48\x83\xEC\x20\x48\x8B\x41\x50\x0F\xB6\xDA",
+                    "xxxxxxxxxxxxx"
+                );
+
+                if (_sigToggleEntityCollision == 0)
+                    return;
+            }
+
+            var fpToggleEntityCollision = Marshal.GetDelegateForFunctionPointer<_tToggleEntityCollision>((IntPtr)_sigToggleEntityCollision);
+
+            if (fpToggleEntityCollision == null)
+                return;
+
+            long sonicContext = GetSonicContext();
+
+            if (sonicContext == 0)
+                return;
+            
+            fpToggleEntityCollision.Invoke(sonicContext, enabled);
+        }
+    }
+
+    public static class Effect
+    {
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate IntPtr _tPlayEffect(long gocEffect, IntPtr effectName, uint* flags);
+
+        public static void PlayEffect(string name)
+        {
+            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tPlayEffect>((IntPtr)0x140C4A8F0);
+
+            if (fpPlayEffect == null)
+                return;
+
+            long gocEffect = GameObject.GetGOC(GetSonic(), "GOCEffect");
+
+            if (gocEffect == 0)
+                return;
+
+            fpPlayEffect.Invoke(gocEffect, Marshal.StringToHGlobalAnsi(name), null);
+        }
+    }
+
+    public class Kinematics
+    {
+        public Vector3* Position;
+        public Quaternion* Rotation;
+        public Vector3* Velocity;
+
+        public Kinematics(long gocPlayerKinematicParams)
+        {
+            Position = (Vector3*)(gocPlayerKinematicParams + 0x80);
+            Rotation = (Quaternion*)(gocPlayerKinematicParams + 0x90);
+            Velocity = (Vector3*)(gocPlayerKinematicParams + 0xD0);
+        }
+
+        public static Kinematics Get()
+        {
+            long sonic = GetSonic();
+
+            if (sonic == 0)
+                return null;
+
+            long gocPlayerKinematicParams = GameObject.GetGOC(sonic, "GOCPlayerKinematicParams");
+
+            if (gocPlayerKinematicParams == 0)
+                return null;
+
+            return new Kinematics(gocPlayerKinematicParams);
+        }
+    }
+
+    public static class Message
+    {
+        private static bool _initialised = false;
+        private static int _currentMessageID = -1;
+
+        private static void Init()
+        {
+            if (_initialised)
+                return;
+
+            fixed (int* p_currentMessageID = &_currentMessageID)
+            {
+                WriteAsmHook
+                (
+                    $@"
+                        mov    eax, [rdx + 8]
+                        mov    r14, {(long)p_currentMessageID}
+                        mov    dword ptr [r14], eax
+                        mov    r14, rdx
+                        movaps xmmword ptr [rsp + 0x260 + 0xFFFFFFFFFFFFFFD0], xmm6
+                    ",
+
+                    /* 0x140864C1B */
+                    ScanSignature
+                    (
+                        "\x8B\x42\x08\x4C\x8B\xF2\x0F\x29\xB4\x24\x30\x02\x00\x00",
+                        "xxxxxxxxxxxxxx"
+                    ),
+
+                    HookBehavior.Replace
+                );
+            }
+
+            _initialised = true;
+        }
+
+        public static int GetMessageID()
+        {
+            Init();
+
+            return _currentMessageID;
+        }
+    }
+
+    public static class State
+    {
+        private static bool _initialisedStateRedirector = false;
+        private static Dictionary<int, int> _redirectedStates = new();
+        private static int _currentStateID = -1;
+        
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void _tChangeState(long gocPlayerHsm, int stateId, int a3);
+        private static long _sigChangeState = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate int _tSetStateID(int stateId);
+        private static _tSetStateID _delSetStateID = new _tSetStateID(SetStateID);
+        private static IntPtr _fpSetStateID = Marshal.GetFunctionPointerForDelegate(_delSetStateID);
+
+        private static int SetStateID(int stateId)
+        {
+            if (stateId != -1)
+                _currentStateID = stateId;
+
+            if (_redirectedStates.ContainsKey(stateId))
+                return _redirectedStates[stateId];
+
+            return stateId;
+        }
+
+        private static void InitStateRedirector()
+        {
+            if (_initialisedStateRedirector)
+                return;
+
+            WriteAsmHook
+            (
+                $@"
+                    mov   edx, [rbx + 0x114]
+                    mov   ecx, edx
+                    mov   rax, {(long)_fpSetStateID}
+                    call  rax
+                    mov   edx, eax
+                    movzx eax, byte ptr [rbx + 0x11C]
+                ",
+
+                /* 0x140802F2D */
+                ScanSignature
+                (
+                    "\x8B\x93\x14\x01\x00\x00\x83\xFA\xFF",
+                    "xxxxxxxxx"
+                ),
+
+                HookBehavior.Replace
+            );
+
+            _initialisedStateRedirector = true;
+        }
+
+        public static int GetCurrentStateID()
+        {
+            InitStateRedirector();
+
+            return _currentStateID;
+        }
+
+        public static void Redirect(int source, int destination)
+        {
+            InitStateRedirector();
+
+            if (_redirectedStates.ContainsKey(source))
+            {
+                _redirectedStates[source] = destination;
+                return;
+            }
+
+            _redirectedStates.Add(source, destination);
+        }
+
+        public static void Restore(int source)
+        {
+            InitStateRedirector();
+            
+            _redirectedStates.Remove(source);
+        }
+
+        public static void ChangeState(int destination)
+        {
+            if (_sigChangeState == 0)
+            {
+                /* 0x140802400 */
+                _sigChangeState = ScanSignature
+                (
+                    "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x57\x48\x83\xEC\x20\x48\x8B\xD9\x41\x8B\xF8\x48\x81\xC1\x88\x00\x00\x00\x8B\xF2\xE8\xCC\xCC\xCC\xCC\x3B",
+                    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????x"
+                );
+
+                if (_sigChangeState == 0)
+                    return;
+            }
+
+            var fpChangeState = Marshal.GetDelegateForFunctionPointer<_tChangeState>((IntPtr)_sigChangeState);
+
+            if (fpChangeState == null)
+                return;
+
+            long sonicContext = GetSonicContext();
+
+            if (sonicContext == 0)
+                return;
+
+            fpChangeState.Invoke(Read<long>(sonicContext + 0x38), (int)destination, 0);
+        }
+    }
+}
+
+Library "StringMapOperation" by "ĐeäTh"
+{
+    public uint ComputeHash(string key)
+    {
+        uint hash = key[0];
+
+        for (int i = 1; i < key.Length; i++)
+            hash = key[i] + 31 * hash;
+
+        return hash & 0x7FFFFFFF;
+    }
+}
+
 Patch "2x Extended Grass Draw Distance" in "Graphics" by "Hyper" does "Extends the draw distance of the grass past the visible horizon."
 //
     static float Range = 3.0f;
