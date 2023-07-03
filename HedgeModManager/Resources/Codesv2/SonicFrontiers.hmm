@@ -5399,7 +5399,7 @@ Patch "Force Light Scattering" in "Graphics" by "WasifBoomz & Robowil" does "For
             ; Enable Light Scattering
             mov byte ptr [r8], 1
 			
-            ;Set Color to (0.015, 0.013, 0.023)
+            ; Set Color to (0.015, 0.013, 0.023)
             mov dword ptr [r8+16], 0x3C75C28F
             mov dword ptr [r8+20], 0x3C54FDF4
             mov dword ptr [r8+24], 0x3CBC6A7F
