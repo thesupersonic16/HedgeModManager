@@ -602,6 +602,9 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         private static bool _initialisedStateRedirector = false;
         private static Dictionary<int, int> _redirectedStates = new();
         private static int _currentStateID = -1;
+
+        public delegate void TStateNotifyAction(int stateId);
+        private static List<TStateNotifyAction> _stateNotifyActions = new();
         
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void _tChangeState(long gocPlayerHsm, int stateId, int a3);
@@ -616,6 +619,9 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         {
             if (stateId != -1)
                 _currentStateID = stateId;
+
+            foreach (TStateNotifyAction action in _stateNotifyActions)
+                action.Invoke(_currentStateID);
 
             if (_redirectedStates.ContainsKey(stateId))
                 return _redirectedStates[stateId];
@@ -657,6 +663,20 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             InitStateRedirector();
 
             return _currentStateID;
+        }
+
+        public static void AddStateNotifyAction(TStateNotifyAction action)
+        {
+            InitStateRedirector();
+
+            _stateNotifyActions.Add(action);
+        }
+
+        public static void RemoveStateNotifyAction(TStateNotifyAction action)
+        {
+            InitStateRedirector();
+
+            _stateNotifyActions.Remove(action);
         }
 
         public static void Redirect(int source, int destination)
@@ -1000,7 +1020,7 @@ Known issues;
         WriteProtected<float>(DVSceneAspectRatioAddr + 6, AspectRatio);
 }
 
-Code "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic to damage enemies and harder physics objects by boosting through them."
+Patch "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic to damage enemies and harder physics objects by boosting through them."
 //
     #lib "Bitwise"
     #lib "BlackboardStatus"
@@ -1009,24 +1029,29 @@ Code "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic
     static bool IsBoostPrevious = false;
 //
 {
-    if (BlackboardStatus.Get() != 0)
+    void NotifyStateRunDamageCollision(int stateId)
     {
-        bool isStateRun = Sonic.State.GetCurrentStateID() == 4;
-        bool isBoost = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost);
+        if (BlackboardStatus.Get() != 0)
+        {
+            bool isStateRun = stateId == 4;
+            bool isBoost = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost);
 
-        if (isStateRun && isBoost)
-        {
-            Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Damage, 1.0f);
-            Sonic.Collision.ToggleEntityCollision(false);
-            IsBoostPrevious = true;
-        }
-        else if (IsBoostPrevious)
-        {
-            Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Default, 1.0f);
-            Sonic.Collision.ToggleEntityCollision(true);
-            IsBoostPrevious = false;
+            if (isStateRun && isBoost)
+            {
+                Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Damage, 1.0f);
+                Sonic.Collision.ToggleEntityCollision(false);
+                IsBoostPrevious = true;
+            }
+            else if (IsBoostPrevious)
+            {
+                Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Default, 1.0f);
+                Sonic.Collision.ToggleEntityCollision(true);
+                IsBoostPrevious = false;
+            }
         }
     }
+
+    Sonic.State.AddStateNotifyAction(NotifyStateRunDamageCollision);
 }
 
 Patch "Always Allow Unlocking Story Skills" in "Cheats" by "Hyper" does
