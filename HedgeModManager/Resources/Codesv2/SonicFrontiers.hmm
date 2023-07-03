@@ -399,7 +399,8 @@ Library "Sonic" by "Hyper, NM & Ahremic"
     public enum CollisionType : byte
     {
         Default,
-        Hit = 2
+        Damage = 2,
+        DamageHoming = 3
     }
 
     public static class Collision
@@ -1004,14 +1005,27 @@ Code "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic
     #lib "Bitwise"
     #lib "BlackboardStatus"
     #lib "Sonic"
+
+    static bool IsBoostPrevious = false;
 //
 {
     if (BlackboardStatus.Get() != 0)
     {
+        bool isStateRun = Sonic.State.GetCurrentStateID() == 4;
         bool isBoost = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost);
 
-        Sonic.Collision.SetCollisionSphere(isBoost ? Sonic.CollisionType.Hit : Sonic.CollisionType.Default, 1.0f);
-        Sonic.Collision.ToggleEntityCollision(!isBoost);
+        if (isStateRun && isBoost)
+        {
+            Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Damage, 1.0f);
+            Sonic.Collision.ToggleEntityCollision(false);
+            IsBoostPrevious = true;
+        }
+        else if (IsBoostPrevious)
+        {
+            Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Default, 1.0f);
+            Sonic.Collision.ToggleEntityCollision(true);
+            IsBoostPrevious = false;
+        }
     }
 }
 
