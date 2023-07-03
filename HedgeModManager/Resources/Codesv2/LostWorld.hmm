@@ -470,7 +470,7 @@ WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 5");
 Patch "Disable Wisp Hints" in "UI" by "Sajid"
 WriteNop(ASLR(0x0091AAF8), 6)
 
-Patch "Fix Rigid Bodies Falling Through Collision" in "Fixes" by "ĐeäTh & Darío" does "Fixes enemies falling through the collision of the level ocassionally." 
+Patch "Fix Rigid Bodies Falling Through Collision" in "Fixes" by "ĐeäTh & Darío" does "Fixes enemies falling through the collision of the level occasionally."
 static int p_updateBroadphaseAndResetCollisionInformationOfWarpedBody = (int)ASLR(0x00AED500);
 static int p_setLinearVelocity = (int)ASLR(0x00B88220);
 
