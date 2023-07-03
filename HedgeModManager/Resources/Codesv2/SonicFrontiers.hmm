@@ -4062,7 +4062,7 @@ Patch "Fix Rail Switching Animation" in "Fixes" by "WasifBoomz & Sails" does "St
     WriteAsmHook
     (
         $@"
-            ;Check if (unknown float) is equal to 40
+            ; Check if (unknown float) is equal to 40
             cmp   dword ptr [r15+14h], 0x42200000
             jz    setSpeed
             jmp   originalCode
@@ -5396,32 +5396,32 @@ Patch "Force Light Scattering" in "Graphics" by "WasifBoomz & Robowil" does "For
     WriteAsmHook
     (
         $@"
-            ;Enable Light Scattering
+            ; Enable Light Scattering
             mov byte ptr [r8], 1
 			
-			;Set Color to (0.015, 0.013, 0.023)
-			mov dword ptr [r8+16], 0x3C75C28F
-			mov dword ptr [r8+20], 0x3C54FDF4
-			mov dword ptr [r8+24], 0x3CBC6A7F
+            ;Set Color to (0.015, 0.013, 0.023)
+            mov dword ptr [r8+16], 0x3C75C28F
+            mov dword ptr [r8+20], 0x3C54FDF4
+            mov dword ptr [r8+24], 0x3CBC6A7F
 			
-			;Set Scattering Scale to 15
-			mov dword ptr [r8+32], 0x41700000
+            ; Set Scattering Scale to 15
+            mov dword ptr [r8+32], 0x41700000
 			
-			;Set Beta Mie to 0.6
-			mov dword ptr [r8+64], 0x3F19999A
+            ; Set Beta Mie to 0.6
+            mov dword ptr [r8+64], 0x3F19999A
 			
-			;Set Gamma to 0.08
-			mov dword ptr [r8+68], 0x3DA3D70A
+            ; Set Gamma to 0.08
+            mov dword ptr [r8+68], 0x3DA3D70A
 			
-			;Set ZNear and Far to 300 and 55000
-			mov dword ptr [r8+72], 0x43960000
+            ; Set ZNear and Far to 300 and 55000
+            mov dword ptr [r8+72], 0x43960000
         ",
 			
         /* 0x14828BC8C */
         ScanSignature
         (
             "\x45\x0F\x10\x00\x44\x0F\x29\x8C\x24\xE0\x00\x00\x00",
-			"xxxxxxxxxxxxx"
+            "xxxxxxxxxxxxx"
         ),
 			
         HookBehavior.After
