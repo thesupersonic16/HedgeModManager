@@ -999,6 +999,22 @@ Known issues;
         WriteProtected<float>(DVSceneAspectRatioAddr + 6, AspectRatio);
 }
 
+Code "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic to damage enemies and harder physics objects by boosting through them."
+//
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+    #lib "Sonic"
+//
+{
+    if (BlackboardStatus.Get() != 0)
+    {
+        bool isBoost = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost);
+
+        Sonic.Collision.SetCollisionSphere(isBoost ? Sonic.CollisionType.Hit : Sonic.CollisionType.Default, 1.0f);
+        Sonic.Collision.ToggleEntityCollision(!isBoost);
+    }
+}
+
 Patch "Always Allow Unlocking Story Skills" in "Cheats" by "Hyper" does
 /*
 Allows the skills typically obtained through story progression to be unlocked as regular skills for free.
