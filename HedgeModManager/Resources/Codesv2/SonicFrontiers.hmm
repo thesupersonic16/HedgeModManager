@@ -1110,40 +1110,17 @@ Affected skills;
 }
 
 Patch "Always Allow Spin Dash on Dash Panels" in "Gameplay" by "Hyper" does "Allows Sonic to Spin Dash through dash panels without interruptions."
-//
-    #lib "Sonic"
-
-    using System.Runtime.InteropServices;
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    private delegate void _tSetDashPanelImpulseState();
-    private static _tSetDashPanelImpulseState _delSetDashPanelImpulseState = new _tSetDashPanelImpulseState(SetDashPanelImpulseState);
-    private static IntPtr _fpSetDashPanelImpulseState = Marshal.GetFunctionPointerForDelegate(_delSetDashPanelImpulseState);
-
-    private static void SetDashPanelImpulseState()
-    {
-        if (Sonic.State.GetCurrentStateID() != 116)
-            Sonic.State.ChangeState(4);
-    }
-
-    static bool Initialised = false;
-//
 {
-    WriteAsmHook
+    WriteProtected<byte>
     (
-        $@"
-            mov  rax, {(long)_fpSetDashPanelImpulseState}
-            call rax
-        ",
-
-        /* 0x14086253A */
+        /* 0x140862428 */
         ScanSignature
         (
-            "\xBA\x04\x00\x00\x00\x44\x8D\x42\xFD\xE8\xCC\xCC\xCC\xCC\xEB\x70",
-            "xxxxxxxxxx????xx"
+            "\x41\x0F\x94\xC4\xD0\xE9",
+            "xxxxxx"
         ),
 
-        HookBehavior.Replace
+        Assemble("mov r12b, 0; nop")
     );
 }
 
