@@ -1755,23 +1755,31 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
     /* 0x140901E20 */
     long playParticleFuncAddr = playParticleCallerAddr + Read<int>(playParticleCallerAddr + 0x01) + 0x05;
 
+    /* 0x14B4DB1E6 */
+    long playAnimationCallerAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x41\xB0\x01\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x89\xF1",
+        "x????xxxxxx????xxx"
+    );
+
+    /* 0x1408122E0 */
+    long playAnimationFuncAddr = playAnimationCallerAddr + Read<int>(playAnimationCallerAddr + 0x01) + 0x05;
+
     // StateJump
     {
         WriteAsmHook
         (
             $@"
-                push rax
-                push rdx
+                mov  r8b, 0xFE
+                mov  rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("JUMP_BALL")}
+                mov  rcx, rax
+                mov  rax, {playAnimationFuncAddr}
+                call rax
                 mov  r8b, 1
                 mov  rdx, {SPINJUMP}
                 mov  rcx, rsi
                 mov  rax, {playParticleFuncAddr}
                 call rax
-                pop  rdx
-                pop  rax
-                mov  r8b, 0xFE
-                mov  rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("JUMP_BALL")}
-                mov  rcx, rax
             ",
 
             /* 0x14B4DB1D4 */
@@ -1784,17 +1792,7 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
             HookBehavior.Replace
         );
 
-        WriteNop
-        (
-            /* 0x14B4DB1F8 */
-            ScanSignature
-            (
-                "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x0D\xBA\x8E\xB4\x47\x3B\xE8\xCC\xCC\xCC\xCC\x49\x89\xC6",
-                "x????xxxxxxxxxxxxxxxxxxxxxx????xxx"
-            ),
-
-            5
-        );
+        WriteNop(playAnimationCallerAddr, 23);
     }
 
     // StateDoubleJump
