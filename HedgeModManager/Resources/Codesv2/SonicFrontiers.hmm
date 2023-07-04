@@ -1769,7 +1769,9 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
                 call rax
                 pop  rdx
                 pop  rax
+                mov  r8b, 0xFE
                 mov  rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("JUMP_BALL")}
+                mov  rcx, rax
             ",
 
             /* 0x14B4DB1D4 */
