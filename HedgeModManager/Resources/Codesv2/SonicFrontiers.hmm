@@ -4042,6 +4042,34 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
     }
 }
 
+Patch "Fix Damage from Jumping into Enemies" in "Fixes" by "Hyper" does "Fixes Sonic taking damage when jumping into enemies within a small frame window."
+//
+    #lib "Sonic"
+
+    static bool IsJumpPrevious = false;
+//
+{
+    void NotifyJumpDamageCollision(int stateId)
+    {
+        bool isJump = stateId == 8 || stateId == 9 || stateId == 48;
+
+        if (isJump)
+        {
+            Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Damage, 1.0f);
+            Sonic.Collision.ToggleEntityCollision(false);
+            IsJumpPrevious = true;
+        }
+        else if (IsJumpPrevious)
+        {
+            Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Default, 1.0f);
+            Sonic.Collision.ToggleEntityCollision(true);
+            IsJumpPrevious = false;
+        }
+    }
+
+    Sonic.State.AddStateNotifyAction(NotifyJumpDamageCollision);
+}
+
 Patch "Fix Quick Cyloop Lock-On" in "Fixes" by "WasifBoomz & The Duck Dealer" does "Fixes the lock-on target changing whenever Sonic performs a Quick Cyloop, allowing for consistent attacks during combat."
 {
     WriteProtected<byte>
