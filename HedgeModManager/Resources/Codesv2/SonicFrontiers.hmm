@@ -54,6 +54,9 @@ Library "Blackboard" by "Hyper, ĐeäTh & Sajid"
         {
             IntPtr blackboardContent = blackboards[i];
 
+            if (blackboardContent == IntPtr.Zero)
+                continue;
+
             var fpGetNameHash = Marshal.GetDelegateForFunctionPointer<_tGetNameHash>(Read<IntPtr>(Read<IntPtr>(blackboardContent) + 1 * IntPtr.Size));
             
             if (fpGetNameHash.Invoke() == StringMapOperation.ComputeHash(name))
