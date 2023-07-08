@@ -6674,7 +6674,6 @@ This state lasts a fraction of a second, but keep in mind that within that time,
     
     static bool IsInitialised = false;
     static bool IsRecoveryJumpCharging = false;
-    static bool IsSpringJump = false;
 //
 {
     if (!IsInitialised)
