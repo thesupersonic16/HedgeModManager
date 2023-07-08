@@ -573,12 +573,92 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (fpPlayEffect == null)
                 return;
 
-            long gocEffect = GameObject.GetGOC(GetSonic(), "GOCEffect");
+            long sonic = GetSonic();
+
+            if (sonic == 0)
+                return;
+
+            long gocEffect = GameObject.GetGOC(sonic, "GOCEffect");
 
             if (gocEffect == 0)
                 return;
 
             fpPlayEffect.Invoke(gocEffect, Marshal.StringToHGlobalAnsi(name), null);
+        }
+    }
+    
+    public enum ButtonState : uint
+    {
+        Inactive = 0,
+        Press    = 0x13000000,
+        Release  = 0x4000000,
+        Hold     = 0x1000000
+    }
+
+    public class Input
+    {
+        public ButtonState* A;
+        public ButtonState* Y;
+        public ButtonState* RightTrigger;
+        public ButtonState* LeftStick;
+        public ButtonState* LeftBumper;
+        public ButtonState* RightBumper;
+        public ButtonState* B;
+        public ButtonState* X;
+        public ButtonState* RightStick;
+        public ButtonState* LeftTrigger;
+        
+        public float* LeftStickX;
+        public float* LeftStickY;
+        public float* RightStickX;
+        public float* RightStickY;
+
+        public Input(long gocInput)
+        {
+            A            = (ButtonState*)(gocInput + 0x1A4);
+            Y            = (ButtonState*)(gocInput + 0x1AC);
+            RightTrigger = (ButtonState*)(gocInput + 0x1C4);
+            LeftStick    = (ButtonState*)(gocInput + 0x1D4);
+            LeftBumper   = (ButtonState*)(gocInput + 0x1DC);
+            RightBumper  = (ButtonState*)(gocInput + 0x1E4);
+            B            = (ButtonState*)(gocInput + 0x1EC);
+            X            = (ButtonState*)(gocInput + 0x1FC);
+            RightStick   = (ButtonState*)(gocInput + 0x20C);
+            LeftTrigger  = (ButtonState*)(gocInput + 0x214);
+            LeftStickX   = (float*)(gocInput + 0x228);
+            LeftStickY   = (float*)(gocInput + 0x240);
+            RightStickX  = (float*)(gocInput + 0x258);
+            RightStickY  = (float*)(gocInput + 0x270);
+        }
+
+        public static Input Get()
+        {
+            long sonic = GetSonic();
+
+            if (sonic == 0)
+                return null;
+
+            long gocInput = GameObject.GetGOC(sonic, "GOCInput");
+
+            if (gocInput == 0)
+                return null;
+
+            return new Input(gocInput);
+        }
+
+        public static bool IsPressed(ButtonState buttonState)
+        {
+            return (buttonState & ButtonState.Press) == ButtonState.Press;
+        }
+
+        public static bool IsReleased(ButtonState buttonState)
+        {
+            return (buttonState & ButtonState.Release) == ButtonState.Release;
+        }
+
+        public static bool IsDown(ButtonState buttonState)
+        {
+            return (buttonState & ButtonState.Hold) == ButtonState.Hold;
         }
     }
 
@@ -587,10 +667,6 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         public Vector3* Position;
         public Quaternion* Rotation;
         public Vector3* Velocity;
-
-        Vector3 LastGroundedPosition;
-
-        float HeightFallen = 0.0f;
 
         public Kinematics(long gocPlayerKinematicParams)
         {
@@ -6581,6 +6657,8 @@ Enters Sonic into a somersault state when landing from a moderate height at a hi
 This state lasts a fraction of a second, but keep in mind that within that time, you will be unable to perform other actions until the animation is complete.
 */
 //
+    #lib "Bitwise"
+    #lib "Blackboard"
     #lib "Sonic"
 
     #load "System.Numerics.dll"
@@ -6590,16 +6668,15 @@ This state lasts a fraction of a second, but keep in mind that within that time,
 
     static Vector3 LastGroundedPosition;
 
-    static List<int> ExitStates = new() { 12, 15, 16, 161 };
+    static List<int> ExitStates = new() { 8, 12, 15, 16, 161 };
 
     static float HeightFallen = 0.0f;
     
     static bool IsInitialised = false;
     static bool IsRecoveryJumpCharging = false;
+    static bool IsSpringJump = false;
 //
 {
-    var kinematics = Sonic.Kinematics.Get();
-
     if (!IsInitialised)
     {
         fixed (bool* pIsRecoveryJumpCharging = &IsRecoveryJumpCharging)
@@ -6627,42 +6704,78 @@ This state lasts a fraction of a second, but keep in mind that within that time,
             );
         }
 
+        void NotifyStateSpringJumpHeadLandDamageCollision(int stateId)
+        {
+            bool isStateSpringJumpHeadLand = stateId == 163;
+            
+            if (isStateSpringJumpHeadLand)
+            {
+                Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Damage, 1.0f);
+                Sonic.Collision.ToggleEntityCollision(false);
+            }
+            else if (Sonic.State.GetPreviousStateID() == 163)
+            {
+                Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Default, 1.0f);
+                Sonic.Collision.ToggleEntityCollision(true);
+            }
+        }
+
+        Sonic.State.AddStateNotifyAction(NotifyStateSpringJumpHeadLandDamageCollision);
+
         IsInitialised = true;
     }
 
+    var kinematics = Sonic.Kinematics.Get();
+
     if (kinematics == null)
         return;
+
+    var input = Sonic.Input.Get();
+
+    if (input != null && Sonic.State.GetCurrentStateID() == 163)
+    {
+        if (Sonic.Input.IsPressed(*input.A) || Sonic.Input.IsPressed(*input.X))
+        {
+            // Exit into StateRun.
+            Sonic.State.SetState(4);
+        }
+
+        if (Sonic.Input.IsPressed(*input.B))
+        {
+            // Exit into StateSliding.
+            Sonic.State.SetState(59);
+        }
+    }
 
     if (Sonic.IsGrounded())
     {
         LastGroundedPosition = *kinematics.Position;
 
         if (!ExitStates.Contains(Sonic.State.GetPreviousStateID()))
-            return;
+            goto Reset;
 
         if (Sonic.Kinematics.GetHorizontalMagnitude() > 15.0f && HeightFallen >= 5.0f)
         {
+            if (BlackboardStatus.Get() != null && Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost))
+            {
+                // Allow StateJump to continue running if we're boosting.
+                if (Sonic.State.GetPreviousStateID() == 8)
+                    goto Reset;
+            }
+
             // Allow StateRecoveryJump to enter StateDropDash.
             if (Sonic.State.GetPreviousStateID() == 12 && IsRecoveryJumpCharging)
-                return;
+                goto Reset;
 
             // Exit into StateSpringJumpHeadLand.
             Sonic.State.SetState(163);
         }
-        else
-        {
-            HeightFallen = 0.0f;
-        }
+        
+    Reset:
+        HeightFallen = 0.0f;
     }
     else
     {
-        /* Always reset position if StateBumpJump was entered from StateSpinBoost.
-           This is to prevent issues with Always Trickable Spin Dash Exit. */
-        if (Sonic.State.GetPreviousStateID() == 16 && Sonic.State.GetPreviousStateID(1) == 116)
-        {
-            LastGroundedPosition = *kinematics.Position;
-        }
-
         /* Reset position if the player has reached
            apex height and has begun falling again. */
         if ((LastGroundedPosition.Y - kinematics.Position->Y) < HeightFallen)
