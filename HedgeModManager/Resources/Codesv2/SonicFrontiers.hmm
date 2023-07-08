@@ -6596,7 +6596,6 @@ This state lasts a fraction of a second, but keep in mind that within that time,
     
     static bool IsInitialised = false;
     static bool IsRecoveryJumpCharging = false;
-    static bool IsGrindJumpReset = false;
 //
 {
     var kinematics = Sonic.Kinematics.Get();
@@ -6637,7 +6636,6 @@ This state lasts a fraction of a second, but keep in mind that within that time,
     if (Sonic.IsGrounded())
     {
         LastGroundedPosition = *kinematics.Position;
-        IsGrindJumpReset = false;
 
         if (!ExitStates.Contains(Sonic.State.GetPreviousStateID()))
             return;
@@ -6650,6 +6648,10 @@ This state lasts a fraction of a second, but keep in mind that within that time,
 
             // Exit into StateSpringJumpHeadLand.
             Sonic.State.SetState(163);
+        }
+        else
+        {
+            HeightFallen = 0.0f;
         }
     }
     else
