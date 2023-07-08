@@ -745,6 +745,21 @@ Library "StringMapOperation" by "ĐeäTh"
     }
 }
 
+Patch "Always Unlocked Extreme Difficulty" in "Cheats" by "Hyper"
+{
+    WriteNop
+    (
+        /* 0x140A007D9 */
+        ScanSignature
+        (
+            "\x74\x65\x0F\x1F\x44\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        2
+    );
+}
+
 Patch "2x Extended Grass Draw Distance" in "Graphics" by "Hyper" does "Extends the draw distance of the grass past the visible horizon."
 //
     static float Range = 3.0f;
