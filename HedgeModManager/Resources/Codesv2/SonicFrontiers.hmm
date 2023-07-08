@@ -6709,12 +6709,10 @@ This state lasts a fraction of a second, but keep in mind that within that time,
             
             if (isStateSpringJumpHeadLand)
             {
-                Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Damage, 1.0f);
                 Sonic.Collision.ToggleEntityCollision(false);
             }
             else if (Sonic.State.GetPreviousStateID() == 163)
             {
-                Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Default, 1.0f);
                 Sonic.Collision.ToggleEntityCollision(true);
             }
         }
