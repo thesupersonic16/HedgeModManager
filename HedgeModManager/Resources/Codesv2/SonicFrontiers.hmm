@@ -6654,7 +6654,7 @@ Code "Somersault Landing at High Velocity" in "Animation" by "Hyper" does
 /*
 Enters Sonic into a somersault state when landing from a moderate height at a high velocity whilst retaining your momentum.
 
-This state lasts a fraction of a second, but keep in mind that within that time, you will be unable to perform other actions until the animation is complete.
+This state lasts a fraction of a second, but keep in mind that within that time, you will be unable to perform certain actions until the animation is complete.
 */
 //
     #lib "Bitwise"
