@@ -6594,10 +6594,42 @@ This state lasts a fraction of a second, but keep in mind that within that time,
 
     static float HeightFallen = 0.0f;
     
+    static bool IsInitialised = false;
+    static bool IsRecoveryJumpCharging = false;
     static bool IsGrindJumpReset = false;
 //
 {
     var kinematics = Sonic.Kinematics.Get();
+
+    if (!IsInitialised)
+    {
+        fixed (bool* pIsRecoveryJumpCharging = &IsRecoveryJumpCharging)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    movaps xmmword ptr [rsp + 0x38 + 0xFFFFFFFFFFFFFFE8], xmm6
+                    mov    rsi, rcx
+                    mov    rcx, {(long)pIsRecoveryJumpCharging}
+                    mov    dl, byte ptr [rsi + 0xC4]
+                    mov    byte ptr [rcx], dl
+                    mov    edx, 0x18
+                    mov    rcx, rdi
+                ",
+
+                /* 0x1408A0A1D */
+                ScanSignature
+                (
+                    "\x0F\x29\x74\x24\x20\x48\x8B\xF1\xBA\x18\x00\x00\x00",
+                    "xxxxxxxxxxxxx"
+                ),
+
+                HookBehavior.Replace
+            );
+        }
+
+        IsInitialised = true;
+    }
 
     if (kinematics == null)
         return;
@@ -6612,6 +6644,10 @@ This state lasts a fraction of a second, but keep in mind that within that time,
 
         if (Sonic.Kinematics.GetHorizontalMagnitude() > 15.0f && HeightFallen >= 5.0f)
         {
+            // Allow StateRecoveryJump to enter StateDropDash.
+            if (Sonic.State.GetPreviousStateID() == 12 && IsRecoveryJumpCharging)
+                return;
+
             // Exit into StateSpringJumpHeadLand.
             Sonic.State.SetState(163);
         }
