@@ -6658,7 +6658,7 @@ This state lasts a fraction of a second, but keep in mind that within that time,
 */
 //
     #lib "Bitwise"
-    #lib "Blackboard"
+    #lib "BlackboardStatus"
     #lib "Sonic"
 
     #load "System.Numerics.dll"
