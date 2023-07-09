@@ -1348,7 +1348,7 @@ Patch "Always Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allo
         }
     }
 
-    tSonic.State.AddStateNotifyAction(NotifyStateRunDamageCollision);
+    Sonic.State.AddStateNotifyAction(NotifyStateRunDamageCollision);
 }
 
 Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by tapping Attack while holding Jump."
