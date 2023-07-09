@@ -463,7 +463,6 @@ Library "Sonic" by "Hyper, NM & Ahremic"
 
     public static class Collision
     {
-
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate long _tGetStatePluginCollision(long sonicContext);
         private static long _sigGetStatePluginCollision = 0;
@@ -565,10 +564,24 @@ Library "Sonic" by "Hyper, NM & Ahremic"
     {
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate IntPtr _tPlayEffect(long gocEffect, IntPtr effectName, uint* flags);
+        private static long _sigPlayEffect = 0;
 
         public static void PlayEffect(string name)
         {
-            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tPlayEffect>((IntPtr)0x140C4A8F0);
+            if (_sigPlayEffect == 0)
+            {
+                /* 0x140901E20 */
+                _sigPlayEffect = ScanSignature
+                (
+                    "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x57\x48\x83\xEC\x20\x48\x8B\xF2\x48\x8B\xF9\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8",
+                    "xxxxxxxxxxxxxxxxxxxxxx????xxx"
+                );
+
+                if (_sigPlayEffect == 0)
+                    return;
+            }
+
+            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tPlayEffect>((IntPtr)_sigPlayEffect);
 
             if (fpPlayEffect == null)
                 return;
@@ -586,79 +599,99 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             fpPlayEffect.Invoke(gocEffect, Marshal.StringToHGlobalAnsi(name), null);
         }
     }
-    
-    public enum ButtonState : uint
+
+    public enum PlayerActionType
     {
-        Inactive = 0,
-        Press    = 0x13000000,
-        Release  = 0x4000000,
-        Hold     = 0x1000000
+        PlayerJump = 0,             // A
+        PlayerCyloop = 1,           // Y
+        PlayerAttack = 2,           // X
+        PlayerLightDash = 3,        // LS
+        PlayerBoost = 4,            // RT
+        PlayerDrift = 5,            // Unknown
+        PlayerChangeSuperSonic = 6, // Unknown
+        PlayerLeftStep = 7,         // LB
+        PlayerRightStep = 8,        // RB
+        PlayerStomping = 9,         // B
+        PlayerAction = 10,          // Unknown
+        PlayerActionAlways = 11,    // Unknown
+        PlayerSmash = 12,           // Unknown
+        CameraGaze = 13,            // RS
+        PlayerSonicboom = 14        // LT
     }
 
-    public class Input
+    public static class Input
     {
-        public ButtonState* A;
-        public ButtonState* Y;
-        public ButtonState* RightTrigger;
-        public ButtonState* LeftStick;
-        public ButtonState* LeftBumper;
-        public ButtonState* RightBumper;
-        public ButtonState* B;
-        public ButtonState* X;
-        public ButtonState* RightStick;
-        public ButtonState* LeftTrigger;
+        private enum ButtonState
+        {
+            Pressed,
+            Down,
+            Released
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate bool _tCommonInputDel(long sonicContext, PlayerActionType actionType);
+
+        /* 0x1408F6400 */
+        private static long _sigIsPressed = ScanSignature
+        (
+            "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x63\xFA\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8B\x5C\x24\x30\x48\x8B\x80\x90\x00\x00\x00\x48\x8B\x48\x78\x0F\xB6\x44\xF9\x07\xD0",
+            "xxxxxxxxxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxxxxxxxxxx"
+        );
         
-        public float* LeftStickX;
-        public float* LeftStickY;
-        public float* RightStickX;
-        public float* RightStickY;
+        /* 0x1408F65D0 */
+        private static long _sigIsDown = ScanSignature
+        (
+            "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x63\xFA\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8B\x5C\x24\x30\x48\x8B\x80\x90\x00\x00\x00\x48\x8B\x48\x78\x0F\xB6\x44\xF9\x07\xF6",
+            "xxxxxxxxxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxxxxxxxxxx"
+        );
 
-        public Input(long gocInput)
+        /* 0x1408F6580 */
+        private static long _sigIsReleased = ScanSignature
+        (
+            "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x63\xFA\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8B\x5C\x24\x30\x48\x8B\x80\x90\x00\x00\x00\x48\x8B\x48\x78\x0F\xB6\x44\xF9\x07\xC0",
+            "xxxxxxxxxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxxxxxxxxxx"
+        );
+
+        private static bool CheckButtonState(ButtonState buttonState, PlayerActionType actionType)
         {
-            A            = (ButtonState*)(gocInput + 0x1A4);
-            Y            = (ButtonState*)(gocInput + 0x1AC);
-            RightTrigger = (ButtonState*)(gocInput + 0x1C4);
-            LeftStick    = (ButtonState*)(gocInput + 0x1D4);
-            LeftBumper   = (ButtonState*)(gocInput + 0x1DC);
-            RightBumper  = (ButtonState*)(gocInput + 0x1E4);
-            B            = (ButtonState*)(gocInput + 0x1EC);
-            X            = (ButtonState*)(gocInput + 0x1FC);
-            RightStick   = (ButtonState*)(gocInput + 0x20C);
-            LeftTrigger  = (ButtonState*)(gocInput + 0x214);
-            LeftStickX   = (float*)(gocInput + 0x228);
-            LeftStickY   = (float*)(gocInput + 0x240);
-            RightStickX  = (float*)(gocInput + 0x258);
-            RightStickY  = (float*)(gocInput + 0x270);
+            long sonicContext = GetSonicContext();
+
+            if (sonicContext == 0)
+                return false;
+
+            IntPtr functionPtr = IntPtr.Zero;
+
+            switch (buttonState)
+            {
+                case ButtonState.Pressed:
+                    functionPtr = (IntPtr)_sigIsPressed;
+                    break;
+
+                case ButtonState.Down:
+                    functionPtr = (IntPtr)_sigIsDown;
+                    break;
+
+                case ButtonState.Released:
+                    functionPtr = (IntPtr)_sigIsReleased;
+                    break;
+            }
+
+            return Marshal.GetDelegateForFunctionPointer<_tCommonInputDel>(functionPtr).Invoke(sonicContext, actionType);
         }
 
-        public static Input Get()
+        public static bool IsPressed(PlayerActionType actionType)
         {
-            long sonic = GetSonic();
-
-            if (sonic == 0)
-                return null;
-
-            long gocInput = GameObject.GetGOC(sonic, "GOCInput");
-
-            if (gocInput == 0)
-                return null;
-
-            return new Input(gocInput);
+            return CheckButtonState(ButtonState.Pressed, actionType);
         }
 
-        public static bool IsPressed(ButtonState buttonState)
+        public static bool IsDown(PlayerActionType actionType)
         {
-            return (buttonState & ButtonState.Press) == ButtonState.Press;
+            return !CheckButtonState(ButtonState.Down, actionType);
         }
 
-        public static bool IsReleased(ButtonState buttonState)
+        public static bool IsReleased(PlayerActionType actionType)
         {
-            return (buttonState & ButtonState.Release) == ButtonState.Release;
-        }
-
-        public static bool IsDown(ButtonState buttonState)
-        {
-            return (buttonState & ButtonState.Hold) == ButtonState.Hold;
+            return CheckButtonState(ButtonState.Released, actionType);
         }
     }
 
@@ -7026,17 +7059,16 @@ This state lasts a fraction of a second, but keep in mind that within that time,
     if (kinematics == null)
         return;
 
-    var input = Sonic.Input.Get();
-
-    if (input != null && Sonic.State.GetCurrentStateID() == 163)
+    if (Sonic.State.GetCurrentStateID() == 163)
     {
-        if (Sonic.Input.IsPressed(*input.A) || Sonic.Input.IsPressed(*input.X))
+        if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerJump) ||
+            Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
         {
             // Exit into StateRun.
             Sonic.State.SetState(4);
         }
 
-        if (Sonic.Input.IsPressed(*input.B))
+        if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerStomping))
         {
             // Exit into StateSliding.
             Sonic.State.SetState(59);
