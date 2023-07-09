@@ -1009,7 +1009,7 @@ WARNING: this will almost definitely cause performance issues, especially if you
     }
 }
 
-Code "Additive Springs on Boost" in "Gameplay" by "WasifBoomz" does "Keeps your velocity upon hitting a vertical spring while boosting"
+Code "Additive Spring Trajectory with Boost" in "Gameplay" by "WasifBoomz" does "Keeps your velocity upon hitting a vertical spring while boosting."
 //
     #lib "Sonic"
     #lib "Bitwise"
@@ -1022,25 +1022,29 @@ Code "Additive Springs on Boost" in "Gameplay" by "WasifBoomz" does "Keeps your 
     using System.Collections.Generic;
 	
     static int framesSinceHit = 0;
-    static int boosting = 0;
+    static bool boosting = false;
     static bool isInitialised = false;
     static Vector3 prevVelocity;
 //
 {
     Sonic.Kinematics kinematics = Sonic.Kinematics.Get();
 
-    if(!isInitialised) {
-        long aSpringJump = ScanSignature(
+    if (!isInitialised)
+    {
+        long aSpringJump = ScanSignature
+        (
             "SPRING_JUMP",
             "xxxxxxxxxxx"
         );
 
-        long ChangeAnimLocation = ScanSignature(
+        long ChangeAnimLocation = ScanSignature
+        (
             "\x40\x53\x48\x83\xEC\x20\xF6\x81\x78\x01\x00\x00\x10\x48\x8B\xDA",
             "xxxxxxxxxxxxxxxx"
         );
 
-        fixed (int* pFramesSinceHit = &framesSinceHit, pBoosting = &boosting)
+	fixed (bool* pBoosting = &boosting)
+        fixed (int* pFramesSinceHit = &framesSinceHit)
         {
             WriteAsmHook
             (
@@ -1077,12 +1081,13 @@ Code "Additive Springs on Boost" in "Gameplay" by "WasifBoomz" does "Keeps your 
     if (kinematics == null)
         return;
     
-    if(BlackboardStatus.Get() == 0)
+    if (BlackboardStatus.Get() == 0)
         return;
 
-    boosting = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost) ? 1 : 0;
+    boosting = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost);
 
-    switch (framesSinceHit){
+    switch (framesSinceHit)
+    {
         case 0:
             prevVelocity = *kinematics.Velocity;
             break;
@@ -1091,10 +1096,12 @@ Code "Additive Springs on Boost" in "Gameplay" by "WasifBoomz" does "Keeps your 
             framesSinceHit++;
             break;
         case 2:
+        {
             if(Sonic.Kinematics.GetHorizontalMagnitude() < Math.Abs(kinematics.Velocity->Y))
-                *kinematics.Velocity += new Vector3(prevVelocity.X,0,prevVelocity.Z);
+                    *kinematics.Velocity += new Vector3(prevVelocity.X,0,prevVelocity.Z);
             framesSinceHit = 0;
             break;
+        }
         default:
             framesSinceHit = 1;
             break;
@@ -2538,12 +2545,12 @@ Patch "Disable Thorn Cylinders" in "Gameplay" by "Hyper" does "Disables the cyli
     );
 }
 
-Patch "Enable Flinging off of Terrain in Cyber Space" in "Gameplay" by "WasifBoomz" does
+Patch "Enable Flinging from Terrain in Cyber Space" in "Gameplay" by "WasifBoomz" does
 /*
-Enables the Tumble State in Cyber Space.
+Allows Sonic to fling off of terrain in Cyber Space.
 
 Notes;
-- This does not enable being able to trick off of terrain.
+- This does not allow Sonic to perform Air Tricks from terrain, use the 'Enable Air Tricks in Cyber Space' code to do so.
 */
 {
     long CheckTumbleFuncAddress = ScanSignature
@@ -2587,19 +2594,19 @@ Notes;
     );
 }
 
-Code "Enable Tricks in Cyber Space" in "Gameplay" by "WasifBoomz" does
+Code "Enable Air Tricks in Cyber Space" in "Gameplay" by "WasifBoomz" does
 /*
-Allows Sonic to use air tricks during Cyber Space levels.
+Allows Sonic to use the Air Trick skill in Cyber Space.
 
 Notes;
-- This does not enable being able to fling off of terrain.
+- This will only work for traversal objects, use the 'Enable Flinging from Terrain in Cyber Space' code to allow Sonic to fling off of terrain.
 */
-    static int isCyber = 0;
+    static bool isCyber = false;
     static bool isInitialised = false;
 {
-    if(!isInitialised) {
-        fixed (int* pIsCyber = &isCyber) {
-            
+    if (!isInitialised)
+    {
+        fixed (bool* pIsCyber = &isCyber) {
             /* 0x14BB55230 */
             long CallAddress1 = ScanSignature
             (
@@ -2620,7 +2627,7 @@ Notes;
                 $@"
                     mov rbx, {(long)pIsCyber}
                     cmp byte ptr [rbx], 1
-                    jz cyber
+                    jz  cyber
                     
                 original:
                     mov  rcx, rdi
@@ -2630,10 +2637,10 @@ Notes;
                     mov  rcx, rdi
                     mov  rax, {(long)CallAddress2}
                     call rax
-                    jmp end
+                    jmp  end
 
                 cyber:
-                    mov al, 1
+                    mov  al, 1
                 end:
                 ",
                 
@@ -2656,11 +2663,7 @@ Notes;
             
             long JumpAddress = HandleAddress + 0x1E;
             
-            WriteNop
-            (
-                HandleAddress,
-                0x1E
-            );
+            WriteNop(HandleAddress, 0x1E);
             
             /* Unscannable */
             long ChangeFlagAddress = 0x1408F9C10;
@@ -2693,13 +2696,14 @@ Notes;
                 HookBehavior.Replace
             );
         }
+
         isInitialised = true;
     }
 
     if(BlackboardStatus.Get() == 0)
         return;
 
-    isCyber = Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsCyberSpace) ? 1 : 0
+    isCyber = Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsCyberSpace);
 }
 
 Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt that covers up Sonic when using drift dash panels."
