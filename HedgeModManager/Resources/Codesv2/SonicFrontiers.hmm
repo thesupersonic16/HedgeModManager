@@ -1361,11 +1361,6 @@ Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" doe
     static bool allowChargeAttack = false;
 //
 {
-    var input = Sonic.Input.Get();
-
-    if (input == null)
-        return;
-
     if (BlackboardStatus.Get() == 0)
         return;
 
