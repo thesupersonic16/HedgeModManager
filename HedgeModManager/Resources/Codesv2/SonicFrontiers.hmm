@@ -1130,7 +1130,7 @@ Code "Additive Spring Trajectory with Boost" in "Gameplay" by "WasifBoomz" does 
             break;
         case 2:
         {
-            if(Sonic.Kinematics.GetHorizontalMagnitude() < Math.Abs(kinematics.Velocity->Y))
+            if (Sonic.Kinematics.GetHorizontalMagnitude() < Math.Abs(kinematics.Velocity->Y))
                     *kinematics.Velocity += new Vector3(prevVelocity.X,0,prevVelocity.Z);
             framesSinceHit = 0;
             break;
@@ -1363,7 +1363,7 @@ Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" doe
 {
     var input = Sonic.Input.Get();
 
-    if(input == null)
+    if (input == null)
         return;
 
     if (BlackboardStatus.Get() == 0)
@@ -1374,12 +1374,12 @@ Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" doe
     if (Sonic.IsGrounded())
         allowChargeAttack = true;
 
-    if(Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsWallClimb))
+    if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsWallClimb))
         allowChargeAttack = true;
 
-    for(int i = 0; i < enableStates.Length; i++)
+    for (int i = 0; i < enableStates.Length; i++)
     {
-        if(state == enableStates[i])
+        if (state == enableStates[i])
             allowChargeAttack = true;
     }
 
@@ -2673,8 +2673,10 @@ Allows Sonic to use the Air Trick skill in Cyber Space.
 Notes;
 - This will only work for traversal objects, use the 'Enable Flinging from Terrain in Cyber Space' code to allow Sonic to fling off of terrain.
 */
+//
     static bool isCyber = false;
     static bool isInitialised = false;
+//
 {
     if (!isInitialised)
     {
@@ -2772,7 +2774,7 @@ Notes;
         isInitialised = true;
     }
 
-    if(BlackboardStatus.Get() == 0)
+    if (BlackboardStatus.Get() == 0)
         return;
 
     isCyber = Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsCyberSpace);
