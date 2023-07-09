@@ -1315,7 +1315,46 @@ Patch "Always Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allo
         }
     }
 
-    Sonic.State.AddStateNotifyAction(NotifyStateRunDamageCollision);
+    tSonic.State.AddStateNotifyAction(NotifyStateRunDamageCollision);
+}
+
+Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by tapping Attack while holding Jump."
+//
+    #lib "Sonic"
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+
+    static int[] enableStates = {8, 11, 46, 162};
+    static bool allowChargeAttack = false;
+//
+{
+    var input = Sonic.Input.Get();
+
+    if(input == null)
+        return;
+
+    if (BlackboardStatus.Get() == 0)
+        return;
+
+    int state = Sonic.State.GetCurrentStateID();
+
+    if (Sonic.IsGrounded())
+        allowChargeAttack = true;
+
+    if(Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsWallClimb))
+        allowChargeAttack = true;
+
+    for(int i = 0; i < enableStates.Length; i++)
+    {
+        if(state == enableStates[i])
+            allowChargeAttack = true;
+    }
+
+    if (allowChargeAttack && Sonic.Input.IsDown(*input.A) && Sonic.Input.IsPressed(*input.X))
+    {
+        Sonic.State.SetState(148);
+        allowChargeAttack = false;
+    }
 }
 
 Patch "Always Allow Unlocking Story Skills" in "Cheats" by "Hyper" does
