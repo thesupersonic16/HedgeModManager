@@ -1009,6 +1009,98 @@ WARNING: this will almost definitely cause performance issues, especially if you
     }
 }
 
+Code "Additive Springs on Boost" in "Gameplay" by "WasifBoomz" does "Keeps your velocity upon hitting a vertical spring while boosting"
+//
+    #lib "Sonic"
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+	
+    #load "System.Numerics.dll"
+	
+    using System;
+    using System.Numerics;
+    using System.Collections.Generic;
+	
+    static int framesSinceHit = 0;
+    static int boosting = 0;
+    static bool isInitialised = false;
+    static Vector3 prevVelocity;
+//
+{
+    Sonic.Kinematics kinematics = Sonic.Kinematics.Get();
+
+    if(!isInitialised) {
+        long aSpringJump = ScanSignature(
+            "SPRING_JUMP",
+            "xxxxxxxxxxx"
+        );
+
+        long ChangeAnimLocation = ScanSignature(
+            "\x40\x53\x48\x83\xEC\x20\xF6\x81\x78\x01\x00\x00\x10\x48\x8B\xDA",
+            "xxxxxxxxxxxxxxxx"
+        );
+
+        fixed (int* pFramesSinceHit = &framesSinceHit, pBoosting = &boosting)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    mov  rax, {(long)aSpringJump}
+                    cmp  rdx, rax
+                    jnz  original
+                    mov  rcx, {(long)pBoosting}
+                    cmp  byte ptr [rcx], 0
+                    jz   original
+                    mov  rax, {(long)pFramesSinceHit}
+                    mov  byte ptr [rax], 1
+                original:
+                    mov  r8b, 0FEh
+                    mov  rcx, rbx
+                    mov  rax, {(long)ChangeAnimLocation}
+                    call rax
+                    mov  edx, [rbp+0DCh]
+                ",
+                    
+                /* 0x1408C1B02 */
+                ScanSignature(
+                    "\x41\xB0\xFE\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x8B\x95\xDC\x00\x00\x00",
+                    "xxxxxxx????xxxxxx"
+                ),
+                    
+                HookBehavior.Replace
+            );
+        }
+
+        isInitialised = true;
+    }
+
+    if (kinematics == null)
+        return;
+    
+    if(BlackboardStatus.Get() == 0)
+        return;
+
+    boosting = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost) ? 1 : 0;
+
+    switch (framesSinceHit){
+        case 0:
+            prevVelocity = *kinematics.Velocity;
+            break;
+        case 1:
+            Sonic.State.SetState(16);
+            framesSinceHit++;
+            break;
+        case 2:
+            if(Sonic.Kinematics.GetHorizontalMagnitude() < Math.Abs(kinematics.Velocity->Y))
+                *kinematics.Velocity += new Vector3(prevVelocity.X,0,prevVelocity.Z);
+            framesSinceHit = 0;
+            break;
+        default:
+            framesSinceHit = 1;
+            break;
+    }
+}
+
 Code "Adjust Aspect Ratio to Resolution (experimental)" in "Graphics" by "M&M & Hyper" does
 /*
 Dynamically adjusts the aspect ratio to match the game resolution (recommended for non-16:9 resolutions).
@@ -2444,6 +2536,170 @@ Patch "Disable Thorn Cylinders" in "Gameplay" by "Hyper" does "Disables the cyli
 
         0xE9, 0x4A, 0x04, 0x00, 0x00
     );
+}
+
+Patch "Enable Flinging off of Terrain in Cyber Space" in "Gameplay" by "WasifBoomz" does
+/*
+Enables the Tumble State in Cyber Space.
+
+Notes;
+- This does not enable being able to trick off of terrain.
+*/
+{
+    long CheckTumbleFuncAddress = ScanSignature
+    (
+        "\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x55\x48\x8B\xEC",
+        "xxxxxxxxxxxxxx"
+    );
+
+    WriteAsmHook
+    (
+        $@"
+            mov  rdx, rax
+            mov  rcx, rbx
+            mov  rax, {(long)CheckTumbleFuncAddress}
+            call rax
+            cmp  byte ptr [rax], 0
+            jnz  end
+            mov  byte ptr [rax], 1
+            mov  dword ptr [rax+4h],  0x41700000
+            mov  dword ptr [rax+1Ch], 0x40000000
+            mov  dword ptr [rax+20h], 0x40000000
+            mov  dword ptr [rax+24h], 0x42480000
+            mov  dword ptr [rax+28h], 0x42B40000
+            mov  dword ptr [rax+2Ch], 0x42200000
+            mov  dword ptr [rax+30h], 0x42A00000
+            mov  dword ptr [rax+34h], 0x41A00000
+            mov  dword ptr [rax+40h], 0x41A00000
+            mov  dword ptr [rax+4Ch], 0x41400000
+        end:
+            cmp  byte ptr [rax], 0
+        ",
+
+        /* 0x1408FD0C5 */
+        ScanSignature
+        (
+            "\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x80\x38\x00\x74\x7D",
+            "xxxxxxx????xxxxx"
+        ),
+                
+        HookBehavior.Replace
+    );
+}
+
+Code "Enable Tricks in Cyber Space" in "Gameplay" by "WasifBoomz" does
+/*
+Allows Sonic to use air tricks during Cyber Space levels.
+
+Notes;
+- This does not enable being able to fling off of terrain.
+*/
+    static int isCyber = 0;
+    static bool isInitialised = false;
+{
+    if(!isInitialised) {
+        fixed (int* pIsCyber = &isCyber) {
+            
+            /* 0x14BB55230 */
+            long CallAddress1 = ScanSignature
+            (
+                "\x40\x53\x48\x83\xEC\x20\x48\x8B\x41\x38\x0F\xB6\xDA\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x1F\xBA\xFF\x9E\x82\x22",
+                "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            );
+
+            /* 0x1408F62C0 */
+            long CallAddress2 = ScanSignature
+            (
+                "\x40\x53\x48\x83\xEC\x20\xBA\x1A\x00\x00\x00",
+                "xxxxxxxxxxx"
+            );
+            
+            /* Handling the Tumble State */
+            WriteAsmHook
+            (
+                $@"
+                    mov rbx, {(long)pIsCyber}
+                    cmp byte ptr [rbx], 1
+                    jz cyber
+                    
+                original:
+                    mov  rcx, rdi
+                    mov  rbx, {(long)CallAddress1}
+                    call rbx
+                                    
+                    mov  rcx, rdi
+                    mov  rax, {(long)CallAddress2}
+                    call rax
+                    jmp end
+
+                cyber:
+                    mov al, 1
+                end:
+                ",
+                
+                /* 0x14B3E7548 */
+                ScanSignature
+                (
+                    "\x48\x89\xF9\xE8\xCC\xCC\xCC\xCC\x48\x89\xF9\xE8\xCC\xCC\xCC\xCC\x84\xC0",
+                    "xxxx????xxxx????xx"
+                ),
+                
+                HookBehavior.Replace
+            );
+    
+            /* 0x14B74C5F6 */
+            long HandleAddress = ScanSignature
+            (
+                "\x80\x79\x3D\x00\x48\x89\xCB",
+                "xxxxxxx"
+            );
+            
+            long JumpAddress = HandleAddress + 0x1E;
+            
+            WriteNop
+            (
+                HandleAddress,
+                0x1E
+            );
+            
+            /* Unscannable */
+            long ChangeFlagAddress = 0x1408F9C10;
+            
+            /* Handling Springs, Jump Boards, and Dash Rings */
+            WriteAsmHook
+            (
+                $@"
+                    mov rax, {(long)pIsCyber}
+                    cmp byte ptr [rax], 1
+                    jz  cyberJump
+
+                originalCheck:
+                    cmp  byte ptr [rcx+3Dh], 0
+                    mov  rbx, rcx
+                    jz   end
+                
+                cyberJump:
+                    mov  rcx, [rcx+20h]
+                    mov  r8b, 1
+                    mov  edx, 28h
+                    mov  rax, {(long)ChangeFlagAddress}
+                    call rax
+                    mov  byte ptr [rbx+3Dh], 0
+                end:
+                ",
+                
+                HandleAddress,
+                
+                HookBehavior.Replace
+            );
+        }
+        isInitialised = true;
+    }
+
+    if(BlackboardStatus.Get() == 0)
+        return;
+
+    isCyber = Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsCyberSpace) ? 1 : 0
 }
 
 Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt that covers up Sonic when using drift dash panels."
