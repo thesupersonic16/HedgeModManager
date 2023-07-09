@@ -54,6 +54,9 @@ Library "Blackboard" by "Hyper, ĐeäTh & Sajid"
         {
             IntPtr blackboardContent = blackboards[i];
 
+            if (blackboardContent == IntPtr.Zero)
+                continue;
+
             var fpGetNameHash = Marshal.GetDelegateForFunctionPointer<_tGetNameHash>(Read<IntPtr>(Read<IntPtr>(blackboardContent) + 1 * IntPtr.Size));
             
             if (fpGetNameHash.Invoke() == StringMapOperation.ComputeHash(name))
@@ -146,6 +149,8 @@ Library "BlackboardStatus" by "Hyper"
 
 Library "Collections" by "Sajid & Hyper"
 {
+    using System.Collections.Generic;
+
     public unsafe struct MoveArray<T> where T : unmanaged
     {
         public T* Items;
@@ -158,6 +163,58 @@ Library "Collections" by "Sajid & Hyper"
         public ref T this[int index]
         {
             get => ref Items[index];
+        }
+    }
+
+    public class StackList<T> : List<T>
+    {
+        private int _maxCapacity;
+
+        public StackList(int maxCapacity)
+        {
+            _maxCapacity = maxCapacity;
+        }
+
+        public new void Add(T item)
+        {
+            if (Count >= _maxCapacity)
+            {
+                RemoveAt(Count - 1);
+            }
+
+            Insert(0, item);
+        }
+
+        public T GetItemAt(int index)
+        {
+            if (Count == 0)
+                return default;
+
+            if (index >= Count)
+            {
+                return this[Count - 1];
+            }
+
+            return this[index];
+        }
+
+        public void Push(T item)
+        {
+            Add(item);
+        }
+
+        public T Pop()
+        {
+            T item = GetItemAt(0);
+
+            RemoveAt(0);
+
+            return item;
+        }
+
+        public T Peek()
+        {
+            return GetItemAt(0);
         }
     }
 }
@@ -323,6 +380,7 @@ Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
 
 Library "Sonic" by "Hyper, NM & Ahremic"
 {
+    #lib "Collections"
     #lib "GameDocument"
     #lib "GameObject"
     #lib "LevelInfo"
@@ -359,27 +417,27 @@ Library "Sonic" by "Hyper, NM & Ahremic"
     public static class Animation
     {
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate void _tChangeAnimation(long gocPlayerVisual, long animationNamePtr, byte a3);
-        private static long _sigChangeAnimation = 0;
+        private delegate void _tSetAnimation(long gocPlayerVisual, long animationNamePtr, byte a3);
+        private static long _sigSetAnimation = 0;
 
-        public static void ChangeAnimation(string destination)
+        public static void SetAnimation(string destination)
         {
-            if (_sigChangeAnimation == 0)
+            if (_sigSetAnimation == 0)
             {
                 /* 0x1408122E0 */
-                _sigChangeAnimation = ScanSignature
+                _sigSetAnimation = ScanSignature
                 (
                     "\x40\x53\x48\x83\xEC\x20\xF6\x81\x78\x01\x00\x00\x10\x48\x8B\xDA",
                     "xxxxxxxxxxxxxxxx"
                 );
 
-                if (_sigChangeAnimation == 0)
+                if (_sigSetAnimation == 0)
                     return;
             }
 
-            var fpChangeAnimation = Marshal.GetDelegateForFunctionPointer<_tChangeAnimation>((IntPtr)_sigChangeAnimation);
+            var fpSetAnimation = Marshal.GetDelegateForFunctionPointer<_tSetAnimation>((IntPtr)_sigSetAnimation);
 
-            if (fpChangeAnimation == null)
+            if (fpSetAnimation == null)
                 return;
 
             long sonic = GetSonic();
@@ -392,7 +450,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (gocPlayerVisual == 0)
                 return;
 
-            fpChangeAnimation.Invoke(gocPlayerVisual, (long)Marshal.StringToHGlobalAnsi(destination), 0xFE);
+            fpSetAnimation.Invoke(gocPlayerVisual, (long)Marshal.StringToHGlobalAnsi(destination), 0xFE);
         }
     }
 
@@ -515,12 +573,92 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (fpPlayEffect == null)
                 return;
 
-            long gocEffect = GameObject.GetGOC(GetSonic(), "GOCEffect");
+            long sonic = GetSonic();
+
+            if (sonic == 0)
+                return;
+
+            long gocEffect = GameObject.GetGOC(sonic, "GOCEffect");
 
             if (gocEffect == 0)
                 return;
 
             fpPlayEffect.Invoke(gocEffect, Marshal.StringToHGlobalAnsi(name), null);
+        }
+    }
+    
+    public enum ButtonState : uint
+    {
+        Inactive = 0,
+        Press    = 0x13000000,
+        Release  = 0x4000000,
+        Hold     = 0x1000000
+    }
+
+    public class Input
+    {
+        public ButtonState* A;
+        public ButtonState* Y;
+        public ButtonState* RightTrigger;
+        public ButtonState* LeftStick;
+        public ButtonState* LeftBumper;
+        public ButtonState* RightBumper;
+        public ButtonState* B;
+        public ButtonState* X;
+        public ButtonState* RightStick;
+        public ButtonState* LeftTrigger;
+        
+        public float* LeftStickX;
+        public float* LeftStickY;
+        public float* RightStickX;
+        public float* RightStickY;
+
+        public Input(long gocInput)
+        {
+            A            = (ButtonState*)(gocInput + 0x1A4);
+            Y            = (ButtonState*)(gocInput + 0x1AC);
+            RightTrigger = (ButtonState*)(gocInput + 0x1C4);
+            LeftStick    = (ButtonState*)(gocInput + 0x1D4);
+            LeftBumper   = (ButtonState*)(gocInput + 0x1DC);
+            RightBumper  = (ButtonState*)(gocInput + 0x1E4);
+            B            = (ButtonState*)(gocInput + 0x1EC);
+            X            = (ButtonState*)(gocInput + 0x1FC);
+            RightStick   = (ButtonState*)(gocInput + 0x20C);
+            LeftTrigger  = (ButtonState*)(gocInput + 0x214);
+            LeftStickX   = (float*)(gocInput + 0x228);
+            LeftStickY   = (float*)(gocInput + 0x240);
+            RightStickX  = (float*)(gocInput + 0x258);
+            RightStickY  = (float*)(gocInput + 0x270);
+        }
+
+        public static Input Get()
+        {
+            long sonic = GetSonic();
+
+            if (sonic == 0)
+                return null;
+
+            long gocInput = GameObject.GetGOC(sonic, "GOCInput");
+
+            if (gocInput == 0)
+                return null;
+
+            return new Input(gocInput);
+        }
+
+        public static bool IsPressed(ButtonState buttonState)
+        {
+            return (buttonState & ButtonState.Press) == ButtonState.Press;
+        }
+
+        public static bool IsReleased(ButtonState buttonState)
+        {
+            return (buttonState & ButtonState.Release) == ButtonState.Release;
+        }
+
+        public static bool IsDown(ButtonState buttonState)
+        {
+            return (buttonState & ButtonState.Hold) == ButtonState.Hold;
         }
     }
 
@@ -550,6 +688,21 @@ Library "Sonic" by "Hyper, NM & Ahremic"
                 return null;
 
             return new Kinematics(gocPlayerKinematicParams);
+        }
+
+        public static float GetHorizontalMagnitude()
+        {
+            Kinematics k = Get();
+
+            if (k == null)
+                return 0.0f;
+
+            Vector3* velocity = k.Velocity;
+
+            if (velocity == null)
+                return 0.0f;
+
+            return (float)Math.Sqrt(velocity->X * velocity->X + velocity->Z * velocity->Z);
         }
     }
 
@@ -602,13 +755,14 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         private static bool _initialisedStateRedirector = false;
         private static Dictionary<int, int> _redirectedStates = new();
         private static int _currentStateID = -1;
+        private static Collections.StackList<int> _stateStackTrace = new(10);
 
         public delegate void TStateNotifyAction(int stateId);
         private static List<TStateNotifyAction> _stateNotifyActions = new();
         
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate void _tChangeState(long gocPlayerHsm, int stateId, int a3);
-        private static long _sigChangeState = 0;
+        private delegate void _tSetState(long gocPlayerHsm, int stateId, int a3);
+        private static long _sigSetState = 0;
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate int _tSetStateID(int stateId);
@@ -618,7 +772,11 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         private static int SetStateID(int stateId)
         {
             if (stateId != -1)
+            {
+                _stateStackTrace.Push(_currentStateID);
+
                 _currentStateID = stateId;
+            }
 
             foreach (TStateNotifyAction action in _stateNotifyActions)
                 action.Invoke(_currentStateID);
@@ -665,6 +823,13 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             return _currentStateID;
         }
 
+        public static int GetPreviousStateID(int stackIndex = 0)
+        {
+            InitStateRedirector();
+
+            return _stateStackTrace.GetItemAt(stackIndex);
+        }
+
         public static void AddStateNotifyAction(TStateNotifyAction action)
         {
             InitStateRedirector();
@@ -699,24 +864,24 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             _redirectedStates.Remove(source);
         }
 
-        public static void ChangeState(int destination)
+        public static void SetState(int destination)
         {
-            if (_sigChangeState == 0)
+            if (_sigSetState == 0)
             {
                 /* 0x140802400 */
-                _sigChangeState = ScanSignature
+                _sigSetState = ScanSignature
                 (
                     "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x57\x48\x83\xEC\x20\x48\x8B\xD9\x41\x8B\xF8\x48\x81\xC1\x88\x00\x00\x00\x8B\xF2\xE8\xCC\xCC\xCC\xCC\x3B",
                     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????x"
                 );
 
-                if (_sigChangeState == 0)
+                if (_sigSetState == 0)
                     return;
             }
 
-            var fpChangeState = Marshal.GetDelegateForFunctionPointer<_tChangeState>((IntPtr)_sigChangeState);
+            var fpSetState = Marshal.GetDelegateForFunctionPointer<_tSetState>((IntPtr)_sigSetState);
 
-            if (fpChangeState == null)
+            if (fpSetState == null)
                 return;
 
             long sonicContext = GetSonicContext();
@@ -724,7 +889,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (sonicContext == 0)
                 return;
 
-            fpChangeState.Invoke(Read<long>(sonicContext + 0x38), (int)destination, 0);
+            fpSetState.Invoke(Read<long>(sonicContext + 0x38), (int)destination, 0);
         }
     }
 }
@@ -1020,7 +1185,7 @@ Known issues;
         WriteProtected<float>(DVSceneAspectRatioAddr + 6, AspectRatio);
 }
 
-Patch "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic to damage enemies and harder physics objects by boosting through them."
+Patch "Always Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic to damage enemies and harder physics objects by boosting through them."
 //
     #lib "Bitwise"
     #lib "BlackboardStatus"
@@ -1107,6 +1272,21 @@ Affected skills;
             HookBehavior.Replace
         );
     }
+}
+
+Patch "Always Allow Spin Dash on Dash Panels" in "Gameplay" by "Hyper" does "Allows Sonic to Spin Dash through dash panels without interruptions."
+{
+    WriteProtected<byte>
+    (
+        /* 0x140862428 */
+        ScanSignature
+        (
+            "\x41\x0F\x94\xC4\xD0\xE9",
+            "xxxxxx"
+        ),
+
+        Assemble("mov r12b, 0; nop")
+    );
 }
 
 Patch "Always Cloudy on Islands" in "Weather" by "Hyper" does
@@ -1553,6 +1733,21 @@ Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
     );
 }
 
+Patch "Always Unlocked Extreme Difficulty" in "Cheats" by "Hyper"
+{
+    WriteNop
+    (
+        /* 0x140A007D9 */
+        ScanSignature
+        (
+            "\x74\x65\x0F\x1F\x44\x00\x00",
+            "xxxxxxx"
+        ),
+        
+        2
+    );
+}
+
 Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper"
 {
     WriteAsmHook
@@ -1740,21 +1935,31 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
     /* 0x140901E20 */
     long playParticleFuncAddr = playParticleCallerAddr + Read<int>(playParticleCallerAddr + 0x01) + 0x05;
 
+    /* 0x14B4DB1E6 */
+    long playAnimationCallerAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x41\xB0\x01\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x89\xF1",
+        "x????xxxxxx????xxx"
+    );
+
+    /* 0x1408122E0 */
+    long playAnimationFuncAddr = playAnimationCallerAddr + Read<int>(playAnimationCallerAddr + 0x01) + 0x05;
+
     // StateJump
     {
         WriteAsmHook
         (
             $@"
-                push rax
-                push rdx
+                mov  r8b, 0xFE
+                mov  rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("JUMP_BALL")}
+                mov  rcx, rax
+                mov  rax, {playAnimationFuncAddr}
+                call rax
                 mov  r8b, 1
                 mov  rdx, {SPINJUMP}
                 mov  rcx, rsi
                 mov  rax, {playParticleFuncAddr}
                 call rax
-                pop  rdx
-                pop  rax
-                mov  rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("JUMP_BALL")}
             ",
 
             /* 0x14B4DB1D4 */
@@ -1767,17 +1972,7 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
             HookBehavior.Replace
         );
 
-        WriteNop
-        (
-            /* 0x14B4DB1F8 */
-            ScanSignature
-            (
-                "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x0D\xBA\x8E\xB4\x47\x3B\xE8\xCC\xCC\xCC\xCC\x49\x89\xC6",
-                "x????xxxxxxxxxxxxxxxxxxxxxx????xxx"
-            ),
-
-            5
-        );
+        WriteNop(playAnimationCallerAddr, 23);
     }
 
     // StateDoubleJump
@@ -4040,6 +4235,34 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
 
         Initialised = true;
     }
+}
+
+Patch "Fix Damage from Jumping into Enemies" in "Fixes" by "Hyper" does "Fixes Sonic taking damage when jumping into enemies within a small frame window."
+//
+    #lib "Sonic"
+
+    static bool IsJumpPrevious = false;
+//
+{
+    void NotifyJumpDamageCollision(int stateId)
+    {
+        bool isJump = stateId == 8 || stateId == 9 || stateId == 48;
+
+        if (isJump)
+        {
+            Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Damage, 1.0f);
+            Sonic.Collision.ToggleEntityCollision(false);
+            IsJumpPrevious = true;
+        }
+        else if (IsJumpPrevious)
+        {
+            Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Default, 1.0f);
+            Sonic.Collision.ToggleEntityCollision(true);
+            IsJumpPrevious = false;
+        }
+    }
+
+    Sonic.State.AddStateNotifyAction(NotifyJumpDamageCollision);
 }
 
 Patch "Fix Quick Cyloop Lock-On" in "Fixes" by "WasifBoomz & The Duck Dealer" does "Fixes the lock-on target changing whenever Sonic performs a Quick Cyloop, allowing for consistent attacks during combat."
@@ -6424,6 +6647,140 @@ Patch "Smooth Camera (v1.30)" in "Camera" by "Ahremic" does "Replaces linear cam
 
             HookBehavior.Replace
         );
+    }
+}
+
+Code "Somersault Landing at High Velocity" in "Animation" by "Hyper" does
+/*
+Enters Sonic into a somersault state when landing from a moderate height at a high velocity whilst retaining your momentum.
+
+This state lasts a fraction of a second, but keep in mind that within that time, you will be unable to perform certain actions until the animation is complete.
+*/
+//
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+    #lib "Sonic"
+
+    #load "System.Numerics.dll"
+
+    using System.Numerics;
+    using System.Collections.Generic;
+
+    static Vector3 LastGroundedPosition;
+
+    static List<int> ExitStates = new() { 8, 12, 15, 16, 161 };
+
+    static float HeightFallen = 0.0f;
+    
+    static bool IsInitialised = false;
+    static bool IsRecoveryJumpCharging = false;
+//
+{
+    if (!IsInitialised)
+    {
+        fixed (bool* pIsRecoveryJumpCharging = &IsRecoveryJumpCharging)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    movaps xmmword ptr [rsp + 0x38 + 0xFFFFFFFFFFFFFFE8], xmm6
+                    mov    rsi, rcx
+                    mov    rcx, {(long)pIsRecoveryJumpCharging}
+                    mov    dl, byte ptr [rsi + 0xC4]
+                    mov    byte ptr [rcx], dl
+                    mov    edx, 0x18
+                    mov    rcx, rdi
+                ",
+
+                /* 0x1408A0A1D */
+                ScanSignature
+                (
+                    "\x0F\x29\x74\x24\x20\x48\x8B\xF1\xBA\x18\x00\x00\x00",
+                    "xxxxxxxxxxxxx"
+                ),
+
+                HookBehavior.Replace
+            );
+        }
+
+        void NotifyStateSpringJumpHeadLandDamageCollision(int stateId)
+        {
+            bool isStateSpringJumpHeadLand = stateId == 163;
+            
+            if (isStateSpringJumpHeadLand)
+            {
+                Sonic.Collision.ToggleEntityCollision(false);
+            }
+            else if (Sonic.State.GetPreviousStateID() == 163)
+            {
+                Sonic.Collision.ToggleEntityCollision(true);
+            }
+        }
+
+        Sonic.State.AddStateNotifyAction(NotifyStateSpringJumpHeadLandDamageCollision);
+
+        IsInitialised = true;
+    }
+
+    var kinematics = Sonic.Kinematics.Get();
+
+    if (kinematics == null)
+        return;
+
+    var input = Sonic.Input.Get();
+
+    if (input != null && Sonic.State.GetCurrentStateID() == 163)
+    {
+        if (Sonic.Input.IsPressed(*input.A) || Sonic.Input.IsPressed(*input.X))
+        {
+            // Exit into StateRun.
+            Sonic.State.SetState(4);
+        }
+
+        if (Sonic.Input.IsPressed(*input.B))
+        {
+            // Exit into StateSliding.
+            Sonic.State.SetState(59);
+        }
+    }
+
+    if (Sonic.IsGrounded())
+    {
+        LastGroundedPosition = *kinematics.Position;
+
+        if (!ExitStates.Contains(Sonic.State.GetPreviousStateID()))
+            goto Reset;
+
+        if (Sonic.Kinematics.GetHorizontalMagnitude() > 15.0f && HeightFallen >= 5.0f)
+        {
+            if (BlackboardStatus.Get() != null && Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost))
+            {
+                // Allow StateJump to continue running if we're boosting.
+                if (Sonic.State.GetPreviousStateID() == 8)
+                    goto Reset;
+            }
+
+            // Allow StateRecoveryJump to enter StateDropDash.
+            if (Sonic.State.GetPreviousStateID() == 12 && IsRecoveryJumpCharging)
+                goto Reset;
+
+            // Exit into StateSpringJumpHeadLand.
+            Sonic.State.SetState(163);
+        }
+        
+    Reset:
+        HeightFallen = 0.0f;
+    }
+    else
+    {
+        /* Reset position if the player has reached
+           apex height and has begun falling again. */
+        if ((LastGroundedPosition.Y - kinematics.Position->Y) < HeightFallen)
+        {
+            LastGroundedPosition = *kinematics.Position;
+        }
+
+        HeightFallen = LastGroundedPosition.Y - kinematics.Position->Y;
     }
 }
 
