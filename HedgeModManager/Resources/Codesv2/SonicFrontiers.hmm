@@ -2753,6 +2753,8 @@ Notes;
 - This will only work for traversal objects, use the 'Enable Flinging from Terrain in Cyber Space' code to allow Sonic to fling off of terrain.
 */
 //
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
     #lib "Memory"
 
     static bool isCyber = false;
