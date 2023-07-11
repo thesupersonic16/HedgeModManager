@@ -4042,7 +4042,7 @@ Patch "Disable Power Boost Audio" in "Audio" by "Hyper"
     );
 }
 
-Patch "Disable Power Boost Effects" in "Graphics" by "NM & Hyper"
+Patch "Hide Power Boost Effects" in "Graphics" by "NM & Hyper"
 {
     /* Activation FX */
     WriteNop
@@ -4200,6 +4200,21 @@ Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
         ),
 
         0xC6, 0x41, 0x01, 0x00, 0x90, 0x90, 0x90
+    );
+}
+
+Patch "Disable Sixth Sense Effects" in "Graphics" by "Hyper" does "Disables the particle effect when Sonic senses an enemy attack."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1407E98CC */
+        ScanSignature
+        (
+            "\x74\x79\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4B\x6C",
+            "xxx????xxxx"
+        ),
+
+        0xEB
     );
 }
 
@@ -4367,7 +4382,7 @@ Patch "Disable Subsurface Scattering" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Disable Super Combat Particles" in "Graphics" by "Hyper" does "Disables the giant fist and foot particles during combat as Super Sonic."
+Patch "Hide Super Combat Effects" in "Graphics" by "Hyper" does "Disables the giant fist and foot particles during combat as Super Sonic."
 {
     WriteProtected<byte>
     (
@@ -4547,7 +4562,7 @@ Patch "Disable Water Audio Filter" in "Audio" by "Hyper"
     );
 }
 
-Patch "Hide Air Trick Hint Particles" in "Graphics" by "Hyper" does "Hides the particles that hint at dash rings, jump boards and springs being air trickable."
+Patch "Hide Air Trick Hint Effects" in "Graphics" by "Hyper" does "Hides the particles that hint at dash rings, jump boards and springs being air trickable."
 {
     // Dash Rings
     WriteProtected<byte>
