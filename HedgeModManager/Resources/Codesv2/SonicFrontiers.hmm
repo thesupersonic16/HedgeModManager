@@ -4042,48 +4042,6 @@ Patch "Disable Power Boost Audio" in "Audio" by "Hyper"
     );
 }
 
-Patch "Hide Power Boost Effects" in "Graphics" by "NM & Hyper"
-{
-    /* Activation FX */
-    WriteNop
-    (
-        /* 0x1408D2AE5 */
-        ScanSignature
-        (
-            "\xE8\xCC\xCC\xCC\xCC\x83\x7D\x98\x00\x4C\x8D\x05\xCC\xCC\xCC\xCC\x41\xB9\x11\x00\x00\x00",
-            "x????xxxxxxx????xxxxxx"
-        ),
-
-        5
-    );
-
-    /* Boost Activation FX */
-    WriteProtected<byte>
-    (
-        /* 0x1408D1CD4 */
-        ScanSignature
-        (
-            "\x74\x09\x4C\x8D\x05\xCC\xCC\xCC\xCC\xEB\x4F\x48\x8B\xCF",
-            "xxxxx????xxxxx"
-        ),
-
-        0xEB, 0x09
-    );
-
-    /* Trail FX */
-    WriteProtected<byte>
-    (
-        /* 0x1407E931A */
-        ScanSignature
-        (
-            "\xB2\x02\xEB\x02\x32\xD2",
-            "xxxxxx"
-        ),
-
-        Assemble("mov dl, 1")
-    );
-}
-
 Patch "Disable Ring Loss" in "Cheats" by "M&M"
 {
     WriteProtected<byte>
@@ -4200,21 +4158,6 @@ Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
         ),
 
         0xC6, 0x41, 0x01, 0x00, 0x90, 0x90, 0x90
-    );
-}
-
-Patch "Disable Sixth Sense Effects" in "Graphics" by "Hyper" does "Disables the particle effect when Sonic senses an enemy attack."
-{
-    WriteProtected<byte>
-    (
-        /* 0x1407E98CC */
-        ScanSignature
-        (
-            "\x74\x79\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4B\x6C",
-            "xxx????xxxx"
-        ),
-
-        0xEB
     );
 }
 
@@ -4382,21 +4325,6 @@ Patch "Disable Subsurface Scattering" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Hide Super Combat Effects" in "Graphics" by "Hyper" does "Disables the giant fist and foot particles during combat as Super Sonic."
-{
-    WriteProtected<byte>
-    (
-        /* 0x1407B5BF2 */
-        ScanSignature
-        (
-            "\x0F\x84\x00\x00\x00\x00\x0F\x1F\x84\x00\x00\x00\x00\x00\x48\x8D\x4B\x48\xE8\x00\x00\x00\x00\x84\xC0\x75\x0D\x48\x8D\x4B\x50\xE8\x00\x00\x00\x00\x84\xC0\x74\x0E\x48\x83\xC3\x60\x48\x3B\xDF\x75\xDD\xE9\x00\x00\x00\x00\x0F\x28\x45\x10\x48\x8D\x4B\x48\xF3\x0F\x10\x4D\x00\xF3\x0F\x10\x65\x00\xF3\x0F\x10\x5D\x00\x0F\x29\xB4\x24\x00\x00\x00\x00\xF3\x0F\x10\x75\x00\x66\x0F\x7F\x43\x00\x0F\x28\x55\x20\x66\x0F\x7F\x53\x00\xF3\x0F\x11\x5B\x00\xF3\x0F\x11\x63\x00\xE8\x00\x00\x00\x00\x48\x8D\x4B\x50\x0F\x28\xCE\xE8\x00\x00\x00\x00\xF3\x0F\x10\x05\x00\x00\x00\x00",
-            "xx????xxxx????xxxxx????xxxxxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxxx?xxxx?xxxx?xxxx????xxxx?xxxx?xxxxxxxx?xxxx?xxxx?x????xxxxxxxx????xxxx????"
-        ),
-
-        0xE9, 0x3C, 0x01, 0x00, 0x00
-    );
-}
-
 Patch "Disable Time Velocity Multiplier" in "Time" by "Hyper" does "Disables the time rate increasing based on how fast Sonic is moving."
 {
     WriteNop
@@ -4559,48 +4487,6 @@ Patch "Disable Water Audio Filter" in "Audio" by "Hyper"
         ),
 
         0xEB
-    );
-}
-
-Patch "Hide Air Trick Hint Effects" in "Graphics" by "Hyper" does "Hides the particles that hint at dash rings, jump boards and springs being air trickable."
-{
-    // Dash Rings
-    WriteProtected<byte>
-    (
-        /* 0x14033752F */
-        ScanSignature
-        (
-            "\x74\x7C\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\x0F\xB6\x98\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x84\xDB\x74\x39\x84\xC0\x75\x47\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x4C\x8D\x87\x00\x00\x00\x00\x48\x8B\xC8\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xE9\x00\x00\x00\x00\x84\xC0\x74\x0E\x33\xD2\x48\x8D\x8F\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xC3\xCC\xCC\xCC\x48\x89\x5C\x24\x00",
-            "xxx????xxxxxxx????xxxxxx????xxx????xxx????x????xxxxxxxxx????xxxxxxx????xxx????xxxxxx????xxxx?xxxx?xxxxxx????xxxxxxxxx????x????xxxx?xxxx?xxxxxxxxxxxxx?"
-        ),
-
-        0xEB
-    );
-
-    // Jump Boards
-    WriteProtected<byte>
-    (
-        /* 0x140377917 */
-        ScanSignature
-        (
-            "\x0F\x84\x00\x00\x00\x00\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0",
-            "xx????xxxx?xxxx?x????xxx"
-        ),
-
-        0xE9, 0x84, 0x00, 0x00, 0x00
-    );
-
-    // Springs
-    WriteProtected<byte>
-    (
-        /* 0x1497E39EE */
-        ScanSignature
-        (
-            "\x48\x89\xC3\x85\xC9\x0F\x84\x00\x00\x00\x00\x83\xF9\x03\x0F\x84\x00\x00\x00\x00\x83\xF9\x02\x0F\x85\x00\x00\x00\x00\x80\xBF\x00\x00\x00\x00\x00\x0F\x29\xB4\x24\x00\x00\x00\x00\x0F\x85\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xF9\xE8\x00\x00\x00\x00\x31\xD2\x48\x89\xC1\xE8\x00\x00\x00\x00\x0F\x10\xB0\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xF9\xE8\x00\x00\x00\x00\x0F\xC6\xF6\x55\x48\x8B\x88\x00\x00\x00\x00\xF3\x0F\x5C\xB1\x00\x00\x00\x00\x0F\x54\x35\x00\x00\x00\x00\x0F\x2F\x35\x00\x00\x00\x00\x73\x2D\x48\x8B\x8F\x00\x00\x00\x00\xC6\x87\x00\x00\x00\x00\x00\x48\x85\xC9\x74\x07\xB2\x01\xE8\x00\x00\x00\x00",
-            "xxxxxxx????xxxxx????xxxxx????xx?????xxxx????xx????x????xxxxxxx????xxxxxx????xxx????x????xxxxxxx????xxxxxxx????xxxx????xxx????xxx????xxxxx????xx?????xxxxxxxx????"
-        ),
-
-        0xEB, 0x12
     );
 }
 
@@ -6338,6 +6224,48 @@ Patch "Force Xbox Series Controller UI" in "UI" by "Hyper"
     );
 }
 
+Patch "Hide Air Trick Hint Effects" in "Graphics" by "Hyper" does "Hides the particles that hint at dash rings, jump boards and springs being air trickable."
+{
+    // Dash Rings
+    WriteProtected<byte>
+    (
+        /* 0x14033752F */
+        ScanSignature
+        (
+            "\x74\x7C\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\x0F\xB6\x98\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x84\xDB\x74\x39\x84\xC0\x75\x47\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x4C\x8D\x87\x00\x00\x00\x00\x48\x8B\xC8\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xE9\x00\x00\x00\x00\x84\xC0\x74\x0E\x33\xD2\x48\x8D\x8F\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xC3\xCC\xCC\xCC\x48\x89\x5C\x24\x00",
+            "xxx????xxxxxxx????xxxxxx????xxx????xxx????x????xxxxxxxxx????xxxxxxx????xxx????xxxxxx????xxxx?xxxx?xxxxxx????xxxxxxxxx????x????xxxx?xxxx?xxxxxxxxxxxxx?"
+        ),
+
+        0xEB
+    );
+
+    // Jump Boards
+    WriteProtected<byte>
+    (
+        /* 0x140377917 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0",
+            "xx????xxxx?xxxx?x????xxx"
+        ),
+
+        0xE9, 0x84, 0x00, 0x00, 0x00
+    );
+
+    // Springs
+    WriteProtected<byte>
+    (
+        /* 0x1497E39EE */
+        ScanSignature
+        (
+            "\x48\x89\xC3\x85\xC9\x0F\x84\x00\x00\x00\x00\x83\xF9\x03\x0F\x84\x00\x00\x00\x00\x83\xF9\x02\x0F\x85\x00\x00\x00\x00\x80\xBF\x00\x00\x00\x00\x00\x0F\x29\xB4\x24\x00\x00\x00\x00\x0F\x85\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xF9\xE8\x00\x00\x00\x00\x31\xD2\x48\x89\xC1\xE8\x00\x00\x00\x00\x0F\x10\xB0\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xF9\xE8\x00\x00\x00\x00\x0F\xC6\xF6\x55\x48\x8B\x88\x00\x00\x00\x00\xF3\x0F\x5C\xB1\x00\x00\x00\x00\x0F\x54\x35\x00\x00\x00\x00\x0F\x2F\x35\x00\x00\x00\x00\x73\x2D\x48\x8B\x8F\x00\x00\x00\x00\xC6\x87\x00\x00\x00\x00\x00\x48\x85\xC9\x74\x07\xB2\x01\xE8\x00\x00\x00\x00",
+            "xxxxxxx????xxxxx????xxxxx????xx?????xxxx????xx????x????xxxxxxx????xxxxxx????xxx????x????xxxxxxx????xxxxxxx????xxxx????xxx????xxx????xxxxx????xx?????xxxxxxxx????"
+        ),
+
+        0xEB, 0x12
+    );
+}
+
 Patch "Hide Boost Gauge" in "UI" by "Hyper"
 {
     WriteProtected<byte>
@@ -6499,6 +6427,63 @@ Patch "Hide Oxygen Gauge" in "UI" by "Hyper"
     );
 }
 
+Patch "Hide Power Boost Effects" in "Graphics" by "NM & Hyper"
+{
+    /* Activation FX */
+    WriteNop
+    (
+        /* 0x1408D2AE5 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x83\x7D\x98\x00\x4C\x8D\x05\xCC\xCC\xCC\xCC\x41\xB9\x11\x00\x00\x00",
+            "x????xxxxxxx????xxxxxx"
+        ),
+
+        5
+    );
+
+    /* Boost Activation FX */
+    WriteProtected<byte>
+    (
+        /* 0x1408D1CD4 */
+        ScanSignature
+        (
+            "\x74\x09\x4C\x8D\x05\xCC\xCC\xCC\xCC\xEB\x4F\x48\x8B\xCF",
+            "xxxxx????xxxxx"
+        ),
+
+        0xEB, 0x09
+    );
+
+    /* Trail FX */
+    WriteProtected<byte>
+    (
+        /* 0x1407E931A */
+        ScanSignature
+        (
+            "\xB2\x02\xEB\x02\x32\xD2",
+            "xxxxxx"
+        ),
+
+        Assemble("mov dl, 1")
+    );
+}
+
+Patch "Hide Sixth Sense Effects" in "Graphics" by "Hyper" does "Hides the particle effect when Sonic senses an enemy attack."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1407E98CC */
+        ScanSignature
+        (
+            "\x74\x79\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4B\x6C",
+            "xxx????xxxx"
+        ),
+
+        0xEB
+    );
+}
+
 Patch "Hide Skill Piece Transition" in "UI" by "Hyper" does "Removes the transition when picking up skill pieces to put them into the skill points display."
 {
     WriteNop
@@ -6552,6 +6537,21 @@ Patch "Hide Star Beacons" in "Graphics" by "Hyper" does "Hides the beacons that 
         ),
 
         0x00
+    );
+}
+
+Patch "Hide Super Combat Effects" in "Graphics" by "Hyper" does "Hides the giant fist and foot particles during combat as Super Sonic."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1407B5BF2 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x0F\x1F\x84\x00\x00\x00\x00\x00\x48\x8D\x4B\x48\xE8\x00\x00\x00\x00\x84\xC0\x75\x0D\x48\x8D\x4B\x50\xE8\x00\x00\x00\x00\x84\xC0\x74\x0E\x48\x83\xC3\x60\x48\x3B\xDF\x75\xDD\xE9\x00\x00\x00\x00\x0F\x28\x45\x10\x48\x8D\x4B\x48\xF3\x0F\x10\x4D\x00\xF3\x0F\x10\x65\x00\xF3\x0F\x10\x5D\x00\x0F\x29\xB4\x24\x00\x00\x00\x00\xF3\x0F\x10\x75\x00\x66\x0F\x7F\x43\x00\x0F\x28\x55\x20\x66\x0F\x7F\x53\x00\xF3\x0F\x11\x5B\x00\xF3\x0F\x11\x63\x00\xE8\x00\x00\x00\x00\x48\x8D\x4B\x50\x0F\x28\xCE\xE8\x00\x00\x00\x00\xF3\x0F\x10\x05\x00\x00\x00\x00",
+            "xx????xxxx????xxxxx????xxxxxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxxx?xxxx?xxxx?xxxx????xxxx?xxxx?xxxxxxxx?xxxx?xxxx?x????xxxxxxxx????xxxx????"
+        ),
+
+        0xE9, 0x3C, 0x01, 0x00, 0x00
     );
 }
 
