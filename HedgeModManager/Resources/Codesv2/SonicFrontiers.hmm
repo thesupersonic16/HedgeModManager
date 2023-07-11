@@ -378,6 +378,75 @@ Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
     }
 }
 
+Library "Memory" by "Hyper"
+{
+    public long ReadCall(long addr)
+    {
+        if (addr == 0)
+            return 0;
+
+        return addr + Read<int>(addr + 0x01) + 0x05;
+    }
+
+    public long ReadJump(long addr)
+    {
+        if (addr == 0)
+            return 0;
+
+        sbyte jmpType = -1;
+        byte opcode = Read<byte>(addr);
+
+        if ((opcode & 0xF0) == 0x70)
+        {
+            jmpType = 0;
+        }
+        else
+        {
+            switch (opcode)
+            {
+                case 0xE3:
+                case 0xEB:
+                    jmpType = 0;
+                    break;
+
+                case 0xE9:
+                    jmpType = 1;
+                    break;
+
+                case 0x0F:
+                    jmpType = 2;
+                    break;
+
+                case 0xFF:
+                    jmpType = 3;
+                    break;
+            }
+        }
+
+        switch (jmpType)
+        {
+            case 0:
+                return addr + Read<byte>(addr + 0x01) + 0x02;
+
+            case 1:
+                return addr + Read<int>(addr + 0x01) + 0x05;
+
+            case 2:
+                return addr + Read<int>(addr + 0x02) + 0x06;
+
+            case 3:
+                return Read<long>(addr + 0x06);
+        }
+
+        return 0;
+    }
+
+    public long ReadThunk(long addr, long offset = 0)
+    {
+        return ReadJump(ReadCall(addr) + offset);
+    }
+}
+
 Library "Sonic" by "Hyper, NM & Ahremic"
 {
     #lib "Collections"
@@ -1076,7 +1145,7 @@ Code "Additive Spring Trajectory with Boost" in "Gameplay" by "WasifBoomz" does 
             "xxxxxxxxxxxxxxxx"
         );
 
-	fixed (bool* pBoosting = &boosting)
+        fixed (bool* pBoosting = &boosting)
         fixed (int* pFramesSinceHit = &framesSinceHit)
         {
             WriteAsmHook
@@ -1351,13 +1420,13 @@ Patch "Always Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allo
     Sonic.State.AddStateNotifyAction(NotifyStateRunDamageCollision);
 }
 
-Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by tapping Attack while holding Jump."
+Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by pressing the attack button while holding the jump button."
 //
     #lib "Sonic"
     #lib "Bitwise"
     #lib "BlackboardStatus"
 
-    static int[] enableStates = {8, 11, 46, 162};
+    static int[] enableStates = { 8, 11, 46, 162 };
     static bool allowChargeAttack = false;
 //
 {
@@ -1466,6 +1535,9 @@ Supported islands;
 - Rhea
 - Ouranos
 */
+//
+    #lib "Memory"
+//
 {
     void NOP(long addr)
         => WriteProtected<byte>(addr, 0xEB, 0x4E);
@@ -1478,10 +1550,10 @@ Supported islands;
     );
 
     /* 0x1401EE3ED */
-    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr) + 0x2D);
 
     /* 0x1401EE4DD */
-    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr + 0x0A) + 0x2D);
 }
 
 Patch "Always Day on Islands" in "Time" by "NM"
@@ -1702,6 +1774,9 @@ Supported islands;
 - Rhea
 - Ouranos
 */
+//
+    #lib "Memory"
+//
 {
     void NOP(long addr)
         => WriteProtected<byte>(addr, 0xEB, 0x38);
@@ -1714,10 +1789,10 @@ Supported islands;
     );
 
     /* 0x1401EE3ED */
-    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr) + 0x2D);
 
     /* 0x1401EE4DD */
-    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr + 0x0A) + 0x2D);
 }
 
 Patch "Always Respawn Enemies" in "Enemy" by "Hyper" does "Always respawns enemies and guardians when loading back into islands."
@@ -1757,6 +1832,9 @@ Forces the weather to Sandstorm on supported islands.
 Supported islands;
 - Ares
 */
+//
+    #lib "Memory"
+//
 {
     void NOP(long addr)
         => WriteProtected<byte>(addr, 0xEB, 0x22);
@@ -1769,10 +1847,10 @@ Supported islands;
     );
 
     /* 0x1401EE3ED */
-    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr) + 0x2D);
 
     /* 0x1401EE4DD */
-    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr + 0x0A) + 0x2D);
 }
 
 Patch "Always Sunny on Islands" in "Weather" by "Hyper" does
@@ -1786,6 +1864,9 @@ Supported islands;
 - Rhea
 - Ouranos
 */
+//
+    #lib "Memory"
+//
 {
     void NOP(long addr)
         => WriteProtected<byte>(addr, 0xEB);
@@ -1798,10 +1879,10 @@ Supported islands;
     );
 
     /* 0x1401EE3ED */
-    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr) + 0x2D);
 
     /* 0x1401EE4DD */
-    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr + 0x0A) + 0x2D);
 }
 
 Patch "Always Trickable Dash Rings" in "Gameplay" by "Hyper"
@@ -2088,6 +2169,9 @@ Patch "Always Sunset on Islands" in "Time" by "NM"
 }
 
 Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball animations when jumping and double jumping, similar to Sonic Forces."
+//
+    #lib "Memory"
+//
 {
     long SPINJUMP = (long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPINJUMP");
 
@@ -2099,7 +2183,7 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
     );
 
     /* 0x140901E20 */
-    long playParticleFuncAddr = playParticleCallerAddr + Read<int>(playParticleCallerAddr + 0x01) + 0x05;
+    long playParticleFuncAddr = Memory.ReadCall(playParticleCallerAddr);
 
     /* 0x14B4DB1E6 */
     long playAnimationCallerAddr = ScanSignature
@@ -2109,7 +2193,7 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
     );
 
     /* 0x1408122E0 */
-    long playAnimationFuncAddr = playAnimationCallerAddr + Read<int>(playAnimationCallerAddr + 0x01) + 0x05;
+    long playAnimationFuncAddr = Memory.ReadCall(playAnimationCallerAddr);
 
     // StateJump
     {
@@ -2669,13 +2753,16 @@ Notes;
 - This will only work for traversal objects, use the 'Enable Flinging from Terrain in Cyber Space' code to allow Sonic to fling off of terrain.
 */
 //
+    #lib "Memory"
+
     static bool isCyber = false;
     static bool isInitialised = false;
 //
 {
     if (!isInitialised)
     {
-        fixed (bool* pIsCyber = &isCyber) {
+        fixed (bool* pIsCyber = &isCyber)
+        {
             /* 0x14BB55230 */
             long CallAddress1 = ScanSignature
             (
@@ -2730,12 +2817,18 @@ Notes;
                 "xxxxxxx"
             );
             
-            long JumpAddress = HandleAddress + 0x1E;
-            
             WriteNop(HandleAddress, 0x1E);
             
-            /* Unscannable */
-            long ChangeFlagAddress = 0x1408F9C10;
+            /* 0x1408F9C10 */
+            long ChangeFlagAddress = Memory.ReadCall
+            (
+                /* 0x140866188 */
+                ScanSignature
+                (
+                    "\xE8\xCC\xCC\xCC\xCC\xBA\x06\x00\x00\x00\x48\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x84\xC0",
+                    "x????xxxxxxxxx????xx"
+                )
+            );
             
             /* Handling Springs, Jump Boards, and Dash Rings */
             WriteAsmHook
@@ -3569,6 +3662,8 @@ Known issues;
 
 Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
 //
+    #lib "Memory"
+
     static bool IsWorldIsland = false;
 //
 {
@@ -3615,7 +3710,7 @@ Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops
         );
 
         /* 0x140DDDE40 */
-        long sendMsgFunc = callerFuncAddr + Read<int>(callerFuncAddr + 0x01) + 0x05;
+        long sendMsgFunc = Memory.ReadCall(callerFuncAddr);
 
         /* This hook checks if we're on an island and calls
            the message sender to enter Sonic into the jump
@@ -4494,6 +4589,8 @@ Patch "Hide Air Trick Hint Particles" in "Graphics" by "Hyper" does "Hides the p
 
 Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "Replaces the homing attack finish animation with randomised trick animations."
 //
+    #lib "Memory"
+
     using System.Runtime.InteropServices;
 
     static bool Initialised = false;
@@ -4528,10 +4625,10 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
         );
 
         /* 0x1407C9300 */
-        long playAnimFuncAddr = playAnimCallerAddr + Read<int>(playAnimCallerAddr + 0x01) + 0x05;
+        long playAnimFuncAddr = Memory.ReadCall(playAnimCallerAddr);
 
         /* 0x1407C9DB0 */
-        long setAnimSpeedFuncAddr = setAnimSpeedCallerAddr + Read<int>(setAnimSpeedCallerAddr + 0x01) + 0x05;
+        long setAnimSpeedFuncAddr = Memory.ReadCall(setAnimSpeedCallerAddr);
 
         fixed (float* pAnimSpeed = &AnimSpeed)
         {
@@ -5944,7 +6041,7 @@ Unsupported objects;
 
 Patch "Force Light Scattering" in "Graphics" by "WasifBoomz & Robowil" does "Forces Light Scattering to render."
 {
-    //FxDOFParameter
+    // FxDOFParameter
     WriteAsmHook
     (
         $@"
