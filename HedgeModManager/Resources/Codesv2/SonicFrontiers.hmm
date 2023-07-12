@@ -1426,8 +1426,8 @@ Code "Always Allow Crouching on Rails" in "Gameplay" by "WasifBoomz" does
 Allows Sonic to crouch on grind rails and gain or lose speed based on the angle of the rail.
 
 Notes;
-- This increases the speed cap for rail grinding
-- The boost has been modified to become an accelerator while grinding
+- This increases the speed cap while grinding.
+- The boost has been modified to become an accelerator while grinding.
 */
 
 //
