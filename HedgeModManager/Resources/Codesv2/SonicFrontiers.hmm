@@ -3249,6 +3249,21 @@ Patch "Hide Fixed Camera Notifications" in "UI" by "Hyper" does "Hides the fixed
     );
 }
 
+Patch "Disable Bullet Time Filter" in "Graphics" by "Hyper" does "Disables the greyscale filter applied when entering bullet time from a parry."
+{
+    WriteNop
+    (
+        /* 0x140219623 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\xFF\x15\xCC\xCC\xCC\xCC\x4C\x8D\x9C\x24\xB0\x00\x00\x00",
+            "x????xxxxx????xxxxxxxx"
+        ),
+
+        5
+    );
+}
+
 Patch "Disable Forced Time" in "Time" by "Hyper" does "Disables the time being forced to specific values during events, sequences and bosses."
 {
     WriteProtected<byte>
