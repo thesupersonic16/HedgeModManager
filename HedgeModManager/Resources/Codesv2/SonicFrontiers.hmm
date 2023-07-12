@@ -7209,12 +7209,6 @@ This state lasts a fraction of a second, but keep in mind that within that time,
             // Exit into StateRun.
             Sonic.State.SetState(4);
         }
-
-        if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerStomping))
-        {
-            // Exit into StateSliding.
-            Sonic.State.SetState(59);
-        }
     }
 
     if (Sonic.IsGrounded())
