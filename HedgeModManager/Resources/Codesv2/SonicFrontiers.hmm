@@ -105,9 +105,10 @@ Library "BlackboardStatus" by "Hyper"
 
     public enum WorldFlags
     {
-		IsCyberSpace = 0x1D,
-		IsPowerBoost = 0x26,
-		IsHeightMapCollision = 0x31
+        IsAutoRun = 0x0A,
+        IsCyberSpace = 0x1D,
+        IsPowerBoost = 0x26,
+        IsHeightMapCollision = 0x31
     }
 
     public long Get(long blackboard = 0)
@@ -1623,19 +1624,104 @@ Patch "Always Day on Islands" in "Time" by "NM"
     );
 }
 
-Patch "Always Dodge for Side Step" in "Gameplay" by "Hyper" does "Always makes Sonic dodge left or right instead of performing a cartwheel when side stepping from a standstill."
-{
-    WriteNop
-    (
-        /* 0x1408AAE08 */
-        ScanSignature
-        (
-            "\xE8\xCC\xCC\xCC\xCC\x84\xC0\x75\xD6\xF3\x0F\x10\x8E\xA0\x00\x00\x00",
-            "x????xxxxxxxxxxxx"
-        ),
+Code "Always Dodge with Side Step" in "Gameplay" by "Hyper" does "Always makes Sonic dodge left or right instead of side stepping whilst not running."
+//
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+    #lib "Memory"
+    #lib "Sonic"
 
-        5
-    );
+    static bool IsInitialised = false;
+    static bool IsAutoRun = false;
+    static bool IsCyberSpace = false;
+    static bool IsAboveVelocityThreshold = false;
+//
+{
+    if (!IsInitialised)
+    {
+        fixed (bool* pIsCyberSpace = &IsCyberSpace)
+        {
+            /* 0x14BB219E0 */
+            long sig = ScanSignature
+            (
+                "\x0F\x29\x7C\x24\x70\x48\x8B\x49\x28",
+                "xxxxxxxxx"
+            );
+
+            if (sig == 0)
+                return;
+
+            // StateStand
+            WriteAsmHook
+            (
+                $@"
+                    movaps xmmword ptr [rsp + 0x88 + 0xFFFFFFFFFFFFFFE8], xmm7
+                    mov    rcx, qword ptr [rcx + 0x28]
+                    mov    edx, 5
+                    mov    rax, {(long)pIsCyberSpace}
+                    cmp    byte ptr [rax], 0
+                    jnz    exit
+                    mov    rax, {Memory.ReadJump(sig + 0x15)}
+                    jmp    rax
+                exit:
+                ",
+
+                sig,
+
+                HookBehavior.Replace
+            );
+            
+            /* 0x1408FE17A */
+            sig = ScanSignature
+            (
+                "\x0F\x29\x70\xE8\x48\x8B\x49\x28\xBA\x05\x00\x00\x00\x0F\x29\x78\xD8\xE8\xCC\xCC\xCC\xCC\x84\xC0\x0F\x84\xBD\x02\x00\x00",
+                "xxxxxxxxxxxxxxxxxx????xxxxxxxx"
+            );
+
+            if (sig == 0)
+                return;
+
+            fixed (bool* pIsAutoRun = &IsAutoRun)
+            fixed (bool* pIsAboveVelocityThreshold = &IsAboveVelocityThreshold)
+            {
+                // StateRun
+                WriteAsmHook
+                (
+                    $@"
+                        movaps xmmword ptr [rax - 0x18], xmm6
+                        mov    rcx, qword ptr [rcx + 0x28]
+                        mov    edx, 5
+                        movaps xmmword ptr [rax - 0x28], xmm7
+                        mov    rax, {(long)pIsCyberSpace}
+                        cmp    byte ptr [rax], 0
+                        jnz    exit
+                        mov    rax, {(long)pIsAutoRun}
+                        cmp    byte ptr [rax], 0
+                        jnz    exit
+                        mov    rax, {(long)pIsAboveVelocityThreshold}
+                        cmp    byte ptr [rax], 0
+                        jnz    exit
+                        mov    rax, {Memory.ReadJump(sig + 0x18)}
+                        jmp    rax
+                    exit:
+                    ",
+
+                    sig,
+
+                    HookBehavior.Replace
+                );
+            }
+        }
+
+        IsInitialised = true;
+    }
+
+    if (BlackboardStatus.Get() == 0)
+        return;
+
+    IsAutoRun = Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsAutoRun);
+    IsCyberSpace = Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsCyberSpace);
+    IsAboveVelocityThreshold = Sonic.Kinematics.GetHorizontalMagnitude() >= 15.0f;
 }
 
 Patch "Always Have All Abilities" in "Gameplay" by "Hyper" does
