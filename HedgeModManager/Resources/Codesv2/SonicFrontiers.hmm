@@ -1454,6 +1454,22 @@ Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" doe
     }
 }
 
+Code "Always Allow Dodging from Homing Shot" in "Gameplay" by "Hyper" does "Allows Sonic to exit from Homing Shot by dodging."
+//
+    #lib "Sonic"
+//
+{
+    if (Sonic.State.GetCurrentStateID() == 153)
+    {
+        if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerLeftStep) ||
+            Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerRightStep))
+        {
+            // Exit into StateAvoid.
+            Sonic.State.SetState(137);
+        }
+    }
+}
+
 Patch "Always Allow Unlocking Story Skills" in "Cheats" by "Hyper" does
 /*
 Allows the skills typically obtained through story progression to be unlocked as regular skills for free.
