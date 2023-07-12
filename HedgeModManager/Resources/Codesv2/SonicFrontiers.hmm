@@ -1623,7 +1623,7 @@ Patch "Always Day on Islands" in "Time" by "NM"
     );
 }
 
-Patch "Always Dive for Side Step" in "Gameplay" by "Hyper" does "Always makes Sonic dive left or right instead of performing a cartwheel when side stepping from a standstill."
+Patch "Always Dodge for Side Step" in "Gameplay" by "Hyper" does "Always makes Sonic dodge left or right instead of performing a cartwheel when side stepping from a standstill."
 {
     WriteNop
     (
