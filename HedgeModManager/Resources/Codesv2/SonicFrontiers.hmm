@@ -1421,6 +1421,150 @@ Patch "Always Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allo
     Sonic.State.AddStateNotifyAction(NotifyStateRunDamageCollision);
 }
 
+Code "Always Allow Crouching on Rails" in "Gameplay" by "WasifBoomz" does
+/*
+Allows Sonic to crouch on grind rails and gain or lose speed based on the angle of the rail.
+
+Notes;
+- This increases the speed cap for rail grinding
+- The boost has been modified to become an accelerator while grinding
+*/
+
+//
+    #lib "Sonic"
+    #lib "BlackboardStatus"
+
+    #load "System.Numerics.dll"
+	
+    using System;
+    using System.Numerics;
+	
+    public struct PlayerParamGrind {
+        float maxSpeed;
+        float maxBoostSpeed;
+        float acceleForce;
+        float deceleForce;
+        float limitSpeedMin;
+    }
+
+    const float grindCrouchSpeed = 36.0f;
+    const float boostGrindSpeedMin = 6.0f;
+    const float boostGrindSpeed = 50.0f;
+    static bool isInitialised = false;
+    static bool isRailCrouching = false;
+    static float* playerParamGrind = null;
+//
+{
+    if (!isInitialised)
+    {
+        fixed (float** pPlayerParamGrind = &playerParamGrind)
+        {
+            //Load Player Params Grind
+            WriteAsmHook
+            (
+                $@"
+                    mov rbx, {(long)pPlayerParamGrind}
+                    ;Get Pointer to Params
+                    mov qword ptr [rbx], rax
+                    ;Set Grind Speed to 100
+                    mov dword ptr [rax], 0x42C80000
+                    ;Set Boost Grind Speed to 0
+                    mov dword ptr [rax+4], 0x00000000
+                ",
+
+                /* 0x14080C75E */
+                ScanSignature
+                (
+                    "\x48\x8B\x4F\x40\x4C\x8D\x4C\x24\x30\x45\x33\xC0",
+                    "xxxxxxxxxxxx"
+                ),
+                        
+                HookBehavior.Before
+            );
+        }
+
+        fixed (bool* pIsRailCrouching = &isRailCrouching)
+        {
+            //Modify animation when crouching on rails
+            WriteAsmHook
+            (
+                $@"
+                    cmp byte ptr [r15 - 2h], 52h
+                    jnz end
+                    mov rcx, {(long)pIsRailCrouching}
+                    cmp byte ptr [rcx], 1
+                    jnz reset
+                    mov byte ptr [r15 + 2h], 52h
+                    mov dword ptr [r15 + 4h], 3F800000h
+                    jmp end
+                reset:
+                    mov byte ptr [r15 + 2h], 51h
+                    mov dword ptr [r15 + 4h], 3F000000h
+                end:
+                ",
+
+		/* 0x140DA25AC */
+                ScanSignature
+                (
+                    "\x41\x8B\x47\x08\xF2\x41\x0F\x10\x07",
+                    "xxxxxxxxx"
+                ),
+                        
+                HookBehavior.After
+            );
+        }
+
+	//Jump over the grind boost code
+        WriteProtected<byte>
+        (
+            /* 0x14AD7760A */
+            ScanSignature
+            (
+                "\x74\x0F\xBA\x01\x00\x00\x00\x48\x83\xC4\x20\x5B\xE9\xC5\x14\xAB\xF5",
+                "xxxxxxxxxxxxxxxxx"
+            ),
+
+            0xEB
+        );
+
+        isInitialised = true;
+    }
+
+    Sonic.Kinematics kinematics = Sonic.Kinematics.Get();
+
+    if (BlackboardStatus.Get() == null)
+        return;
+
+    if (kinematics == null)
+        return;
+
+    if (playerParamGrind == null)
+        return;
+
+    float* grindAcceleration = &playerParamGrind[2];
+    *grindAcceleration = 0;
+    isRailCrouching = false;
+
+    //Run this code when crouching on rails
+    if (Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerStomping))
+    {
+        if (Sonic.State.GetCurrentStateID() == 46)
+        {
+            isRailCrouching = true;
+            Sonic.Animation.SetAnimation("GRIND_LAND");
+        }
+
+	//Increase speed based on gravity
+        *grindAcceleration -= (Vector3.Normalize(*kinematics.Velocity).Y) * grindCrouchSpeed;
+    }
+    
+    //Increase acceleration when boosting on Grind Rails
+    if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost)){
+        *grindAcceleration += (Vector3.Normalize(*kinematics.Velocity).Y) * boostGrindSpeed;
+        *grindAcceleration = Math.Max(*grindAcceleration, boostGrindSpeedMin);
+    }
+}
+
 Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by pressing the attack button while holding the jump button."
 //
     #lib "Sonic"
