@@ -1623,6 +1623,21 @@ Patch "Always Day on Islands" in "Time" by "NM"
     );
 }
 
+Patch "Always Dive for Side Step" in "Gameplay" by "Hyper" does "Always makes Sonic dive left or right instead of performing a cartwheel when side stepping from a standstill."
+{
+    WriteNop
+    (
+        /* 0x1408AAE08 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x84\xC0\x75\xD6\xF3\x0F\x10\x8E\xA0\x00\x00\x00",
+            "x????xxxxxxxxxxxx"
+        ),
+
+        5
+    );
+}
+
 Patch "Always Have All Abilities" in "Gameplay" by "Hyper" does
 /*
 Always grants Sonic his abilities (not skills), even when scripted not to have them.
