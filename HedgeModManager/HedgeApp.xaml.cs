@@ -42,6 +42,7 @@ using HedgeModManager.Updates;
 using System.Security;
 using System.Windows.Interop;
 using System.Windows.Shell;
+using HedgeModManager.Annotations;
 using static HedgeModManager.Lang;
 using Microsoft.Win32;
 using HedgeModManager.CLI;
@@ -234,15 +235,7 @@ namespace HedgeModManager
                 ModsDbPath = Path.Combine(StartDirectory, "Mods");
             if (!string.IsNullOrEmpty(StartDirectory))
                 ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
-
-            if (CurrentGame.SupportsCPKREDIR)
-            {
-                if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))
-                {
-                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
-                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
-                }
-            }
+            
 
             // Try to remove old patch
             try
@@ -253,6 +246,8 @@ namespace HedgeModManager
                     if (IsCPKREDIRInstalled(exePath))
                         InstallCPKREDIR(exePath, false);
                 }
+
+                CurrentGame.ModLoader.MakeCompatible(StartDirectory);
             }
             catch { }
 
@@ -695,20 +690,12 @@ namespace HedgeModManager
             bool installed = false;
             try
             {
-                if (CurrentGame.SupportsCPKREDIR)
-                {
-                    if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))
-                    {
-                        File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
-                        File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
-                    }
-                }
-
                 // Do not attempt if no loader exists
                 if (CurrentGame.ModLoader == null)
                     return false;
 
                 string DLLFileName = Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderFileName);
+                CurrentGame.ModLoader.MakeCompatible(StartDirectory);
 
                 if (File.Exists(DLLFileName) && toggle)
                 {
@@ -921,22 +908,6 @@ namespace HedgeModManager
             }
         }
 
-        public static string GetCPKREDIRVersionString()
-        {
-            var temp = Path.Combine(StartDirectory, "cpkredir.dll");
-            FileVersionInfo info = null;
-            if (!File.Exists(temp))
-            {
-                temp = Path.GetTempFileName();
-                File.WriteAllBytes(temp, HMMResources.DAT_CPKREDIR_DLL);
-                info = FileVersionInfo.GetVersionInfo(temp);
-                File.Delete(temp);
-            }
-
-            info = info ?? FileVersionInfo.GetVersionInfo(temp);
-            return $"{info.ProductName} v{info.FileVersion}";
-        }
-
         private static string GetCPKREDIRFileVersion(bool? packed = null)
         {
             string version = null;
@@ -950,24 +921,6 @@ namespace HedgeModManager
             }
 
             return version;
-        }
-
-        /// <summary>
-        /// Checks the current version of CPKREDIR with the embeded one and updates it if the current is older
-        /// </summary>
-        public static void UpdateCPKREDIR()
-        {
-            if (GetCPKREDIRFileVersion(false) is string currentVersionString)
-            {
-                if (int.TryParse(CPKREDIRVersion.Replace(".", ""), out int packedVersion) &&
-                    int.TryParse(currentVersionString.Replace(".", ""), out int currentVersion) &&
-                    packedVersion > currentVersion)
-                {
-                    // Write embeded CPKREDIR
-                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
-                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
-                }
-            }
         }
 
         public static Version ExpandVersion(Version version)
@@ -1020,6 +973,7 @@ namespace HedgeModManager
             }
         }
 
+        [CanBeNull]
         public static CodeLoaderInfo GetCodeLoaderInfo(Game game)
         {
             try
@@ -1044,7 +998,7 @@ namespace HedgeModManager
             }
             catch
             {
-                return new CodeLoaderInfo(new Version("0.1"), new Version("9999.9999"));
+                return null;
             }
         }
 

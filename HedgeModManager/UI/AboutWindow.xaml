@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HedgeModManager"
         mc:Ignorable="d"
-        Title="{StaticResource AboutWindowUITitle}" MinHeight="600" MinWidth="720"
-        Height="600" Width="720"
+        Title="{StaticResource AboutWindowUITitle}" MinHeight="600" MinWidth="800"
+        Height="600" Width="800"
         WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Grid>
         <Grid.RowDefinitions>
@@ -28,26 +28,26 @@
         <GroupBox Header="{StaticResource AboutWindowUICredits}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="0" Margin="8,8,5,16">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.45*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
                     <Label Content="SuperSonic16"/>
                     <Label Content="Sajid"/>
-                    <Label Content="Radfordhound"/>
-                    <Label Content="Korama"/>
                     <Label Content="Skyth"/>
+                    <Label Content="Ahremic"/>
+                    <Label Content="Radfordhound"/>
                     <Label Content="PTKickass"/>
                     <Label Content="M&amp;M"/>
                     <Label Content="Hyper"/>
                     <Label Content="Wam"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <Label Content="Managing the project"/>
-                    <Label Content="Writing 7.0"/>
+                    <Label Content="Project lead, HE2ML"/>
+                    <Label Content="Project lead, HE1ML"/>
+                    <Label Content="RainbowModLoader, Contributing to HE1ML"/>
+                    <Label Content="Contributing to HE1ML"/>
                     <Label Content="Base Design"/>
-                    <Label Content="CPKREDIR"/>
-                    <Label Content="RainbowModLoader"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="Contributing to the project"/>
                     <Label Content="Contributing to the project"/>
