@@ -1,5 +1,1015 @@
 !!VERSION 1.2
 
+Library "Bitwise" by "Hyper"
+{
+    public long Set(long @base, uint offset, bool isOffsetBitIndex = true)
+    {
+        return @base | (isOffsetBitIndex ? (1L << (int)offset) : offset);
+    }
+
+    public long Reset(long @base, uint offset, bool isOffsetBitIndex = true)
+    {
+        return @base & (isOffsetBitIndex ? (1L << (int)offset) : offset);
+    }
+
+    public bool Test(long @base, uint offset, bool isOffsetBitIndex = true)
+    {
+        return (@base & (isOffsetBitIndex ? (1L << (int)offset) : offset)) != 0;
+    }
+}
+
+Library "Blackboard" by "Hyper, ĐeäTh & Sajid"
+{
+    #lib "Collections"
+    #lib "StringMapOperation"
+
+    using System.Runtime.InteropServices;
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    private delegate uint _tGetNameHash();
+
+    public long GetBlackboardFromPlayer(long player)
+    {
+        if (player == 0)
+            return 0;
+
+        long gocPlayerBlackboard = GameObject.GetGOC(player, "GOCPlayerBlackboard");
+
+        if (gocPlayerBlackboard == 0)
+            return 0;
+
+        // app::player::GOCPlayerBlackboard->pBlackboard = 0x80
+        return Read<long>(gocPlayerBlackboard + 0x80);
+    }
+
+    public long GetBlackboardContent(long blackboard, string name)
+    {
+        if (blackboard == 0)
+            return 0;
+
+        // csl::ut::MoveArray<BlackboardContent*> m_Blackboards = 0x18
+        var blackboards = Read<Collections.MoveArray<IntPtr>>(blackboard + 0x18);
+
+        for (int i = 0; i < blackboards.Length; i++)
+        {
+            IntPtr blackboardContent = blackboards[i];
+
+            if (blackboardContent == IntPtr.Zero)
+                continue;
+
+            var fpGetNameHash = Marshal.GetDelegateForFunctionPointer<_tGetNameHash>(Read<IntPtr>(Read<IntPtr>(blackboardContent) + 1 * IntPtr.Size));
+            
+            if (fpGetNameHash.Invoke() == StringMapOperation.ComputeHash(name))
+            {
+                return (long)blackboardContent;
+            }
+        }
+
+        return 0;
+    }
+}
+
+Library "BlackboardStatus" by "Hyper"
+{
+    #lib "Bitwise"
+    #lib "Blackboard"
+    #lib "GameDocument"
+    #lib "GameObject"
+
+    public enum StateFlags
+    {
+        IsBoost = 0x00,
+        IsRecoveryJump = 0x02,
+        IsAirBoost = 0x04,
+        IsGrindJump = 0x06,
+        IsGrind = 0x07,
+        IsJump = 0x08,
+        IsDoubleJump = 0x09,
+        IsBounceJump = 0x0A,
+        IsFall = 0x0B,
+        IsStomp = 0x0C,
+        IsDiving = 0x0D,
+        IsDivingBoost = 0x0E,
+        IsCyloop = 0x11,
+        IsCyloopEnd = 0x12,
+        IsDrift = 0x13,
+        IsDriftDash = 0x14,
+        IsHoming = 0x17,
+        IsParry = 0x18,
+        IsWallClimb = 0x19,
+        IsIdle = 0x1A,
+        IsBoarding = 0x1E,
+        IsSpringJump = 0x21,
+        IsPhantomRush = 0x26
+    }
+
+    public enum WorldFlags
+    {
+        IsAutoRun = 0x0A,
+        IsCyberSpace = 0x1D,
+        IsPowerBoost = 0x26,
+        IsHeightMapCollision = 0x31
+    }
+
+    public long Get(long blackboard = 0)
+    {
+        if (blackboard == 0)
+        {
+            long sonic = GameDocument.GetGameObject("Sonic");
+            
+            if (sonic == 0)
+                return 0;
+
+            blackboard = Blackboard.GetBlackboardFromPlayer(sonic);
+
+            if (blackboard == 0)
+                return 0;
+        }
+
+        return Blackboard.GetBlackboardContent(blackboard, "BlackboardStatus");
+    }
+
+    public long* GetFieldPointer(long blackboardStatus = 0, long fieldOffset = 0)
+    {
+        if (blackboardStatus == 0 && (blackboardStatus = Get()) == 0)
+            return null;
+
+        return (long*)new IntPtr(blackboardStatus + fieldOffset).ToPointer();
+    }
+
+    public long* GetStateFlags(long blackboardStatus = 0)
+    {
+        return GetFieldPointer(blackboardStatus, 0x30);
+    }
+
+    public long* GetWorldFlags(long blackboardStatus = 0)
+    {
+        return GetFieldPointer(blackboardStatus, 0x38);
+    }
+}
+
+Library "Collections" by "Sajid & Hyper"
+{
+    using System.Collections.Generic;
+
+    public unsafe struct MoveArray<T> where T : unmanaged
+    {
+        public T* Items;
+        public int Length;
+        public int Capacity;
+        public void* Allocator;
+        
+        public int Count => Length;    
+
+        public ref T this[int index]
+        {
+            get => ref Items[index];
+        }
+    }
+
+    public class StackList<T> : List<T>
+    {
+        private int _maxCapacity;
+
+        public StackList(int maxCapacity)
+        {
+            _maxCapacity = maxCapacity;
+        }
+
+        public new void Add(T item)
+        {
+            if (Count >= _maxCapacity)
+            {
+                RemoveAt(Count - 1);
+            }
+
+            Insert(0, item);
+        }
+
+        public T GetItemAt(int index)
+        {
+            if (Count == 0)
+                return default;
+
+            if (index >= Count)
+            {
+                return this[Count - 1];
+            }
+
+            return this[index];
+        }
+
+        public void Push(T item)
+        {
+            Add(item);
+        }
+
+        public T Pop()
+        {
+            T item = GetItemAt(0);
+
+            RemoveAt(0);
+
+            return item;
+        }
+
+        public T Peek()
+        {
+            return GetItemAt(0);
+        }
+    }
+}
+
+Library "GameDocument" by "Hyper, ĐeäTh & Sajid"
+{
+    #lib "Collections"
+
+    using System.Runtime.InteropServices;
+
+    /* 0x140C478D8 */
+    private static long gameDocumentUsageSig = ScanSignature
+    (
+        "\x48\x89\x2D\xCC\xCC\xCC\xCC\x8D\x75\x20",
+        "xxx????xxx"
+    );
+
+    public long Get()
+    {
+        if (gameDocumentUsageSig == 0)
+            return 0;
+
+        return Read<long>(gameDocumentUsageSig + Read<int>(gameDocumentUsageSig + 3) + 7);
+    }
+
+    public long GetService(long gameDocument, string name)
+    {
+        if (gameDocument == 0)
+            return 0;
+            
+        // csl::ut::MoveArray<hh::game::GameService*> m_Services = 0x150
+        var services = Read<Collections.MoveArray<IntPtr>>(gameDocument + 0x150);
+
+        for (int i = 0; i < services.Length; i++)
+        {
+            IntPtr service = services[i];
+
+            // hh::game::GameService->pStaticClass = 0x38
+            // hh::game::GameServiceClass->pName   = 0x00
+            if (Marshal.PtrToStringAnsi(Read<IntPtr>(Read<IntPtr>(service + 0x38))) == name)
+            {
+                return (long)service;
+            }
+        }
+
+        return 0;
+    }
+
+    public long GetService(string name)
+    {
+        return GetService(Get(), name);
+    }
+
+    public long GetGameObject(long gameDocument, string name)
+    {
+        if (gameDocument == 0)
+            return 0;
+            
+        // csl::ut::MoveArray<hh::game::GameObject*> m_Objects = 0x130
+        var gameObjects = Read<Collections.MoveArray<IntPtr>>(gameDocument + 0x130);
+
+        for (int i = 0; i < gameObjects.Length; i++)
+        {
+            IntPtr gameObject = gameObjects[i];
+
+            // hh::game::GameObject->pObjectName = 0xB8
+            if (Marshal.PtrToStringAnsi(Read<IntPtr>(gameObject + 0xB8)) == name)
+            {
+                return (long)gameObject;
+            }
+        }
+
+        return 0;
+    }
+
+    public long GetGameObject(string name)
+    {
+        return GetGameObject(Get(), name);
+    }
+}
+
+Library "GameObject" by "Hyper, ĐeäTh & Sajid"
+{
+    #lib "Collections"
+
+    #load "System.Numerics.dll"
+
+    using System.Numerics;
+    using System.Runtime.InteropServices;
+
+    public long GetGOC(long gameObject, string name)
+    {
+        if (gameObject == 0)
+            return 0;
+
+        // csl::ut::MoveArray<hh::game::GOComponent*> m_Components = 0x58
+        var components = Read<Collections.MoveArray<IntPtr>>(gameObject + 0x58);
+
+        for (int i = 0; i < components.Length; i++)
+        {
+            IntPtr component = components[i];
+            
+            // hh::game::GOComponent->pStaticClass = 0x48
+            // hh::game::ComponentClass->pName     = 0x00
+            if (Marshal.PtrToStringAnsi(Read<IntPtr>(Read<IntPtr>(component + 0x48))) == name)
+            {
+                return (long)component;
+            }
+        }
+
+        return 0;
+    }
+
+    public class Transform
+    {
+        public Vector3* Position;
+        public Quaternion* Rotation;
+        public Vector3* Scale;
+
+        public Transform(long gocTransform)
+        {
+            Position = (Vector3*)(gocTransform + 0xC0);
+            Rotation = (Quaternion*)(gocTransform + 0xD0);
+            Scale    = (Vector3*)(gocTransform + 0xE0);
+        }
+
+        public static Transform Get(long gameObject)
+        {
+            if (gameObject == 0)
+                return null;
+
+            long gocTransform = GameObject.GetGOC(gameObject, "GOCTransform");
+
+            if (gocTransform == 0)
+                return null;
+
+            return new Transform(gocTransform);
+        }
+    }
+}
+
+Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
+{
+    #lib "Collections"
+    #lib "GameDocument"
+
+    public long GetLevelInfo(long gameDocument = 0)
+    {
+        if (gameDocument == 0 && (gameDocument = GameDocument.Get()) == 0)
+            return 0;
+
+        return GameDocument.GetService(gameDocument, "LevelInfo");
+    }
+    
+    public long GetPlayerInformation(long levelInfo = 0, int playerIndex = 0)
+    {
+        if (levelInfo == 0 && (levelInfo = GetLevelInfo()) == 0)
+            return 0;
+
+        return Read<long>((levelInfo + 0xC8) + (playerIndex * IntPtr.Size));
+    }
+}
+
+Library "Memory" by "Hyper"
+{
+    public long ReadCall(long addr)
+    {
+        if (addr == 0)
+            return 0;
+
+        return addr + Read<int>(addr + 0x01) + 0x05;
+    }
+
+    public long ReadJump(long addr)
+    {
+        if (addr == 0)
+            return 0;
+
+        sbyte jmpType = -1;
+        byte opcode = Read<byte>(addr);
+
+        if ((opcode & 0xF0) == 0x70)
+        {
+            jmpType = 0;
+        }
+        else
+        {
+            switch (opcode)
+            {
+                case 0xE3:
+                case 0xEB:
+                    jmpType = 0;
+                    break;
+
+                case 0xE9:
+                    jmpType = 1;
+                    break;
+
+                case 0x0F:
+                    jmpType = 2;
+                    break;
+
+                case 0xFF:
+                    jmpType = 3;
+                    break;
+            }
+        }
+
+        switch (jmpType)
+        {
+            case 0:
+                return addr + Read<byte>(addr + 0x01) + 0x02;
+
+            case 1:
+                return addr + Read<int>(addr + 0x01) + 0x05;
+
+            case 2:
+                return addr + Read<int>(addr + 0x02) + 0x06;
+
+            case 3:
+                return Read<long>(addr + 0x06);
+        }
+
+        return 0;
+    }
+
+    public long ReadThunk(long addr, long offset = 0)
+    {
+        return ReadJump(ReadCall(addr) + offset);
+    }
+}
+
+Library "Sonic" by "Hyper, NM & Ahremic"
+{
+    #lib "Collections"
+    #lib "GameDocument"
+    #lib "GameObject"
+    #lib "LevelInfo"
+
+    #load "System.Numerics.dll"
+
+    using System.Collections.Generic;
+    using System.Numerics;
+    using System.Runtime.InteropServices;
+
+    public long GetSonic()
+    {
+        return GameDocument.GetGameObject("Sonic");
+    }
+
+    public long GetSonicContext(long sonic = 0)
+    {
+        if (sonic == 0 && (sonic = GetSonic()) == 0)
+            return 0;
+
+        return Read<long>(sonic + 0x2E0);
+    }
+
+    public bool IsGrounded()
+    {
+        long playerInfo = LevelInfo.GetPlayerInformation();
+
+        if (playerInfo == 0)
+            return false;
+
+        return Read<bool>(playerInfo + 0x2EE);
+    }
+
+    public static class Animation
+    {
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void _tSetAnimation(long gocPlayerVisual, long animationNamePtr, byte a3);
+        private static long _sigSetAnimation = 0;
+
+        public static void SetAnimation(string destination)
+        {
+            if (_sigSetAnimation == 0)
+            {
+                /* 0x1408122E0 */
+                _sigSetAnimation = ScanSignature
+                (
+                    "\x40\x53\x48\x83\xEC\x20\xF6\x81\x78\x01\x00\x00\x10\x48\x8B\xDA",
+                    "xxxxxxxxxxxxxxxx"
+                );
+
+                if (_sigSetAnimation == 0)
+                    return;
+            }
+
+            var fpSetAnimation = Marshal.GetDelegateForFunctionPointer<_tSetAnimation>((IntPtr)_sigSetAnimation);
+
+            if (fpSetAnimation == null)
+                return;
+
+            long sonic = GetSonic();
+
+            if (sonic == 0)
+                return;
+
+            long gocPlayerVisual = GameObject.GetGOC(sonic, "GOCPlayerVisual");
+
+            if (gocPlayerVisual == 0)
+                return;
+
+            fpSetAnimation.Invoke(gocPlayerVisual, (long)Marshal.StringToHGlobalAnsi(destination), 0xFE);
+        }
+    }
+
+    public enum CollisionType : byte
+    {
+        Default,
+        Damage = 2,
+        DamageHoming = 3
+    }
+
+    public static class Collision
+    {
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate long _tGetStatePluginCollision(long sonicContext);
+        private static long _sigGetStatePluginCollision = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate long _tSetCollisionSphere(long statePluginCollision, CollisionType type, float radius);
+        private static long _sigSetCollisionSphere = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void _tToggleEntityCollision(long sonicContext, bool enabled);
+        private static long _sigToggleEntityCollision = 0;
+
+        public static long GetPlugin()
+        {
+            if (_sigGetStatePluginCollision == 0)
+            {
+                /* 0x14086A0B0 */
+                _sigGetStatePluginCollision = ScanSignature
+                (
+                    "\x40\x56\x48\x83\xEC\x20\x48\x8B\x41\x38\x48\x8B\xB0\x08\x01\x00\x00\x48\x85\xF6\x74\x65\x48\x8B\x46\x20\x48\x89\x5C\x24\x30\x48\x8B\x5E\x18\x48\x89\x7C\x24\x38\x48\x8D\x3C\xC3\x48\x3B\xDF\x74\x19\x48\x8B\x0B\x48\x8B\x01\xFF\x50\xCC\x3D\x8E\xB4\x47\x3B",
+                    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx?xxxxx"
+                );
+
+                if (_sigGetStatePluginCollision == 0)
+                    return 0;
+            }
+
+            var fpGetStatePluginCollision = Marshal.GetDelegateForFunctionPointer<_tGetStatePluginCollision>((IntPtr)_sigGetStatePluginCollision);
+
+            if (fpGetStatePluginCollision == null)
+                return 0;
+
+            long sonicContext = GetSonicContext();
+
+            if (sonicContext == 0)
+                return 0;
+
+            return fpGetStatePluginCollision.Invoke(sonicContext);
+        }
+
+        public static long SetCollisionSphere(CollisionType type, float radius)
+        {
+            if (_sigSetCollisionSphere == 0)
+            {
+                /* 0x1408ED200 */
+                _sigSetCollisionSphere = ScanSignature
+                (
+                    "\x40\x53\x48\x83\xEC\x50\x0F\x28\x05\xCC\xCC\xCC\xCC\x48\x8B\xD9\x88\x54\x24\x20",
+                    "xxxxxxxxx????xxxxxxx"
+                );
+
+                if (_sigSetCollisionSphere == 0)
+                    return 0;
+            }
+
+            var fpSetCollisionSphere = Marshal.GetDelegateForFunctionPointer<_tSetCollisionSphere>((IntPtr)_sigSetCollisionSphere);
+
+            if (fpSetCollisionSphere == null)
+                return 0;
+
+            long statePluginCollision = GetPlugin();
+
+            if (statePluginCollision == 0)
+                return 0;
+
+            return fpSetCollisionSphere.Invoke(statePluginCollision, type, radius);
+        }
+
+        public static void ToggleEntityCollision(bool enabled)
+        {
+            if (_sigToggleEntityCollision == 0)
+            {
+                /* 0x14BB87C00 */
+                _sigToggleEntityCollision = ScanSignature
+                (
+                    "\x40\x53\x48\x83\xEC\x20\x48\x8B\x41\x50\x0F\xB6\xDA",
+                    "xxxxxxxxxxxxx"
+                );
+
+                if (_sigToggleEntityCollision == 0)
+                    return;
+            }
+
+            var fpToggleEntityCollision = Marshal.GetDelegateForFunctionPointer<_tToggleEntityCollision>((IntPtr)_sigToggleEntityCollision);
+
+            if (fpToggleEntityCollision == null)
+                return;
+
+            long sonicContext = GetSonicContext();
+
+            if (sonicContext == 0)
+                return;
+            
+            fpToggleEntityCollision.Invoke(sonicContext, enabled);
+        }
+    }
+
+    public static class Effect
+    {
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate IntPtr _tPlayEffect(long gocEffect, IntPtr effectName, uint* flags);
+        private static long _sigPlayEffect = 0;
+
+        public static void PlayEffect(string name)
+        {
+            if (_sigPlayEffect == 0)
+            {
+                /* 0x140901E20 */
+                _sigPlayEffect = ScanSignature
+                (
+                    "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x57\x48\x83\xEC\x20\x48\x8B\xF2\x48\x8B\xF9\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8",
+                    "xxxxxxxxxxxxxxxxxxxxxx????xxx"
+                );
+
+                if (_sigPlayEffect == 0)
+                    return;
+            }
+
+            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tPlayEffect>((IntPtr)_sigPlayEffect);
+
+            if (fpPlayEffect == null)
+                return;
+
+            long sonic = GetSonic();
+
+            if (sonic == 0)
+                return;
+
+            long gocEffect = GameObject.GetGOC(sonic, "GOCEffect");
+
+            if (gocEffect == 0)
+                return;
+
+            fpPlayEffect.Invoke(gocEffect, Marshal.StringToHGlobalAnsi(name), null);
+        }
+    }
+
+    public enum PlayerActionType
+    {
+        PlayerJump = 0,             // A
+        PlayerCyloop = 1,           // Y
+        PlayerAttack = 2,           // X
+        PlayerLightDash = 3,        // LS
+        PlayerBoost = 4,            // RT
+        PlayerDrift = 5,            // Unknown
+        PlayerChangeSuperSonic = 6, // Unknown
+        PlayerLeftStep = 7,         // LB
+        PlayerRightStep = 8,        // RB
+        PlayerStomping = 9,         // B
+        PlayerAction = 10,          // Unknown
+        PlayerActionAlways = 11,    // Unknown
+        PlayerSmash = 12,           // Unknown
+        CameraGaze = 13,            // RS
+        PlayerSonicboom = 14        // LT
+    }
+
+    public static class Input
+    {
+        private enum ButtonState
+        {
+            Pressed,
+            Down,
+            Released
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate bool _tCommonInputDel(long sonicContext, PlayerActionType actionType);
+
+        /* 0x1408F6400 */
+        private static long _sigIsPressed = ScanSignature
+        (
+            "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x63\xFA\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8B\x5C\x24\x30\x48\x8B\x80\x90\x00\x00\x00\x48\x8B\x48\x78\x0F\xB6\x44\xF9\x07\xD0",
+            "xxxxxxxxxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxxxxxxxxxx"
+        );
+        
+        /* 0x1408F65D0 */
+        private static long _sigIsDown = ScanSignature
+        (
+            "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x63\xFA\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8B\x5C\x24\x30\x48\x8B\x80\x90\x00\x00\x00\x48\x8B\x48\x78\x0F\xB6\x44\xF9\x07\xF6",
+            "xxxxxxxxxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxxxxxxxxxx"
+        );
+
+        /* 0x1408F6580 */
+        private static long _sigIsReleased = ScanSignature
+        (
+            "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x63\xFA\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8B\x5C\x24\x30\x48\x8B\x80\x90\x00\x00\x00\x48\x8B\x48\x78\x0F\xB6\x44\xF9\x07\xC0",
+            "xxxxxxxxxxxxxx????xxxx????xxxxxxx????xxxxxxxxxxxxxxxxxxxxxx"
+        );
+
+        private static bool CheckButtonState(ButtonState buttonState, PlayerActionType actionType)
+        {
+            long sonicContext = GetSonicContext();
+
+            if (sonicContext == 0)
+                return false;
+
+            IntPtr functionPtr = IntPtr.Zero;
+
+            switch (buttonState)
+            {
+                case ButtonState.Pressed:
+                    functionPtr = (IntPtr)_sigIsPressed;
+                    break;
+
+                case ButtonState.Down:
+                    functionPtr = (IntPtr)_sigIsDown;
+                    break;
+
+                case ButtonState.Released:
+                    functionPtr = (IntPtr)_sigIsReleased;
+                    break;
+            }
+
+            return Marshal.GetDelegateForFunctionPointer<_tCommonInputDel>(functionPtr).Invoke(sonicContext, actionType);
+        }
+
+        public static bool IsPressed(PlayerActionType actionType)
+        {
+            return CheckButtonState(ButtonState.Pressed, actionType);
+        }
+
+        public static bool IsDown(PlayerActionType actionType)
+        {
+            return !CheckButtonState(ButtonState.Down, actionType);
+        }
+
+        public static bool IsReleased(PlayerActionType actionType)
+        {
+            return CheckButtonState(ButtonState.Released, actionType);
+        }
+    }
+
+    public class Kinematics
+    {
+        public Vector3* Position;
+        public Quaternion* Rotation;
+        public Vector3* Velocity;
+
+        public Kinematics(long gocPlayerKinematicParams)
+        {
+            Position = (Vector3*)(gocPlayerKinematicParams + 0x80);
+            Rotation = (Quaternion*)(gocPlayerKinematicParams + 0x90);
+            Velocity = (Vector3*)(gocPlayerKinematicParams + 0xD0);
+        }
+
+        public static Kinematics Get()
+        {
+            long sonic = GetSonic();
+
+            if (sonic == 0)
+                return null;
+
+            long gocPlayerKinematicParams = GameObject.GetGOC(sonic, "GOCPlayerKinematicParams");
+
+            if (gocPlayerKinematicParams == 0)
+                return null;
+
+            return new Kinematics(gocPlayerKinematicParams);
+        }
+
+        public static float GetHorizontalMagnitude()
+        {
+            Kinematics k = Get();
+
+            if (k == null)
+                return 0.0f;
+
+            Vector3* velocity = k.Velocity;
+
+            if (velocity == null)
+                return 0.0f;
+
+            return (float)Math.Sqrt(velocity->X * velocity->X + velocity->Z * velocity->Z);
+        }
+    }
+
+    public static class Message
+    {
+        private static bool _initialised = false;
+        private static int _currentMessageID = -1;
+
+        private static void Init()
+        {
+            if (_initialised)
+                return;
+
+            fixed (int* p_currentMessageID = &_currentMessageID)
+            {
+                WriteAsmHook
+                (
+                    $@"
+                        mov    eax, [rdx + 8]
+                        mov    r14, {(long)p_currentMessageID}
+                        mov    dword ptr [r14], eax
+                        mov    r14, rdx
+                        movaps xmmword ptr [rsp + 0x260 + 0xFFFFFFFFFFFFFFD0], xmm6
+                    ",
+
+                    /* 0x140864C1B */
+                    ScanSignature
+                    (
+                        "\x8B\x42\x08\x4C\x8B\xF2\x0F\x29\xB4\x24\x30\x02\x00\x00",
+                        "xxxxxxxxxxxxxx"
+                    ),
+
+                    HookBehavior.Replace
+                );
+            }
+
+            _initialised = true;
+        }
+
+        public static int GetMessageID()
+        {
+            Init();
+
+            return _currentMessageID;
+        }
+    }
+
+    public static class State
+    {
+        private static bool _initialisedStateRedirector = false;
+        private static Dictionary<int, int> _redirectedStates = new();
+        private static int _currentStateID = -1;
+        private static Collections.StackList<int> _stateStackTrace = new(10);
+
+        public delegate void TStateNotifyAction(int stateId);
+        private static List<TStateNotifyAction> _stateNotifyActions = new();
+        
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void _tSetState(long gocPlayerHsm, int stateId, int a3);
+        private static long _sigSetState = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate int _tSetStateID(int stateId);
+        private static _tSetStateID _delSetStateID = new _tSetStateID(SetStateID);
+        private static IntPtr _fpSetStateID = Marshal.GetFunctionPointerForDelegate(_delSetStateID);
+
+        private static int SetStateID(int stateId)
+        {
+            if (stateId != -1)
+            {
+                _stateStackTrace.Push(_currentStateID);
+
+                _currentStateID = stateId;
+            }
+
+            foreach (TStateNotifyAction action in _stateNotifyActions)
+                action.Invoke(_currentStateID);
+
+            if (_redirectedStates.ContainsKey(stateId))
+                return _redirectedStates[stateId];
+
+            return stateId;
+        }
+
+        private static void InitStateRedirector()
+        {
+            if (_initialisedStateRedirector)
+                return;
+
+            WriteAsmHook
+            (
+                $@"
+                    mov   edx, [rbx + 0x114]
+                    mov   ecx, edx
+                    mov   rax, {(long)_fpSetStateID}
+                    call  rax
+                    mov   edx, eax
+                    movzx eax, byte ptr [rbx + 0x11C]
+                ",
+
+                /* 0x140802F2D */
+                ScanSignature
+                (
+                    "\x8B\x93\x14\x01\x00\x00\x83\xFA\xFF",
+                    "xxxxxxxxx"
+                ),
+
+                HookBehavior.Replace
+            );
+
+            _initialisedStateRedirector = true;
+        }
+
+        public static int GetCurrentStateID()
+        {
+            InitStateRedirector();
+
+            return _currentStateID;
+        }
+
+        public static int GetPreviousStateID(int stackIndex = 0)
+        {
+            InitStateRedirector();
+
+            return _stateStackTrace.GetItemAt(stackIndex);
+        }
+
+        public static void AddStateNotifyAction(TStateNotifyAction action)
+        {
+            InitStateRedirector();
+
+            _stateNotifyActions.Add(action);
+        }
+
+        public static void RemoveStateNotifyAction(TStateNotifyAction action)
+        {
+            InitStateRedirector();
+
+            _stateNotifyActions.Remove(action);
+        }
+
+        public static void Redirect(int source, int destination)
+        {
+            InitStateRedirector();
+
+            if (_redirectedStates.ContainsKey(source))
+            {
+                _redirectedStates[source] = destination;
+                return;
+            }
+
+            _redirectedStates.Add(source, destination);
+        }
+
+        public static void Restore(int source)
+        {
+            InitStateRedirector();
+            
+            _redirectedStates.Remove(source);
+        }
+
+        public static void SetState(int destination)
+        {
+            if (_sigSetState == 0)
+            {
+                /* 0x140802400 */
+                _sigSetState = ScanSignature
+                (
+                    "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x57\x48\x83\xEC\x20\x48\x8B\xD9\x41\x8B\xF8\x48\x81\xC1\x88\x00\x00\x00\x8B\xF2\xE8\xCC\xCC\xCC\xCC\x3B",
+                    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????x"
+                );
+
+                if (_sigSetState == 0)
+                    return;
+            }
+
+            var fpSetState = Marshal.GetDelegateForFunctionPointer<_tSetState>((IntPtr)_sigSetState);
+
+            if (fpSetState == null)
+                return;
+
+            long sonicContext = GetSonicContext();
+
+            if (sonicContext == 0)
+                return;
+
+            fpSetState.Invoke(Read<long>(sonicContext + 0x38), (int)destination, 0);
+        }
+    }
+}
+
+Library "StringMapOperation" by "ĐeäTh"
+{
+    public uint ComputeHash(string key)
+    {
+        uint hash = key[0];
+
+        for (int i = 1; i < key.Length; i++)
+            hash = key[i] + 31 * hash;
+
+        return hash & 0x7FFFFFFF;
+    }
+}
+
 Patch "2x Extended Grass Draw Distance" in "Graphics" by "Hyper" does "Extends the draw distance of the grass past the visible horizon."
 //
     static float Range = 3.0f;
@@ -99,6 +1109,105 @@ WARNING: this will almost definitely cause performance issues, especially if you
 
             HookBehavior.Replace
         );
+    }
+}
+
+Code "Additive Spring Trajectory with Boost" in "Gameplay" by "WasifBoomz" does "Keeps your velocity upon hitting a vertical spring while boosting."
+//
+    #lib "Sonic"
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+	
+    #load "System.Numerics.dll"
+	
+    using System;
+    using System.Numerics;
+    using System.Collections.Generic;
+	
+    static int framesSinceHit = 0;
+    static bool boosting = false;
+    static bool isInitialised = false;
+    static Vector3 prevVelocity;
+//
+{
+    Sonic.Kinematics kinematics = Sonic.Kinematics.Get();
+
+    if (!isInitialised)
+    {
+        long aSpringJump = ScanSignature
+        (
+            "SPRING_JUMP",
+            "xxxxxxxxxxx"
+        );
+
+        long ChangeAnimLocation = ScanSignature
+        (
+            "\x40\x53\x48\x83\xEC\x20\xF6\x81\x78\x01\x00\x00\x10\x48\x8B\xDA",
+            "xxxxxxxxxxxxxxxx"
+        );
+
+        fixed (bool* pBoosting = &boosting)
+        fixed (int* pFramesSinceHit = &framesSinceHit)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    mov  rax, {(long)aSpringJump}
+                    cmp  rdx, rax
+                    jnz  original
+                    mov  rcx, {(long)pBoosting}
+                    cmp  byte ptr [rcx], 0
+                    jz   original
+                    mov  rax, {(long)pFramesSinceHit}
+                    mov  byte ptr [rax], 1
+                original:
+                    mov  r8b, 0FEh
+                    mov  rcx, rbx
+                    mov  rax, {(long)ChangeAnimLocation}
+                    call rax
+                    mov  edx, [rbp+0DCh]
+                ",
+                    
+                /* 0x1408C1B02 */
+                ScanSignature(
+                    "\x41\xB0\xFE\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x8B\x95\xDC\x00\x00\x00",
+                    "xxxxxxx????xxxxxx"
+                ),
+                    
+                HookBehavior.Replace
+            );
+        }
+
+        isInitialised = true;
+    }
+
+    if (kinematics == null)
+        return;
+    
+    if (BlackboardStatus.Get() == 0)
+        return;
+
+    boosting = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost);
+
+    switch (framesSinceHit)
+    {
+        case 0:
+            prevVelocity = *kinematics.Velocity;
+            break;
+        case 1:
+            Sonic.State.SetState(16);
+            framesSinceHit++;
+            break;
+        case 2:
+        {
+            if (Sonic.Kinematics.GetHorizontalMagnitude() < Math.Abs(kinematics.Velocity->Y))
+                    *kinematics.Velocity += new Vector3(prevVelocity.X,0,prevVelocity.Z);
+            framesSinceHit = 0;
+            break;
+        }
+        default:
+            framesSinceHit = 1;
+            break;
     }
 }
 
@@ -278,6 +1387,90 @@ Known issues;
         WriteProtected<float>(DVSceneAspectRatioAddr + 6, AspectRatio);
 }
 
+Patch "Always Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic to damage enemies and harder physics objects by boosting through them."
+//
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+    #lib "Sonic"
+
+    static bool IsBoostPrevious = false;
+//
+{
+    void NotifyStateRunDamageCollision(int stateId)
+    {
+        if (BlackboardStatus.Get() != 0)
+        {
+            bool isStateRun = stateId == 4;
+            bool isBoost = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost);
+
+            if (isStateRun && isBoost)
+            {
+                Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Damage, 1.0f);
+                Sonic.Collision.ToggleEntityCollision(false);
+                IsBoostPrevious = true;
+            }
+            else if (IsBoostPrevious)
+            {
+                Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Default, 1.0f);
+                Sonic.Collision.ToggleEntityCollision(true);
+                IsBoostPrevious = false;
+            }
+        }
+    }
+
+    Sonic.State.AddStateNotifyAction(NotifyStateRunDamageCollision);
+}
+
+Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by pressing the attack button while holding the jump button."
+//
+    #lib "Sonic"
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+
+    static int[] enableStates = { 8, 11, 46, 162 };
+    static bool allowChargeAttack = false;
+//
+{
+    if (BlackboardStatus.Get() == 0)
+        return;
+
+    int state = Sonic.State.GetCurrentStateID();
+
+    if (Sonic.IsGrounded())
+        allowChargeAttack = true;
+
+    if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsWallClimb))
+        allowChargeAttack = true;
+
+    for (int i = 0; i < enableStates.Length; i++)
+    {
+        if (state == enableStates[i])
+            allowChargeAttack = true;
+    }
+
+    if (allowChargeAttack && Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerJump) && Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
+    {
+        Sonic.State.SetState(148);
+        allowChargeAttack = false;
+    }
+}
+
+Code "Always Allow Dodging from Homing Shot" in "Gameplay" by "Hyper" does "Allows Sonic to exit from Homing Shot by dodging."
+//
+    #lib "Sonic"
+//
+{
+    if (Sonic.State.GetCurrentStateID() == 153)
+    {
+        if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerLeftStep) ||
+            Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerRightStep))
+        {
+            // Exit into StateAvoid.
+            Sonic.State.SetState(137);
+        }
+    }
+}
+
 Patch "Always Allow Unlocking Story Skills" in "Cheats" by "Hyper" does
 /*
 Allows the skills typically obtained through story progression to be unlocked as regular skills for free.
@@ -333,6 +1526,21 @@ Affected skills;
     }
 }
 
+Patch "Always Allow Spin Dash on Dash Panels" in "Gameplay" by "Hyper" does "Allows Sonic to Spin Dash through dash panels without interruptions."
+{
+    WriteProtected<byte>
+    (
+        /* 0x140862428 */
+        ScanSignature
+        (
+            "\x41\x0F\x94\xC4\xD0\xE9",
+            "xxxxxx"
+        ),
+
+        Assemble("mov r12b, 0; nop")
+    );
+}
+
 Patch "Always Cloudy on Islands" in "Weather" by "Hyper" does
 /*
 Forces the weather to Cloudy on supported islands.
@@ -344,6 +1552,9 @@ Supported islands;
 - Rhea
 - Ouranos
 */
+//
+    #lib "Memory"
+//
 {
     void NOP(long addr)
         => WriteProtected<byte>(addr, 0xEB, 0x4E);
@@ -356,10 +1567,10 @@ Supported islands;
     );
 
     /* 0x1401EE3ED */
-    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr) + 0x2D);
 
     /* 0x1401EE4DD */
-    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr + 0x0A) + 0x2D);
 }
 
 Patch "Always Day on Islands" in "Time" by "NM"
@@ -411,6 +1622,106 @@ Patch "Always Day on Islands" in "Time" by "NM"
 
         HookBehavior.Replace
     );
+}
+
+Code "Always Dodge with Side Step" in "Gameplay" by "Hyper" does "Always makes Sonic dodge left or right instead of side stepping whilst not running."
+//
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+    #lib "Memory"
+    #lib "Sonic"
+
+    static bool IsInitialised = false;
+    static bool IsAutoRun = false;
+    static bool IsCyberSpace = false;
+    static bool IsAboveVelocityThreshold = false;
+//
+{
+    if (!IsInitialised)
+    {
+        fixed (bool* pIsCyberSpace = &IsCyberSpace)
+        {
+            /* 0x14BB219E0 */
+            long sig = ScanSignature
+            (
+                "\x0F\x29\x7C\x24\x70\x48\x8B\x49\x28",
+                "xxxxxxxxx"
+            );
+
+            if (sig == 0)
+                return;
+
+            // StateStand
+            WriteAsmHook
+            (
+                $@"
+                    movaps xmmword ptr [rsp + 0x88 + 0xFFFFFFFFFFFFFFE8], xmm7
+                    mov    rcx, qword ptr [rcx + 0x28]
+                    mov    edx, 5
+                    mov    rax, {(long)pIsCyberSpace}
+                    cmp    byte ptr [rax], 0
+                    jnz    exit
+                    mov    rax, {Memory.ReadJump(sig + 0x15)}
+                    jmp    rax
+                exit:
+                ",
+
+                sig,
+
+                HookBehavior.Replace
+            );
+            
+            /* 0x1408FE17A */
+            sig = ScanSignature
+            (
+                "\x0F\x29\x70\xE8\x48\x8B\x49\x28\xBA\x05\x00\x00\x00\x0F\x29\x78\xD8\xE8\xCC\xCC\xCC\xCC\x84\xC0\x0F\x84\xBD\x02\x00\x00",
+                "xxxxxxxxxxxxxxxxxx????xxxxxxxx"
+            );
+
+            if (sig == 0)
+                return;
+
+            fixed (bool* pIsAutoRun = &IsAutoRun)
+            fixed (bool* pIsAboveVelocityThreshold = &IsAboveVelocityThreshold)
+            {
+                // StateRun
+                WriteAsmHook
+                (
+                    $@"
+                        movaps xmmword ptr [rax - 0x18], xmm6
+                        mov    rcx, qword ptr [rcx + 0x28]
+                        mov    edx, 5
+                        movaps xmmword ptr [rax - 0x28], xmm7
+                        mov    rax, {(long)pIsCyberSpace}
+                        cmp    byte ptr [rax], 0
+                        jnz    exit
+                        mov    rax, {(long)pIsAutoRun}
+                        cmp    byte ptr [rax], 0
+                        jnz    exit
+                        mov    rax, {(long)pIsAboveVelocityThreshold}
+                        cmp    byte ptr [rax], 0
+                        jnz    exit
+                        mov    rax, {Memory.ReadJump(sig + 0x18)}
+                        jmp    rax
+                    exit:
+                    ",
+
+                    sig,
+
+                    HookBehavior.Replace
+                );
+            }
+        }
+
+        IsInitialised = true;
+    }
+
+    if (BlackboardStatus.Get() == 0)
+        return;
+
+    IsAutoRun = Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsAutoRun);
+    IsCyberSpace = Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsCyberSpace);
+    IsAboveVelocityThreshold = Sonic.Kinematics.GetHorizontalMagnitude() >= 15.0f;
 }
 
 Patch "Always Have All Abilities" in "Gameplay" by "Hyper" does
@@ -580,6 +1891,9 @@ Supported islands;
 - Rhea
 - Ouranos
 */
+//
+    #lib "Memory"
+//
 {
     void NOP(long addr)
         => WriteProtected<byte>(addr, 0xEB, 0x38);
@@ -592,10 +1906,10 @@ Supported islands;
     );
 
     /* 0x1401EE3ED */
-    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr) + 0x2D);
 
     /* 0x1401EE4DD */
-    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr + 0x0A) + 0x2D);
 }
 
 Patch "Always Respawn Enemies" in "Enemy" by "Hyper" does "Always respawns enemies and guardians when loading back into islands."
@@ -635,6 +1949,9 @@ Forces the weather to Sandstorm on supported islands.
 Supported islands;
 - Ares
 */
+//
+    #lib "Memory"
+//
 {
     void NOP(long addr)
         => WriteProtected<byte>(addr, 0xEB, 0x22);
@@ -647,10 +1964,10 @@ Supported islands;
     );
 
     /* 0x1401EE3ED */
-    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr) + 0x2D);
 
     /* 0x1401EE4DD */
-    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr + 0x0A) + 0x2D);
 }
 
 Patch "Always Sunny on Islands" in "Weather" by "Hyper" does
@@ -664,6 +1981,9 @@ Supported islands;
 - Rhea
 - Ouranos
 */
+//
+    #lib "Memory"
+//
 {
     void NOP(long addr)
         => WriteProtected<byte>(addr, 0xEB);
@@ -676,10 +1996,10 @@ Supported islands;
     );
 
     /* 0x1401EE3ED */
-    NOP((callerFuncAddr + Read<short>(callerFuncAddr + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr) + 0x2D);
 
     /* 0x1401EE4DD */
-    NOP(((callerFuncAddr + 0x0A) + Read<short>((callerFuncAddr + 0x0A) + 0x01) + 0x05) + 0x2D);
+    NOP(Memory.ReadCall(callerFuncAddr + 0x0A) + 0x2D);
 }
 
 Patch "Always Trickable Dash Rings" in "Gameplay" by "Hyper"
@@ -773,6 +2093,21 @@ Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
             "xxxxxxxxxxxxxxxxxxxx"
         ),
 
+        2
+    );
+}
+
+Patch "Always Unlocked Extreme Difficulty" in "Cheats" by "Hyper"
+{
+    WriteNop
+    (
+        /* 0x140A007D9 */
+        ScanSignature
+        (
+            "\x74\x65\x0F\x1F\x44\x00\x00",
+            "xxxxxxx"
+        ),
+        
         2
     );
 }
@@ -951,6 +2286,9 @@ Patch "Always Sunset on Islands" in "Time" by "NM"
 }
 
 Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball animations when jumping and double jumping, similar to Sonic Forces."
+//
+    #lib "Memory"
+//
 {
     long SPINJUMP = (long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("SPINJUMP");
 
@@ -962,23 +2300,33 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
     );
 
     /* 0x140901E20 */
-    long playParticleFuncAddr = playParticleCallerAddr + Read<int>(playParticleCallerAddr + 0x01) + 0x05;
+    long playParticleFuncAddr = Memory.ReadCall(playParticleCallerAddr);
+
+    /* 0x14B4DB1E6 */
+    long playAnimationCallerAddr = ScanSignature
+    (
+        "\xE8\xCC\xCC\xCC\xCC\x41\xB0\x01\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x89\xF1",
+        "x????xxxxxx????xxx"
+    );
+
+    /* 0x1408122E0 */
+    long playAnimationFuncAddr = Memory.ReadCall(playAnimationCallerAddr);
 
     // StateJump
     {
         WriteAsmHook
         (
             $@"
-                push rax
-                push rdx
+                mov  r8b, 0xFE
+                mov  rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("JUMP_BALL")}
+                mov  rcx, rax
+                mov  rax, {playAnimationFuncAddr}
+                call rax
                 mov  r8b, 1
                 mov  rdx, {SPINJUMP}
                 mov  rcx, rsi
                 mov  rax, {playParticleFuncAddr}
                 call rax
-                pop  rdx
-                pop  rax
-                mov  rdx, {(long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi("JUMP_BALL")}
             ",
 
             /* 0x14B4DB1D4 */
@@ -991,17 +2339,7 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
             HookBehavior.Replace
         );
 
-        WriteNop
-        (
-            /* 0x14B4DB1F8 */
-            ScanSignature
-            (
-                "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x0D\xBA\x8E\xB4\x47\x3B\xE8\xCC\xCC\xCC\xCC\x49\x89\xC6",
-                "x????xxxxxxxxxxxxxxxxxxxxxx????xxx"
-            ),
-
-            5
-        );
+        WriteNop(playAnimationCallerAddr, 23);
     }
 
     // StateDoubleJump
@@ -1235,6 +2573,18 @@ Patch "Disable Birthday Party Decorations" in "UI" by "Hyper" does "Disables the
 
         0xEB
     );
+
+    WriteProtected<byte>
+    (
+        /* 0x140969157 */
+        ScanSignature
+        (
+            "\x74\x04\x80\x4F\x28\x04",
+            "xxxxxx"
+        ),
+
+        0xEB
+    );
 }
 
 Patch "Disable Boost Replenishment from Rings" in "Gameplay" by "Hyper" does "Prevents the boost gauge from refilling when collecting rings."
@@ -1463,6 +2813,180 @@ Patch "Disable Thorn Cylinders" in "Gameplay" by "Hyper" does "Disables the cyli
     );
 }
 
+Patch "Enable Flinging from Terrain in Cyber Space" in "Gameplay" by "WasifBoomz" does
+/*
+Allows Sonic to fling off of terrain in Cyber Space.
+
+Notes;
+- This does not allow Sonic to perform Air Tricks from terrain, use the 'Enable Air Tricks in Cyber Space' code to do so.
+*/
+{
+    long CheckTumbleFuncAddress = ScanSignature
+    (
+        "\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x55\x48\x8B\xEC",
+        "xxxxxxxxxxxxxx"
+    );
+
+    WriteAsmHook
+    (
+        $@"
+            mov  rdx, rax
+            mov  rcx, rbx
+            mov  rax, {(long)CheckTumbleFuncAddress}
+            call rax
+            cmp  byte ptr [rax], 0
+            jnz  end
+            mov  byte ptr [rax], 1
+            mov  dword ptr [rax+4h],  0x41700000
+            mov  dword ptr [rax+1Ch], 0x40000000
+            mov  dword ptr [rax+20h], 0x40000000
+            mov  dword ptr [rax+24h], 0x42480000
+            mov  dword ptr [rax+28h], 0x42B40000
+            mov  dword ptr [rax+2Ch], 0x42200000
+            mov  dword ptr [rax+30h], 0x42A00000
+            mov  dword ptr [rax+34h], 0x41A00000
+            mov  dword ptr [rax+40h], 0x41A00000
+            mov  dword ptr [rax+4Ch], 0x41400000
+        end:
+            cmp  byte ptr [rax], 0
+        ",
+
+        /* 0x1408FD0C5 */
+        ScanSignature
+        (
+            "\x48\x8B\xD0\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x80\x38\x00\x74\x7D",
+            "xxxxxxx????xxxxx"
+        ),
+                
+        HookBehavior.Replace
+    );
+}
+
+Code "Enable Air Tricks in Cyber Space" in "Gameplay" by "WasifBoomz" does
+/*
+Allows Sonic to use the Air Trick skill in Cyber Space.
+
+Notes;
+- This will only work for traversal objects, use the 'Enable Flinging from Terrain in Cyber Space' code to allow Sonic to fling off of terrain.
+*/
+//
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+    #lib "Memory"
+
+    static bool isCyber = false;
+    static bool isInitialised = false;
+//
+{
+    if (!isInitialised)
+    {
+        fixed (bool* pIsCyber = &isCyber)
+        {
+            /* 0x14BB55230 */
+            long CallAddress1 = ScanSignature
+            (
+                "\x40\x53\x48\x83\xEC\x20\x48\x8B\x41\x38\x0F\xB6\xDA\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x1F\xBA\xFF\x9E\x82\x22",
+                "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            );
+
+            /* 0x1408F62C0 */
+            long CallAddress2 = ScanSignature
+            (
+                "\x40\x53\x48\x83\xEC\x20\xBA\x1A\x00\x00\x00",
+                "xxxxxxxxxxx"
+            );
+            
+            /* Handling the Tumble State */
+            WriteAsmHook
+            (
+                $@"
+                    mov rbx, {(long)pIsCyber}
+                    cmp byte ptr [rbx], 1
+                    jz  cyber
+                    
+                original:
+                    mov  rcx, rdi
+                    mov  rbx, {(long)CallAddress1}
+                    call rbx
+                                    
+                    mov  rcx, rdi
+                    mov  rax, {(long)CallAddress2}
+                    call rax
+                    jmp  end
+
+                cyber:
+                    mov  al, 1
+                end:
+                ",
+                
+                /* 0x14B3E7548 */
+                ScanSignature
+                (
+                    "\x48\x89\xF9\xE8\xCC\xCC\xCC\xCC\x48\x89\xF9\xE8\xCC\xCC\xCC\xCC\x84\xC0",
+                    "xxxx????xxxx????xx"
+                ),
+                
+                HookBehavior.Replace
+            );
+    
+            /* 0x14B74C5F6 */
+            long HandleAddress = ScanSignature
+            (
+                "\x80\x79\x3D\x00\x48\x89\xCB",
+                "xxxxxxx"
+            );
+            
+            WriteNop(HandleAddress, 0x1E);
+            
+            /* 0x1408F9C10 */
+            long ChangeFlagAddress = Memory.ReadCall
+            (
+                /* 0x140866188 */
+                ScanSignature
+                (
+                    "\xE8\xCC\xCC\xCC\xCC\xBA\x06\x00\x00\x00\x48\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x84\xC0",
+                    "x????xxxxxxxxx????xx"
+                )
+            );
+            
+            /* Handling Springs, Jump Boards, and Dash Rings */
+            WriteAsmHook
+            (
+                $@"
+                    mov rax, {(long)pIsCyber}
+                    cmp byte ptr [rax], 1
+                    jz  cyberJump
+
+                originalCheck:
+                    cmp  byte ptr [rcx+3Dh], 0
+                    mov  rbx, rcx
+                    jz   end
+                
+                cyberJump:
+                    mov  rcx, [rcx+20h]
+                    mov  r8b, 1
+                    mov  edx, 28h
+                    mov  rax, {(long)ChangeFlagAddress}
+                    call rax
+                    mov  byte ptr [rbx+3Dh], 0
+                end:
+                ",
+                
+                HandleAddress,
+                
+                HookBehavior.Replace
+            );
+        }
+
+        isInitialised = true;
+    }
+
+    if (BlackboardStatus.Get() == 0)
+        return;
+
+    isCyber = Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsCyberSpace);
+}
+
 Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt that covers up Sonic when using drift dash panels."
 {
     WriteNop
@@ -1594,6 +3118,21 @@ Example usage;
     }
 }
 
+Patch "Disable Drift Dash Panels" in "Gameplay" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        /* 0x140482A6E */
+        ScanSignature
+        (
+            "\x48\x8B\xC2\x48\x8B\xF9\x48\x8B\xC8\x48\x8D\x15\xCC\xCC\xCC\xCC\xE8\xCC\xCC\xCC\xCC\x4C\x8B\xF8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x4C\x8B\xE8",
+            "xxxxxxxxxxxx????x????xxxx????xxxxxxx????xxx"
+        ),
+
+        0xE9, 0x24, 0x03, 0x00, 0x00
+    );
+}
+
 Patch "Disable Drop Dash" in "Gameplay" by "Hyper"
 {
     // Disable drop dash charge from StateDoubleJump.
@@ -1707,6 +3246,21 @@ Patch "Hide Fixed Camera Notifications" in "UI" by "Hyper" does "Hides the fixed
         ),
 
         0xE9, 0x5E, 0x01, 0x00, 0x00
+    );
+}
+
+Patch "Disable Bullet Time Filter" in "Graphics" by "Hyper" does "Disables the greyscale filter applied when entering bullet time from a parry."
+{
+    WriteNop
+    (
+        /* 0x140219623 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\xFF\x15\xCC\xCC\xCC\xCC\x4C\x8D\x9C\x24\xB0\x00\x00\x00",
+            "x????xxxxx????xxxxxxxx"
+        ),
+
+        5
     );
 }
 
@@ -2242,6 +3796,8 @@ Known issues;
 
 Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops Sonic locking to a path when hitting jump boards, allowing him to fling off them like ramps."
 //
+    #lib "Memory"
+
     static bool IsWorldIsland = false;
 //
 {
@@ -2288,7 +3844,7 @@ Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops
         );
 
         /* 0x140DDDE40 */
-        long sendMsgFunc = callerFuncAddr + Read<int>(callerFuncAddr + 0x01) + 0x05;
+        long sendMsgFunc = Memory.ReadCall(callerFuncAddr);
 
         /* This hook checks if we're on an island and calls
            the message sender to enter Sonic into the jump
@@ -2456,6 +4012,21 @@ Notes;
     );
 }
 
+Patch "Disable Parry Targeting" in "Gameplay" by "Hyper" does "Disables Sonic automatically targeting the nearest enemy when parrying."
+{
+    WriteNop
+    (
+        /* 0x14087B767 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x46\x38\xBA\x01\x02\x8F\x12",
+            "x????xxxxxxxxx"
+        ),
+
+        5
+    );
+}
+
 Patch "Disable Photo Mode Camera Collision" in "Camera" by "Hyper"
 {
     // Camera position
@@ -2615,48 +4186,6 @@ Patch "Disable Power Boost Audio" in "Audio" by "Hyper"
         ),
 
         System.Text.Encoding.UTF8.GetBytes("sn_boost_run\0")
-    );
-}
-
-Patch "Disable Power Boost Effects" in "Graphics" by "NM & Hyper"
-{
-    /* Activation FX */
-    WriteNop
-    (
-        /* 0x1408D2AE5 */
-        ScanSignature
-        (
-            "\xE8\xCC\xCC\xCC\xCC\x83\x7D\x98\x00\x4C\x8D\x05\xCC\xCC\xCC\xCC\x41\xB9\x11\x00\x00\x00",
-            "x????xxxxxxx????xxxxxx"
-        ),
-
-        5
-    );
-
-    /* Boost Activation FX */
-    WriteProtected<byte>
-    (
-        /* 0x1408D1CD4 */
-        ScanSignature
-        (
-            "\x74\x09\x4C\x8D\x05\xCC\xCC\xCC\xCC\xEB\x4F\x48\x8B\xCF",
-            "xxxxx????xxxxx"
-        ),
-
-        0xEB, 0x09
-    );
-
-    /* Trail FX */
-    WriteProtected<byte>
-    (
-        /* 0x1407E931A */
-        ScanSignature
-        (
-            "\xB2\x02\xEB\x02\x32\xD2",
-            "xxxxxx"
-        ),
-
-        Assemble("mov dl, 1")
     );
 }
 
@@ -2943,21 +4472,6 @@ Patch "Disable Subsurface Scattering" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Disable Super Combat Particles" in "Graphics" by "Hyper" does "Disables the giant fist and foot particles during combat as Super Sonic."
-{
-    WriteProtected<byte>
-    (
-        /* 0x1407B5BF2 */
-        ScanSignature
-        (
-            "\x0F\x84\x00\x00\x00\x00\x0F\x1F\x84\x00\x00\x00\x00\x00\x48\x8D\x4B\x48\xE8\x00\x00\x00\x00\x84\xC0\x75\x0D\x48\x8D\x4B\x50\xE8\x00\x00\x00\x00\x84\xC0\x74\x0E\x48\x83\xC3\x60\x48\x3B\xDF\x75\xDD\xE9\x00\x00\x00\x00\x0F\x28\x45\x10\x48\x8D\x4B\x48\xF3\x0F\x10\x4D\x00\xF3\x0F\x10\x65\x00\xF3\x0F\x10\x5D\x00\x0F\x29\xB4\x24\x00\x00\x00\x00\xF3\x0F\x10\x75\x00\x66\x0F\x7F\x43\x00\x0F\x28\x55\x20\x66\x0F\x7F\x53\x00\xF3\x0F\x11\x5B\x00\xF3\x0F\x11\x63\x00\xE8\x00\x00\x00\x00\x48\x8D\x4B\x50\x0F\x28\xCE\xE8\x00\x00\x00\x00\xF3\x0F\x10\x05\x00\x00\x00\x00",
-            "xx????xxxx????xxxxx????xxxxxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxxx?xxxx?xxxx?xxxx????xxxx?xxxx?xxxxxxxx?xxxx?xxxx?x????xxxxxxxx????xxxx????"
-        ),
-
-        0xE9, 0x3C, 0x01, 0x00, 0x00
-    );
-}
-
 Patch "Disable Time Velocity Multiplier" in "Time" by "Hyper" does "Disables the time rate increasing based on how fast Sonic is moving."
 {
     WriteNop
@@ -3123,50 +4637,10 @@ Patch "Disable Water Audio Filter" in "Audio" by "Hyper"
     );
 }
 
-Patch "Hide Air Trick Hint Particles" in "Graphics" by "Hyper" does "Hides the particles that hint at dash rings, jump boards and springs being air trickable."
-{
-    // Dash Rings
-    WriteProtected<byte>
-    (
-        /* 0x14033752F */
-        ScanSignature
-        (
-            "\x74\x7C\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\x0F\xB6\x98\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x84\xDB\x74\x39\x84\xC0\x75\x47\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x4C\x8D\x87\x00\x00\x00\x00\x48\x8B\xC8\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xE9\x00\x00\x00\x00\x84\xC0\x74\x0E\x33\xD2\x48\x8D\x8F\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xC3\xCC\xCC\xCC\x48\x89\x5C\x24\x00",
-            "xxx????xxxxxxx????xxxxxx????xxx????xxx????x????xxxxxxxxx????xxxxxxx????xxx????xxxxxx????xxxx?xxxx?xxxxxx????xxxxxxxxx????x????xxxx?xxxx?xxxxxxxxxxxxx?"
-        ),
-
-        0xEB
-    );
-
-    // Jump Boards
-    WriteProtected<byte>
-    (
-        /* 0x140377917 */
-        ScanSignature
-        (
-            "\x0F\x84\x00\x00\x00\x00\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0",
-            "xx????xxxx?xxxx?x????xxx"
-        ),
-
-        0xE9, 0x84, 0x00, 0x00, 0x00
-    );
-
-    // Springs
-    WriteProtected<byte>
-    (
-        /* 0x1497E39EE */
-        ScanSignature
-        (
-            "\x48\x89\xC3\x85\xC9\x0F\x84\x00\x00\x00\x00\x83\xF9\x03\x0F\x84\x00\x00\x00\x00\x83\xF9\x02\x0F\x85\x00\x00\x00\x00\x80\xBF\x00\x00\x00\x00\x00\x0F\x29\xB4\x24\x00\x00\x00\x00\x0F\x85\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xF9\xE8\x00\x00\x00\x00\x31\xD2\x48\x89\xC1\xE8\x00\x00\x00\x00\x0F\x10\xB0\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xF9\xE8\x00\x00\x00\x00\x0F\xC6\xF6\x55\x48\x8B\x88\x00\x00\x00\x00\xF3\x0F\x5C\xB1\x00\x00\x00\x00\x0F\x54\x35\x00\x00\x00\x00\x0F\x2F\x35\x00\x00\x00\x00\x73\x2D\x48\x8B\x8F\x00\x00\x00\x00\xC6\x87\x00\x00\x00\x00\x00\x48\x85\xC9\x74\x07\xB2\x01\xE8\x00\x00\x00\x00",
-            "xxxxxxx????xxxxx????xxxxx????xx?????xxxx????xx????x????xxxxxxx????xxxxxx????xxx????x????xxxxxxx????xxxxxxx????xxxx????xxx????xxx????xxxxx????xx?????xxxxxxxx????"
-        ),
-
-        0xEB, 0x12
-    );
-}
-
 Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "Replaces the homing attack finish animation with randomised trick animations."
 //
+    #lib "Memory"
+
     using System.Runtime.InteropServices;
 
     static bool Initialised = false;
@@ -3201,10 +4675,10 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
         );
 
         /* 0x1407C9300 */
-        long playAnimFuncAddr = playAnimCallerAddr + Read<int>(playAnimCallerAddr + 0x01) + 0x05;
+        long playAnimFuncAddr = Memory.ReadCall(playAnimCallerAddr);
 
         /* 0x1407C9DB0 */
-        long setAnimSpeedFuncAddr = setAnimSpeedCallerAddr + Read<int>(setAnimSpeedCallerAddr + 0x01) + 0x05;
+        long setAnimSpeedFuncAddr = Memory.ReadCall(setAnimSpeedCallerAddr);
 
         fixed (float* pAnimSpeed = &AnimSpeed)
         {
@@ -3239,6 +4713,34 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
     }
 }
 
+Patch "Fix Damage from Jumping into Enemies" in "Fixes" by "Hyper" does "Fixes Sonic taking damage when jumping into enemies within a small frame window."
+//
+    #lib "Sonic"
+
+    static bool IsJumpPrevious = false;
+//
+{
+    void NotifyJumpDamageCollision(int stateId)
+    {
+        bool isJump = stateId == 8 || stateId == 9 || stateId == 48;
+
+        if (isJump)
+        {
+            Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Damage, 1.0f);
+            Sonic.Collision.ToggleEntityCollision(false);
+            IsJumpPrevious = true;
+        }
+        else if (IsJumpPrevious)
+        {
+            Sonic.Collision.SetCollisionSphere(Sonic.CollisionType.Default, 1.0f);
+            Sonic.Collision.ToggleEntityCollision(true);
+            IsJumpPrevious = false;
+        }
+    }
+
+    Sonic.State.AddStateNotifyAction(NotifyJumpDamageCollision);
+}
+
 Patch "Fix Quick Cyloop Lock-On" in "Fixes" by "WasifBoomz & The Duck Dealer" does "Fixes the lock-on target changing whenever Sonic performs a Quick Cyloop, allowing for consistent attacks during combat."
 {
     WriteProtected<byte>
@@ -3251,6 +4753,36 @@ Patch "Fix Quick Cyloop Lock-On" in "Fixes" by "WasifBoomz & The Duck Dealer" do
         ),
 
         0xEB
+    );
+}
+
+Patch "Fix Rail Switching Animation" in "Fixes" by "WasifBoomz & Sails" does "Stops the rail switching animation from ending abruptly."
+{
+    WriteAsmHook
+    (
+        $@"
+            ; Check if (unknown float) is equal to 40
+            cmp   dword ptr [r15+14h], 0x42200000
+            jz    setSpeed
+            jmp   originalCode
+			
+        setSpeed:
+            mov   dword ptr [r15+18h], 0x3F266666
+			
+        originalCode:
+            movss xmm1, dword ptr [r15+18h]
+            subss xmm0, dword ptr [rbx+r12*8]
+            andps xmm1, xmm9
+        ",
+			
+        /* 0x140DA61A5 */
+        ScanSignature
+        (
+            "\xF3\x41\x0F\x10\x4F\x18\xF3\x42\x0F\x5C\x04\xE3",
+            "xxxxxxxxxxxx"
+        ),
+			
+        HookBehavior.Replace
     );
 }
 
@@ -4557,6 +6089,44 @@ Unsupported objects;
     }
 }
 
+Patch "Force Light Scattering" in "Graphics" by "WasifBoomz & Robowil" does "Forces Light Scattering to render."
+{
+    // FxDOFParameter
+    WriteAsmHook
+    (
+        $@"
+            ; Enable Light Scattering
+            mov byte ptr [r8], 1
+			
+            ; Set Color to (0.015, 0.013, 0.023)
+            mov dword ptr [r8+16], 0x3C75C28F
+            mov dword ptr [r8+20], 0x3C54FDF4
+            mov dword ptr [r8+24], 0x3CBC6A7F
+			
+            ; Set Scattering Scale to 15
+            mov dword ptr [r8+32], 0x41700000
+			
+            ; Set Beta Mie to 0.6
+            mov dword ptr [r8+64], 0x3F19999A
+			
+            ; Set Gamma to 0.08
+            mov dword ptr [r8+68], 0x3DA3D70A
+			
+            ; Set ZNear and Far to 300 and 55000
+            mov dword ptr [r8+72], 0x43960000
+        ",
+			
+        /* 0x14828BC8C */
+        ScanSignature
+        (
+            "\x45\x0F\x10\x00\x44\x0F\x29\x8C\x24\xE0\x00\x00\x00",
+            "xxxxxxxxxxxxx"
+        ),
+			
+        HookBehavior.After
+    );
+}
+
 Patch "Force Maximum Geometry Detail" in "Graphics" by "Hyper" does
 /*
 Forces terrain, object and rail geometry to always render at the highest detail.
@@ -4801,6 +6371,48 @@ Patch "Force Xbox Series Controller UI" in "UI" by "Hyper"
     );
 }
 
+Patch "Hide Air Trick Hint Effects" in "Graphics" by "Hyper" does "Hides the particles that hint at dash rings, jump boards and springs being air trickable."
+{
+    // Dash Rings
+    WriteProtected<byte>
+    (
+        /* 0x14033752F */
+        ScanSignature
+        (
+            "\x74\x7C\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xC8\xE8\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\x0F\xB6\x98\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x84\xDB\x74\x39\x84\xC0\x75\x47\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x4C\x8D\x87\x00\x00\x00\x00\x48\x8B\xC8\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xE9\x00\x00\x00\x00\x84\xC0\x74\x0E\x33\xD2\x48\x8D\x8F\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x74\x24\x00\x48\x83\xC4\x20\x5F\xC3\xCC\xCC\xCC\x48\x89\x5C\x24\x00",
+            "xxx????xxxxxxx????xxxxxx????xxx????xxx????x????xxxxxxxxx????xxxxxxx????xxx????xxxxxx????xxxx?xxxx?xxxxxx????xxxxxxxxx????x????xxxx?xxxx?xxxxxxxxxxxxx?"
+        ),
+
+        0xEB
+    );
+
+    // Jump Boards
+    WriteProtected<byte>
+    (
+        /* 0x140377917 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0",
+            "xx????xxxx?xxxx?x????xxx"
+        ),
+
+        0xE9, 0x84, 0x00, 0x00, 0x00
+    );
+
+    // Springs
+    WriteProtected<byte>
+    (
+        /* 0x1497E39EE */
+        ScanSignature
+        (
+            "\x48\x89\xC3\x85\xC9\x0F\x84\x00\x00\x00\x00\x83\xF9\x03\x0F\x84\x00\x00\x00\x00\x83\xF9\x02\x0F\x85\x00\x00\x00\x00\x80\xBF\x00\x00\x00\x00\x00\x0F\x29\xB4\x24\x00\x00\x00\x00\x0F\x85\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xF9\xE8\x00\x00\x00\x00\x31\xD2\x48\x89\xC1\xE8\x00\x00\x00\x00\x0F\x10\xB0\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x89\xC2\x48\x89\xF9\xE8\x00\x00\x00\x00\x0F\xC6\xF6\x55\x48\x8B\x88\x00\x00\x00\x00\xF3\x0F\x5C\xB1\x00\x00\x00\x00\x0F\x54\x35\x00\x00\x00\x00\x0F\x2F\x35\x00\x00\x00\x00\x73\x2D\x48\x8B\x8F\x00\x00\x00\x00\xC6\x87\x00\x00\x00\x00\x00\x48\x85\xC9\x74\x07\xB2\x01\xE8\x00\x00\x00\x00",
+            "xxxxxxx????xxxxx????xxxxx????xx?????xxxx????xx????x????xxxxxxx????xxxxxx????xxx????x????xxxxxxx????xxxxxxx????xxxx????xxx????xxx????xxxxx????xx?????xxxxxxxx????"
+        ),
+
+        0xEB, 0x12
+    );
+}
+
 Patch "Hide Boost Gauge" in "UI" by "Hyper"
 {
     WriteProtected<byte>
@@ -4962,6 +6574,63 @@ Patch "Hide Oxygen Gauge" in "UI" by "Hyper"
     );
 }
 
+Patch "Hide Power Boost Effects" in "Graphics" by "NM & Hyper"
+{
+    /* Activation FX */
+    WriteNop
+    (
+        /* 0x1408D2AE5 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x83\x7D\x98\x00\x4C\x8D\x05\xCC\xCC\xCC\xCC\x41\xB9\x11\x00\x00\x00",
+            "x????xxxxxxx????xxxxxx"
+        ),
+
+        5
+    );
+
+    /* Boost Activation FX */
+    WriteProtected<byte>
+    (
+        /* 0x1408D1CD4 */
+        ScanSignature
+        (
+            "\x74\x09\x4C\x8D\x05\xCC\xCC\xCC\xCC\xEB\x4F\x48\x8B\xCF",
+            "xxxxx????xxxxx"
+        ),
+
+        0xEB, 0x09
+    );
+
+    /* Trail FX */
+    WriteProtected<byte>
+    (
+        /* 0x1407E931A */
+        ScanSignature
+        (
+            "\xB2\x02\xEB\x02\x32\xD2",
+            "xxxxxx"
+        ),
+
+        Assemble("mov dl, 1")
+    );
+}
+
+Patch "Hide Sixth Sense Effects" in "Graphics" by "Hyper" does "Hides the particle effect when Sonic senses an enemy attack."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1407E98CC */
+        ScanSignature
+        (
+            "\x74\x79\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4B\x6C",
+            "xxx????xxxx"
+        ),
+
+        0xEB
+    );
+}
+
 Patch "Hide Skill Piece Transition" in "UI" by "Hyper" does "Removes the transition when picking up skill pieces to put them into the skill points display."
 {
     WriteNop
@@ -5015,6 +6684,21 @@ Patch "Hide Star Beacons" in "Graphics" by "Hyper" does "Hides the beacons that 
         ),
 
         0x00
+    );
+}
+
+Patch "Hide Super Combat Effects" in "Graphics" by "Hyper" does "Hides the giant fist and foot particles during combat as Super Sonic."
+{
+    WriteProtected<byte>
+    (
+        /* 0x1407B5BF2 */
+        ScanSignature
+        (
+            "\x0F\x84\x00\x00\x00\x00\x0F\x1F\x84\x00\x00\x00\x00\x00\x48\x8D\x4B\x48\xE8\x00\x00\x00\x00\x84\xC0\x75\x0D\x48\x8D\x4B\x50\xE8\x00\x00\x00\x00\x84\xC0\x74\x0E\x48\x83\xC3\x60\x48\x3B\xDF\x75\xDD\xE9\x00\x00\x00\x00\x0F\x28\x45\x10\x48\x8D\x4B\x48\xF3\x0F\x10\x4D\x00\xF3\x0F\x10\x65\x00\xF3\x0F\x10\x5D\x00\x0F\x29\xB4\x24\x00\x00\x00\x00\xF3\x0F\x10\x75\x00\x66\x0F\x7F\x43\x00\x0F\x28\x55\x20\x66\x0F\x7F\x53\x00\xF3\x0F\x11\x5B\x00\xF3\x0F\x11\x63\x00\xE8\x00\x00\x00\x00\x48\x8D\x4B\x50\x0F\x28\xCE\xE8\x00\x00\x00\x00\xF3\x0F\x10\x05\x00\x00\x00\x00",
+            "xx????xxxx????xxxxx????xxxxxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxxx?xxxx?xxxx?xxxx????xxxx?xxxx?xxxxxxxx?xxxx?xxxx?x????xxxxxxxx????xxxx????"
+        ),
+
+        0xE9, 0x3C, 0x01, 0x00, 0x00
     );
 }
 
@@ -5101,6 +6785,21 @@ Patch "Infinite Quick Cyloop Gauge" in "Cheats" by "NM"
     );
 }
 
+Patch "Keep Red Rings on Death" in "Cheats" by "WasifBoomz" does "Prevents you from losing Red Rings after dying in Cyber Space."
+{
+    WriteNop
+    (
+        /* 0x1401B12B4 */
+        ScanSignature
+        (
+            "\x88\x41\x1A\xC3\x0F\xB6\x41\x18",
+            "xxxxxxxx"
+        ),
+			
+        3
+    );
+}
+
 Code "Play Random Soundtrack in Cyber Space" in "Audio" by "Hyper" does "Plays a random soundtrack every time you enter Cyber Space."
 //
     static long Address = 0;
@@ -5137,6 +6836,147 @@ Code "Play Random Soundtrack in Cyber Space" in "Audio" by "Hyper" does "Plays a
     else
     {
         WriteProtected<byte>(Address, System.Text.Encoding.UTF8.GetBytes(BgmList[new Random().Next(0, 30)]));
+    }
+}
+
+Code "Rail Crouch" in "Gameplay" by "WasifBoomz" does
+/*
+Allows Sonic to crouch on grind rails to gain or lose speed based on the angle of the rail.
+
+Notes;
+- The speed cap is increased while grinding.
+- The boost has been modified to become an accelerator while grinding.
+*/
+//
+    #lib "Sonic"
+    #lib "BlackboardStatus"
+    #lib "Bitwise"
+
+    #load "System.Numerics.dll"
+	
+    using System;
+    using System.Numerics;
+
+    const float grindCrouchSpeed = 36.0f;
+    const float boostGrindSpeedMin = 6.0f;
+    const float boostGrindSpeed = 50.0f;
+    static bool isInitialised = false;
+    static bool isRailCrouching = false;
+    static float* playerParamGrind = null;
+//
+{
+    if (!isInitialised)
+    {
+        fixed (float** pPlayerParamGrind = &playerParamGrind)
+        {
+            // Load Player Params Grind
+            WriteAsmHook
+            (
+                $@"
+                    mov rbx, {(long)pPlayerParamGrind}
+                    ; Get Pointer to Params
+                    mov qword ptr [rbx], rax
+                    ; Set Grind Speed to 100
+                    mov dword ptr [rax], 0x42C80000
+                    ; Set Boost Grind Speed to 0
+                    mov dword ptr [rax+4], 0x00000000
+                ",
+
+                /* 0x14080C75E */
+                ScanSignature
+                (
+                    "\x48\x8B\x4F\x40\x4C\x8D\x4C\x24\x30\x45\x33\xC0",
+                    "xxxxxxxxxxxx"
+                ),
+                        
+                HookBehavior.Before
+            );
+        }
+
+        fixed (bool* pIsRailCrouching = &isRailCrouching)
+        {
+            // Modify animation when crouching on rails
+            WriteAsmHook
+            (
+                $@"
+                    ; Check if the Grind Land animation is playing
+                    cmp byte ptr [r15 - 0x2], 0x52
+                    jnz end
+                    mov rcx, {(long)pIsRailCrouching}
+                    ; Check if the player is crouching
+                    cmp byte ptr [rcx], 1
+                    jnz reset
+                    ; Set Transition Time and Next State
+                    mov byte ptr [r15 + 0x2], 0x52
+                    mov dword ptr [r15 + 0x4], 0x3F800000
+                    jmp end
+                reset:
+                    ; Reset Transition Time and Next State
+                    mov byte ptr [r15 + 0x2], 0x51
+                    mov dword ptr [r15 + 0x4], 0x3E4CCCCD
+                end:
+                ",
+
+		/* 0x140DA25AC */
+                ScanSignature
+                (
+                    "\x41\x8B\x47\x08\xF2\x41\x0F\x10\x07",
+                    "xxxxxxxxx"
+                ),
+                        
+                HookBehavior.After
+            );
+        }
+
+	// Jump over the grind boost code
+        WriteProtected<byte>
+        (
+            /* 0x14AD7760A */
+            ScanSignature
+            (
+                "\x74\x0F\xBA\x01\x00\x00\x00\x48\x83\xC4\x20\x5B\xE9\xC5\x14\xAB\xF5",
+                "xxxxxxxxxxxxxxxxx"
+            ),
+
+            0xEB
+        );
+
+        isInitialised = true;
+    }
+
+    Sonic.Kinematics kinematics = Sonic.Kinematics.Get();
+
+    if (BlackboardStatus.Get() == null)
+        return;
+
+    if (kinematics == null)
+        return;
+
+    if (playerParamGrind == null)
+        return;
+
+    float* grindAcceleration = &playerParamGrind[2];
+    *grindAcceleration = 0;
+    isRailCrouching = false;
+
+    // Run this code when crouching on rails
+    if (Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerStomping))
+    {
+        if (Sonic.State.GetCurrentStateID() == 46)
+        {
+            isRailCrouching = true;
+            Sonic.Animation.SetAnimation("GRIND_LAND");
+        }
+
+	// Increase speed based on gravity
+        *grindAcceleration -= (Vector3.Normalize(*kinematics.Velocity).Y) * grindCrouchSpeed;
+    }
+    
+    // Increase acceleration when boosting on Grind Rails
+    if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost))
+    {
+        *grindAcceleration += (Vector3.Normalize(*kinematics.Velocity).Y) * boostGrindSpeed;
+        *grindAcceleration = Math.Max(*grindAcceleration, boostGrindSpeedMin);
     }
 }
 
@@ -5538,6 +7378,133 @@ Patch "Smooth Camera (v1.30)" in "Camera" by "Ahremic" does "Replaces linear cam
 
             HookBehavior.Replace
         );
+    }
+}
+
+Code "Somersault Landing at High Velocity" in "Animation" by "Hyper" does
+/*
+Enters Sonic into a somersault state when landing from a moderate height at a high velocity whilst retaining your momentum.
+
+This state lasts a fraction of a second, but keep in mind that within that time, you will be unable to perform certain actions until the animation is complete.
+*/
+//
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+    #lib "Sonic"
+
+    #load "System.Numerics.dll"
+
+    using System.Numerics;
+    using System.Collections.Generic;
+
+    static Vector3 LastGroundedPosition;
+
+    static List<int> ExitStates = new() { 8, 12, 15, 16, 161 };
+
+    static float HeightFallen = 0.0f;
+    
+    static bool IsInitialised = false;
+    static bool IsRecoveryJumpCharging = false;
+//
+{
+    if (!IsInitialised)
+    {
+        fixed (bool* pIsRecoveryJumpCharging = &IsRecoveryJumpCharging)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    movaps xmmword ptr [rsp + 0x38 + 0xFFFFFFFFFFFFFFE8], xmm6
+                    mov    rsi, rcx
+                    mov    rcx, {(long)pIsRecoveryJumpCharging}
+                    mov    dl, byte ptr [rsi + 0xC4]
+                    mov    byte ptr [rcx], dl
+                    mov    edx, 0x18
+                    mov    rcx, rdi
+                ",
+
+                /* 0x1408A0A1D */
+                ScanSignature
+                (
+                    "\x0F\x29\x74\x24\x20\x48\x8B\xF1\xBA\x18\x00\x00\x00",
+                    "xxxxxxxxxxxxx"
+                ),
+
+                HookBehavior.Replace
+            );
+        }
+
+        void NotifyStateSpringJumpHeadLandDamageCollision(int stateId)
+        {
+            bool isStateSpringJumpHeadLand = stateId == 163;
+            
+            if (isStateSpringJumpHeadLand)
+            {
+                Sonic.Collision.ToggleEntityCollision(false);
+            }
+            else if (Sonic.State.GetPreviousStateID() == 163)
+            {
+                Sonic.Collision.ToggleEntityCollision(true);
+            }
+        }
+
+        Sonic.State.AddStateNotifyAction(NotifyStateSpringJumpHeadLandDamageCollision);
+
+        IsInitialised = true;
+    }
+
+    var kinematics = Sonic.Kinematics.Get();
+
+    if (kinematics == null)
+        return;
+
+    if (Sonic.State.GetCurrentStateID() == 163)
+    {
+        if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerJump) ||
+            Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
+        {
+            // Exit into StateRun.
+            Sonic.State.SetState(4);
+        }
+    }
+
+    if (Sonic.IsGrounded())
+    {
+        LastGroundedPosition = *kinematics.Position;
+
+        if (!ExitStates.Contains(Sonic.State.GetPreviousStateID()))
+            goto Reset;
+
+        if (Sonic.Kinematics.GetHorizontalMagnitude() > 15.0f && HeightFallen >= 5.0f)
+        {
+            if (BlackboardStatus.Get() != null && Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost))
+            {
+                // Allow StateJump to continue running if we're boosting.
+                if (Sonic.State.GetPreviousStateID() == 8)
+                    goto Reset;
+            }
+
+            // Allow StateRecoveryJump to enter StateDropDash.
+            if (Sonic.State.GetPreviousStateID() == 12 && IsRecoveryJumpCharging)
+                goto Reset;
+
+            // Exit into StateSpringJumpHeadLand.
+            Sonic.State.SetState(163);
+        }
+        
+    Reset:
+        HeightFallen = 0.0f;
+    }
+    else
+    {
+        /* Reset position if the player has reached
+           apex height and has begun falling again. */
+        if ((LastGroundedPosition.Y - kinematics.Position->Y) < HeightFallen)
+        {
+            LastGroundedPosition = *kinematics.Position;
+        }
+
+        HeightFallen = LastGroundedPosition.Y - kinematics.Position->Y;
     }
 }
 

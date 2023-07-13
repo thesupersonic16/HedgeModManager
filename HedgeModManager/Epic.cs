@@ -82,6 +82,9 @@ namespace HedgeModManager
                 return null;
             }
 
+            if (installations == null || installations?.Count == 0)
+                return null;
+
             var games = new List<GameInstall>();
 
             foreach (var game in Games.GetSupportedGames())
@@ -116,7 +119,6 @@ namespace HedgeModManager
             {
                 launcherInstalled = JsonConvert.DeserializeObject<EGSLauncherInstalled>(File.ReadAllText(launcherInstalledFilePath));
             }
-
             catch
             {
                 return null;
