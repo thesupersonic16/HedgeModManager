@@ -1428,6 +1428,7 @@ Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" doe
     #lib "BlackboardStatus"
 
     static int[] enableStates = { 8, 11, 46, 162 };
+    static int[] disableStates = { 77 };
     static bool allowChargeAttack = false;
 //
 {
@@ -1446,6 +1447,12 @@ Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" doe
     {
         if (state == enableStates[i])
             allowChargeAttack = true;
+    }
+
+    for (int i = 0; i < disableStates.Length; i++)
+    {
+        if (state == disableStates[i])
+            allowChargeAttack = false;
     }
 
     if (allowChargeAttack && Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerJump) && Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
