@@ -190,10 +190,7 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized string similar to using System;
         ///using System.Collections.Generic;
-        ///using System.IO;
         ///using System.Linq;
-        ///using System.Reflection;
-        ///using System.Runtime.CompilerServices;
         ///using System.Text;
         ///using System.Threading.Tasks;
         ///using System.Runtime.InteropServices;
@@ -206,7 +203,8 @@ namespace HedgeModManager.Properties {
         ///        public static extern bool VirtualProtect(IntPtr lpAddress,
         ///                IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
         ///
-        ///       [rest of string was truncated]&quot;;.
+        ///        [DllImport(&quot;kernel32.dll&quot;, CharSet = CharSet.Auto)]
+        ///        public static extern  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MemoryService {
             get {
@@ -241,6 +239,15 @@ namespace HedgeModManager.Properties {
         internal static string URL_GCL_DL {
             get {
                 return ResourceManager.GetString("URL_GCL_DL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HE1ML.dll.
+        /// </summary>
+        internal static string URL_HE1ML_DL {
+            get {
+                return ResourceManager.GetString("URL_HE1ML_DL", resourceCulture);
             }
         }
         
