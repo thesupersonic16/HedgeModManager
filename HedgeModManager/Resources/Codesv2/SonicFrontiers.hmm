@@ -6839,6 +6839,147 @@ Code "Play Random Soundtrack in Cyber Space" in "Audio" by "Hyper" does "Plays a
     }
 }
 
+Code "Rail Crouch" in "Gameplay" by "WasifBoomz" does
+/*
+Allows Sonic to crouch on grind rails to gain or lose speed based on the angle of the rail.
+
+Notes;
+- The speed cap is increased while grinding.
+- The boost has been modified to become an accelerator while grinding.
+*/
+//
+    #lib "Sonic"
+    #lib "BlackboardStatus"
+    #lib "Bitwise"
+
+    #load "System.Numerics.dll"
+	
+    using System;
+    using System.Numerics;
+
+    const float grindCrouchSpeed = 36.0f;
+    const float boostGrindSpeedMin = 6.0f;
+    const float boostGrindSpeed = 50.0f;
+    static bool isInitialised = false;
+    static bool isRailCrouching = false;
+    static float* playerParamGrind = null;
+//
+{
+    if (!isInitialised)
+    {
+        fixed (float** pPlayerParamGrind = &playerParamGrind)
+        {
+            // Load Player Params Grind
+            WriteAsmHook
+            (
+                $@"
+                    mov rbx, {(long)pPlayerParamGrind}
+                    ; Get Pointer to Params
+                    mov qword ptr [rbx], rax
+                    ; Set Grind Speed to 100
+                    mov dword ptr [rax], 0x42C80000
+                    ; Set Boost Grind Speed to 0
+                    mov dword ptr [rax+4], 0x00000000
+                ",
+
+                /* 0x14080C75E */
+                ScanSignature
+                (
+                    "\x48\x8B\x4F\x40\x4C\x8D\x4C\x24\x30\x45\x33\xC0",
+                    "xxxxxxxxxxxx"
+                ),
+                        
+                HookBehavior.Before
+            );
+        }
+
+        fixed (bool* pIsRailCrouching = &isRailCrouching)
+        {
+            // Modify animation when crouching on rails
+            WriteAsmHook
+            (
+                $@"
+                    ; Check if the Grind Land animation is playing
+                    cmp byte ptr [r15 - 0x2], 0x52
+                    jnz end
+                    mov rcx, {(long)pIsRailCrouching}
+                    ; Check if the player is crouching
+                    cmp byte ptr [rcx], 1
+                    jnz reset
+                    ; Set Transition Time and Next State
+                    mov byte ptr [r15 + 0x2], 0x52
+                    mov dword ptr [r15 + 0x4], 0x3F800000
+                    jmp end
+                reset:
+                    ; Reset Transition Time and Next State
+                    mov byte ptr [r15 + 0x2], 0x51
+                    mov dword ptr [r15 + 0x4], 0x3E4CCCCD
+                end:
+                ",
+
+		/* 0x140DA25AC */
+                ScanSignature
+                (
+                    "\x41\x8B\x47\x08\xF2\x41\x0F\x10\x07",
+                    "xxxxxxxxx"
+                ),
+                        
+                HookBehavior.After
+            );
+        }
+
+	// Jump over the grind boost code
+        WriteProtected<byte>
+        (
+            /* 0x14AD7760A */
+            ScanSignature
+            (
+                "\x74\x0F\xBA\x01\x00\x00\x00\x48\x83\xC4\x20\x5B\xE9\xC5\x14\xAB\xF5",
+                "xxxxxxxxxxxxxxxxx"
+            ),
+
+            0xEB
+        );
+
+        isInitialised = true;
+    }
+
+    Sonic.Kinematics kinematics = Sonic.Kinematics.Get();
+
+    if (BlackboardStatus.Get() == null)
+        return;
+
+    if (kinematics == null)
+        return;
+
+    if (playerParamGrind == null)
+        return;
+
+    float* grindAcceleration = &playerParamGrind[2];
+    *grindAcceleration = 0;
+    isRailCrouching = false;
+
+    // Run this code when crouching on rails
+    if (Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerStomping))
+    {
+        if (Sonic.State.GetCurrentStateID() == 46)
+        {
+            isRailCrouching = true;
+            Sonic.Animation.SetAnimation("GRIND_LAND");
+        }
+
+	// Increase speed based on gravity
+        *grindAcceleration -= (Vector3.Normalize(*kinematics.Velocity).Y) * grindCrouchSpeed;
+    }
+    
+    // Increase acceleration when boosting on Grind Rails
+    if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost))
+    {
+        *grindAcceleration += (Vector3.Normalize(*kinematics.Velocity).Y) * boostGrindSpeed;
+        *grindAcceleration = Math.Max(*grindAcceleration, boostGrindSpeedMin);
+    }
+}
+
 Patch "Rebind Quick Restart to Back" in "Gameplay" by "Hyper" does "Rebinds the quick restart command from LT + RT + Back to just pressing the Back button."
 {
     // GameModeBattleRush
