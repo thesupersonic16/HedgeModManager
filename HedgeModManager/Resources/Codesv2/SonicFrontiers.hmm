@@ -1455,7 +1455,7 @@ Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" doe
             allowChargeAttack = false;
     }
 
-    if (allowChargeAttack && Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerJump) && Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
+    if (allowChargeAttack && Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerJump) && Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack) && state != 62)
     {
         Sonic.State.SetState(148);
         allowChargeAttack = false;
@@ -6309,6 +6309,48 @@ Patch "Force PlayStation 5 Controller UI" in "UI" by "Hyper"
     );
 }
 
+Patch "Force Screen Space Global Illumination" in "Graphics" by "WasifBoomz" does
+/*
+Forces Screen Space Global Illumination, giving the world more atmosphere and better lighting.
+
+Notes;
+- This effect may result in artifacts.
+*/
+{
+    // FxSSGIParameter
+    WriteAsmHook
+    (
+        $@"
+            ; Enable SSGI
+            mov byte ptr [r8], 1
+            
+            ; Set Intensity to 6
+            mov dword ptr [r8+4], 0x41800000
+            
+            ; Enable Albedo
+            mov byte ptr [r8+8], 1
+            
+            ; Enable Parameter
+            mov byte ptr [r8+9], 1
+            
+            ; Enable Denoiser
+            mov byte ptr [r8+12], 1
+            
+            ; Set Ray Length to 6
+            mov dword ptr [r8+16], 0x40C00000
+        ",
+            
+        /* 0x1401EE3FD */
+        ScanSignature
+        (
+            "\x49\x3B\xC2\x0F\x85\x76\x02\x00\x00",
+            "xxxxxxxxx"
+        ),
+            
+        HookBehavior.After
+    );
+}
+
 Patch "Force Switch Controller UI" in "UI" by "Hyper"
 {
     WriteAsmHook
@@ -6807,6 +6849,46 @@ Patch "Keep Red Rings on Death" in "Cheats" by "WasifBoomz" does "Prevents you f
     );
 }
 
+Code "Lose Speed on Collision" in "Physics" by "WasifBoomz" does "Reduce speed when you hit a wall, rather than keeping your speed."
+//
+    #lib "BlackboardStatus"
+    #lib "Sonic"
+
+    #load "System.Numerics.dll"
+	
+    using System;
+    using System.Numerics;
+
+    static float* deltaTime = (float*)0x14F26C;
+    static Vector3 position = Vector3.Zero;
+    static float currentTimeSliding = 0.0f;
+//
+{
+    Sonic.Kinematics kinematics = Sonic.Kinematics.Get();
+    if (kinematics == null)
+        return;
+    
+    Vector3 distanceVec = position - *kinematics.Position;
+    float distance = (float)Math.Sqrt(distanceVec.X * distanceVec.X + distanceVec.Z * distanceVec.Z) / *deltaTime;
+
+    if (Sonic.Kinematics.GetHorizontalMagnitude() > distance * 1.5 && distance < 15.0 && Sonic.Kinematics.GetHorizontalMagnitude() > 15.0)
+    {
+        currentTimeSliding += *deltaTime;
+        if (currentTimeSliding > 0.1f)
+        {
+            float yVel = kinematics.Velocity->Y;
+            *kinematics.Velocity = Vector3.Normalize(*kinematics.Velocity) * distance;
+            kinematics.Velocity->Y = yVel;
+        }
+    }
+    else
+    {
+        currentTimeSliding = 0;
+    }
+
+    position = *kinematics.Position;
+}
+
 Code "Play Random Soundtrack in Cyber Space" in "Audio" by "Hyper" does "Plays a random soundtrack every time you enter Cyber Space."
 //
     static long Address = 0;
@@ -6865,8 +6947,8 @@ Notes;
     using System.Numerics;
 
     const float grindCrouchSpeed = 36.0f;
-    const float boostGrindSpeedMin = 6.0f;
-    const float boostGrindSpeed = 50.0f;
+    const float boostGrindSpeedMin = 12.0f;
+    const float boostGrindSpeed = 30.0f;
     static bool isInitialised = false;
     static bool isRailCrouching = false;
     static float* playerParamGrind = null;
@@ -6982,6 +7064,7 @@ Notes;
     // Increase acceleration when boosting on Grind Rails
     if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost))
     {
+        *grindAcceleration += boostGrindSpeedMin;
         *grindAcceleration += (Vector3.Normalize(*kinematics.Velocity).Y) * boostGrindSpeed;
         *grindAcceleration = Math.Max(*grindAcceleration, boostGrindSpeedMin);
     }
