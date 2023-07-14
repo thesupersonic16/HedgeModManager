@@ -1874,7 +1874,11 @@ namespace HedgeModManager
                             var asset = release.Assets[0];
                             var downloader = new DownloadWindow($"Downloading Hedge Mod Manager ({release.TagName})", asset.BrowserDownloadUrl.ToString(), path)
                             {
-                                DownloadCompleted = () => HedgeApp.PerformUpdate(path, asset.ContentType)
+                                DownloadCompleted = () =>
+                                {
+                                    HedgeApp.UnInstallOtherLoader();
+                                    HedgeApp.PerformUpdate(path, asset.ContentType);
+                                }
                             };
                             downloader.Start();
                         }
@@ -1889,7 +1893,11 @@ namespace HedgeModManager
                         var downloader = new DownloadWindow($"Downloading {artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})",
                             string.Format(HMMResources.URL_HMM_DEV, workflow.CheckSuiteID, artifact.ID), path)
                         {
-                            DownloadCompleted = () => HedgeApp.PerformUpdate(path, "application/x-zip-compressed")
+                            DownloadCompleted = () =>
+                            {
+                                HedgeApp.UnInstallOtherLoader();
+                                HedgeApp.PerformUpdate(path, "application/x-zip-compressed");
+                            }
                         };
                         downloader.Start();
                     }

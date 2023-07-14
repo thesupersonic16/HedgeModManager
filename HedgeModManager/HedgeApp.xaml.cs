@@ -685,6 +685,30 @@ namespace HedgeModManager
             return box;
         }
 
+        public static bool UnInstallOtherLoader()
+        {
+            if (CurrentGame?.ModLoader == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                var path = Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderFileName);
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static bool InstallOtherLoader(bool toggle = true)
         {
             bool installed = false;
