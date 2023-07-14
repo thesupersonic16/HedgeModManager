@@ -160,7 +160,10 @@ namespace HedgeModManager
 
             // Include commit hash if defined
             if (!string.IsNullOrEmpty(RepoCommit))
+            {
+                ProgramName += " Development";
                 VersionString += $"-{RepoCommit.Substring(0, 7)}";
+            }
 
             var application = new HedgeApp();
             application.InitializeComponent();
