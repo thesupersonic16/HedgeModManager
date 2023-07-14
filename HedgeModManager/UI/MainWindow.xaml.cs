@@ -386,7 +386,7 @@ namespace HedgeModManager
 
             DataContext = ViewModel;
 
-            Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {HedgeApp.CurrentGame} ({SelectedModProfile?.Name})" + (HedgeApp.IsLinux ? " (Linux)" : "");
+            Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {SelectedModProfile?.Name}" + (HedgeApp.IsLinux ? " (Linux)" : "");
 
             if (HedgeApp.CurrentGame.ModLoader != null)
             {
