@@ -4176,6 +4176,20 @@ Patch "Disable Power Boost" in "Gameplay" by "Hyper"
 
 Patch "Disable Power Boost Audio" in "Audio" by "Hyper"
 {
+    // Activation SFX
+    WriteNop
+    (
+        /* 0x1408D2B23 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\xBA\x5F\x23\x00\x00\x48\x8D\x4C\x24\x68",
+            "x????xxxxxxxxxx"
+        ),
+
+        5
+    );
+
+    // Trail SFX
     WriteProtected<byte>
     (
         /* 0x141413C68 */
