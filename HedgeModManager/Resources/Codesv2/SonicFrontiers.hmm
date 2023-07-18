@@ -450,6 +450,8 @@ Library "Memory" by "Hyper"
 
 Library "Sonic" by "Hyper, NM & Ahremic"
 {
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
     #lib "Collections"
     #lib "GameDocument"
     #lib "GameObject"
@@ -482,6 +484,17 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             return false;
 
         return Read<bool>(playerInfo + 0x2EE);
+    }
+
+    public bool IsGroundedSpecial()
+    {
+        if (BlackboardStatus.Get() == 0)
+            return true;
+
+        return IsGrounded() ||
+            Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsGrind) ||
+            Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsSpringJump) ||
+            Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsWallClimb);
     }
 
     public static class Animation
@@ -937,12 +950,18 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         {
             InitStateRedirector();
 
+            if (_stateNotifyActions.Contains(action))
+                return;
+
             _stateNotifyActions.Add(action);
         }
 
         public static void RemoveStateNotifyAction(TStateNotifyAction action)
         {
             InitStateRedirector();
+
+            if (!_stateNotifyActions.Contains(action))
+                return;
 
             _stateNotifyActions.Remove(action);
         }
@@ -4724,6 +4743,32 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
         }
 
         Initialised = true;
+    }
+}
+
+Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform another Air Boost after previously using it before performing a homing attack or using a spring."
+//
+    #lib "Sonic"
+
+    static bool IsAdditionalAirBoost = false;
+//
+{
+    void NotifyAirBoostReset(int stateId)
+    {
+        /* Restore Air Boost for
+           StateHomingFinished and StateSpringJump. */
+        if (stateId == 64 || stateId == 162)
+            IsAdditionalAirBoost = true;
+    }
+
+    Sonic.State.AddStateNotifyAction(NotifyAirBoostReset);
+
+    if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerBoost) && !Sonic.IsGroundedSpecial() && IsAdditionalAirBoost)
+    {
+        // Exit into StateAirBoost.
+        Sonic.State.SetState(23);
+        
+        IsAdditionalAirBoost = false;
     }
 }
 
