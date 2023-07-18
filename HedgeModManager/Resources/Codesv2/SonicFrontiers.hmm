@@ -7108,6 +7108,78 @@ This replaces the basic X button QTE to dodge the rifle projectile in the final 
     );
 }
 
+Code "Retain Ground Velocity for Jump" in "Physics" by "Hyper"
+//
+    #lib "Memory"
+    #lib "Sonic"
+
+    static bool IsInitialised = false;
+    static bool IsStateJump = false;
+//
+{
+    if (!IsInitialised)
+    {
+        fixed (bool* pIsStateJump = &IsStateJump)
+        {
+            /* v1.30: 0x1408406F8 */
+            var callerFuncAddr = ScanSignature
+            (
+                "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x20\xBA\x20\x16\x1E\x71\x44\x0F\x28\xC0\x48\x8B\x88\x80\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x0F\x28\xF8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8D\x55\xE7",
+                "x????xxxxxxxxxxxxxxxxxxxxx????xxxx????xxxxxxx????xxxx????xxxx"
+            );
+
+            /* v1.30: 0x14080CA10 */
+            var mainFuncAddr = Memory.ReadCall(callerFuncAddr);
+
+            // Update posture to allow retaining ground velocity.
+            WriteAsmHook
+            (
+                $@"
+                    mov   rdi, rcx
+
+                    ; Check if we're in the jump state
+                    push  r11
+                    mov   r11, {(long)pIsStateJump}
+                    mov   r11b, byte ptr [r11]
+                    cmp   r11b, 0
+                    jz    default
+                    mov   al, 1
+                    jmp   exit
+
+                default:
+                    xor   edx, edx
+                    mov   rcx, [rcx + 0x28] ; RCX = BlackboardStatus
+                    mov   eax, edx
+                    and   eax, 0x3F
+                    movzx r8d, al
+                    mov   eax, edx
+                    shr   rax, 6
+                    mov   rax, [rcx + rax * 8 + 0x30]
+                    bt    rax, r8
+                    setb  al
+
+                exit:
+                    pop   r11
+                ",
+
+                /* v1.30: 0x14080CA16 */
+                mainFuncAddr + 6,
+
+                HookBehavior.Replace
+            );
+        }
+
+        IsInitialised = true;
+    }
+
+    void NotifyStateJump(int stateId)
+    {
+        IsStateJump = stateId == 8;
+    }
+
+    Sonic.State.AddStateNotifyAction(NotifyStateJump);
+}
+
 Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
 //
     using System.Diagnostics;
