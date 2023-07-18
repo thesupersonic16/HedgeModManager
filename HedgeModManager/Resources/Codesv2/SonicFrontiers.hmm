@@ -7108,7 +7108,14 @@ This replaces the basic X button QTE to dodge the rifle projectile in the final 
     );
 }
 
-Code "Retain Ground Velocity for Jump" in "Physics" by "Hyper"
+Code "Retain Ground Velocity for Jump" in "Physics" by "Hyper" does
+/*
+Retains Sonic's ground velocity when jumping.
+
+Notes;
+- This will allow you to retain velocity when jumping out of a Drop Dash.
+- The "Jump Deceleration" and "Maintain boost during a jump" options can remain active without conflicting with this code.
+*/
 //
     #lib "Memory"
     #lib "Sonic"
