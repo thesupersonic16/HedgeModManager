@@ -4748,6 +4748,8 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
 
 Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform another Air Boost after previously using it before performing a homing attack or using a spring."
 //
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
     #lib "Sonic"
 
     static bool IsAdditionalAirBoost = false;
@@ -4762,6 +4764,13 @@ Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform a
     }
 
     Sonic.State.AddStateNotifyAction(NotifyAirBoostReset);
+
+    if (BlackboardStatus.Get() != 0)
+    {
+        // Disable restored Air Boost when diving.
+        if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsDiving))
+            IsAdditionalAirBoost = false;
+    }
 
     if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerBoost) && !Sonic.IsGroundedSpecial() && IsAdditionalAirBoost)
     {
