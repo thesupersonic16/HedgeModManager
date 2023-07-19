@@ -4752,15 +4752,24 @@ Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform a
     #lib "BlackboardStatus"
     #lib "Sonic"
 
+    static int[] AirBoostStates =
+    {
+        53, // StateStompingFlip
+        58, // StateStompingBounce
+        64, // StateHomingFinished
+        162 // StateSpringJump
+    }
+
     static bool IsAdditionalAirBoost = false;
 //
 {
     void NotifyAirBoostReset(int stateId)
     {
-        /* Restore Air Boost for
-           StateHomingFinished and StateSpringJump. */
-        if (stateId == 64 || stateId == 162)
-            IsAdditionalAirBoost = true;
+        foreach (int restoreState in AirBoostStates)
+        {
+            if (restoreState == stateId)
+                IsAdditionalAirBoost = true;
+        }
     }
 
     Sonic.State.AddStateNotifyAction(NotifyAirBoostReset);
