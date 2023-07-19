@@ -3276,6 +3276,68 @@ Patch "Hide Fixed Camera Notifications" in "UI" by "Hyper" does "Hides the fixed
     );
 }
 
+Patch "Disable Bullet Time" in "Gameplay" by "Hyper" does
+/*
+Disables the slow-mo sequences when performing certain actions.
+
+Notes;
+- This only applies to sequences that apply the bullet time filter, other actions like QTEs will remain unchanged.
+*/
+{
+    // Disable bullet time for bosses and parry.
+    WriteProtected<byte>
+    (
+        /* 0x1402193E0 */
+        ScanSignature
+        (
+            "\x40\x53\x48\x83\xEC\x50\x0F\x29\x74\x24\x40\x48\x8B\xD9\x0F\x29\x7C\x24\x30\x0F\x28\xF1",
+            "xxxxxxxxxxxxxxxxxxxxxx"
+        )
+        + 0x06,
+
+        0xEB, 0x40
+    );
+
+    // Disable bullet time audio for parry.
+    WriteProtected<byte>
+    (
+        /* 0x1408CF3BF */
+        ScanSignature
+        (
+            "\x4C\x8D\x05\xCC\xCC\xCC\xCC\x48\x8B\xD7\x48\x8D\x4C\x24\x60\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4E\x58",
+            "xxx????xxxxxxxxx????xxxx"
+        ),
+
+        0xEB, 0x40
+    );
+
+    // Disable bullet time for Giganto dash rings.
+    WriteProtected<byte>
+    (
+        /* 0x1402A1C4F */
+        ScanSignature
+        (
+            "\x48\x8D\x4D\x97\x0F\x28\xF9",
+            "xxxxxxx"
+        ),
+
+        0xE9, 0xCC, 0x00, 0x00, 0x00
+    );
+
+    // Disable bullet time for Ninja.
+    WriteProtected<byte>
+    (
+        /* 0x1405A7E7B */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4E\x3C\xE8\xCC\xCC\xCC\xCC\x84\xC0\x75\x37",
+            "x????xxxxx????xxxx"
+        ),
+
+        0xEB, 0x77
+    );
+}
+
 Patch "Disable Bullet Time Filter" in "Graphics" by "Hyper" does "Disables the greyscale filter applied when entering bullet time from a parry."
 {
     WriteNop
