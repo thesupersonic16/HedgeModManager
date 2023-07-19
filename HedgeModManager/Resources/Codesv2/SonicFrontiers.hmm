@@ -4850,8 +4850,8 @@ Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform a
 {
     void NotifyAirBoostReset(int stateId)
     {
-        // Reset flag for StateAirBoost.
-        if (stateId == 23)
+        // Reset flag for StateAirBoost or StateSpinBoost.
+        if (stateId == 23 || stateId == 116)
         {
             IsRestoredAirBoost = false;
             return;
