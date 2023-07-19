@@ -129,6 +129,14 @@ Library "BlackboardStatus" by "Hyper"
         return Blackboard.GetBlackboardContent(blackboard, "BlackboardStatus");
     }
 
+    public bool IsSuper(long blackboardStatus = 0)
+    {
+        if (blackboardStatus == 0 && (blackboardStatus = Get()) == 0)
+            return false;
+
+        return Read<bool>(blackboardStatus + 0x24);
+    }
+
     public long* GetFieldPointer(long blackboardStatus = 0, long fieldOffset = 0)
     {
         if (blackboardStatus == 0 && (blackboardStatus = Get()) == 0)
@@ -4760,15 +4768,22 @@ Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform a
         162 // StateSpringJump
     }
 
-    static bool IsAdditionalAirBoost = false;
+    static bool IsRestoredAirBoost = false;
 //
 {
     void NotifyAirBoostReset(int stateId)
     {
+        // Reset flag for StateAirBoost.
+        if (stateId == 23)
+        {
+            IsRestoredAirBoost = false;
+            return;
+        }
+
         foreach (int restoreState in AirBoostStates)
         {
             if (restoreState == stateId)
-                IsAdditionalAirBoost = true;
+                IsRestoredAirBoost = true;
         }
     }
 
@@ -4776,17 +4791,19 @@ Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform a
 
     if (BlackboardStatus.Get() != 0)
     {
-        // Disable restored Air Boost when diving.
+        // Disable restored air boost for Super Sonic.
+        if (BlackboardStatus.IsSuper())
+            IsRestoredAirBoost = false;
+
+        // Disable restored air boost for diving.
         if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsDiving))
-            IsAdditionalAirBoost = false;
+            IsRestoredAirBoost = false;
     }
 
-    if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerBoost) && !Sonic.IsGroundedSpecial() && IsAdditionalAirBoost)
+    if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerBoost) && !Sonic.IsGroundedSpecial() && IsRestoredAirBoost)
     {
         // Exit into StateAirBoost.
         Sonic.State.SetState(23);
-        
-        IsAdditionalAirBoost = false;
     }
 }
 
