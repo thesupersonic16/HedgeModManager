@@ -1442,7 +1442,7 @@ Code "Allow Attacking from Stomp Bounce" in "Gameplay" by "Hyper"
     if (Sonic.State.GetCurrentStateID() == 11)
     {
         if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
-            Sonic.State.SetState(Sonic.IsGrounded() ? 4 : 15);
+            Sonic.State.SetState(15);
     }
 }
 
@@ -5386,19 +5386,35 @@ Patch "Fix Shadow Stutter" in "Fixes" by "Hyper" does "Fixes shadows not interpo
     );
 }
 
-Patch "Fix Stomp Reset" in "Fixes" by "Hyper" does "Fixes the stomp attack only resetting once you hit the ground, allowing you to perform multiple stomps whilst still airborne."
-{
-    WriteNop
-    (
-        /* 0x1408FF6C0 */
-        ScanSignature
-        (
-            "\x74\x1C\x45\x33\xC0\x48\x8B\xCB\x41\x8D\x50\x36",
-            "xxxxxxxxxxxx"
-        ),
+Code "Fix Stomp Reset" in "Fixes" by "Hyper" does "Fixes the stomp attack only resetting once you hit the ground, allowing you to perform multiple stomps whilst still airborne."
+//
+    #lib "Sonic"
 
-        2
-    );
+    static bool IsInitialised = false;
+//
+{
+    if (!IsInitialised)
+    {
+        WriteNop
+        (
+            /* 0x1408FF6C0 */
+            ScanSignature
+            (
+                "\x74\x1C\x45\x33\xC0\x48\x8B\xCB\x41\x8D\x50\x36",
+                "xxxxxxxxxxxx"
+            ),
+
+            2
+        );
+
+        IsInitialised = true;
+    }
+    
+    if (Sonic.State.GetCurrentStateID() == 11)
+    {
+        if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerStomping))
+            Sonic.State.SetState(54);
+    }
 }
 
 Patch "Fix Upreel Grip Position" in "Fixes" by "ĐeäTh" does
