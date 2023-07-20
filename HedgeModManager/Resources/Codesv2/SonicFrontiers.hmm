@@ -7874,8 +7874,9 @@ Idea by Yosho.
     using System.Numerics;
 
     static bool IsInitialised = false;
+    static bool IsStompBeginPositionPreserved = false;
 
-    static Vector3 LastGroundedPosition;
+    static Vector3 StompBeginPosition;
 
     static float HeightFallen = 0.0f;
     static float HeightThreshold = 15.0f;
@@ -7956,23 +7957,25 @@ Idea by Yosho.
     if (kinematics == null)
         return;
 
-    if (Sonic.IsGroundedSpecial())
+    if (Sonic.State.GetCurrentStateID() == 54)
     {
-        HeightFallen = 0.0f;
-    }
-    else
-    {
-        /* Reset position if the player has reached
-           apex height and has begun falling again. */
-        if ((LastGroundedPosition.Y - kinematics.Position->Y) < HeightFallen)
+        if (!IsStompBeginPositionPreserved)
         {
-            LastGroundedPosition = *kinematics.Position;
-        }
+            StompBeginPosition = *kinematics.Position;
 
-        HeightFallen = LastGroundedPosition.Y - kinematics.Position->Y;
+            IsStompBeginPositionPreserved = true;
+        }
+        
+        HeightFallen = StompBeginPosition.Y - kinematics.Position->Y;
 
         // 11.0f is the default value for boundStompingCollisionScale.
         Radius = MathHelper.Clamp(HeightFallen - HeightThreshold, 11.0f, 33.0f);
+    }
+    else
+    {
+        IsStompBeginPositionPreserved = false;
+
+        HeightFallen = 0.0f;
     }
 }
 
