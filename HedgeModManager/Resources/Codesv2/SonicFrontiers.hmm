@@ -1480,7 +1480,7 @@ Patch "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Soni
     Sonic.State.AddStateNotifyAction(NotifyStateRunDamageCollision);
 }
 
-Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by pressing the attack button while holding the jump button."
+Code "Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by pressing the attack button while holding the jump button."
 //
     #lib "Sonic"
     #lib "Bitwise"
@@ -1514,7 +1514,7 @@ Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" doe
     }
 }
 
-Code "Always Allow Dodging from Homing Shot" in "Gameplay" by "Hyper" does "Allows Sonic to exit from Homing Shot by dodging."
+Code "Allow Dodging from Homing Shot" in "Gameplay" by "Hyper" does "Allows Sonic to exit from Homing Shot by dodging."
 //
     #lib "Sonic"
 //
@@ -1585,7 +1585,7 @@ Affected skills;
     }
 }
 
-Patch "Always Allow Spin Dash on Dash Panels" in "Gameplay" by "Hyper" does "Allows Sonic to Spin Dash through dash panels without interruptions."
+Patch "Allow Spin Dash on Dash Panels" in "Gameplay" by "Hyper" does "Allows Sonic to Spin Dash through dash panels without interruptions."
 {
     WriteProtected<byte>
     (
