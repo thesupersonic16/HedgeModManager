@@ -387,6 +387,26 @@ Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
     }
 }
 
+Library "MathHelper" by "Hyper"
+{
+    // The .NET version HMM uses does not provide the native Math.Clamp() function.
+    public T Clamp<T>(T value, T minValue, T maxValue) where T : IComparable<T>
+    {
+        if (value.CompareTo(minValue) < 0)
+        {
+            return minValue;
+        }
+        else if (value.CompareTo(maxValue) > 0)
+        {
+            return maxValue;
+        }
+        else
+        {
+            return value;
+        }
+    }
+}
+
 Library "Memory" by "Hyper"
 {
     public long ReadCall(long addr)
@@ -7758,150 +7778,120 @@ This state lasts a fraction of a second, but keep in mind that within that time,
     }
 }
 
-Patch "Super Stomp" in "Gameplay" by "Hyper & Yosho" does
+Code "Super Stomp" in "Gameplay" by "Hyper & Yosho" does
 /*
 Sends a powerful shockwave when landing a stomp from a great height.
 
 Idea by Yosho.
 */
 //
-    static float StompingTime = 0.0f;
-    static float SuperStompThreshold = 0.35f;
+    #lib "MathHelper"
+    #lib "Memory"
+
+    #load "System.Numerics.dll"
+
+    using System.Numerics;
+
+    static bool IsInitialised = false;
+
+    static Vector3 LastGroundedPosition;
+
+    static float HeightFallen = 0.0f;
+    static float HeightThreshold = 15.0f;
+    static float Radius = 11.0f;
 //
 {
-    fixed (float* pStompingTime = &StompingTime)
-    fixed (float* pSuperStompThreshold = &SuperStompThreshold)
+    if (!IsInitialised)
     {
-        // Create timer for stomping.
-        WriteAsmHook
-        (
-            $@"
-                mov    r15, [rcx + 0x18]
-                mov    rdi, rcx
-                mov    rcx, {(long)pStompingTime}
-                movss  xmm8, dword ptr [rcx]
-                addss  xmm8, xmm1
-                movss  dword ptr [rcx], xmm8
-                mov    rcx, r15
-                movaps xmmword ptr [rsp + 0x80 + 0xFFFFFFFFFFFFFFF0], xmm6
-            ",
-
-            /* 0x140850553 */
-            ScanSignature
-            (
-                "\x4C\x8B\x79\x18\x48\x8B\xF9\x49\x8B\xCF",
-                "xxxxxxxxxx"
-            ),
-
-            HookBehavior.Replace
-        );
-
-        /* 0x1408ACA68 */
-        long shockwaveCondAddr = ScanSignature
-        (
-            "\xE8\xCC\xCC\xCC\xCC\x83\xBE\xB0\x00\x00\x00\x02\x48\x8B\xE8",
-            "x????xxxxxxxxxx"
-        );
-
-        // Set stomp shockwave condition.
-        WriteAsmHook
-        (
-            $@"
-                mov    rax, {shockwaveCondAddr + Read<int>(shockwaveCondAddr + 1) + 5}
-                call   rax
-                mov    rbp, {(long)pStompingTime}
-                movss  xmm8, dword ptr [rbp]
-                mov    rbp, {(long)pSuperStompThreshold}
-                movss  xmm9, dword ptr [rbp]
-                comiss xmm8, xmm9
-                mov    ebp, dword ptr [rsi + 0xB0] ; preserve stomp bounce count
-                jna    exit
-                mov    dword ptr [rsi + 0xB0], 2   ; force stomp bounce count to meet condition requirements
-            exit:
-                cmp    dword ptr [rsi + 0xB0], 2
-                mov    dword ptr [rsi + 0xB0], ebp ; restore stomp bounce count
-                mov    rbp, {(long)pStompingTime}
-                mov    dword ptr [rbp], 0
-                mov    rbp, rax
-            ",
-
-            shockwaveCondAddr,
-
-            HookBehavior.Replace
-        );
-
-        /* TODO: create a library for checking Sonic flags (e.g. IsGrounded)
-           and use that for resetting the timer instead. */
-
-        // Reset stomping timer for successful stomp attacks.
+        fixed (float* pHeightFallen = &HeightFallen)
+        fixed (float* pHeightThreshold = &HeightThreshold)
         {
-            /* 0x14B6D58A3 */
-            var sig = ScanSignature
+            /* 0x1408ACA68 */
+            long shockwaveCondAddr = ScanSignature
             (
-                "\xBA\x0D\x00\x00\x00\x48\x89\xF1\xE8\xCC\xCC\xCC\xCC\x84\xC0\x74\x7B",
-                "xxxxxxxxx????xxxx"
+                "\xE8\xCC\xCC\xCC\xCC\x83\xBE\xB0\x00\x00\x00\x02\x48\x8B\xE8",
+                "x????xxxxxxxxxx"
             );
 
+            // Set stomp shockwave condition.
             WriteAsmHook
             (
                 $@"
-                    mov  rcx, {(long)pStompingTime}
-                    mov  dword ptr [rcx], 0
-                    mov  edx, 0x0D
-                    mov  rcx, rsi
-                    mov  rax, {(sig + 8) + Read<int>(sig + 9) + 5}
-                    call rax
-                    test al, al
+                    mov    rax, {Memory.ReadCall(shockwaveCondAddr)}
+                    call   rax
+                    mov    rbp, {(long)pHeightFallen}
+                    movss  xmm8, dword ptr [rbp]
+                    mov    rbp, {(long)pHeightThreshold}
+                    movss  xmm9, dword ptr [rbp]
+                    comiss xmm8, xmm9
+                    mov    ebp, dword ptr [rsi + 0xB0] ; preserve stomp bounce count
+                    jna    exit
+                    mov    dword ptr [rsi + 0xB0], 2   ; force stomp bounce count to meet condition requirements
+                exit:
+                    cmp    dword ptr [rsi + 0xB0], 2
+                    mov    dword ptr [rsi + 0xB0], ebp ; restore stomp bounce count
+                    mov    rbp, {(long)pHeightFallen}
+                    mov    dword ptr [rbp], 0
+                    mov    rbp, rax
                 ",
 
-                sig,
+                shockwaveCondAddr,
 
                 HookBehavior.Replace
             );
         }
 
-        // Reset stomping timer when grinding.
-        WriteAsmHook
-        (
-            $@"
-                mov    rcx, {(long)pStompingTime}
-                mov    dword ptr [rcx], 0
-                movaps xmmword ptr [rsp + 0x68 + 0xFFFFFFFFFFFFFFC8], xmm8
-                mov    rcx, rdx
-                movaps xmm8, xmm2
-                mov    rbx, rdx
-            ",
-
-            /* 0x14B4BB01D */
-            ScanSignature
+        fixed (float* pRadius = &Radius)
+        {
+            /* 0x1408ACA9B */
+            long radiusAddr = ScanSignature
             (
-                "\x44\x0F\x29\x44\x24\x30\x48\x89\xD1",
-                "xxxxxxxxx"
-            ),
+                "\xF3\x0F\x10\x55\x1C\xB2\x08",
+                "xxxxxxx"
+            );
 
-            HookBehavior.Replace
-        );
-
-        // Reset stomping timer if taking damage.
-        WriteAsmHook
-        (
-            $@"
-                mov  rax, {(long)pStompingTime}
-                mov  dword ptr [rax], 0
-                mov  rax, [rbx + 0x38]
-                mov  rcx, [rax + 0x108]
-                test rcx, rcx
-            ",
-
-            /* 0x14088D7AD */
-            ScanSignature
+            WriteAsmHook
             (
-                "\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x1C\xBA\xDC\x40\x0E\x2D",
-                "xxxxxxxxxxxxxxxxxxxxx"
-            ),
+                $@"
+                    mov   rcx, {(long)pRadius}
+                    movss xmm2, dword ptr [rcx]
+                    mov   dl, 8
+                    mov   rcx, rax
+                    mov   rax, {Memory.ReadCall(radiusAddr + 0x0A)}
+                    call  rax
+                ",
 
-            HookBehavior.Replace
-        );
+                radiusAddr,
+
+                HookBehavior.Replace
+            );
+        }
+
+        IsInitialised = true;
+    }
+
+    var kinematics = Sonic.Kinematics.Get();
+
+    if (kinematics == null)
+        return;
+
+    if (Sonic.IsGroundedSpecial())
+    {
+        HeightFallen = 0.0f;
+    }
+    else
+    {
+        /* Reset position if the player has reached
+           apex height and has begun falling again. */
+        if ((LastGroundedPosition.Y - kinematics.Position->Y) < HeightFallen)
+        {
+            LastGroundedPosition = *kinematics.Position;
+        }
+
+        HeightFallen = LastGroundedPosition.Y - kinematics.Position->Y;
+
+        // 11.0f is the default value for boundStompingCollisionScale.
+        Radius = MathHelper.Clamp(HeightFallen - HeightThreshold, 11.0f, 33.0f);
     }
 }
 
