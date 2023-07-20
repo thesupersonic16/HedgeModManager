@@ -1434,6 +1434,49 @@ Known issues;
         WriteProtected<float>(DVSceneAspectRatioAddr + 6, AspectRatio);
 }
 
+Code "Air Trick from Rails" in "Gameplay" by "Hyper" does
+/*
+Allows Sonic to perform Air Tricks when jumping off of grind rails.
+
+Notes;
+- Holding the jump button whilst jumping off a rail will keep you in the usual grind jump state until released.
+- Releasing the jump button will give you a small frame window where you can perform a double jump.
+*/
+//
+    #lib "Sonic"
+
+    static bool BeginFrameCount = false;
+
+    static long GrindJumpReleaseFrameCount = 0;
+
+    static void ResetMembers()
+    {
+        BeginFrameCount = false;
+        GrindJumpReleaseFrameCount = 0;
+    }
+//
+{
+    if (Sonic.State.GetCurrentStateID() == 47)
+    {
+        if (Sonic.Input.IsReleased(Sonic.PlayerActionType.PlayerJump))
+            BeginFrameCount = true;
+
+        if (BeginFrameCount)
+            GrindJumpReleaseFrameCount++;
+
+        // Provide small frame window to allow for StateGrindDoubleJump.
+        if (GrindJumpReleaseFrameCount > 12)
+        {
+            Sonic.State.SetState(16);
+            ResetMembers();
+        }
+    }
+    else
+    {
+        ResetMembers();
+    }
+}
+
 Code "Allow Attacking from Stomp Bounce" in "Gameplay" by "Hyper"
 //
     #lib "Sonic"
