@@ -7868,6 +7868,7 @@ Idea by Yosho.
 //
     #lib "MathHelper"
     #lib "Memory"
+    #lib "Sonic"
 
     #load "System.Numerics.dll"
 
