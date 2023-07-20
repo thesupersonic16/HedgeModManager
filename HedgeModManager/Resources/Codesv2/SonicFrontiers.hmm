@@ -1434,7 +1434,19 @@ Known issues;
         WriteProtected<float>(DVSceneAspectRatioAddr + 6, AspectRatio);
 }
 
-Patch "Always Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic to damage enemies and harder physics objects by boosting through them."
+Code "Allow Attacking from Stomp Bounce" in "Gameplay" by "Hyper"
+//
+    #lib "Sonic"
+//
+{
+    if (Sonic.State.GetCurrentStateID() == 11)
+    {
+        if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
+            Sonic.State.SetState(Sonic.IsGrounded() ? 4 : 15);
+    }
+}
+
+Patch "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic to damage enemies and harder physics objects by boosting through them."
 //
     #lib "Bitwise"
     #lib "BlackboardStatus"
