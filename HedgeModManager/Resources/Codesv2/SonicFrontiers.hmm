@@ -3000,6 +3000,27 @@ Patch "Disable Camera Shake" in "Camera" by "Hyper" does "Disables camera shake 
     );
 }
 
+Patch "Disable Caterpillar (experimental)" in "Enemy" by "Hyper" does
+/*
+Disables the Caterpillar guardian on Ouranos Island.
+
+Known issues;
+- This also affects Battle Rush and causes a softlock.
+*/
+{
+    WriteNop
+    (
+        /* 0x1405AEE3B */
+        ScanSignature
+        (
+            "\x75\x2A\x45\x33\xC0\x33\xD2\x48\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCE",
+            "xxxxxxxxxxx????xxx"
+        ),
+
+        2
+    );
+}
+
 Patch "Disable Challenge Marker Scanner (experimental)" in "Gameplay" by "Hyper" does
 /*
 Disables the scanning event and map transition after completing challenges.
