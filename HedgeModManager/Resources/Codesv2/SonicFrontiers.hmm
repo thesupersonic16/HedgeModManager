@@ -2461,6 +2461,7 @@ Patch "Always Unlocked Extreme Difficulty" in "Cheats" by "Hyper"
 
 Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper"
 {
+    // Unlock various components of Spin Dash.
     WriteAsmHook
     (
         $@"
@@ -2473,6 +2474,32 @@ Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper"
         (
             "\x48\x8B\x41\x08\x8B\x40\x4C",
             "xxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+
+    // Force Spin Dash bitflag check to always pass.
+    WriteAsmHook
+    (
+        $@"
+            cmp   edx, 0x3B
+            jne   exit
+            mov   al, 1
+            ret
+        exit:
+            mov   eax, edx
+            and   eax, 0x3F
+            movzx r8d, al
+            mov   eax, edx
+            shr   rax, 6
+        ",
+
+        /* 0x1407DE270 */
+        ScanSignature
+        (
+            "\x8B\xC2\x83\xE0\x3F\x44\x0F\xB6\xC0\x8B\xC2\x48\xC1\xE8\x06\x48\x8B\x44\xC1\x28",
+            "xxxxxxxxxxxxxxxxxxxx"
         ),
 
         HookBehavior.Replace
