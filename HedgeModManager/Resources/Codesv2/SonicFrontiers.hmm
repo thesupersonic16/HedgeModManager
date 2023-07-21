@@ -389,7 +389,6 @@ Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
 
 Library "MathHelper" by "Hyper"
 {
-    // The .NET version HMM uses does not provide the native Math.Clamp() function.
     public T Clamp<T>(T value, T minValue, T maxValue) where T : IComparable<T>
     {
         if (value.CompareTo(minValue) < 0)
@@ -405,10 +404,68 @@ Library "MathHelper" by "Hyper"
             return value;
         }
     }
+    
+    public float Lerp(float start, float end, float time)
+    {
+        return start + (end - start) * time;
+    }
 }
 
 Library "Memory" by "Hyper"
 {
+    using System.Collections.Generic;
+
+    private static Dictionary<IntPtr, List<byte>> _preservedMemory = new();
+
+    public void Preserve(IntPtr location, long length, bool preserveOnce = true)
+    {
+        if (location == IntPtr.Zero)
+            return;
+
+        if (preserveOnce)
+        {
+            if (_preservedMemory.ContainsKey(location))
+                return;
+        }
+        else
+        {
+            if (_preservedMemory.ContainsKey(location))
+                _preservedMemory.Remove(location);
+        }
+        
+        List<byte> buffer = new();
+        for (long i = 0; i < length; i++)
+            buffer.Add(Read<byte>(location.ToInt64() + i));
+
+        _preservedMemory.Add(location, buffer);
+    }
+
+    public void Preserve(long location, long length, bool preserveOnce = true)
+    {
+        Preserve(new IntPtr(location), length, preserveOnce);
+    }
+
+    public void Restore(IntPtr location)
+    {
+        if (location == IntPtr.Zero)
+            return;
+
+        if (!_preservedMemory.ContainsKey(location))
+            return;
+
+        long i = 0;
+        foreach (byte b in _preservedMemory[location])
+        {
+            WriteProtected<byte>(location.ToInt64() + i, b);
+            i++;
+        }
+    }
+
+    public void Restore(long location)
+    {
+        Restore(new IntPtr(location));
+    }
+
     public long ReadCall(long addr)
     {
         if (addr == 0)
@@ -674,40 +731,35 @@ Library "Sonic" by "Hyper, NM & Ahremic"
     public static class Effect
     {
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate IntPtr _tPlayEffect(long gocEffect, IntPtr effectName, uint* flags);
-        private static long _sigPlayEffect = 0;
+        private delegate IntPtr _tPlayAnimationEffect(long sonicContext, IntPtr effectName);
+        private static long _sigPlayAnimationEffect = 0;
 
-        public static void PlayEffect(string name)
+        public static void PlayAnimationEffect(string name)
         {
-            if (_sigPlayEffect == 0)
+            if (_sigPlayAnimationEffect == 0)
             {
                 /* 0x140901E20 */
-                _sigPlayEffect = ScanSignature
+                _sigPlayAnimationEffect = ScanSignature
                 (
                     "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x57\x48\x83\xEC\x20\x48\x8B\xF2\x48\x8B\xF9\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8",
                     "xxxxxxxxxxxxxxxxxxxxxx????xxx"
                 );
 
-                if (_sigPlayEffect == 0)
+                if (_sigPlayAnimationEffect == 0)
                     return;
             }
 
-            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tPlayEffect>((IntPtr)_sigPlayEffect);
+            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tPlayAnimationEffect>((IntPtr)_sigPlayAnimationEffect);
 
             if (fpPlayEffect == null)
                 return;
 
-            long sonic = GetSonic();
+            long sonicContext = GetSonicContext();
 
-            if (sonic == 0)
+            if (sonicContext == 0)
                 return;
 
-            long gocEffect = GameObject.GetGOC(sonic, "GOCEffect");
-
-            if (gocEffect == 0)
-                return;
-
-            fpPlayEffect.Invoke(gocEffect, Marshal.StringToHGlobalAnsi(name), null);
+            fpPlayEffect.Invoke(sonicContext, Marshal.StringToHGlobalAnsi(name));
         }
     }
 
@@ -832,6 +884,16 @@ Library "Sonic" by "Hyper, NM & Ahremic"
                 return null;
 
             return new Kinematics(gocPlayerKinematicParams);
+        }
+
+        public static Vector3 GetForward()
+        {
+            Kinematics k = Get();
+
+            if (k == null)
+                return Vector3.Zero;
+
+            return Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), Quaternion.Normalize(*k.Rotation));
         }
 
         public static float GetHorizontalMagnitude()
@@ -1054,6 +1116,179 @@ Library "StringMapOperation" by "ĐeäTh"
             hash = key[i] + 31 * hash;
 
         return hash & 0x7FFFFFFF;
+    }
+}
+
+Library "XInput" by "Hyper"
+{
+    #load "System.Numerics.dll"
+
+    using System.Numerics;
+    using System.Runtime.InteropServices;
+
+    public const short XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE = 7849;
+    public const short XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE = 8689;
+
+    [DllImport("xinput1_4.dll", EntryPoint = "XInputGetState")]
+    public extern int XInputGetState(int dwUserIndex, ref State pState);
+    
+    [DllImport("xinput1_4.dll", EntryPoint = "XInputSetState")]
+    public extern int XInputSetState(int dwUserIndex, ref Vibration pVibration);
+
+    [Flags]
+    public enum Buttons : ushort
+    {
+        DPAD_UP        = 0x0001,
+        DPAD_DOWN      = 0x0002,
+        DPAD_LEFT      = 0x0004,
+        DPAD_RIGHT     = 0x0008,
+        START          = 0x0010,
+        BACK           = 0x0020,
+        LEFT_THUMB     = 0x0040,
+        RIGHT_THUMB    = 0x0080,
+        LEFT_SHOULDER  = 0x0100,
+        RIGHT_SHOULDER = 0x0200,
+        A              = 0x1000,
+        B              = 0x2000,
+        X              = 0x4000,
+        Y              = 0x8000
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct State
+    {
+        public int dwPacketNumber;
+        public Gamepad Gamepad;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Gamepad
+    {
+        public Buttons wButtons; // Use Sonic.Input for keyboard parity!
+        public byte bLeftTrigger;
+        public byte bRightTrigger;
+        public short sThumbLX;
+        public short sThumbLY;
+        public short sThumbRX;
+        public short sThumbRY;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Vibration
+    {
+        public ushort wLeftMotorSpeed;
+        public ushort wRightMotorSpeed;
+
+        public Vibration(ushort leftMotorSpeed, ushort rightMotorSpeed)
+        {
+            wLeftMotorSpeed = leftMotorSpeed;
+            wRightMotorSpeed = rightMotorSpeed;
+        }
+
+        public Vibration(ushort motorSpeed)
+        {
+            wLeftMotorSpeed = motorSpeed;
+            wRightMotorSpeed = motorSpeed;
+        }
+    }
+
+    public State? GetState()
+    {
+        var pState = new State();
+
+        if (XInputGetState(0, ref pState) != 0)
+            return null;
+
+        return pState;
+    }
+
+    public void SetState(Vibration pVibration)
+    {
+        XInputSetState(0, ref pVibration);
+    }
+
+    public Vector2 GetAnalog(int analogIndex, bool testDeadzone = true)
+    {
+        var pState = GetState();
+
+        if (pState == null)
+            return Vector2.Zero;
+
+        Vector2 v = Vector2.Zero;
+
+        switch (analogIndex)
+        {
+            case 0:
+                v = new Vector2(pState.Value.Gamepad.sThumbLX / 32767.0f, pState.Value.Gamepad.sThumbLY / 32767.0f);
+                break;
+
+            case 1:
+                v = new Vector2(pState.Value.Gamepad.sThumbRX / 32767.0f, pState.Value.Gamepad.sThumbRY / 32767.0f);
+                break;
+        }
+
+        if (testDeadzone)
+        {
+            v = IsAnalogNeutral(analogIndex)
+                ? Vector2.Zero
+                : v;
+        }
+
+        return v;
+    }
+
+    public float GetTrigger(int triggerIndex)
+    {
+        var pState = GetState();
+
+        if (pState == null)
+            return 0;
+
+        switch (triggerIndex)
+        {
+            case 0:
+                return pState.Value.Gamepad.bLeftTrigger / 255.0f;
+
+            case 1:
+                return pState.Value.Gamepad.bRightTrigger / 255.0f;
+        }
+
+        return 0;
+    }
+
+    public bool IsAnalogNeutral(int analogIndex)
+    {
+        var pState = GetState();
+
+        if (pState == null)
+            return true;
+
+        switch (analogIndex)
+        {
+            case 0:
+            {
+                short x = pState.Value.Gamepad.sThumbLX;
+                short y = pState.Value.Gamepad.sThumbLY;
+
+                return x < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+                    x > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+                    y < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+                    y > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+            }
+
+            case 1:
+            {
+                short x = pState.Value.Gamepad.sThumbRX;
+                short y = pState.Value.Gamepad.sThumbRY;
+
+                return x < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+                    x > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+                    y < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+                    y > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+            }
+        }
+
+        return true;
     }
 }
 
