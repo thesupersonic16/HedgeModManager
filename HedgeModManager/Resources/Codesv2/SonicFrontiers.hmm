@@ -129,6 +129,14 @@ Library "BlackboardStatus" by "Hyper"
         return Blackboard.GetBlackboardContent(blackboard, "BlackboardStatus");
     }
 
+    public bool IsSuper(long blackboardStatus = 0)
+    {
+        if (blackboardStatus == 0 && (blackboardStatus = Get()) == 0)
+            return false;
+
+        return Read<bool>(blackboardStatus + 0x24);
+    }
+
     public long* GetFieldPointer(long blackboardStatus = 0, long fieldOffset = 0)
     {
         if (blackboardStatus == 0 && (blackboardStatus = Get()) == 0)
@@ -379,8 +387,85 @@ Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
     }
 }
 
+Library "MathHelper" by "Hyper"
+{
+    public T Clamp<T>(T value, T minValue, T maxValue) where T : IComparable<T>
+    {
+        if (value.CompareTo(minValue) < 0)
+        {
+            return minValue;
+        }
+        else if (value.CompareTo(maxValue) > 0)
+        {
+            return maxValue;
+        }
+        else
+        {
+            return value;
+        }
+    }
+    
+    public float Lerp(float start, float end, float time)
+    {
+        return start + (end - start) * time;
+    }
+}
+
 Library "Memory" by "Hyper"
 {
+    using System.Collections.Generic;
+
+    private static Dictionary<IntPtr, List<byte>> _preservedMemory = new();
+
+    public void Preserve(IntPtr location, long length, bool preserveOnce = true)
+    {
+        if (location == IntPtr.Zero)
+            return;
+
+        if (preserveOnce)
+        {
+            if (_preservedMemory.ContainsKey(location))
+                return;
+        }
+        else
+        {
+            if (_preservedMemory.ContainsKey(location))
+                _preservedMemory.Remove(location);
+        }
+        
+        List<byte> buffer = new();
+        for (long i = 0; i < length; i++)
+            buffer.Add(Read<byte>(location.ToInt64() + i));
+
+        _preservedMemory.Add(location, buffer);
+    }
+
+    public void Preserve(long location, long length, bool preserveOnce = true)
+    {
+        Preserve(new IntPtr(location), length, preserveOnce);
+    }
+
+    public void Restore(IntPtr location)
+    {
+        if (location == IntPtr.Zero)
+            return;
+
+        if (!_preservedMemory.ContainsKey(location))
+            return;
+
+        long i = 0;
+        foreach (byte b in _preservedMemory[location])
+        {
+            WriteProtected<byte>(location.ToInt64() + i, b);
+            i++;
+        }
+    }
+
+    public void Restore(long location)
+    {
+        Restore(new IntPtr(location));
+    }
+
     public long ReadCall(long addr)
     {
         if (addr == 0)
@@ -450,6 +535,8 @@ Library "Memory" by "Hyper"
 
 Library "Sonic" by "Hyper, NM & Ahremic"
 {
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
     #lib "Collections"
     #lib "GameDocument"
     #lib "GameObject"
@@ -482,6 +569,17 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             return false;
 
         return Read<bool>(playerInfo + 0x2EE);
+    }
+
+    public bool IsGroundedSpecial()
+    {
+        if (BlackboardStatus.Get() == 0)
+            return true;
+
+        return IsGrounded() ||
+            Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsGrind) ||
+            Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsSpringJump) ||
+            Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsWallClimb);
     }
 
     public static class Animation
@@ -633,40 +731,35 @@ Library "Sonic" by "Hyper, NM & Ahremic"
     public static class Effect
     {
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate IntPtr _tPlayEffect(long gocEffect, IntPtr effectName, uint* flags);
-        private static long _sigPlayEffect = 0;
+        private delegate IntPtr _tPlayAnimationEffect(long sonicContext, IntPtr effectName);
+        private static long _sigPlayAnimationEffect = 0;
 
-        public static void PlayEffect(string name)
+        public static void PlayAnimationEffect(string name)
         {
-            if (_sigPlayEffect == 0)
+            if (_sigPlayAnimationEffect == 0)
             {
                 /* 0x140901E20 */
-                _sigPlayEffect = ScanSignature
+                _sigPlayAnimationEffect = ScanSignature
                 (
                     "\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x57\x48\x83\xEC\x20\x48\x8B\xF2\x48\x8B\xF9\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD8",
                     "xxxxxxxxxxxxxxxxxxxxxx????xxx"
                 );
 
-                if (_sigPlayEffect == 0)
+                if (_sigPlayAnimationEffect == 0)
                     return;
             }
 
-            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tPlayEffect>((IntPtr)_sigPlayEffect);
+            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tPlayAnimationEffect>((IntPtr)_sigPlayAnimationEffect);
 
             if (fpPlayEffect == null)
                 return;
 
-            long sonic = GetSonic();
+            long sonicContext = GetSonicContext();
 
-            if (sonic == 0)
+            if (sonicContext == 0)
                 return;
 
-            long gocEffect = GameObject.GetGOC(sonic, "GOCEffect");
-
-            if (gocEffect == 0)
-                return;
-
-            fpPlayEffect.Invoke(gocEffect, Marshal.StringToHGlobalAnsi(name), null);
+            fpPlayEffect.Invoke(sonicContext, Marshal.StringToHGlobalAnsi(name));
         }
     }
 
@@ -791,6 +884,16 @@ Library "Sonic" by "Hyper, NM & Ahremic"
                 return null;
 
             return new Kinematics(gocPlayerKinematicParams);
+        }
+
+        public static Vector3 GetForward()
+        {
+            Kinematics k = Get();
+
+            if (k == null)
+                return Vector3.Zero;
+
+            return Vector3.Transform(new Vector3(0.0f, 0.0f, 1.0f), Quaternion.Normalize(*k.Rotation));
         }
 
         public static float GetHorizontalMagnitude()
@@ -937,12 +1040,18 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         {
             InitStateRedirector();
 
+            if (_stateNotifyActions.Contains(action))
+                return;
+
             _stateNotifyActions.Add(action);
         }
 
         public static void RemoveStateNotifyAction(TStateNotifyAction action)
         {
             InitStateRedirector();
+
+            if (!_stateNotifyActions.Contains(action))
+                return;
 
             _stateNotifyActions.Remove(action);
         }
@@ -1007,6 +1116,179 @@ Library "StringMapOperation" by "ĐeäTh"
             hash = key[i] + 31 * hash;
 
         return hash & 0x7FFFFFFF;
+    }
+}
+
+Library "XInput" by "Hyper"
+{
+    #load "System.Numerics.dll"
+
+    using System.Numerics;
+    using System.Runtime.InteropServices;
+
+    public const short XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE = 7849;
+    public const short XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE = 8689;
+
+    [DllImport("xinput1_4.dll", EntryPoint = "XInputGetState")]
+    public extern int XInputGetState(int dwUserIndex, ref State pState);
+    
+    [DllImport("xinput1_4.dll", EntryPoint = "XInputSetState")]
+    public extern int XInputSetState(int dwUserIndex, ref Vibration pVibration);
+
+    [Flags]
+    public enum Buttons : ushort
+    {
+        DPAD_UP        = 0x0001,
+        DPAD_DOWN      = 0x0002,
+        DPAD_LEFT      = 0x0004,
+        DPAD_RIGHT     = 0x0008,
+        START          = 0x0010,
+        BACK           = 0x0020,
+        LEFT_THUMB     = 0x0040,
+        RIGHT_THUMB    = 0x0080,
+        LEFT_SHOULDER  = 0x0100,
+        RIGHT_SHOULDER = 0x0200,
+        A              = 0x1000,
+        B              = 0x2000,
+        X              = 0x4000,
+        Y              = 0x8000
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct State
+    {
+        public int dwPacketNumber;
+        public Gamepad Gamepad;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Gamepad
+    {
+        public Buttons wButtons; // Use Sonic.Input for keyboard parity!
+        public byte bLeftTrigger;
+        public byte bRightTrigger;
+        public short sThumbLX;
+        public short sThumbLY;
+        public short sThumbRX;
+        public short sThumbRY;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Vibration
+    {
+        public ushort wLeftMotorSpeed;
+        public ushort wRightMotorSpeed;
+
+        public Vibration(ushort leftMotorSpeed, ushort rightMotorSpeed)
+        {
+            wLeftMotorSpeed = leftMotorSpeed;
+            wRightMotorSpeed = rightMotorSpeed;
+        }
+
+        public Vibration(ushort motorSpeed)
+        {
+            wLeftMotorSpeed = motorSpeed;
+            wRightMotorSpeed = motorSpeed;
+        }
+    }
+
+    public State? GetState()
+    {
+        var pState = new State();
+
+        if (XInputGetState(0, ref pState) != 0)
+            return null;
+
+        return pState;
+    }
+
+    public void SetState(Vibration pVibration)
+    {
+        XInputSetState(0, ref pVibration);
+    }
+
+    public Vector2 GetAnalog(int analogIndex, bool testDeadzone = true)
+    {
+        var pState = GetState();
+
+        if (pState == null)
+            return Vector2.Zero;
+
+        Vector2 v = Vector2.Zero;
+
+        switch (analogIndex)
+        {
+            case 0:
+                v = new Vector2(pState.Value.Gamepad.sThumbLX / 32767.0f, pState.Value.Gamepad.sThumbLY / 32767.0f);
+                break;
+
+            case 1:
+                v = new Vector2(pState.Value.Gamepad.sThumbRX / 32767.0f, pState.Value.Gamepad.sThumbRY / 32767.0f);
+                break;
+        }
+
+        if (testDeadzone)
+        {
+            v = IsAnalogNeutral(analogIndex)
+                ? Vector2.Zero
+                : v;
+        }
+
+        return v;
+    }
+
+    public float GetTrigger(int triggerIndex)
+    {
+        var pState = GetState();
+
+        if (pState == null)
+            return 0;
+
+        switch (triggerIndex)
+        {
+            case 0:
+                return pState.Value.Gamepad.bLeftTrigger / 255.0f;
+
+            case 1:
+                return pState.Value.Gamepad.bRightTrigger / 255.0f;
+        }
+
+        return 0;
+    }
+
+    public bool IsAnalogNeutral(int analogIndex)
+    {
+        var pState = GetState();
+
+        if (pState == null)
+            return true;
+
+        switch (analogIndex)
+        {
+            case 0:
+            {
+                short x = pState.Value.Gamepad.sThumbLX;
+                short y = pState.Value.Gamepad.sThumbLY;
+
+                return x < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+                    x > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+                    y < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+                    y > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+            }
+
+            case 1:
+            {
+                short x = pState.Value.Gamepad.sThumbRX;
+                short y = pState.Value.Gamepad.sThumbRY;
+
+                return x < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+                    x > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+                    y < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+                    y > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+            }
+        }
+
+        return true;
     }
 }
 
@@ -1387,7 +1669,72 @@ Known issues;
         WriteProtected<float>(DVSceneAspectRatioAddr + 6, AspectRatio);
 }
 
-Patch "Always Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic to damage enemies and harder physics objects by boosting through them."
+Code "Air Trick from Rails" in "Gameplay" by "Hyper" does
+/*
+Allows Sonic to perform Air Tricks when jumping off of grind rails.
+
+Notes;
+- Holding the jump button whilst jumping off of a grind rail will keep you in the usual grind jump state until released.
+- Releasing the jump button will give you a small frame window where you can perform a double jump.
+- Flinging off of a grind rail will automatically begin tricking.
+*/
+//
+    #lib "Sonic"
+
+    static bool BeginFrameCount = false;
+
+    static long GrindJumpReleaseFrameCount = 0;
+
+    static void ResetMembers()
+    {
+        BeginFrameCount = false;
+        GrindJumpReleaseFrameCount = 0;
+    }
+//
+{
+    // Current: StateFall, Previous: StateGrind
+    if (Sonic.State.GetCurrentStateID() == 15 && Sonic.State.GetPreviousStateID() == 46)
+    {
+        // Enter into StateBumpJump when flinging off of grind rails.
+        Sonic.State.SetState(16);
+    }
+
+    // StateGrindJump
+    if (Sonic.State.GetCurrentStateID() == 47)
+    {
+        if (Sonic.Input.IsReleased(Sonic.PlayerActionType.PlayerJump))
+            BeginFrameCount = true;
+
+        if (BeginFrameCount)
+            GrindJumpReleaseFrameCount++;
+
+        // Provide small frame window to allow for StateGrindDoubleJump.
+        if (GrindJumpReleaseFrameCount > 12)
+        {
+            Sonic.State.SetState(16);
+
+            ResetMembers();
+        }
+    }
+    else
+    {
+        ResetMembers();
+    }
+}
+
+Code "Allow Attacking from Stomp Bounce" in "Gameplay" by "Hyper"
+//
+    #lib "Sonic"
+//
+{
+    if (Sonic.State.GetCurrentStateID() == 11)
+    {
+        if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
+            Sonic.State.SetState(15);
+    }
+}
+
+Patch "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Sonic to damage enemies and harder physics objects by boosting through them."
 //
     #lib "Bitwise"
     #lib "BlackboardStatus"
@@ -1421,7 +1768,7 @@ Patch "Always Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allo
     Sonic.State.AddStateNotifyAction(NotifyStateRunDamageCollision);
 }
 
-Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by pressing the attack button while holding the jump button."
+Code "Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by pressing the attack button while holding the jump button."
 //
     #lib "Sonic"
     #lib "Bitwise"
@@ -1462,7 +1809,7 @@ Code "Always Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" doe
     }
 }
 
-Code "Always Allow Dodging from Homing Shot" in "Gameplay" by "Hyper" does "Allows Sonic to exit from Homing Shot by dodging."
+Code "Allow Dodging from Homing Shot" in "Gameplay" by "Hyper" does "Allows Sonic to exit from Homing Shot by dodging."
 //
     #lib "Sonic"
 //
@@ -1533,7 +1880,7 @@ Affected skills;
     }
 }
 
-Patch "Always Allow Spin Dash on Dash Panels" in "Gameplay" by "Hyper" does "Allows Sonic to Spin Dash through dash panels without interruptions."
+Patch "Allow Spin Dash on Dash Panels" in "Gameplay" by "Hyper" does "Allows Sonic to Spin Dash through dash panels without interruptions."
 {
     WriteProtected<byte>
     (
@@ -2121,6 +2468,7 @@ Patch "Always Unlocked Extreme Difficulty" in "Cheats" by "Hyper"
 
 Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper"
 {
+    // Unlock various components of Spin Dash.
     WriteAsmHook
     (
         $@"
@@ -2133,6 +2481,32 @@ Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper"
         (
             "\x48\x8B\x41\x08\x8B\x40\x4C",
             "xxxxxxx"
+        ),
+
+        HookBehavior.Replace
+    );
+
+    // Force Spin Dash bitflag check to always pass.
+    WriteAsmHook
+    (
+        $@"
+            cmp   edx, 0x3B
+            jne   exit
+            mov   al, 1
+            ret
+        exit:
+            mov   eax, edx
+            and   eax, 0x3F
+            movzx r8d, al
+            mov   eax, edx
+            shr   rax, 6
+        ",
+
+        /* 0x1407DE270 */
+        ScanSignature
+        (
+            "\x8B\xC2\x83\xE0\x3F\x44\x0F\xB6\xC0\x8B\xC2\x48\xC1\xE8\x06\x48\x8B\x44\xC1\x28",
+            "xxxxxxxxxxxxxxxxxxxx"
         ),
 
         HookBehavior.Replace
@@ -2630,6 +3004,27 @@ Patch "Disable Camera Shake" in "Camera" by "Hyper" does "Disables camera shake 
         ),
 
         0xE9, 0x09, 0x03, 0x00, 0x00
+    );
+}
+
+Patch "Disable Caterpillar (experimental)" in "Enemy" by "Hyper" does
+/*
+Disables the Caterpillar guardian on Ouranos Island.
+
+Known issues;
+- This also affects Battle Rush and causes a softlock.
+*/
+{
+    WriteNop
+    (
+        /* 0x1405AEE3B */
+        ScanSignature
+        (
+            "\x75\x2A\x45\x33\xC0\x33\xD2\x48\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCE",
+            "xxxxxxxxxxx????xxx"
+        ),
+
+        2
     );
 }
 
@@ -3256,6 +3651,68 @@ Patch "Hide Fixed Camera Notifications" in "UI" by "Hyper" does "Hides the fixed
     );
 }
 
+Patch "Disable Bullet Time" in "Gameplay" by "Hyper" does
+/*
+Disables the slow-mo sequences when performing certain actions.
+
+Notes;
+- This only applies to sequences that apply the bullet time filter, other actions like QTEs will remain unchanged.
+*/
+{
+    // Disable bullet time for bosses and parry.
+    WriteProtected<byte>
+    (
+        /* 0x1402193E0 */
+        ScanSignature
+        (
+            "\x40\x53\x48\x83\xEC\x50\x0F\x29\x74\x24\x40\x48\x8B\xD9\x0F\x29\x7C\x24\x30\x0F\x28\xF1",
+            "xxxxxxxxxxxxxxxxxxxxxx"
+        )
+        + 0x06,
+
+        0xEB, 0x40
+    );
+
+    // Disable bullet time audio for parry.
+    WriteProtected<byte>
+    (
+        /* 0x1408CF3BF */
+        ScanSignature
+        (
+            "\x4C\x8D\x05\xCC\xCC\xCC\xCC\x48\x8B\xD7\x48\x8D\x4C\x24\x60\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4E\x58",
+            "xxx????xxxxxxxxx????xxxx"
+        ),
+
+        0xEB, 0x40
+    );
+
+    // Disable bullet time for Giganto dash rings.
+    WriteProtected<byte>
+    (
+        /* 0x1402A1C4F */
+        ScanSignature
+        (
+            "\x48\x8D\x4D\x97\x0F\x28\xF9",
+            "xxxxxxx"
+        ),
+
+        0xE9, 0xCC, 0x00, 0x00, 0x00
+    );
+
+    // Disable bullet time for Ninja.
+    WriteProtected<byte>
+    (
+        /* 0x1405A7E7B */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x8D\x4E\x3C\xE8\xCC\xCC\xCC\xCC\x84\xC0\x75\x37",
+            "x????xxxxx????xxxx"
+        ),
+
+        0xEB, 0x77
+    );
+}
+
 Patch "Disable Bullet Time Filter" in "Graphics" by "Hyper" does "Disables the greyscale filter applied when entering bullet time from a parry."
 {
     WriteNop
@@ -3265,6 +3722,21 @@ Patch "Disable Bullet Time Filter" in "Graphics" by "Hyper" does "Disables the g
         (
             "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\xFF\x15\xCC\xCC\xCC\xCC\x4C\x8D\x9C\x24\xB0\x00\x00\x00",
             "x????xxxxx????xxxxxxxx"
+        ),
+
+        5
+    );
+}
+
+Patch "Disable Fishing Jingle" in "Audio" by "Hyper" does "Disables the jingle that plays when successfully reeling in a fish."
+{
+    WriteNop
+    (
+        /* 0x1406D82AA */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x8B\x8E\x78\x02\x00\x00\xE8\xCC\xCC\xCC\xCC\x84\xC0\x74\x0F",
+            "x????xxxxxxx????xxxx"
         ),
 
         5
@@ -4183,6 +4655,20 @@ Patch "Disable Power Boost" in "Gameplay" by "Hyper"
 
 Patch "Disable Power Boost Audio" in "Audio" by "Hyper"
 {
+    // Activation SFX
+    WriteNop
+    (
+        /* 0x1408D2B23 */
+        ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\xBA\x5F\x23\x00\x00\x48\x8D\x4C\x24\x68",
+            "x????xxxxxxxxxx"
+        ),
+
+        5
+    );
+
+    // Trail SFX
     WriteProtected<byte>
     (
         /* 0x141413C68 */
@@ -4720,6 +5206,59 @@ Code "Homing Attack Trick Animations" in "Animation" by "Hyper & Ahremic" does "
     }
 }
 
+Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform another Air Boost after previously using it before performing a homing attack, stomp, or using a spring."
+//
+    #lib "Bitwise"
+    #lib "BlackboardStatus"
+    #lib "Sonic"
+
+    static int[] AirBoostStates =
+    {
+        53, // StateStompingFlip
+        58, // StateStompingBounce
+        64, // StateHomingFinished
+        162 // StateSpringJump
+    }
+
+    static bool IsRestoredAirBoost = false;
+//
+{
+    void NotifyAirBoostReset(int stateId)
+    {
+        // Reset flag for StateAirBoost or StateSpinBoost.
+        if (stateId == 23 || stateId == 116)
+        {
+            IsRestoredAirBoost = false;
+            return;
+        }
+
+        foreach (int restoreState in AirBoostStates)
+        {
+            if (restoreState == stateId)
+                IsRestoredAirBoost = true;
+        }
+    }
+
+    Sonic.State.AddStateNotifyAction(NotifyAirBoostReset);
+
+    if (BlackboardStatus.Get() != 0)
+    {
+        // Disable restored air boost for Super Sonic.
+        if (BlackboardStatus.IsSuper())
+            IsRestoredAirBoost = false;
+
+        // Disable restored air boost for diving.
+        if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsDiving))
+            IsRestoredAirBoost = false;
+    }
+
+    if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerBoost) && !Sonic.IsGroundedSpecial() && IsRestoredAirBoost)
+    {
+        // Exit into StateAirBoost.
+        Sonic.State.SetState(23);
+    }
+}
+
 Patch "Fix Damage from Jumping into Enemies" in "Fixes" by "Hyper" does "Fixes Sonic taking damage when jumping into enemies within a small frame window."
 //
     #lib "Sonic"
@@ -5190,19 +5729,35 @@ Patch "Fix Shadow Stutter" in "Fixes" by "Hyper" does "Fixes shadows not interpo
     );
 }
 
-Patch "Fix Stomp Reset" in "Fixes" by "Hyper" does "Fixes the stomp attack only resetting once you hit the ground, allowing you to perform multiple stomps whilst still airborne."
-{
-    WriteNop
-    (
-        /* 0x1408FF6C0 */
-        ScanSignature
-        (
-            "\x74\x1C\x45\x33\xC0\x48\x8B\xCB\x41\x8D\x50\x36",
-            "xxxxxxxxxxxx"
-        ),
+Code "Fix Stomp Reset" in "Fixes" by "Hyper" does "Fixes the stomp attack only resetting once you hit the ground, allowing you to perform multiple stomps whilst still airborne."
+//
+    #lib "Sonic"
 
-        2
-    );
+    static bool IsInitialised = false;
+//
+{
+    if (!IsInitialised)
+    {
+        WriteNop
+        (
+            /* 0x1408FF6C0 */
+            ScanSignature
+            (
+                "\x74\x1C\x45\x33\xC0\x48\x8B\xCB\x41\x8D\x50\x36",
+                "xxxxxxxxxxxx"
+            ),
+
+            2
+        );
+
+        IsInitialised = true;
+    }
+    
+    if (Sonic.State.GetCurrentStateID() == 11)
+    {
+        if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerStomping))
+            Sonic.State.SetState(54);
+    }
 }
 
 Patch "Fix Upreel Grip Position" in "Fixes" by "ĐeäTh" does
@@ -7184,6 +7739,85 @@ This replaces the basic X button QTE to dodge the rifle projectile in the final 
     );
 }
 
+Code "Retain Ground Velocity for Jump" in "Physics" by "Hyper" does
+/*
+Retains Sonic's ground velocity when jumping.
+
+Notes;
+- This will allow you to retain velocity when jumping out of a Drop Dash.
+- The "Jump Deceleration" and "Maintain boost during a jump" options can remain active without conflicting with this code.
+*/
+//
+    #lib "Memory"
+    #lib "Sonic"
+
+    static bool IsInitialised = false;
+    static bool IsStateJump = false;
+//
+{
+    if (!IsInitialised)
+    {
+        fixed (bool* pIsStateJump = &IsStateJump)
+        {
+            /* v1.30: 0x1408406F8 */
+            var callerFuncAddr = ScanSignature
+            (
+                "\xE8\xCC\xCC\xCC\xCC\x48\x8B\x43\x20\xBA\x20\x16\x1E\x71\x44\x0F\x28\xC0\x48\x8B\x88\x80\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCB\x0F\x28\xF8\xE8\xCC\xCC\xCC\xCC\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8D\x55\xE7",
+                "x????xxxxxxxxxxxxxxxxxxxxx????xxxx????xxxxxxx????xxxx????xxxx"
+            );
+
+            /* v1.30: 0x14080CA10 */
+            var mainFuncAddr = Memory.ReadCall(callerFuncAddr);
+
+            // Update posture to allow retaining ground velocity.
+            WriteAsmHook
+            (
+                $@"
+                    mov   rdi, rcx
+
+                    ; Check if we're in the jump state
+                    push  r11
+                    mov   r11, {(long)pIsStateJump}
+                    mov   r11b, byte ptr [r11]
+                    cmp   r11b, 0
+                    jz    default
+                    mov   al, 1
+                    jmp   exit
+
+                default:
+                    xor   edx, edx
+                    mov   rcx, [rcx + 0x28] ; RCX = BlackboardStatus
+                    mov   eax, edx
+                    and   eax, 0x3F
+                    movzx r8d, al
+                    mov   eax, edx
+                    shr   rax, 6
+                    mov   rax, [rcx + rax * 8 + 0x30]
+                    bt    rax, r8
+                    setb  al
+
+                exit:
+                    pop   r11
+                ",
+
+                /* v1.30: 0x14080CA16 */
+                mainFuncAddr + 6,
+
+                HookBehavior.Replace
+            );
+        }
+
+        IsInitialised = true;
+    }
+
+    void NotifyStateJump(int stateId)
+    {
+        IsStateJump = stateId == 8;
+    }
+
+    Sonic.State.AddStateNotifyAction(NotifyStateJump);
+}
+
 Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
 //
     using System.Diagnostics;
@@ -7598,150 +8232,124 @@ This state lasts a fraction of a second, but keep in mind that within that time,
     }
 }
 
-Patch "Super Stomp" in "Gameplay" by "Hyper & Yosho" does
+Code "Super Stomp" in "Gameplay" by "Hyper & Yosho" does
 /*
 Sends a powerful shockwave when landing a stomp from a great height.
 
 Idea by Yosho.
 */
 //
-    static float StompingTime = 0.0f;
-    static float SuperStompThreshold = 0.35f;
+    #lib "MathHelper"
+    #lib "Memory"
+    #lib "Sonic"
+
+    #load "System.Numerics.dll"
+
+    using System.Numerics;
+
+    static bool IsInitialised = false;
+    static bool IsStompBeginPositionPreserved = false;
+
+    static Vector3 StompBeginPosition;
+
+    static float HeightFallen = 0.0f;
+    static float HeightThreshold = 15.0f;
+    static float Radius = 11.0f;
 //
 {
-    fixed (float* pStompingTime = &StompingTime)
-    fixed (float* pSuperStompThreshold = &SuperStompThreshold)
+    if (!IsInitialised)
     {
-        // Create timer for stomping.
-        WriteAsmHook
-        (
-            $@"
-                mov    r15, [rcx + 0x18]
-                mov    rdi, rcx
-                mov    rcx, {(long)pStompingTime}
-                movss  xmm8, dword ptr [rcx]
-                addss  xmm8, xmm1
-                movss  dword ptr [rcx], xmm8
-                mov    rcx, r15
-                movaps xmmword ptr [rsp + 0x80 + 0xFFFFFFFFFFFFFFF0], xmm6
-            ",
-
-            /* 0x140850553 */
-            ScanSignature
-            (
-                "\x4C\x8B\x79\x18\x48\x8B\xF9\x49\x8B\xCF",
-                "xxxxxxxxxx"
-            ),
-
-            HookBehavior.Replace
-        );
-
-        /* 0x1408ACA68 */
-        long shockwaveCondAddr = ScanSignature
-        (
-            "\xE8\xCC\xCC\xCC\xCC\x83\xBE\xB0\x00\x00\x00\x02\x48\x8B\xE8",
-            "x????xxxxxxxxxx"
-        );
-
-        // Set stomp shockwave condition.
-        WriteAsmHook
-        (
-            $@"
-                mov    rax, {shockwaveCondAddr + Read<int>(shockwaveCondAddr + 1) + 5}
-                call   rax
-                mov    rbp, {(long)pStompingTime}
-                movss  xmm8, dword ptr [rbp]
-                mov    rbp, {(long)pSuperStompThreshold}
-                movss  xmm9, dword ptr [rbp]
-                comiss xmm8, xmm9
-                mov    ebp, dword ptr [rsi + 0xB0] ; preserve stomp bounce count
-                jna    exit
-                mov    dword ptr [rsi + 0xB0], 2   ; force stomp bounce count to meet condition requirements
-            exit:
-                cmp    dword ptr [rsi + 0xB0], 2
-                mov    dword ptr [rsi + 0xB0], ebp ; restore stomp bounce count
-                mov    rbp, {(long)pStompingTime}
-                mov    dword ptr [rbp], 0
-                mov    rbp, rax
-            ",
-
-            shockwaveCondAddr,
-
-            HookBehavior.Replace
-        );
-
-        /* TODO: create a library for checking Sonic flags (e.g. IsGrounded)
-           and use that for resetting the timer instead. */
-
-        // Reset stomping timer for successful stomp attacks.
+        fixed (float* pHeightFallen = &HeightFallen)
+        fixed (float* pHeightThreshold = &HeightThreshold)
         {
-            /* 0x14B6D58A3 */
-            var sig = ScanSignature
+            /* 0x1408ACA68 */
+            long shockwaveCondAddr = ScanSignature
             (
-                "\xBA\x0D\x00\x00\x00\x48\x89\xF1\xE8\xCC\xCC\xCC\xCC\x84\xC0\x74\x7B",
-                "xxxxxxxxx????xxxx"
+                "\xE8\xCC\xCC\xCC\xCC\x83\xBE\xB0\x00\x00\x00\x02\x48\x8B\xE8",
+                "x????xxxxxxxxxx"
             );
 
+            // Set stomp shockwave condition.
             WriteAsmHook
             (
                 $@"
-                    mov  rcx, {(long)pStompingTime}
-                    mov  dword ptr [rcx], 0
-                    mov  edx, 0x0D
-                    mov  rcx, rsi
-                    mov  rax, {(sig + 8) + Read<int>(sig + 9) + 5}
-                    call rax
-                    test al, al
+                    mov    rax, {Memory.ReadCall(shockwaveCondAddr)}
+                    call   rax
+                    mov    rbp, {(long)pHeightFallen}
+                    movss  xmm8, dword ptr [rbp]
+                    mov    rbp, {(long)pHeightThreshold}
+                    movss  xmm9, dword ptr [rbp]
+                    comiss xmm8, xmm9
+                    mov    ebp, dword ptr [rsi + 0xB0] ; preserve stomp bounce count
+                    jna    exit
+                    mov    dword ptr [rsi + 0xB0], 2   ; force stomp bounce count to meet condition requirements
+                exit:
+                    cmp    dword ptr [rsi + 0xB0], 2
+                    mov    dword ptr [rsi + 0xB0], ebp ; restore stomp bounce count
+                    mov    rbp, {(long)pHeightFallen}
+                    mov    dword ptr [rbp], 0
+                    mov    rbp, rax
                 ",
 
-                sig,
+                shockwaveCondAddr,
 
                 HookBehavior.Replace
             );
         }
 
-        // Reset stomping timer when grinding.
-        WriteAsmHook
-        (
-            $@"
-                mov    rcx, {(long)pStompingTime}
-                mov    dword ptr [rcx], 0
-                movaps xmmword ptr [rsp + 0x68 + 0xFFFFFFFFFFFFFFC8], xmm8
-                mov    rcx, rdx
-                movaps xmm8, xmm2
-                mov    rbx, rdx
-            ",
-
-            /* 0x14B4BB01D */
-            ScanSignature
+        fixed (float* pRadius = &Radius)
+        {
+            /* 0x1408ACA9B */
+            long radiusAddr = ScanSignature
             (
-                "\x44\x0F\x29\x44\x24\x30\x48\x89\xD1",
-                "xxxxxxxxx"
-            ),
+                "\xF3\x0F\x10\x55\x1C\xB2\x08",
+                "xxxxxxx"
+            );
 
-            HookBehavior.Replace
-        );
-
-        // Reset stomping timer if taking damage.
-        WriteAsmHook
-        (
-            $@"
-                mov  rax, {(long)pStompingTime}
-                mov  dword ptr [rax], 0
-                mov  rax, [rbx + 0x38]
-                mov  rcx, [rax + 0x108]
-                test rcx, rcx
-            ",
-
-            /* 0x14088D7AD */
-            ScanSignature
+            WriteAsmHook
             (
-                "\x48\x8B\x43\x38\x48\x8B\x88\x08\x01\x00\x00\x48\x85\xC9\x74\x1C\xBA\xDC\x40\x0E\x2D",
-                "xxxxxxxxxxxxxxxxxxxxx"
-            ),
+                $@"
+                    mov   rcx, {(long)pRadius}
+                    movss xmm2, dword ptr [rcx]
+                    mov   dl, 8
+                    mov   rcx, rax
+                    mov   rax, {Memory.ReadCall(radiusAddr + 0x0A)}
+                    call  rax
+                ",
 
-            HookBehavior.Replace
-        );
+                radiusAddr,
+
+                HookBehavior.Replace
+            );
+        }
+
+        IsInitialised = true;
+    }
+
+    var kinematics = Sonic.Kinematics.Get();
+
+    if (kinematics == null)
+        return;
+
+    if (Sonic.State.GetCurrentStateID() == 54)
+    {
+        if (!IsStompBeginPositionPreserved)
+        {
+            StompBeginPosition = *kinematics.Position;
+
+            IsStompBeginPositionPreserved = true;
+        }
+        
+        HeightFallen = StompBeginPosition.Y - kinematics.Position->Y;
+
+        // 11.0f is the default value for boundStompingCollisionScale.
+        Radius = MathHelper.Clamp(HeightFallen - HeightThreshold, 11.0f, 33.0f);
+    }
+    else
+    {
+        IsStompBeginPositionPreserved = false;
+
+        HeightFallen = 0.0f;
     }
 }
 
