@@ -4484,6 +4484,107 @@ Notes;
     );
 }
 
+Code "Disable Mouse Input" in "System" by "Hyper" does
+/*
+Disables input from the mouse and unhooks the cursor from the game window.
+
+Notes;
+- This is mainly useful for debugging, to prevent the game stealing focus from debuggers (e.g. Cheat Engine) when modal windows are opened.
+- This code is incompatible with Always Hide Mouse Cursor, but the cursor will no longer be in inconvenient locations whilst visible.
+*/
+//
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    static extern int ShowCursor(bool bShow);
+
+    static bool IsInitialised = false;
+//
+{
+    /* There's way too many calls to this in the game,
+       I'm just gonna force ShowCursor() every frame. */
+    ShowCursor(true);
+
+    if (IsInitialised)
+        return;
+
+    // Disable pointing for menus.
+    WriteProtected<byte>
+    (
+        /* 0x140E37536 */
+        ScanSignature
+        (
+            "\x74\x6C\x48\x8D\x4C\x24\x48",
+            "xxxxxxx"
+        ),
+
+        0xEB
+    );
+
+    // Disable mouse axis mapping.
+    WriteProtected<byte>
+    (
+        /* 0x140E36EB0 */
+        ScanSignature
+        (
+            "\x81\xC2\x00\x00\xFC\xFF\x83\xFA\x0C",
+            "xxxxxxxxx"
+        ),
+
+        Assemble("xorps xmm0, xmm0; ret")
+    );
+
+    // Disable mouse cursor hook.
+    WriteProtected<byte>
+    (
+        /* 0x140E2B6D9 */
+        ScanSignature
+        (
+            "\x0F\x28\xF1\x48\x85\xDB\x74\x6C",
+            "xxxxxxxx"
+        ),
+
+        0xE9, 0x8D, 0x00, 0x00, 0x00
+    );
+
+    // Disable mouse cursor clipping.
+    WriteProtected<byte>
+    (
+        /* 0x140C7D7F0 */
+        ScanSignature
+        (
+            "\x0F\x84\x63\xFF\xFF\xFF\x48\x8D\x55\xC8",
+            "xxxxxxxxxx"
+        ),
+
+        0xE9, 0x64, 0xFF, 0xFF, 0xFF
+    );
+
+    // Disable mouse cursor position override on focus change.
+    WriteProtected<byte>
+    (
+        /* 0x140C7D725 */
+        ScanSignature
+        (
+            "\x74\x24\x48\x8B\x08\x48\x8D\x55\xC8",
+            "xxxxxxxxx"
+        ),
+
+        0xEB
+    );
+
+    /* 0x140C7D725 */
+    long sig = ScanSignature
+    (
+        "\x48\x85\xC9\x74\x1B\x48\x8D\x54\x24\x20",
+        "xxxxxxxxxx"
+    );
+
+    // Disable mouse cursor position override on foreground window change.
+    WriteProtected<byte>(sig, Assemble("xor rcx, rcx"));
+    WriteProtected<byte>(sig + 0x03, 0xEB);
+
+    IsInitialised = true;
+}
+
 Patch "Disable Parry Targeting" in "Gameplay" by "Hyper" does "Disables Sonic automatically targeting the nearest enemy when parrying."
 {
     WriteNop
