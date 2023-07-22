@@ -4357,6 +4357,21 @@ Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops
     }
 }
 
+Patch "Disable Keyboard Input" in "System" by "Hyper" does "Disables input from the keyboard."
+{
+    WriteProtected<byte>
+    (
+        /* 0x140E11CC6 */
+        ScanSignature
+        (
+            "\x0F\x84\x9C\x00\x00\x00\x48\x8B\xB7\xB8\x01\x00\x00",
+            "xxxxxxxxxxxxx"
+        ),
+
+        0xE9, 0x9D, 0x00, 0x00, 0x00
+    );
+}
+
 Patch "Disable Loop Kick on Slide" in "Gameplay" by "Hyper"
 {
     WriteNop
