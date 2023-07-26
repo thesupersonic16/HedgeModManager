@@ -69,6 +69,39 @@ Library "Blackboard" by "Hyper, ĐeäTh & Sajid"
     }
 }
 
+Library "BlackboardItem" by "Hyper"
+{
+    #lib "Blackboard"
+    #lib "GameDocument"
+    #lib "GameObject"
+
+    public long Get(long blackboard = 0)
+    {
+        if (blackboard == 0)
+        {
+            long sonic = GameDocument.GetGameObject("Sonic");
+            
+            if (sonic == 0)
+                return 0;
+
+            blackboard = Blackboard.GetBlackboardFromPlayer(sonic);
+
+            if (blackboard == 0)
+                return 0;
+        }
+
+        return Blackboard.GetBlackboardContent(blackboard, "BlackboardItem");
+    }
+
+    public int GetRingCount(long blackboardItem = 0)
+    {
+        if (blackboardItem == 0 && (blackboardItem = Get()) == 0)
+            return 0;
+
+        return Read<int>(blackboardItem + 0x28);
+    }
+}
+
 Library "BlackboardStatus" by "Hyper"
 {
     #lib "Bitwise"
@@ -4370,6 +4403,52 @@ Patch "Disable Keyboard Input" in "System" by "Hyper" does "Disables input from 
 
         0xE9, 0x9D, 0x00, 0x00, 0x00
     );
+}
+
+Code "Disable Lava Instant Death" in "Gameplay" by "Hyper" does "Disables Sonic instantly drowning in lava and makes him jump up from the heat until running out of rings."
+//
+    #lib "BlackboardItem"
+    #lib "Memory"
+
+    static bool IsInitialised = false;
+
+    static int RingCount = 0;
+//
+{
+    if (!IsInitialised)
+    {
+        fixed (int* pRingCount = &RingCount)
+        {
+            /* 0x1408D78F7 */
+            long sig = ScanSignature
+            (
+                "\xF6\x43\x54\x40\x0F\x84\xD0\x00\x00\x00",
+                "xxxxxxxxxx"
+            );
+
+            WriteAsmHook
+            (
+                $@"
+                    mov rcx, {(long)pRingCount}
+                    cmp dword ptr [rcx], 0
+                    jnz exit
+                    mov rdx, {Memory.ReadJump(sig + 0x04)}
+                    jmp rdx
+                exit:
+                    lea edx, dword ptr [rax - 0x03]
+                    mov r8d, 0x800000
+                ",
+
+                sig,
+
+                HookBehavior.Replace
+            );
+        }
+
+        IsInitialised = true;
+    }
+
+    RingCount = BlackboardItem.GetRingCount();
 }
 
 Patch "Disable Loop Kick on Slide" in "Gameplay" by "Hyper"
