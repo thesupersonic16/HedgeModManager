@@ -398,6 +398,46 @@ Library "GameObject" by "Hyper, ĐeäTh & Sajid"
     }
 }
 
+Library "HMM" by "Hyper"
+{
+    #lib "INI"
+
+    using System.Collections.Generic;
+    using System.IO;
+
+    public Dictionary<string, Dictionary<string, string>> GetModsDatabase()
+    {
+        string workingDir = Directory.GetCurrentDirectory();
+        string cpkredirCfgPath = Path.Combine(workingDir, "cpkredir.ini");
+
+        if (!File.Exists(cpkredirCfgPath))
+            return null;
+
+        var cpkredirCfg = INI.Read(cpkredirCfgPath);
+        string modsDbPath = cpkredirCfg["CPKREDIR"]["ModsDbIni"];
+
+        if (!File.Exists(modsDbPath))
+            return null;
+
+        return INI.Read(modsDbPath);
+    }
+
+    public List<string> GetCodes()
+    {
+        List<string> result = new();
+
+        var modsDb = GetModsDatabase();
+
+        if (modsDb == null)
+            return null;
+
+        foreach (var value in modsDb["Codes"].Values)
+            result.Add(value);
+
+        return result;
+    }
+}
+
 Library "INI" by "Hyper"
 {
     using System.Collections.Generic;
