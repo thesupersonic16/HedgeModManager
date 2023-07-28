@@ -398,6 +398,57 @@ Library "GameObject" by "Hyper, ĐeäTh & Sajid"
     }
 }
 
+Library "INI" by "Hyper"
+{
+    using System.Collections.Generic;
+    using System.IO;
+    
+    public Dictionary<string, Dictionary<string, string>> Read(string path)
+    {
+        Dictionary<string, Dictionary<string, string>> result = new();
+
+        if (!File.Exists(path))
+            return result;
+
+        using (StreamReader reader = new StreamReader(path))
+        {
+            string section = string.Empty;
+            string line = string.Empty;
+
+            // Add root section.
+            result.Add(section, new Dictionary<string, string>());
+
+            while ((line = reader.ReadLine()) != null)
+            {
+                if (line.StartsWith("[") && line.EndsWith("]"))
+                {
+                    section = line.Substring(1, line.Length - 2);
+                    result.Add(section, new Dictionary<string, string>());
+                    continue;
+                }
+
+                if (line.StartsWith(";") || line.StartsWith("#"))
+                    continue;
+
+                int delimiterIndex = line.IndexOf('=');
+
+                if (delimiterIndex == -1)
+                    continue;
+
+                string key = line.Substring(0, delimiterIndex);
+                string value = line.Substring(delimiterIndex + 1);
+
+                if (value.StartsWith("\"") && value.EndsWith("\"") && value.Length > 1)
+                    value = value.Substring(1, value.Length - 2);
+                
+                result[section].Add(key, value);
+            }
+        }
+
+        return result;
+    }
+}
+
 Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
 {
     #lib "Collections"
