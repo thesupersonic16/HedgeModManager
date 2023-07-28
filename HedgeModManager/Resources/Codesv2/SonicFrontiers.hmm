@@ -578,6 +578,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
     #load "System.Numerics.dll"
 
     using System.Collections.Generic;
+    using System.Linq;
     using System.Numerics;
     using System.Runtime.InteropServices;
 
@@ -996,7 +997,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         private static int _currentStateID = -1;
         private static Collections.StackList<int> _stateStackTrace = new(10);
 
-        public delegate void TStateNotifyAction(int stateId);
+        public delegate void TStateNotifyAction(int stateId, int[] stateStackTrace);
         private static List<TStateNotifyAction> _stateNotifyActions = new();
         
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -1018,7 +1019,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             }
 
             foreach (TStateNotifyAction action in _stateNotifyActions)
-                action.Invoke(_currentStateID);
+                action.Invoke(_currentStateID, _stateStackTrace.ToArray());
 
             if (_redirectedStates.ContainsKey(stateId))
                 return _redirectedStates[stateId];
@@ -1776,7 +1777,7 @@ Patch "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Soni
     static bool IsBoostPrevious = false;
 //
 {
-    void NotifyStateRunDamageCollision(int stateId)
+    void NotifyStateRunDamageCollision(int stateId, int[] stateStackTrace)
     {
         if (BlackboardStatus.Get() != 0)
         {
@@ -5411,7 +5412,7 @@ Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform a
     static bool IsRestoredAirBoost = false;
 //
 {
-    void NotifyAirBoostReset(int stateId)
+    void NotifyAirBoostReset(int stateId, int[] stateStackTrace)
     {
         // Reset flag for StateAirBoost or StateSpinBoost.
         if (stateId == 23 || stateId == 116)
@@ -5454,7 +5455,7 @@ Patch "Fix Damage from Jumping into Enemies" in "Fixes" by "Hyper" does "Fixes S
     static bool IsJumpPrevious = false;
 //
 {
-    void NotifyJumpDamageCollision(int stateId)
+    void NotifyJumpDamageCollision(int stateId, int[] stateStackTrace)
     {
         bool isJump = stateId == 8 || stateId == 9 || stateId == 48;
 
@@ -7915,7 +7916,7 @@ Notes;
         IsInitialised = true;
     }
 
-    void NotifyStateJump(int stateId)
+    void NotifyStateJump(int stateId, int[] stateStackTrace)
     {
         IsStateJump = stateId == 8;
     }
@@ -8263,7 +8264,7 @@ This state lasts a fraction of a second, but keep in mind that within that time,
             );
         }
 
-        void NotifyStateSpringJumpHeadLandDamageCollision(int stateId)
+        void NotifyStateSpringJumpHeadLandDamageCollision(int stateId, int[] stateStackTrace)
         {
             bool isStateSpringJumpHeadLand = stateId == 163;
             
