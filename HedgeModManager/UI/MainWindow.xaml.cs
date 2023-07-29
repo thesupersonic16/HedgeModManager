@@ -980,7 +980,10 @@ namespace HedgeModManager
                 EnableSaveRedirIfUsed();
                 await SaveModsDB();
                 if (HedgeApp.IsLinux)
+                {
                     Linux.PatchRegistry(HedgeApp.CurrentGame);
+                    Linux.LinkRuntimeToProtonPrefix(HedgeApp.CurrentGame);
+                }
                 Refresh();
                 UpdateStatus(Localise("StatusUIModsDBSaved"));
                 if (startGame)
