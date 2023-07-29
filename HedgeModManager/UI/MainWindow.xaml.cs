@@ -979,6 +979,8 @@ namespace HedgeModManager
                 ShowMissingOtherLoaderWarning();
                 EnableSaveRedirIfUsed();
                 await SaveModsDB();
+                if (HedgeApp.IsLinux)
+                    Linux.PatchRegistry(HedgeApp.CurrentGame);
                 Refresh();
                 UpdateStatus(Localise("StatusUIModsDBSaved"));
                 if (startGame)

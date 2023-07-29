@@ -51,6 +51,9 @@ namespace HedgeModManager
             return Path.Combine(SteamLocation, "config/avatarcache/", SID64 + ".png");
         }
 
+        public static string GetProtonPrefixPath(string gameId) =>
+            Path.Combine(SteamLocation, $"steamapps\\compatdata\\{gameId}\\pfx");
+
         public static List<GameInstall> SearchForGames()
         {
             var paths = new List<string>();

@@ -13,6 +13,38 @@ namespace HedgeModManager
     public static class Linux
     {
 
+        /// <summary>
+        /// Performs any patches needed for mods to execute correctly
+        /// </summary>
+        /// <param name="game">Game to apply the patch to</param>
+        /// <returns></returns>
+        public static bool PatchRegistry(Game game)
+        {
+            if (game == null)
+                return false;
+
+            string prefixPath = ConvertToUnix(Path.Combine(Steam.GetProtonPrefixPath(game.AppID)));
+            string userReg = Path.Combine(prefixPath, "user.reg");
+
+            // Check if registry exists
+            if (!File.Exists(userReg))
+                return false;
+
+            // Registry data
+            byte[] reg = File.ReadAllBytes(userReg);
+            
+            string modLoaderFileName = 
+                Path.GetFileNameWithoutExtension(game.ModLoader.ModLoaderFileName);
+            string group = @"[Software\\Wine\\DllOverrides]";
+            string key = $"\"{modLoaderFileName}\"=\"native,builtin\"";
+
+            // Scan
+            if (HedgeApp.BoyerMooreSearch(reg, Encoding.UTF8.GetBytes(key)) == -1)
+                File.AppendAllText(userReg, $"\n{group}\n{key}");
+
+            return true;
+        }
+
         public static bool GenerateDesktop()
         {
             string baseExec = null;
