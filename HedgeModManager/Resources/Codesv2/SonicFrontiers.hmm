@@ -69,6 +69,39 @@ Library "Blackboard" by "Hyper, ĐeäTh & Sajid"
     }
 }
 
+Library "BlackboardItem" by "Hyper"
+{
+    #lib "Blackboard"
+    #lib "GameDocument"
+    #lib "GameObject"
+
+    public long Get(long blackboard = 0)
+    {
+        if (blackboard == 0)
+        {
+            long sonic = GameDocument.GetGameObject("Sonic");
+            
+            if (sonic == 0)
+                return 0;
+
+            blackboard = Blackboard.GetBlackboardFromPlayer(sonic);
+
+            if (blackboard == 0)
+                return 0;
+        }
+
+        return Blackboard.GetBlackboardContent(blackboard, "BlackboardItem");
+    }
+
+    public int GetRingCount(long blackboardItem = 0)
+    {
+        if (blackboardItem == 0 && (blackboardItem = Get()) == 0)
+            return 0;
+
+        return Read<int>(blackboardItem + 0x28);
+    }
+}
+
 Library "BlackboardStatus" by "Hyper"
 {
     #lib "Bitwise"
@@ -365,6 +398,97 @@ Library "GameObject" by "Hyper, ĐeäTh & Sajid"
     }
 }
 
+Library "HMM" by "Hyper"
+{
+    #lib "INI"
+
+    using System.Collections.Generic;
+    using System.IO;
+
+    public Dictionary<string, Dictionary<string, string>> GetModsDatabase()
+    {
+        string workingDir = Directory.GetCurrentDirectory();
+        string cpkredirCfgPath = Path.Combine(workingDir, "cpkredir.ini");
+
+        if (!File.Exists(cpkredirCfgPath))
+            return null;
+
+        var cpkredirCfg = INI.Read(cpkredirCfgPath);
+        string modsDbPath = cpkredirCfg["CPKREDIR"]["ModsDbIni"];
+
+        if (!File.Exists(modsDbPath))
+            return null;
+
+        return INI.Read(modsDbPath);
+    }
+
+    public List<string> GetCodes()
+    {
+        List<string> result = new();
+
+        var modsDb = GetModsDatabase();
+
+        if (modsDb == null)
+            return null;
+
+        foreach (var value in modsDb["Codes"].Values)
+            result.Add(value);
+
+        return result;
+    }
+}
+
+Library "INI" by "Hyper"
+{
+    using System.Collections.Generic;
+    using System.IO;
+    
+    public Dictionary<string, Dictionary<string, string>> Read(string path)
+    {
+        Dictionary<string, Dictionary<string, string>> result = new();
+
+        if (!File.Exists(path))
+            return result;
+
+        using (StreamReader reader = new StreamReader(path))
+        {
+            string section = string.Empty;
+            string line = string.Empty;
+
+            // Add root section.
+            result.Add(section, new Dictionary<string, string>());
+
+            while ((line = reader.ReadLine()) != null)
+            {
+                if (line.StartsWith("[") && line.EndsWith("]"))
+                {
+                    section = line.Substring(1, line.Length - 2);
+                    result.Add(section, new Dictionary<string, string>());
+                    continue;
+                }
+
+                if (line.StartsWith(";") || line.StartsWith("#"))
+                    continue;
+
+                int delimiterIndex = line.IndexOf('=');
+
+                if (delimiterIndex == -1)
+                    continue;
+
+                string key = line.Substring(0, delimiterIndex);
+                string value = line.Substring(delimiterIndex + 1);
+
+                if (value.StartsWith("\"") && value.EndsWith("\"") && value.Length > 1)
+                    value = value.Substring(1, value.Length - 2);
+                
+                result[section].Add(key, value);
+            }
+        }
+
+        return result;
+    }
+}
+
 Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
 {
     #lib "Collections"
@@ -541,10 +665,13 @@ Library "Sonic" by "Hyper, NM & Ahremic"
     #lib "GameDocument"
     #lib "GameObject"
     #lib "LevelInfo"
+    #lib "Memory"
+    #lib "StringMapOperation"
 
     #load "System.Numerics.dll"
 
     using System.Collections.Generic;
+    using System.Linq;
     using System.Numerics;
     using System.Runtime.InteropServices;
 
@@ -588,6 +715,10 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         private delegate void _tSetAnimation(long gocPlayerVisual, long animationNamePtr, byte a3);
         private static long _sigSetAnimation = 0;
 
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void _tSetAnimationParameter(long gocPlayerVisual, long paramNamePtr, float value);
+        private static long _sigSetAnimationParameter = 0;
+
         public static void SetAnimation(string destination)
         {
             if (_sigSetAnimation == 0)
@@ -619,6 +750,39 @@ Library "Sonic" by "Hyper, NM & Ahremic"
                 return;
 
             fpSetAnimation.Invoke(gocPlayerVisual, (long)Marshal.StringToHGlobalAnsi(destination), 0xFE);
+        }
+
+        public static void SetAnimationParameter(string paramName, float value)
+        {
+            if (_sigSetAnimationParameter == 0)
+            {
+                /* 0x140813140 */
+                _sigSetAnimationParameter = ScanSignature
+                (
+                    "\x40\x53\x48\x83\xEC\x30\x48\x8B\x81\x10\x01\x00\x00\x48\x8B\xDA",
+                    "xxxxxxxxxxxxxxxx"
+                );
+
+                if (_sigSetAnimationParameter == 0)
+                    return;
+            }
+
+            var fpSetAnimationParameter = Marshal.GetDelegateForFunctionPointer<_tSetAnimationParameter>((IntPtr)_sigSetAnimationParameter);
+
+            if (fpSetAnimationParameter == null)
+                return;
+
+            long sonic = GetSonic();
+
+            if (sonic == 0)
+                return;
+
+            long gocPlayerVisual = GameObject.GetGOC(sonic, "GOCPlayerVisual");
+
+            if (gocPlayerVisual == 0)
+                return;
+
+            fpSetAnimationParameter.Invoke(gocPlayerVisual, (long)Marshal.StringToHGlobalAnsi(paramName), value);
         }
     }
 
@@ -731,8 +895,76 @@ Library "Sonic" by "Hyper, NM & Ahremic"
     public static class Effect
     {
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate IntPtr _tPlayAnimationEffect(long sonicContext, IntPtr effectName);
+        private delegate bool _tPlayAnimationEffect(long pSonicContext, long effectName);
         private static long _sigPlayAnimationEffect = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate long _tStopAnimationEffects(long sonicContext);
+        private static long _sigStopAnimationEffects = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate long _tPlayEffect(long pStatePluginEffect, uint handleNameHash, long pEffectName);
+        private static long _sigPlayEffect = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate long _tStopEffect(long pStatePluginEffect, uint handleNameHash);
+        private static long _sigStopEffect = 0;
+
+        public static void PlayEffect(string handleName, string effectName)
+        {
+            if (_sigPlayEffect == 0)
+            {
+                /* 0x1408DF420 */
+                _sigPlayEffect = ScanSignature
+                (
+                    "\x48\x8B\xC4\x48\x89\x58\x08\x48\x89\x68\x18\x48\x89\x70\x20\x57\x48\x81\xEC\xA0\x00\x00\x00\xF3",
+                    "xxxxxxxxxxxxxxxxxxxxxxxx"
+                );
+
+                if (_sigPlayEffect == 0)
+                    return;
+            }
+
+            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tPlayEffect>((IntPtr)_sigPlayEffect);
+
+            if (fpPlayEffect == null)
+                return;
+
+            long pStatePluginEffect = State.GetStatePlugin("StatePluginEffect");
+
+            if (pStatePluginEffect == 0)
+                return;
+
+            fpPlayEffect.Invoke(pStatePluginEffect, StringMapOperation.ComputeHash(handleName), (long)Marshal.StringToHGlobalAnsi(effectName));
+        }
+
+        public static void StopEffect(string handleName)
+        {
+            if (_sigStopEffect == 0)
+            {
+                /* 0x14B912E80 */
+                _sigStopEffect = ScanSignature
+                (
+                    "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x8B\x41\x30\x48\x8D",
+                    "xxxxxxxxxxxxxxxx"
+                );
+
+                if (_sigStopEffect == 0)
+                    return;
+            }
+
+            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tStopEffect>((IntPtr)_sigStopEffect);
+
+            if (fpPlayEffect == null)
+                return;
+
+            long pStatePluginEffect = State.GetStatePlugin("StatePluginEffect");
+
+            if (pStatePluginEffect == 0)
+                return;
+
+            fpPlayEffect.Invoke(pStatePluginEffect, StringMapOperation.ComputeHash(handleName));
+        }
 
         public static void PlayAnimationEffect(string name)
         {
@@ -749,9 +981,9 @@ Library "Sonic" by "Hyper, NM & Ahremic"
                     return;
             }
 
-            var fpPlayEffect = Marshal.GetDelegateForFunctionPointer<_tPlayAnimationEffect>((IntPtr)_sigPlayAnimationEffect);
+            var fpPlayAnimationEffect = Marshal.GetDelegateForFunctionPointer<_tPlayAnimationEffect>((IntPtr)_sigPlayAnimationEffect);
 
-            if (fpPlayEffect == null)
+            if (fpPlayAnimationEffect == null)
                 return;
 
             long sonicContext = GetSonicContext();
@@ -759,7 +991,35 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (sonicContext == 0)
                 return;
 
-            fpPlayEffect.Invoke(sonicContext, Marshal.StringToHGlobalAnsi(name));
+            fpPlayAnimationEffect.Invoke(sonicContext, (long)Marshal.StringToHGlobalAnsi(name));
+        }
+
+        public static void StopAnimationEffects()
+        {
+            if (_sigStopAnimationEffects == 0)
+            {
+                /* 0x14BC65500 */
+                _sigStopAnimationEffects = ScanSignature
+                (
+                    "\x40\x53\x48\x83\xEC\x20\x48\x89\xCB\xE8\xCC\xCC\xCC\xCC\x48\x85\xC0",
+                    "xxxxxxxxxx????xxx"
+                );
+
+                if (_sigStopAnimationEffects == 0)
+                    return;
+            }
+
+            var fpStopAnimationEffect = Marshal.GetDelegateForFunctionPointer<_tStopAnimationEffects>((IntPtr)_sigStopAnimationEffects);
+
+            if (fpStopAnimationEffect == null)
+                return;
+
+            long sonicContext = GetSonicContext();
+
+            if (sonicContext == 0)
+                return;
+
+            fpStopAnimationEffect.Invoke(sonicContext);
         }
     }
 
@@ -956,6 +1216,77 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         }
     }
 
+    public static class Sound
+    {
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate int* _tPlaySound(long pGOCSound, int* a2, long pSoundName, float a4);
+        private static long _sigPlaySound = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate int* _tStopSound(int* pSoundHandle);
+        private static long _sigStopSound = 0;
+
+        public static int PlaySound(string soundName)
+        {
+            if (_sigPlaySound == 0)
+            {
+                /* 0x140AE69F0 */
+                _sigPlaySound = ScanSignature
+                (
+                    "\x4C\x8B\xDC\x49\x89\x5B\x08\x57\x48\x81\xEC\x80\x00\x00\x00",
+                    "xxxxxxxxxxxxxxx"
+                );
+
+                if (_sigPlaySound == 0)
+                    return 0;
+            }
+
+            var fpPlaySound = Marshal.GetDelegateForFunctionPointer<_tPlaySound>((IntPtr)_sigPlaySound);
+
+            if (fpPlaySound == null)
+                return 0;
+
+            long pSonic = GetSonic();
+
+            if (pSonic == 0)
+                return 0;
+
+            long pGOCSound = GameObject.GetGOC(pSonic, "GOCSound");
+
+            if (pGOCSound == 0)
+                return 0;
+
+            int zero = 0;
+            
+            return *fpPlaySound.Invoke(pGOCSound, &zero, (long)Marshal.StringToHGlobalAnsi(soundName), 0.0f);
+        }
+
+        public static void StopSound(int* pSoundHandle)
+        {
+            if (_sigStopSound == 0)
+            {
+                /* 0x1405A90FF */
+                _sigStopSound = ScanSignature
+                (
+                    "\xE8\xCC\xCC\xCC\xCC\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x33\xD2\x48\x8B\xCF\xF3\x0F\x10\x90\x90\x00\x00\x00",
+                    "x????xxxx????xxxxxxxxxxxxx"
+                );
+
+                if (_sigStopSound == 0)
+                    return;
+
+                _sigStopSound = Memory.ReadCall(_sigStopSound);
+            }
+
+            var fpStopSound = Marshal.GetDelegateForFunctionPointer<_tStopSound>((IntPtr)_sigStopSound);
+
+            if (fpStopSound == null)
+                return;
+
+            fpStopSound.Invoke(pSoundHandle);
+        }
+    }
+
     public static class State
     {
         private static bool _initialisedStateRedirector = false;
@@ -963,17 +1294,21 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         private static int _currentStateID = -1;
         private static Collections.StackList<int> _stateStackTrace = new(10);
 
-        public delegate void TStateNotifyAction(int stateId);
+        public delegate void TStateNotifyAction(int stateId, int[] stateStackTrace);
         private static List<TStateNotifyAction> _stateNotifyActions = new();
-        
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate void _tSetState(long gocPlayerHsm, int stateId, int a3);
-        private static long _sigSetState = 0;
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate int _tSetStateID(int stateId);
         private static _tSetStateID _delSetStateID = new _tSetStateID(SetStateID);
         private static IntPtr _fpSetStateID = Marshal.GetFunctionPointerForDelegate(_delSetStateID);
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate long _tGetStatePlugin(long pStatePluginManager, uint pluginNameHash);
+        private static long _sigGetStatePlugin = 0;
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void _tSetState(long gocPlayerHsm, int stateId, int a3);
+        private static long _sigSetState = 0;
 
         private static int SetStateID(int stateId)
         {
@@ -985,7 +1320,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             }
 
             foreach (TStateNotifyAction action in _stateNotifyActions)
-                action.Invoke(_currentStateID);
+                action.Invoke(_currentStateID, _stateStackTrace.ToArray());
 
             if (_redirectedStates.ContainsKey(stateId))
                 return _redirectedStates[stateId];
@@ -1034,6 +1369,34 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             InitStateRedirector();
 
             return _stateStackTrace.GetItemAt(stackIndex);
+        }
+
+        public static long GetStatePlugin(string pluginName)
+        {
+            if (_sigGetStatePlugin == 0)
+            {
+                /* 0x140124200 */
+                _sigGetStatePlugin = ScanSignature
+                (
+                    "\x48\x89\x5C\x24\x08\x48\x89\x6C\x24\x10\x48\x89\x74\x24\x18\x57\x48\x83\xEC\x20\x48\x8B\x59\x18\x8B",
+                    "xxxxxxxxxxxxxxxxxxxxxxxxx"
+                );
+
+                if (_sigGetStatePlugin == 0)
+                    return 0;
+            }
+
+            var fpGetStatePlugin = Marshal.GetDelegateForFunctionPointer<_tGetStatePlugin>((IntPtr)_sigGetStatePlugin);
+
+            if (fpGetStatePlugin == null)
+                return 0;
+
+            long pSonicContext = GetSonicContext();
+
+            if (pSonicContext == 0)
+                return 0;
+
+            return fpGetStatePlugin.Invoke(*(long*)(*(long*)(pSonicContext + 0x38) + 0x108), StringMapOperation.ComputeHash(pluginName));
         }
 
         public static void AddStateNotifyAction(TStateNotifyAction action)
@@ -1116,6 +1479,58 @@ Library "StringMapOperation" by "ĐeäTh"
             hash = key[i] + 31 * hash;
 
         return hash & 0x7FFFFFFF;
+    }
+}
+
+Library "Time" by "Hyper"
+{
+    private static bool _initialised = false;
+    private static float* _pFrameRate;
+
+    private void Init()
+    {
+        if (_initialised)
+            return;
+
+        fixed (float** p_pFrameRate = &_pFrameRate)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    movss  xmm0, dword ptr [rcx + 0x14]
+                    lea    rdi, qword ptr [rcx + 0x14]
+                    movaps xmmword ptr [rsp + 0x58 + 0xFFFFFFFFFFFFFFE8], xmm6
+                    mov    r9, {(long)p_pFrameRate}
+                    mov    [r9], rcx
+                    add    qword ptr [r9], 0x14
+                ",
+
+                /* 0x140BB9EDF */
+                ScanSignature
+                (
+                    "\xF3\x0F\x10\x41\x14\x48\x8D\x79\x14",
+                    "xxxxxxxxx"
+                ),
+                
+                HookBehavior.Replace
+            );
+        }
+
+        _initialised = true;
+    }
+
+    public float GetFrameRate()
+    {
+        Init();
+
+        return _pFrameRate == null ? 0.0f : *_pFrameRate;
+    }
+
+    public float GetDeltaTime()
+    {
+        Init();
+
+        return 1.0f / GetFrameRate();
     }
 }
 
@@ -1743,7 +2158,7 @@ Patch "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Soni
     static bool IsBoostPrevious = false;
 //
 {
-    void NotifyStateRunDamageCollision(int stateId)
+    void NotifyStateRunDamageCollision(int stateId, int[] stateStackTrace)
     {
         if (BlackboardStatus.Get() != 0)
         {
@@ -4364,6 +4779,67 @@ Patch "Disable Jump Board Paths on Islands" in "Gameplay" by "Hyper" does "Stops
     }
 }
 
+Patch "Disable Keyboard Input" in "System" by "Hyper" does "Disables input from the keyboard."
+{
+    WriteProtected<byte>
+    (
+        /* 0x140E11CC6 */
+        ScanSignature
+        (
+            "\x0F\x84\x9C\x00\x00\x00\x48\x8B\xB7\xB8\x01\x00\x00",
+            "xxxxxxxxxxxxx"
+        ),
+
+        0xE9, 0x9D, 0x00, 0x00, 0x00
+    );
+}
+
+Code "Disable Lava Instant Death" in "Gameplay" by "Hyper" does "Disables Sonic instantly drowning in lava and makes him jump up from the heat until running out of rings."
+//
+    #lib "BlackboardItem"
+    #lib "Memory"
+
+    static bool IsInitialised = false;
+
+    static int RingCount = 0;
+//
+{
+    if (!IsInitialised)
+    {
+        fixed (int* pRingCount = &RingCount)
+        {
+            /* 0x1408D78F7 */
+            long sig = ScanSignature
+            (
+                "\xF6\x43\x54\x40\x0F\x84\xD0\x00\x00\x00",
+                "xxxxxxxxxx"
+            );
+
+            WriteAsmHook
+            (
+                $@"
+                    mov rcx, {(long)pRingCount}
+                    cmp dword ptr [rcx], 0
+                    jnz exit
+                    mov rdx, {Memory.ReadJump(sig + 0x04)}
+                    jmp rdx
+                exit:
+                    lea edx, dword ptr [rax - 0x03]
+                    mov r8d, 0x800000
+                ",
+
+                sig,
+
+                HookBehavior.Replace
+            );
+        }
+
+        IsInitialised = true;
+    }
+
+    RingCount = BlackboardItem.GetRingCount();
+}
+
 Patch "Disable Loop Kick on Slide" in "Gameplay" by "Hyper"
 {
     WriteNop
@@ -4489,6 +4965,107 @@ Notes;
 
         0xEB
     );
+}
+
+Code "Disable Mouse Input" in "System" by "Hyper" does
+/*
+Disables input from the mouse and unhooks the cursor from the game window.
+
+Notes;
+- This is mainly useful for debugging, to prevent the game stealing focus from debuggers (e.g. Cheat Engine) when modal windows are opened.
+- This code is incompatible with Always Hide Mouse Cursor, but the cursor will no longer be in inconvenient locations whilst visible.
+*/
+//
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    static extern int ShowCursor(bool bShow);
+
+    static bool IsInitialised = false;
+//
+{
+    /* There's way too many calls to this in the game,
+       I'm just gonna force ShowCursor() every frame. */
+    ShowCursor(true);
+
+    if (IsInitialised)
+        return;
+
+    // Disable pointing for menus.
+    WriteProtected<byte>
+    (
+        /* 0x140E37536 */
+        ScanSignature
+        (
+            "\x74\x6C\x48\x8D\x4C\x24\x48",
+            "xxxxxxx"
+        ),
+
+        0xEB
+    );
+
+    // Disable mouse axis mapping.
+    WriteProtected<byte>
+    (
+        /* 0x140E36EB0 */
+        ScanSignature
+        (
+            "\x81\xC2\x00\x00\xFC\xFF\x83\xFA\x0C",
+            "xxxxxxxxx"
+        ),
+
+        Assemble("xorps xmm0, xmm0; ret")
+    );
+
+    // Disable mouse cursor hook.
+    WriteProtected<byte>
+    (
+        /* 0x140E2B6D9 */
+        ScanSignature
+        (
+            "\x0F\x28\xF1\x48\x85\xDB\x74\x6C",
+            "xxxxxxxx"
+        ),
+
+        0xE9, 0x8D, 0x00, 0x00, 0x00
+    );
+
+    // Disable mouse cursor clipping.
+    WriteProtected<byte>
+    (
+        /* 0x140C7D7F0 */
+        ScanSignature
+        (
+            "\x0F\x84\x63\xFF\xFF\xFF\x48\x8D\x55\xC8",
+            "xxxxxxxxxx"
+        ),
+
+        0xE9, 0x64, 0xFF, 0xFF, 0xFF
+    );
+
+    // Disable mouse cursor position override on focus change.
+    WriteProtected<byte>
+    (
+        /* 0x140C7D725 */
+        ScanSignature
+        (
+            "\x74\x24\x48\x8B\x08\x48\x8D\x55\xC8",
+            "xxxxxxxxx"
+        ),
+
+        0xEB
+    );
+
+    /* 0x140C7D725 */
+    long sig = ScanSignature
+    (
+        "\x48\x85\xC9\x74\x1B\x48\x8D\x54\x24\x20",
+        "xxxxxxxxxx"
+    );
+
+    // Disable mouse cursor position override on foreground window change.
+    WriteProtected<byte>(sig, Assemble("xor rcx, rcx"));
+    WriteProtected<byte>(sig + 0x03, 0xEB);
+
+    IsInitialised = true;
 }
 
 Patch "Disable Parry Targeting" in "Gameplay" by "Hyper" does "Disables Sonic automatically targeting the nearest enemy when parrying."
@@ -5223,7 +5800,7 @@ Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform a
     static bool IsRestoredAirBoost = false;
 //
 {
-    void NotifyAirBoostReset(int stateId)
+    void NotifyAirBoostReset(int stateId, int[] stateStackTrace)
     {
         // Reset flag for StateAirBoost or StateSpinBoost.
         if (stateId == 23 || stateId == 116)
@@ -5266,7 +5843,7 @@ Patch "Fix Damage from Jumping into Enemies" in "Fixes" by "Hyper" does "Fixes S
     static bool IsJumpPrevious = false;
 //
 {
-    void NotifyJumpDamageCollision(int stateId)
+    void NotifyJumpDamageCollision(int stateId, int[] stateStackTrace)
     {
         bool isJump = stateId == 8 || stateId == 9 || stateId == 48;
 
@@ -7810,7 +8387,7 @@ Notes;
         IsInitialised = true;
     }
 
-    void NotifyStateJump(int stateId)
+    void NotifyStateJump(int stateId, int[] stateStackTrace)
     {
         IsStateJump = stateId == 8;
     }
@@ -7820,6 +8397,8 @@ Notes;
 
 Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
 //
+    #lib "Time"
+
     using System.Diagnostics;
     using System.Runtime.InteropServices;
     using System.Text;
@@ -7833,71 +8412,29 @@ Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
     [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
     static extern bool SetWindowText(IntPtr hWnd, String lpString);
 
-    static bool Initialised = false;
-
-    static float* pFramerate;
-
     static IntPtr HWND = IntPtr.Zero;
 
     static string OriginalTitle;
 //
 {
-    if (!Initialised)
+    if (HWND == IntPtr.Zero)
     {
-        fixed (float** ppFramerate = &pFramerate)
-        {
-            WriteAsmHook
-            (
-                $@"
-                    ; Restore original code.
-                    movss  xmm0, dword ptr [rcx + 0x14]
-                    lea    rdi, qword ptr [rcx + 0x14]
-                    movaps xmmword ptr [rsp + 0x58 + 0xFFFFFFFFFFFFFFE8], xmm6
-
-                    ; Get float pointer.
-                    mov r9, {(long)ppFramerate}
-                    mov [r9], rcx
-                    add qword ptr [r9], 0x14
-                ",
-
-                /* 0x140BB9EDF */
-                ScanSignature
-                (
-                    "\xF3\x0F\x10\x41\x14\x48\x8D\x79\x14",
-                    "xxxxxxxxx"
-                ),
-
-                HookBehavior.Replace
-            );
-        }
-
-        Initialised = true;
+        HWND = Process.GetCurrentProcess().MainWindowHandle;
     }
-
-    if (pFramerate != null)
+    else
     {
-        if (HWND == IntPtr.Zero)
+        if (string.IsNullOrEmpty(OriginalTitle))
         {
-            HWND = Process.GetCurrentProcess().MainWindowHandle;
+            StringBuilder title = new StringBuilder(GetWindowTextLength(HWND) + 1);
+            {
+                GetWindowText(HWND, title, title.Capacity);
+
+                OriginalTitle = title.ToString();
+            }
         }
         else
         {
-            float framerate = *pFramerate;
-            float frametime = 1.0f / framerate;
-
-            if (string.IsNullOrEmpty(OriginalTitle))
-            {
-                StringBuilder title = new StringBuilder(GetWindowTextLength(HWND) + 1);
-                {
-                    GetWindowText(HWND, title, title.Capacity);
-
-                    OriginalTitle = title.ToString();
-                }
-            }
-            else
-            {
-                SetWindowText(HWND, $"{OriginalTitle} - {framerate:0} FPS ({frametime} ms)");
-            }
+            SetWindowText(HWND, $"{OriginalTitle} - {Time.GetFrameRate()} FPS ({Time.GetDeltaTime()} ms)");
         }
     }
 }
@@ -8158,7 +8695,7 @@ This state lasts a fraction of a second, but keep in mind that within that time,
             );
         }
 
-        void NotifyStateSpringJumpHeadLandDamageCollision(int stateId)
+        void NotifyStateSpringJumpHeadLandDamageCollision(int stateId, int[] stateStackTrace)
         {
             bool isStateSpringJumpHeadLand = stateId == 163;
             
