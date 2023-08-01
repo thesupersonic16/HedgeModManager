@@ -485,7 +485,7 @@ namespace HedgeModManager
             try
             {
                 await Singleton.GetInstance<HttpClient>().DownloadFileAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}",
-                    ModsDB.CodesTextPath, null, token);
+                    Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath), null, token);
 
                 Dispatcher.Invoke(Refresh);
             }
@@ -508,13 +508,14 @@ namespace HedgeModManager
             if (HedgeApp.CurrentGame == Games.Unknown)
                 return;
 
-            if (!File.Exists(ModsDB.CodesTextPath))
+            var codesPath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
+            if (!File.Exists(codesPath))
                 return;
 
             try
             {
                 // Codes from disk.
-                string localCodes = File.ReadAllText(ModsDB.CodesTextPath);
+                string localCodes = File.ReadAllText(codesPath);
                 string repoCodes = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}");
 
                 if (ViewModel.CPKREDIR.UpdateCodesOnLaunch && localCodes != repoCodes)
@@ -1440,7 +1441,7 @@ namespace HedgeModManager
             UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGame));
             try
             {
-                string codesFilePath = ModsDB.CodesTextPath;
+                string codesFilePath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
                 bool codesFileExists = File.Exists(codesFilePath);
 
                 /* Parse current codes list, since ModsDB.CodesDatabase
@@ -1460,22 +1461,22 @@ namespace HedgeModManager
                         Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
 
                         // Don't display diff for initial download.
-                        if (!codesFileExists)
+                        if (oldCodes == null)
                             return;
 
                         var diff = new CodeFile(codesFilePath).CalculateDiff(oldCodes);
                         {
                             var sb = new StringBuilder();
 
-                            foreach (var code in diff.ToList())
+                            foreach (var block in diff.ToList())
                             {
-                                sb.AppendLine($"- {code}");
+                                sb.AppendLine($"- {DiffBlockToString(block)}");
 
-                                if (code.Type == DiffType.Renamed)
+                                if (block.Type == DiffType.Renamed)
                                 {
                                     // Restore enabled state of renamed code.
-                                    if (ViewModel.ModsDB.Codes.Contains(code.Data.Key))
-                                        ViewModel.ModsDB.CodesDatabase.Codes.Find(x => x.Name == code.Data.Value).Enabled = true;
+                                    if (ViewModel.ModsDB.Codes.Contains(block.Data.Key))
+                                        ViewModel.ModsDB.CodesDatabase.Codes.Find(x => x.Name == block.Data.Value).Enabled = true;
                                 }
                             }
 
@@ -1501,6 +1502,19 @@ namespace HedgeModManager
             {
                 UpdateStatus(Localise("StatusUIDownloadFailed"));
             }
+        }
+
+        private static string DiffBlockToString(DiffBlock block)
+        {
+            string key = block.Type switch
+            {
+                DiffType.Added => "DiffUIAdded",
+                DiffType.Removed => "DiffUIRemoved",
+                DiffType.Renamed => "DiffUIRenamed",
+                _ => "DiffUIModified",
+            };
+
+            return LocaliseFormat(key, block.Description);
         }
 
         private void UI_Download_Codes(object sender, RoutedEventArgs e)
