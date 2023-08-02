@@ -751,6 +751,21 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsWallClimb);
     }
 
+    public bool IsSideView()
+    {
+		var pSonic = GetSonic();
+
+		if (pSonic == 0)
+			return false;
+
+		var pPlayerParameter = GameObject.GetGOC(pSonic, "GOCPlayerParameter");
+
+		if (pPlayerParameter == 0)
+			return false;
+
+		return *(int*)(((long)pPlayerParameter) + 0xB8) == 3;
+    }
+
     public static class Animation
     {
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -6924,10 +6939,7 @@ Patch "Force Depth of Field" in "Graphics" by "WasifBoomz & Dicey" does "Forces 
     );
 }
 
-Patch "Force Higher Detail Reflections" in "Graphics" by "Hyper" does
-/*
-Forces real-time local reflections to render at a higher resolution and reduces artefacting around Sonic and other nearby objects.
-*/
+Patch "Force Higher Detail Reflections" in "Graphics" by "Hyper" does "Forces real-time local reflections to render at a higher resolution and reduces artefacting around Sonic and other nearby objects."
 {
     WriteAsmHook
     (
