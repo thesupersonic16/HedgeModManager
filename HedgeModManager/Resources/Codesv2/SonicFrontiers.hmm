@@ -513,6 +513,8 @@ Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
 
 Library "MathHelper" by "Hyper"
 {
+    using System.Collections.Generic;
+
     public T Clamp<T>(T value, T minValue, T maxValue) where T : IComparable<T>
     {
         if (value.CompareTo(minValue) < 0)
@@ -527,6 +529,46 @@ Library "MathHelper" by "Hyper"
         {
             return value;
         }
+    }
+
+    public T FloatPercentToRange<T>(float value)
+    {
+        float range = value / 100.0f;
+
+        if (typeof(T) == typeof(sbyte))
+        {
+            return (T)(object)(byte)(range * (sbyte.MaxValue * 1.0f));
+        }
+        else if (typeof(T) == typeof(byte))
+        {
+            return (T)(object)(byte)(range * (byte.MaxValue * 1.0f));
+        }
+        else if (typeof(T) == typeof(short))
+        {
+            return (T)(object)(short)(range * (short.MaxValue * 1.0f));
+        }
+        else if (typeof(T) == typeof(ushort))
+        {
+            return (T)(object)(ushort)(range * (ushort.MaxValue * 1.0f));
+        }
+        else if (typeof(T) == typeof(int))
+        {
+            return (T)(object)(int)(range * (int.MaxValue * 1.0f));
+        }
+        else if (typeof(T) == typeof(uint))
+        {
+            return (T)(object)(uint)(range * (uint.MaxValue * 1.0f));
+        }
+        else if (typeof(T) == typeof(long))
+        {
+            return (T)(object)(long)(range * (long.MaxValue * 1.0f));
+        }
+        else if (typeof(T) == typeof(ulong))
+        {
+            return (T)(object)(ulong)(range * (ulong.MaxValue * 1.0f));
+        }
+        
+        return default;
     }
     
     public float Lerp(float start, float end, float time)
@@ -1541,14 +1583,17 @@ Library "XInput" by "Hyper"
     using System.Numerics;
     using System.Runtime.InteropServices;
 
-    public const short XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE = 7849;
-    public const short XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE = 8689;
-
     [DllImport("xinput1_4.dll", EntryPoint = "XInputGetState")]
     public extern int XInputGetState(int dwUserIndex, ref State pState);
     
     [DllImport("xinput1_4.dll", EntryPoint = "XInputSetState")]
     public extern int XInputSetState(int dwUserIndex, ref Vibration pVibration);
+
+    public const short XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE = 7849;
+    public const short XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE = 8689;
+
+    public static float LeftMotorSpeed = 0.0f;
+    public static float RightMotorSpeed = 0.0f;
 
     [Flags]
     public enum Buttons : ushort
@@ -1598,12 +1643,30 @@ Library "XInput" by "Hyper"
         {
             wLeftMotorSpeed = leftMotorSpeed;
             wRightMotorSpeed = rightMotorSpeed;
+
+            LeftMotorSpeed = leftMotorSpeed / 65535.0f;
+            RightMotorSpeed = rightMotorSpeed / 65535.0f;
+        }
+
+        public Vibration(float leftMotorSpeed, float rightMotorSpeed)
+        {
+            wLeftMotorSpeed = MathHelper.FloatPercentToRange<ushort>(leftMotorSpeed);
+            wRightMotorSpeed = MathHelper.FloatPercentToRange<ushort>(rightMotorSpeed);
+
+            LeftMotorSpeed = leftMotorSpeed;
+            RightMotorSpeed = rightMotorSpeed;
         }
 
         public Vibration(ushort motorSpeed)
         {
-            wLeftMotorSpeed = motorSpeed;
-            wRightMotorSpeed = motorSpeed;
+            wLeftMotorSpeed = wRightMotorSpeed = motorSpeed;
+            LeftMotorSpeed = RightMotorSpeed = motorSpeed / 65535.0f;
+        }
+
+        public Vibration(float motorSpeed)
+        {
+            wLeftMotorSpeed = wRightMotorSpeed = MathHelper.FloatPercentToRange<ushort>(motorSpeed);
+            LeftMotorSpeed = RightMotorSpeed = motorSpeed;
         }
     }
 
@@ -1704,6 +1767,29 @@ Library "XInput" by "Hyper"
         }
 
         return true;
+    }
+
+    public void SetVibration(float value)
+    {
+        SetState(new Vibration(MathHelper.FloatPercentToRange<ushort>(value)));
+    }
+
+    public void SetVibration(int motorIndex, float value)
+    {
+        switch (motorIndex)
+        {
+            case 0:
+            {
+                SetState(new Vibration(value, RightMotorSpeed));
+                break;
+            }
+
+            case 1:
+            {
+                SetState(new Vibration(LeftMotorSpeed, value));
+                break;
+            }
+        }
     }
 }
 
