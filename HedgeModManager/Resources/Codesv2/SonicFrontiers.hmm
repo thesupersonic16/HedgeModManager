@@ -100,6 +100,14 @@ Library "BlackboardItem" by "Hyper"
 
         return Read<int>(blackboardItem + 0x28);
     }
+
+    public void SetRingCount(int newRingCount)
+    {
+        if(Get() != 0)
+        {
+             WriteProtected<int>(Get() + 0x28, newRingCount);
+        }
+    }
 }
 
 Library "BlackboardStatus" by "Hyper"
