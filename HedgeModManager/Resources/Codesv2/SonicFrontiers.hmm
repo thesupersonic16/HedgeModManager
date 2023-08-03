@@ -1344,14 +1344,228 @@ Library "Sonic" by "Hyper, NM & Ahremic"
         }
     }
 
+    public enum StateID : int
+    {
+        Default = -1,
+        StateAcceleCombo1 = 146,           // StateAttackRoot
+        StateAcceleCombo2 = 147,           // StateAttackRoot
+        StateAquaBallJump = 119,
+        StateAquaBallStand = 118,
+        StateAquaBallStomping = 120,
+        StateAttackRoot = 131,
+        StateAuraTrain = 188,
+        StateAvoid = 137,
+        StateAvoidLocal = 140,
+        StateAvoidToTarget = 139,
+        StateAvoidUpper = 138,
+        StateAwakening = 26,
+        StateBallMove = 169,
+        StateBaseJump = 101,
+        StateBatterBox = 200,
+        StateBattleStart = 155,
+        StateBoarding = 180,
+        StateBossCounter = 156,
+        StateBrake = 6,
+        StateBrakeNeutral = 7,
+        StateBreathe = 43,
+        StateBumpJump = 16,
+        StateCaught = 164,
+        StateChargeAttack = 148,           // StateAttackRoot
+        StateClimbing = 99,                // StateWallActionRoot
+        StateClimbingEdge = 98,            // StateWallActionRoot
+        StateCloudJump = 189,
+        StateHomingFinish = 133,           // StateAttackRoot
+        StateComboMove = 128,
+        StateComboStep = 129,
+        StateComboWarp = 130,
+        StateCrasher = 150,                // StateAttackRoot
+        StateCrossSlash = 152,             // StateAttackRoot
+        StateDamage = 28,                  // StateDamageRoot
+        StateDamageBlowOff = 30,           // StateDamageRoot
+        StateDamageBlowOffHeavy = 31,      // StateDamageRoot
+        StateDamageLava = 37,
+        StateDamageQuake = 32,             // StateDamageRoot
+        StateDamageRoot = 27,
+        StateDamageRunning = 33,           // StateDamageRoot
+        StateDamageTurnBack = 29,          // StateDamageRoot
+        StateDead = 38,
+        StateDebuff = 177,
+        StateDestination = 185,
+        StateDiving = 78,                  // StateDivingRoot
+        StateDivingDamage = 80,            // StateDivingRoot
+        StateDivingFall = 79,              // StateDivingRoot
+        StateDivingRoot = 77,
+        StateDivingSpecial = 83,           // StateDivingSpecialRoot
+        StateDivingSpecialDamage = 86,     // StateDivingSpecialRoot
+        StateDivingSpecialDashRing = 84,   // StateDivingSpecialRoot
+        StateDivingSpecialFall = 85,       // StateDivingSpecialRoot
+        StateDivingSpecialPush = 87,       // StateDivingSpecialRoot
+        StateDivingSpecialRoot = 82,
+        StateDivingSpring = 81,            // StateDivingRoot
+        StateDrift = 109,
+        StateDriftDash = 110,
+        StateDriftAir = 111,
+        StateDropDash = 112,
+        StateFall = 15,
+        StateFallWithKodama = 195,
+        StateFallWithCannonball = 198,
+        StateFallFlip = 22,
+        StateFallingDead = 39,
+        StateFallSlope = 21,
+        StateFan = 168,
+        StateFixedGoal = 126,
+        StateFloat = 107,
+        StateFly = 102,
+        StateFlyLocal = 105,
+        StateFlyLocal2D = 106,
+        StateFlyOnPath = 104,
+        StateFlyTurn = 103,
+        StateGoal = 124,
+        StateGoal2 = 125,
+        StateGrind = 46,                   // StateGrindRoot
+        StateGrindDamage = 49,             // StateGrindRoot
+        StateGrindDamageAir = 50,          // StateGrindRoot
+        StateGrindJump = 47,               // StateGrindRoot
+        StateGrindDoubleJump = 48,         // StateGrindRoot
+        StateGrindRoot = 45,
+        StateGrindStep = 51,
+        StateGuard = 145,
+        StateGuardedFlipBack = 34,         // StateDamageRoot
+        StateHangPole = 170,
+        StateHangPoleJump = 171,
+        StateHoldStand = 159,
+        StateHomingAttack = 62,            // StateAttackRoot
+        StateHomingAttackRoot = 61,        // StateAttackRoot
+        StateHomingAttackInStorm = 63,     // StateAttackRoot
+        StateHomingFinished = 64,          // StateAttackRoot
+        StateHomingRepelled = 65,
+        StateHomingShot = 153,             // StateAttackRoot
+        StateImpactGimmick = 182,
+        StateJump = 8,
+        StateJumpWithKodama = 194,
+        StateJumpBoardLaunch = 167,
+        StateBounceJump = 11,
+        StateRecoveryJump = 12,
+        StateSpringJump = 162,
+        StateSpringJumpHeadLand = 163,
+        StateKickBox = 173,
+        StateLavaDead = 44,
+        StateLeftStep = 71,
+        StateLeftStepRun = 73,
+        PlayerStateLevitation = 211,
+        StateLightDash = 25,
+        StateLoopKick = 149,               // StateAttackRoot
+        StateMoveInWarningArea = 186,
+        StateMoveToBatterBox = 201,
+        StateMoveToBossArea = 187,
+        StateMoveToReflexesPanel = 203,
+        StateNoisyGoal = 127,
+        StateOperateConsole = 181,
+        StateParalysis = 36,
+        StateParriedFlipBack = 35,
+        StateParry = 141,
+        StateParryStand = 142,             // StateParry
+        StatePipeMove = 165,
+        StatePipeOut = 166,
+        StatePressDead = 42,
+        StatePursuitKick = 132,            // StateAttackRoot
+        StatePushBox = 172,
+        StateQuickCyloop = 134,            // StateAttackRoot
+        StateQuickStep = 67,               // StateQuickStepRoot
+        StateQuickStepCrash = 70,          // StateQuickStepRoot
+        StateQuickStepJump = 75,
+        StateQuickStepDoubleJump = 76,
+        StateQuickStepLeft = 68,           // StateQuickStepRoot
+        StateQuickStepRight = 69,          // StateQuickStepRoot
+        StateQuickStepRoot = 66,
+        StateRecoil = 20,
+        StateRecovery = 161,
+        StateReflexesPanel = 202,
+        StateReflexesPanelLeftStep = 204,
+        StateReflexesPanelRightStep = 205,
+        StateRightStep = 72,
+        StateRightStepRun = 74,
+        StateRun = 4,
+        StateRunWithKodama = 193,
+        StateRunWithCannonball = 196,
+        StateRunawayBee = 191,
+        StateRunningStart = 123,
+        StateSandSki = 174,
+        StateSandSkiBlow = 175,
+        StateSendSignal = 183,
+        StateSleep = 0,
+        StateSliding = 59,                 // StateSquatRoot
+        StateSlidingToStand = 60,
+        StateSlingshot = 176,
+        StateSmash = 135,                  // StateAttackRoot
+        StateSmashSS = 136,                // StateAttackRoot
+        StateSonicBoomKick = 151,          // StateAttackRoot
+        StateSpin = 113,
+        StateSpinAttack = 14,
+        StateSpinBoost = 116,
+        StateSpinBoostCharge = 115,
+        StateSpinMove = 117,
+        StateSpinDash = 114,               // StateAttackRoot
+        StateSpinSlash = 154,              // StateAttackRoot
+        StateSquat = 19,                   // StateSquatRoot
+        StateSquatRoot = 18,
+        StateStandRoot = 1,
+        StateStandWithKodama = 192,
+        StateStand = 2,                    // StateStandRoot
+        StateStandWithCannonball = 197,
+        StateStolenEmerald = 179,
+        StateStorm = 178,
+        StateSuffocatingDead = 41,
+        StateTakeBehind = 143,
+        StateTakeBehindSS = 144,
+        StateTalkMode = 160,
+        StateThrowCannonball = 199,
+        StateTreadmill = 190,
+        StateTreeJump = 243,
+        StateTumble = 17,
+        StateTurn = 5,
+        StateUpDead = 40,
+        StateUpDownPole = 121,
+        StateUpDownPoleDamage = 122,
+        StateWakeUp = 3,
+        StateWarpEnd = 158,
+        StateWarpStart = 157,
+        StateWaterFall = 184,
+        StateAirBoost = 23,
+        StateWithAnimalRoot = 206,
+        StateFallWithAnimal = 210,         // StateWithAnimalRoot
+        StateJumpWithAnimal = 209,         // StateWithAnimalRoot
+        StateDoubleJump = 9,
+        StateRunWithAnimal = 208,          // StateWithAnimalRoot
+        StateStandWithAnimal = 207,        // StateWithAnimalRoot
+        StateStomping = 52,                // StateAttackRoot
+        StateStompingAttack = 55,          // StateAttackRoot
+        StateStompingBounce = 58,          // StateAttackRoot
+        StateStompingDown = 54,            // StateAttackRoot
+        StateStompingFlip = 53,            // StateAttackRoot
+        StateStompingLand = 57,            // StateAttackRoot
+        StateStompingPress = 56,           // StateAttackRoot
+        StateWallHanging = 90,             // StateWallActionRoot
+        StateWallHoming = 92,
+        StateWallJump = 96,
+        StateWallJumpReady = 97,
+        StateWallLanding = 93,             // StateWallActionRoot
+        StateWallLeave = 100,
+        StateWallReset = 95,               // StateWallActionRoot
+        StateWallRest = 91,                // StateWallActionRoot
+        StateWallSlideDown = 94,           // StateWallActionRoot
+        StateWallActionRoot = 88,
+        StateWallMove = 89                 // StateWallActionRoot
+    }
+
     public static class State
     {
         private static bool _initialisedStateRedirector = false;
-        private static Dictionary<int, int> _redirectedStates = new();
-        private static int _currentStateID = -1;
-        private static Collections.StackList<int> _stateStackTrace = new(10);
+        private static Dictionary<StateID, StateID> _redirectedStates = new();
+        private static StateID _currentStateID = Sonic.StateID.Default;
+        private static Collections.StackList<StateID> _stateStackTrace = new(10);
 
-        public delegate void TStateNotifyAction(int stateId, int[] stateStackTrace);
+        public delegate void TStateNotifyAction(StateID stateId, StateID[] stateStackTrace);
         private static List<TStateNotifyAction> _stateNotifyActions = new();
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -1373,14 +1587,14 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             {
                 _stateStackTrace.Push(_currentStateID);
 
-                _currentStateID = stateId;
+                _currentStateID = (StateID)stateId;
             }
 
             foreach (TStateNotifyAction action in _stateNotifyActions)
                 action.Invoke(_currentStateID, _stateStackTrace.ToArray());
 
-            if (_redirectedStates.ContainsKey(stateId))
-                return _redirectedStates[stateId];
+            if (_redirectedStates.ContainsKey((StateID)stateId))
+                return (int)_redirectedStates[(StateID)stateId];
 
             return stateId;
         }
@@ -1414,14 +1628,14 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             _initialisedStateRedirector = true;
         }
 
-        public static int GetCurrentStateID()
+        public static StateID GetCurrentStateID()
         {
             InitStateRedirector();
 
             return _currentStateID;
         }
 
-        public static int GetPreviousStateID(int stackIndex = 0)
+        public static StateID GetPreviousStateID(int stackIndex = 0)
         {
             InitStateRedirector();
 
@@ -1476,7 +1690,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             _stateNotifyActions.Remove(action);
         }
 
-        public static void Redirect(int source, int destination)
+        public static void Redirect(StateID source, StateID destination)
         {
             InitStateRedirector();
 
@@ -1489,14 +1703,14 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             _redirectedStates.Add(source, destination);
         }
 
-        public static void Restore(int source)
+        public static void Restore(StateID source)
         {
             InitStateRedirector();
             
             _redirectedStates.Remove(source);
         }
 
-        public static void SetState(int destination)
+        public static void SetState(StateID destination)
         {
             if (_sigSetState == 0)
             {
@@ -1992,17 +2206,22 @@ Code "Additive Spring Trajectory with Boost" in "Gameplay" by "WasifBoomz" does 
         case 0:
             prevVelocity = *kinematics.Velocity;
             break;
+
         case 1:
-            Sonic.State.SetState(16);
+            Sonic.State.SetState(Sonic.StateID.StateBumpJump);
             framesSinceHit++;
             break;
+
         case 2:
         {
             if (Sonic.Kinematics.GetHorizontalMagnitude() < Math.Abs(kinematics.Velocity->Y))
-                    *kinematics.Velocity += new Vector3(prevVelocity.X,0,prevVelocity.Z);
+                    *kinematics.Velocity += new Vector3(prevVelocity.X, 0, prevVelocity.Z);
+
             framesSinceHit = 0;
+
             break;
         }
+
         default:
             framesSinceHit = 1;
             break;
@@ -2209,14 +2428,14 @@ Notes;
 //
 {
     // Current: StateFall, Previous: StateGrind
-    if (Sonic.State.GetCurrentStateID() == 15 && Sonic.State.GetPreviousStateID() == 46)
+    if (Sonic.State.GetCurrentStateID() == Sonic.StateID.StateFall && Sonic.State.GetPreviousStateID() == Sonic.StateID.StateGrind)
     {
         // Enter into StateBumpJump when flinging off of grind rails.
-        Sonic.State.SetState(16);
+        Sonic.State.SetState(Sonic.StateID.StateBumpJump);
     }
 
     // StateGrindJump
-    if (Sonic.State.GetCurrentStateID() == 47)
+    if (Sonic.State.GetCurrentStateID() == Sonic.StateID.StateGrindJump)
     {
         if (Sonic.Input.IsReleased(Sonic.PlayerActionType.PlayerJump))
             BeginFrameCount = true;
@@ -2227,7 +2446,7 @@ Notes;
         // Provide small frame window to allow for StateGrindDoubleJump.
         if (GrindJumpReleaseFrameCount > 12)
         {
-            Sonic.State.SetState(16);
+            Sonic.State.SetState(Sonic.StateID.StateBumpJump);
 
             ResetMembers();
         }
@@ -2243,10 +2462,10 @@ Code "Allow Attacking from Stomp Bounce" in "Gameplay" by "Hyper"
     #lib "Sonic"
 //
 {
-    if (Sonic.State.GetCurrentStateID() == 11)
+    if (Sonic.State.GetCurrentStateID() == Sonic.StateID.StateBounceJump)
     {
         if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
-            Sonic.State.SetState(15);
+            Sonic.State.SetState(Sonic.StateID.StateFall);
     }
 }
 
@@ -2259,11 +2478,11 @@ Patch "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Soni
     static bool IsBoostPrevious = false;
 //
 {
-    void NotifyStateRunDamageCollision(int stateId, int[] stateStackTrace)
+    void NotifyStateRunDamageCollision(Sonic.StateID stateId, Sonic.StateID[] stateStackTrace)
     {
         if (BlackboardStatus.Get() != 0)
         {
-            bool isStateRun = stateId == 4;
+            bool isStateRun = stateId == Sonic.StateID.StateRun;
             bool isBoost = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost);
 
             if (isStateRun && isBoost)
@@ -2290,14 +2509,21 @@ Code "Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allo
     #lib "Bitwise"
     #lib "BlackboardStatus"
 
-    static int[] enableStates = { 8, 11, 46, 162 };
+    static Sonic.StateID[] enableStates =
+    {
+        Sonic.StateID.StateJump,
+        Sonic.StateID.StateBounceJump,
+        Sonic.StateID.StateGrind,
+        Sonic.StateID.StateSpringJump
+    };
+
     static bool allowChargeAttack = false;
 //
 {
     if (BlackboardStatus.Get() == 0)
         return;
 
-    int state = Sonic.State.GetCurrentStateID();
+    var state = Sonic.State.GetCurrentStateID();
 
     if (Sonic.IsGrounded())
         allowChargeAttack = true;
@@ -2313,7 +2539,7 @@ Code "Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allo
 
     if (allowChargeAttack && Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerJump) && Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
     {
-        Sonic.State.SetState(148);
+        Sonic.State.SetState(Sonic.StateID.StateChargeAttack);
         allowChargeAttack = false;
     }
 }
@@ -2323,13 +2549,13 @@ Code "Allow Dodging from Homing Shot" in "Gameplay" by "Hyper" does "Allows Soni
     #lib "Sonic"
 //
 {
-    if (Sonic.State.GetCurrentStateID() == 153)
+    if (Sonic.State.GetCurrentStateID() == Sonic.StateID.StateHomingShot)
     {
         if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerLeftStep) ||
             Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerRightStep))
         {
             // Exit into StateAvoid.
-            Sonic.State.SetState(137);
+            Sonic.State.SetState(Sonic.StateID.StateAvoid);
         }
     }
 }
@@ -5883,27 +6109,27 @@ Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform a
     #lib "BlackboardStatus"
     #lib "Sonic"
 
-    static int[] AirBoostStates =
+    static Sonic.StateID[] AirBoostStates =
     {
-        53, // StateStompingFlip
-        58, // StateStompingBounce
-        64, // StateHomingFinished
-        162 // StateSpringJump
+        Sonic.StateID.StateStompingFlip,
+        Sonic.StateID.StateStompingBounce,
+        Sonic.StateID.StateHomingFinished,
+        Sonic.StateID.StateSpringJump
     }
 
     static bool IsRestoredAirBoost = false;
 //
 {
-    void NotifyAirBoostReset(int stateId, int[] stateStackTrace)
+    void NotifyAirBoostReset(Sonic.StateID stateId, Sonic.StateID[] stateStackTrace)
     {
         // Reset flag for StateAirBoost or StateSpinBoost.
-        if (stateId == 23 || stateId == 116)
+        if (stateId == Sonic.StateID.StateAirBoost || stateId == Sonic.StateID.StateSpinBoost)
         {
             IsRestoredAirBoost = false;
             return;
         }
 
-        foreach (int restoreState in AirBoostStates)
+        foreach (var restoreState in AirBoostStates)
         {
             if (restoreState == stateId)
                 IsRestoredAirBoost = true;
@@ -5926,7 +6152,7 @@ Code "Fix Air Boost Reset" in "Fixes" by "Hyper" does "Allows Sonic to perform a
     if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerBoost) && !Sonic.IsGroundedSpecial() && IsRestoredAirBoost)
     {
         // Exit into StateAirBoost.
-        Sonic.State.SetState(23);
+        Sonic.State.SetState(Sonic.StateID.StateAirBoost);
     }
 }
 
@@ -5937,9 +6163,11 @@ Patch "Fix Damage from Jumping into Enemies" in "Fixes" by "Hyper" does "Fixes S
     static bool IsJumpPrevious = false;
 //
 {
-    void NotifyJumpDamageCollision(int stateId, int[] stateStackTrace)
+    void NotifyJumpDamageCollision(Sonic.StateID stateId, Sonic.StateID[] stateStackTrace)
     {
-        bool isJump = stateId == 8 || stateId == 9 || stateId == 48;
+        bool isJump = stateId == Sonic.StateID.StateJump ||
+            stateId == Sonic.StateID.StateDoubleJump ||
+            stateId == Sonic.StateID.StateGrindDoubleJump;
 
         if (isJump)
         {
@@ -6424,10 +6652,10 @@ Code "Fix Stomp Reset" in "Fixes" by "Hyper" does "Fixes the stomp attack only r
         IsInitialised = true;
     }
     
-    if (Sonic.State.GetCurrentStateID() == 11)
+    if (Sonic.State.GetCurrentStateID() == Sonic.StateID.StateBounceJump)
     {
         if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerStomping))
-            Sonic.State.SetState(54);
+            Sonic.State.SetState(Sonic.StateID.StateStompingDown);
     }
 }
 
@@ -8147,7 +8375,7 @@ Notes;
                 end:
                 ",
 
-		/* 0x140DA25AC */
+		    /* 0x140DA25AC */
                 ScanSignature
                 (
                     "\x41\x8B\x47\x08\xF2\x41\x0F\x10\x07",
@@ -8158,7 +8386,7 @@ Notes;
             );
         }
 
-	// Jump over the grind boost code
+	    // Jump over the grind boost code
         WriteProtected<byte>
         (
             /* 0x14AD7760A */
@@ -8192,13 +8420,13 @@ Notes;
     // Run this code when crouching on rails
     if (Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerStomping))
     {
-        if (Sonic.State.GetCurrentStateID() == 46)
+        if (Sonic.State.GetCurrentStateID() == Sonic.StateID.StateGrind)
         {
             isRailCrouching = true;
             Sonic.Animation.SetAnimation("GRIND_LAND");
         }
 
-	// Increase speed based on gravity
+	    // Increase speed based on gravity
         *grindAcceleration -= (Vector3.Normalize(*kinematics.Velocity).Y) * grindCrouchSpeed;
     }
     
@@ -8395,9 +8623,9 @@ Notes;
         IsInitialised = true;
     }
 
-    void NotifyStateJump(int stateId, int[] stateStackTrace)
+    void NotifyStateJump(Sonic.StateID stateId, Sonic.StateID[] stateStackTrace)
     {
-        IsStateJump = stateId == 8;
+        IsStateJump = stateId == Sonic.StateID.StateJump;
     }
 
     Sonic.State.AddStateNotifyAction(NotifyStateJump);
@@ -8668,7 +8896,14 @@ This state lasts a fraction of a second, but keep in mind that within that time,
 
     static Vector3 LastGroundedPosition;
 
-    static List<int> ExitStates = new() { 8, 12, 15, 16, 161 };
+    static List<Sonic.StateID> ExitStates = new()
+    {
+        Sonic.StateID.StateJump,
+        Sonic.StateID.StateRecoveryJump,
+        Sonic.StateID.StateFall,
+        Sonic.StateID.StateBumpJump,
+        Sonic.StateID.StateRecovery
+    };
 
     static float HeightFallen = 0.0f;
     
@@ -8703,15 +8938,15 @@ This state lasts a fraction of a second, but keep in mind that within that time,
             );
         }
 
-        void NotifyStateSpringJumpHeadLandDamageCollision(int stateId, int[] stateStackTrace)
+        void NotifyStateSpringJumpHeadLandDamageCollision(Sonic.StateID stateId, Sonic.StateID[] stateStackTrace)
         {
-            bool isStateSpringJumpHeadLand = stateId == 163;
+            bool isStateSpringJumpHeadLand = stateId == Sonic.StateID.StateSpringJumpHeadLand;
             
             if (isStateSpringJumpHeadLand)
             {
                 Sonic.Collision.ToggleEntityCollision(false);
             }
-            else if (Sonic.State.GetPreviousStateID() == 163)
+            else if (Sonic.State.GetPreviousStateID() == Sonic.StateID.StateSpringJumpHeadLand)
             {
                 Sonic.Collision.ToggleEntityCollision(true);
             }
@@ -8727,13 +8962,13 @@ This state lasts a fraction of a second, but keep in mind that within that time,
     if (kinematics == null)
         return;
 
-    if (Sonic.State.GetCurrentStateID() == 163)
+    if (Sonic.State.GetCurrentStateID() == Sonic.StateID.StateSpringJumpHeadLand)
     {
         if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerJump) ||
             Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack))
         {
             // Exit into StateRun.
-            Sonic.State.SetState(4);
+            Sonic.State.SetState(Sonic.StateID.StateRun);
         }
     }
 
@@ -8749,16 +8984,16 @@ This state lasts a fraction of a second, but keep in mind that within that time,
             if (BlackboardStatus.Get() != null && Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost))
             {
                 // Allow StateJump to continue running if we're boosting.
-                if (Sonic.State.GetPreviousStateID() == 8)
+                if (Sonic.State.GetPreviousStateID() == Sonic.StateID.StateJump)
                     goto Reset;
             }
 
             // Allow StateRecoveryJump to enter StateDropDash.
-            if (Sonic.State.GetPreviousStateID() == 12 && IsRecoveryJumpCharging)
+            if (Sonic.State.GetPreviousStateID() == Sonic.StateID.StateRecoveryJump && IsRecoveryJumpCharging)
                 goto Reset;
 
             // Exit into StateSpringJumpHeadLand.
-            Sonic.State.SetState(163);
+            Sonic.State.SetState(Sonic.StateID.StateSpringJumpHeadLand);
         }
         
     Reset:
@@ -8876,7 +9111,7 @@ Idea by Yosho.
     if (kinematics == null)
         return;
 
-    if (Sonic.State.GetCurrentStateID() == 54)
+    if (Sonic.State.GetCurrentStateID() == Sonic.StateID.StateStompingDown)
     {
         if (!IsStompBeginPositionPreserved)
         {
