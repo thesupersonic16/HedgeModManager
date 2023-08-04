@@ -132,7 +132,7 @@ namespace HedgeModManager
 
         public static void LinkRuntimeToProtonPrefix(Game game)
         {
-            if (CheckDotNetRuntime(game.AppID) == false && IsBottles())
+            if (CheckDotNetRuntime(game.AppID) == false && IsBottles() && game.Is64Bit)
             {
                 // Prefix paths
                 string protonPath = ConvertToUnix(Path.Combine(Steam.GetProtonPrefixPath(game.AppID)));
