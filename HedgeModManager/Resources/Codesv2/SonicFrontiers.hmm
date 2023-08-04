@@ -103,10 +103,8 @@ Library "BlackboardItem" by "Hyper"
 
     public void SetRingCount(int newRingCount)
     {
-        if(Get() != 0)
-        {
-             WriteProtected<int>(Get() + 0x28, newRingCount);
-        }
+        if (Get() != 0)
+            WriteProtected<int>(Get() + 0x28, newRingCount);
     }
 }
 
