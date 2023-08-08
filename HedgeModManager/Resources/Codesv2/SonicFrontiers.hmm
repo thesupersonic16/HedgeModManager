@@ -101,10 +101,12 @@ Library "BlackboardItem" by "Hyper"
         return Read<int>(blackboardItem + 0x28);
     }
 
-    public void SetRingCount(int newRingCount)
+    public void SetRingCount(int count)
     {
-        if (Get() != 0)
-            WriteProtected<int>(Get() + 0x28, newRingCount);
+        if (Get() == 0)
+            return;
+
+        WriteProtected<int>(Get() + 0x28, count);
     }
 }
 
@@ -174,6 +176,14 @@ Library "BlackboardStatus" by "Hyper"
             return false;
 
         return Read<bool>(blackboardStatus + 0x24);
+    }
+
+    public bool IsCyberSpace(long blackboardStatus = 0)
+    {
+        if (blackboardStatus == 0 && (blackboardStatus = Get()) == 0)
+            return false;
+
+        return Bitwise.Test(*GetWorldFlags(), (uint)WorldFlags.IsCyberSpace);
     }
 
     public long* GetFieldPointer(long blackboardStatus = 0, long fieldOffset = 0)
@@ -601,6 +611,17 @@ Library "Helpers" by "Hyper"
         public returnType functionName(__VA_ARGS__)
 
     #define GET_UNMANAGED_FUNCTION_PTR(functionName) _fp##functionName
+
+    #define CREATE_FUNCTION_PTR(returnType, functionName, location, ...) \
+        [System.Runtime.InteropServices.UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.StdCall)] \
+        private delegate returnType T##functionName(__VA_ARGS__); \
+        private static long _addr##functionName = location;
+
+    #define GET_FUNCTION_PTR(functionName) System.Runtime.InteropServices.Marshal.GetDelegateForFunctionPointer<T##functionName>((IntPtr)_addr##functionName)
+
+    #define TO_STRING_PTR(str) (long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(str)
+
+    #define FROM_STRING_PTR(ptr) System.Runtime.InteropServices.Marshal.PtrToStringAnsi((IntPtr)ptr)
 }
 
 Library "HMM" by "Hyper"
@@ -716,7 +737,7 @@ Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
     }
 }
 
-Library "MathHelper" by "Hyper"
+Library "MathHelpers" by "Hyper"
 {
     using System.Collections.Generic;
 
@@ -1112,7 +1133,7 @@ Library "Resources" by "Hyper"
                 mov  rsi, rcx
                 mov  rcx, rdx
                 mov  rdx, [rdi]
-                mov  rax, {_fpGetResourceInfo}
+                mov  rax, {GET_UNMANAGED_FUNCTION_PTR(GetResourceInfo)}
                 call rax
                 mov  rdx, [rcx]
                 mov  rbx, rdx
@@ -1132,7 +1153,7 @@ Library "Resources" by "Hyper"
         (
             $@"
                 mov  rcx, rax
-                mov  rax, {_fpGetResourceData}
+                mov  rax, {GET_UNMANAGED_FUNCTION_PTR(GetResourceData)}
                 call rax
                 lea  r11, qword ptr [rsp + 0xD8 + 0xFFFFFFFFFFFFFFF8]
                 mov  rbx, qword ptr [r11 + 0x10]
@@ -1301,19 +1322,37 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsWallClimb);
     }
 
-    public bool IsSideView()
+    public enum ModePackageType
+    {
+        ForwardView,
+        Water,
+        CyberSpace,
+        SideView
+    }
+
+    public ModePackageType GetModePackageType()
     {
 		var pSonic = GetSonic();
 
 		if (pSonic == 0)
-			return false;
+			return 0;
 
 		var pPlayerParameter = GameObject.GetGOC(pSonic, "GOCPlayerParameter");
 
 		if (pPlayerParameter == 0)
-			return false;
+			return 0;
 
-		return *(int*)(((long)pPlayerParameter) + 0xB8) == 3;
+		return (ModePackageType)(*(int*)(((long)pPlayerParameter) + 0xB8));
+    }
+
+    public bool IsSideView()
+    {
+		return GetModePackageType() == ModePackageType.SideView;
+    }
+
+    public bool IsUnderwater()
+    {
+		return GetModePackageType() == ModePackageType.Water;
     }
 
     public static class Animation
@@ -2355,6 +2394,28 @@ Library "Time" by "Hyper"
     }
 }
 
+Library "VectorHelpers" by "Hyper"
+{
+    public static Quaternion LookRotation(Vector3 forward, Vector3 upwards)
+    {
+        forward = Vector3.Normalize(forward);
+        upwards = Vector3.Normalize(upwards);
+
+        Vector3 right = Vector3.Cross(upwards, forward);
+        upwards = Vector3.Cross(forward, right);
+
+        Matrix4x4 rotationMatrix = new Matrix4x4
+        (
+            right.X, right.Y, right.Z, 0.0f,
+            upwards.X, upwards.Y, upwards.Z, 0.0f,
+            forward.X, forward.Y, forward.Z, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        );
+
+        return Quaternion.CreateFromRotationMatrix(rotationMatrix);
+    }
+}
+
 Library "XInput" by "Hyper"
 {
     #load "System.Numerics.dll"
@@ -2429,8 +2490,8 @@ Library "XInput" by "Hyper"
 
         public Vibration(float leftMotorSpeed, float rightMotorSpeed)
         {
-            wLeftMotorSpeed = MathHelper.FloatPercentToRange<ushort>(leftMotorSpeed);
-            wRightMotorSpeed = MathHelper.FloatPercentToRange<ushort>(rightMotorSpeed);
+            wLeftMotorSpeed = MathHelpers.FloatPercentToRange<ushort>(leftMotorSpeed);
+            wRightMotorSpeed = MathHelpers.FloatPercentToRange<ushort>(rightMotorSpeed);
 
             LeftMotorSpeed = leftMotorSpeed;
             RightMotorSpeed = rightMotorSpeed;
@@ -2444,7 +2505,7 @@ Library "XInput" by "Hyper"
 
         public Vibration(float motorSpeed)
         {
-            wLeftMotorSpeed = wRightMotorSpeed = MathHelper.FloatPercentToRange<ushort>(motorSpeed);
+            wLeftMotorSpeed = wRightMotorSpeed = MathHelpers.FloatPercentToRange<ushort>(motorSpeed);
             LeftMotorSpeed = RightMotorSpeed = motorSpeed;
         }
     }
@@ -2550,7 +2611,7 @@ Library "XInput" by "Hyper"
 
     public void SetVibration(float value)
     {
-        SetState(new Vibration(MathHelper.FloatPercentToRange<ushort>(value)));
+        SetState(new Vibration(MathHelpers.FloatPercentToRange<ushort>(value)));
     }
 
     public void SetVibration(int motorIndex, float value)
@@ -9098,7 +9159,7 @@ Sends a powerful shockwave when landing a stomp from a great height.
 Idea by Yosho.
 */
 //
-    #lib "MathHelper"
+    #lib "MathHelpers"
     #lib "Memory"
     #lib "Sonic"
 
@@ -9202,7 +9263,7 @@ Idea by Yosho.
         HeightFallen = StompBeginPosition.Y - kinematics.Position->Y;
 
         // 11.0f is the default value for boundStompingCollisionScale.
-        Radius = MathHelper.Clamp(HeightFallen - HeightThreshold, 11.0f, 33.0f);
+        Radius = MathHelpers.Clamp(HeightFallen - HeightThreshold, 11.0f, 33.0f);
     }
     else
     {
