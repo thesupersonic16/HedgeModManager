@@ -63,6 +63,26 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] DAT_CPKREDIR_DLL {
+            get {
+                object obj = ResourceManager.GetObject("DAT_CPKREDIR_DLL", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] DAT_CPKREDIR_TXT {
+            get {
+                object obj = ResourceManager.GetObject("DAT_CPKREDIR_TXT", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] DAT_LOADERS_ZIP {
             get {
                 object obj = ResourceManager.GetObject("DAT_LOADERS_ZIP", resourceCulture);
