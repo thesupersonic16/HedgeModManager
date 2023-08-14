@@ -42,6 +42,7 @@ using HedgeModManager.Updates;
 using System.Security;
 using System.Windows.Interop;
 using System.Windows.Shell;
+using HedgeModManager.Annotations;
 using static HedgeModManager.Lang;
 using Microsoft.Win32;
 using HedgeModManager.CLI;
@@ -1047,6 +1048,7 @@ namespace HedgeModManager
             }
         }
 
+        [CanBeNull]
         public static CodeLoaderInfo GetCodeLoaderInfo(Game game)
         {
             try
@@ -1071,7 +1073,7 @@ namespace HedgeModManager
             }
             catch
             {
-                return new CodeLoaderInfo(new Version("0.1"), new Version("9999.9999"));
+                return null;
             }
         }
 

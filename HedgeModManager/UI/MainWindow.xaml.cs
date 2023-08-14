@@ -862,7 +862,7 @@ namespace HedgeModManager
                 {
                     var loaderInfo = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
                     // Check if there is a loader version, if not return
-                    if (loaderInfo.LoaderVersion == null)
+                    if (loaderInfo?.LoaderVersion == null)
                         return;
 
                     var ini = new IniFile(stream);
@@ -908,6 +908,11 @@ namespace HedgeModManager
         protected void CheckCodeCompatibility()
         {
             var info = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
+            if (info == null)
+            {
+                return;
+            }
+
             if (CodesDatabase.Codes.Count == 0)
                 return;
 
