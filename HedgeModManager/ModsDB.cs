@@ -545,12 +545,16 @@ namespace HedgeModManager
                     continue;
                 }
 
-                foreach (var code in mod.Codes.Codes)
+                if (mod.Codes?.Codes != null)
                 {
-                    if (code.Name == name)
+                    foreach (var code in mod.Codes.Codes)
                     {
-                        return code.Body;
+                        if (code.Name == name)
+                        {
+                            return code.Body;
+                        }
                     }
+
                 }
             }
 
