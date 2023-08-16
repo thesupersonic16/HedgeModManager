@@ -1074,31 +1074,23 @@ Library "ReflectionHelpers" by "Hyper"
     #define RFL_GET_CONTEXTUAL_PLAYER_PARAM(info, hierarchy) \
         (Sonic.IsSideView() \
             ? info.pData->cyberspaceSV.hierarchy \
-            : BlackboardStatus.Get() != 0 \
-                ? Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsCyberSpace) \
-                    ? info.pData->cyberspace.hierarchy \
-                    : info.pData->forwardView.hierarchy \
+            : BlackboardStatus.IsCyberSpace() \
+                ? info.pData->cyberspace.hierarchy \
                 : info.pData->forwardView.hierarchy)
 
     #define RFL_SET_CONTEXTUAL_PLAYER_PARAM(info, hierarchy, value) \
         if (Sonic.IsSideView()) \
             info.pData->cyberspaceSV.hierarchy = value; \
-        else if (BlackboardStatus.Get() != 0) \
-            if (Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsCyberSpace)) \
-                info.pData->cyberspace.hierarchy = value; \
-            else \
-                info.pData->forwardView.hierarchy = value; \
+        else if (BlackboardStatus.IsCyberSpace()) \
+            info.pData->cyberspace.hierarchy = value; \
         else \
             info.pData->forwardView.hierarchy = value;
 
     #define RFL_RESET_CONTEXTUAL_PLAYER_PARAM(info, type, hierarchy) \
         if (Sonic.IsSideView()) \
             info.pData->cyberspaceSV.hierarchy = Reflection.GetOriginalData<type>(info.Name).cyberspaceSV.hierarchy; \
-        else if (BlackboardStatus.Get() != 0) \
-            if (Bitwise.Test(*BlackboardStatus.GetWorldFlags(), (uint)BlackboardStatus.WorldFlags.IsCyberSpace)) \
-                info.pData->cyberspace.hierarchy = Reflection.GetOriginalData<type>(info.Name).cyberspace.hierarchy; \
-            else \
-                info.pData->forwardView.hierarchy = Reflection.GetOriginalData<type>(info.Name).forwardView.hierarchy; \
+        else if (BlackboardStatus.IsCyberSpace()) \
+            info.pData->cyberspace.hierarchy = Reflection.GetOriginalData<type>(info.Name).cyberspace.hierarchy; \
         else \
             info.pData->forwardView.hierarchy = Reflection.GetOriginalData<type>(info.Name).forwardView.hierarchy;
 }
