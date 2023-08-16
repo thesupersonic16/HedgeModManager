@@ -713,6 +713,39 @@ Library "INI" by "Hyper"
 
         return result;
     }
+
+    public T Parse<T>(string value, T defaultValue)
+    {
+        T result = defaultValue;
+
+        if (typeof(T) == typeof(string))
+        {
+            result = (T)(object)value;
+        }
+        else if (typeof(T) == typeof(int))
+        {
+            if (int.TryParse(value, out int intValue))
+            {
+                result = (T)(object)intValue;
+            }
+        }
+        else if (typeof(T) == typeof(double))
+        {
+            if (double.TryParse(value, out double doubleValue))
+            {
+                result = (T)(object)doubleValue;
+            }
+        }
+        else if (typeof(T) == typeof(float))
+        {
+            if (float.TryParse(value, out float floatValue))
+            {
+                result = (T)(object)floatValue;
+            }
+        }
+
+        return result;
+    }
 }
 
 Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
