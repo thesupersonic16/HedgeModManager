@@ -2150,6 +2150,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
     public static class State
     {
         private static bool _initialisedStateRedirector = false;
+        private static List<StateID> _discardedStates = new();
         private static Dictionary<StateID, StateID> _redirectedStates = new();
         private static StateID _currentStateID = Sonic.StateID.Default;
         private static Collections.StackList<StateID> _stateStackTrace = new(10);
@@ -2182,6 +2183,9 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             foreach (TStateNotifyAction action in _stateNotifyActions)
                 action.Invoke(_currentStateID, _stateStackTrace.ToArray());
 
+            if (_discardedStates.Contains((StateID)stateId))
+                return -2;
+
             if (_redirectedStates.ContainsKey((StateID)stateId))
                 return (int)_redirectedStates[(StateID)stateId];
 
@@ -2201,6 +2205,14 @@ Library "Sonic" by "Hyper, NM & Ahremic"
                     mov   rax, {(long)_fpSetStateID}
                     call  rax
                     mov   edx, eax
+                    cmp   edx, -2
+                    jne   exit
+                    mov   r15, qword ptr [rsp + 0x38 + 0xFFFFFFFFFFFFFFE8]
+                    add   rsp, 0x28
+                    pop   rbp
+                    pop   rbx
+                    ret
+                exit:
                     movzx eax, byte ptr [rbx + 0x11C]
                 ",
 
@@ -2292,11 +2304,25 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             _redirectedStates.Add(source, destination);
         }
 
+        public static void Discard(StateID source)
+        {
+            InitStateRedirector();
+
+            if (_discardedStates.Contains(source))
+                return;
+
+            _discardedStates.Add(source);
+        }
+
         public static void Restore(StateID source)
         {
             InitStateRedirector();
+
+            if (_discardedStates.Contains(source))
+                _discardedStates.Remove(source);
             
-            _redirectedStates.Remove(source);
+            if (_redirectedStates.ContainsKey(source))
+                _redirectedStates.Remove(source);
         }
 
         public static void SetState(StateID destination)
