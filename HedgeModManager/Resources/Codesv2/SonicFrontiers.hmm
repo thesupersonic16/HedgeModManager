@@ -631,21 +631,73 @@ Library "HMM" by "Hyper"
     using System.Collections.Generic;
     using System.IO;
 
+    public class Mod
+    {
+        public string Name { get; set; }
+
+        public string Version { get; set; }
+
+        public string Author { get; set; }
+
+        public string Path { get; set; }
+
+        public Dictionary<string, Dictionary<string, string>> Ini { get; set; } = new();
+
+        public Mod(string modIniPath)
+        {
+            var ini = INI.Read(modIniPath);
+
+            if (ini == null)
+                return;
+
+            Name = ini["Desc"]["Title"];
+            Version = ini["Desc"]["Version"];
+            Author = ini["Desc"]["Author"];
+            Path = System.IO.Path.GetDirectoryName(modIniPath);
+            Ini = ini;
+        }
+    }
+
     public Dictionary<string, Dictionary<string, string>> GetModsDatabase()
     {
         string workingDir = Directory.GetCurrentDirectory();
         string cpkredirCfgPath = Path.Combine(workingDir, "cpkredir.ini");
 
         if (!File.Exists(cpkredirCfgPath))
-            return null;
+            return new();
 
         var cpkredirCfg = INI.Read(cpkredirCfgPath);
         string modsDbPath = cpkredirCfg["CPKREDIR"]["ModsDbIni"];
 
         if (!File.Exists(modsDbPath))
-            return null;
+            return new();
 
         return INI.Read(modsDbPath);
+    }
+
+    public List<Mod> GetMods()
+    {
+        List<Mod> result = new();
+
+        var modsDb = GetModsDatabase();
+
+        if (modsDb == null)
+            return result;
+
+        int activeModCount = INI.Parse<int>(modsDb["Main"]["ActiveModCount"], 0);
+
+        foreach (var entry in modsDb["Mods"].Keys)
+        {
+            for (int i = 0; i < activeModCount; i++)
+            {
+                if (modsDb["Main"][$"ActiveMod{i}"].Contains(entry))
+                {
+                    result.Add(new Mod(modsDb["Mods"][entry]));
+                }
+            }
+        }
+
+        return result;
     }
 
     public List<string> GetCodes()
@@ -655,10 +707,25 @@ Library "HMM" by "Hyper"
         var modsDb = GetModsDatabase();
 
         if (modsDb == null)
-            return null;
+            return result;
 
         foreach (var value in modsDb["Codes"].Values)
             result.Add(value);
+
+        return result;
+    }
+
+    public List<Mod> FindModsByName(string name)
+    {
+        List<Mod> result = new();
+
+        foreach (var mod in GetMods())
+        {
+            if (mod.Name.Contains(name))
+            {
+                result.Add(mod);
+            }
+        }
 
         return result;
     }
