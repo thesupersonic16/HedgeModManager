@@ -1098,6 +1098,10 @@ Library "Reflection" by "Hyper"
     	if (!_rflPointers.ContainsKey(rflName))
     		return null;
 
+        // Check for BINA signature.
+        if (*(int*)(_rflPointers[rflName] - 0x40) != 0x414E4942)
+            return null;
+
         var result = (T*)_rflPointers[rflName];
 
     	if (result != null && !_rflBackups.ContainsKey(rflName))
