@@ -1,4 +1,4 @@
-﻿<ResourceDictionary 
+<ResourceDictionary 
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:system="clr-namespace:System;assembly=mscorlib">
@@ -123,6 +123,13 @@
     <system:String x:Key="MainUIMissingLoaderHeader"  >Mod Loader n&apos;est pas installé!</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Pour que {0} puisse charger des mods, le mod loader a besoin d&apos;être installé.&#x0a;Voullez vous l&apos;installer maintenant?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"    >Choisissez l&apos;emplacement des mods...</system:String>
+    <system:String x:Key="MainUIRuntimeMissingTitle"  >Runtime Manquant Détecté!</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} a besoin que {1} sois installé pour que les mods&#x0a;fonctionne correctement, Souhaitez-vous que HMM se charge d&apos;installé se runtime?</system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Un ou plusieurs mods activés ont besoin que la redirection du fichier de sauvegarde fonctionne correctement. Activer cette fonctionnalité?&#x0a;Cliquez sur non uniquement si vous savez ce que vous faites.</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" >Dépendances nécessaire manquantes</system:String>
+    <system:String x:Key="MainUIMissingDepends"       >Les mods suivants ont des dépendances manquantes:</system:String>
+    <system:String x:Key="MainUIMissingDependsResolve">Télécharger GB Mods</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">Une ou plusieurs dépendances peuvent être automatiquement téléchargé&#x0a;depuis GameBanana en cliquant sur "Télécharger GB Mods".</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Veuillez choisir une option!</system:String>
@@ -201,13 +208,14 @@
     <!-- Mod Description UI Strings -->
     <system:String x:Key="ModDescriptionUIAbout">À Propos de {0}</system:String>
     <system:String x:Key="ModDescriptionUIMadeBy">Fait par</system:String>
-    <system:String x:Key="ModDescriptionUIMadeOn">Fait sur</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">Fait le</system:String>
     <system:String x:Key="ModDescriptionUIDate">le</system:String>
 
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Échec du téléchargement du mod</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Une erreur s&apos;est produite pendant le téléchargement. Les serveurs peuvent être en panne ou surchargés. Veuillez réessayer plus tard. &#x0a;&#x0a;Détails: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Échec de la recherche du jeu</system:String>
-    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager n'a pas pu trouver l'installation de {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager n&apos;a pas pu trouver l&apos;installation de {0}</system:String>
 
     <!-- Mod Updates Window Strings -->
     <system:String x:Key="ModUpdatesChangelog"    >Changement</system:String>
@@ -217,9 +225,15 @@
 
     <!-- Exception Window Strings -->
     <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Crash</system:String>
+    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager à Rencontré une exception!</system:String>
+    <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager à Rencontré une Erreur!</system:String>
+    <system:String x:Key="ExceptionWindowButtonCopyLog"   >Copier le log dans le presse-papiers</system:String>
+    <system:String x:Key="ExceptionWindowButtonIgnore"    >Ignorer et fermer</system:String>
+    <system:String x:Key="ExceptionWindowButtonReport"    >Envoyer le rapport sur GitHub</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Nouvelle mise à jour disponible!</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Apparemment, cette version de Hedge Mod Manager n&apos;est pas à jour.&#x0a;Il est fortement recommandé de procéder d&apos;abord à une mise à jour et de vérifier si le problème persiste.&#x0a;Souhaitez-vous faire la mise à jour maintenant?</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">Erreur de mise à jour!</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager n&apos;a pas pu être mis à jour!&#x0a;Veuillez télécharger manuellement la dernière version.</system:String>
 
     <!-- Themes -->
     <system:String x:Key="ThemeDark"  >Sombre</system:String>
