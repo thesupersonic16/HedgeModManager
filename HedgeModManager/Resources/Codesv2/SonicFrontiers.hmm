@@ -1115,39 +1115,37 @@ Library "MathHelpers" by "Hyper"
 
     public T FloatPercentToRange<T>(float value)
     {
-        float range = value / 100.0f;
-
         if (typeof(T) == typeof(sbyte))
         {
-            return (T)(object)(byte)(range * (sbyte.MaxValue * 1.0f));
+            return (T)(object)(byte)(value * (sbyte.MaxValue * 1.0f));
         }
         else if (typeof(T) == typeof(byte))
         {
-            return (T)(object)(byte)(range * (byte.MaxValue * 1.0f));
+            return (T)(object)(byte)(value * (byte.MaxValue * 1.0f));
         }
         else if (typeof(T) == typeof(short))
         {
-            return (T)(object)(short)(range * (short.MaxValue * 1.0f));
+            return (T)(object)(short)(value * (short.MaxValue * 1.0f));
         }
         else if (typeof(T) == typeof(ushort))
         {
-            return (T)(object)(ushort)(range * (ushort.MaxValue * 1.0f));
+            return (T)(object)(ushort)(value * (ushort.MaxValue * 1.0f));
         }
         else if (typeof(T) == typeof(int))
         {
-            return (T)(object)(int)(range * (int.MaxValue * 1.0f));
+            return (T)(object)(int)(value * (int.MaxValue * 1.0f));
         }
         else if (typeof(T) == typeof(uint))
         {
-            return (T)(object)(uint)(range * (uint.MaxValue * 1.0f));
+            return (T)(object)(uint)(value * (uint.MaxValue * 1.0f));
         }
         else if (typeof(T) == typeof(long))
         {
-            return (T)(object)(long)(range * (long.MaxValue * 1.0f));
+            return (T)(object)(long)(value * (long.MaxValue * 1.0f));
         }
         else if (typeof(T) == typeof(ulong))
         {
-            return (T)(object)(ulong)(range * (ulong.MaxValue * 1.0f));
+            return (T)(object)(ulong)(value * (ulong.MaxValue * 1.0f));
         }
         
         return default;
@@ -2801,6 +2799,8 @@ Library "VectorHelpers" by "Hyper"
 
 Library "XInput" by "Hyper"
 {
+    #lib "MathHelpers"
+
     #load "System.Numerics.dll"
 
     using System.Numerics;
