@@ -967,9 +967,6 @@ Library "Lua" by "Hyper & ĐeäTh"
     {
         Init();
 
-        if (GameMode.GetName() != "GameModeStage")
-            return 0;
-
         return _pLuaState;
     }
 
