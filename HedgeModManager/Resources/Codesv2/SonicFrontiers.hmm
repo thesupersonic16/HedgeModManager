@@ -2847,7 +2847,7 @@ Library "XInput" by "Hyper"
     [StructLayout(LayoutKind.Sequential)]
     public struct Gamepad
     {
-        public Buttons wButtons; // Use Sonic.Input for keyboard parity!
+        public Buttons wButtons;
         public byte bLeftTrigger;
         public byte bRightTrigger;
         public short sThumbLX;
@@ -2936,6 +2936,17 @@ Library "XInput" by "Hyper"
         }
 
         return v;
+    }
+
+    // Use Sonic.Input for keyboard parity!
+    public bool IsButtonDown(Buttons buttons)
+    {
+        var pState = GetState();
+
+        if (pState == null)
+            return false;
+
+        return (pState.Value.Gamepad.wButtons & buttons) != 0;
     }
 
     public float GetTrigger(int triggerIndex)
