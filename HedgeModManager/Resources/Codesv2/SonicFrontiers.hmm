@@ -601,6 +601,95 @@ Library "GameObject" by "Hyper, ĐeäTh & Sajid"
     }
 }
 
+Library "GameService" by "Hyper & Sajid"
+{
+    #include "Helpers" noemit
+
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+
+    private static bool _isInitialised = false;
+
+    private static List<long> _userServiceClassPtrs = new();
+
+    UNMANAGED_FUNCTION(long, CreateServices, long ppClasses)
+    {
+        var classes = new List<long>();
+
+        // Copy array contents to our list.
+        while (Read<long>(ppClasses) != 0)
+        {
+            classes.Add(Read<long>(ppClasses));
+            ppClasses += 8;
+        }
+
+        // Add user service class pointers.
+        foreach (long ptr in _userServiceClassPtrs)
+            classes.Add(ptr);
+        
+        classes.Add(0);
+
+        var classesArr = classes.ToArray();
+
+        fixed (long* pClasses = classesArr)
+            return (long)pClasses;
+    }
+
+    private void Init()
+    {
+        if (_isInitialised)
+            return;
+        
+        WriteAsmHook
+        (
+            $@"
+                push r14
+                sub  rsp, 0x20
+                mov  rax, qword ptr [rdx]
+                mov  r14, rdx
+                mov  rbx, rcx
+                mov  rcx, r14
+                mov  rdx, {GET_UNMANAGED_FUNCTION_PTR(CreateServices)}
+                call rdx
+                mov  r14, rax
+                mov  rax, qword ptr [rax]
+            ",
+
+            /* 0x147140C75 */
+            ScanSignature
+            (
+                "\x41\x56\x48\x83\xEC\x20\x48\x8B\x02\x49\x89\xD6",
+                "xxxxxxxxxxxx"
+            ),
+
+            HookBehavior.Replace
+        );
+
+        _isInitialised = true;
+    }
+
+    public void AddUserService(long ptr)
+    {
+        Init();
+
+        if (_userServiceClassPtrs.Contains(ptr))
+            return;
+
+        _userServiceClassPtrs.Add(ptr);
+    }
+
+    public void RemoveUserService(long ptr)
+    {
+        Init();
+        
+        if (!_userServiceClassPtrs.Contains(ptr))
+            return;
+
+        _userServiceClassPtrs.Remove(ptr);
+    }
+}
+
 Library "Helpers" by "Hyper"
 {
     #define UNMANAGED_FUNCTION(returnType, functionName, ...) \
@@ -840,16 +929,20 @@ Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
 Library "Lua" by "Hyper & ĐeäTh"
 {
     #include "Helpers" noemit
-
+    
+    #lib "GameDocument"
     #lib "GameMode"
+    #lib "GameService"
     #lib "Memory"
 
     using System.Collections.Generic;
     using System.IO;
 
     private static bool _isInitialised = false;
+    private static bool _isInitialisedScriptSequence = false;
 
     private static long _pLuaState = 0;
+    private static long _sigScriptSequenceManagerStaticClassCtor = 0;
 
     #define LUA_TNONE          (-1)
     #define LUA_TNIL           0
@@ -911,8 +1004,18 @@ Library "Lua" by "Hyper & ĐeäTh"
     private static long _sig_lua_toboolean = ScanSignature("\x48\x83\xEC\x28\xE8\xCC\xCC\xCC\xCC\x0F\xB6\x48\x08\x80\xF9\x01", "xxxxx????xxxxxxx");
     CREATE_FUNCTION_PTR(bool, lua_toboolean, _sig_lua_toboolean, long L, int idx)
 
+    /* 0x14BDE5E20 */
+    private static long _sigInitScriptSequenceManager = ScanSignature("\x48\x89\x5C\x24\x10\x48\x89\x6C\x24\x18\x56\x57\x41\x54\x41\x56\x41\x57\x48\x81\xEC\x30\x01\x00\x00\x48\x89", "xxxxxxxxxxxxxxxxxxxxxxxxxxx");
+    CREATE_FUNCTION_PTR(int*, InitScriptSequenceManager, _sigInitScriptSequenceManager, long pScriptSequenceManager, uint* pStringHash, char a3)
+    
+    /* 0x14BDD7B60 */
+    private static long _sigRegisterScriptSequenceManager = ScanSignature("\x40\x56\x48\x81\xEC\xC0\x00\x00\x00\x48\x89\xCE\x45", "xxxxxxxxxxxxx");
+    CREATE_FUNCTION_PTR(long, RegisterScriptSequenceManager, _sigRegisterScriptSequenceManager, long pScriptSequenceManager)
+
     private void Init()
     {
+        InitScriptSequence();
+
         if (_isInitialised)
             return;
 
@@ -961,6 +1064,40 @@ Library "Lua" by "Hyper & ĐeäTh"
         }
 
         _isInitialised = true;
+    }
+
+    public void InitScriptSequence()
+    {
+        if (_sigScriptSequenceManagerStaticClassCtor == 0)
+        {
+            /* 0x140053480 */
+            _sigScriptSequenceManagerStaticClassCtor = ScanSignature
+            (
+                "\x45\x33\xC9\x4C\x8D\x05\xCC\xCC\xCC\xCC\x48\x8D\x15\xCC\xCC\xCC\xCC\x48\x8D\x0D\xCC\xCC\xCC\xCC\xE9\x73\x3F",
+                "xxxxxx????xxx????xxx????xxx"
+            );
+
+            /* 0x143C53810 */
+            long pScriptSequenceManagerStaticClass = Memory.ReadEffectiveAddress(_sigScriptSequenceManagerStaticClassCtor + 0x11);
+
+            GameService.AddUserService(pScriptSequenceManagerStaticClass);
+        }
+
+        long pGameDocument = GameDocument.Get();
+
+        if (pGameDocument == 0)
+            return;
+
+        long pScriptSequenceManager = GameDocument.GetService(pGameDocument, "ScriptSequenceManager");
+
+        if (pScriptSequenceManager == 0)
+            return;
+
+        // BuildLevel
+        uint hash = 0x59B595D6;
+
+        GET_FUNCTION_PTR(InitScriptSequenceManager).Invoke(pScriptSequenceManager, &hash, (char)0);
+        GET_FUNCTION_PTR(RegisterScriptSequenceManager).Invoke(pScriptSequenceManager);
     }
 
     public long GetState()
@@ -1218,6 +1355,14 @@ Library "Memory" by "Hyper"
             return 0;
 
         return addr + Read<int>(addr + 0x01) + 0x05;
+    }
+
+    public long ReadEffectiveAddress(long addr)
+    {
+        if (addr == 0)
+            return 0;
+
+        return addr + Read<int>(addr + 0x03) + 0x07;
     }
 
     public long ReadJump(long addr)
