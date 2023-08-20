@@ -414,7 +414,7 @@ Library "Converse" by "Hyper & M&M"
         return pCnvrsText;
     }
 
-    public void Init()
+    private void Init()
     {
         if (_isInitialised)
             return;
@@ -1224,7 +1224,7 @@ Library "LevelInfo" by "Hyper, ĐeäTh & Sajid"
 Library "Lua" by "Hyper & ĐeäTh"
 {
     #include "Helpers" noemit
-    
+
     #lib "GameDocument"
     #lib "GameMode"
     #lib "GameService"
@@ -1325,7 +1325,7 @@ Library "Lua" by "Hyper & ĐeäTh"
                     mov  r9b, byte ptr [r8 + 0x20]
                     mov  rbp, {(long)p_isScriptSequenceInactive}
                     mov  byte ptr [rbp], r9b
-                    cmp  byte ptr [r8 + 0x20], 0
+                    cmp  r9b, 0
                     jz   getLuaState
                     mov  rbp, {(long)p_pLuaState}
                     mov  qword ptr [rbp], 0
@@ -1367,6 +1367,9 @@ Library "Lua" by "Hyper & ĐeäTh"
 
     public void InitScriptSequence()
     {
+        if (GameMode.GetName() == "GameModeStage")
+            return;
+        
         if (_sigScriptSequenceManagerStaticClassCtor == 0)
         {
             /* 0x140053480 */
