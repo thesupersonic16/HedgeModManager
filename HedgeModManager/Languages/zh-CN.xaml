@@ -136,8 +136,8 @@
 
     <!-- AboutWindow UI Strings -->
     <system:String x:Key="AboutWindowUITitle"      >关于 Hedge Mod Manager</system:String>
-    <system:String x:Key="AboutWindowUILine1"      >设计 Hedge Mod Manager 程序的目的是帮助人们能够更方便地加载 Mod。</system:String>
-    <system:String x:Key="AboutWindowUILine2"      >请使用您合法持有的正版游戏</system:String>
+    <system:String x:Key="AboutWindowUILine1"      >Hedge Mod Manager 旨在帮助用户更方便地加载 Mod</system:String>
+    <system:String x:Key="AboutWindowUILine2"      >请阁下切记使用合法持有的正版游戏</system:String>
     <system:String x:Key="AboutWindowUICredits"    >参与人员</system:String>
     <system:String x:Key="AboutWindowUITranslators">翻译人员</system:String>
 
@@ -156,10 +156,10 @@
     <system:String x:Key="ProfileWindowUINameLabel"  >配置文件名称: </system:String>
     <system:String x:Key="ProfileWindowUIImportFail" >导入 Mod 配置文件失败</system:String>
     <system:String x:Key="ProfileWindowUIImportMissingMods"   >未找到以下 Mod: </system:String>
-    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >未找到以下代码: </system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >未找到以下社区代码: </system:String>
 
     <!-- EditModWindow UI Strings -->
-    <system:String x:Key="EditModWindowUIHeader">请填写有关您的 Mod 的一些详细信息</system:String>
+    <system:String x:Key="EditModWindowUIHeader">请输入 Mod 的属性信息</system:String>
 
     <!-- PropertyEditor UI Strings -->
     <system:String x:Key="PropertyEditorUIName" >名称</system:String>
@@ -168,42 +168,44 @@
     <!-- Status UI Strings -->
     <system:String x:Key="StatusUILoadedMods"             >已加载 {0} 个 Mod</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >查询 {0} 项更新</system:String>
-    <system:String x:Key="StatusUIFailedToUpdate"         >{0}更新失败 {1}</system:String>
-    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Mod 已查询 {0} 项完成， {1} 项失败</system:String>
-    <system:String x:Key="StatusUIStartingGame"           >运行中 {0}</system:String>
-    <system:String x:Key="StatusUICheckingForUpdates"     >更新查询中</system:String>
-    <system:String x:Key="StatusUINoUpdatesFound"         >找不到更新</system:String>
+    <system:String x:Key="StatusUIFailedToUpdate"         >{0} 更新失败 {1}</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Mod 查询更新状态：{0} 项成功，{1} 项失败</system:String>
+    <system:String x:Key="StatusUIStartingGame"           >《{0}》运行中</system:String>
+    <system:String x:Key="StatusUICheckingForUpdates"     >查询更新中</system:String>
+    <system:String x:Key="StatusUINoUpdatesFound"         >尚未查询到可用更新</system:String>
     <system:String x:Key="StatusUIFailedToCheckUpdates"   >无法查询更新</system:String>
     <system:String x:Key="StatusUICheckingForLoaderUpdate">查询 {0} 项更新</system:String>
     <system:String x:Key="StatusUILoaderUpToDate"         >{0} 项已是最新版本</system:String>
     <system:String x:Key="StatusUIFailedLoaderUpdateCheck">查询 {0} 更新失败</system:String>
-    <system:String x:Key="StatusUIInstalledLoader"        >已安装 {0}</system:String>
-    <system:String x:Key="StatusUIDeletedMod"             >已删除 {0}</system:String>
+    <system:String x:Key="StatusUIInstalledLoader"        >{0} 已安装</system:String>
+    <system:String x:Key="StatusUIDeletedMod"             >{0} 已删除</system:String>
     <system:String x:Key="StatusUIModsDBSaved"            >Mod 数据库已保存</system:String>
-    <system:String x:Key="StatusUIModsDBLocationChanged"  >数据库位置已更新</system:String>
-    <system:String x:Key="StatusUIGameChange"             >游戏已更换 {0}</system:String>
-    <system:String x:Key="StatusUIDownloadingCodes"       >下载代码中 {0}</system:String>
-    <system:String x:Key="StatusUIDownloadFinished"       >已完成下载</system:String>
+    <system:String x:Key="StatusUIModsDBLocationChanged"  >数据库保存路径已更新</system:String>
+    <system:String x:Key="StatusUIGameChange"             >已切换为《{0}》</system:String>
+    <system:String x:Key="StatusUIDownloadingCodes"       >正在下载《{0}》社区代码</system:String>
+    <system:String x:Key="StatusUIDownloadFinished"       >下载完成</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >下载失败</system:String>
-    <system:String x:Key="StatusUICodeUpdatesAvailable"   >代码更新可用！</system:String>
-    <system:String x:Key="StatusUINoCodeUpdatesFound"     >未找到代码更新</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >社区代码当前有可用更新！</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >尚未查询到可更新代码</system:String>
     
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager 无法读取游戏目录。&#x0a;请确保以下目录及其所有文件和文件夹的用户组"写入"设置为允许。&#x0a;&#x0a;{0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >您确定要删除 "{0}"？&#x0a;此操作无法撤销！</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} 已经是最新的。</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >({1}) 已找到可用的 {0} 的较新版本！</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} 已经是最新版本</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >({1}) 已查询到 {0} 的可用较新版本！</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">您确定要取消更新吗？&#x0a;这可能会损坏 {0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >找不到 7-Zip 或 WinRAR！&#x0a;这是解压 Mod 数据必要的软件&#x0a;&#x0a;请确保您的系统上安装了其中一个。</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >无法在计算机上找到 7-Zip 或 WinRAR！&#x0a;这是解压 Mod 数据的必要软件&#x0a;&#x0a;请确保在您的系统上安装至少其一软件。</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >项完成</system:String>
     <system:String x:Key="StatusUIUpdateCompletedPlural"        >项完成</system:String>
     <system:String x:Key="StatusUIUpdateFailedSingular"         >项失败</system:String>
+
     <system:String x:Key="StatusUIUpdateFailedPlural"           >项失败</system:String>
 
     <!-- Mod Config UI Strings -->
     <system:String x:Key="ModConfigUITitle">{0} 设置</system:String>
+
 
     <!-- Mod Description UI Strings -->
     <system:String x:Key="ModDescriptionUIAbout">关于 {0}</system:String>
@@ -230,9 +232,9 @@
     <system:String x:Key="ExceptionWindowButtonCopyLog"   >将日志复制到剪贴板</system:String>
     <system:String x:Key="ExceptionWindowButtonIgnore"    >忽略并关闭</system:String>
     <system:String x:Key="ExceptionWindowButtonReport"    >在 GitHub 上提交报告</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >有新的更新可用！</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >这个版本的 Hedge Mod Manager 似乎已经过时了。&#x0a;强烈建议先更新，再看看问题是否仍然存在&#x0a;要更新吗？</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorTitle">更新错误！</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >有新更新可用！</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >您当前版本的 Hedge Mod Manager 似乎已过时。&#x0a;建议在更新本程序后再次检查问题是否仍然存在&#x0a;是否开始更新？</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorTitle">更新时出现错误！</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager 无法更新！&#x0a;请手动下载最新版本。</system:String>
 
     <!-- Themes -->
@@ -240,6 +242,7 @@
     <system:String x:Key="ThemeDarker">黑暗</system:String>
     <system:String x:Key="ThemeOLED"  >OLED</system:String>
     <system:String x:Key="ThemeLight" >明亮</system:String>
+
 
     <!-- Games -->
     <system:String x:Key="GameSonicGenerations">索尼克 世代</system:String>
@@ -250,7 +253,7 @@
     <system:String x:Key="GameSonicColorsUltimate">索尼克 缤纷色彩 究极版</system:String>
     <system:String x:Key="GameSonicOrigins">索尼克 起源</system:String>
     <system:String x:Key="GameSonicFrontiers">索尼克 未知边境</system:String>
-    <system:String x:Key="GameNoGame">未能检测游戏</system:String>
+    <system:String x:Key="GameNoGame">未能检测到游戏</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>
     <system:String x:Key="LauncherHeroic">Heroic</system:String>
