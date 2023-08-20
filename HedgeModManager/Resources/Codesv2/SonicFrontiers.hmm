@@ -277,6 +277,301 @@ Library "Collections" by "Sajid & Hyper"
     }
 }
 
+Library "Converse" by "Hyper & M&M"
+{
+    #include "Helpers" noemit
+
+    #lib "Memory"
+
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Text.RegularExpressions;
+
+    private static bool _isInitialised = false;
+
+    public enum Language : sbyte
+    {
+        Unknown = -1,
+        English,
+        French,
+        Italian,
+        German,
+        Spanish,
+        Polish,
+        Portuguese,
+        Russian,
+        Japanese,
+        ChineseTraditional,
+        ChineseSimplified,
+        Korean
+    }
+
+    private static sbyte _language = -1;
+
+    public class ReplacementString
+    {
+        public string Pattern { get; set; }
+
+        public string Replacement { get; set; }
+
+        public bool IsRegex { get; set; }
+
+        public ReplacementString(string in_pattern, string in_replacement, bool in_isRegex)
+        {
+            Pattern = in_pattern;
+            Replacement = in_replacement;
+            IsRegex = in_isRegex;
+        }
+    }
+
+    private static Dictionary<string, string> _redirectedStrings = new();
+    private static List<ReplacementString> _replacementStrings = new();
+
+    public delegate string TConverseNotifyAction(string key, string text);
+    private static List<TConverseNotifyAction> _converseNotifyActions = new();
+
+    UNMANAGED_FUNCTION(long, RedirectString, long pCnvrsKey, long pCnvrsText, int cnvrsTextLength)
+    {
+        if (pCnvrsKey == 0 || pCnvrsText == 0)
+            return pCnvrsText;
+
+        string cnvrsKey = Marshal.PtrToStringAnsi((IntPtr)pCnvrsKey);
+        string cnvrsText = Marshal.PtrToStringUni((IntPtr)pCnvrsText);
+        IntPtr pData = IntPtr.Zero;
+
+        void MarshalString(string str)
+        {
+            int length = sizeof(int) + ((str.Length + 1) * sizeof(short));
+
+            pData = Marshal.AllocHGlobal(length);
+
+            var wideTextStart = pData + sizeof(int);
+            var wideText = Encoding.Unicode.GetBytes(str);
+            var wideTextEnd = wideTextStart + wideText.Length;
+            
+            Marshal.Copy(wideText, 0, wideTextStart, wideText.Length);
+            
+            // Null terminator.
+            Marshal.WriteInt16(wideTextEnd, 0);
+
+            pCnvrsText = (long)pData;
+            cnvrsTextLength = length;
+        }
+
+        string redirectResult = cnvrsText;
+        {
+            foreach (var entry in _redirectedStrings)
+            {
+                if (entry.Key == cnvrsKey)
+                    redirectResult = entry.Value;
+            }
+
+            if (redirectResult != cnvrsText)
+                MarshalString(redirectResult);
+        }
+
+        string notifyResult = redirectResult;
+        {
+            foreach (var action in _converseNotifyActions)
+                notifyResult = action.Invoke(cnvrsKey, notifyResult);
+
+            if (notifyResult != cnvrsText)
+                MarshalString(notifyResult);
+        }
+
+        foreach (var entry in _replacementStrings)
+        {
+            string replacementResult = notifyResult;
+
+            if (entry.IsRegex)
+            {
+                replacementResult = new Regex(entry.Pattern).Replace(notifyResult, entry.Replacement);
+            }
+            else
+            {
+                replacementResult = notifyResult.Replace(entry.Pattern, entry.Replacement);
+            }
+
+            if (replacementResult != cnvrsText)
+                MarshalString(replacementResult);
+        }
+
+        if (pData != IntPtr.Zero)
+        {
+            // Wide string length.
+            Marshal.WriteInt32(pData, cnvrsTextLength);
+            Marshal.FreeHGlobal(pData);
+        }
+        else
+        {
+            /* No need to reallocate all strings,
+               return -1 and reload original pointer. */
+            pCnvrsText = -1;
+        }
+
+        return pCnvrsText;
+    }
+
+    public void Init()
+    {
+        if (_isInitialised)
+            return;
+
+        void ConverseHook(long addr)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    mov  r8d, dword ptr [rsp + 0x1C8 + 0xFFFFFFFFFFFFFE60]
+                    mov  rcx, rsi
+                    mov  rax, {GET_UNMANAGED_FUNCTION_PTR(RedirectString)}
+                    call rax
+                    cmp  rax, -1
+                    je   notCustom
+                    lea  rdx, qword ptr [rax + 4]
+                    mov  r8d, dword ptr [rax]
+                    jmp  exit
+                notCustom:
+                    mov  rdx, qword ptr [rsp + 0x1C8 + 0xFFFFFFFFFFFFFE58]
+                    mov  r8d, dword ptr [rsp + 0x1C8 + 0xFFFFFFFFFFFFFE60]
+                exit:
+                    mov  rcx, qword ptr [rdi + 8]
+                    mov  rax, {Memory.ReadCall(addr + 0x09)}
+                    call rax
+                ",
+
+                addr,
+
+                HookBehavior.Replace
+            );
+        }
+
+        ConverseHook
+        (
+            /* 0x14DA90041 */
+            ScanSignature
+            (
+                "\x44\x8B\x44\x24\x28\x48\x8B\x4F\x08\xE8\xCC\xCC\xCC\xCC\x48\x89\xC2\x48\x8B\x8F\xF0\x00\x00\x00",
+                "xxxxxxxxxx????xxxxxxxxxx"
+            )
+        );
+
+        ConverseHook
+        (
+            /* 0x14DA900A8 */
+            ScanSignature
+            (
+                "\x44\x8B\x44\x24\x28\x48\x8B\x4F\x08\xE8\xCC\xCC\xCC\xCC\x48\x89\xC2\x48\x89\xF9",
+                "xxxxxxxxxx????xxxxxx"
+            )
+        );
+
+        fixed (sbyte* p_language = &_language)
+        {
+            /* 0x140A14050 */
+            long sig = Memory.ReadCall
+            (
+                ScanSignature
+                (
+                    "\xE8\xCC\xCC\xCC\xCC\x48\x89\xC1\xE8\xCC\xCC\xCC\xCC\x48\x8B\x4C\x24\x30",
+                    "x????xxxx????xxxxx"
+                )
+            );
+
+            WriteAsmHook
+            (
+                $@"
+                    mov   rax, qword ptr [rcx + 8]
+                    movzx ecx, byte ptr [rax + 9]
+                    mov   rax, {(long)p_language}
+                    mov   byte ptr [rax], cl
+                    mov   rax, {Memory.ReadJump(sig + 8)}
+                    jmp   rax
+                ",
+
+                sig,
+
+                HookBehavior.Replace
+            );
+        }
+
+        _isInitialised = true;
+    }
+
+    public Language GetCurrentLanguage()
+    {
+        Init();
+
+        return (Language)_language;
+    }
+
+    public void AddConverseNotifyAction(TConverseNotifyAction action)
+    {
+        Init();
+
+        if (_converseNotifyActions.Contains(action))
+            return;
+
+        _converseNotifyActions.Add(action);
+    }
+
+    public void RemoveConverseNotifyAction(TConverseNotifyAction action)
+    {
+        Init();
+
+        if (!_converseNotifyActions.Contains(action))
+            return;
+
+        _converseNotifyActions.Remove(action);
+    }
+
+    public void Redirect(string key, string text)
+    {
+        Init();
+
+        if (_redirectedStrings.ContainsKey(key))
+        {
+            _redirectedStrings[key] = text;
+            return;
+        }
+
+        _redirectedStrings.Add(key, text);
+    }
+
+    public void Replace(string pattern, string replacement, bool isRegex = false)
+    {
+        Init();
+
+        if (string.IsNullOrEmpty(pattern))
+            return;
+
+        var first = _replacementStrings.FirstOrDefault(x => x.Pattern == pattern);
+        
+        if (first != null)
+        {
+            first.Replacement = replacement;
+            return;
+        }
+
+        _replacementStrings.Add(new ReplacementString(pattern, replacement, isRegex));
+    }
+
+    public void Restore(string key)
+    {
+        Init();
+
+        if (string.IsNullOrEmpty(key))
+            return;
+        
+        if (_redirectedStrings.ContainsKey(key))
+            _redirectedStrings.Remove(key);
+        
+        _replacementStrings.RemoveAll(x => x.Pattern == key);
+    }
+}
+
 Library "GameDocument" by "Hyper, ĐeäTh & Sajid"
 {
     #lib "Collections"
