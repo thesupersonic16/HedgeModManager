@@ -939,7 +939,7 @@ Library "Lua" by "Hyper & ĐeäTh"
     using System.IO;
 
     private static bool _isInitialised = false;
-    private static bool _isInitialisedScriptSequence = false;
+    private static bool _isScriptSequenceInactive = true;
 
     private static long _pLuaState = 0;
     private static long _sigScriptSequenceManagerStaticClassCtor = 0;
@@ -1019,6 +1019,7 @@ Library "Lua" by "Hyper & ĐeäTh"
         if (_isInitialised)
             return;
 
+        fixed (bool* p_isScriptSequenceInactive = &_isScriptSequenceInactive)
         fixed (long* p_pLuaState = &_pLuaState)
         {
             WriteAsmHook
@@ -1026,6 +1027,9 @@ Library "Lua" by "Hyper & ĐeäTh"
                 $@"
                     push rbp
                     sub  rsp, 0x50
+                    mov  r9b, byte ptr [r8 + 0x20]
+                    mov  rbp, {(long)p_isScriptSequenceInactive}
+                    mov  byte ptr [rbp], r9b
                     cmp  byte ptr [r8 + 0x20], 0
                     jz   getLuaState
                     mov  rbp, {(long)p_pLuaState}
@@ -1077,11 +1081,18 @@ Library "Lua" by "Hyper & ĐeäTh"
                 "xxxxxx????xxx????xxx????xxx"
             );
 
-            /* 0x143C53810 */
-            long pScriptSequenceManagerStaticClass = Memory.ReadEffectiveAddress(_sigScriptSequenceManagerStaticClassCtor + 0x11);
+            if (_sigScriptSequenceManagerStaticClassCtor == 0)
+            {
+                Console.WriteLine("[Lua] Failed to initialise script sequence!");
+                return;
+            }
 
-            GameService.AddUserService(pScriptSequenceManagerStaticClass);
+            /* 0x143C53810 */
+            GameService.AddUserService(Memory.ReadEffectiveAddress(_sigScriptSequenceManagerStaticClassCtor + 0x11));
         }
+
+        if (_isScriptSequenceInactive)
+            return;
 
         long pGameDocument = GameDocument.Get();
 
