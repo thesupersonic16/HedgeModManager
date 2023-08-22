@@ -180,7 +180,7 @@ namespace HedgeModManager.Serialization
                 var name = string.IsNullOrEmpty(fieldAttribute.Name) ? property.Name : fieldAttribute.Name;
                 var valueType = property.PropertyType;
 
-                if (file.Groups.ContainsKey(group))
+                if (file.Groups.ContainsKey(group) && file[group].Params.ContainsKey(name))
                 {
                     var value = ReadField(group, name, valueType);
                     if (value != null)
