@@ -683,12 +683,22 @@ Library "GameMode" by "Hyper"
 {
     using System.Runtime.InteropServices;
 
-    private static bool _initialised = false;
+    private static bool _isInitialised = false;
+
+    public enum DestinationMode : sbyte
+    {
+        Unknown = -1,
+        GameModeStage,
+        GameModeCyberStage
+    }
+
+    private static sbyte _destinationMode = -1;
+    
     private static long _pGameModeName = 0;
 
-    private void Init()
+    public void Init()
     {
-        if (_initialised)
+        if (_isInitialised)
             return;
 
         fixed (long* p_pGameModeName = &_pGameModeName)
@@ -696,17 +706,24 @@ Library "GameMode" by "Hyper"
             WriteAsmHook
             (
                 $@"
-                    push   rax
-                    mov    rax, {(long)p_pGameModeName}
-                    mov    [rax], r8
-                    pop    rax
                     push   rbx
                     sub    rsp, 0x30
+                    mov    rax, qword ptr [r8]
+                    mov    rbx, 0x65646F4D656D6147 ; GameMode
+                    cmp    rax, rbx
+                    mov    rax, {(long)p_pGameModeName}
+                    jne    unknown
+                    mov    qword ptr [rax], r8
+                    jmp    exit
+                unknown:
+                    mov    rbx, {(long)Marshal.StringToHGlobalAnsi("GameModeUnknown")}
+                    mov    qword ptr [rax], rbx
+                exit:
                     mov    rbx, rcx
                     movaps xmmword ptr [rsp + 0x38 + 0xFFFFFFFFFFFFFFE8], xmm6
                 ",
 
-                /* 0x146C74440 */
+                /* 0x146BEA180 */
                 ScanSignature
                 (
                     "\x40\x53\x48\x83\xEC\x30\x48\x89\xCB\x0F\x29\x74\x24\x20\x48\x83\xE9\x80\x0F\x28\xF1\xE8\xCC\xCC\xCC\xCC\x48\x85\xC0\x74\x12",
@@ -715,30 +732,24 @@ Library "GameMode" by "Hyper"
 
                 HookBehavior.Replace
             );
-                
+
             // Set if we're currently in Cyber Space.
             WriteAsmHook
             (
                 $@"
-                    push rdi
-                    sub  rsp, 0x20
-                    mov  rbx, r8
-                    mov  rdi, rdx
-                    mov  rsi, rcx
-                    push rax
-                    push rbx
-                    mov  rax, {(long)p_pGameModeName}
-                    mov  rbx, {(long)Marshal.StringToHGlobalAnsi("GameModeCyberStage")}
-                    mov  [rax], rbx
-                    pop  rbx
-                    pop  rax
+                    mov r8, {(long)Marshal.StringToHGlobalAnsi("GameModeCyberStage")}
+                    mov rcx, {(long)p_pGameModeName}
+                    mov qword ptr [rcx], r8
+                    mov r8d, 0x10
+                    mov qword ptr [rsi], rax
+                    lea rcx, qword ptr [rsi + 0x100]
                 ",
 
-                /* 0x1473C021A */
+                /* 0x147334264 */
                 ScanSignature
                 (
-                    "\x57\x48\x83\xEC\x20\x4C\x89\xC3\x48\x89\xD7\x48\x89\xCE\xE8\xCC\xCC\xCC\xCC\x48\x8D\x05\xCC\xCC\xCC\xCC\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x00\x01\x00\x00",
-                    "xxxxxxxxxxxxxxx????xxx????xxxxxxxxxxxxxxxx"
+                    "\x41\xB8\x10\x00\x00\x00\x48\x89\x06\x48\x8D\x8E\x00\x01\x00\x00\x0F\x10\x03\x0F\x11\x86\xE0\x00\x00\x00\x0F\x10\x4B\x10\x0F\x11\x8E\xF0\x00\x00\x00\x48\x8B\x13\xE8\xCC\xCC\xCC\xCC\x4C\x31\x05",
+                    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx"
                 ),
 
                 HookBehavior.Replace
@@ -748,111 +759,103 @@ Library "GameMode" by "Hyper"
             WriteAsmHook
             (
                 $@"
-                    mov  qword ptr [rsi + 0x1A8], rdi
-                    xor  ebp, ebp
-                    mov  qword ptr [rsi + 0x190], rbp
-                    push rax
-                    push rbx
-                    mov  rax, {(long)p_pGameModeName}
-                    mov  rbx, {(long)Marshal.StringToHGlobalAnsi("GameModeStage")}
-                    mov  [rax], rbx
-                    pop  rbx
-                    pop  rax
+                    mov qword ptr [rsi + 0x1A8], rbx
+                    mov rbp, {(long)Marshal.StringToHGlobalAnsi("GameModeStage")}
+                    mov rax, {(long)p_pGameModeName}
+                    mov qword ptr [rax], rbp
+                    xor ebp, ebp
+                    mov qword ptr [rsi + 0x190], rbp
                 ",
 
-                /* 0x1479E9DD1 */
+                /* 0x147967172 */
                 ScanSignature
                 (
-                    "\x48\x89\xBE\xA8\x01\x00\x00\x31\xED",
+                    "\x48\x89\x9E\xA8\x01\x00\x00\x31\xED",
                     "xxxxxxxxx"
                 ),
 
                 HookBehavior.Replace
             );
 
-            // Set if we're entering Cyber Space from Training Simulator.
-            WriteAsmHook
-            (
-                $@"
-                    movups xmm0, xmmword ptr [rax]
-                    movups xmmword ptr [rdi + 0xA0], xmm0
-                    movaps xmm0, xmmword ptr [rax + 0x10]
-                    push   rax
-                    push   rbx
-                    mov    rax, {(long)p_pGameModeName}
-                    mov    rbx, {(long)Marshal.StringToHGlobalAnsi("GameModeCyberStage")}
-                    mov    [rax], rbx
-                    pop    rbx
-                    pop    rax
-                ",
-
-                /* 0x14015023F */
-                ScanSignature
+            fixed (sbyte* p_destinationMode = &_destinationMode)
+            {
+                // Set if we're entering Cyber Space from Training Simulator.
+                WriteAsmHook
                 (
-                    "\x0F\x10\x00\x0F\x11\x87\xA0\x00\x00\x00\x0F\x28\x40\x10\x0F\x29\x87\xD0\x00\x00\x00\x0F\x28\x48\x20\x0F\x29\x8F\xE0\x00\x00\x00\x0F\x28\x40\x30\x0F\x29\x87\xF0\x00\x00\x00\x0F\x28\x48\x40\x0F\x29\x8F\x00\x01\x00\x00\x0F\x28\x40\x50\x48\x8B\x47\x10",
-                    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                ),
-
-                HookBehavior.Replace
-            );
-
-            // Set if we're returning to an island from Training Simulator after quitting Cyber Space.
-            WriteAsmHook
-            (
-                $@"
-                    ; Restore original code.
-                    movups xmm0, xmmword ptr [rsp + 0x210 + 0xFFFFFFFFFFFFFE10]
-                    mov    qword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFFA0], rax
-                    mov    word ptr [rdi + 0x120], 0x101
-                    push   rax
-                    push   rbx
-                    mov    rax, {(long)p_pGameModeName}
-                    mov    rbx, {(long)Marshal.StringToHGlobalAnsi("GameModeStage")}
-                    mov    [rax], rbx
-                    pop    rbx
-                    pop    rax
-                ",
-
-                /* 0x14014E6E7 */
-                ScanSignature
+                    $@"
+                        mov    rdx, {(long)Marshal.StringToHGlobalAnsi("GameModeTutorial")}
+                        mov    rax, {(long)p_pGameModeName}
+                        mov    qword ptr [rax], rdx
+                        mov    rax, {(long)p_destinationMode}
+                        mov    byte ptr [rax], 1
+                        mov    rax, [rdi + 0x10]
+                        movaps xmmword ptr [rdi + 0x110], xmm0
+                        mov    rdx, [rax + 0x70]
+                    ",
+                    
+                    /* 0x14015AAA9 */
+                    ScanSignature
+                    (
+                        "\x48\x8B\x47\x10\x0F\x29\x87\x10\x01\x00\x00",
+                        "xxxxxxxxxxx"
+                    ),
+                    
+                    HookBehavior.Replace
+                );
+                
+                // Set if we're returning to an island from Training Simulator after quitting Cyber Space.
+                WriteAsmHook
                 (
-                    "\x0F\x10\x44\x24\x20\x48\x89\x85\xB0\x00\x00\x00\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
-                    "xxxxxxxxxxxxxxxxxxxxx"
-                ),
+                    $@"
+                        ; Restore original code.
+                        movups xmm0, xmmword ptr [rsp + 0x210 + 0xFFFFFFFFFFFFFE10]
+                        mov    qword ptr [rbp + 0x110 + 0xFFFFFFFFFFFFFFA0], rax
+                        mov    word ptr [rdi + 0x120], 0x101
+                        mov    rcx, {(long)Marshal.StringToHGlobalAnsi("GameModeTutorial")}
+                        mov    rax, {(long)p_pGameModeName}
+                        mov    qword ptr [rax], rcx
+                        mov    rax, {(long)p_destinationMode}
+                        mov    byte ptr [rax], 0
+                    ",
+                    
+                    /* 0x140158D07 */
+                    ScanSignature
+                    (
+                        "\x0F\x10\x44\x24\x20\x48\x89\x85\xB0\x00\x00\x00\x66\xC7\x87\x20\x01\x00\x00\x01\x01",
+                        "xxxxxxxxxxxxxxxxxxxxx"
+                    ),
+                    
+                    HookBehavior.Replace
+                );
 
-                HookBehavior.Replace
-            );
-
-            // Set if we're returning to an island from Training Simulator after completing Cyber Space.
-            WriteAsmHook
-            (
-                $@"
-                    push rax
-                    xor  ebx, ebx
-                    mov  rax, {(long)Marshal.StringToHGlobalAnsi("w6d01")}
-                    lea  rcx, qword ptr [rax]
-                    mov  edx, ebx
-                    push rax
-                    push rbx
-                    mov  rax, {(long)p_pGameModeName}
-                    mov  rbx, {(long)Marshal.StringToHGlobalAnsi("GameModeStage")}
-                    mov  [rax], rbx
-                    pop  rbx
-                    pop  rax
-                ",
-
-                /* 0x14014E4B0 */
-                ScanSignature
+                // Set if we're returning to an island from Training Simulator after completing Cyber Space.
+                WriteAsmHook
                 (
-                    "\x33\xDB\x48\x8D\x0D\xCC\xCC\xCC\xCC\x8B\xD3",
-                    "xxxxx????xx"
-                ),
-
-                HookBehavior.Replace
-            );
+                    $@"
+                        mov rbx, {(long)Marshal.StringToHGlobalAnsi("w6d01")}
+                        lea rcx, qword ptr [rbx]
+                        mov rbx, {(long)Marshal.StringToHGlobalAnsi("GameModeTutorial")}
+                        mov rdx, {(long)p_pGameModeName}
+                        mov qword ptr [rdx], rbx
+                        mov rax, {(long)p_destinationMode}
+                        mov byte ptr [rax], 0
+                        xor ebx, ebx
+                        mov edx, ebx
+                    ",
+                    
+                    /* 0x140158AD0 */
+                    ScanSignature
+                    (
+                        "\x33\xDB\x48\x8D\x0D\xCC\xCC\xCC\xCC\x8B\xD3",
+                        "xxxxx????xx"
+                    ),
+                    
+                    HookBehavior.Replace
+                );
+            }
         }
 
-        _initialised = true;
+        _isInitialised = true;
     }
 
     public string GetName()
@@ -863,6 +866,11 @@ Library "GameMode" by "Hyper"
             return "GameModeUnknown";
 
         return Marshal.PtrToStringAnsi((IntPtr)_pGameModeName);
+    }
+
+    public DestinationMode GetTutorialDestination()
+    {
+        return (DestinationMode)_destinationMode;
     }
 }
 
@@ -8351,7 +8359,7 @@ Unsupported objects;
         return resourceName;
     }
 
-    if (GameMode.GetName() == "GameModeStage")
+    if (GameMode.GetName() == "GameModeStage" || GameMode.GetTutorialDestination() == GameMode.DestinationMode.GameModeStage)
     {
         Resources.AddResourceNotifyAction(NotifyRedirectIslandObjects);
     }
@@ -8555,7 +8563,7 @@ Unsupported objects;
         return resourceName;
     }
 
-    if (GameMode.GetName() == "GameModeCyberStage")
+    if (GameMode.GetName() == "GameModeCyberStage" || GameMode.GetTutorialDestination() == GameMode.DestinationMode.GameModeCyberStage)
     {
         Resources.AddResourceNotifyAction(NotifyRedirectCyberSpaceObjects);
     }
@@ -9570,7 +9578,7 @@ This replaces the basic X button QTE to dodge the rifle projectile in the final 
     );
 }
 
-Code "Retain Ground Velocity for Jump" in "Physics" by "Hyper" does
+Patch "Retain Ground Velocity for Jump" in "Physics" by "Hyper" does
 /*
 Retains Sonic's ground velocity when jumping.
 
