@@ -334,11 +334,11 @@ Library "Converse" by "Hyper & M&M"
 
     UNMANAGED_FUNCTION(long, RedirectString, long pCnvrsKey, long pCnvrsText, int cnvrsTextLength)
     {
-        if (pCnvrsKey == 0 || pCnvrsText == 0)
+        if (pCnvrsKey == 0)
             return pCnvrsText;
 
         string cnvrsKey = Marshal.PtrToStringAnsi((IntPtr)pCnvrsKey);
-        string cnvrsText = Marshal.PtrToStringUni((IntPtr)pCnvrsText);
+        string cnvrsText = pCnvrsText == 0 ? string.Empty : Marshal.PtrToStringUni((IntPtr)pCnvrsText);
         IntPtr pData = IntPtr.Zero;
 
         void MarshalString(string str)
@@ -404,7 +404,7 @@ Library "Converse" by "Hyper & M&M"
             Marshal.WriteInt32(pData, cnvrsTextLength);
             Marshal.FreeHGlobal(pData);
         }
-        else
+        else if (pCnvrsText != 0)
         {
             /* No need to reallocate all strings,
                return -1 and reload original pointer. */
@@ -428,6 +428,12 @@ Library "Converse" by "Hyper & M&M"
                     mov  rcx, rsi
                     mov  rax, {GET_UNMANAGED_FUNCTION_PTR(RedirectString)}
                     call rax
+                    cmp  rax, 0
+                    jne  notNull
+                    mov  rdx, {(long)Marshal.StringToHGlobalUni(" ")}
+                    mov  r8d, 1
+                    jmp  exit
+                notNull:
                     cmp  rax, -1
                     je   notCustom
                     lea  rdx, qword ptr [rax + 4]
@@ -448,6 +454,18 @@ Library "Converse" by "Hyper & M&M"
             );
         }
 
+        WriteNop
+        (
+            /* 0x14DA9000D */
+            ScanSignature
+            (
+                "\x0F\x84\xE8\x00\x00\x00\x48\x8D\x8F\xC8\x00\x00\x00",
+                "xxxxxxxxxxxxx"
+            ),
+            
+            6
+        );
+
         ConverseHook
         (
             /* 0x14DA90041 */
@@ -456,6 +474,18 @@ Library "Converse" by "Hyper & M&M"
                 "\x44\x8B\x44\x24\x28\x48\x8B\x4F\x08\xE8\xCC\xCC\xCC\xCC\x48\x89\xC2\x48\x8B\x8F\xF0\x00\x00\x00",
                 "xxxxxxxxxx????xxxxxxxxxx"
             )
+        );
+
+        WriteNop
+        (
+            /* 0x14DA900A6 */
+            ScanSignature
+            (
+                "\x74\x53\x44\x8B\x44\x24\x28",
+                "xxxxxxx"
+            ),
+            
+            2
         );
 
         ConverseHook
