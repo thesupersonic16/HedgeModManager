@@ -1436,6 +1436,12 @@ Library "Lua" by "Hyper & ĐeäTh"
 
     public void InitScriptSequence()
     {
+        if (GameMode.GetName() == "GameModeStage" ||
+            GameMode.GetTutorialDestination() == GameMode.DestinationMode.GameModeStage)
+        {
+            return;
+        }
+
         if (_sigScriptSequenceManagerStaticClassCtor == 0)
         {
             /* 0x140053480 */
