@@ -1476,6 +1476,19 @@ Library "Lua" by "Hyper & ĐeäTh"
     {
         Init();
 
+        /*
+            This stupid null check validates the Lua state
+            by checking if lua_State.next is null. This won't
+            always mean the state is valid, of course, as any
+            bit of memory could have a null QWORD, but it works.
+
+            PUC-Rio should really add a signature to the lua_State
+            struct for external validation, because checking the
+            result of luaL_newstate is just not good enough.
+        */
+        if (_pLuaState != 0 && *(long*)_pLuaState != 0)
+            return 0;
+
         if (_isScriptSequenceInactive)
             return 0;
 
