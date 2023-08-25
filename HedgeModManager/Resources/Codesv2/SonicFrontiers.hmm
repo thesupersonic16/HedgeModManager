@@ -733,6 +733,28 @@ Library "GameMode" by "Hyper"
                 HookBehavior.Replace
             );
 
+            WriteAsmHook
+            (
+                $@"
+                    mov   rcx, {(long)Marshal.StringToHGlobalAnsi("GameModeTitle")}
+                    mov   rdx, {(long)p_pGameModeName}
+                    mov   qword ptr [rdx], rcx
+                    mov   edx, 0x38
+                    mov   qword ptr [rdi], rax
+                    mov   rcx, rsi
+                    movsd xmm0, qword ptr [rbx]
+                ",
+
+                /* 0x1401D8EA4 */
+                ScanSignature
+                (
+                    "\xBA\x38\x00\x00\x00\x48\x89\x07",
+                    "xxxxxxxx"
+                ),
+
+                HookBehavior.Replace
+            );
+
             // Set if we're currently in Cyber Space.
             WriteAsmHook
             (
@@ -1274,6 +1296,8 @@ Library "Lua" by "Hyper & ĐeäTh"
     private static bool _isInitialised = false;
     private static bool _isScriptSequenceInactive = true;
 
+    private static string _lastGameModeName = "GameModeUnknown";
+
     private static long _pLuaState = 0;
     private static long _sigScriptSequenceManagerStaticClassCtor = 0;
 
@@ -1345,12 +1369,19 @@ Library "Lua" by "Hyper & ĐeäTh"
     private static long _sigRegisterScriptSequenceManager = ScanSignature("\x40\x56\x48\x81\xEC\xC0\x00\x00\x00\x48\x89\xCE\x45", "xxxxxxxxxxxxx");
     CREATE_FUNCTION_PTR(long, RegisterScriptSequenceManager, _sigRegisterScriptSequenceManager, long pScriptSequenceManager)
 
-    private void Init()
+    public void Init()
     {
-        InitScriptSequence();
+        if (_lastGameModeName != GameMode.GetName())
+        {
+            InitScriptSequence();
+
+            _lastGameModeName = GameMode.GetName();
+        }
 
         if (_isInitialised)
             return;
+
+        GameMode.Init();
 
         fixed (bool* p_isScriptSequenceInactive = &_isScriptSequenceInactive)
         fixed (long* p_pLuaState = &_pLuaState)
@@ -1405,9 +1436,6 @@ Library "Lua" by "Hyper & ĐeäTh"
 
     public void InitScriptSequence()
     {
-        if (GameMode.GetName() == "GameModeStage")
-            return;
-        
         if (_sigScriptSequenceManagerStaticClassCtor == 0)
         {
             /* 0x140053480 */
@@ -1426,9 +1454,6 @@ Library "Lua" by "Hyper & ĐeäTh"
             /* 0x143C53810 */
             GameService.AddUserService(Memory.ReadEffectiveAddress(_sigScriptSequenceManagerStaticClassCtor + 0x11));
         }
-
-        if (_isScriptSequenceInactive)
-            return;
 
         long pGameDocument = GameDocument.Get();
 
@@ -1451,6 +1476,9 @@ Library "Lua" by "Hyper & ĐeäTh"
     {
         Init();
 
+        if (_isScriptSequenceInactive)
+            return 0;
+
         return _pLuaState;
     }
 
@@ -1458,15 +1486,13 @@ Library "Lua" by "Hyper & ĐeäTh"
     {
         Init();
 
-        long L = GetState();
-
-        if (L == 0)
+        if (GetState() == 0)
             return;
             
         long str = TO_STRING_PTR(code);
         
-        GET_FUNCTION_PTR(luaL_loadbufferx).Invoke(L, str, code.Length, str, 0);
-        GET_FUNCTION_PTR(lua_pcallk).Invoke(L, 0, -1, 0, 0, 0);
+        GET_FUNCTION_PTR(luaL_loadbufferx).Invoke(GetState(), str, code.Length, str, 0);
+        GET_FUNCTION_PTR(lua_pcallk).Invoke(GetState(), 0, -1, 0, 0, 0);
     }
 
     public void LoadScript(string path)
@@ -1495,12 +1521,10 @@ Library "Lua" by "Hyper & ĐeäTh"
     {
         Init();
 
-        long L = GetState();
-
-        if (L == 0)
+        if (GetState() == 0)
             return;
 
-        GET_FUNCTION_PTR(lua_getglobal).Invoke(L, TO_STRING_PTR(funcName));
+        GET_FUNCTION_PTR(lua_getglobal).Invoke(GetState(), TO_STRING_PTR(funcName));
 
         foreach (var arg in args)
         {
@@ -1509,19 +1533,19 @@ Library "Lua" by "Hyper & ĐeäTh"
             if (type == typeof(string))
             {
                 string str = (string)arg;
-                GET_FUNCTION_PTR(lua_pushlstring).Invoke(L, TO_STRING_PTR(str), str.Length);
+                GET_FUNCTION_PTR(lua_pushlstring).Invoke(GetState(), TO_STRING_PTR(str), str.Length);
             }
             else if (type == typeof(int))
             {
-                GET_FUNCTION_PTR(lua_pushinteger).Invoke(L, (int)arg);
+                GET_FUNCTION_PTR(lua_pushinteger).Invoke(GetState(), (int)arg);
             }
             else if (type == typeof(float) || type == typeof(double))
             {
-                GET_FUNCTION_PTR(lua_pushnumber).Invoke(L, (float)arg);
+                GET_FUNCTION_PTR(lua_pushnumber).Invoke(GetState(), (float)arg);
             }
             else if (type == typeof(bool))
             {
-                GET_FUNCTION_PTR(lua_pushboolean).Invoke(L, (bool)arg ? 1 : 0);
+                GET_FUNCTION_PTR(lua_pushboolean).Invoke(GetState(), (bool)arg ? 1 : 0);
             }
             else
             {
@@ -1529,7 +1553,7 @@ Library "Lua" by "Hyper & ĐeäTh"
             }
         }
 
-        GET_FUNCTION_PTR(lua_pcallk).Invoke(L, args.Length, resultCount, 0, 0, 0);
+        GET_FUNCTION_PTR(lua_pcallk).Invoke(GetState(), args.Length, resultCount, 0, 0, 0);
     }
 
     public void Call(string funcName, params object[] args)
@@ -1541,32 +1565,30 @@ Library "Lua" by "Hyper & ĐeäTh"
     {
         Init();
 
-        long L = GetState();
-
-        if (L == 0)
+        if (GetState() == 0)
             return default;
 
         Call(funcName, 1, args);
 
         var type = typeof(T);
-        var luaType = GET_FUNCTION_PTR(lua_type).Invoke(L, -1);
+        var luaType = GET_FUNCTION_PTR(lua_type).Invoke(GetState(), -1);
 
         if (type == typeof(string) && luaType == LUA_TSTRING)
         {
-            long ptr = (long)GET_FUNCTION_PTR(lua_tolstring).Invoke(L, -1, 0);
+            long ptr = (long)GET_FUNCTION_PTR(lua_tolstring).Invoke(GetState(), -1, 0);
             return (T)(object)FROM_STRING_PTR(ptr);
         }
         else if (type == typeof(int) && luaType == LUA_TNUMBER)
         {
-            return (T)(object)(int)GET_FUNCTION_PTR(lua_tointegerx).Invoke(L, -1, 0);
+            return (T)(object)(int)GET_FUNCTION_PTR(lua_tointegerx).Invoke(GetState(), -1, 0);
         }
         else if ((type == typeof(float) || type == typeof(double)) && luaType == LUA_TNUMBER)
         {
-            return (T)(object)(float)GET_FUNCTION_PTR(lua_tonumberx).Invoke(L, -1, 0);
+            return (T)(object)(float)GET_FUNCTION_PTR(lua_tonumberx).Invoke(GetState(), -1, 0);
         }
         else if (type == typeof(bool) && luaType == LUA_TBOOLEAN)
         {
-            return (T)(object)(bool)GET_FUNCTION_PTR(lua_toboolean).Invoke(L, -1);
+            return (T)(object)(bool)GET_FUNCTION_PTR(lua_toboolean).Invoke(GetState(), -1);
         }
         else
         {
