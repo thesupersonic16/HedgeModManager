@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/stale@v5
         with:
+          ascending: true
+          operations-per-run: 150
+          exempt-issue-labels: 'feature'
           days-before-issue-stale: 30
           days-before-issue-close: 14
           stale-issue-label: "stale"
