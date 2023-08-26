@@ -1299,6 +1299,14 @@ Library "Lua" by "Hyper & ĐeäTh"
     private static bool _isInitialised = false;
     private static bool _isScriptSequenceInactive = true;
 
+    private static List<string> _deniedGameModes = new()
+    {
+        "GameModeBattleRush",
+        "GameModeFishing",
+        "GameModeHacking",
+        "GameModeStage"
+    };
+
     private static string _lastGameModeName = "GameModeUnknown";
 
     private static long _pLuaState = 0;
@@ -1441,7 +1449,7 @@ Library "Lua" by "Hyper & ĐeäTh"
 
     public void InitScriptSequence()
     {
-        if (GameMode.GetName() == "GameModeStage" ||
+        if (_deniedGameModes.Contains(GameMode.GetName()) ||
             GameMode.GetTutorialDestination() == GameMode.DestinationMode.GameModeStage)
         {
             return;
