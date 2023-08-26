@@ -36,6 +36,7 @@ using System.Windows.Documents;
 using System.Xml.Linq;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using HedgeModManager.CodeCompiler;
+using HedgeModManager.Diagnostics;
 
 namespace HedgeModManager
 {
@@ -253,7 +254,9 @@ namespace HedgeModManager
             LoadDatabase();
             ModsDatabase.Mods.Sort((x, y) => x.Title.CompareTo(y.Title));
 
-            CodesDatabase = CodeFile.FromFiles(CodeProvider.CodesTextPath, CodeProvider.ExtraCodesTextPath);
+            var root = ModsDatabase.RootDirectory;
+
+            CodesDatabase = CodeFile.FromFiles(Path.Combine(root, ModsDB.CodesTextPath), Path.Combine(root, ModsDB.ExtraCodesTextPath));
             ModsDatabase.Codes.ForEach((x) =>
             {
                 var code = CodesDatabase.Codes.Find((y) => { return y.Name == x; });
@@ -482,7 +485,7 @@ namespace HedgeModManager
             try
             {
                 await Singleton.GetInstance<HttpClient>().DownloadFileAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}",
-                    CodeProvider.CodesTextPath, null, token);
+                    Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath), null, token);
 
                 Dispatcher.Invoke(Refresh);
             }
@@ -505,13 +508,14 @@ namespace HedgeModManager
             if (HedgeApp.CurrentGame == Games.Unknown)
                 return;
 
-            if (!File.Exists(CodeProvider.CodesTextPath))
+            var codesPath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
+            if (!File.Exists(codesPath))
                 return;
 
             try
             {
                 // Codes from disk.
-                string localCodes = File.ReadAllText(CodeProvider.CodesTextPath);
+                string localCodes = File.ReadAllText(codesPath);
                 string repoCodes = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}");
 
                 if (ViewModel.CPKREDIR.UpdateCodesOnLaunch && localCodes != repoCodes)
@@ -1437,7 +1441,7 @@ namespace HedgeModManager
             UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGame));
             try
             {
-                string codesFilePath = CodeProvider.CodesTextPath;
+                string codesFilePath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
                 bool codesFileExists = File.Exists(codesFilePath);
 
                 /* Parse current codes list, since ModsDB.CodesDatabase
@@ -1457,22 +1461,22 @@ namespace HedgeModManager
                         Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
 
                         // Don't display diff for initial download.
-                        if (!codesFileExists)
+                        if (oldCodes == null)
                             return;
 
-                        var diff = new CodeFile(codesFilePath).Diff(oldCodes);
+                        var diff = new CodeFile(codesFilePath).CalculateDiff(oldCodes);
                         {
                             var sb = new StringBuilder();
 
-                            foreach (var code in diff)
+                            foreach (var block in diff.ToList())
                             {
-                                sb.AppendLine($"- {code}");
+                                sb.AppendLine($"- {DiffBlockToString(block)}");
 
-                                if (code.Type == CodeDiffResult.CodeDiffType.Renamed)
+                                if (block.Type == DiffType.Renamed)
                                 {
                                     // Restore enabled state of renamed code.
-                                    if (ViewModel.ModsDB.Codes.Contains(code.OriginalName))
-                                        ViewModel.ModsDB.CodesDatabase.Codes.Find(x => x.Name == code.NewName).Enabled = true;
+                                    if (ViewModel.ModsDB.Codes.Contains(block.Data.Key))
+                                        ViewModel.ModsDB.CodesDatabase.Codes.Find(x => x.Name == block.Data.Value).Enabled = true;
                                 }
                             }
 
@@ -1498,6 +1502,19 @@ namespace HedgeModManager
             {
                 UpdateStatus(Localise("StatusUIDownloadFailed"));
             }
+        }
+
+        private static string DiffBlockToString(DiffBlock block)
+        {
+            string key = block.Type switch
+            {
+                DiffType.Added => "DiffUIAdded",
+                DiffType.Removed => "DiffUIRemoved",
+                DiffType.Renamed => "DiffUIRenamed",
+                _ => "DiffUIModified",
+            };
+
+            return LocaliseFormat(key, block.Description);
         }
 
         private void UI_Download_Codes(object sender, RoutedEventArgs e)
@@ -1662,7 +1679,7 @@ namespace HedgeModManager
 
         private void CodesList_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            Code code = GetCodeFromView(sender);
+            CSharpCode code = GetCodeFromView(sender);
 
             if (code == null)
                 return;
@@ -1989,18 +2006,18 @@ namespace HedgeModManager
             public void WriteLine(string str) => Window.UpdateStatus(str);
         }
 
-        private void OpenAboutCodeWindow(Code code)
+        private void OpenAboutCodeWindow(CSharpCode code)
         {
             if (!string.IsNullOrEmpty(code?.Description))
                 new AboutCodeWindow(code).ShowDialog();
         }
 
-        private Code GetCodeFromView(object sender)
+        private CSharpCode GetCodeFromView(object sender)
         {
             if (sender is ListViewItem lvItem)
-                return lvItem.Content as Code;
+                return lvItem.Content as CSharpCode;
             else if (sender is ListView lv)
-                return lv.SelectedItem as Code;
+                return lv.SelectedItem as CSharpCode;
             else if (sender is TreeViewItem tvItem)
                 return (tvItem.DataContext as CodeHierarchyViewModel)?.Code;
             else if (sender is TreeView tv)
@@ -2041,7 +2058,7 @@ namespace HedgeModManager
             }
         }
 
-        private void UpdateCodeDescription(Code code)
+        private void UpdateCodeDescription(CSharpCode code)
         {
             var fgBrush = (SolidColorBrush)HedgeApp.Current.FindResource("HMM.Window.ForegroundBrush");
             var noBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF646464");
@@ -2136,7 +2153,7 @@ namespace HedgeModManager
             {
                 if (CodesList.SelectedItems.Count == 1)
                 {
-                    UpdateCodeDescription(CodesList.SelectedItem as Code);
+                    UpdateCodeDescription(CodesList.SelectedItem as CSharpCode);
                     return;
                 }
             }
@@ -2169,7 +2186,7 @@ namespace HedgeModManager
             else
             {
                 if (CodesList.SelectedItems.Count == 1)
-                    OpenAboutCodeWindow(CodesList.SelectedItem as Code);
+                    OpenAboutCodeWindow(CodesList.SelectedItem as CSharpCode);
             }
         }
 

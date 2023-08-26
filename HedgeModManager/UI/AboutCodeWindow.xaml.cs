@@ -22,7 +22,7 @@ namespace HedgeModManager
     /// </summary>
     public partial class AboutCodeWindow : Window
     {
-        public AboutCodeWindow(Code code)
+        public AboutCodeWindow(CSharpCode code)
         {
             DataContext = code;
             InitializeComponent();

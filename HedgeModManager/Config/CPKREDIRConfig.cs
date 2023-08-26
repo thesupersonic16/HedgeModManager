@@ -13,59 +13,59 @@ namespace HedgeModManager
     public class CPKREDIRConfig : INotifyPropertyChanged
     {
         // CPKREDIR
-        [IniField("CPKREDIR")]
+        [IniField("CPKREDIR", true)]
         public bool Enabled { get; set; } = true;
 
-        [IniField("CPKREDIR")]
+        [IniField("CPKREDIR", true)]
         public bool PlaceTocAtEnd { get; set; } = true;
 
-        [IniField("CPKREDIR")]
+        [IniField("CPKREDIR", true)]
         public bool HandleCpksWithoutExtFiles { get; set; } = false;
 
-        [IniField("CPKREDIR")]
+        [IniField("CPKREDIR", true)]
         public string LogFile { get; set; } = "cpkredir.log";
 
-        [IniField("CPKREDIR")]
+        [IniField("CPKREDIR", true)]
         public int ReadBlockSizeKB { get; set; } = 4096;
 
-        [IniField("CPKREDIR")]
+        [IniField("CPKREDIR", true)]
         public string ModsDbIni { get; set; } = "mods\\ModsDB.ini";
 
-        [IniField("CPKREDIR", "EnableSaveFileRedirection")]
+        [IniField("CPKREDIR", "EnableSaveFileRedirection", true)]
         public bool EnableSaveFileRedirection { get; set; } = false;
 
-        [IniField("CPKREDIR")]
+        [IniField("CPKREDIR", true)]
         public string SaveFileFallback { get; set; } = string.Empty;
 
-        [IniField("CPKREDIR")]
+        [IniField("CPKREDIR", true)]
         public string SaveFileOverride { get; set; } = string.Empty;
 
         [IniField("CPKREDIR")]
         public string LogType { get; set; }
 
         // HedgeModManager
-        [IniField("HedgeModManager", "AutoCheckForUpdates")]
+        [IniField("HedgeModManager", "AutoCheckForUpdates", true)]
         public bool CheckForUpdates { get; set; } = true;
 
-        [IniField("HedgeModManager", "CheckLoader")]
+        [IniField("HedgeModManager", "CheckLoader", true)]
         public bool CheckLoaderUpdates { get; set; } = true;
 
-        [IniField("HedgeModManager", "CheckModUpdates")]
+        [IniField("HedgeModManager", "CheckModUpdates", true)]
         public bool CheckForModUpdates { get; set; } = true;
 
-        [IniField("HedgeModManager", "UpdateCodesOnLaunch")]
+        [IniField("HedgeModManager", "UpdateCodesOnLaunch", true)]
         public bool UpdateCodesOnLaunch { get; set; } = true;
 
-        [IniField("HedgeModManager", "KeepModLoaderOpen")]
+        [IniField("HedgeModManager", "KeepModLoaderOpen", true)]
         public bool KeepOpen { get; set; } = true;
 
-        [IniField("HedgeModManager", nameof(EnableFallbackSaveRedirection))]
+        [IniField("HedgeModManager", nameof(EnableFallbackSaveRedirection), true)]
         public bool EnableFallbackSaveRedirection { get; set; } = true;
 
-        [IniField("HedgeModManager", "ModProfile")]
+        [IniField("HedgeModManager", "ModProfile", true)]
         public string ModProfile { get; set; } = "Default";
 
-        [IniField("HedgeModManager", "UseLauncher")]
+        [IniField("HedgeModManager", "UseLauncher", true)]
         public bool UseLauncher { get; set; } = true;
 
         public bool EnableDebugConsole 

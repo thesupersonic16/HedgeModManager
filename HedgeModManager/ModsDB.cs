@@ -16,11 +16,17 @@ using HedgeModManager.UI;
 using Newtonsoft.Json;
 using static HedgeModManager.Lang;
 using HedgeModManager.CodeCompiler;
+using HedgeModManager.CodeCompiler.PreProcessor;
+using HedgeModManager.Foundation;
 
 namespace HedgeModManager
 {
-    public class ModsDB : IEnumerable<ModInfo>
+    public class ModsDB : IEnumerable<ModInfo>, IIncludeResolver
     {
+        public const string CompiledCodesName = "Codes.dll";
+        public const string CodesTextPath = "Codes.hmm";
+        public const string ExtraCodesTextPath = "ExtraCodes.hmm";
+
         public CodeFile CodesDatabase = new CodeFile();
         public List<ModInfo> Mods = new List<ModInfo>();
 
@@ -208,7 +214,7 @@ namespace HedgeModManager
 
             if (compileCodes)
             {
-                var codes = new List<Code>();
+                var codes = new List<CSharpCode>();
 
                 foreach (var code in CodesDatabase.Codes)
                 {
@@ -222,7 +228,7 @@ namespace HedgeModManager
                         codes.AddRange(mod.Codes.Codes);
                 }
 
-                await CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
+                await CodeProvider.CompileCodes(codes, Path.Combine(RootDirectory, CompiledCodesName), this);
             }
         }
 
@@ -520,6 +526,39 @@ namespace HedgeModManager
             }
 
             return invalid;
+        }
+
+        public string Resolve(string name)
+        {
+            foreach (var code in CodesDatabase.Codes)
+            {
+                if (code.Name == name)
+                {
+                    return code.Body;
+                }
+            }
+
+            foreach (var mod in Mods)
+            {
+                if (!mod.Enabled)
+                {
+                    continue;
+                }
+
+                if (mod.Codes?.Codes != null)
+                {
+                    foreach (var code in mod.Codes.Codes)
+                    {
+                        if (code.Name == name)
+                        {
+                            return code.Body;
+                        }
+                    }
+
+                }
+            }
+
+            return null;
         }
 
         public IEnumerator<ModInfo> GetEnumerator()
