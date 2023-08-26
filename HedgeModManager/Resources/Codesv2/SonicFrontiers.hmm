@@ -1291,6 +1291,7 @@ Library "Lua" by "Hyper & ĐeäTh"
     #lib "GameMode"
     #lib "GameService"
     #lib "Memory"
+    #lib "StringMapOperation"
 
     using System.Collections.Generic;
     using System.IO;
@@ -1302,6 +1303,8 @@ Library "Lua" by "Hyper & ĐeäTh"
 
     private static long _pLuaState = 0;
     private static long _sigScriptSequenceManagerStaticClassCtor = 0;
+
+    private static List<uint> _luaScripts = new();
 
     #define LUA_TNONE          (-1)
     #define LUA_TNIL           0
@@ -1503,12 +1506,26 @@ Library "Lua" by "Hyper & ĐeäTh"
         return _pLuaState;
     }
 
-    public void Script(string code)
+    public void Script(string code, bool isRunOnce = false)
     {
         Init();
 
         if (GetState() == 0)
             return;
+
+        if (isRunOnce)
+        {
+            uint codeHash = StringMapOperation.ComputeHash(code);
+
+            if (_luaScripts.Contains(codeHash))
+            {
+                return;
+            }
+            else
+            {
+                _luaScripts.Add(codeHash);
+            }
+        }
             
         long str = TO_STRING_PTR(code);
         
@@ -1516,7 +1533,7 @@ Library "Lua" by "Hyper & ĐeäTh"
         GET_FUNCTION_PTR(lua_pcallk)(GetState(), 0, -1, 0, 0, 0);
     }
 
-    public void LoadScript(string path)
+    public void LoadScript(string path, bool isRunOnce = false)
     {
         if (!File.Exists(path))
             return;
@@ -1535,7 +1552,7 @@ Library "Lua" by "Hyper & ĐeäTh"
         if (string.IsNullOrEmpty(code))
             return;
 
-        Script(code);
+        Script(code, isRunOnce);
     }
 
     private void Call(string funcName, int resultCount, params object[] args)
