@@ -708,6 +708,8 @@ Library "GameMode" by "Hyper"
                 $@"
                     push   rbx
                     sub    rsp, 0x30
+                    cmp    r8, 0
+                    je     exit
                     mov    rax, qword ptr [r8]
                     mov    rbx, 0x65646F4D656D6147 ; GameMode
                     cmp    rax, rbx
