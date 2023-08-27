@@ -4422,7 +4422,7 @@ Patch "Always Have Phantom Rush" in "Cheats" by "NM" does "Phantom Rush is activ
     );
 }
 
-Patch "Always Have Power Boost on Islands" in "Cheats" by "SuperSonic16" does "Power Boost is active at all times on the islands.
+Patch "Always Have Power Boost on Islands" in "Cheats" by "SuperSonic16" does "Power Boost is active at all times on the islands."
 {
     WriteProtected<byte>
     (
@@ -5820,7 +5820,7 @@ Example usage;
     }
 }
 
-Patch "Disable Drift Dash Panels" in "Gameplay" by "Hyper" does "Disables all Drift Dash Panels seen in 3-5. "
+Patch "Disable Drift Dash Panels" in "Gameplay" by "Hyper" does "Disables all Drift Dash Panels seen in 3-5."
 {
     WriteProtected<byte>
     (
@@ -8965,7 +8965,7 @@ Patch "Hide Air Trick Hint Effects" in "Graphics" by "Hyper" does "Hides the par
     );
 }
 
-Patch "Hide Boost Gauge" in "UI" by "Hyper" does "Disables the Boost guage UI element."
+Patch "Hide Boost Gauge" in "UI" by "Hyper" does "Disables the Boost gauge UI element."
 {
     WriteProtected<byte>
     (
@@ -9111,7 +9111,7 @@ Patch "Hide Target Reticle" in "UI" by "Hyper" does "Disables the Homing Attack 
     );
 }
 
-Patch "Hide Oxygen Gauge" in "UI" by "Hyper" does "Disabled the oxygen guage UI element."
+Patch "Hide Oxygen Gauge" in "UI" by "Hyper" does "Disabled the oxygen gauge UI element."
 {
     WriteProtected<byte>
     (
@@ -9270,7 +9270,7 @@ Patch "Hide Titan Health Gauge" in "UI" by "Hyper" does "Disables the Titan heal
     );
 }
 
-Patch "Infinite Boost Gauge" in "Cheats" by "Hyper" does "Grants unlimited boost guage."
+Patch "Infinite Boost Gauge" in "Cheats" by "Hyper" does "Grants unlimited boost gauge."
 {
     WriteNop
     (
