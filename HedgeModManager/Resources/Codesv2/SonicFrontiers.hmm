@@ -4022,7 +4022,7 @@ Notes;
     }
 }
 
-Code "Allow Attacking from Stomp Bounce" in "Gameplay" by "Hyper"
+Code "Allow Attacking from Stomp Bounce" in "Gameplay" by "Hyper" does "Allows Sonic to attack directly after a Stomp Bounce."
 //
     #lib "Sonic"
 //
@@ -4227,7 +4227,7 @@ Supported islands;
     NOP(Memory.ReadCall(callerFuncAddr + 0x0A) + 0x2D);
 }
 
-Patch "Always Day on Islands" in "Time" by "NM"
+Patch "Always Day on Islands" in "Time" by "NM" does "Forces the time to day."
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -4407,7 +4407,7 @@ Abilities;
     );
 }
 
-Patch "Always Have Phantom Rush" in "Cheats" by "NM"
+Patch "Always Have Phantom Rush" in "Cheats" by "NM" does "Phantom Rush is active at all times."
 {
     WriteNop
     (
@@ -4422,7 +4422,7 @@ Patch "Always Have Phantom Rush" in "Cheats" by "NM"
     );
 }
 
-Patch "Always Have Power Boost on Islands" in "Cheats" by "SuperSonic16"
+Patch "Always Have Power Boost on Islands" in "Cheats" by "SuperSonic16" does "Power Boost is active at all times on the islands.
 {
     WriteProtected<byte>
     (
@@ -4437,7 +4437,7 @@ Patch "Always Have Power Boost on Islands" in "Cheats" by "SuperSonic16"
     );
 }
 
-Patch "Always Have Power Boost in Cyber Space" in "Cheats" by "Hyper"
+Patch "Always Have Power Boost in Cyber Space" in "Cheats" by "Hyper" does "Power Boost is active at all times in Cyber Space."
 {
     WriteNop
     (
@@ -4481,7 +4481,7 @@ This prevents the mouse cursor appearing under certain conditions, even if the p
     }
 }
 
-Patch "Always Play 'One Way Dream' During Credits" in "Audio" by "M&M"
+Patch "Always Play 'One Way Dream' During Credits" in "Audio" by "M&M" does "Plays 'One Way Dream' in place of 'Vandalize' during the credits in Normal and Easy modes."
 {
     /* v1.30: 0x1401C8AF3 */
     WriteProtected<byte>
@@ -4508,7 +4508,7 @@ Patch "Always Play 'One Way Dream' During Credits" in "Audio" by "M&M"
     );
 }
 
-Patch "Always Play 'Vandalize' During Credits" in "Audio" by "M&M"
+Patch "Always Play 'Vandalize' During Credits" in "Audio" by "M&M" does "Plays 'Vandalize' in place of 'One Way Dream' during the credits in Hard mode."
 {
     /* v1.30: 0x1401C8AF3 */
     WriteNop
@@ -4656,7 +4656,7 @@ Supported islands;
     NOP(Memory.ReadCall(callerFuncAddr + 0x0A) + 0x2D);
 }
 
-Patch "Always Trickable Dash Rings" in "Gameplay" by "Hyper"
+Patch "Always Trickable Dash Rings" in "Gameplay" by "Hyper" does "Allows Sonic to always trick after using a Dash Ring."
 {
     WriteProtected<byte>
     (
@@ -4671,7 +4671,7 @@ Patch "Always Trickable Dash Rings" in "Gameplay" by "Hyper"
     );
 }
 
-Patch "Always Trickable Jump Boards" in "Gameplay" by "Hyper"
+Patch "Always Trickable Jump Boards" in "Gameplay" by "Hyper" does "Allows Sonic to always trick after using a Jump Board."
 {
     WriteProtected<byte>
     (
@@ -4706,7 +4706,7 @@ By default, exiting Spin Dash without boosting will make Sonic fall.
     );
 }
 
-Patch "Always Trickable Springs" in "Gameplay" by "Hyper"
+Patch "Always Trickable Springs" in "Gameplay" by "Hyper" does "Allows Sonic to always trick after using a Spring."
 {
     WriteNop
     (
@@ -4721,7 +4721,7 @@ Patch "Always Trickable Springs" in "Gameplay" by "Hyper"
     );
 }
 
-Patch "Always Unlocked All Juke Box Songs" in "Cheats" by "Hyper"
+Patch "Always Unlocked All Juke Box Songs" in "Cheats" by "Hyper" does "Unlocks all Juke Box songs at all times."
 {
     WriteProtected<byte>
     (
@@ -4736,7 +4736,7 @@ Patch "Always Unlocked All Juke Box Songs" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
+Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper" does "Unlocks Arcade Mode at all times."
 {
     WriteNop
     (
@@ -4751,7 +4751,7 @@ Patch "Always Unlocked Arcade Mode" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Unlocked Extreme Difficulty" in "Cheats" by "Hyper"
+Patch "Always Unlocked Extreme Difficulty" in "Cheats" by "Hyper" does "Unlocks Extreme Mode at all times."
 {
     WriteNop
     (
@@ -4766,7 +4766,7 @@ Patch "Always Unlocked Extreme Difficulty" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper"
+Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper" does "Unlocks Spin Dash at all times."
 {
     // Unlock various components of Spin Dash.
     WriteAsmHook
@@ -4813,7 +4813,7 @@ Patch "Always Unlocked Spin Dash" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Always Night on Islands" in "Time" by "NM"
+Patch "Always Night on Islands" in "Time" by "NM" does "Forces the time to night."
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -4864,7 +4864,7 @@ Patch "Always Night on Islands" in "Time" by "NM"
     );
 }
 
-Patch "Always Sunrise on Islands" in "Time" by "NM"
+Patch "Always Sunrise on Islands" in "Time" by "NM" does "Forces the time to sunrise."
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -4915,7 +4915,7 @@ Patch "Always Sunrise on Islands" in "Time" by "NM"
     );
 }
 
-Patch "Always Sunset on Islands" in "Time" by "NM"
+Patch "Always Sunset on Islands" in "Time" by "NM" does "Forces the time to sunset."
 {
     /*
         When forcing the hours, minutes, and seconds opcodes to all write static values, the game will freeze shortly after a save is loaded. This is caused by two opcodes that seemingly invoke a loop until two addresses match in value. These two addresses can either be hours or minutes.
@@ -5045,7 +5045,7 @@ Patch "Bouncy Jump Ball" in "Animation" by "Hyper" does "Uses bouncy jump ball a
     );
 }
 
-Patch "Centre Game Window on Launch" in "System" by "Hyper"
+Patch "Centre Game Window on Launch" in "System" by "Hyper" does "Centres the game window on launch."
 //
     #load "System.Drawing.dll"
     #load "System.Xml.dll"
@@ -5704,7 +5704,7 @@ Patch "Hide Drift Input Prompt" in "UI" by "Hyper" does "Hides the input prompt 
     );
 }
 
-Patch "Disable Cyloop Aura" in "Graphics" by "Hyper"
+Patch "Disable Cyloop Aura" in "Graphics" by "Hyper" does "Disables the blue aura that surrounds Sonic while performing a Cyloop."
 {
     WriteProtected<byte>
     (
@@ -5719,7 +5719,7 @@ Patch "Disable Cyloop Aura" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Disable Cyloop Camera" in "Camera" by "Hyper"
+Patch "Disable Cyloop Camera" in "Camera" by "Hyper" does "Disables the dynamic camera while performing a Cyloop."
 {
     WriteNop
     (
@@ -5820,7 +5820,7 @@ Example usage;
     }
 }
 
-Patch "Disable Drift Dash Panels" in "Gameplay" by "Hyper"
+Patch "Disable Drift Dash Panels" in "Gameplay" by "Hyper" does "Disables all Drift Dash Panels seen in 3-5. "
 {
     WriteProtected<byte>
     (
@@ -5835,7 +5835,7 @@ Patch "Disable Drift Dash Panels" in "Gameplay" by "Hyper"
     );
 }
 
-Patch "Disable Drop Dash" in "Gameplay" by "Hyper"
+Patch "Disable Drop Dash" in "Gameplay" by "Hyper" does "Disables the Drop Dash."
 {
     // Disable drop dash charge from StateDoubleJump.
     WriteProtected<byte>
@@ -5877,7 +5877,7 @@ Patch "Disable Drop Dash" in "Gameplay" by "Hyper"
     );
 }
 
-Patch "Disable Drop Dash Camera Delay" in "Camera" by "Hyper"
+Patch "Disable Drop Dash Camera Delay" in "Camera" by "Hyper" does "Disables the camera delay upon performing a Drop Dash."
 {
     WriteProtected<byte>
     (
@@ -6264,7 +6264,7 @@ Known issues;
     );
 }
 
-Patch "Disable Grass" in "Graphics" by "Hyper"
+Patch "Disable Grass" in "Graphics" by "Hyper" does "Disables grass foliage."
 {
     WriteProtected<byte>
     (
@@ -6497,7 +6497,7 @@ Known issues;
     );
 }
 
-Patch "Disable Hit Stop" in "Gameplay" by "Hyper" does "Disables the slow motion effect after performing attacks."
+Patch "Disable Hit Stop" in "Gameplay" by "Hyper" does "Disables the slow-motion effect after performing certain attacks."
 {
     WriteAsmHook
     (
@@ -6679,7 +6679,7 @@ Patch "Disable Keyboard Input" in "System" by "Hyper" does "Disables input from 
     );
 }
 
-Code "Disable Lava Instant Death" in "Gameplay" by "Hyper" does "Disables Sonic instantly drowning in lava and makes him jump up from the heat until running out of rings."
+Code "Disable Lava Instant Death" in "Gameplay" by "Hyper" does "Disables Sonic instantly dying to lava, and instead makes him lose rings and launch into the air."
 //
     #lib "BlackboardItem"
     #lib "Memory"
@@ -6725,7 +6725,7 @@ Code "Disable Lava Instant Death" in "Gameplay" by "Hyper" does "Disables Sonic 
     RingCount = BlackboardItem.GetRingCount();
 }
 
-Patch "Disable Loop Kick on Slide" in "Gameplay" by "Hyper"
+Patch "Disable Loop Kick on Slide" in "Gameplay" by "Hyper" does "Disables performing Loop Kick upon getting close to an enemy while sliding."
 {
     WriteNop
     (
@@ -6968,7 +6968,7 @@ Patch "Disable Parry Targeting" in "Gameplay" by "Hyper" does "Disables Sonic au
     );
 }
 
-Patch "Disable Photo Mode Camera Collision" in "Camera" by "Hyper"
+Patch "Disable Photo Mode Camera Collision" in "Camera" by "Hyper" does "Disables camera collision in Photo Mode, allowing the camera to pass through terrain."
 {
     // Camera position
     WriteProtected<byte>
@@ -7023,7 +7023,7 @@ Patch "Disable Photo Mode Camera Collision" in "Camera" by "Hyper"
     );
 }
 
-Patch "Disable Photo Mode Distance Limit" in "Camera" by "Hyper"
+Patch "Disable Photo Mode Distance Limit" in "Camera" by "Hyper" does "Disables the distance limit for Photo Mode."
 {
     WriteProtected<byte>
     (
@@ -7038,7 +7038,7 @@ Patch "Disable Photo Mode Distance Limit" in "Camera" by "Hyper"
     );
 }
 
-Patch "Disable Photo Mode Tilt Limit" in "Camera" by "Hyper"
+Patch "Disable Photo Mode Tilt Limit" in "Camera" by "Hyper" does "Disables the tilt limit for Photo Mode."
 {
     /* 0x1400A5F66 */
     var addr = ScanSignature
@@ -7051,7 +7051,7 @@ Patch "Disable Photo Mode Tilt Limit" in "Camera" by "Hyper"
     WriteProtected<byte>(addr + 0x16, Assemble("mov rax, rcx; nop"));
 }
 
-Patch "Disable Photo Mode Zoom Limit" in "Camera" by "Hyper"
+Patch "Disable Photo Mode Zoom Limit" in "Camera" by "Hyper" does "Disables the zoom limit for Photo Mode."
 {
     /* 0x1400A5D69 */
     var addr = ScanSignature
@@ -7100,7 +7100,7 @@ Known issues;
     }
 }
 
-Patch "Disable Power Boost" in "Gameplay" by "Hyper"
+Patch "Disable Power Boost" in "Gameplay" by "Hyper" does "Disables the Power Boost."
 {
     WriteProtected<byte>
     (
@@ -7115,7 +7115,7 @@ Patch "Disable Power Boost" in "Gameplay" by "Hyper"
     );
 }
 
-Patch "Disable Power Boost Audio" in "Audio" by "Hyper"
+Patch "Disable Power Boost Audio" in "Audio" by "Hyper" does "Disables the Power Boost's unique sound effects."
 {
     // Activation SFX
     WriteNop
@@ -7144,7 +7144,7 @@ Patch "Disable Power Boost Audio" in "Audio" by "Hyper"
     );
 }
 
-Patch "Disable Ring Loss" in "Cheats" by "M&M"
+Patch "Disable Ring Loss" in "Cheats" by "M&M" does "Sonic no longer loses rings when taking damage."
 {
     WriteProtected<byte>
     (
@@ -7248,7 +7248,7 @@ RFL research by GamingLeroy.
     );
 }
 
-Patch "Disable Shadows" in "Graphics" by "Luig & Hyper"
+Patch "Disable Shadows" in "Graphics" by "Luig & Hyper" does "Disables shadows."
 {
     WriteProtected<byte>
     (
@@ -7339,7 +7339,7 @@ Patch "Disable Spin Charge Camera" in "Camera" by "Hyper" does "Disables the zoo
     );
 }
 
-Patch "Disable Spin Slash on Drop Dash" in "Gameplay" by "Hyper"
+Patch "Disable Spin Slash on Drop Dash" in "Gameplay" by "Hyper" does "Disables performing the Spin Slash when getting close to an enemy while drop dashing."
 {
     WriteProtected<byte>
     (
@@ -7354,7 +7354,7 @@ Patch "Disable Spin Slash on Drop Dash" in "Gameplay" by "Hyper"
     );
 }
 
-Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cutscene that occurs before Starfall."
+Patch "Disable Starfall Cutscene" in "Gameplay" by "Hyper" does "Disables the cutscene that occurs before a Starfall."
 {
     /* 0x1403A5330 */
     var addr = ScanSignature
@@ -7405,7 +7405,7 @@ Notes;
     }
 }
 
-Patch "Disable Subsurface Scattering" in "Graphics" by "Hyper"
+Patch "Disable Subsurface Scattering" in "Graphics" by "Hyper" does "Disables subsurface scattering."
 {
     WriteAsmHook
     (
@@ -7427,7 +7427,7 @@ Patch "Disable Subsurface Scattering" in "Graphics" by "Hyper"
     );
 }
 
-Patch "Disable Time Velocity Multiplier" in "Time" by "Hyper" does "Disables the time rate increasing based on how fast Sonic is moving."
+Patch "Disable Time Velocity Multiplier" in "Time" by "Hyper" does "Disables the flow of time speeding up based on how fast Sonic is moving."
 {
     WriteNop
     (
@@ -7577,7 +7577,7 @@ Affected objects;
     );
 }
 
-Patch "Disable Water Audio Filter" in "Audio" by "Hyper"
+Patch "Disable Water Audio Filter" in "Audio" by "Hyper" does "Disables the audio filter used while underwater."
 {
     WriteProtected<byte>
     (
@@ -7874,7 +7874,7 @@ Patch "Disable Tutorial Messages" in "Gameplay" by "Hyper" does "Disables all in
     );
 }
 
-Patch "Disable Umbrella Camera Lock-On" in "Camera" by "Hyper" does "Disables the lock-on camera when the Umbrella enemy in Ares jumps into the sky."
+Patch "Disable Umbrella Camera Lock-On" in "Camera" by "Hyper" does "Disables the lock-on camera when the Umbrella enemy jumps into the sky."
 {
     WriteProtected<byte>
     (
@@ -7901,7 +7901,7 @@ Patch "Disable Umbrella Camera Lock-On" in "Camera" by "Hyper" does "Disables th
     );
 }
 
-Patch "Disable Vignette" in "Graphics" by "Hyper"
+Patch "Disable Vignette" in "Graphics" by "Hyper" does "Disables the vignette around the edges of the camera."
 {
     WriteNop
     (
@@ -8178,7 +8178,7 @@ Patch "Fix Resolution Resetting on Launch" in "Fixes" by "Hyper" does "Fixes a b
     );
 }
 
-Patch "Fix Shadow Stutter" in "Fixes" by "Hyper" does "Fixes shadows not interpolating smoothly when time passes."
+Patch "Fix Shadow Stutter" in "Fixes" by "Hyper" does "Fixes shadows not interpolating smoothly as time passes."
 {
     WriteProtected<byte>
     (
@@ -8782,7 +8782,7 @@ This does not address pop-in issues.
     }
 }
 
-Patch "Force PlayStation 4 Controller UI" in "UI" by "Hyper"
+Patch "Force PlayStation 4 Controller UI" in "UI" by "Hyper" does "Forces the PlayStation 4 controller UI to be used."
 {
     WriteAsmHook
     (
@@ -8818,7 +8818,7 @@ Patch "Force PlayStation 4 Controller UI" in "UI" by "Hyper"
     );
 }
 
-Patch "Force PlayStation 5 Controller UI" in "UI" by "Hyper"
+Patch "Force PlayStation 5 Controller UI" in "UI" by "Hyper" does "Forces the PlayStation 5 controller UI to be used."
 {
     WriteAsmHook
     (
@@ -8854,7 +8854,7 @@ Patch "Force PlayStation 5 Controller UI" in "UI" by "Hyper"
     );
 }
 
-Patch "Force Switch Controller UI" in "UI" by "Hyper"
+Patch "Force Switch Controller UI" in "UI" by "Hyper" does "Forces the Nintendo Switch controller UI to be used."
 {
     WriteAsmHook
     (
@@ -8877,7 +8877,7 @@ Patch "Force Switch Controller UI" in "UI" by "Hyper"
     );
 }
 
-Patch "Force Xbox One Controller UI" in "UI" by "Hyper"
+Patch "Force Xbox One Controller UI" in "UI" by "Hyper" does "Forces the Xbox One controller UI to be used."
 {
     WriteAsmHook
     (
@@ -8900,7 +8900,7 @@ Patch "Force Xbox One Controller UI" in "UI" by "Hyper"
     );
 }
 
-Patch "Force Xbox Series Controller UI" in "UI" by "Hyper"
+Patch "Force Xbox Series S/X Controller UI" in "UI" by "Hyper" does "Forces the Xbox Series S/X controller UI to be used."
 {
     WriteAsmHook
     (
@@ -8923,7 +8923,7 @@ Patch "Force Xbox Series Controller UI" in "UI" by "Hyper"
     );
 }
 
-Patch "Hide Air Trick Hint Effects" in "Graphics" by "Hyper" does "Hides the particles that hint at dash rings, jump boards and springs being air trickable."
+Patch "Hide Air Trick Hint Effects" in "Graphics" by "Hyper" does "Hides the particles that signify dash rings, jump boards and springs are trickable."
 {
     // Dash Rings
     WriteProtected<byte>
@@ -8965,7 +8965,7 @@ Patch "Hide Air Trick Hint Effects" in "Graphics" by "Hyper" does "Hides the par
     );
 }
 
-Patch "Hide Boost Gauge" in "UI" by "Hyper"
+Patch "Hide Boost Gauge" in "UI" by "Hyper" does "Disables the Boost guage UI element."
 {
     WriteProtected<byte>
     (
@@ -9022,7 +9022,7 @@ Patch "Hide Challenge Markers" in "Graphics" by "Hyper" does "Hides the markers 
     );
 }
 
-Patch "Hide Cyber Space Timer" in "UI" by "Hyper"
+Patch "Hide Cyber Space Timer" in "UI" by "Hyper" does "Disables the timer UI element in Cyber Space."
 {
     WriteProtected<byte>
     (
@@ -9081,7 +9081,7 @@ Patch "Hide Enemy Health Gauge" in "UI" by "Hyper & Gordon Ramsay" does "Hides t
     );
 }
 
-Patch "Hide Homing Reticle" in "UI" by "Hyper"
+Patch "Hide Target Reticle" in "UI" by "Hyper" does "Disables the Homing Attack reticle displayed when in range, as well as the lock-on triangle indicator."
 {
     // Disable sound and main reticle.
     WriteProtected<byte>
@@ -9111,7 +9111,7 @@ Patch "Hide Homing Reticle" in "UI" by "Hyper"
     );
 }
 
-Patch "Hide Oxygen Gauge" in "UI" by "Hyper"
+Patch "Hide Oxygen Gauge" in "UI" by "Hyper" does "Disabled the oxygen guage UI element."
 {
     WriteProtected<byte>
     (
@@ -9126,7 +9126,7 @@ Patch "Hide Oxygen Gauge" in "UI" by "Hyper"
     );
 }
 
-Patch "Hide Power Boost Effects" in "Graphics" by "NM & Hyper"
+Patch "Hide Power Boost Effects" in "Graphics" by "NM & Hyper" does "Disables the Power Boost's unique visual effects."
 {
     /* Activation FX */
     WriteNop
@@ -9254,7 +9254,7 @@ Patch "Hide Super Combat Effects" in "Graphics" by "Hyper" does "Hides the giant
     );
 }
 
-Patch "Hide Titan Health Gauge" in "UI" by "Hyper"
+Patch "Hide Titan Health Gauge" in "UI" by "Hyper" does "Disables the Titan health bar gauge."
 {
     WriteProtected<byte>
     (
@@ -9270,7 +9270,7 @@ Patch "Hide Titan Health Gauge" in "UI" by "Hyper"
     );
 }
 
-Patch "Infinite Boost Gauge" in "Cheats" by "Hyper"
+Patch "Infinite Boost Gauge" in "Cheats" by "Hyper" does "Grants unlimited boost guage."
 {
     WriteNop
     (
@@ -9285,7 +9285,7 @@ Patch "Infinite Boost Gauge" in "Cheats" by "Hyper"
     );
 }
 
-Patch "Infinite Skill Points" in "Cheats" by "Hyper"
+Patch "Infinite Skill Points" in "Cheats" by "Hyper" does "Grants unlimited Skill Points."
 {
     WriteAsmHook
     (
@@ -9317,7 +9317,7 @@ Patch "Infinite Training Simulator Timer" in "Cheats" by "Hyper" does "Allows th
     );
 }
 
-Patch "Infinite Quick Cyloop Gauge" in "Cheats" by "NM"
+Patch "Infinite Quick Cyloop Gauge" in "Cheats" by "NM" does "Grants unlimited Quick Cyloop gauge."
 {
     WriteAsmHook
     (
@@ -9574,7 +9574,7 @@ Patch "Rebind Quick Restart to Back" in "Gameplay" by "Hyper" does "Rebinds the 
     );
 }
 
-Patch "Reduced Homing Delay" in "Physics" by "Hyper" does "Reduces the delay after performing a homing attack, allowing you to perform chained homing attacks much quicker."
+Patch "Reduce Homing Attack Input Delay" in "Physics" by "Hyper" does "Reduces the input delay after performing a homing attack to 0.2 seconds, allowing Sonic to chain homing attacks much quicker."
 //
     static float Delay = 0.2f;
 //
@@ -9605,7 +9605,7 @@ Patch "Reduced Homing Delay" in "Physics" by "Hyper" does "Reduces the delay aft
     }
 }
 
-Patch "Restore Unused Spin Charge Camera Shake" in "Camera" by "Hyper"
+Patch "Restore Unused Spin Charge Camera Shake" in "Camera" by "Hyper" does "Restores the unused camera shake effect when charging a Spin Dash."
 {
     WriteAsmHook
     (
@@ -9725,7 +9725,7 @@ Notes;
     Sonic.State.AddStateNotifyAction(NotifyStateJump);
 }
 
-Code "Show Framerate on Title Bar" in "System" by "Hyper & Sajid"
+Code "Show Frame Rate on Title Bar" in "System" by "Hyper & Sajid" does "Displays the game's current frame rate in the title bar."
 //
     #lib "Time"
 
@@ -10108,9 +10108,9 @@ This state lasts a fraction of a second, but keep in mind that within that time,
 
 Code "Super Stomp" in "Gameplay" by "Hyper & Yosho" does
 /*
-Sends a powerful shockwave when landing a stomp from a great height.
+Emits a powerful shockwave when landing a stomp from a great height, similar to Stomp Bounce.
 
-Idea by Yosho.
+Suggested by Yosho.
 */
 //
     #lib "MathHelpers"
