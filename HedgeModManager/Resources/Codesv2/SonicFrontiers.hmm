@@ -4071,53 +4071,162 @@ Patch "Allow Boost to Damage Objects" in "Gameplay" by "Hyper" does "Allows Soni
 Code "Allow Cyclone Kick for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to use the Cyclone Kick for traversal by pressing the attack button while holding the jump button."
 //
     #lib "Sonic"
-    #lib "Bitwise"
-    #lib "BlackboardStatus"
 
-    static Sonic.StateID[] enableStates =
-    {
-        Sonic.StateID.StateJump,
-        Sonic.StateID.StateBounceJump,
-        Sonic.StateID.StateGrind,
-        Sonic.StateID.StateSpringJump
-    };
-    
-    static Sonic.StateID[] disableStates =
-    {
-        Sonic.StateID.StateDivingRoot
-    };
-    
     static bool allowChargeAttack = false;
 //
 {
-    if (BlackboardStatus.Get() == 0)
-        return;
+    Sonic.StateID state = Sonic.State.GetCurrentStateID();
 
-    var state = Sonic.State.GetCurrentStateID();
-
-    if (Sonic.IsGrounded())
+    if (Sonic.IsGroundedSpecial())
         allowChargeAttack = true;
 
-    if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsWallClimb))
-        allowChargeAttack = true;
-
-    for (int i = 0; i < enableStates.Length; i++)
-    {
-        if (state == enableStates[i])
-            allowChargeAttack = true;
-    }
-
-    for (int i = 0; i < disableStates.Length; i++)
-    {
-        if (state == disableStates[i])
-            allowChargeAttack = false;
-    }
-
-    if (allowChargeAttack && Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerJump) && Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerAttack) && state != 62)
+    if (state == Sonic.StateID.StateAcceleCombo1 && Sonic.Input.IsDown(Sonic.PlayerActionType.PlayerJump) && !Sonic.IsGroundedSpecial() && allowChargeAttack)
     {
         Sonic.State.SetState(Sonic.StateID.StateChargeAttack);
         allowChargeAttack = false;
     }
+}
+
+Code "Allow Diving for Traversal" in "Gameplay" by "WasifBoomz" does "Allows Sonic to Dive for traversal by pressing the Light Dash button in the air."
+//
+    #lib "BlackboardStatus"
+    #lib "Sonic"
+
+    using System.Collections.Generic;
+
+    static Sonic.StateID[] allowStates =
+    {
+        Sonic.StateID.StateJump,
+        Sonic.StateID.StateBounceJump,
+        Sonic.StateID.StateDoubleJump,
+        Sonic.StateID.StateSpringJump,
+        Sonic.StateID.StateFall,
+        Sonic.StateID.StateBumpJump,
+        Sonic.StateID.StateTumble,
+        Sonic.StateID.StateAirBoost,
+        Sonic.StateID.StateStompingDown,
+        Sonic.StateID.StateSpinDash,
+        Sonic.StateID.StateSpinBoost,
+        Sonic.StateID.StateSpinBoostCharge,
+        Sonic.StateID.StateDropDash,
+        Sonic.StateID.StateGrindJump,
+        Sonic.StateID.StateGrindDoubleJump,
+        Sonic.StateID.StateRecoveryJump,
+        Sonic.StateID.StateSpringJumpHeadLand
+    };
+
+    static Dictionary<Sonic.PlayerActionType, Sonic.StateID> divingStateExits = new Dictionary<Sonic.PlayerActionType, Sonic.StateID>()
+    {
+        {Sonic.PlayerActionType.PlayerLightDash, Sonic.StateID.StateFall},
+        {Sonic.PlayerActionType.PlayerStomping, Sonic.StateID.StateStompingDown},
+        {Sonic.PlayerActionType.PlayerJump, Sonic.StateID.StateRecoveryJump},
+        {Sonic.PlayerActionType.PlayerLeftStep, Sonic.StateID.StateLeftStepRun},
+        {Sonic.PlayerActionType.PlayerRightStep, Sonic.StateID.StateRightStepRun},
+        {Sonic.PlayerActionType.PlayerAttack, Sonic.StateID.StateAcceleCombo1},
+        {Sonic.PlayerActionType.PlayerSonicboom, Sonic.StateID.StateSpinBoostCharge}
+    };
+
+    static bool isInitialised = false;
+
+    static bool canDive = false;
+    static bool inDivableState = false;
+    static bool isDiving = false;
+    static bool isDivingFromCommand = false;
+//
+{
+    if (!isInitialised)
+    {
+        WriteProtected<byte>
+        (
+            /* 0x140893844 */
+            ScanSignature
+            (
+                "\x74\x0E\x48\x8B\xD7\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x4C\x8B\xF0\x41\xB8\x0F\x00\x00\x00\x49\x8B\xD6\x48\x8B\xCB\xE8\xCC\xCC\xCC\xCC\x48\x8D\x55\xC7\x49\x8B\xCE\xE8\xCC\xCC\xCC\xCC\x48\x89\x74\x24\x20",
+                "xxxxxxxxx????xxxxxxxxxxxxxxxx????xxxxxxxx????xxxxx"
+            ),
+
+            0xEB, 0x48
+        );
+
+        fixed (bool* pisDivingFromCommand = &isDivingFromCommand)
+        {
+            WriteAsmHook
+            (
+                $@"
+                    mov  ecx, [rax+48h]
+                    mov  [rdi+34h], ecx
+                    mov  ecx, [rax+4Ch]
+                    mov  [rdi+38h], ecx
+                    mov  eax, [rax+50h]
+
+                    mov  rdx, {(long)pisDivingFromCommand}
+                    cmp  byte ptr [rdx], 0
+                    jz   exit
+
+                    mov  dword ptr [rdi+34h], 0x40A00000
+                    mov  dword ptr [rdi+38h], 0x41400000
+                exit:
+                ",
+                    
+                /* 0x14083637F */
+                ScanSignature
+                (
+                    "\x8B\x48\x48\x89\x4F\x34",
+                    "xxxxxx"
+                ),
+                    
+                HookBehavior.Replace
+            );
+        }
+
+        isInitialised = true;
+    }
+
+    if (BlackboardStatus.Get() == 0)
+        return;
+
+    if (BlackboardStatus.IsSuper())
+        return;
+
+    isDiving = Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsDiving);
+
+    if (!isDiving)
+        isDivingFromCommand = false;
+
+    void NotifyInDivableState(Sonic.StateID stateId, Sonic.StateID[] stateStackTrace)
+    {
+        inDivableState = false;
+
+        foreach (Sonic.StateID id in allowStates)
+        {
+            if (stateId == id)
+                inDivableState = true;
+        }
+    }
+
+    if (Sonic.IsGroundedSpecial())
+        canDive = true;
+
+    if (Sonic.Input.IsPressed(Sonic.PlayerActionType.PlayerLightDash) && inDivableState && canDive)
+    {
+        isDivingFromCommand = true;
+        canDive = false;
+        Sonic.State.SetState(Sonic.StateID.StateDiving);
+    }
+
+    if (isDiving && isDivingFromCommand && !Sonic.IsGroundedSpecial())
+    {
+        foreach (KeyValuePair<Sonic.PlayerActionType, Sonic.StateID> kvp in divingStateExits)
+        {
+            if (Sonic.Input.IsPressed(kvp.Key)) 
+            {
+                Sonic.State.SetState(kvp.Value);
+                isDivingFromCommand = false;
+            }
+        }
+    }
+
+    Sonic.State.AddStateNotifyAction(NotifyInDivableState);
 }
 
 Code "Allow Dodging from Homing Shot" in "Gameplay" by "Hyper" does "Allows Sonic to exit from Homing Shot by dodging."
@@ -8873,26 +8982,26 @@ Notes;
 - This effect may result in artifacts.
 */
 {
-    // FxSSGIParameter
+    //FxSSGIParameter
     WriteAsmHook
     (
         $@"
-            ; Enable SSGI
+            ;Enable SSGI
             mov byte ptr [r8], 1
             
-            ; Set Intensity to 6
+            ;Set Intensity to 6
             mov dword ptr [r8+4], 0x41800000
             
-            ; Enable Albedo
+            ;Enable Albedo
             mov byte ptr [r8+8], 1
             
-            ; Enable Parameter
+            ;Enable Parameter
             mov byte ptr [r8+9], 1
             
-            ; Enable Denoiser
+            ;Enable Denoiser
             mov byte ptr [r8+12], 1
             
-            ; Set Ray Length to 6
+            ;Set Ray Length to 6
             mov dword ptr [r8+16], 0x40C00000
         ",
             
@@ -9409,13 +9518,13 @@ Code "Lose Speed on Collision" in "Physics" by "WasifBoomz" does "Reduce speed w
 //
     #lib "BlackboardStatus"
     #lib "Sonic"
+    #lib "Time"
 
     #load "System.Numerics.dll"
 	
     using System;
     using System.Numerics;
 
-    static float* deltaTime = (float*)0x14F26C;
     static Vector3 position = Vector3.Zero;
     static float currentTimeSliding = 0.0f;
 //
@@ -9425,11 +9534,11 @@ Code "Lose Speed on Collision" in "Physics" by "WasifBoomz" does "Reduce speed w
         return;
     
     Vector3 distanceVec = position - *kinematics.Position;
-    float distance = (float)Math.Sqrt(distanceVec.X * distanceVec.X + distanceVec.Z * distanceVec.Z) / *deltaTime;
+    float distance = (float)Math.Sqrt(distanceVec.X * distanceVec.X + distanceVec.Z * distanceVec.Z) / Time.GetDeltaTime();
 
-    if (Sonic.Kinematics.GetHorizontalMagnitude() > distance * 1.5 && distance < 15.0 && Sonic.Kinematics.GetHorizontalMagnitude() > 15.0)
+    if(Sonic.Kinematics.GetHorizontalMagnitude() > distance * 1.5 && distance < 15.0 && Sonic.Kinematics.GetHorizontalMagnitude() > 15.0 && distance > 0)
     {
-        currentTimeSliding += *deltaTime;
+        currentTimeSliding += Time.GetDeltaTime();
         if (currentTimeSliding > 0.1f)
         {
             float yVel = kinematics.Velocity->Y;
@@ -9502,9 +9611,9 @@ Notes;
     using System;
     using System.Numerics;
 
-    const float grindCrouchSpeed = 36.0f;
-    const float boostGrindSpeedMin = 12.0f;
-    const float boostGrindSpeed = 30.0f;
+    const float grindCrouchSpeed = 40.0f;
+    const float boostGrindSpeedMin = 3.0f;
+    const float boostGrindSpeed = 45.0f;
     static bool isInitialised = false;
     static bool isRailCrouching = false;
     static float* playerParamGrind = null;
@@ -9620,7 +9729,6 @@ Notes;
     // Increase acceleration when boosting on Grind Rails
     if (Bitwise.Test(*BlackboardStatus.GetStateFlags(), (uint)BlackboardStatus.StateFlags.IsBoost))
     {
-        *grindAcceleration += boostGrindSpeedMin;
         *grindAcceleration += (Vector3.Normalize(*kinematics.Velocity).Y) * boostGrindSpeed;
         *grindAcceleration = Math.Max(*grindAcceleration, boostGrindSpeedMin);
     }
