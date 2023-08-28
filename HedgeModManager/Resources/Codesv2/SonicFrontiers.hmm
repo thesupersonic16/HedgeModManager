@@ -59,7 +59,7 @@ Library "Blackboard" by "Hyper, ĐeäTh & Sajid"
 
             var fpGetNameHash = Marshal.GetDelegateForFunctionPointer<_tGetNameHash>(Read<IntPtr>(Read<IntPtr>(blackboardContent) + 1 * IntPtr.Size));
             
-            if (fpGetNameHash.Invoke() == StringMapOperation.ComputeHash(name))
+            if (fpGetNameHash() == StringMapOperation.ComputeHash(name))
             {
                 return (long)blackboardContent;
             }
@@ -375,7 +375,7 @@ Library "Converse" by "Hyper & M&M"
         string notifyResult = redirectResult;
         {
             foreach (var action in _converseNotifyActions)
-                notifyResult = action.Invoke(cnvrsKey, notifyResult);
+                notifyResult = action(cnvrsKey, notifyResult);
 
             if (notifyResult != cnvrsText)
                 MarshalString(notifyResult);
@@ -708,6 +708,8 @@ Library "GameMode" by "Hyper"
                 $@"
                     push   rbx
                     sub    rsp, 0x30
+                    cmp    r8, 0
+                    je     exit
                     mov    rax, qword ptr [r8]
                     mov    rbx, 0x65646F4D656D6147 ; GameMode
                     cmp    rax, rbx
@@ -1289,6 +1291,7 @@ Library "Lua" by "Hyper & ĐeäTh"
     #lib "GameMode"
     #lib "GameService"
     #lib "Memory"
+    #lib "StringMapOperation"
 
     using System.Collections.Generic;
     using System.IO;
@@ -1296,10 +1299,20 @@ Library "Lua" by "Hyper & ĐeäTh"
     private static bool _isInitialised = false;
     private static bool _isScriptSequenceInactive = true;
 
+    private static List<string> _deniedGameModes = new()
+    {
+        "GameModeBattleRush",
+        "GameModeFishing",
+        "GameModeHacking",
+        "GameModeStage"
+    };
+
     private static string _lastGameModeName = "GameModeUnknown";
 
     private static long _pLuaState = 0;
     private static long _sigScriptSequenceManagerStaticClassCtor = 0;
+
+    private static List<uint> _luaScripts = new();
 
     #define LUA_TNONE          (-1)
     #define LUA_TNIL           0
@@ -1436,7 +1449,7 @@ Library "Lua" by "Hyper & ĐeäTh"
 
     public void InitScriptSequence()
     {
-        if (GameMode.GetName() == "GameModeStage" ||
+        if (_deniedGameModes.Contains(GameMode.GetName()) ||
             GameMode.GetTutorialDestination() == GameMode.DestinationMode.GameModeStage)
         {
             return;
@@ -1474,8 +1487,8 @@ Library "Lua" by "Hyper & ĐeäTh"
         // BuildLevel
         uint hash = 0x59B595D6;
 
-        GET_FUNCTION_PTR(InitScriptSequenceManager).Invoke(pScriptSequenceManager, &hash, (char)0);
-        GET_FUNCTION_PTR(RegisterScriptSequenceManager).Invoke(pScriptSequenceManager);
+        GET_FUNCTION_PTR(InitScriptSequenceManager)(pScriptSequenceManager, &hash, (char)0);
+        GET_FUNCTION_PTR(RegisterScriptSequenceManager)(pScriptSequenceManager);
     }
 
     public long GetState()
@@ -1501,20 +1514,34 @@ Library "Lua" by "Hyper & ĐeäTh"
         return _pLuaState;
     }
 
-    public void Script(string code)
+    public void Script(string code, bool isRunOnce = false)
     {
         Init();
 
         if (GetState() == 0)
             return;
+
+        if (isRunOnce)
+        {
+            uint codeHash = StringMapOperation.ComputeHash(code);
+
+            if (_luaScripts.Contains(codeHash))
+            {
+                return;
+            }
+            else
+            {
+                _luaScripts.Add(codeHash);
+            }
+        }
             
         long str = TO_STRING_PTR(code);
         
-        GET_FUNCTION_PTR(luaL_loadbufferx).Invoke(GetState(), str, code.Length, str, 0);
-        GET_FUNCTION_PTR(lua_pcallk).Invoke(GetState(), 0, -1, 0, 0, 0);
+        GET_FUNCTION_PTR(luaL_loadbufferx)(GetState(), str, code.Length, str, 0);
+        GET_FUNCTION_PTR(lua_pcallk)(GetState(), 0, -1, 0, 0, 0);
     }
 
-    public void LoadScript(string path)
+    public void LoadScript(string path, bool isRunOnce = false)
     {
         if (!File.Exists(path))
             return;
@@ -1533,7 +1560,7 @@ Library "Lua" by "Hyper & ĐeäTh"
         if (string.IsNullOrEmpty(code))
             return;
 
-        Script(code);
+        Script(code, isRunOnce);
     }
 
     private void Call(string funcName, int resultCount, params object[] args)
@@ -1543,7 +1570,7 @@ Library "Lua" by "Hyper & ĐeäTh"
         if (GetState() == 0)
             return;
 
-        GET_FUNCTION_PTR(lua_getglobal).Invoke(GetState(), TO_STRING_PTR(funcName));
+        GET_FUNCTION_PTR(lua_getglobal)(GetState(), TO_STRING_PTR(funcName));
 
         foreach (var arg in args)
         {
@@ -1552,19 +1579,19 @@ Library "Lua" by "Hyper & ĐeäTh"
             if (type == typeof(string))
             {
                 string str = (string)arg;
-                GET_FUNCTION_PTR(lua_pushlstring).Invoke(GetState(), TO_STRING_PTR(str), str.Length);
+                GET_FUNCTION_PTR(lua_pushlstring)(GetState(), TO_STRING_PTR(str), str.Length);
             }
             else if (type == typeof(int))
             {
-                GET_FUNCTION_PTR(lua_pushinteger).Invoke(GetState(), (int)arg);
+                GET_FUNCTION_PTR(lua_pushinteger)(GetState(), (int)arg);
             }
             else if (type == typeof(float) || type == typeof(double))
             {
-                GET_FUNCTION_PTR(lua_pushnumber).Invoke(GetState(), (float)arg);
+                GET_FUNCTION_PTR(lua_pushnumber)(GetState(), (float)arg);
             }
             else if (type == typeof(bool))
             {
-                GET_FUNCTION_PTR(lua_pushboolean).Invoke(GetState(), (bool)arg ? 1 : 0);
+                GET_FUNCTION_PTR(lua_pushboolean)(GetState(), (bool)arg ? 1 : 0);
             }
             else
             {
@@ -1572,7 +1599,7 @@ Library "Lua" by "Hyper & ĐeäTh"
             }
         }
 
-        GET_FUNCTION_PTR(lua_pcallk).Invoke(GetState(), args.Length, resultCount, 0, 0, 0);
+        GET_FUNCTION_PTR(lua_pcallk)(GetState(), args.Length, resultCount, 0, 0, 0);
     }
 
     public void Call(string funcName, params object[] args)
@@ -1590,24 +1617,24 @@ Library "Lua" by "Hyper & ĐeäTh"
         Call(funcName, 1, args);
 
         var type = typeof(T);
-        var luaType = GET_FUNCTION_PTR(lua_type).Invoke(GetState(), -1);
+        var luaType = GET_FUNCTION_PTR(lua_type)(GetState(), -1);
 
         if (type == typeof(string) && luaType == LUA_TSTRING)
         {
-            long ptr = (long)GET_FUNCTION_PTR(lua_tolstring).Invoke(GetState(), -1, 0);
+            long ptr = (long)GET_FUNCTION_PTR(lua_tolstring)(GetState(), -1, 0);
             return (T)(object)FROM_STRING_PTR(ptr);
         }
         else if (type == typeof(int) && luaType == LUA_TNUMBER)
         {
-            return (T)(object)(int)GET_FUNCTION_PTR(lua_tointegerx).Invoke(GetState(), -1, 0);
+            return (T)(object)(int)GET_FUNCTION_PTR(lua_tointegerx)(GetState(), -1, 0);
         }
         else if ((type == typeof(float) || type == typeof(double)) && luaType == LUA_TNUMBER)
         {
-            return (T)(object)(float)GET_FUNCTION_PTR(lua_tonumberx).Invoke(GetState(), -1, 0);
+            return (T)(object)(float)GET_FUNCTION_PTR(lua_tonumberx)(GetState(), -1, 0);
         }
         else if (type == typeof(bool) && luaType == LUA_TBOOLEAN)
         {
-            return (T)(object)(bool)GET_FUNCTION_PTR(lua_toboolean).Invoke(GetState(), -1);
+            return (T)(object)(bool)GET_FUNCTION_PTR(lua_toboolean)(GetState(), -1);
         }
         else
         {
@@ -1984,7 +2011,7 @@ Library "Resources" by "Hyper"
         _currentResourceType = Marshal.PtrToStringAnsi((IntPtr)pResourceTypeName);
     
     	foreach (TResourceNotifyAction action in _resourceNotifyActions)
-    		pResourceName = (long)Marshal.StringToHGlobalAnsi(action.Invoke(_currentResourceName, _currentResourceType));
+    		pResourceName = (long)Marshal.StringToHGlobalAnsi(action(_currentResourceName, _currentResourceType));
     	
         return pResourceName;
     }
@@ -1992,7 +2019,7 @@ Library "Resources" by "Hyper"
     UNMANAGED_FUNCTION(long, GetResourceData, long pResourceData)
     {
     	foreach (TResourceDataAction action in _resourceDataActions)
-    		pResourceData = action.Invoke(_currentResourceName, _currentResourceType, pResourceData);
+    		pResourceData = action(_currentResourceName, _currentResourceType, pResourceData);
     
         return pResourceData;
     }
@@ -2283,7 +2310,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (gocPlayerVisual == 0)
                 return;
 
-            fpSetAnimation.Invoke(gocPlayerVisual, (long)Marshal.StringToHGlobalAnsi(destination), 0xFE);
+            fpSetAnimation(gocPlayerVisual, (long)Marshal.StringToHGlobalAnsi(destination), 0xFE);
         }
 
         public static void SetAnimationParameter(string paramName, float value)
@@ -2316,7 +2343,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (gocPlayerVisual == 0)
                 return;
 
-            fpSetAnimationParameter.Invoke(gocPlayerVisual, (long)Marshal.StringToHGlobalAnsi(paramName), value);
+            fpSetAnimationParameter(gocPlayerVisual, (long)Marshal.StringToHGlobalAnsi(paramName), value);
         }
     }
 
@@ -2366,7 +2393,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (sonicContext == 0)
                 return 0;
 
-            return fpGetStatePluginCollision.Invoke(sonicContext);
+            return fpGetStatePluginCollision(sonicContext);
         }
 
         public static long SetCollisionSphere(CollisionType type, float radius)
@@ -2394,7 +2421,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (statePluginCollision == 0)
                 return 0;
 
-            return fpSetCollisionSphere.Invoke(statePluginCollision, type, radius);
+            return fpSetCollisionSphere(statePluginCollision, type, radius);
         }
 
         public static void ToggleEntityCollision(bool enabled)
@@ -2422,7 +2449,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (sonicContext == 0)
                 return;
             
-            fpToggleEntityCollision.Invoke(sonicContext, enabled);
+            fpToggleEntityCollision(sonicContext, enabled);
         }
     }
 
@@ -2469,7 +2496,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (pStatePluginEffect == 0)
                 return;
 
-            fpPlayEffect.Invoke(pStatePluginEffect, StringMapOperation.ComputeHash(handleName), (long)Marshal.StringToHGlobalAnsi(effectName));
+            fpPlayEffect(pStatePluginEffect, StringMapOperation.ComputeHash(handleName), (long)Marshal.StringToHGlobalAnsi(effectName));
         }
 
         public static void StopEffect(string handleName)
@@ -2497,7 +2524,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (pStatePluginEffect == 0)
                 return;
 
-            fpPlayEffect.Invoke(pStatePluginEffect, StringMapOperation.ComputeHash(handleName));
+            fpPlayEffect(pStatePluginEffect, StringMapOperation.ComputeHash(handleName));
         }
 
         public static void PlayAnimationEffect(string name)
@@ -2525,7 +2552,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (sonicContext == 0)
                 return;
 
-            fpPlayAnimationEffect.Invoke(sonicContext, (long)Marshal.StringToHGlobalAnsi(name));
+            fpPlayAnimationEffect(sonicContext, (long)Marshal.StringToHGlobalAnsi(name));
         }
 
         public static void StopAnimationEffects()
@@ -2553,7 +2580,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (sonicContext == 0)
                 return;
 
-            fpStopAnimationEffect.Invoke(sonicContext);
+            fpStopAnimationEffect(sonicContext);
         }
     }
 
@@ -2633,7 +2660,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
                     break;
             }
 
-            return Marshal.GetDelegateForFunctionPointer<_tCommonInputDel>(functionPtr).Invoke(sonicContext, actionType);
+            return Marshal.GetDelegateForFunctionPointer<_tCommonInputDel>(functionPtr)(sonicContext, actionType);
         }
 
         public static bool IsPressed(PlayerActionType actionType)
@@ -2792,7 +2819,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
 
             int zero = 0;
             
-            return *fpPlaySound.Invoke(pGOCSound, &zero, (long)Marshal.StringToHGlobalAnsi(soundName), 0.0f);
+            return *fpPlaySound(pGOCSound, &zero, (long)Marshal.StringToHGlobalAnsi(soundName), 0.0f);
         }
 
         public static void StopSound(int* pSoundHandle)
@@ -2817,7 +2844,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (fpStopSound == null)
                 return;
 
-            fpStopSound.Invoke(pSoundHandle);
+            fpStopSound(pSoundHandle);
         }
     }
 
@@ -3069,7 +3096,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             }
 
             foreach (TStateNotifyAction action in _stateNotifyActions)
-                action.Invoke(_currentStateID, _stateStackTrace.ToArray());
+                action(_currentStateID, _stateStackTrace.ToArray());
 
             if (_discardedStates.Contains((StateID)stateId))
                 return -2;
@@ -3156,7 +3183,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (pSonicContext == 0)
                 return 0;
 
-            return fpGetStatePlugin.Invoke(*(long*)(*(long*)(pSonicContext + 0x38) + 0x108), StringMapOperation.ComputeHash(pluginName));
+            return fpGetStatePlugin(*(long*)(*(long*)(pSonicContext + 0x38) + 0x108), StringMapOperation.ComputeHash(pluginName));
         }
 
         public static void AddStateNotifyAction(TStateNotifyAction action)
@@ -3238,7 +3265,7 @@ Library "Sonic" by "Hyper, NM & Ahremic"
             if (sonicContext == 0)
                 return;
 
-            fpSetState.Invoke(Read<long>(sonicContext + 0x38), (int)destination, 0);
+            fpSetState(Read<long>(sonicContext + 0x38), (int)destination, 0);
         }
     }
 }
