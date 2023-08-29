@@ -3,6 +3,8 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:system="clr-namespace:System;assembly=mscorlib">
 
+    <!-- uwu'd with https://github.com/Daniel-Liu-c0deb0t/uwu -->
+
     <!-- Common UI Strings -->
     <system:String x:Key="CommonUIClose"   >cwose</system:String>
     <system:String x:Key="CommonUIOK"      >ok</system:String>
@@ -62,11 +64,26 @@
 
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >name</system:String>
+    <system:String x:Key="CodesUICategory">categowy</system:String>
     <system:String x:Key="CodesUIDownload">downwoad c-community codes</system:String>
     <system:String x:Key="CodesUIUpdate"  >update c-community codes</system:String>
     <system:String x:Key="CodesUISearch"  >seawch:</system:String>
+    <system:String x:Key="CodesUiInfo"    >doubwe-cwick t-this code fow mowe infowmation.</system:String>
+    <system:String x:Key="CodesUiInfoHint">hovew ovew a code fow mowe infowmation.</system:String>
+    <system:String x:Key="CodesUiNoInfo"  >no infowmation avaiwabwe.</system:String>
+    <system:String x:Key="CodesUiCopyCode">copy code to c-cwipboawd</system:String>
+    <system:String x:Key="CodesUiExpand"  >expand a-aww</system:String>
+    <system:String x:Key="CodesUiCollapse">cowwapse aww</system:String>
+    <system:String x:Key="CodesUiNullCategory">uncategowized</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">the i-instawwed codes awe incompatibwe with the code woadew.&#x0a;pwease update t-the codes and the code woadew.&#x0a;wawning: this w-wiww ewase any c-custom codes.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">fetching codes... (ꈍᴗꈍ)</system:String>
+
+    <!-- Diff UI Strings -->
+    <system:String x:Key="DiffUITitle"   >changewog</system:String>
+    <system:String x:Key="DiffUIAdded"   >added: {0}</system:String>
+    <system:String x:Key="DiffUIModified">modified: {0}</system:String>
+    <system:String x:Key="DiffUIRemoved" >wemoved: {0}</system:String>
+    <system:String x:Key="DiffUIRenamed" >wenamed: {0}</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
@@ -77,7 +94,7 @@
     <system:String x:Key="SettingsUIOpenGameDir"    >open game diwectowy</system:String>
     <system:String x:Key="SettingsUIEnableML"       >enabwe mod woadew</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >enabwe d-debug consowe</system:String>
-    <system:String x:Key="SettingsUIEnableSRedir"   >enabwe save fiwe wediwection</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >w-wediwect defauwt save fiwe</system:String>
     <system:String x:Key="SettingsUIUseLauncher"    >use game w-waunchew</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >woadews:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >game:</system:String>
@@ -85,10 +102,11 @@
     <system:String x:Key="SettingsUILabelMDir"      >mods diwectowy:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"      >hedge m-mod managew</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"  >check fow mod woadew u-updates</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"  >check fow code woadew updates</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates">check fow mod updates</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"  >automaticawwy check fow hedge m-mod managew updates</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"  >automaticawwy check fow mod woadew updates</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates">automaticawwy check f-fow mod updates</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >keep hedge mod m-managew open aftew stawting a g-game</system:String>
+    <system:String x:Key="SettingsUICodesUseTreeView">use t-twee view f-fow codes wist</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate" >Check for Updates</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >about hedge mod managew</system:String>
     <system:String x:Key="SettingsUILanguage"       >wanguage:</system:String>
@@ -231,5 +249,11 @@
     <system:String x:Key="GamePuyoPuyoTetris2">puyo puyo t-tetwis 2</system:String>
     <system:String x:Key="GameTokyo2020">owympic games tokyo 2020</system:String>
     <system:String x:Key="GameSonicColorsUltimate">sonic c-cowouws: uwtimate</system:String>
+    <system:String x:Key="GameSonicOrigins">sonic owigins</system:String>
+    <system:String x:Key="GameSonicFrontiers">sonic fwontiews</system:String>
+    <system:String x:Key="GameNoGame">no g-game detected!</system:String>
+    <system:String x:Key="LauncherSteam">steam</system:String>
+    <system:String x:Key="LauncherEpic">epic g-games</system:String>
+    <system:String x:Key="LauncherHeroic">hewoic</system:String>
 
 </ResourceDictionary>

@@ -30,7 +30,7 @@ namespace HedgeModManager
             AppID = "71340",
             GBProtocol = "hedgemmgens",
             Is64Bit = false,
-            ModLoader = ModLoaders.GenerationsCodeLoader,
+            ModLoader = ModLoaders.HE1ModLoader,
             CodesURL = Resources.URL_BLUEBLUR_CODES,
             GamePath = Path.Combine("Sonic Generations", "SonicGenerations.exe")
         };
@@ -46,7 +46,7 @@ namespace HedgeModManager
             AppID = "329440",
             GBProtocol = "hedgemmlw",
             Is64Bit = false,
-            ModLoader = ModLoaders.LostCodeLoader,
+            ModLoader = ModLoaders.HE1ModLoader,
             CodesURL = Resources.URL_SONIC2013_CODES,
             GamePath = Path.Combine("Sonic Lost World", "slw.exe")
         };
@@ -105,12 +105,14 @@ namespace HedgeModManager
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
             Folders = new[] { "PCCriPak" },
+            AppID = "2055290",
             EGSID = "e5071e19d08c45a6bdda5d92fbd0a03e",
             GBProtocol = "hedgemmrainbow",
             Is64Bit = true,
             ModLoader = ModLoaders.RainbowModLoader,
             CodesURL = Resources.URL_RAINBOW_CODES,
-            GamePath = Path.Combine("SonicColorsUltimate", "rainbow Shipping", "Sonic Colors - Ultimate.exe")
+            GamePath = Path.Combine("SonicColorsUltimate", "exec", "SonicColorsUltimate.exe"),
+            GamePathEGS = Path.Combine("SonicColorsUltimate", "rainbow Shipping", "Sonic Colors - Ultimate.exe")
         };
 
         public static Game SonicOrigins = new Game()
@@ -161,8 +163,7 @@ namespace HedgeModManager
 
     internal static class EmbeddedLoaders
     {
-        public static byte[] GenerationsCodeLoader;
-        public static byte[] LostCodeLoader;
+        public static byte[] HE1ModLoader;
         public static byte[] HE2ModLoader;
         public static byte[] RainbowModLoader;
         public static byte[] HiteModLoader;
@@ -172,8 +173,7 @@ namespace HedgeModManager
             using (var stream = new MemoryStream(Resources.DAT_LOADERS_ZIP))
             using (var zip = new ZipArchive(stream))
             {
-                GenerationsCodeLoader = GetFile("SonicGenerationsCodeLoader.dll");
-                LostCodeLoader = GetFile("LostCodeLoader.dll");
+                HE1ModLoader = GetFile("HE1ML.dll");
                 HE2ModLoader = GetFile("HE2ModLoader.dll");
                 RainbowModLoader = GetFile("RainbowModLoader.dll");
                 HiteModLoader = GetFile("HiteModLoader.dll");
@@ -207,6 +207,7 @@ namespace HedgeModManager
         public bool Is64Bit = false;
         public string CodesURL;
         public string GamePath = string.Empty;
+        public string GamePathEGS = string.Empty;
 
         public override string ToString() => Localise("Game" + GameName, GameName);
     }

@@ -182,6 +182,10 @@ namespace HedgeModManager.Serialization
 
                 if (file.Groups.ContainsKey(group))
                 {
+                    // Ignore reading if missing
+                    if (fieldAttribute.UseDefault && !file[group].Params.ContainsKey(name))
+                        continue;
+
                     var value = ReadField(group, name, valueType);
                     if (value != null)
                         property.SetValue(obj, value);
@@ -200,6 +204,10 @@ namespace HedgeModManager.Serialization
 
                 if (file.Groups.ContainsKey(group))
                 {
+                    // Ignore reading if missing
+                    if (fieldAttribute.UseDefault && !file[group].Params.ContainsKey(name))
+                        continue;
+
                     var value = ReadField(group, name, valueType);
                     if (value != null)
                         field.SetValue(obj, value);
@@ -285,6 +293,7 @@ namespace HedgeModManager.Serialization
     {
         public string Name;
         public string Group;
+        public bool UseDefault = false;
 
         public IniField()
         {
@@ -301,6 +310,20 @@ namespace HedgeModManager.Serialization
             Group = group;
             Name = name;
         }
+
+        public IniField(string group, string name, bool useDefault)
+        {
+            Group = group;
+            Name = name;
+            UseDefault = useDefault;
+        }
+
+        public IniField(string group, bool useDefault)
+        {
+            Group = group;
+            UseDefault = useDefault;
+        }
+
     }
 
     public struct IniConvertMeta

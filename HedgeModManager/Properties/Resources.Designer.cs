@@ -63,26 +63,6 @@ namespace HedgeModManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DAT_CPKREDIR_DLL {
-            get {
-                object obj = ResourceManager.GetObject("DAT_CPKREDIR_DLL", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DAT_CPKREDIR_TXT {
-            get {
-                object obj = ResourceManager.GetObject("DAT_CPKREDIR_TXT", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] DAT_LOADERS_ZIP {
             get {
                 object obj = ResourceManager.GetObject("DAT_LOADERS_ZIP", resourceCulture);
@@ -239,6 +219,15 @@ namespace HedgeModManager.Properties {
         internal static string URL_GCL_DL {
             get {
                 return ResourceManager.GetString("URL_GCL_DL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HE1ML.dll.
+        /// </summary>
+        internal static string URL_HE1ML_DL {
+            get {
+                return ResourceManager.GetString("URL_HE1ML_DL", resourceCulture);
             }
         }
         

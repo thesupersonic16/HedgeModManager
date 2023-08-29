@@ -645,7 +645,7 @@ Patch "Disable Spin Dash on Dash Panels" in "Gameplay" by "Hyper" does "Disables
 WriteProtected<byte>(0xE0AC1C, 0xE9, 0x27, 0x01, 0x00, 0x00);
 WriteProtected<byte>(0xE0C734, 0xE9, 0x27, 0x01, 0x00, 0x00);
 
-Patch "Disable Boost Gauge" in "Gameplay" by "Hyper"
+Patch "Disable Boost Gauge" in "UI" by "Hyper"
 WriteNop(0x109B8DD, 2);
 
 Patch "Disable Boost Button Prompt" in "UI" by "Hyper"
@@ -773,10 +773,15 @@ WriteProtected<float>(0x11D9F03, (float)0.8)
 WriteNop(0x11D9F07, 8)
 WriteProtected<byte>(0x10E7B96, 0xEB, 0x0A)
 
-Patch "Decrease Super Sonic Rings Every Second" in "Gameplay" by "brianuuu"
+Patch "Decrease Super Sonic Rings Every Second" in "Gameplay" by "brianuuu and M&M"
+// Modern
 WriteProtected<byte>(0x11D6807, 0xC7, 0x47, 0x64)
 WriteProtected<float>(0x11D680A, 1)
 WriteProtected<byte>(0x11D680E, 0xEB, 0x1D)
+// Classic
+WriteProtected<byte>(0x11D33BC, 0xC7, 0x47, 0x64)
+WriteProtected<float>(0x11D33BF, 1)
+WriteProtected<byte>(0x11D33C3, 0xEB, 0x0C)
 
 Patch "Disable Super Sonic Floating Boost (Ground Boost)" in "Gameplay" by "Skyth"
 WriteProtected<byte>(0xDFF34C, 0xEB);
@@ -1209,3 +1214,6 @@ Code "Disable Light Shafts" in "Graphics" by "Skyth"
 
 Code "Disable Planar Reflections" in "Graphics" by "Skyth"
 *(bool*)0x1B22E78 = false;
+
+Patch "Restart Doesn't Reduce Life Count" in "Cheats" by "M&M"
+WriteProtected<byte>(0xD06919, 0xEB, 0x29);

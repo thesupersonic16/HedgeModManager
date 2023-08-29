@@ -11,6 +11,8 @@ namespace HedgeModManager.Misc
     {
         [DllImport("dwmapi.dll", PreserveSig = true)]
         public static extern int DwmSetWindowAttribute(IntPtr hwnd, DwmWindowAttribute attr, ref int attrValue, int attrSize);
+        [DllImport("dwmapi.dll", PreserveSig = true)]
+        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DwmWindowAttribute attr, ref int attrValue, int attrSize);
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref Margins margins);
@@ -49,7 +51,8 @@ namespace HedgeModManager.Misc
             ExcludedFromPeek,
             Cloak,
             Cloaked,
-            FreezeRepresentation
+            FreezeRepresentation,
+            WindowCornerPreference = 33
         }
 
         public struct Margins

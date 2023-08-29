@@ -82,6 +82,9 @@ namespace HedgeModManager
                 return null;
             }
 
+            if (installations == null || installations?.Count == 0)
+                return null;
+
             var games = new List<GameInstall>();
 
             foreach (var game in Games.GetSupportedGames())
@@ -116,7 +119,6 @@ namespace HedgeModManager
             {
                 launcherInstalled = JsonConvert.DeserializeObject<EGSLauncherInstalled>(File.ReadAllText(launcherInstalledFilePath));
             }
-
             catch
             {
                 return null;
@@ -135,7 +137,9 @@ namespace HedgeModManager
                 if (installation == null)
                     continue;
 
-                string fullPath = Path.Combine(installation.InstallLocation, game.GamePath.Substring(game.GamePath.IndexOf('\\') + 1));
+                string gamePath = game.GamePathEGS == String.Empty ? game.GamePath : game.GamePathEGS;
+
+                string fullPath = Path.Combine(installation.InstallLocation, gamePath.Substring(gamePath.IndexOf('\\') + 1));
 
                 if (File.Exists(fullPath))
                     games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.Epic));
