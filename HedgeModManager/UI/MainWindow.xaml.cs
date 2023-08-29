@@ -518,7 +518,7 @@ namespace HedgeModManager
                 string localCodes = File.ReadAllText(codesPath);
                 string repoCodes = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}");
 
-                if (ViewModel.CPKREDIR.UpdateCodesOnLaunch && localCodes != repoCodes)
+                if (RegistryConfig.UpdateCodesOnLaunch && localCodes != repoCodes)
                 {
                     UpdateCodes();
                 }
@@ -667,7 +667,7 @@ namespace HedgeModManager
             // Force launcher if running on linux
             HedgeApp.CurrentGameInstall.StartGame(HedgeApp.Config.UseLauncher || HedgeApp.IsLinux);
 
-            if (!HedgeApp.Config.KeepOpen)
+            if (!RegistryConfig.KeepOpen)
                 Dispatcher.Invoke(() => Close());
 
             UpdateStatus(string.Format(Localise("StatusUIStartingGame"), HedgeApp.CurrentGame));
@@ -744,7 +744,7 @@ namespace HedgeModManager
         {
             await CheckForManagerUpdatesAsync();
 
-            if (HedgeApp.Config?.CheckForModUpdates == true)
+            if (RegistryConfig.CheckModUpdates == true)
             {
                 ContextCancelSource = new CancellationTokenSource();
                 try
@@ -759,7 +759,7 @@ namespace HedgeModManager
 
         public async Task CheckForManagerUpdatesAsync()
         {
-            if (!HedgeApp.Config?.CheckForUpdates == true && !ViewModel.DevBuild)
+            if (!RegistryConfig.CheckManagerUpdates == true && !ViewModel.DevBuild)
                 return;
 
             UpdateStatus(Localise("StatusUICheckingForUpdates"));
@@ -847,7 +847,7 @@ namespace HedgeModManager
 
         protected async Task CheckForLoaderUpdateAsync()
         {
-            if (!(HedgeApp.Config?.CheckLoaderUpdates == true))
+            if (!(RegistryConfig.CheckLoaderUpdates == true))
                 return;
 
             if (HedgeApp.CurrentGame.ModLoader == null)
@@ -2188,6 +2188,11 @@ namespace HedgeModManager
                 if (CodesList.SelectedItems.Count == 1)
                     OpenAboutCodeWindow(CodesList.SelectedItem as CSharpCode);
             }
+        }
+
+        private void CheckBox_RegistryConfig_Checked(object sender, RoutedEventArgs e)
+        {
+            RegistryConfig.Save();
         }
 
         private void CheckBox_CodesUseTreeView_Checked(object sender, RoutedEventArgs e)

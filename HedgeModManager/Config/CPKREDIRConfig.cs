@@ -44,21 +44,6 @@ namespace HedgeModManager
         public string LogType { get; set; }
 
         // HedgeModManager
-        [IniField("HedgeModManager", "AutoCheckForUpdates", true)]
-        public bool CheckForUpdates { get; set; } = true;
-
-        [IniField("HedgeModManager", "CheckLoader", true)]
-        public bool CheckLoaderUpdates { get; set; } = true;
-
-        [IniField("HedgeModManager", "CheckModUpdates", true)]
-        public bool CheckForModUpdates { get; set; } = true;
-
-        [IniField("HedgeModManager", "UpdateCodesOnLaunch", true)]
-        public bool UpdateCodesOnLaunch { get; set; } = true;
-
-        [IniField("HedgeModManager", "KeepModLoaderOpen", true)]
-        public bool KeepOpen { get; set; } = true;
-
         [IniField("HedgeModManager", nameof(EnableFallbackSaveRedirection), true)]
         public bool EnableFallbackSaveRedirection { get; set; } = true;
 
