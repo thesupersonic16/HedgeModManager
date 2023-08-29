@@ -541,6 +541,193 @@ Library "RSDK" by "Hyper & ĐeäTh"
     }
 }
 
+Library "UIRflParam" by "Hyper"
+{
+    using System.Numerics;
+    using System.Runtime.InteropServices;
+
+    [StructLayout(LayoutKind.Explicit, Size = 4)]
+    public struct InputHelpRflParam
+    {
+        [FieldOffset(0)] public float itemMargin;
+    }
+
+    public enum MainMenuMode : sbyte
+    {
+        MAINMENU_MODE_SONIC1 = 0,
+        MAINMENU_MODE_SONICCD = 1,
+        MAINMENU_MODE_SONIC2 = 2,
+        MAINMENU_MODE_SONIC3K = 3,
+        MAINMENU_MODE_MISSION = 4,
+        MAINMENU_MODE_DATA = 5,
+        MAINMENU_MODE_NUM = 6
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 2)]
+    public struct AllMapMenuItemParam
+    {
+        [FieldOffset(0)] public MainMenuMode menuMode;
+        [FieldOffset(1)] public bool isRepeate;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 8)]
+    public struct AllMapMenuRflParam
+    {
+        [FieldOffset(0)] public AllMapMenuItemParam itemUp;
+        [FieldOffset(2)] public AllMapMenuItemParam itemDown;
+        [FieldOffset(4)] public AllMapMenuItemParam itemLeft;
+        [FieldOffset(6)] public AllMapMenuItemParam itemRight;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 60)]
+    public struct MainMenuRflParam
+    {
+        [FieldOffset(0)]  public float textScrollSpeed;
+        [FieldOffset(4)]  public bool textScrollLoop;
+        [FieldOffset(5)]  public unsafe fixed byte /* AllMapMenuRflParam[6] */ _allMapMenu[48];
+
+        public unsafe AllMapMenuRflParam* allMapMenu
+        {
+            get
+            {
+                fixed (byte* p_allMapMenu = _allMapMenu)
+                    return (AllMapMenuRflParam*)p_allMapMenu;
+            }
+        }
+
+        [FieldOffset(56)] public float backTitleInputTime;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 2)]
+    public struct MenuFPSRflParam
+    {
+        [FieldOffset(0)] public bool fixedFrame;
+        [FieldOffset(1)] public bool isFPS30;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 88)]
+    public struct MenuRflParam
+    {
+        [FieldOffset(0)]  public InputHelpRflParam inputHelpParam;
+        [FieldOffset(4)]  public MainMenuRflParam mainMenuParam;
+        [FieldOffset(64)] public MenuFPSRflParam fpsParam;
+        [FieldOffset(66)] public MenuFPSRflParam fpsParamNX;
+        [FieldOffset(68)] public MenuFPSRflParam fpsParamORBIS;
+        [FieldOffset(70)] public MenuFPSRflParam fpsParamDURANGO;
+        [FieldOffset(72)] public float missionOutWaitTimer;
+        [FieldOffset(76)] public float mydataOutWaitTimer;
+        [FieldOffset(80)] public float museumOutWaitTimer;
+        [FieldOffset(84)] public float optionOutWaitTimer;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 80)]
+    public struct AdvertiseRflParam
+    {
+        [FieldOffset(0)]  public float CESA_autoTimer;
+        [FieldOffset(4)]  public float CESA_skipTimer;
+        [FieldOffset(8)]  public float CESA_startTimer;
+        [FieldOffset(12)] public float CESA_endTimer;
+        [FieldOffset(16)] public float CAUTION_LIGHT_autoTimer;
+        [FieldOffset(20)] public float CAUTION_LIGHT_skipTimer;
+        [FieldOffset(24)] public float CAUTION_LIGHT_startTimer;
+        [FieldOffset(28)] public float CAUTION_LIGHT_endTimer;
+        [FieldOffset(32)] public float SEGA_LOGO_autoTimer;
+        [FieldOffset(36)] public float SEGA_LOGO_skipTimer;
+        [FieldOffset(40)] public float SEGA_LOGO_startTimer;
+        [FieldOffset(44)] public float SEGA_LOGO_endTimer;
+        [FieldOffset(48)] public float SONICTEAM_LOGO_autoTimer;
+        [FieldOffset(52)] public float SONICTEAM_LOGO_skipTimer;
+        [FieldOffset(56)] public float SONICTEAM_LOGO_startTimer;
+        [FieldOffset(60)] public float SONICTEAM_LOGO_endTimer;
+        [FieldOffset(64)] public float RSDK_CRI_LOGO_autoTimer;
+        [FieldOffset(68)] public float RSDK_CRI_LOGO_skipTimer;
+        [FieldOffset(72)] public float RSDK_CRI_LOGO_startTimer;
+        [FieldOffset(76)] public float RSDK_CRI_LOGO_endTimer;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 12)]
+    public struct TitleRflParam
+    {
+        [FieldOffset(0)] public float toMovieTimer;
+        [FieldOffset(4)] public float movieVolume;
+        [FieldOffset(8)] public float cancelInputTime;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 12)]
+    public struct OptionLanguageEditRflParam
+    {
+        [FieldOffset(0)] public unsafe fixed bool enableEdit[12];
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 120)]
+    public struct OptionLetterBoxEditRflParam
+    {
+        [FieldOffset(0)]  public unsafe fixed int enableDLC1LetterBoxKinds[10];
+        [FieldOffset(40)] public unsafe fixed int enableDLC2LetterBoxKinds[20];
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 16)]
+    public struct CString
+    {
+        [FieldOffset(0)] public long pValue;
+
+        public string Value
+        {
+        	get => Marshal.PtrToStringAnsi((IntPtr)pValue);
+        	set => pValue = (long)Marshal.StringToHGlobalAnsi(value);
+        }
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 72)]
+    public struct OptionLicensePFParam
+    {
+        [FieldOffset(0)]  public CString addText;
+        [FieldOffset(16)] public int addTextSize;
+        [FieldOffset(24)] public CString addCommonTagJP;
+        [FieldOffset(40)] public CString addCommonTagUS;
+        [FieldOffset(56)] public CString addCommonTagEU;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 368)]
+    public struct OptionLicenseRflParam
+    {
+        [FieldOffset(0)]   public int commonTextSize;
+        [FieldOffset(8)]   public OptionLicensePFParam licensePS;
+        [FieldOffset(80)]  public OptionLicensePFParam licenseXBOX;
+        [FieldOffset(152)] public OptionLicensePFParam licenseSWITCH;
+        [FieldOffset(224)] public OptionLicensePFParam licenseSTEAM;
+        [FieldOffset(296)] public OptionLicensePFParam licenseEPIC;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 520)]
+    public struct OptionRflParam
+    {
+        [FieldOffset(0)]   public OptionLanguageEditRflParam languageEdit;
+        [FieldOffset(12)]  public OptionLetterBoxEditRflParam letterBoxEdit;
+        [FieldOffset(136)] public OptionLicenseRflParam licenseParam;
+        [FieldOffset(504)] public int ui_seekbarActionMove;
+        [FieldOffset(508)] public float ui_seekbarWheelRatio;
+        [FieldOffset(512)] public int applyTimer;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 4)]
+    public struct SaveIconRflParam
+    {
+        [FieldOffset(0)] public float minimumDisplayTime;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 712)]
+    public struct Root
+    {
+        [FieldOffset(0)]   public MenuRflParam menuParam;
+        [FieldOffset(88)]  public AdvertiseRflParam advertiseParam;
+        [FieldOffset(168)] public TitleRflParam titleParam;
+        [FieldOffset(184)] public OptionRflParam optionParam;
+        [FieldOffset(704)] public SaveIconRflParam saveIconParam;
+    }
+
+}
+
 Patch "Disable Auto Save Icon" in "UI" by "Hyper"
 {
     WriteProtected<byte>
@@ -666,4 +853,19 @@ Code "Disable Super Music in S3&K" in "Audio" by "MegAmi" does "Due to how the c
         return;
     
     WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() - 0x08, 0x00);
+}
+
+Code "Locked 30 FPS for Main Menu" in "Graphics" by "MegAmi" does "Limits the main menu to running at 30 FPS. This works similarly to how the Switch version's FPS cap works, meaning the actual games are unaffected."
+//
+	#include "ReflectionHelpers" noemit
+
+	#lib "UIRflParam"
+//
+{
+	var UIRflParamInfo = Reflection.GetDataInfo<UIRflParam.Root>("ui_rfl_param");
+
+	if (UIRflParamInfo.pData == null)
+		return;
+
+	RFL_SET_PARAM(UIRflParamInfo, menuParam.fpsParam.isFPS30, true);
 }
