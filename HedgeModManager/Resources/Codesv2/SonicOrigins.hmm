@@ -541,7 +541,149 @@ Library "RSDK" by "Hyper & ĐeäTh"
     }
 }
 
-Library "UIRflParam" by "Hyper"
+Patch "Disable Auto Save Icon" in "UI" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        // v1.0.0: 0x140403FAC
+        ScanSignature
+        (
+            "\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x48\x8D\x6C\x24\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\xDA\x48\x8B\xF9\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x33\xF6\x48\x85\xC0\x74\x16\x48\x85\xFF\x48\x8D\x97\x00\x00\x00\x00\x48\x8B\xC8\x48\x0F\x44\xD6\xE8\x00\x00\x00\x00\x0F\x57\xC0\xC7\x45\x00\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\xC6\x45\xBB\x80\xF3\x0F\x7F\x45\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x89\x75\xCF\xE8\x00\x00\x00\x00\x48\x8B\x15\x00\x00\x00\x00\x48\x8D\x4D\xA7\x48\x89\x45\xAF\xC7\x45\x00\x00\x00\x00\x00\xC6\x45\xBB\x15\xE8\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x48\x8B\xD8",
+            "xxxx?xxxx?xxxx?xxxxx?xxx????xxxxxxx????xxxxxxx????xxxxxxxxxxxxx????xxxxxxxx????xxxxx?????xxx????xxxxxxxx?xxx?????xxx?????xxxx????xxx????xxxxxxxxxx?????xxxxx????x????xxxxxxx????xxx"
+        )
+        + 0x1C,
+
+        0xE9, 0x94, 0x01, 0x00, 0x00
+    );
+}
+
+Code "Enable Lives in Anniversary Mode" in "Gameplay" by "ĐeäTh" does "Enabling this code will cause Anniversary Mode to use a different set of saves from normal, and your regular Anniversary Mode saves will be inaccessible."
+//
+    #lib "RSDK"
+//
+{
+    // Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
+    // Version 1.0.0 and 1.0.4: RSDKv4DataPtr + 0x1A4
+    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x1FC) == 1)
+    {
+        // Sonic 1 Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x1FC, 0x00);
+    }
+
+    // Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
+    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x23C) == 1)
+    {
+        // Sonic 2 Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x288, 0x00);
+    }
+
+    // Check if RSDKv3 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
+    if (*(byte*)(RSDK.GetRSDKv3DataPtr() + 0x1DC) == 1)
+    {
+        // Sonic CD Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv3DataPtr() + 0x220, 0x00);
+    }
+
+    // Sonic 3&K Coin Mode and HUD Update
+    if (RSDK.GetRSDKGlobalsAbsPtr() != 0)
+    {
+        // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
+        // Version 1.0.0: RSDKGlobalsPtr + 0x447D08
+        // Version 1.0.4: RSDKGlobalsPtr + 0x4C3508 (Thanks to RDC)
+        // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x104
+        if (*(byte*)(RSDK.GetRSDKGlobalsAbsPtr() + 0x10C) == 1)
+        {
+            // HUD Update
+            // Version 1.0.0: RSDKGlobalsPtr + 0x447D20
+            // Version 1.0.4: RSDKGlobalsPtr + 0x4C34D4 (Thanks to RDC)
+            WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() + 0xD0, 0x00);
+
+            // Coin Mode
+            // Version 1.0.0: RSDKGlobalsPtr + 0x447CD4
+            // Version 1.0.4: RSDKGlobalsPtr + 0x4C3520 (Thanks to RDC)
+            // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x124
+            WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() + 0x124, 0x00);
+        }
+    }
+}
+
+Code "Enable Lives in Mirror Mode" in "Gameplay" by "ĐeäTh" does "Enabling this code will cause Mirror Mode to use a different set of saves from normal, and your regular Mirror Mode saves will be inaccessible."
+//
+    #lib "RSDK"
+//
+{
+    // Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_MIRRORING
+    // Version 1.0.0 and 1.0.4: RSDKv4DataPtr + 0x1A4
+    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x1FC) == 3)
+    {
+        // Sonic 1 Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x1FC, 0x00);
+    }
+
+    // Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_MIRRORING
+    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x23C) == 3)
+    {
+        // Sonic 2 Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x288, 0x00);
+    }
+
+    // Check if RSDKv3 game.playMode is set to BOOT_PLAYMODE_MIRRORING
+    if (*(byte*)(RSDK.GetRSDKv3DataPtr() + 0x1DC) == 3)
+    {
+        // Sonic CD Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv3DataPtr() + 0x220, 0x00);
+    }
+
+    // Sonic 3&K Coin Mode and HUD Update
+    if (RSDK.GetRSDKGlobalsAbsPtr() != 0)
+    {
+        // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
+        // Version 1.0.0: RSDKGlobalsPtr + 0x447D08
+        // Version 1.0.4: RSDKGlobalsPtr + 0x4C3508 (Thanks to RDC)
+        // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x104
+        if (*(byte*)(RSDK.GetRSDKGlobalsAbsPtr() + 0x10C) == 3)
+        {
+            // HUD Update
+            // Version 1.0.0: RSDKGlobalsPtr + 0x447D20
+            // Version 1.0.4: RSDKGlobalsPtr + 0x4C34D4 (Thanks to RDC)
+            WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() + 0xD0, 0x00);
+
+            // Coin Mode
+            // Version 1.0.0: RSDKGlobalsPtr + 0x447CD4
+            // Version 1.0.4: RSDKGlobalsPtr + 0x4C3520 (Thanks to RDC)
+            // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x124
+            WriteProtected<byte>(RSDK.GetRSDKGlobalsPtr() + 0x124, 0x00);
+        }
+    }
+}
+
+Code "Disable Super Music in S3&K" in "Audio" by "MegAmi" does "Due to how the cheat works, the Super music may still play in some instances, such as after the AIZ Act 1 bombing cutscene."
+//
+    #lib "RSDK"
+//
+{
+    if (RSDK.GetRSDKGlobalsAbsPtr() == 0)
+        return;
+    
+    WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() - 0x08, 0x00);
+}
+
+Code "Locked 30 FPS for Main Menu" in "Graphics" by "MegAmi" does "Limits the main menu to running at 30 FPS. This works similarly to how the Switch version's FPS cap works, meaning the actual games are unaffected."
+//
+	#include "ReflectionHelpers" noemit
+
+	#lib "UIRflParam"
+//
+{
+	var UIRflParamInfo = Reflection.GetDataInfo<UIRflParam.Root>("ui_rfl_param");
+
+	if (UIRflParamInfo.pData == null)
+		return;
+
+	RFL_SET_PARAM(UIRflParamInfo, menuParam.fpsParam.isFPS30, true);
+}
+
+Library "UIRflParam"
 {
     using System.Numerics;
     using System.Runtime.InteropServices;
@@ -726,146 +868,4 @@ Library "UIRflParam" by "Hyper"
         [FieldOffset(704)] public SaveIconRflParam saveIconParam;
     }
 
-}
-
-Patch "Disable Auto Save Icon" in "UI" by "Hyper"
-{
-    WriteProtected<byte>
-    (
-        // v1.0.0: 0x140403FAC
-        ScanSignature
-        (
-            "\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x48\x8D\x6C\x24\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\xDA\x48\x8B\xF9\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x33\xF6\x48\x85\xC0\x74\x16\x48\x85\xFF\x48\x8D\x97\x00\x00\x00\x00\x48\x8B\xC8\x48\x0F\x44\xD6\xE8\x00\x00\x00\x00\x0F\x57\xC0\xC7\x45\x00\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\xC6\x45\xBB\x80\xF3\x0F\x7F\x45\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x89\x75\xCF\xE8\x00\x00\x00\x00\x48\x8B\x15\x00\x00\x00\x00\x48\x8D\x4D\xA7\x48\x89\x45\xAF\xC7\x45\x00\x00\x00\x00\x00\xC6\x45\xBB\x15\xE8\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x48\x8B\xD8",
-            "xxxx?xxxx?xxxx?xxxxx?xxx????xxxxxxx????xxxxxxx????xxxxxxxxxxxxx????xxxxxxxx????xxxxx?????xxx????xxxxxxxx?xxx?????xxx?????xxxx????xxx????xxxxxxxxxx?????xxxxx????x????xxxxxxx????xxx"
-        )
-        + 0x1C,
-
-        0xE9, 0x94, 0x01, 0x00, 0x00
-    );
-}
-
-Code "Enable Lives in Anniversary Mode" in "Gameplay" by "ĐeäTh" does "Enabling this code will cause Anniversary Mode to use a different set of saves from normal, and your regular Anniversary Mode saves will be inaccessible."
-//
-    #lib "RSDK"
-//
-{
-    // Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-    // Version 1.0.0 and 1.0.4: RSDKv4DataPtr + 0x1A4
-    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x1FC) == 1)
-    {
-        // Sonic 1 Coin Mode
-        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x1FC, 0x00);
-    }
-
-    // Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x23C) == 1)
-    {
-        // Sonic 2 Coin Mode
-        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x288, 0x00);
-    }
-
-    // Check if RSDKv3 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-    if (*(byte*)(RSDK.GetRSDKv3DataPtr() + 0x1DC) == 1)
-    {
-        // Sonic CD Coin Mode
-        WriteProtected<byte>(RSDK.GetRSDKv3DataPtr() + 0x220, 0x00);
-    }
-
-    // Sonic 3&K Coin Mode and HUD Update
-    if (RSDK.GetRSDKGlobalsAbsPtr() != 0)
-    {
-        // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-        // Version 1.0.0: RSDKGlobalsPtr + 0x447D08
-        // Version 1.0.4: RSDKGlobalsPtr + 0x4C3508 (Thanks to RDC)
-        // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x104
-        if (*(byte*)(RSDK.GetRSDKGlobalsAbsPtr() + 0x10C) == 1)
-        {
-            // HUD Update
-            // Version 1.0.0: RSDKGlobalsPtr + 0x447D20
-            // Version 1.0.4: RSDKGlobalsPtr + 0x4C34D4 (Thanks to RDC)
-            WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() + 0xD0, 0x00);
-
-            // Coin Mode
-            // Version 1.0.0: RSDKGlobalsPtr + 0x447CD4
-            // Version 1.0.4: RSDKGlobalsPtr + 0x4C3520 (Thanks to RDC)
-            // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x124
-            WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() + 0x124, 0x00);
-        }
-    }
-}
-
-Code "Enable Lives in Mirror Mode" in "Gameplay" by "ĐeäTh" does "Enabling this code will cause Mirror Mode to use a different set of saves from normal, and your regular Mirror Mode saves will be inaccessible."
-//
-    #lib "RSDK"
-//
-{
-    // Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_MIRRORING
-    // Version 1.0.0 and 1.0.4: RSDKv4DataPtr + 0x1A4
-    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x1FC) == 3)
-    {
-        // Sonic 1 Coin Mode
-        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x1FC, 0x00);
-    }
-
-    // Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_MIRRORING
-    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x23C) == 3)
-    {
-        // Sonic 2 Coin Mode
-        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x288, 0x00);
-    }
-
-    // Check if RSDKv3 game.playMode is set to BOOT_PLAYMODE_MIRRORING
-    if (*(byte*)(RSDK.GetRSDKv3DataPtr() + 0x1DC) == 3)
-    {
-        // Sonic CD Coin Mode
-        WriteProtected<byte>(RSDK.GetRSDKv3DataPtr() + 0x220, 0x00);
-    }
-
-    // Sonic 3&K Coin Mode and HUD Update
-    if (RSDK.GetRSDKGlobalsAbsPtr() != 0)
-    {
-        // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-        // Version 1.0.0: RSDKGlobalsPtr + 0x447D08
-        // Version 1.0.4: RSDKGlobalsPtr + 0x4C3508 (Thanks to RDC)
-        // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x104
-        if (*(byte*)(RSDK.GetRSDKGlobalsAbsPtr() + 0x10C) == 3)
-        {
-            // HUD Update
-            // Version 1.0.0: RSDKGlobalsPtr + 0x447D20
-            // Version 1.0.4: RSDKGlobalsPtr + 0x4C34D4 (Thanks to RDC)
-            WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() + 0xD0, 0x00);
-
-            // Coin Mode
-            // Version 1.0.0: RSDKGlobalsPtr + 0x447CD4
-            // Version 1.0.4: RSDKGlobalsPtr + 0x4C3520 (Thanks to RDC)
-            // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x124
-            WriteProtected<byte>(RSDK.GetRSDKGlobalsPtr() + 0x124, 0x00);
-        }
-    }
-}
-
-Code "Disable Super Music in S3&K" in "Audio" by "MegAmi" does "Due to how the cheat works, the Super music may still play in some instances, such as after the AIZ Act 1 bombing cutscene."
-//
-    #lib "RSDK"
-//
-{
-    if (RSDK.GetRSDKGlobalsAbsPtr() == 0)
-        return;
-    
-    WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() - 0x08, 0x00);
-}
-
-Code "Locked 30 FPS for Main Menu" in "Graphics" by "MegAmi" does "Limits the main menu to running at 30 FPS. This works similarly to how the Switch version's FPS cap works, meaning the actual games are unaffected."
-//
-	#include "ReflectionHelpers" noemit
-
-	#lib "UIRflParam"
-//
-{
-	var UIRflParamInfo = Reflection.GetDataInfo<UIRflParam.Root>("ui_rfl_param");
-
-	if (UIRflParamInfo.pData == null)
-		return;
-
-	RFL_SET_PARAM(UIRflParamInfo, menuParam.fpsParam.isFPS30, true);
 }
