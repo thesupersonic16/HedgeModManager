@@ -9409,9 +9409,9 @@ Notes;
     using System;
     using System.Numerics;
 
-    const float grindCrouchSpeed = 36.0f;
-    const float boostGrindSpeedMin = 6.0f;
-    const float boostGrindSpeed = 50.0f;
+    const float grindCrouchSpeed = 40.0f;
+    const float boostGrindSpeedMin = 3.0f;
+    const float boostGrindSpeed = 45.0f;
     static bool isInitialised = false;
     static bool isRailCrouching = false;
     static float* playerParamGrind = null;
