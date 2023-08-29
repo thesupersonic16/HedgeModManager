@@ -9512,7 +9512,7 @@ Patch "Keep Red Rings on Death" in "Cheats" by "WasifBoomz" does "Prevents you f
     );
 }
 
-Code "Lose Speed on Collision" in "Physics" by "WasifBoomz" does "Reduce speed when you hit a wall, rather than keeping your speed."
+Code "Lose Speed on Collision" in "Physics" by "WasifBoomz" does "Prevents sliding against objects upon collision."
 //
     #lib "BlackboardStatus"
     #lib "Sonic"
