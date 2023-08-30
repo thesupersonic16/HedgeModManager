@@ -515,16 +515,25 @@ namespace HedgeModManager
             try
             {
                 // Codes from disk.
-                string localCodes = File.ReadAllText(codesPath);
-                string repoCodes = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}");
+                var localCodes = CodeFile.FromFile(codesPath);
 
-                if (RegistryConfig.UpdateCodesOnLaunch && localCodes != repoCodes)
+                var remoteContents = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}");
+                var remoteCodes = CodeFile.FromText(remoteContents);
+
+                var diff = localCodes.CalculateDiff(remoteCodes).ToList();
+                if (diff.Count == 0)
                 {
-                    UpdateCodes();
+                    // No changes
+                    return;
+                }
+
+                if (RegistryConfig.UpdateCodesOnLaunch)
+                {
+                    UpdateCodes(remoteContents, diff);
                 }
                 else
                 {
-                    if (localCodes == repoCodes)
+                    if (diff.Count == 0)
                     {
                         CodesOutdated = false;
 
@@ -910,8 +919,8 @@ namespace HedgeModManager
             var info = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
             if (CodesDatabase.Codes.Count == 0 || info == null)
                 return;
-
-            if (CodesDatabase.FileVersion >= info.MinCodeVersion && CodesDatabase.FileVersion <= info.MaxCodeVersion)
+            
+            if (CodesDatabase.FileVersion is { Major: 0, Minor: 0 } || (CodesDatabase.FileVersion >= info.MinCodeVersion && CodesDatabase.FileVersion <= info.MaxCodeVersion))
                 return;
 
             var dialog = new HedgeMessageBox(Localise("CommonUIWarning"), Localise("CodesUIVersionIncompatible"));
@@ -1436,17 +1445,33 @@ namespace HedgeModManager
             await RunTask(CheckForLoaderUpdateAsync());
         }
 
-        private void UpdateCodes()
+        private void UpdateCodes(string newContents = null, List<DiffBlock> diff = null)
         {
-            UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGame));
+            string codesFilePath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
+            bool codesFileExists = File.Exists(codesFilePath);
+
             try
             {
-                string codesFilePath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
-                bool codesFileExists = File.Exists(codesFilePath);
-
                 /* Parse current codes list, since ModsDB.CodesDatabase
                    is contaminated with codes from ExtraCodes.hmm */
                 var oldCodes = codesFileExists ? new CodeFile(codesFilePath) : null;
+
+                if (!string.IsNullOrEmpty(newContents))
+                {
+                    File.WriteAllText(codesFilePath, newContents);
+                    UpdateStatus(Localise("StatusUIDownloadFinished"));
+
+                    Refresh();
+                    CodesOutdated = false;
+
+                    if (oldCodes != null)
+                    {
+                        diff ??= new CodeFile(codesFilePath).CalculateDiff(oldCodes).ToList();
+                        DisplayDiff(diff);
+                    }
+
+                    return;
+                }
 
                 var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGame),
                     HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}", codesFilePath)
@@ -1463,44 +1488,50 @@ namespace HedgeModManager
                         // Don't display diff for initial download.
                         if (oldCodes == null)
                             return;
-
-                        var diff = new CodeFile(codesFilePath).CalculateDiff(oldCodes);
-                        {
-                            var sb = new StringBuilder();
-
-                            foreach (var block in diff.ToList())
-                            {
-                                sb.AppendLine($"- {DiffBlockToString(block)}");
-
-                                if (block.Type == DiffType.Renamed)
-                                {
-                                    // Restore enabled state of renamed code.
-                                    if (ViewModel.ModsDB.Codes.Contains(block.Data.Key))
-                                        ViewModel.ModsDB.CodesDatabase.Codes.Find(x => x.Name == block.Data.Value).Enabled = true;
-                                }
-                            }
-
-                            if (!string.IsNullOrEmpty(sb.ToString()))
-                            {
-                                var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
-                                {
-                                    box.AddButton(Localise("CommonUIOK"), () => box.Close());
-                                    box.ShowDialog();
-                                }
-                            }
-                            else
-                            {
-                                UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
-                            }
-                        }
+                        
+                        DisplayDiff(new CodeFile(codesFilePath).CalculateDiff(oldCodes).ToList());
                     }
                 };
 
+                UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGame));
                 downloader.Start();
             }
             catch
             {
                 UpdateStatus(Localise("StatusUIDownloadFailed"));
+            }
+
+            void DisplayDiff(List<DiffBlock> blocks)
+            {
+                if (blocks.Count == 0)
+                {
+                    UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
+                    return;
+                }
+
+                var sb = new StringBuilder();
+
+                foreach (var block in blocks)
+                {
+                    sb.AppendLine($"- {DiffBlockToString(block)}");
+
+                    if (block.Type == DiffType.Renamed)
+                    {
+                        // Restore enabled state of renamed code.
+                        var code = ViewModel.ModsDB.CodesDatabase.Codes.Find(x => x.Name == block.Data.Value);
+                        if (code != null)
+                            code.Enabled = true;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(sb.ToString()))
+                {
+                    var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+                    {
+                        box.AddButton(Localise("CommonUIOK"), () => box.Close());
+                        box.ShowDialog();
+                    }
+                }
             }
         }
 
