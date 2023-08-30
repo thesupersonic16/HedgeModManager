@@ -7,8 +7,8 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("A mod manager for Hedgehog Engine games.")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Hedge Mod Manager")]
+[assembly: AssemblyDescription("A mod manager for Hedgehog Engine games.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Hedge Mod Manager")]
