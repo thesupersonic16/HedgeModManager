@@ -871,7 +871,7 @@ namespace HedgeModManager
                 {
                     var loaderInfo = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
                     // Check if there is a loader version, if not return
-                    if (loaderInfo?.LoaderVersion == null)
+                    if (loaderInfo.LoaderVersion == null)
                         return;
 
                     var ini = new IniFile(stream);
@@ -917,7 +917,7 @@ namespace HedgeModManager
         protected void CheckCodeCompatibility()
         {
             var info = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
-            if (CodesDatabase.Codes.Count == 0 || info == null)
+            if (CodesDatabase.Codes.Count == 0)
                 return;
             
             if (CodesDatabase.FileVersion is { Major: 0, Minor: 0 } || (CodesDatabase.FileVersion >= info.MinCodeVersion && CodesDatabase.FileVersion <= info.MaxCodeVersion))
@@ -1146,6 +1146,11 @@ namespace HedgeModManager
             // Check if a game is selected
             if (HedgeApp.CurrentGame == Games.Unknown)
                 return;
+
+
+            // Update CPKREDIR if needed
+            if (HedgeApp.CurrentGame.SupportsCPKREDIR)
+                HedgeApp.UpdateCPKREDIR();
 
             RefreshProfiles();
             Refresh();
@@ -1418,21 +1423,15 @@ namespace HedgeModManager
 
                 HedgeApp.SelectGameInstall((GameInstall)ComboBox_GameStatus.SelectedItem);
 
-                try
+                if (HedgeApp.CurrentGame.SupportsCPKREDIR)
                 {
-                    if (HedgeApp.CurrentGame.SupportsCPKREDIR)
-                    {
-                        // Remove old patch
-                        string exePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecutableName);
-                        if (HedgeApp.IsCPKREDIRInstalled(exePath))
-                            HedgeApp.InstallCPKREDIR(exePath, false);
+                    // Remove old patch
+                    string exePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecutableName);
+                    if (HedgeApp.IsCPKREDIRInstalled(exePath))
+                        HedgeApp.InstallCPKREDIR(exePath, false);
 
-                        HedgeApp.CurrentGame.ModLoader.MakeCompatible(HedgeApp.StartDirectory);
-                    }
-                }
-                catch
-                {
-                    // ignore
+                    // Update CPKREDIR if needed
+                    HedgeApp.UpdateCPKREDIR();
                 }
 
                 ResetWatchers();

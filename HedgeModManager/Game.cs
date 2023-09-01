@@ -30,7 +30,7 @@ namespace HedgeModManager
             AppID = "71340",
             GBProtocol = "hedgemmgens",
             Is64Bit = false,
-            ModLoader = ModLoaders.HE1ModLoader,
+            ModLoader = ModLoaders.GenerationsCodeLoader,
             CodesURL = Resources.URL_BLUEBLUR_CODES,
             GamePath = Path.Combine("Sonic Generations", "SonicGenerations.exe")
         };
@@ -46,7 +46,7 @@ namespace HedgeModManager
             AppID = "329440",
             GBProtocol = "hedgemmlw",
             Is64Bit = false,
-            ModLoader = ModLoaders.HE1ModLoader,
+            ModLoader = ModLoaders.LostCodeLoader,
             CodesURL = Resources.URL_SONIC2013_CODES,
             GamePath = Path.Combine("Sonic Lost World", "slw.exe")
         };
@@ -163,7 +163,8 @@ namespace HedgeModManager
 
     internal static class EmbeddedLoaders
     {
-        public static byte[] HE1ModLoader;
+        public static byte[] GenerationsCodeLoader;
+        public static byte[] LostCodeLoader;
         public static byte[] HE2ModLoader;
         public static byte[] RainbowModLoader;
         public static byte[] HiteModLoader;
@@ -173,7 +174,8 @@ namespace HedgeModManager
             using (var stream = new MemoryStream(Resources.DAT_LOADERS_ZIP))
             using (var zip = new ZipArchive(stream))
             {
-                HE1ModLoader = GetFile("HE1ML.dll");
+                GenerationsCodeLoader = GetFile("SonicGenerationsCodeLoader.dll");
+                LostCodeLoader = GetFile("LostCodeLoader.dll");
                 HE2ModLoader = GetFile("HE2ModLoader.dll");
                 RainbowModLoader = GetFile("RainbowModLoader.dll");
                 HiteModLoader = GetFile("HiteModLoader.dll");
