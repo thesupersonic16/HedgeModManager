@@ -822,7 +822,7 @@ namespace HedgeModManager
 
         public static async Task<(bool, WorkflowRunInfo, ArtifactInfo)> CheckForUpdatesDevAsync()
         {
-            var runs = await GitHubAPI.GetAllRuns(RepoOwner, RepoName);
+            var runs = await GitHubAPI.GetAllRuns(RepoOwner, RepoName, "build.yml");
             var workflow = runs.Runs.FirstOrDefault();
             if (workflow == null)
                 return (false, null, null);
