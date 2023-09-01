@@ -520,7 +520,7 @@ namespace HedgeModManager
                 var remoteContents = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}");
                 var remoteCodes = CodeFile.FromText(remoteContents);
 
-                var diff = localCodes.CalculateDiff(remoteCodes).ToList();
+                var diff = remoteCodes.CalculateDiff(localCodes).ToList();
                 if (diff.Count == 0)
                 {
                     // No changes
@@ -1466,7 +1466,7 @@ namespace HedgeModManager
 
                     if (oldCodes != null)
                     {
-                        diff ??= new CodeFile(codesFilePath).CalculateDiff(oldCodes).ToList();
+                        diff ??= oldCodes.CalculateDiff(new CodeFile(codesFilePath)).ToList();
                         DisplayDiff(diff);
                     }
 
