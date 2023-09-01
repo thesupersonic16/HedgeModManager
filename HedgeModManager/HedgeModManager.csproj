@@ -83,7 +83,7 @@
     <PackageReference Include="gong-wpf-dragdrop">
       <Version>2.3.2</Version>
     </PackageReference>
-    <PackageReference Include="HedgeModManager.CodeCompiler" Version="0.2.13" />
+    <PackageReference Include="HedgeModManager.CodeCompiler" Version="0.2.15" />
     <PackageReference Include="Markdig">
       <Version>0.25.0</Version>
     </PackageReference>
