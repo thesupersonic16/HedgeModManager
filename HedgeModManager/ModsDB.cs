@@ -26,6 +26,8 @@ namespace HedgeModManager
         public const string CompiledCodesName = "Codes.dll";
         public const string CodesTextPath = "Codes.hmm";
         public const string ExtraCodesTextPath = "ExtraCodes.hmm";
+        public const string InternalsDirectory = ".hedgemm";
+        public static readonly string WorkCodesPath = Path.Combine("work", "Codes");
 
         public CodeFile CodesDatabase = new CodeFile();
         public List<ModInfo> Mods = new List<ModInfo>();

@@ -257,6 +257,17 @@ namespace HedgeModManager
             var root = ModsDatabase.RootDirectory;
 
             CodesDatabase = CodeFile.FromFiles(Path.Combine(root, ModsDB.CodesTextPath), Path.Combine(root, ModsDB.ExtraCodesTextPath));
+
+            var workCodesPath = Path.Combine(root, ModsDB.InternalsDirectory, ModsDB.WorkCodesPath);
+            if (Directory.Exists(workCodesPath))
+            {
+                foreach (var file in Directory.EnumerateFiles(Path.Combine(workCodesPath), "*.hmm", SearchOption.AllDirectories))
+                {
+                    var codes = CodeFile.FromFile(file);
+                    CodesDatabase.Codes.AddRange(codes.Codes);
+                }
+            }
+
             ModsDatabase.Codes.ForEach((x) =>
             {
                 var code = CodesDatabase.Codes.Find((y) => { return y.Name == x; });
