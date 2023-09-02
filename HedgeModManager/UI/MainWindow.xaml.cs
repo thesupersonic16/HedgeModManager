@@ -264,7 +264,11 @@ namespace HedgeModManager
                 foreach (var file in Directory.EnumerateFiles(Path.Combine(workCodesPath), "*.hmm", SearchOption.AllDirectories))
                 {
                     var codes = CodeFile.FromFile(file);
-                    CodesDatabase.Codes.AddRange(codes.Codes);
+                    foreach (var code in codes.Codes)
+                    {
+                        CodesDatabase.Codes.RemoveAll(x => x.Name == code.Name);
+                        CodesDatabase.Codes.Add(code);
+                    }
                 }
             }
 
