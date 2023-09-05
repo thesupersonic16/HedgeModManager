@@ -158,6 +158,10 @@ namespace HedgeModManager
                     if (File.Exists(codesPath))
                     {
                         Codes = CodeCompiler.CodeFile.FromFile(codesPath);
+                        foreach (var code in Codes.Codes)
+                        {
+                            code.Name = $"{Title}\\{code.Name}";
+                        }
                     }
                 }
 
