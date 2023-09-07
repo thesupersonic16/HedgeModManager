@@ -87,10 +87,31 @@ namespace HedgeModManager
                 Tasks.Remove(task);
         }
 
-        public Task WaitTasks()
+        public Task WaitTasks(int? currentTask = null)
         {
-            lock (Tasks)
-                return Task.WhenAll(Tasks);
+            if (currentTask == null)
+            {
+                lock (Tasks)
+                {
+                    return Task.WhenAll(Tasks);
+                }
+            }
+            else
+            {
+                lock (Tasks)
+                {
+                    var tasks = new List<Task>(Tasks.Count);
+                    foreach (var task in Tasks)
+                    {
+                        if (task.Id != currentTask)
+                        {
+                            tasks.Add(task);
+                        }
+                    }
+
+                    return Task.WhenAll(tasks);
+                }
+            }
         }
 
         public void Refresh()
@@ -602,6 +623,11 @@ namespace HedgeModManager
 
         public async Task CheckAllModsUpdatesAsync(CancellationToken cancellationToken = default)
         {
+            if (ModsDatabase == null || ModsDatabase.Mods.Count == 0)
+            {
+                return;
+            }
+
             var updateMods = ModsDatabase.Where(x => x.HasUpdates).ToList();
             int completedCount = 0;
             int failedCount = 0;
@@ -766,9 +792,10 @@ namespace HedgeModManager
 
         public async Task CheckForUpdatesAsync()
         {
-            await CheckForManagerUpdatesAsync();
-
-            if (RegistryConfig.CheckModUpdates == true)
+            await RunTask(CheckForManagerUpdatesAsync());
+            await RunTask(CheckForCodeUpdates());
+            
+            if (RegistryConfig.CheckModUpdates)
             {
                 ContextCancelSource = new CancellationTokenSource();
                 try
@@ -777,15 +804,13 @@ namespace HedgeModManager
                 }
                 catch (OperationCanceledException) { }
             }
-
-            await CheckForCodeUpdates();
         }
 
         public async Task CheckForManagerUpdatesAsync()
         {
-            if (!RegistryConfig.CheckManagerUpdates == true && !ViewModel.DevBuild)
+            if (!RegistryConfig.CheckManagerUpdates)
                 return;
-
+            
             UpdateStatus(Localise("StatusUICheckingForUpdates"));
             try
             {
@@ -871,12 +896,13 @@ namespace HedgeModManager
 
         protected async Task CheckForLoaderUpdateAsync()
         {
-            if (!(RegistryConfig.CheckLoaderUpdates == true))
+            if (!RegistryConfig.CheckLoaderUpdates)
                 return;
 
             if (HedgeApp.CurrentGame.ModLoader == null)
                 return;
-
+            
+            await WaitTasks(Task.CurrentId);
             await Task.Yield();
 
             UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), HedgeApp.CurrentGame.ModLoader.ModLoaderName));
