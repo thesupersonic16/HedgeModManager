@@ -230,7 +230,12 @@ namespace HedgeModManager
                         codes.AddRange(mod.Codes.Codes);
                 }
 
-                var report = await CodeProvider.CompileCodes(codes, Path.Combine(RootDirectory, CompiledCodesName), this);
+                var report = await CodeProvider.CompileCodes(new CompilerOptions<CodeFile>(CodesDatabase)
+                {
+                    IncludeAllSources = true,
+                    IncludeResolver = this
+                });
+                // var report = await CodeProvider.CompileCodes(codes, Path.Combine(RootDirectory, CompiledCodesName), this);
                 if (report.HasErrors)
                 {
                     var sb = new StringBuilder();
@@ -245,7 +250,7 @@ namespace HedgeModManager
 
                         foreach (var block in file.Value)
                         {
-                            sb.AppendLine($"        {block.Message}");
+                            sb.AppendLine($"        {block.Severity} {block.Message}");
                         }
 
                         sb.AppendLine();
