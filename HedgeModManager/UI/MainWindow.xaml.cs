@@ -815,31 +815,51 @@ namespace HedgeModManager
 
             UpdateStatus(Localise("StatusUICheckingForUpdates"));
 
-            // Check for release channel updates, regardless of user's channel choice.
+            bool allowDevUpdate = ViewModel.DevBuild;
+
+            // Release channel
             try
             {
                 var update = await HedgeApp.CheckForUpdatesAsync();
 
-                if (!update.Item1 && !ViewModel.DevBuild)
+                // Ask development channel user if they want to switch to release
+                if (allowDevUpdate && update.Item1)
                 {
-                    UpdateStatus(Localise("StatusUINoUpdatesFound"));
-                    return;
-                }
-                else if (update.Item1)
-                {
-                    await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2));
+                    var dialog = new HedgeMessageBox(Localise("DialogUINewRelUpdateOnDevTitle"), Localise("DialogUINewRelUpdateOnDev"));
+
+                    dialog.AddButton(Localise("CommonUIYes"), () =>
+                    {
+                        allowDevUpdate = false;
+                        dialog.Close();
+                    });
+
+                    dialog.AddButton(Localise("CommonUINo"), () =>
+                    {
+                        dialog.Close();
+                    });
+
+                    dialog.ShowDialog();
                 }
 
-                if (!ViewModel.DevBuild)
+                if (!allowDevUpdate)
+                {
+                    if (!update.Item1)
+                    {
+                        UpdateStatus(Localise("StatusUINoUpdatesFound"));
+                        return;
+                    }
+
+                    await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2));
                     UpdateStatus(string.Empty);
+                }
             }
             catch
             {
                 UpdateStatus(Localise("StatusUIFailedToCheckUpdates"));
             }
 
-            // If on development channel, check for that channel's updates.
-            if (ViewModel.DevBuild)
+            // Development channel
+            if (allowDevUpdate)
             {
                 try
                 {

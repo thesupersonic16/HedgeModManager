@@ -189,12 +189,14 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >No code updates found</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager could not access the game directory.&#x0a;Please ensure the Users group has &quot;Write&quot; set to Allow on the directory below and all of its files and folders.&#x0a;&#x0a;{0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >Are you sure you want to delete &quot;{0}&quot;?&#x0a;This action cannot be undone!</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} is already up to date.</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >A newer version of {0} available! ({1})</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Are you sure you want to cancel updating?&#x0a;This may corrupt {0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Could not find 7-Zip or WinRAR!&#x0a;This is required to extract the mod data&#x0a;&#x0a;Please make sure you have either one installed on your system.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >Hedge Mod Manager could not access the game directory.&#x0a;Please ensure the Users group has &quot;Write&quot; set to Allow on the directory below and all of its files and folders.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"             >Are you sure you want to delete &quot;{0}&quot;?&#x0a;This action cannot be undone!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"             >{0} is already up to date.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             >A newer version of {0} available! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate"       >Are you sure you want to cancel updating?&#x0a;This may corrupt {0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor"        >Could not find 7-Zip or WinRAR!&#x0a;This is required to extract the mod data&#x0a;&#x0a;Please make sure you have either one installed on your system.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">New Release Channel Update</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >There is a new update on the Release channel. Sticking with the Development channel may result in unwanted instability.&#x0a;&#x0a;Would you like to switch to the Release channel?</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >completed</system:String>
