@@ -190,7 +190,7 @@ namespace HedgeModManager
             SaveDB(compileCodes).GetAwaiter().GetResult();
         }
 
-        public async Task SaveDB(bool compileCodes = true)
+        public async Task<bool> SaveDB(bool compileCodes = true)
         {
             ActiveMods.Clear();
             FavoriteMods.Clear();
@@ -230,9 +230,18 @@ namespace HedgeModManager
                         codes.AddRange(mod.Codes.Codes);
                 }
 
-                var report = await CodeProvider.CompileCodes(codes, Path.Combine(RootDirectory, CompiledCodesName), this);
+                var compiledPath = Path.Combine(RootDirectory, CompiledCodesName);
+                var report = await CodeProvider.CompileCodes(codes, compiledPath, this);
                 if (report.HasErrors)
                 {
+                    try
+                    {
+                        File.Delete(compiledPath);
+                    }
+                    catch
+                    {
+                        // ignore
+                    }
                     var sb = new StringBuilder();
                     sb.AppendLine("Error Compiling Codes");
 
@@ -260,8 +269,11 @@ namespace HedgeModManager
                         ReportRepository = "https://github.com/hedge-dev/HMMCodes"
                     };
                     dialog.ShowDialog();
+                    return false;
                 }
             }
+
+            return true;
         }
 
         public ModInfo GetModFromActiveGUID(string id)

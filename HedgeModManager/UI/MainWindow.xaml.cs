@@ -680,7 +680,7 @@ namespace HedgeModManager
             Dispatcher.Invoke(RefreshUI);
         }
 
-        public async Task SaveModsDB()
+        public async Task<bool> SaveModsDB()
         {
             HedgeApp.Config.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
             try
@@ -702,13 +702,15 @@ namespace HedgeModManager
                     }
                 }
 
-                await ModsDatabase.SaveDB();
+                return await ModsDatabase.SaveDB();
             }
             catch (UnauthorizedAccessException)
             {
                 HedgeApp.CreateOKMessageBox(Localise("CommonUIError"),
                     string.Format(Localise("DialogUINoGameDirAccess"), HedgeApp.CurrentGameInstall.GameDirectory))
                     .ShowDialog();
+
+                return false;
             }
         }
 
@@ -1032,7 +1034,10 @@ namespace HedgeModManager
                 File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
                 ShowMissingOtherLoaderWarning();
                 EnableSaveRedirIfUsed();
-                await SaveModsDB();
+                if (!await SaveModsDB())
+                {
+                    return;
+                }
                 if (HedgeApp.IsLinux)
                 {
                     Linux.PatchRegistry(HedgeApp.CurrentGame);
