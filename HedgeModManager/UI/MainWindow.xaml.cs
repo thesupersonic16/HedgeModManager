@@ -816,31 +816,32 @@ namespace HedgeModManager
             UpdateStatus(Localise("StatusUICheckingForUpdates"));
             try
             {
+                var updateR = await HedgeApp.CheckForUpdatesAsync();
+
+                if (!updateR.Item1 && !ViewModel.DevBuild)
+                {
+                    UpdateStatus(Localise("StatusUINoUpdatesFound"));
+                    return;
+                }
+                else if (updateR.Item1)
+                {
+                    await Dispatcher.InvokeAsync(() => ShowUpdate(updateR.Item2));
+                }
+
                 if (ViewModel.DevBuild)
                 {
-                    var update = await HedgeApp.CheckForUpdatesDevAsync();
+                    var updateD = await HedgeApp.CheckForUpdatesDevAsync();
 
-                    if (!update.Item1)
+                    if (!updateD.Item1)
                     {
                         UpdateStatus(Localise("StatusUINoUpdatesFound"));
                         return;
                     }
 
-                    string changelog = await HedgeApp.GetGitChangeLog(update.Item2.HeadSHA);
-                    await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2, update.Item3, changelog));
+                    string changelog = await HedgeApp.GetGitChangeLog(updateD.Item2.HeadSHA);
+                    await Dispatcher.InvokeAsync(() => ShowUpdate(updateD.Item2, updateD.Item3, changelog));
                 }
-                else
-                {
-                    var update = await HedgeApp.CheckForUpdatesAsync();
 
-                    if (!update.Item1)
-                    {
-                        UpdateStatus(Localise("StatusUINoUpdatesFound"));
-                        return;
-                    }
-
-                    await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2));
-                }
                 UpdateStatus(string.Empty);
             }
             catch
