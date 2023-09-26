@@ -20,8 +20,9 @@ namespace HedgeModManager
             ModLoaderFileName = "dinput8.dll",
             DirectXVersion = 9,
 
-            IncompatibleFiles = new []{ "d3d9.dll" },
-            IncompatibleFileCallback = ModLoader.IncompatibleByOriginalName("GenerationsCodeLoader.dll", "LostCodeLoader.dll")
+            IncompatibleFiles = new []{ "d3d9.dll", "cpkredir.dll", "cpkredir.txt" },
+            IncompatibleFileCallback = ModLoader.IncompatibleByOriginalName("GenerationsCodeLoader.dll", "LostCodeLoader.dll", "cpkredir.dll") 
+                                       + ModLoader.IncompatibleByMD5(("cpkredir.txt", "A095F4BFFC3B3E5D76F3B30EE84AB867"))
         };
 
         public static ModLoader HE2ModLoader = new ModLoader()
@@ -74,7 +75,42 @@ namespace HedgeModManager
                 var info = FileVersionInfo.GetVersionInfo(fileName);
                 if (originalNames.Contains(info.OriginalFilename))
                 {
-                    File.Delete(fileName);
+                    try
+                    {
+                        File.Delete(fileName);
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            };
+        }
+
+        public static Func<string, bool> IncompatibleByMD5(params ValueTuple<string, string>[] types)
+        {
+            return fileName =>
+            {
+                var name = Path.GetFileName(fileName);
+                var data = types.FirstOrDefault(x => x.Item1.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+                if (data != default)
+                {
+                    var hash = HedgeApp.ComputeMD5Hash(fileName);
+                    if (hash.Equals(data.Item2, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        try
+                        {
+                            File.Delete(fileName);
+                            return true;
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    }
                 }
 
                 return true;
