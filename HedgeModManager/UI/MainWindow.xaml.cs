@@ -2354,7 +2354,7 @@ namespace HedgeModManager
 
         private void UI_CodesView_CopyToClipboard_Click(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetText(GetCodeFromView(IsCodesTreeView ? CodesTree : CodesList)?.ToString());
+            Clipboard.SetDataObject(GetCodeFromView(IsCodesTreeView ? CodesTree : CodesList)?.ToString());
         }
     }
 }
