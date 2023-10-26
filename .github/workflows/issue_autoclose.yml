@@ -14,7 +14,7 @@ jobs:
         with:
           ascending: true
           operations-per-run: 150
-          exempt-issue-labels: 'feature'
+          exempt-issue-labels: 'feature,bug'
           days-before-issue-stale: 30
           days-before-issue-close: 14
           stale-issue-label: "stale"
