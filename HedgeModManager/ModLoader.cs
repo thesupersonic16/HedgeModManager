@@ -31,8 +31,10 @@ namespace HedgeModManager
             ModLoaderData = EmbeddedLoaders.HE2ModLoader,
             ModLoaderName = "Hedgehog Engine 2 Mod Loader",
             ModLoaderID   = "HE2ModLoader",
-            ModLoaderFileName = "d3d11.dll",
+            ModLoaderFileName = "dinput8.dll",
             DirectXVersion = 11,
+            IncompatibleFiles = new[] { "d3d11.dll" },
+            IncompatibleFileCallback = ModLoader.IncompatibleByOriginalName("HE2ModLoader.dll")
         };
 
         public static ModLoader RainbowModLoader = new ModLoader()
