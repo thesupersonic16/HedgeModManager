@@ -248,9 +248,9 @@ namespace HedgeModManager
                         break;
                 }
 
-                for (int i = CodesDatabase.Codes.Count - 1; i >= 0; i--)
+                for (int i = CodesDatabase.ExecutableCodes.Count() - 1; i >= 0; i--)
                 {
-                    var code = CodesDatabase.Codes[i];
+                    var code = CodesDatabase.ExecutableCodes.ElementAt(i);
 
                     if (code.Enabled)
                         CodesList.Items.Insert(0, code);
