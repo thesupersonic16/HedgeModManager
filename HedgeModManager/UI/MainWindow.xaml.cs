@@ -314,7 +314,7 @@ namespace HedgeModManager
                         {
                             /* Always load codes by their base name
                                until the manifest version is updated. */
-                            if (!ModsDatabase.IsManifestUpdated())
+                            if (ModsDatabase.GetManifestVersion() <= new Version(1, 0))
                                 return x.EndsWith(y.Name);
 
                             if (string.IsNullOrEmpty(y.Category))

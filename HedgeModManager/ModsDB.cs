@@ -198,7 +198,7 @@ namespace HedgeModManager
             return LatestManifestVersion;
         }
 
-        public bool IsManifestUpdated()
+        public bool IsManifestLatest()
         {
             return GetManifestVersion() == LatestManifestVersion;
         }
