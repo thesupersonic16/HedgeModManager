@@ -225,6 +225,7 @@ namespace HedgeModManager
             {
                 if (CodesTree?.ItemsSource == null)
                 {
+                    // Build category tree on first load.
                     CodesTree.ItemsSource = CodeTreeNode.BuildCategoryTree(CodesDatabase.ExecutableCodes);
                 }
                 else
@@ -303,12 +304,30 @@ namespace HedgeModManager
                 }
             }
 
-            ModsDatabase.Codes.ForEach((x) =>
-            {
-                var code = CodesDatabase.Codes.Find((y) => { return y.Name == x; });
-                if (code != null)
-                    code.Enabled = true;
-            });
+            ModsDatabase.Codes.ForEach
+            (
+                x =>
+                {
+                    var code = CodesDatabase.Codes.Find
+                    (
+                        y =>
+                        {
+                            /* Always load codes by their base name
+                               until the manifest version is updated. */
+                            if (!ModsDatabase.IsManifestUpdated())
+                                return x.EndsWith(y.Name);
+
+                            if (string.IsNullOrEmpty(y.Category))
+                                return y.Name == x;
+
+                            return x.StartsWith(y.Category + "/") && x.EndsWith(y.Name);
+                        }
+                    );
+
+                    if (code != null)
+                        code.Enabled = true;
+                }
+            );
 
             SortCodesList();
 
@@ -708,7 +727,12 @@ namespace HedgeModManager
                 {
                     if (code.Enabled)
                     {
-                        ModsDatabase.Codes.Add(code.Name);
+                        ModsDatabase.Codes.Add
+                        (
+                            string.IsNullOrEmpty(code.Category)
+                                ? code.Name
+                                : $"{code.Category}/{code.Name}"
+                        );
                     }
                 }
 
