@@ -298,7 +298,7 @@ namespace HedgeModManager
                     var codes = CodeFile.FromFile(file);
                     foreach (var code in codes.Codes)
                     {
-                        CodesDatabase.Codes.RemoveAll(x => x.Name == code.Name);
+                        CodesDatabase.Codes.RemoveAll(x => x.Name == code.Name && x.Category == code.Category);
                         CodesDatabase.Codes.Add(code);
                     }
                 }
