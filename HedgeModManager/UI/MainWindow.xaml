@@ -28,10 +28,13 @@
             <MenuItem x:Name="ContextMenuItemCheckUpdateAll" Header="{DynamicResource ModsUICheckUpdatesAll}" Click="UI_CheckUpdates_AllMods"/>
         </ContextMenu>
         <ContextMenu x:Key="CodesTreeContextMenu">
-            <MenuItem Header="{DynamicResource CodesUICopyCode}" Click="UI_CodesView_CopyToClipboard_Click" Tag="Item" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUICopyCode}"     Click="UI_CodesView_CopyToClipboard_Click" Tag="Item" Visibility="Collapsed"/>
             <Separator Style="{DynamicResource SeparatorThemeStyle}" Tag="Item" Visibility="Collapsed"/>
-            <MenuItem Header="{DynamicResource CodesUIExpand}"   Click="UI_CodesTree_ExpandAll_Click"/>
-            <MenuItem Header="{DynamicResource CodesUICollapse}" Click="UI_CodesTree_CollapseAll_Click"/>
+            <MenuItem Header="{DynamicResource CodesUIExpandSub}"    Click="UI_CodesTree_ExpandAllChildren_Click"   Tag="Node"/>
+            <MenuItem Header="{DynamicResource CodesUICollapseSub}"  Click="UI_CodesTree_CollapseAllChildren_Click" Tag="Node"/>
+            <Separator Style="{DynamicResource SeparatorThemeStyle}" Tag="Node" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUIExpand}"       Click="UI_CodesTree_ExpandAll_Click"/>
+            <MenuItem Header="{DynamicResource CodesUICollapse}"     Click="UI_CodesTree_CollapseAll_Click"/>
         </ContextMenu>
         <ContextMenu x:Key="CodesListContextMenu">
             <MenuItem Header="{DynamicResource CodesUICopyCode}" Click="UI_CodesView_CopyToClipboard_Click"/>

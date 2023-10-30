@@ -2137,6 +2137,16 @@ namespace HedgeModManager
             return null;
         }
 
+        private CodeTreeNode GetCodeTreeNodeFromView(object sender)
+        {
+            if (sender is TreeViewItem tvItem)
+                return tvItem.DataContext as CodeTreeNode;
+            else if (sender is TreeView tv)
+                return tv.SelectedItem as CodeTreeNode;
+
+            return null;
+        }
+
         private void CodesView_Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var code = GetCodeFromView(sender);
@@ -2347,26 +2357,51 @@ namespace HedgeModManager
             SetCodesTreeExpandedState(false);
         }
 
+        private void UI_CodesTree_ExpandAllChildren_Click(object sender, RoutedEventArgs e)
+        {
+            var c = GetCodeTreeNodeFromView(CodesTree);
+
+            if (c == null)
+                return;
+
+            c.IsExpanded = true;
+
+            SetCodesTreeExpandedState(true, c.Children);
+        }
+
+        private void UI_CodesTree_CollapseAllChildren_Click(object sender, RoutedEventArgs e)
+        {
+            var c = GetCodeTreeNodeFromView(CodesTree);
+
+            if (c == null)
+                return;
+
+            c.IsExpanded = false;
+
+            SetCodesTreeExpandedState(false, c.Children);
+        }
+
         private void CodesTree_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             if (CodesTree.SelectedItem != null)
             {
                 foreach (var item in CodesTree.ContextMenu.Items)
                 {
-                    var codeVM = CodesTree.SelectedItem as CodeTreeNode;
+                    SetItemVisibility("Item", GetCodeFromView(sender) != null);
+                    SetItemVisibility("Node", GetCodeTreeNodeFromView(sender) != null);
 
-                    if (codeVM == null)
-                        continue;
+                    void SetItemVisibility(string tag, bool isVisible)
+                    {
+                        var visibility = isVisible
+                            ? Visibility.Visible
+                            : Visibility.Collapsed;
 
-                    var visibility = codeVM.IsCategory
-                        ? Visibility.Collapsed
-                        : Visibility.Visible;
+                        if (item is Separator separator && separator?.Tag as string == tag)
+                            separator.Visibility = visibility;
 
-                    if (item is Separator separator && separator?.Tag as string == "Item")
-                        separator.Visibility = visibility;
-
-                    if (item is MenuItem menuItem && menuItem?.Tag as string == "Item")
-                        menuItem.Visibility = visibility;
+                        if (item is MenuItem menuItem && menuItem?.Tag as string == tag)
+                            menuItem.Visibility = visibility;
+                    }
                 }
             }
         }

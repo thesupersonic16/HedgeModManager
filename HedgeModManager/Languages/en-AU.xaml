@@ -61,17 +61,19 @@
     <system:String xml:space="preserve" x:Key="ModsUINoMods">...There is not a lot here.&#x0a;Go get some mods!</system:String>
 
     <!-- Codes UI Strings -->
-    <system:String x:Key="CodesUIName"    >Name</system:String>
-    <system:String x:Key="CodesUICategory">Category</system:String>
-    <system:String x:Key="CodesUIDownload">Download Community Codes</system:String>
-    <system:String x:Key="CodesUIUpdate"  >Update Community Codes</system:String>
-    <system:String x:Key="CodesUISearch"  >Search: </system:String>
-    <system:String x:Key="CodesUIInfo"    >Double-click this code for more information.</system:String>
-    <system:String x:Key="CodesUIInfoHint">Hover over a code for more information.</system:String>
-    <system:String x:Key="CodesUINoInfo"  >No information available.</system:String>
-    <system:String x:Key="CodesUICopyCode">Copy Code to Clipboard</system:String>
-    <system:String x:Key="CodesUIExpand"  >Expand All</system:String>
-    <system:String x:Key="CodesUICollapse">Collapse All</system:String>
+    <system:String x:Key="CodesUIName"        >Name</system:String>
+    <system:String x:Key="CodesUICategory"    >Category</system:String>
+    <system:String x:Key="CodesUIDownload"    >Download Community Codes</system:String>
+    <system:String x:Key="CodesUIUpdate"      >Update Community Codes</system:String>
+    <system:String x:Key="CodesUISearch"      >Search: </system:String>
+    <system:String x:Key="CodesUIInfo"        >Double-click this code for more information.</system:String>
+    <system:String x:Key="CodesUIInfoHint"    >Hover over a code for more information.</system:String>
+    <system:String x:Key="CodesUINoInfo"      >No information available.</system:String>
+    <system:String x:Key="CodesUICopyCode"    >Copy Code to Clipboard</system:String>
+    <system:String x:Key="CodesUIExpand"      >Expand All</system:String>
+    <system:String x:Key="CodesUIExpandSub"   >Expand All Children of Node</system:String>
+    <system:String x:Key="CodesUICollapse"    >Collapse All</system:String>
+    <system:String x:Key="CodesUICollapseSub" >Collapse All Children of Node</system:String>
     <system:String x:Key="CodesUINullCategory">Uncategorised</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">The installed codes are incompatible with the code loader.&#x0a;Please update the codes and the code loader.&#x0a;WARNING: This will erase any custom codes.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">Fetching codes...</system:String>
