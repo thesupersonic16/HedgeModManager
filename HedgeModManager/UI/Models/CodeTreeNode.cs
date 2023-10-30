@@ -96,8 +96,10 @@ namespace HedgeModManager.UI.Models
                 // Add uncategorised nodes.
                 foreach (var cat in categories)
                 {
-                    if (cat.IsUncategorised)
-                        node.Children.Add(cat);
+                    if (!cat.IsUncategorised)
+                        continue;
+
+                    node.Children.Add(cat);
                 }
 
                 // Add category nodes.
