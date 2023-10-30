@@ -53,8 +53,10 @@ namespace HedgeModManager
             ModLoaderData = EmbeddedLoaders.HiteModLoader,
             ModLoaderName = "Hite Mod Loader",
             ModLoaderID = "HiteModLoader",
-            ModLoaderFileName = "d3d11.dll",
+            ModLoaderFileName = "dinput8.dll",
             DirectXVersion = 11,
+            IncompatibleFiles = new[] { "d3d11.dll" },
+            IncompatibleFileCallback = ModLoader.IncompatibleByOriginalName("HiteModLoader.dll")
         };
 
     }
