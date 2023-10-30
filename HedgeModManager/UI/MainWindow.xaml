@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:local="clr-namespace:HedgeModManager"
+        xmlns:cc="clr-namespace:HedgeModManager.CodeCompiler;assembly=HedgeModManager.CodeCompiler"
+        xmlns:models="clr-namespace:HedgeModManager.UI.Models"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
@@ -30,8 +32,8 @@
         <ContextMenu x:Key="CodesTreeContextMenu">
             <MenuItem Header="{DynamicResource CodesUICopyCode}" Click="UI_CodesView_CopyToClipboard_Click" Tag="Item" Visibility="Collapsed"/>
             <Separator Style="{DynamicResource SeparatorThemeStyle}" Tag="Item" Visibility="Collapsed"/>
-            <MenuItem Header="{DynamicResource CodesUIExpand}"           Click="UI_CodesTree_ExpandAll_Click"/>
-            <MenuItem Header="{DynamicResource CodesUICollapse}"         Click="UI_CodesTree_CollapseAll_Click"/>
+            <MenuItem Header="{DynamicResource CodesUIExpand}"   Click="UI_CodesTree_ExpandAll_Click"/>
+            <MenuItem Header="{DynamicResource CodesUICollapse}" Click="UI_CodesTree_CollapseAll_Click"/>
         </ContextMenu>
         <ContextMenu x:Key="CodesListContextMenu">
             <MenuItem Header="{DynamicResource CodesUICopyCode}" Click="UI_CodesView_CopyToClipboard_Click"/>
@@ -193,12 +195,12 @@
                                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
                                                              Color="{DynamicResource HMM.Button.HoverColor}"/>
                                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                                             Color="{DynamicResource HMM.Button.HoverColor}" />
+                                                             Color="{DynamicResource HMM.Button.HoverColor}"/>
                                         </TreeView.Resources>
                                         <TreeView.ItemContainerStyle>
                                             <Style TargetType="{x:Type TreeViewItem}">
-                                                <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
-                                                <EventSetter Event="RequestBringIntoView" Handler="CodesTree_ViewItem_RequestBringIntoView"/>
+                                                <Setter      Property="IsExpanded"        Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                                <EventSetter Event="RequestBringIntoView" Handler="CodesTree_Item_RequestBringIntoView"/>
                                             </Style>
                                         </TreeView.ItemContainerStyle>
                                         <TreeView.ItemTemplate>
@@ -207,7 +209,7 @@
                                                     <Style TargetType="{x:Type TreeViewItem}">
                                                         <Setter Property="ToolTipService.ToolTip">
                                                             <Setter.Value>
-                                                                <ToolTip Content="{DynamicResource CodesUIInfo}" Tag="{Binding Path=Code.Description}">
+                                                                <ToolTip Content="{DynamicResource CodesUIInfo}" Tag="{Binding Path=Description}">
                                                                     <ToolTip.Style>
                                                                         <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
                                                                             <Style.Triggers>
@@ -223,10 +225,12 @@
                                                                 </ToolTip>
                                                             </Setter.Value>
                                                         </Setter>
-                                                        <EventSetter Event="MouseDoubleClick" Handler="CodesView_Item_MouseDoubleClick"/>
-                                                        <EventSetter Event="MouseEnter"       Handler="CodesView_Item_MouseEnter"/>
-                                                        <EventSetter Event="MouseLeave"       Handler="CodesView_Item_MouseLeave"/>
-                                                        <EventSetter Event="Selected"         Handler="CodesView_Item_Selected"/>
+                                                        <Setter      Property="IsExpanded"        Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                                        <EventSetter Event="RequestBringIntoView" Handler="CodesTree_Item_RequestBringIntoView"/>
+                                                        <EventSetter Event="MouseDoubleClick"     Handler="CodesView_Item_MouseDoubleClick"/>
+                                                        <EventSetter Event="MouseEnter"           Handler="CodesView_Item_MouseEnter"/>
+                                                        <EventSetter Event="MouseLeave"           Handler="CodesView_Item_MouseLeave"/>
+                                                        <EventSetter Event="Selected"             Handler="CodesView_Item_Selected"/>
                                                     </Style>
                                                 </HierarchicalDataTemplate.ItemContainerStyle>
                                                 <Grid>
@@ -236,8 +240,8 @@
                                                     </Grid.ColumnDefinitions>
 
                                                     <StackPanel Orientation="Horizontal">
-                                                        <CheckBox IsChecked="{Binding Path=Code.Enabled}" Margin="0,2,4,2" IsTabStop="False"
-                                                              Visibility="{Binding Path=IsRoot, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                                                        <CheckBox IsChecked="{Binding Path=Enabled}" Margin="0,2,4,2" IsTabStop="False"
+                                                              Visibility="{Binding Path=IsCategory, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
                                                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
                                                     </StackPanel>
                                                 </Grid>
