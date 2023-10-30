@@ -16,6 +16,8 @@ namespace HedgeModManager.UI.Models
 
         public bool IsCategory { get; set; }
 
+        public bool IsUncategorised { get; set; }
+
         public ObservableCollection<object> Children { get; set; } = new();
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -33,6 +35,14 @@ namespace HedgeModManager.UI.Models
                 for (int i = 0; i < categories.Length; i++)
                 {
                     var category = categories[i];
+                    bool isUncategorised = false;
+
+                    if (string.IsNullOrEmpty(category))
+                    {
+                        category = Lang.Localise("CodesUINullCategory");
+                        isUncategorised = true;
+                    }
+
                     var subcategory = currentNode.Children.FirstOrDefault(c => (c as CodeTreeNode)?.Name == category);
 
                     // Set path for traversing cached expanded nodes.
@@ -40,7 +50,14 @@ namespace HedgeModManager.UI.Models
 
                     if (subcategory == null)
                     {
-                        subcategory = new CodeTreeNode { Name = category, IsCategory = true, Path = path };
+                        subcategory = new CodeTreeNode
+                        {
+                            Name = category,
+                            Path = path,
+                            IsCategory = true,
+                            IsUncategorised = isUncategorised
+                        };
+
                         currentNode.Children.Add(subcategory);
                     }
 
@@ -76,9 +93,23 @@ namespace HedgeModManager.UI.Models
                 categories.Sort((a, b) => a.Name.CompareTo(b.Name));
                 codes.Sort((a, b) => a.Name.CompareTo(b.Name));
 
+                // Add uncategorised nodes.
                 foreach (var cat in categories)
-                    node.Children.Add(cat);
+                {
+                    if (cat.IsUncategorised)
+                        node.Children.Add(cat);
+                }
 
+                // Add category nodes.
+                foreach (var cat in categories)
+                {
+                    if (cat.IsUncategorised)
+                        continue;
+
+                    node.Children.Add(cat);
+                }
+
+                // Add code nodes.
                 foreach (var code in codes)
                     node.Children.Add(code);
             }
