@@ -118,12 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="DAT_CPKREDIR_DLL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\cpkredir.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="DAT_CPKREDIR_TXT" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\cpkredir.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="DAT_LOADERS_ZIP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ModLoader\EmbeddedLoaders.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -149,16 +143,19 @@ in the current directory!
 Do you want run the HMM Auto Installer?</value>
   </data>
   <data name="URL_BLUEBLUR_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicGenerations.hmm</value>
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicGenerations.hmm</value>
   </data>
   <data name="URL_GCL_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/SonicGenerationsCodeLoader.dll</value>
+  </data>
+  <data name="URL_HE1ML_DL" xml:space="preserve">
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HE1ML.dll</value>
   </data>
   <data name="URL_HE2ML_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HE2ModLoader.dll</value>
   </data>
   <data name="URL_HITE_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicOrigins.hmm</value>
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicOrigins.hmm</value>
   </data>
   <data name="URL_HML_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HiteModLoader.dll</value>
@@ -179,25 +176,25 @@ Do you want run the HMM Auto Installer?</value>
     <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/ModLoader/Loaders.ini</value>
   </data>
   <data name="URL_MUSASHI_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/TokyoOlympics2020.hmm</value>
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/TokyoOlympics2020.hmm</value>
   </data>
   <data name="URL_RAINBOW_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicColorsUltimate.hmm</value>
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicColorsUltimate.hmm</value>
   </data>
   <data name="URL_RANGERS_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicFrontiers.hmm</value>
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicFrontiers.hmm</value>
   </data>
   <data name="URL_RML_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/RainbowModLoader.dll</value>
   </data>
   <data name="URL_SONIC2013_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/LostWorld.hmm</value>
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicLostWorld.hmm</value>
   </data>
   <data name="URL_TENPEX_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/PuyoPuyoTetris2.hmm</value>
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/PuyoPuyoTetris2.hmm</value>
   </data>
   <data name="URL_WARS_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/thesupersonic16/HedgeModManager/rewrite/HedgeModManager/Resources/Codesv2/SonicForces.hmm</value>
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicForces.hmm</value>
   </data>
   <data name="Version" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\version.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

@@ -20,7 +20,7 @@ namespace HedgeModManager.Languages
 
         public override string ToString()
         {
-            return Lines != LanguageList.TotalLines ? $"{Name} ({(float)Lines / LanguageList.TotalLines * 100:N0}%)" : Name;
+            return Lines != LanguageList.TotalLines ? $"{Name} ({Math.Floor((float)Lines / LanguageList.TotalLines * 100)}%)" : Name;
         }
     }
 }

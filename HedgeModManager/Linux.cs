@@ -13,12 +13,44 @@ namespace HedgeModManager
     public static class Linux
     {
 
+        /// <summary>
+        /// Performs any patches needed for mods to execute correctly
+        /// </summary>
+        /// <param name="game">Game to apply the patch to</param>
+        /// <returns></returns>
+        public static bool PatchRegistry(Game game)
+        {
+            if (game == null)
+                return false;
+
+            string prefixPath = ConvertToUnix(Path.Combine(Steam.GetProtonPrefixPath(game.AppID)));
+            string userReg = Path.Combine(prefixPath, "user.reg");
+
+            // Check if registry exists
+            if (!File.Exists(userReg))
+                return false;
+
+            // Registry data
+            byte[] reg = File.ReadAllBytes(userReg);
+            
+            string modLoaderFileName = 
+                Path.GetFileNameWithoutExtension(game.ModLoader.ModLoaderFileName);
+            string group = @"[Software\\Wine\\DllOverrides]";
+            string key = $"\"{modLoaderFileName}\"=\"native,builtin\"";
+
+            // Scan
+            if (HedgeApp.BoyerMooreSearch(reg, Encoding.UTF8.GetBytes(key)) == -1)
+                File.AppendAllText(userReg, $"\n{group}\n{key}");
+
+            return true;
+        }
+
         public static bool GenerateDesktop()
         {
             string baseExec = null;
             string icon = null;
             // Check if bottles is used
-            if (Environment.GetEnvironmentVariable("FLATPAK_ID") == "com.usebottles.bottles")
+            if (IsBottles())
             {
                 // Parse bottle config
                 var deserializer = new DeserializerBuilder()
@@ -98,7 +130,69 @@ namespace HedgeModManager
             return true;
         }
 
+        public static void LinkRuntimeToProtonPrefix(Game game)
+        {
+            if (CheckDotNetRuntime(game.AppID) == false && IsBottles() && game.Is64Bit)
+            {
+                // Prefix paths
+                string protonPath = ConvertToUnix(Path.Combine(Steam.GetProtonPrefixPath(game.AppID)));
+                string bottlePath = ConvertToUnix(GetPrefixDirectory());
+
+                // Directories
+                string protonDotNet = Path.Combine(protonPath, "drive_c\\windows\\Microsoft.NET");
+                string bottleDotNet = Path.Combine(bottlePath, "drive_c\\windows\\Microsoft.NET");
+                string protonSys32 = Path.Combine(protonPath, "drive_c\\windows\\system32");
+                string bottleSys32 = Path.Combine(bottlePath, "drive_c\\windows\\system32");
+
+                // Check if the prefix exists
+                if (!Directory.Exists(protonSys32))
+                    return;
+
+                if (Directory.Exists(protonDotNet))
+                    Directory.Move(protonDotNet, protonDotNet + ".bak");
+                RunUnixCommand($"/usr/bin/ln -s {ConvertToUnix(bottleDotNet)} {ConvertToUnix(protonDotNet)}");
+
+                var dlls = new List<string>();
+                dlls.Add("mscoree.dll");
+                dlls.AddRange(Directory.EnumerateFiles(bottleSys32)
+                    .Select(x => Path.GetFileName(x))
+                    .Where(x => x.StartsWith("ucrt")));
+                dlls.AddRange(Directory.EnumerateFiles(bottleSys32)
+                    .Select(x => Path.GetFileName(x))
+                    .Where(x => x.StartsWith("vcruntime")));
+
+                foreach (string dll in dlls)
+                {
+                    if (File.Exists(Path.Combine(protonSys32, dll)))
+                        RunUnixCommand($"/usr/bin/rm {ConvertToUnix(Path.Combine(protonSys32, dll))}");
+                    RunUnixCommand($"/usr/bin/ln -s {ConvertToUnix(Path.Combine(bottleSys32, dll))} {ConvertToUnix(Path.Combine(protonSys32, dll))}");
+                }
+            }
+        }
+
+        // Hope it works
+        public static bool? CheckDotNetRuntime(string gameId)
+        {
+            string protonPath = ConvertToUnix(Steam.GetProtonPrefixPath(gameId));
+            if (!Directory.Exists(Path.Combine(protonPath, "drive_c\\windows\\Microsoft.NET")))
+                return null;
+            if (!Directory.Exists(Path.Combine(protonPath, "drive_c\\windows\\Microsoft.NET\\assembly")))
+                return false;
+
+            return true;
+        }
+
         // Wine
+        public static void RunUnixCommand(string command)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = $"start",
+                Arguments = $"/b /wait /unix {command}",
+                UseShellExecute = false
+            }).WaitForExit(200);
+        }
+
         public static string GetHomeDirectory() => Environment.GetEnvironmentVariable("WINEHOMEDIR").Replace("\\??\\", "");
         public static string GetPrefixDirectory() => Environment.GetEnvironmentVariable("WINEPREFIX").Replace("\\??\\", "");
 
@@ -106,6 +200,7 @@ namespace HedgeModManager
 
         // Bottles
         public static string GetBottleConfigPath() => Path.Combine(GetPrefixDirectory(), "bottle.yml");
+        public static bool IsBottles() => Environment.GetEnvironmentVariable("FLATPAK_ID") == "com.usebottles.bottles";
 
         public class BottleConfig
         {

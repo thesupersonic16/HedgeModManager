@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using HedgeModManager.CodeCompiler;
 
 namespace HedgeModManager.UI.Models
 {
@@ -6,7 +7,7 @@ namespace HedgeModManager.UI.Models
     {
         public string Name { get; set; }
 
-        public Code Code { get; set; }
+        public CSharpCode Code { get; set; }
 
         public bool IsExpanded { get; set; }
 

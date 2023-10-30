@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using HedgeModManager.CodeCompiler;
 using Markdig.Helpers;
 
 namespace HedgeModManager
@@ -21,7 +22,7 @@ namespace HedgeModManager
     /// </summary>
     public partial class AboutCodeWindow : Window
     {
-        public AboutCodeWindow(Code code)
+        public AboutCodeWindow(CSharpCode code)
         {
             DataContext = code;
             InitializeComponent();
