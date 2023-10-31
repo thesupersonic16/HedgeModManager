@@ -846,11 +846,56 @@ namespace HedgeModManager
         {
             if (!RegistryConfig.CheckManagerUpdates)
                 return;
-            
+
             UpdateStatus(Localise("StatusUICheckingForUpdates"));
+
+            bool allowDevUpdate = ViewModel.DevBuild;
+
+            // Release channel
             try
             {
-                if (ViewModel.DevBuild)
+                var update = await HedgeApp.CheckForUpdatesAsync();
+
+                // Ask development channel user if they want to switch to release
+                if (allowDevUpdate && update.Item1)
+                {
+                    var dialog = new HedgeMessageBox(Localise("DialogUINewRelUpdateOnDevTitle"), Localise("DialogUINewRelUpdateOnDev"));
+
+                    dialog.AddButton(Localise("CommonUIYes"), () =>
+                    {
+                        allowDevUpdate = false;
+                        dialog.Close();
+                    });
+
+                    dialog.AddButton(Localise("CommonUINo"), () =>
+                    {
+                        dialog.Close();
+                    });
+
+                    dialog.ShowDialog();
+                }
+
+                if (!allowDevUpdate)
+                {
+                    if (!update.Item1)
+                    {
+                        UpdateStatus(Localise("StatusUINoUpdatesFound"));
+                        return;
+                    }
+
+                    await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2));
+                    UpdateStatus(string.Empty);
+                }
+            }
+            catch
+            {
+                UpdateStatus(Localise("StatusUIFailedToCheckUpdates"));
+            }
+
+            // Development channel
+            if (allowDevUpdate)
+            {
+                try
                 {
                     var update = await HedgeApp.CheckForUpdatesDevAsync();
 
@@ -862,24 +907,13 @@ namespace HedgeModManager
 
                     string changelog = await HedgeApp.GetGitChangeLog(update.Item2.HeadSHA);
                     await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2, update.Item3, changelog));
+
+                    UpdateStatus(string.Empty);
                 }
-                else
+                catch
                 {
-                    var update = await HedgeApp.CheckForUpdatesAsync();
-
-                    if (!update.Item1)
-                    {
-                        UpdateStatus(Localise("StatusUINoUpdatesFound"));
-                        return;
-                    }
-
-                    await Dispatcher.InvokeAsync(() => ShowUpdate(update.Item2));
+                    UpdateStatus(Localise("StatusUIFailedToCheckUpdates"));
                 }
-                UpdateStatus(string.Empty);
-            }
-            catch
-            {
-                UpdateStatus(Localise("StatusUIFailedToCheckUpdates"));
             }
         }
 
