@@ -60,7 +60,6 @@ namespace HedgeModManager
         public ModProfile SelectedModProfile = null;
         public CancellationTokenSource ContextCancelSource { get; set; }
 
-        public List<string> ExpandedCodeCategories = new List<string>();
         public bool IsCodesTreeView = true;
 
         protected List<Task> Tasks { get; set; } = new List<Task>(4);
@@ -174,6 +173,49 @@ namespace HedgeModManager
             }
         }
 
+        private static IEnumerable<string> CacheExpandedCategories(IEnumerable<object> nodes)
+        {
+            var expandedNodes = new List<string>();
+
+            foreach (var node in nodes)
+            {
+                if (node is CodeTreeNode c)
+                {
+                    if (!c.IsCategory)
+                        continue;
+
+                    if (c.IsExpanded)
+                    {
+                        expandedNodes.Add(c.Path);
+                        expandedNodes.AddRange(CacheExpandedCategories(c.Children));
+                    }
+                }
+            }
+
+            return expandedNodes;
+        }
+
+        private void RestoreExpandedCategories(IEnumerable<string> categories, IEnumerable<object> nodes = null)
+        {
+            nodes ??= CodesTree.ItemContainerGenerator.Items;
+
+            foreach (var node in nodes)
+            {
+                if (node is CodeTreeNode c)
+                {
+                    if (!c.IsCategory)
+                        continue;
+
+                    if (categories.Contains(c.Path))
+                    {
+                        c.IsExpanded = true;
+
+                        RestoreExpandedCategories(categories, c.Children);
+                    }
+                }
+            }
+        }
+
         private void SortCodesList(int index = -1)
         {
             // Set toggle checkbox and switch to user view.
@@ -181,50 +223,19 @@ namespace HedgeModManager
 
             if (IsCodesTreeView)
             {
-                ExpandedCodeCategories.Clear();
-
-                // Cache expanded tree nodes.
-                foreach (CodeHierarchyViewModel item in CodesTree.Items)
+                if (CodesTree?.ItemsSource == null)
                 {
-                    if
-                    (                                                   /* yes I have to do "== true" because nullable */
-                        (CodesTree.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem)?.IsExpanded == true &&
-                        !ExpandedCodeCategories.Contains(item.Name)
-                    )
-                    {
-                        ExpandedCodeCategories.Add(item.Name);
-                    }
+                    // Build category tree on first load.
+                    CodesTree.ItemsSource = CodeTreeNode.BuildCategoryTree(CodesDatabase.ExecutableCodes);
                 }
+                else
+                {
+                    var categories = CacheExpandedCategories(CodesTree.ItemsSource.Cast<object>());
 
-                CodesTree.ItemsSource = CodesDatabase.ExecutableCodes.OrderBy(x => x.Category).ThenBy(x => x.Name).GroupBy(x => x.Category).Select
-                (
-                    (cat) =>
-                    {
-                        string name = string.IsNullOrEmpty(cat.Key)
-                                ? Localise("CodesUINullCategory")
-                                : cat.Key;
+                    CodesTree.ItemsSource = CodeTreeNode.BuildCategoryTree(CodesDatabase.ExecutableCodes);
 
-                        var codes = cat.ToList();
-
-                        return new CodeHierarchyViewModel()
-                        {
-                            Name       = name,
-                            IsExpanded = ExpandedCodeCategories.Contains(name),
-                            IsRoot     = true,
-
-                            Children = cat.Select
-                            (
-                                y => new CodeHierarchyViewModel()
-                                {
-                                    Name = y.Name,
-                                    Code = codes[codes.IndexOf(y)]
-                                }
-                            )
-                            .ToArray()
-                        };
-                    }
-                )
-                .ToArray();
+                    RestoreExpandedCategories(categories);
+                }
             }
             else
             {
@@ -287,18 +298,36 @@ namespace HedgeModManager
                     var codes = CodeFile.FromFile(file);
                     foreach (var code in codes.Codes)
                     {
-                        CodesDatabase.Codes.RemoveAll(x => x.Name == code.Name);
+                        CodesDatabase.Codes.RemoveAll(x => x.Name == code.Name && x.Category == code.Category);
                         CodesDatabase.Codes.Add(code);
                     }
                 }
             }
 
-            ModsDatabase.Codes.ForEach((x) =>
-            {
-                var code = CodesDatabase.Codes.Find((y) => { return y.Name == x; });
-                if (code != null)
-                    code.Enabled = true;
-            });
+            ModsDatabase.Codes.ForEach
+            (
+                x =>
+                {
+                    var code = CodesDatabase.Codes.Find
+                    (
+                        y =>
+                        {
+                            /* Always load codes by their base name
+                               until the manifest version is updated. */
+                            if (ModsDatabase.GetManifestVersion() <= new Version(1, 0))
+                                return x.EndsWith(y.Name);
+
+                            if (string.IsNullOrEmpty(y.Category))
+                                return y.Name == x;
+
+                            return x.StartsWith(y.Category + "/") && x.EndsWith(y.Name);
+                        }
+                    );
+
+                    if (code != null)
+                        code.Enabled = true;
+                }
+            );
 
             SortCodesList();
 
@@ -698,7 +727,12 @@ namespace HedgeModManager
                 {
                     if (code.Enabled)
                     {
-                        ModsDatabase.Codes.Add(code.Name);
+                        ModsDatabase.Codes.Add
+                        (
+                            string.IsNullOrEmpty(code.Category)
+                                ? code.Name
+                                : $"{code.Category}/{code.Name}"
+                        );
                     }
                 }
 
@@ -2096,9 +2130,19 @@ namespace HedgeModManager
             else if (sender is ListView lv)
                 return lv.SelectedItem as CSharpCode;
             else if (sender is TreeViewItem tvItem)
-                return (tvItem.DataContext as CodeHierarchyViewModel)?.Code;
+                return tvItem.DataContext as CSharpCode;
             else if (sender is TreeView tv)
-                return (tv.SelectedItem as CodeHierarchyViewModel)?.Code;
+                return tv.SelectedItem as CSharpCode;
+
+            return null;
+        }
+
+        private CodeTreeNode GetCodeTreeNodeFromView(object sender)
+        {
+            if (sender is TreeViewItem tvItem)
+                return tvItem.DataContext as CodeTreeNode;
+            else if (sender is TreeView tv)
+                return tv.SelectedItem as CodeTreeNode;
 
             return null;
         }
@@ -2222,7 +2266,7 @@ namespace HedgeModManager
             {
                 if (CodesTree.SelectedItem != null)
                 {
-                    UpdateCodeDescription((CodesTree.SelectedItem as CodeHierarchyViewModel).Code);
+                    UpdateCodeDescription(CodesTree.SelectedItem as CSharpCode);
                     return;
                 }
             }
@@ -2258,7 +2302,7 @@ namespace HedgeModManager
             if (IsCodesTreeView)
             {
                 if (CodesTree.SelectedItem != null)
-                    OpenAboutCodeWindow((CodesTree.SelectedItem as CodeHierarchyViewModel).Code);
+                    OpenAboutCodeWindow(CodesTree.SelectedItem as CSharpCode);
             }
             else
             {
@@ -2280,7 +2324,7 @@ namespace HedgeModManager
             Refresh();
         }
 
-        private void CodesTree_ViewItem_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+        private void CodesTree_Item_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
             /* Prevents the tree view from scrolling
                horizontally automatically if an item
@@ -2288,12 +2332,18 @@ namespace HedgeModManager
             e.Handled = true;
         }
 
-        private void SetCodesTreeExpandedState(bool expand)
+        private void SetCodesTreeExpandedState(bool expand, IEnumerable<object> nodes = null)
         {
-            foreach (var item in CodesTree.Items)
+            nodes ??= CodesTree.ItemContainerGenerator.Items;
+        
+            foreach (var item in nodes)
             {
-                if (CodesTree.ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem tvItem)
-                    tvItem.IsExpanded = expand;
+                if (item is CodeTreeNode c)
+                {
+                    c.IsExpanded = expand;
+        
+                    SetCodesTreeExpandedState(expand, c.Children);
+                }
             }
         }
 
@@ -2307,26 +2357,51 @@ namespace HedgeModManager
             SetCodesTreeExpandedState(false);
         }
 
+        private void UI_CodesTree_ExpandAllChildren_Click(object sender, RoutedEventArgs e)
+        {
+            var c = GetCodeTreeNodeFromView(CodesTree);
+
+            if (c == null)
+                return;
+
+            c.IsExpanded = true;
+
+            SetCodesTreeExpandedState(true, c.Children);
+        }
+
+        private void UI_CodesTree_CollapseAllChildren_Click(object sender, RoutedEventArgs e)
+        {
+            var c = GetCodeTreeNodeFromView(CodesTree);
+
+            if (c == null)
+                return;
+
+            c.IsExpanded = false;
+
+            SetCodesTreeExpandedState(false, c.Children);
+        }
+
         private void CodesTree_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             if (CodesTree.SelectedItem != null)
             {
                 foreach (var item in CodesTree.ContextMenu.Items)
                 {
-                    var codeVM = CodesTree.SelectedItem as CodeHierarchyViewModel;
+                    SetItemVisibility("Item", GetCodeFromView(sender) != null);
+                    SetItemVisibility("Node", GetCodeTreeNodeFromView(sender) != null);
 
-                    if (codeVM == null)
-                        continue;
+                    void SetItemVisibility(string tag, bool isVisible)
+                    {
+                        var visibility = isVisible
+                            ? Visibility.Visible
+                            : Visibility.Collapsed;
 
-                    var visibility = codeVM.IsRoot
-                        ? Visibility.Collapsed
-                        : Visibility.Visible;
+                        if (item is Separator separator && separator?.Tag as string == tag)
+                            separator.Visibility = visibility;
 
-                    if (item is Separator separator && separator?.Tag as string == "Item")
-                        separator.Visibility = visibility;
-
-                    if (item is MenuItem menuItem && menuItem?.Tag as string == "Item")
-                        menuItem.Visibility = visibility;
+                        if (item is MenuItem menuItem && menuItem?.Tag as string == tag)
+                            menuItem.Visibility = visibility;
+                    }
                 }
             }
         }

@@ -23,6 +23,8 @@ namespace HedgeModManager
 {
     public class ModsDB : IEnumerable<ModInfo>, IIncludeResolver
     {
+        public static readonly Version LatestManifestVersion = new(1, 1);
+
         public const string CompiledCodesName = "Codes.dll";
         public const string CodesTextPath = "Codes.hmm";
         public const string ExtraCodesTextPath = "ExtraCodes.hmm";
@@ -31,6 +33,9 @@ namespace HedgeModManager
 
         public CodeFile CodesDatabase = new CodeFile();
         public List<ModInfo> Mods = new List<ModInfo>();
+
+        [IniField("Main")]
+        public string ManifestVersion { get; set; } = "0.0";
 
         [IniField("Main", "ActiveMod")]
         public List<string> ActiveMods = new List<string>();
@@ -185,6 +190,19 @@ namespace HedgeModManager
             }
         }
 
+        public Version GetManifestVersion()
+        {
+            if (Version.TryParse(ManifestVersion, out var ver))
+                return ver;
+
+            return LatestManifestVersion;
+        }
+
+        public bool IsManifestLatest()
+        {
+            return GetManifestVersion() == LatestManifestVersion;
+        }
+
         public void SaveDBSync(bool compileCodes = true)
         {
             SaveDB(compileCodes).GetAwaiter().GetResult();
@@ -192,6 +210,8 @@ namespace HedgeModManager
 
         public async Task<bool> SaveDB(bool compileCodes = true)
         {
+            ManifestVersion = LatestManifestVersion.ToString();
+
             ActiveMods.Clear();
             FavoriteMods.Clear();
             mMods.Clear();
