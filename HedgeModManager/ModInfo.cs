@@ -157,7 +157,7 @@ namespace HedgeModManager
 
                     foreach (var codeFile in CodeFile.Split(','))
                     {
-                        var codesPath = Path.Combine(RootDirectory, codeFile);
+                        var codesPath = Path.Combine(RootDirectory, codeFile.Trim());
                         if (File.Exists(codesPath))
                         {
                             var codes = CodeCompiler.CodeFile.FromFile(codesPath);
