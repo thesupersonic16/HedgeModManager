@@ -155,14 +155,22 @@ namespace HedgeModManager
                         ConfigSchema?.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
                     }
 
-                    var codesPath = Path.Combine(RootDirectory, CodeFile);
-                    if (File.Exists(codesPath))
+                    foreach (var codeFile in CodeFile.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        Codes = CodeCompiler.CodeFile.FromFile(codesPath);
-                        foreach (var code in Codes.Codes)
+                        var codesPath = Path.Combine(RootDirectory, codeFile.Trim());
+                        if (File.Exists(codesPath))
                         {
-                            if (code.IsExecutable())
-                                code.Name = $"{Title}\\{code.Name}";
+                            var codes = CodeCompiler.CodeFile.FromFile(codesPath);
+                            foreach (var code in codes.Codes)
+                            {
+                                if (code.IsExecutable())
+                                    code.Name = $"{Title}\\{code.Name}";
+                            }
+
+                            if (Codes == null)
+                                Codes = codes;
+                            else
+                                Codes.Codes.AddRange(codes.Codes);
                         }
                     }
                 }
