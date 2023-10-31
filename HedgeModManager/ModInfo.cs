@@ -155,7 +155,7 @@ namespace HedgeModManager
                         ConfigSchema?.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
                     }
 
-                    foreach (var codeFile in CodeFile.Split(','))
+                    foreach (var codeFile in CodeFile.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                     {
                         var codesPath = Path.Combine(RootDirectory, codeFile.Trim());
                         if (File.Exists(codesPath))
