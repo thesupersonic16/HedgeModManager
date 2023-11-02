@@ -828,7 +828,9 @@ namespace HedgeModManager
 
         public async Task CheckForUpdatesAsync()
         {
-            await RunTask(CheckForManagerUpdatesAsync());
+            if (RegistryConfig.CheckManagerUpdates)
+                await RunTask(CheckForManagerUpdatesAsync());
+
             await RunTask(CheckForCodeUpdates());
             
             if (RegistryConfig.CheckModUpdates)
@@ -844,9 +846,6 @@ namespace HedgeModManager
 
         public async Task CheckForManagerUpdatesAsync()
         {
-            if (!RegistryConfig.CheckManagerUpdates)
-                return;
-
             UpdateStatus(Localise("StatusUICheckingForUpdates"));
 
             bool allowDevUpdate = ViewModel.DevBuild;
