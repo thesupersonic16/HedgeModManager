@@ -828,7 +828,7 @@ namespace HedgeModManager
 
         public async Task CheckForUpdatesAsync()
         {
-            if (RegistryConfig.CheckManagerUpdates)
+            if (RegistryConfig.CheckManagerUpdates || ViewModel.DevBuild)
                 await RunTask(CheckForManagerUpdatesAsync());
 
             await RunTask(CheckForCodeUpdates());
