@@ -1632,7 +1632,20 @@ namespace HedgeModManager
                     if (block.Type == DiffType.Renamed)
                     {
                         // Restore enabled state of renamed code.
-                        var code = ViewModel.ModsDB.CodesDatabase.Codes.Find(x => x.Name == block.Data.Value);
+                        var code = ViewModel.ModsDB.CodesDatabase.Codes.Find
+                        (
+                            x =>
+                            {
+                                if (block.Data.Value is CSharpCode cc)
+                                {
+                                    if (x.Name == cc.Name && x.Category == cc.Category)
+                                        return true;
+                                }
+
+                                return false;
+                            }
+                        );
+
                         if (code != null)
                             code.Enabled = true;
                     }
