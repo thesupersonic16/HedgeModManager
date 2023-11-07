@@ -78,10 +78,10 @@
 
     <!-- Diff UI Strings -->
     <system:String x:Key="DiffUITitle"   >変更履歴</system:String>
-    <system:String x:Key="DiffUIAdded"   >追加: {0}</system:String>
-    <system:String x:Key="DiffUIModified">変更: {0}</system:String>
-    <system:String x:Key="DiffUIRemoved" >削除: {0}</system:String>
-    <system:String x:Key="DiffUIRenamed" >改名: {0}</system:String>
+    <system:String x:Key="DiffUIAdded"   >追加</system:String>
+    <system:String x:Key="DiffUIModified">変更</system:String>
+    <system:String x:Key="DiffUIRemoved" >削除</system:String>
+    <system:String x:Key="DiffUIRenamed" >改名</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->

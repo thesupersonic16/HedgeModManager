@@ -78,10 +78,10 @@
 
     <!-- Diff UI Strings -->
     <system:String x:Key="DiffUITitle"   >변경점</system:String>
-    <system:String x:Key="DiffUIAdded"   >추가됨: {0}</system:String>
-    <system:String x:Key="DiffUIModified">변경됨: {0}</system:String>
-    <system:String x:Key="DiffUIRemoved" >제거됨: {0}</system:String>
-    <system:String x:Key="DiffUIRenamed" >이름 변경됨: {0}</system:String>
+    <system:String x:Key="DiffUIAdded"   >추가됨</system:String>
+    <system:String x:Key="DiffUIModified">변경됨</system:String>
+    <system:String x:Key="DiffUIRemoved" >제거됨</system:String>
+    <system:String x:Key="DiffUIRenamed" >이름 변경됨</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->

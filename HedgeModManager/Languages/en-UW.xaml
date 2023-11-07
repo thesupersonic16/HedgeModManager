@@ -80,10 +80,10 @@
 
     <!-- Diff UI Strings -->
     <system:String x:Key="DiffUITitle"   >changewog</system:String>
-    <system:String x:Key="DiffUIAdded"   >added: {0}</system:String>
-    <system:String x:Key="DiffUIModified">modified: {0}</system:String>
-    <system:String x:Key="DiffUIRemoved" >wemoved: {0}</system:String>
-    <system:String x:Key="DiffUIRenamed" >wenamed: {0}</system:String>
+    <system:String x:Key="DiffUIAdded"   >added</system:String>
+    <system:String x:Key="DiffUIModified">modified</system:String>
+    <system:String x:Key="DiffUIRemoved" >wemoved</system:String>
+    <system:String x:Key="DiffUIRenamed" >wenamed</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->

@@ -1591,18 +1591,15 @@ namespace HedgeModManager
                 {
                     DownloadCompleted = () =>
                     {
-                        Refresh();
-
-                        CodesOutdated = false;
-
                         UpdateStatus(Localise("StatusUIDownloadFinished"));
                         Button_DownloadCodes.SetResourceReference(ContentProperty, "CodesUIDownload");
 
+                        Refresh();
+                        CodesOutdated = false;
+
                         // Don't display diff for initial download.
-                        if (oldCodes == null)
-                            return;
-                        
-                        DisplayDiff(new CodeFile(codesFilePath).CalculateDiff(oldCodes).ToList());
+                        if (oldCodes != null)
+                            DisplayDiff(new CodeFile(codesFilePath).CalculateDiff(oldCodes).ToList());
                     }
                 };
 
@@ -1628,35 +1625,51 @@ namespace HedgeModManager
                 {
                     sb.AppendLine($"- {DiffBlockToString(block)}");
 
-                    if (block.Type == DiffType.Renamed)
-                    {
-                        // Restore enabled state of renamed code.
-                        var code = ViewModel.ModsDB.CodesDatabase.Codes.Find
-                        (
-                            x =>
+                    bool isCodeEnabled = ModsDatabase.Codes.Find
+                    (
+                        x =>
+                        {
+                            if (block.Data.Key is CSharpCode cc)
                             {
-                                if (block.Data.Value is CSharpCode cc)
-                                {
-                                    if (x.Name == cc.Name && x.Category == cc.Category)
-                                        return true;
-                                }
-
-                                return false;
+                                if (x.EndsWith(cc.Name))
+                                    return true;
                             }
-                        );
 
-                        if (code != null)
-                            code.Enabled = true;
-                    }
+                            return false;
+                        }
+                    )
+                    != null;
+
+                    var code = ViewModel.ModsDB.CodesDatabase.Codes.Find
+                    (
+                        x =>
+                        {
+                            if (block.Data.Value is CSharpCode cc)
+                            {
+                                if (x.Name == cc.Name && x.Category == cc.Category)
+                                    return true;
+                            }
+
+                            return false;
+                        }
+                    );
+
+                    if (code != null)
+                        code.Enabled = isCodeEnabled;
                 }
+
+                SaveConfig();
 
                 if (!string.IsNullOrEmpty(sb.ToString()))
                 {
-                    var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), textAlignment: TextAlignment.Left, type: InputType.MarkDown);
+                    var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), type: InputType.MarkDown)
                     {
-                        box.AddButton(Localise("CommonUIOK"), () => box.Close());
-                        box.ShowDialog();
-                    }
+                        MaxHeight = 550,
+                        MaxWidth = 800
+                    };
+
+                    box.AddButton(Localise("CommonUIOK"), box.Close);
+                    box.ShowDialog();
                 }
             }
         }
@@ -1668,10 +1681,11 @@ namespace HedgeModManager
                 DiffType.Added => "DiffUIAdded",
                 DiffType.Removed => "DiffUIRemoved",
                 DiffType.Renamed => "DiffUIRenamed",
+                DiffType.Moved => "DiffUIMoved",
                 _ => "DiffUIModified",
             };
 
-            return LocaliseFormat(key, block.Description);
+            return $"**{Localise(key)}** - {block.Description}";
         }
 
         private void UI_Download_Codes(object sender, RoutedEventArgs e)

@@ -78,10 +78,10 @@
 
     <!-- Diff UI Strings -->
     <system:String x:Key="DiffUITitle"   >Список змін</system:String>
-    <system:String x:Key="DiffUIAdded"   >Додано: {0}</system:String>
-    <system:String x:Key="DiffUIModified">Змінено: {0}</system:String>
-    <system:String x:Key="DiffUIRemoved" >Видалено: {0}</system:String>
-    <system:String x:Key="DiffUIRenamed" >Перейменовано: {0}</system:String>
+    <system:String x:Key="DiffUIAdded"   >Додано</system:String>
+    <system:String x:Key="DiffUIModified">Змінено</system:String>
+    <system:String x:Key="DiffUIRemoved" >Видалено</system:String>
+    <system:String x:Key="DiffUIRenamed" >Перейменовано</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
