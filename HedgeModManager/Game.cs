@@ -259,7 +259,21 @@ namespace HedgeModManager
             }
             else
             {
-                Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
+                string path = "";
+                switch (Launcher)
+                {
+                    case GameLauncher.Steam:
+                        path = Path.Combine(startDirectory, Path.GetFileName(BaseGame.GamePath));
+                        break;
+                    case GameLauncher.Heroic:
+                    case GameLauncher.Epic:
+                        path = Path.Combine(startDirectory, Path.GetFileName(BaseGame.GamePathEGS));
+                        break;
+                    default:
+                        break;
+                }
+
+                Process.Start(new ProcessStartInfo(path)
                 {
                     WorkingDirectory = startDirectory
                 });

@@ -46,8 +46,8 @@ namespace HedgeModManager
 
         public static List<GameInstall> SearchForGamesHeroic()
         {
-            // Find home folder
             string home = null;
+            string appdata = null;
             if (HedgeApp.IsLinux)
             {
                 home = Environment.GetEnvironmentVariable("WINEHOMEDIR")?.Replace("\\??\\", "");
@@ -58,16 +58,22 @@ namespace HedgeModManager
             else
             {
                 home = Environment.GetEnvironmentVariable("USERPROFILE");
+                appdata = Environment.GetEnvironmentVariable("APPDATA");
             }
 
             // Return if home folder is not found
-            if (home == null)
+            if (home == null || appdata == null)
                 return null;
 
-            string installedFilePath = Path.Combine(home, ".config", "legendary", "installed.json");
+            
+            string installedFilePath = Path.Combine(appdata, "heroic", "legendaryConfig", "legendary", "installed.json");
+            if (!File.Exists(installedFilePath))
+                installedFilePath = Path.Combine(home, ".config", "legendary", "installed.json");
+            if (!File.Exists(installedFilePath))
+                installedFilePath = Path.Combine(home, ".var", "app", "com.heroicgameslauncher.hgl", "config", "heroic", "legendaryConfig", "legendary", "installed.json");
             if (!File.Exists(installedFilePath))
                 installedFilePath = Path.Combine(home, ".var", "app", "com.heroicgameslauncher.hgl", "config", "legendary", "installed.json");
-            
+
             if (!File.Exists(installedFilePath))
                 return null;
 
