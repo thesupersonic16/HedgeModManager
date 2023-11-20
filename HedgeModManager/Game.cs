@@ -166,7 +166,6 @@ namespace HedgeModManager
         public static byte[] HE1ModLoader;
         public static byte[] HE2ModLoader;
         public static byte[] RainbowModLoader;
-        public static byte[] HiteModLoader;
 
         static EmbeddedLoaders()
         {
@@ -176,7 +175,6 @@ namespace HedgeModManager
                 HE1ModLoader = GetFile("HE1ML.dll");
                 HE2ModLoader = GetFile("HE2ModLoader.dll");
                 RainbowModLoader = GetFile("RainbowModLoader.dll");
-                HiteModLoader = GetFile("HiteModLoader.dll");
 
                 byte[] GetFile(string name)
                 {

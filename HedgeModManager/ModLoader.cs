@@ -50,7 +50,6 @@ namespace HedgeModManager
         public static ModLoader HiteModLoader = new ModLoader()
         {
             ModLoaderDownloadURL = Resources.URL_HML_DL,
-            ModLoaderData = EmbeddedLoaders.HiteModLoader,
             ModLoaderName = "Hite Mod Loader",
             ModLoaderID = "HiteModLoader",
             ModLoaderFileName = "dinput8.dll",
