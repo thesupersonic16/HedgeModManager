@@ -786,9 +786,11 @@ namespace HedgeModManager
                         }
 
                         // Note: This will not work if the DLL within the zip is not {ModLoaderID}.dll
-                        // Rename modloader
-                        File.Move(Path.ChangeExtension(filePath, ".dll"),
-                            Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderFileName));
+                        // Replace modloader
+                        string loaderPath = Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderFileName);
+                        if (File.Exists(loaderPath))
+                            File.Delete(loaderPath);
+                        File.Move(Path.ChangeExtension(filePath, ".dll"), loaderPath);
 
                         // Delete temp file
                         try
