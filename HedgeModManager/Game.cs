@@ -141,6 +141,7 @@ namespace HedgeModManager
             SupportsSaveRedirection = true,
             Folders = new[] { "raw" },
             AppID = "1237320",
+            EGSID = "c5ca98fa240c4eb796835f97126df8e7",
             GBProtocol = "hedgemmrangers",
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
