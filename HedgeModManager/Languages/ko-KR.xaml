@@ -61,17 +61,19 @@
     <system:String xml:space="preserve" x:Key="ModsUINoMods">...여기는 아무 것도 없습니다.&#x0a;모드를 구하러 가봅시다!</system:String>
 
     <!-- Codes UI Strings -->
-    <system:String x:Key="CodesUIName"    >이름</system:String>
-    <system:String x:Key="CodesUICategory">범주</system:String>
-    <system:String x:Key="CodesUIDownload">커뮤니티 코드 다운로드</system:String>
-    <system:String x:Key="CodesUIUpdate"  >커뮤니티 코드 업데이트</system:String>
-    <system:String x:Key="CodesUISearch"  >검색:</system:String>
-    <system:String x:Key="CodesUIInfo"    >이 코드를 더블클릭하면 자세한 정보를 볼 수 있습니다.</system:String>
-    <system:String x:Key="CodesUIInfoHint">코드에 커서를 가져다 대면 자세한 정보를 볼 수 있습니다.</system:String>
-    <system:String x:Key="CodesUINoInfo"  >정보 없음.</system:String>
-    <system:String x:Key="CodesUICopyCode">코드를 클립보드에 복사</system:String>
-    <system:String x:Key="CodesUIExpand"  >모두 펼치기</system:String>
-    <system:String x:Key="CodesUICollapse">모두 닫기</system:String>
+    <system:String x:Key="CodesUIName"        >이름</system:String>
+    <system:String x:Key="CodesUICategory"    >범주</system:String>
+    <system:String x:Key="CodesUIDownload"    >커뮤니티 코드 다운로드</system:String>
+    <system:String x:Key="CodesUIUpdate"      >커뮤니티 코드 업데이트</system:String>
+    <system:String x:Key="CodesUISearch"      >검색:</system:String>
+    <system:String x:Key="CodesUIInfo"        >이 코드를 더블클릭하면 자세한 정보를 볼 수 있습니다.</system:String>
+    <system:String x:Key="CodesUIInfoHint"    >코드에 커서를 가져다 대면 자세한 정보를 볼 수 있습니다.</system:String>
+    <system:String x:Key="CodesUINoInfo"      >정보 없음.</system:String>
+    <system:String x:Key="CodesUICopyCode"    >코드를 클립보드에 복사</system:String>
+    <system:String x:Key="CodesUIExpand"      >모두 펼치기</system:String>
+    <system:String x:Key="CodesUIExpandSub"   >하위 노드 모두 펼치기</system:String>
+    <system:String x:Key="CodesUICollapse"    >모두 닫기</system:String>
+    <system:String x:Key="CodesUICollapseSub" >하위 노드 모두 닫기</system:String>
     <system:String x:Key="CodesUINullCategory">범주 없음</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">설치된 코드가 코드로더와 호환되지 않습니다.&#x0a;코드와 코드로더를 업데이트해 주십시오.&#x0a;경고: 이 행위를 하면 커스텀 코드가 삭제됩니다.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">코드를 가져오는 중...</system:String>
@@ -82,6 +84,7 @@
     <system:String x:Key="DiffUIModified">변경됨</system:String>
     <system:String x:Key="DiffUIRemoved" >제거됨</system:String>
     <system:String x:Key="DiffUIRenamed" >이름 변경됨</system:String>
+    <system:String x:Key="DiffUIMoved"   >이동됨</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
@@ -125,11 +128,11 @@
     <system:String x:Key="MainUISelectModsDBTitle"    >모드를 불러올 경로를 지정해 주십시오...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle"  >런타임 누락 감지됨!</system:String>
     <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0}가 올바르게 작동하기 위해서는 {1}이/가 설치되어 있어야 합니다.&#x0a;HMM이 이 런타임을 설치하게 하시겠습니까?</system:String>
-    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">하나 이상의 활성화된 모드가 정상적으로 작동하기 위해서 세이브 파일 경로 변경을 필요로 합니다. 이 기능을 활성화하시겠습니까?&#x0a;지금 무엇을 하고 있는지 잘 이해하고 계신 경우에만 '아니오'를 선택해 주십시오.</system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">하나 이상의 활성화된 모드가 정상적으로 작동하기 위해서 세이브 파일 경로 변경을 필요로 합니다. 이 기능을 활성화하시겠습니까?&#x0a;지금 무엇을 하고 있는지 잘 이해하고 계신 경우에만 &apos;아니오&apos;를 선택해 주십시오.</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" >모드 의존 관계를 해결하지 못했습니다</system:String>
     <system:String x:Key="MainUIMissingDepends"       >다음 모드는 의존 관계가 없습니다:</system:String>
     <system:String x:Key="MainUIMissingDependsResolve">GB 모드 해결</system:String>
-    <system:String x:Key="MainUIResolvable" xml:space="preserve">'GB 모드 해결'을 클릭하면&#x0a;GameBanana에서 의존 관계를 자동으로 해결할 수 있습니다.</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">&apos;GB 모드 해결&apos;을 클릭하면&#x0a;GameBanana에서 의존 관계를 자동으로 해결할 수 있습니다.</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >설정을 선택해 주십시오!</system:String>
@@ -189,12 +192,14 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >코드 업데이트 없음</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager가 게임 경로에 접근할 수 없었습니다.&#x0a;Users 그룹이 이하의 경로와 모든 폴더 및 파일에 &quot;쓰기&quot; 권한이 있는지 확인해 주십시오.&#x0a;&#x0a;{0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >정말로 &quot;{0}&quot;를 삭제하시겠습니까?&#x0a;이 작업은 취소할 수 없습니다!</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0}은/는 이미 최신 버전입니다.</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >{0}의 최신 버전을 이용할 수 있습니다! ({1})</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">정말로 업데이트를 취소하시겠습니까?&#x0a;{0}에 문제가 발생할 수 있습니다.</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >7-Zip 또는 WinRAR를 찾을 수 없었습니다!&#x0a;이것들은 모드 데이터를 추출하는 데 필요합니다.&#x0a;&#x0a;둘 중 하나가 시스템에 설치되어 있는지 확인해 주십시오.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >Hedge Mod Manager가 게임 경로에 접근할 수 없었습니다.&#x0a;Users 그룹이 이하의 경로와 모든 폴더 및 파일에 &quot;쓰기&quot; 권한이 있는지 확인해 주십시오.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"             >정말로 &quot;{0}&quot;를 삭제하시겠습니까?&#x0a;이 작업은 취소할 수 없습니다!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"             >{0}은/는 이미 최신 버전입니다.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             >{0}의 최신 버전을 이용할 수 있습니다! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate"       >정말로 업데이트를 취소하시겠습니까?&#x0a;{0}에 문제가 발생할 수 있습니다.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor"        >7-Zip 또는 WinRAR를 찾을 수 없었습니다!&#x0a;이것들은 모드 데이터를 추출하는 데 필요합니다.&#x0a;&#x0a;둘 중 하나가 시스템에 설치되어 있는지 확인해 주십시오.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">새 릴리즈 채널 업데이트</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >릴리즈 채널에 새 업데이트가 있습니다. 개발 채널에 남아 있으면 원치 않은 문제가 발생할 수 있습니다.&#x0a;&#x0a;릴리즈 채널로 변경하시겠습니까?</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >완료</system:String>
