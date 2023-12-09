@@ -110,7 +110,12 @@ namespace HedgeModManager.Properties {
         ///}
         ///
         ///th, td {
-        ///    padding:  [rest of string was truncated]&quot;;.
+        ///    padding: 2px;
+        ///}
+        ///
+        ///th {
+        ///    text-align: left;
+        ///}.
         /// </summary>
         internal static string GBStyleSheet {
             get {
@@ -159,7 +164,8 @@ namespace HedgeModManager.Properties {
         ///        None = 0x00,
         ///
         ///        /// &lt;summary&gt;
-        ///        ///  The left mou [rest of string was truncated]&quot;;.
+        ///        ///  The left mouse button.
+        ///        / [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Keys {
             get {
@@ -184,7 +190,7 @@ namespace HedgeModManager.Properties {
         ///                IntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
         ///
         ///        [DllImport(&quot;kernel32.dll&quot;, CharSet = CharSet.Auto)]
-        ///        public static extern  [rest of string was truncated]&quot;;.
+        ///        public static extern IntPtr GetModule [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MemoryService {
             get {
@@ -250,7 +256,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HiteModLoader.dll.
+        ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HiteModLoader.zip.
         /// </summary>
         internal static string URL_HML_DL {
             get {
@@ -367,7 +373,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 1238b69344e5e21f475b3e90f9707a7d048776e5.
         /// </summary>
         internal static string Version {
             get {

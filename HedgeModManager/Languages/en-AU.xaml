@@ -80,10 +80,11 @@
 
     <!-- Diff UI Strings -->
     <system:String x:Key="DiffUITitle"   >Changelog</system:String>
-    <system:String x:Key="DiffUIAdded"   >Added: {0}</system:String>
-    <system:String x:Key="DiffUIModified">Modified: {0}</system:String>
-    <system:String x:Key="DiffUIRemoved" >Removed: {0}</system:String>
-    <system:String x:Key="DiffUIRenamed" >Renamed: {0}</system:String>
+    <system:String x:Key="DiffUIAdded"   >Added</system:String>
+    <system:String x:Key="DiffUIModified">Modified</system:String>
+    <system:String x:Key="DiffUIRemoved" >Removed</system:String>
+    <system:String x:Key="DiffUIRenamed" >Renamed</system:String>
+    <system:String x:Key="DiffUIMoved"   >Moved</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->

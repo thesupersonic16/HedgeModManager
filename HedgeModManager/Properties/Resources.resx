@@ -158,7 +158,7 @@ Do you want run the HMM Auto Installer?</value>
     <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicOrigins.hmm</value>
   </data>
   <data name="URL_HML_DL" xml:space="preserve">
-    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HiteModLoader.dll</value>
+    <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/HiteModLoader.zip</value>
   </data>
   <data name="URL_HMM_DEV" xml:space="preserve">
     <value>https://nightly.link/thesupersonic16/HedgeModManager/suites/{0}/artifacts/{1}</value>

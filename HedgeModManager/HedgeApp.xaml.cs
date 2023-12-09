@@ -715,42 +715,89 @@ namespace HedgeModManager
         public static bool InstallOtherLoader(bool toggle = true)
         {
             bool installed = false;
+            bool isZip = false;
             try
             {
                 // Do not attempt if no loader exists
                 if (CurrentGame.ModLoader == null)
                     return false;
 
-                string DLLFileName = Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderFileName);
+                string filePath = Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderFileName);
                 CurrentGame.ModLoader.MakeCompatible(StartDirectory);
 
-                if (File.Exists(DLLFileName) && toggle)
+                if (File.Exists(filePath) && toggle)
                 {
                     installed = true;
-                    File.Delete(DLLFileName);
+                    File.Delete(filePath);
                     return true;
+                }
+
+                // Change path to .zip if download URL contains it
+                if (CurrentGame.ModLoader.ModLoaderDownloadURL.EndsWith(".zip"))
+                {
+                    filePath = Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderID + ".zip");
+                    isZip = true;
                 }
 
                 // Downloads the loader
                 var downloader = new DownloadWindow($"Downloading {CurrentGame.ModLoader.ModLoaderName}",
-                    CurrentGame.ModLoader.ModLoaderDownloadURL, DLLFileName);
+                    CurrentGame.ModLoader.ModLoaderDownloadURL, filePath);
 
                 downloader.DownloadFailed += (ex) =>
                 {
                     var loader = CurrentGame.ModLoader.ModLoaderData;
                     if (loader != null)
-                        File.WriteAllBytes(DLLFileName, loader);
+                        File.WriteAllBytes(filePath, loader);
                     else
                     {
                         CreateOKMessageBox("Hedge Mod Manager", Lang.Localise("MainUIMLDownloadFail")).ShowDialog();
-                        if (File.Exists(DLLFileName))
+                        if (File.Exists(filePath))
                         {
                             try
                             {
-                                File.Delete(DLLFileName);
+                                File.Delete(filePath);
                             }
                             catch { }
                         }
+                    }
+                };
+
+                downloader.DownloadCompleted += () =>
+                {
+                    if (isZip && File.Exists(filePath))
+                    {
+                        // Extract archive
+                        //ZipFile.ExtractToDirectory(filePath, StartDirectory, true);
+
+                        // .NET Framework workaround
+                        using (var stream = File.OpenRead(filePath))
+                        {
+                            using (var zip = new ZipArchive(stream))
+                            {
+                                foreach (var entry in 
+                                    zip.Entries.Where(x => Path.GetFileName(x.FullName).Length != 0))
+                                {
+                                    string fullPath = Path.GetFullPath(Path.Combine(StartDirectory, entry.FullName));
+
+                                    Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+                                    entry.ExtractToFile(fullPath, true);
+                                }
+                            }
+                        }
+
+                        // Note: This will not work if the DLL within the zip is not {ModLoaderID}.dll
+                        // Replace modloader
+                        string loaderPath = Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderFileName);
+                        if (File.Exists(loaderPath))
+                            File.Delete(loaderPath);
+                        File.Move(Path.ChangeExtension(filePath, ".dll"), loaderPath);
+
+                        // Delete temp file
+                        try
+                        {
+                            File.Delete(filePath);
+                        }
+                        catch { }
                     }
                 };
 

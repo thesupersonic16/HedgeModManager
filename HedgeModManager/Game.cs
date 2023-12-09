@@ -141,6 +141,7 @@ namespace HedgeModManager
             SupportsSaveRedirection = true,
             Folders = new[] { "raw" },
             AppID = "1237320",
+            EGSID = "c5ca98fa240c4eb796835f97126df8e7",
             GBProtocol = "hedgemmrangers",
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
@@ -166,7 +167,6 @@ namespace HedgeModManager
         public static byte[] HE1ModLoader;
         public static byte[] HE2ModLoader;
         public static byte[] RainbowModLoader;
-        public static byte[] HiteModLoader;
 
         static EmbeddedLoaders()
         {
@@ -176,7 +176,6 @@ namespace HedgeModManager
                 HE1ModLoader = GetFile("HE1ML.dll");
                 HE2ModLoader = GetFile("HE2ModLoader.dll");
                 RainbowModLoader = GetFile("RainbowModLoader.dll");
-                HiteModLoader = GetFile("HiteModLoader.dll");
 
                 byte[] GetFile(string name)
                 {
@@ -261,7 +260,21 @@ namespace HedgeModManager
             }
             else
             {
-                Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
+                string path = "";
+                switch (Launcher)
+                {
+                    case GameLauncher.Steam:
+                        path = Path.Combine(startDirectory, Path.GetFileName(BaseGame.GamePath));
+                        break;
+                    case GameLauncher.Heroic:
+                    case GameLauncher.Epic:
+                        path = Path.Combine(startDirectory, Path.GetFileName(BaseGame.GamePathEGS));
+                        break;
+                    default:
+                        break;
+                }
+
+                Process.Start(new ProcessStartInfo(path)
                 {
                     WorkingDirectory = startDirectory
                 });
