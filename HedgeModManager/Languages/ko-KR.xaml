@@ -84,6 +84,7 @@
     <system:String x:Key="DiffUIModified">변경됨: {0}</system:String>
     <system:String x:Key="DiffUIRemoved" >제거됨: {0}</system:String>
     <system:String x:Key="DiffUIRenamed" >이름 변경됨: {0}</system:String>
+    <system:String x:Key="DiffUIMoved"   >이동됨: {0}</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
