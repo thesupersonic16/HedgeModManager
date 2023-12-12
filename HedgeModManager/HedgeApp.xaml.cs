@@ -294,6 +294,21 @@ namespace HedgeModManager
             MainWindow.Show();
         }
 
+        public static string MakeLongPath(string path)
+        {
+            if (path.StartsWith(@"\\?\"))
+            {
+                return path;
+            }
+
+            if (!Path.IsPathRooted(path))
+            {
+                path = Path.GetFullPath(path);
+            }
+
+            return @"\\?\" + path;
+        }
+
         private static async Task LoadNetworkConfigAsync()
         {
             Singleton.SetInstance(await NetworkConfig.LoadConfig(

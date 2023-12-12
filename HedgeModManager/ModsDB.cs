@@ -480,13 +480,17 @@ namespace HedgeModManager
                     }
 
                     // Creates all of the directories.
-                    Directory.CreateDirectory(Path.Combine(root, Path.GetFileName(folder)));
+                    Directory.CreateDirectory(HedgeApp.MakeLongPath(Path.Combine(root, Path.GetFileName(folder))));
                     foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
-                        Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(root, directoryName)));
+                    {
+                        Directory.CreateDirectory(HedgeApp.MakeLongPath(dirPath.Replace(folder, Path.Combine(root, directoryName))));
+                    }
 
                     // Copies all the files from the Directories.
                     foreach (string filePath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
-                        File.Copy(filePath, filePath.Replace(folder, Path.Combine(root, directoryName)), true);
+                    {
+                        File.Copy(HedgeApp.MakeLongPath(filePath), HedgeApp.MakeLongPath(filePath.Replace(folder, Path.Combine(root, directoryName))), true);
+                    }
                 }
             }
         }
