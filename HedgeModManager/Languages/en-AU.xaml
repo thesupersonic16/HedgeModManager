@@ -200,6 +200,8 @@
     <system:String xml:space="preserve" x:Key="DialogUINoDecompressor"        >Could not find 7-Zip or WinRAR!&#x0a;This is required to extract the mod data&#x0a;&#x0a;Please make sure you have either one installed on your system.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">New Release Channel Update</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >There is a new update on the Release channel. Sticking with the Development channel may result in unwanted instability.&#x0a;&#x0a;Would you like to switch to the Release channel?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorHeader" >Failed To Load Mod Configuration</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorBody"   >The mod "{0}" contains a malformed configuration schema.&#x0a;&#x0a;Please contact the mod author "{1}" for support.</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >completed</system:String>

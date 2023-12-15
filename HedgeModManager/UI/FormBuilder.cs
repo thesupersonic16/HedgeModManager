@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using HedgeModManager.Controls;
 using Newtonsoft.Json;
+using static HedgeModManager.Lang;
 
 namespace HedgeModManager.UI
 {
@@ -99,6 +100,22 @@ namespace HedgeModManager.UI
         public string IniFile { get; set; } = "Config.ini";
         public List<FormGroup> Groups = new List<FormGroup>();
         public Dictionary<string, List<FormEnum>> Enums = new Dictionary<string, List<FormEnum>>();
+
+        public bool TryLoad(ModInfo mod)
+        {
+            try
+            {
+                LoadValuesFromIni(Path.Combine(mod.RootDirectory, mod.ConfigSchema.IniFile));
+                return true;
+            }
+            catch 
+            {
+                var messageBox = new HedgeMessageBox(Localise("DialogUIConfigLoadErrorHeader"), LocaliseFormat("DialogUIConfigLoadErrorBody", mod.Title, mod.Author));
+                messageBox.AddButton(Localise("CommonUIOK"), () => messageBox.Close());
+                messageBox.ShowDialog();
+                return false;
+            }
+        }
 
         public void LoadValuesFromIni(string path)
         {
