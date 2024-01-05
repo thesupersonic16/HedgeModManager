@@ -574,8 +574,12 @@ namespace HedgeModManager
                 return;
 
             var codesPath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
+
             if (!File.Exists(codesPath))
+            {
+                UpdateCodes();
                 return;
+            }
 
             try
             {
