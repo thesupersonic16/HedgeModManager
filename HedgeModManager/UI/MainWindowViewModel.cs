@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
+using HedgeModManager.CodeCompiler;
 using HedgeModManager.Exceptions;
 using Newtonsoft.Json;
 using static HedgeModManager.Lang;
@@ -26,7 +27,7 @@ namespace HedgeModManager.UI
 
         public ModInfo SelectedMod { get; set; }
         public ModProfile SelectedModProfile { get; set; }
-        public Code SelectedCode { get; set; }
+        public CSharpCode SelectedCode { get; set; }
         public bool HiddenMode { get; set; }
         public bool DevBuild { get; set; }
 
