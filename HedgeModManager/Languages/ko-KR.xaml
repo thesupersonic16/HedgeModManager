@@ -247,7 +247,7 @@
     <system:String x:Key="ThemeLight" >라이트</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameSonicGenerations">소닉 제네레이션즈</system:String>
+    <system:String x:Key="GameSonicGenerations">소닉 제너레이션즈</system:String>
     <system:String x:Key="GameSonicLostWorld">소닉 로스트 월드</system:String>
     <system:String x:Key="GameSonicForces">소닉 포시즈</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">뿌요뿌요 테트리스 2</system:String>
