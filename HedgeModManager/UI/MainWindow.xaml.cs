@@ -391,8 +391,9 @@ namespace HedgeModManager
 
             CodesTree.ClearSelectedItems();
 
-            if (HedgeApp.AprilFools)
-                SavePlayButton.Content = "Save & Pay";
+            // Removed due to no localization - ĐeäTh
+            /*if (HedgeApp.AprilFools)
+                SavePlayButton.Content = "Save & Pay";*/
 
             // No game selected
             if (HedgeApp.CurrentGame == Games.Unknown)
@@ -1268,7 +1269,8 @@ namespace HedgeModManager
             Refresh();
             await CheckForUpdatesAsync();
 
-            if (HedgeApp.AprilFools)
+            // Removed this horrible "joke" - ĐeäTh
+            /* if (HedgeApp.AprilFools)
             {
                 var random = new Random();
                 if (random.Next(10) == 0)
@@ -1294,7 +1296,7 @@ namespace HedgeModManager
                     };
                     timer.Start();
                 }
-            }
+            }*/ 
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
