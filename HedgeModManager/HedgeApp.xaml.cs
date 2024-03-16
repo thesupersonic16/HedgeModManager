@@ -74,7 +74,7 @@ namespace HedgeModManager
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
-        public static bool AprilFools, IizukaBirthday, IsLinux = false;
+        public static bool IizukaBirthday, IsLinux = false;
 
         public static HttpClient HttpClient { get; private set; }
         public static string UserAgent { get; }
@@ -117,7 +117,6 @@ namespace HedgeModManager
             Singleton.SetInstance(HttpClient);
             Singleton.SetInstance<IWindowService>(new WindowServiceImplWindows());
 
-            AprilFools      = DateTime.Now.Day == 1 && DateTime.Now.Month == 4;
             IizukaBirthday  = DateTime.Now.Day == 16 && DateTime.Now.Month == 3;
 
             // Check for Wine, assuming Linux
@@ -180,7 +179,7 @@ namespace HedgeModManager
 #endif
 
             SplashScreen splashScreen = null;
-            if (AprilFools || IizukaBirthday)
+            if (IizukaBirthday)
             {
                 splashScreen = new ("Resources/Graphics/splash.png");
                 splashScreen.Show(false, true);
@@ -253,17 +252,6 @@ namespace HedgeModManager
                 }
             }
             catch { }
-
-            if (AprilFools)
-            {
-                var random = new Random();
-                if (random.Next(10) == 0)
-                {
-                    var langDict = new ResourceDictionary { Source = new Uri("Languages/en-UW.xaml", UriKind.Relative) };
-                    Current.Resources.MergedDictionaries.RemoveAt(3);
-                    Current.Resources.MergedDictionaries.Insert(3, langDict);
-                }
-            }
 
             CodeProvider.TryLoadRoslyn();
 

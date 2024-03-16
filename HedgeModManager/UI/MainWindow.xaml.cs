@@ -391,10 +391,6 @@ namespace HedgeModManager
 
             CodesTree.ClearSelectedItems();
 
-            // Removed due to no localization - ĐeäTh
-            /*if (HedgeApp.AprilFools)
-                SavePlayButton.Content = "Save & Pay";*/
-
             // No game selected
             if (HedgeApp.CurrentGame == Games.Unknown)
             {
@@ -1268,35 +1264,6 @@ namespace HedgeModManager
             RefreshProfiles();
             Refresh();
             await CheckForUpdatesAsync();
-
-            // Removed this horrible "joke" - ĐeäTh
-            /* if (HedgeApp.AprilFools)
-            {
-                var random = new Random();
-                if (random.Next(10) == 0)
-                {
-                    CleaningGrid.Visibility = Visibility.Visible;
-                    DispatcherTimer timer = new DispatcherTimer();
-                    timer.Interval = TimeSpan.FromMilliseconds(175);
-                    int skipped = 0;
-                    SaveButton.IsEnabled = SavePlayButton.IsEnabled = false;
-                    timer.Tick += (sender, e) =>
-                    {
-                        if (random.Next(5) == 0)
-                            ++skipped;
-                        if (ViewModel.Mods.Count <= skipped)
-                        {
-                            RefreshUI();
-                            RefreshButton.IsEnabled = SaveButton.IsEnabled = SavePlayButton.IsEnabled = true;
-                            CleaningGrid.Visibility = Visibility.Collapsed;
-                            timer.Stop();
-                            return;
-                        }
-                        ViewModel.Mods.RemoveAt(skipped);
-                    };
-                    timer.Start();
-                }
-            }*/ 
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
