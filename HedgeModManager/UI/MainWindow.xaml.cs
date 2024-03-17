@@ -466,6 +466,7 @@ namespace HedgeModManager
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentGameInstall;
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
+            Events.OnMainUIRefresh(this);
         }
 
         public void FilterCodes(string text)

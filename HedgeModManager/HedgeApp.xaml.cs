@@ -74,7 +74,7 @@ namespace HedgeModManager
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
-        public static bool IizukaBirthday, IsLinux = false;
+        public static bool IsLinux = false;
 
         public static HttpClient HttpClient { get; private set; }
         public static string UserAgent { get; }
@@ -116,8 +116,6 @@ namespace HedgeModManager
 
             Singleton.SetInstance(HttpClient);
             Singleton.SetInstance<IWindowService>(new WindowServiceImplWindows());
-
-            IizukaBirthday  = DateTime.Now.Day == 16 && DateTime.Now.Month == 3;
 
             // Check for Wine, assuming Linux
             RegistryKey key = null;
@@ -177,13 +175,6 @@ namespace HedgeModManager
                 ExceptionWindow.UnhandledExceptionEventHandler(e.ExceptionObject as Exception, e.IsTerminating);
             };
 #endif
-
-            SplashScreen splashScreen = null;
-            if (IizukaBirthday)
-            {
-                splashScreen = new ("Resources/Graphics/splash.png");
-                splashScreen.Show(false, true);
-            }
 
             // Gets the embeded version
             CPKREDIRVersion = GetCPKREDIRFileVersion(true);
@@ -255,8 +246,7 @@ namespace HedgeModManager
 
             CodeProvider.TryLoadRoslyn();
 
-            if (splashScreen != null)
-                splashScreen.Close(TimeSpan.FromSeconds(0.5));
+            Events.OnStartUp();
 
             application.Run();
         }
@@ -1185,6 +1175,7 @@ namespace HedgeModManager
                 // Cursed
                 Unsafe.Unbox<Thickness>(window.FindResource("HedgeWindowGridMargin")) = new Thickness(2);
             }
+            Events.OnWindowLoaded(window);
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
