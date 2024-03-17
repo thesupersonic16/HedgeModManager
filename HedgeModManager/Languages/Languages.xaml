@@ -20,6 +20,7 @@
         <local:LangEntry FileName="it-IT" Name="Italiano (Italy)"/>
         <local:LangEntry FileName="ja-JP" Name="日本語 (Japanese)"/>
         <local:LangEntry FileName="ko-KR" Name="한국어 (Korean)"/>
+        <local:LangEntry FileName="hu-HU" Name="Magyar (Hungarian)"/>
     </local:LanguageList>
     
 </ResourceDictionary>
