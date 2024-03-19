@@ -79,6 +79,8 @@
                         <Label Content="NextinHKRY"/>
                         <Label Content="OctSquid"/>
                         <Label Content="teabarley"/>
+                        <Label Content="kaszarobert"/>
+                        <Label Content="ĐeäTh"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <Label Content="Portuguese translations"/>
@@ -97,6 +99,8 @@
                         <Label Content="Italian translation"/>
                         <Label Content="Japanese translation"/>
                         <Label Content="Korean translation"/>
+                        <Label Content="Hungarian translation"/>
+                        <Label Content="Hungarian translation reviewing"/>
                     </StackPanel>
                 </Grid>
             </ScrollViewer>
