@@ -22,6 +22,7 @@ namespace HedgeModManager
         public static bool CheckLoaderUpdates { get; set; } = true;
         public static bool CheckModUpdates { get; set; } = true;
         public static bool KeepOpen { get; set; } = true;
+        public static bool AllowEvents { get; set; } = true;
 
         static RegistryConfig()
         {
@@ -43,6 +44,7 @@ namespace HedgeModManager
             key.SetValue(nameof(CheckLoaderUpdates), CheckLoaderUpdates ? 1 : 0);
             key.SetValue(nameof(CheckModUpdates), CheckModUpdates ? 1 : 0);
             key.SetValue(nameof(KeepOpen), KeepOpen ? 1 : 0);
+            key.SetValue(nameof(AllowEvents), AllowEvents ? 1 : 0);
             key.Close();
         }
 
@@ -72,6 +74,7 @@ namespace HedgeModManager
             CheckLoaderUpdates      = (int)key.GetValue(nameof(CheckLoaderUpdates), 1) != 0;
             CheckModUpdates         = (int)key.GetValue(nameof(CheckModUpdates), 1) != 0;
             KeepOpen                = (int)key.GetValue(nameof(KeepOpen), 1) != 0;
+            AllowEvents             = (int)key.GetValue(nameof(AllowEvents), 1) != 0;
             key.Close();
         }
     }

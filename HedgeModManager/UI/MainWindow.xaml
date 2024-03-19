@@ -419,7 +419,8 @@
                                         <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"     IsChecked="{Binding Path=(local:RegistryConfig.CheckModUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
                                         <CheckBox Content="{DynamicResource SettingsUIUpdateCodesOnLaunch}" IsChecked="{Binding Path=(local:RegistryConfig.UpdateCodesOnLaunch)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
                                         <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"         IsChecked="{Binding Path=(local:RegistryConfig.KeepOpen)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIHMMEvents}"           IsChecked="{Binding Path=(local:RegistryConfig.AllowEvents)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked"/>
                                     </StackPanel>
 
                                     <Grid>

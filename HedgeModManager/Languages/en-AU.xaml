@@ -109,6 +109,7 @@
     <system:String x:Key="SettingsUIUpdateCodesOnLaunch">Automatically update community codes on launch</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"        >Keep Hedge Mod Manager open after starting a game</system:String>
     <system:String x:Key="SettingsUICodesUseTreeView"   >Use tree view for codes list</system:String>
+    <system:String x:Key="SettingsUIHMMEvents"          >Enable events</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate"     >Check for Updates</system:String>
     <system:String x:Key="SettingsUIAboutHMM"           >About Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"           >Language:</system:String>
