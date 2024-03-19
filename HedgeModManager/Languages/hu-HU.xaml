@@ -4,7 +4,7 @@
   xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <!-- Common UI Strings -->
-    <system:String x:Key="CommonUIClose"   >Bezár</system:String>
+    <system:String x:Key="CommonUIClose"   >Bezárás</system:String>
     <system:String x:Key="CommonUIOK"      >OK</system:String>
     <system:String x:Key="CommonUICancel"  >Mégse</system:String>
     <system:String x:Key="CommonUIYes"     >Igen</system:String>
@@ -26,7 +26,7 @@
     <system:String x:Key="MainUIAddMod"        >Mod hozzáadása</system:String>
     <system:String x:Key="MainUIRefreshModList">Lista frissítése</system:String>
     <system:String x:Key="MainUISave"          >Mentés</system:String>
-    <system:String x:Key="MainUISaveAndPlay"   >Mentés és játék indítása</system:String>
+    <system:String x:Key="MainUISaveAndPlay"   >Mentés és indítás</system:String>
     <system:String x:Key="MainUIConfigureMod"  >Mod konfigurálása</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Nem sikerült letölteni a modbetöltőt.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Nem sikerült telepíteni a modbetöltőt.&#x0a;Kérjük, ellenőrizze, hogy rendelkezik-e játékfájlok írási jogosultságával!</system:String>
@@ -57,7 +57,7 @@
     <system:String x:Key="ModsUIFeatureCodeDisable"  >Ez a mod nem tartalmaz egyéni kódot.</system:String>
     <system:String x:Key="ModsUIModDragDrop"         >A modok betöltési sorrendje megváltoztatható fogd és vidd módszerrel.</system:String>
     <system:String x:Key="ModsUISearch"              >Keresés: </system:String>
-    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">A Hedge Mod Manager azt észlelte, hogy 1 vagy több modnál érvénytelen az include mappa.&#x0a;Engedélyezi a Hedge Mod Managernek, hogy megpróbálja ezt kijavítani?</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">A Hedge Mod Manager azt észlelte, hogy 1 vagy több modnál érvénytelen az include mappa.&#x0a;Engedélyezi a Hedge Mod Manager-nek, hogy megpróbálja ezt kijavítani?</system:String>
     <system:String xml:space="preserve" x:Key="ModsUINoMods">...Itt nincs sok minden.&#x0a;Menj, szerezz néhány modot!</system:String>
 
     <!-- Codes UI Strings -->
@@ -110,7 +110,7 @@
     <system:String x:Key="SettingsUIKeepHMMOpen"        >Hedge Mod Manager maradjon nyitva a játék indítása után</system:String>
     <system:String x:Key="SettingsUICodesUseTreeView"   >Fa nézet használata a kódok listájához</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate"     >Frissítések keresése</system:String>
-    <system:String x:Key="SettingsUIAboutHMM"           >A Hedge Mod Managerről</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"           >A Hedge Mod Manager-ről</system:String>
     <system:String x:Key="SettingsUILanguage"           >Nyelv:</system:String>
     <system:String x:Key="SettingsUITheme"              >Téma:</system:String>
     <system:String x:Key="SettingsUIReleaseChannel"     >Frissítési csatorna:</system:String>
@@ -132,13 +132,13 @@
     <system:String x:Key="MainUIMissingDependsHeader" >Nem sikerült feloldani a mod függőségeket</system:String>
     <system:String x:Key="MainUIMissingDepends"       >A következő modok függőségei hiányoznak:</system:String>
     <system:String x:Key="MainUIMissingDependsResolve">GB modok függőségeinek feloldása</system:String>
-    <system:String x:Key="MainUIResolvable" xml:space="preserve">Egy vagy több függőség automatikusan feloldható&#x0a;a GameBananából a "GB modok függőségeinek feloldása" gombra kattintva.</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">Egy vagy több függőség automatikusan feloldható&#x0a;GameBanana-ról a "GB modok függőségeinek feloldása" gombra kattintva.</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >Kérjük, válasszon egy opciót!</system:String>
 
     <!-- AboutWindow UI Strings -->
-    <system:String x:Key="AboutWindowUITitle"      >A Hedge Mod Managerről</system:String>
+    <system:String x:Key="AboutWindowUITitle"      >A Hedge Mod Manager-ről</system:String>
     <system:String x:Key="AboutWindowUILine1"      >A program célja, hogy segítsen az embereknek könnyen betölteni Hedgehog Engine modokat.</system:String>
     <system:String x:Key="AboutWindowUILine2"      >A támogatott játékok egyikének jogszerűen birtokolt verziója szükséges.</system:String>
     <system:String x:Key="AboutWindowUICredits"    >Készítők</system:String>
@@ -195,7 +195,7 @@
     <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >A Hedge Mod Manager nem tudott hozzáférni a játék mappájához.&#x0a;Kérjük, ellenőrizze, hogy a Felhasználók csoportban az &quot;Írás&quot; engedélyezve van-e az alábbi mappában és annak összes fájljában és mappájában!&#x0a;&#x0a;{0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"             >Biztos, hogy törölni szeretné a &quot;{0}&quot;?&#x0a;Ez a művelet nem vonható vissza!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest"             >{0} már naprakész.</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             >A {0} újabb verziója elérhető! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             >A(z) {0} újabb verziója elérhető! ({1})</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate"       >Biztos, hogy meg kívánja szakítani a frissítést?&#x0a;Ez tönkreteheti a következőt: {0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINoDecompressor"        >A 7-Zip vagy a WinRAR program nem található.&#x0a;Szükséges a mod adatainak kicsomagolásához&#x0a;&#x0a;Kérjük, győződjön meg róla, hogy valamelyik telepítve van a rendszerén!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">Új kiadási csatorna frissítés</system:String>
@@ -213,8 +213,8 @@
     <!-- Mod Description UI Strings -->
     <system:String x:Key="ModDescriptionUIAbout">A következőről: {0}</system:String>
     <system:String x:Key="ModDescriptionUIMadeBy">Készítette</system:String>
-    <system:String x:Key="ModDescriptionUIMadeOn">Ekkor</system:String>
-    <system:String x:Key="ModDescriptionUIDate">ezen a napon</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">ekkor</system:String>
+    <system:String x:Key="ModDescriptionUIDate">Ezen a napon</system:String>
 
     <!-- Mod Downloader Strings -->
     <system:String x:Key="ModDownloaderFailed">Sikertelen a mod letöltése</system:String>
@@ -233,8 +233,8 @@
     <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager kivételt dobott.</system:String>
     <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager hibába ütközött.</system:String>
     <system:String x:Key="ExceptionWindowButtonCopyLog"   >Napló másolása a vágólapra</system:String>
-    <system:String x:Key="ExceptionWindowButtonIgnore"    >Kihagy és bezár</system:String>
-    <system:String x:Key="ExceptionWindowButtonReport"    >Jelentés beküldése a GitHubra</system:String>
+    <system:String x:Key="ExceptionWindowButtonIgnore"    >Kihagy és bezárás</system:String>
+    <system:String x:Key="ExceptionWindowButtonReport"    >Jelentés beküldése a GitHub-ra</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Új frissítés érhető el!</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Úgy tűnik, hogy a Hedge Mod Manager ezen verziója elavult.&#x0a;Erősen ajánlott először frissíteni, és megnézni, hogy a probléma továbbra is fennáll-e.&#x0a;Szeretne most frissíteni?</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">Hiba történt a frissítés közben.</system:String>
