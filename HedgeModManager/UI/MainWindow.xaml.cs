@@ -1534,8 +1534,8 @@ namespace HedgeModManager
 
         private void UpdateCodes(string newContents = null, List<DiffBlock> diff = null)
         {
-            string codesFilePath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
-            bool codesFileExists = File.Exists(codesFilePath);
+            var codesFilePath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
+            var codesFileExists = File.Exists(codesFilePath);
 
             try
             {
@@ -1551,7 +1551,7 @@ namespace HedgeModManager
                     Refresh();
                     CodesOutdated = false;
 
-                    if (oldCodes != null)
+                    if (codesFileExists)
                     {
                         diff ??= oldCodes.CalculateDiff(new CodeFile(codesFilePath)).ToList();
                         DisplayDiff(diff);
@@ -1572,7 +1572,7 @@ namespace HedgeModManager
                         CodesOutdated = false;
 
                         // Don't display diff for initial download.
-                        if (oldCodes != null)
+                        if (codesFileExists)
                             DisplayDiff(new CodeFile(codesFilePath).CalculateDiff(oldCodes).ToList());
                     }
                 };
@@ -1584,67 +1584,67 @@ namespace HedgeModManager
             {
                 UpdateStatus(Localise("StatusUIDownloadFailed"));
             }
+        }
 
-            void DisplayDiff(List<DiffBlock> blocks)
+        private void DisplayDiff(List<DiffBlock> blocks)
+        {
+            if (blocks.Count == 0)
             {
-                if (blocks.Count == 0)
-                {
-                    UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
-                    return;
-                }
+                UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
+                return;
+            }
 
-                var sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-                foreach (var block in blocks)
-                {
-                    sb.AppendLine($"- {DiffBlockToString(block)}");
+            foreach (var block in blocks)
+            {
+                sb.AppendLine($"- {DiffBlockToString(block)}");
 
-                    bool isCodeEnabled = ModsDatabase.Codes.Find
-                    (
-                        x =>
-                        {
-                            if (block.Data.Key is CSharpCode cc)
-                            {
-                                if (x.EndsWith(cc.Name))
-                                    return true;
-                            }
-
-                            return false;
-                        }
-                    )
-                    != null;
-
-                    var code = ViewModel.ModsDB.CodesDatabase.Codes.Find
-                    (
-                        x =>
-                        {
-                            if (block.Data.Value is CSharpCode cc)
-                            {
-                                if (x.Name == cc.Name && x.Category == cc.Category)
-                                    return true;
-                            }
-
-                            return false;
-                        }
-                    );
-
-                    if (code != null)
-                        code.Enabled = isCodeEnabled;
-                }
-
-                SaveConfig();
-
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                {
-                    var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), type: InputType.MarkDown)
+                bool isCodeEnabled = ModsDatabase.Codes.Find
+                (
+                    x =>
                     {
-                        MaxHeight = 550,
-                        MaxWidth = 800
-                    };
+                        if (block.Data.Key is CSharpCode cc)
+                        {
+                            if (x.EndsWith(cc.Name))
+                                return true;
+                        }
 
-                    box.AddButton(Localise("CommonUIOK"), box.Close);
-                    box.ShowDialog();
-                }
+                        return false;
+                    }
+                )
+                != null;
+
+                var code = ViewModel.ModsDB.CodesDatabase.Codes.Find
+                (
+                    x =>
+                    {
+                        if (block.Data.Value is CSharpCode cc)
+                        {
+                            if (x.Name == cc.Name && x.Category == cc.Category)
+                                return true;
+                        }
+
+                        return false;
+                    }
+                );
+
+                if (code != null)
+                    code.Enabled = isCodeEnabled;
+            }
+
+            SaveConfig();
+
+            if (!string.IsNullOrEmpty(sb.ToString()))
+            {
+                var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), type: InputType.MarkDown)
+                {
+                    MaxHeight = 550,
+                    MaxWidth = 800
+                };
+
+                box.AddButton(Localise("CommonUIOK"), box.Close);
+                box.ShowDialog();
             }
         }
 
