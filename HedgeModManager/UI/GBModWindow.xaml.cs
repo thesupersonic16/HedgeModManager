@@ -173,17 +173,17 @@ namespace HedgeModManager.UI
                         HorizontalAlignment.Right, TextAlignment.Center, InputType.MarkDown);
                     dialog.Owner = this;
 
+                    dialog.AddButton(Localise("CommonUIRetry"), () =>
+                    {
+                        dialog.Close();
+                        Download_Click(sender, e);
+                    });
+
                     dialog.AddButton(Localise("CommonUICancel"), () =>
                     {
                         dialog.Close();
                         DialogResult = false;
                         Close();
-                    });
-
-                    dialog.AddButton(Localise("CommonUIRetry"), () =>
-                    {
-                        dialog.Close();
-                        Download_Click(sender, e);
                     });
 
                     dialog.ShowDialog();
