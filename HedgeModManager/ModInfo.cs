@@ -269,7 +269,10 @@ namespace HedgeModManager
                 return;
 
             if (ConfigSchema.TryLoad(this))
+            {
+                ConfigSchema.LoadValuesFromIni(fileName);
                 ConfigSchema.SaveIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
+            }
         }
 
         public void FixIncludeDirectories()
