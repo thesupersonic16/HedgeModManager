@@ -60,8 +60,12 @@ namespace HedgeModManager
             // 1st of April
             if (CheckDate(4, 1))
             {
-                mainWindow.Title = 
-                    mainWindow.Title.Replace(HedgeApp.ProgramName, "SonicGMI");
+                string title = $"SonicGMI v{HedgeApp.VersionString} (Sonic Generations Mod Installer)";
+                if (mainWindow.SelectedModProfile != null)
+                    title += $" - {mainWindow.SelectedModProfile?.Name}";
+                if (HedgeApp.IsLinux)
+                    title += " (Linux)";
+                mainWindow.Title = title;
             }
         }
 
