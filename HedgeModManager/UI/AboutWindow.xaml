@@ -20,7 +20,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Image Width="64" Height="64" Source="/Resources/Graphics/icon256.png"/>
+            <Image Width="64" Height="64" Source="{DynamicResource AppIcon}"/>
             <Label Content="{Binding ProgramName, Source={x:Static Application.Current}}" Height="Auto" Width="Auto" FontSize="36"/>
         </StackPanel>
         <Label Content="{StaticResource AboutWindowUILine1}" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
@@ -31,7 +31,7 @@
                     <ColumnDefinition Width="0.45*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
+                <StackPanel x:Name="CreditNames" Grid.Column="0">
                     <Label Content="SuperSonic16"/>
                     <Label Content="Sajid"/>
                     <Label Content="Skyth"/>
@@ -42,7 +42,7 @@
                     <Label Content="Hyper"/>
                     <Label Content="Wam"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1">
+                <StackPanel x:Name="CreditRoles" Grid.Column="1">
                     <Label Content="Project lead, HE2ML"/>
                     <Label Content="Project lead, HE1ML"/>
                     <Label Content="RainbowModLoader, contributing to HE1ML"/>

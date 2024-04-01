@@ -62,6 +62,14 @@ namespace HedgeModManager
                 // Apply window icon
                 window.Icon = Application.Current.Resources["AppIcon"] as ImageSource;
                 window.Title = Localise(window.Title);
+
+                var creditNames = window.FindName("CreditNames") as StackPanel;
+                var creditRoles = window.FindName("CreditRoles") as StackPanel;
+                if (creditNames != null && creditRoles != null)
+                {
+                    creditNames.Children.Insert(0, new Label() { Content = "Darío" });
+                    creditRoles.Children.Insert(0, new Label() { Content = "Project Lead" });
+                }
             }
         }
 
