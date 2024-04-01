@@ -68,7 +68,7 @@ namespace HedgeModManager
                 if (creditNames != null && creditRoles != null)
                 {
                     creditNames.Children.Insert(0, new Label() { Content = "Darío" });
-                    creditRoles.Children.Insert(0, new Label() { Content = "Project Lead" });
+                    creditRoles.Children.Insert(0, new Label() { Content = "Project lead" });
                 }
             }
         }
