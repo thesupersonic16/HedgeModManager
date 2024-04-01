@@ -61,7 +61,7 @@ namespace HedgeModManager
         public static Version Version = Assembly.GetExecutingAssembly().GetName().Version;
         public static string StartDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static string AppPath = Path.Combine(StartDirectory, AppDomain.CurrentDomain.FriendlyName);
-        public static string ProgramName = "Hedge Mod Manager";
+        public static string ProgramName { get; set; } = "Hedge Mod Manager";
         public static string VersionString = $"{Version.Major}.{Version.Minor}-{Version.Revision}";
         public static string ModsDbPath;
         public static string ConfigPath;
@@ -446,9 +446,9 @@ namespace HedgeModManager
             while (Current.Resources.MergedDictionaries.Count > 5)
                 Current.Resources.MergedDictionaries.RemoveAt(5);
             // No need to load the fallback language on top
-            if (culture == "en-AU")
-                return;
-            Current.Resources.MergedDictionaries.Add(langDict);
+            if (culture != "en-AU")
+                Current.Resources.MergedDictionaries.Add(langDict);
+            Events.OnLanguageLoad(langDict, culture);
         }
 
         public static void LoadLanguageFolder()
