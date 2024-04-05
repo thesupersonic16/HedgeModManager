@@ -258,7 +258,7 @@ namespace HedgeModManager
             if (!Directory.Exists(Path.GetDirectoryName(fileName)))
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
 
-            if (ConfigSchema.TryLoad(this, fileName))
+            if (ConfigSchema.TryLoad(this))
                 ConfigSchema.SaveIni(fileName);
         }
 
@@ -269,9 +269,7 @@ namespace HedgeModManager
                 return;
 
             if (ConfigSchema.TryLoad(this, fileName))
-            {
                 ConfigSchema.SaveIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
-            }
         }
 
         public void FixIncludeDirectories()
