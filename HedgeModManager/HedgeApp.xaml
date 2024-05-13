@@ -51,6 +51,8 @@
             <local:BoolToGridHeightConverter x:Key="BoolToGridHeightConverter"/>
             <system:Double x:Key="HMM.Window.DialogBottomHeight">45</system:Double>
 
+            <BitmapImage x:Key="AppIcon" UriSource="Resources/Graphics/icon256.png"/>
+            
             <Style TargetType="{x:Type UserControl}" x:Key="DesignTimeStyle">
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
             </Style>
@@ -74,6 +76,11 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </Style>
+
+            <Style x:Key="SeparatorThemeStyle" TargetType="{x:Type Separator}">
+                <Setter Property="Background" Value="{DynamicResource HMM.Menu.HoverColor}"/>
+                <Setter Property="Margin" Value="0,2.5,0,2.5"/>
             </Style>
 
             <Style TargetType="{x:Type MenuItem}">
@@ -130,6 +137,8 @@
                 <Setter Property="Foreground" Value="{DynamicResource HMM.Window.ForegroundBrush}"/>
             </Style>
 
+            <CornerRadius x:Key="HedgeWindowRoundedCornerRadius">8</CornerRadius>
+            <Thickness x:Key="HedgeWindowGridMargin">1</Thickness>
             <Style x:Key="HedgeWindow" TargetType="{x:Type Window}">
                 <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
                 <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
@@ -138,8 +147,8 @@
                     <Setter.Value>
                         <WindowChrome 
                             CaptionHeight="22"
-                            CornerRadius="0"
-                            GlassFrameThickness="0"
+                            CornerRadius="8"
+                            GlassFrameThickness="0,0,0,1"
                             NonClientFrameEdges="None"
                             ResizeBorderThickness="5"
                             UseAeroCaptionButtons="False"/>
@@ -149,34 +158,34 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Window}">
-                            <Grid>
+                            <Grid Background="{TemplateBinding Background}">
                                 <Border x:Name="OutlineBorder" BorderThickness="1" Background="Transparent" IsHitTestVisible="False" BorderBrush="{DynamicResource HMM.Window.AccentBrush2}" Panel.ZIndex="2"/>
-                                <Grid x:Name="WindowGrid" Margin="1" Background="{TemplateBinding Background}" Panel.ZIndex="1">
+                                <Grid x:Name="WindowGrid" Margin="{DynamicResource HedgeWindowGridMargin}" Background="{TemplateBinding Background}" Panel.ZIndex="1">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="24"/>
+                                        <RowDefinition Height="32"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
-                                    <Image Width="24" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0" Source="Resources/Graphics/icon256.png"/>
-                                    <Label Height="33" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,0,112,0" Foreground="#E9E9E9">
+                                    <Image Width="24" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8,4,0,0" Source="{DynamicResource AppIcon}"/>
+                                    <Label Height="33" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="38,10,112,0" Foreground="#E9E9E9">
                                         <TextBlock TextTrimming="CharacterEllipsis" Text="{TemplateBinding Title}"/>
                                     </Label>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Button x:Name="MinBtn" Style="{DynamicResource WindowFrameButton}" Click="Minimize_Click"
-                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                                            <Border BorderThickness="0,0,0,3" Padding="0,0,10,0" Margin="12,6,12,0" 
+                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="30">
+                                            <Border BorderThickness="0,0,0,3" Padding="0,0,10,0" Margin="12,10,12,0" 
                                                     BorderBrush="{DynamicResource HMM.Button.ForegroundBrush}" Background="Transparent"/>
                                         </Button>
 
                                         <Button x:Name="MaxBtn" Style="{DynamicResource WindowFrameButton}" Click="MaxBtn_Click"
-                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                                            <Border BorderThickness="2.5" Padding="3" Margin="0,2,0,2"
+                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="30">
+                                            <Border BorderThickness="2.5" Padding="3" Margin="0,4,0,2"
                                                     BorderBrush="{DynamicResource HMM.Button.ForegroundBrush}" Background="Transparent"/>
                                         </Button>
 
                                         <Button x:Name="CloseBtn" Style="{DynamicResource WindowFrameButtonClose}" Click="Close_Click" 
                                                 FontWeight="Bold" Foreground="{DynamicResource HMM.Button.ForegroundBrush}" 
-                                                FontSize="24" Content="×" Margin="0,0,0,0" Height="26"
-                                                Padding="0,-8,0,0" SnapsToDevicePixels="True">
+                                                FontSize="24" Content="×" Margin="0,0,0,0" Height="30"
+                                                Padding="0,-4,0,0" SnapsToDevicePixels="True">
                                         </Button>
                                     </StackPanel>
 

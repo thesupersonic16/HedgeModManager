@@ -1,32 +1,32 @@
 !!VERSION 1.0
 
-Patch "Stop Timer" by "CodeNameGamma"
+Patch "Stop Timer" in "Cheats" by "CodenameGamma"
 WriteNop(0x14017EE5A, 5)
 
-Patch "Disable Ring Loss From Damage" by "CodeNameGamma"
+Patch "Disable Ring Loss From Damage" in "Cheats" by "CodenameGamma"
 WriteNop(0x1404F77AC, 5)
 
-Patch "Disable Boost Drain" by "CodeNameGamma"
+Patch "Disable Boost Drain" in "Cheats" by "CodenameGamma"
 WriteNop(0x1404CFD62, 0x00000005)
 WriteNop(0x1403DF93E, 0x00000007)
 
-Patch "Disable Damage" by "SuperSonic16"
+Patch "Disable Damage" in "Cheats" by "SuperSonic16"
 WriteProtected<byte>(0x14046E1E0, 0xC3)
 
-Patch "Disable Dashpads" by "SuperSonic16"
+Patch "Disable Dashpads" in "Gameplay" by "SuperSonic16"
 WriteProtected<byte>(0x14046F9A0, 0xC3)
 
-Patch "Disable Ring Loss From Super Sonic" by "SuperSonic16"
+Patch "Disable Ring Loss From Super Sonic" in "Cheats" by "SuperSonic16"
 WriteNop(0x1404E1F54, 0x03)
 
-Patch "Enable Super Sonic with 1 Ring" by "SuperSonic16"
+Patch "Enable Super Sonic with 1 Ring" in "Cheats" by "SuperSonic16"
 WriteProtected<uint>(0x1404E1E8F, 0x4890C931)
 WriteProtected<byte>(0x1404E1E9B, 0x7E)
 
-Patch "Ignore Ring Count When Getting Hit" by "SuperSonic16"
+Patch "Ignore Ring Count When Getting Hit" in "Cheats" by "SuperSonic16"
 WriteNop(0x14046E4EE, 0x06)
 
-Patch "Max Rings" by "SuperSonic16"
+Patch "Max Rings" in "Cheats" by "SuperSonic16"
 WriteProtected<uint>(0x1403DA766, 0x0010BBE9)
 WriteProtected<ushort>(0x1403DA76A, 0x9000)
 WriteProtected<uint>(0x1403DB826, 0x0003E7B9)
@@ -34,7 +34,7 @@ WriteProtected<uint>(0x1403DB82A, 0x1C488900)
 WriteProtected<uint>(0x1403DB82E, 0xE9CF4D89)
 WriteProtected<uint>(0x1403DB832, 0xFFFFEF36)
 
-Patch "Widescreen Fix + FOV" by "Muzzarino Hezibeth"
+Patch "Widescreen Fix + FOV" in "Graphics" by "Muzzarino Hezibeth" does "Dynamically adjusts the aspect ratio and field of view to match the game resolution (recommended for ultrawide)."
 WriteProtected<float>(0x141DBED94, 1.7777777777777778f)
 WriteProtected<float>(0x14086BBE3, 1)
 WriteProtected<byte>(0x14086BA8B, 0xE9)
@@ -142,40 +142,40 @@ WriteProtected<uint>(0x14086BC12, 0xFFCF5C04)
 WriteProtected<byte>(0x140561815, 0xE9)
 WriteProtected<uint>(0x140561816, 0x0030A3EB)
 
-Patch "Wispon Gauge Stay's Full" by "CodeNameGamma"
+Patch "Wispon Gauge Stay's Full" in "Cheats" by "CodenameGamma"
 WriteNop(0x1404D228C, 0x00000004)
 
-Patch "Wispon Special Always Ready (Use Wispon Anytime)" by "CodeNameGamma"
+Patch "Wispon Special Always Ready (Use Wispon Anytime)" in "Cheats" by "CodenameGamma"
 WriteProtected<byte>(0x1423C060C, 0x01)
 
-Patch "Disable Wispon Boundaries" by "CodeNameGamma"
+Patch "Disable Wispon Boundaries" in "Cheats" by "CodenameGamma"
 WriteNop(0x140267527, 0x00000005)
 
-Patch "360 Degree Movement" by "Skyth"
+Patch "360 Degree Movement" in "Gameplay" by "Skyth"
 WriteNop(0x1404615B7, 4)
 
-Code "75 FPS (experimental)" by "M&M"
+Code "75 FPS (experimental)" in "Graphics" by "M&M"
 Write<float>(GetPointer(0x14240E818, 0x34), 1.0f / 75.0f); /* internal framerate */
 Write<float>(0x88D23BD8, 75.0f); /* external framerate */
 WriteNop(0x14061AE3B, 3); /* nop out framerate changer */
 WriteNop(0x14061D4FD, 5); /* nop out framerate changer */
 WriteNop(0x1406E5F96, 5); /* nop out framerate changer */
 
-Code "120 FPS (experimental)" by "M&M"
+Code "120 FPS (experimental)" in "Graphics" by "M&M"
 Write<float>(GetPointer(0x14240E818, 0x34), 1.0f / 120.0f); /* internal framerate */
 Write<float>(0x88D23BD8, 120.0f); /* external framerate */
 WriteNop(0x14061AE3B, 3); /* nop out framerate changer */
 WriteNop(0x14061D4FD, 5); /* nop out framerate changer */
 WriteNop(0x1406E5F96, 5); /* nop out framerate changer */
 
-Code "144 FPS (experimental)" by "M&M"
+Code "144 FPS (experimental)" in "Graphics" by "M&M"
 Write<float>(GetPointer(0x14240E818, 0x34), 1.0f / 144.0f); /* internal framerate */
 Write<float>(0x88D23BD8, 144.0f); /* external framerate */
 WriteNop(0x14061AE3B, 3); /* nop out framerate changer */
 WriteNop(0x14061D4FD, 5); /* nop out framerate changer */
 WriteNop(0x1406E5F96, 5); /* nop out framerate changer */
 
-Code "165 FPS (experimental)" by "M&M"
+Code "165 FPS (experimental)" in "Graphics" by "M&M"
 Write<float>(GetPointer(0x14240E818, 0x34), 1.0f / 165.0f); /* internal framerate */
 Write<float>(0x88D23BD8, 165.0f); /* external framerate */
 WriteNop(0x14061AE3B, 3); /* nop out framerate changer */

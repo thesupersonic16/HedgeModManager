@@ -144,7 +144,7 @@ namespace HMMCodes
             if (sigs.Length % 2 != 0)
                 return 0;
 
-            for (int i = 0; i < sigs.Length; i++)
+            for (int i = 0; i < sigs.Length - 1; i++)
             {
                 var result = ScanSignature(MakePatternFromString(sigs[i * 2 + 0]), sigs[i * 2 + 1]).ToInt64();
                 if (result != 0)

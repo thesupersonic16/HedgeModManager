@@ -46,8 +46,8 @@ namespace HedgeModManager
 
         public static List<GameInstall> SearchForGamesHeroic()
         {
-            // Find home folder
             string home = null;
+            string appdata = null;
             if (HedgeApp.IsLinux)
             {
                 home = Environment.GetEnvironmentVariable("WINEHOMEDIR")?.Replace("\\??\\", "");
@@ -58,16 +58,22 @@ namespace HedgeModManager
             else
             {
                 home = Environment.GetEnvironmentVariable("USERPROFILE");
+                appdata = Environment.GetEnvironmentVariable("APPDATA");
             }
 
             // Return if home folder is not found
-            if (home == null)
+            if (home == null || appdata == null)
                 return null;
 
-            string installedFilePath = Path.Combine(home, ".config", "legendary", "installed.json");
+            
+            string installedFilePath = Path.Combine(appdata, "heroic", "legendaryConfig", "legendary", "installed.json");
+            if (!File.Exists(installedFilePath))
+                installedFilePath = Path.Combine(home, ".config", "legendary", "installed.json");
+            if (!File.Exists(installedFilePath))
+                installedFilePath = Path.Combine(home, ".var", "app", "com.heroicgameslauncher.hgl", "config", "heroic", "legendaryConfig", "legendary", "installed.json");
             if (!File.Exists(installedFilePath))
                 installedFilePath = Path.Combine(home, ".var", "app", "com.heroicgameslauncher.hgl", "config", "legendary", "installed.json");
-            
+
             if (!File.Exists(installedFilePath))
                 return null;
 
@@ -81,6 +87,9 @@ namespace HedgeModManager
             {
                 return null;
             }
+
+            if (installations == null || installations?.Count == 0)
+                return null;
 
             var games = new List<GameInstall>();
 
@@ -116,7 +125,6 @@ namespace HedgeModManager
             {
                 launcherInstalled = JsonConvert.DeserializeObject<EGSLauncherInstalled>(File.ReadAllText(launcherInstalledFilePath));
             }
-
             catch
             {
                 return null;
@@ -135,7 +143,9 @@ namespace HedgeModManager
                 if (installation == null)
                     continue;
 
-                string fullPath = Path.Combine(installation.InstallLocation, game.GamePath.Substring(game.GamePath.IndexOf('\\') + 1));
+                string gamePath = game.GamePathEGS == String.Empty ? game.GamePath : game.GamePathEGS;
+
+                string fullPath = Path.Combine(installation.InstallLocation, gamePath.Substring(gamePath.IndexOf('\\') + 1));
 
                 if (File.Exists(fullPath))
                     games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.Epic));

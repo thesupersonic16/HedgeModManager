@@ -44,7 +44,7 @@ namespace HedgeModManager
 
         private void AboutModWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Escape)
+            if (e.Key == Key.Escape)
                 Close();
         }
 
