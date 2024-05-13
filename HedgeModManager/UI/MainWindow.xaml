@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
-        MinHeight="640" MinWidth="580" Height="640" Width="580" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
+        MinHeight="662" MinWidth="585" Height="662" Width="585" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
@@ -28,10 +28,13 @@
             <MenuItem x:Name="ContextMenuItemCheckUpdateAll" Header="{DynamicResource ModsUICheckUpdatesAll}" Click="UI_CheckUpdates_AllMods"/>
         </ContextMenu>
         <ContextMenu x:Key="CodesTreeContextMenu">
-            <MenuItem Header="{DynamicResource CodesUICopyCode}" Click="UI_CodesView_CopyToClipboard_Click" Tag="Item" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUICopyCode}"     Click="UI_CodesView_CopyToClipboard_Click" Tag="Item" Visibility="Collapsed"/>
             <Separator Style="{DynamicResource SeparatorThemeStyle}" Tag="Item" Visibility="Collapsed"/>
-            <MenuItem Header="{DynamicResource CodesUIExpand}"           Click="UI_CodesTree_ExpandAll_Click"/>
-            <MenuItem Header="{DynamicResource CodesUICollapse}"         Click="UI_CodesTree_CollapseAll_Click"/>
+            <MenuItem Header="{DynamicResource CodesUIExpandSub}"    Click="UI_CodesTree_ExpandAllChildren_Click"   Tag="Node" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUICollapseSub}"  Click="UI_CodesTree_CollapseAllChildren_Click" Tag="Node" Visibility="Collapsed"/>
+            <Separator Style="{DynamicResource SeparatorThemeStyle}" Tag="Node" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUIExpand}"       Click="UI_CodesTree_ExpandAll_Click"/>
+            <MenuItem Header="{DynamicResource CodesUICollapse}"     Click="UI_CodesTree_CollapseAll_Click"/>
         </ContextMenu>
         <ContextMenu x:Key="CodesListContextMenu">
             <MenuItem Header="{DynamicResource CodesUICopyCode}" Click="UI_CodesView_CopyToClipboard_Click"/>
@@ -193,12 +196,12 @@
                                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
                                                              Color="{DynamicResource HMM.Button.HoverColor}"/>
                                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                                             Color="{DynamicResource HMM.Button.HoverColor}" />
+                                                             Color="{DynamicResource HMM.Button.HoverColor}"/>
                                         </TreeView.Resources>
                                         <TreeView.ItemContainerStyle>
                                             <Style TargetType="{x:Type TreeViewItem}">
-                                                <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
-                                                <EventSetter Event="RequestBringIntoView" Handler="CodesTree_ViewItem_RequestBringIntoView"/>
+                                                <Setter      Property="IsExpanded"        Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                                <EventSetter Event="RequestBringIntoView" Handler="CodesTree_Item_RequestBringIntoView"/>
                                             </Style>
                                         </TreeView.ItemContainerStyle>
                                         <TreeView.ItemTemplate>
@@ -207,7 +210,7 @@
                                                     <Style TargetType="{x:Type TreeViewItem}">
                                                         <Setter Property="ToolTipService.ToolTip">
                                                             <Setter.Value>
-                                                                <ToolTip Content="{DynamicResource CodesUIInfo}" Tag="{Binding Path=Code.Description}">
+                                                                <ToolTip Content="{DynamicResource CodesUIInfo}" Tag="{Binding Path=Description}">
                                                                     <ToolTip.Style>
                                                                         <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
                                                                             <Style.Triggers>
@@ -223,10 +226,12 @@
                                                                 </ToolTip>
                                                             </Setter.Value>
                                                         </Setter>
-                                                        <EventSetter Event="MouseDoubleClick" Handler="CodesView_Item_MouseDoubleClick"/>
-                                                        <EventSetter Event="MouseEnter"       Handler="CodesView_Item_MouseEnter"/>
-                                                        <EventSetter Event="MouseLeave"       Handler="CodesView_Item_MouseLeave"/>
-                                                        <EventSetter Event="Selected"         Handler="CodesView_Item_Selected"/>
+                                                        <Setter      Property="IsExpanded"        Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                                        <EventSetter Event="RequestBringIntoView" Handler="CodesTree_Item_RequestBringIntoView"/>
+                                                        <EventSetter Event="MouseDoubleClick"     Handler="CodesView_Item_MouseDoubleClick"/>
+                                                        <EventSetter Event="MouseEnter"           Handler="CodesView_Item_MouseEnter"/>
+                                                        <EventSetter Event="MouseLeave"           Handler="CodesView_Item_MouseLeave"/>
+                                                        <EventSetter Event="Selected"             Handler="CodesView_Item_Selected"/>
                                                     </Style>
                                                 </HierarchicalDataTemplate.ItemContainerStyle>
                                                 <Grid>
@@ -236,8 +241,8 @@
                                                     </Grid.ColumnDefinitions>
 
                                                     <StackPanel Orientation="Horizontal">
-                                                        <CheckBox IsChecked="{Binding Path=Code.Enabled}" Margin="0,2,4,2" IsTabStop="False"
-                                                              Visibility="{Binding Path=IsRoot, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                                                        <CheckBox IsChecked="{Binding Path=Enabled}" Margin="0,2,4,2" IsTabStop="False"
+                                                              Visibility="{Binding Path=IsCategory, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
                                                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
                                                     </StackPanel>
                                                 </Grid>
@@ -409,11 +414,12 @@
                             <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2">
                                 <Grid>
                                     <StackPanel x:Name="HMMSettingsSackPanel" Margin="10,10,0,0">
-                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"    IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"    IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"  IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"      IsChecked="{Binding CPKREDIR.KeepOpen}"           Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}" Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"       IsChecked="{Binding Path=(local:RegistryConfig.CheckManagerUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"       IsChecked="{Binding Path=(local:RegistryConfig.CheckLoaderUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"     IsChecked="{Binding Path=(local:RegistryConfig.CheckModUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIUpdateCodesOnLaunch}" IsChecked="{Binding Path=(local:RegistryConfig.UpdateCodesOnLaunch)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"         IsChecked="{Binding Path=(local:RegistryConfig.KeepOpen)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView"/>
                                     </StackPanel>
 
                                     <Grid>

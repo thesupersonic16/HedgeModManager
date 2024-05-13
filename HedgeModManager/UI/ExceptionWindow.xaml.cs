@@ -31,6 +31,7 @@ namespace HedgeModManager
         // This should be kept in English as its used in creating reports
         public string UpdateStatus { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+        public string ReportRepository { get; set; } = "https://github.com/thesupersonic16/HedgeModManager";
 
         public ExceptionWindow(Exception exception, string extraInfo = "") : this()
         {
@@ -90,14 +91,30 @@ namespace HedgeModManager
                 body.AppendLine($"Exception:");
                 if (useMarkdown) body.AppendLine("```");
 
-                body.AppendLine($"    Type: {Exception.GetType().Name}");
+                if (Exception.GetType() != typeof(Exception))
+                {
+                    body.AppendLine($"    Type: {Exception.GetType().Name}");
+                }
+
                 body.AppendLine($"    Message: {Exception.Message}");
-                body.AppendLine($"    Source: {Exception.Source}");
-                body.AppendLine($"    Function: {Exception.TargetSite}");
+
+                if (!string.IsNullOrEmpty(Exception.Source))
+                {
+                    body.AppendLine($"    Source: {Exception.Source}");
+                }
+
+                if (Exception.TargetSite != null)
+                {
+                    body.AppendLine($"    Function: {Exception.TargetSite}");
+                }
+
                 if(Exception.StackTrace != null)
                     body.AppendLine($"    StackTrace: \n    {Exception.StackTrace.Replace("\n", "\n    ")}");
 
-                body.AppendLine($"    InnerException: {Exception.InnerException}");
+                if (Exception.InnerException != null)
+                {
+                    body.AppendLine($"    InnerException: {Exception.InnerException}");
+                }
 
                 if (useMarkdown) body.AppendLine("```");
                 body.AppendLine("");
@@ -127,7 +144,7 @@ namespace HedgeModManager
 
         private void Button_Report_Click(object sender, RoutedEventArgs e)
         {
-            string url = "https://github.com/thesupersonic16/HedgeModManager/issues/new";
+            string url = $"{ReportRepository}/issues/new";
             url += $"?title=[{HedgeApp.CurrentGame?.GameName}] ";
             url += $"&body={Uri.EscapeDataString(GetReport(true, true))}";
             Process.Start(url);

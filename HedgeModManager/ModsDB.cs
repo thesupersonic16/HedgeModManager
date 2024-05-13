@@ -15,13 +15,27 @@ using HedgeModManager.Serialization;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
 using static HedgeModManager.Lang;
+using HedgeModManager.CodeCompiler;
+using HedgeModManager.CodeCompiler.PreProcessor;
+using HedgeModManager.Foundation;
 
 namespace HedgeModManager
 {
-    public class ModsDB : IEnumerable<ModInfo>
+    public class ModsDB : IEnumerable<ModInfo>, IIncludeResolver
     {
+        public static readonly Version LatestManifestVersion = new(1, 1);
+
+        public const string CompiledCodesName = "Codes.dll";
+        public const string CodesTextPath = "Codes.hmm";
+        public const string ExtraCodesTextPath = "ExtraCodes.hmm";
+        public const string InternalsDirectory = ".hedgemm";
+        public static readonly string WorkCodesPath = Path.Combine("work", "Codes");
+
         public CodeFile CodesDatabase = new CodeFile();
         public List<ModInfo> Mods = new List<ModInfo>();
+
+        [IniField("Main")]
+        public string ManifestVersion { get; set; } = "0.0";
 
         [IniField("Main", "ActiveMod")]
         public List<string> ActiveMods = new List<string>();
@@ -176,13 +190,28 @@ namespace HedgeModManager
             }
         }
 
+        public Version GetManifestVersion()
+        {
+            if (Version.TryParse(ManifestVersion, out var ver))
+                return ver;
+
+            return LatestManifestVersion;
+        }
+
+        public bool IsManifestLatest()
+        {
+            return GetManifestVersion() == LatestManifestVersion;
+        }
+
         public void SaveDBSync(bool compileCodes = true)
         {
             SaveDB(compileCodes).GetAwaiter().GetResult();
         }
 
-        public async Task SaveDB(bool compileCodes = true)
+        public async Task<bool> SaveDB(bool compileCodes = true)
         {
+            ManifestVersion = LatestManifestVersion.ToString();
+
             ActiveMods.Clear();
             FavoriteMods.Clear();
             mMods.Clear();
@@ -207,11 +236,11 @@ namespace HedgeModManager
 
             if (compileCodes)
             {
-                var codes = new List<Code>();
+                var codes = new List<CSharpCode>();
 
                 foreach (var code in CodesDatabase.Codes)
                 {
-                    if (code.Enabled)
+                    if (code.Enabled || code.Type == CodeType.Library)
                         codes.Add(code);
                 }
 
@@ -221,8 +250,50 @@ namespace HedgeModManager
                         codes.AddRange(mod.Codes.Codes);
                 }
 
-                await CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
+                var compiledPath = Path.Combine(RootDirectory, CompiledCodesName);
+                var report = await CodeProvider.CompileCodes(codes, compiledPath, this);
+                if (report.HasErrors)
+                {
+                    try
+                    {
+                        File.Delete(compiledPath);
+                    }
+                    catch
+                    {
+                        // ignore
+                    }
+                    var sb = new StringBuilder();
+                    sb.AppendLine("Error Compiling Codes");
+
+                    foreach (var file in report.Blocks)
+                    {
+                        if (!string.IsNullOrEmpty(file.Key))
+                        {
+                            sb.AppendLine($"    - {file.Key}");
+                        }
+
+                        foreach (var block in file.Value)
+                        {
+                            sb.AppendLine($"        {block.Severity} {block.Message}");
+                        }
+
+                        sb.AppendLine();
+                    }
+
+                    var dialog = new ExceptionWindow(new Exception(sb.ToString()))
+                    {
+                        Header =
+                        {
+                            Content = "Error Compiling Codes"
+                        },
+                        ReportRepository = "https://github.com/hedge-dev/HMMCodes"
+                    };
+                    dialog.ShowDialog();
+                    return false;
+                }
             }
+
+            return true;
         }
 
         public ModInfo GetModFromActiveGUID(string id)
@@ -409,13 +480,17 @@ namespace HedgeModManager
                     }
 
                     // Creates all of the directories.
-                    Directory.CreateDirectory(Path.Combine(root, Path.GetFileName(folder)));
+                    Directory.CreateDirectory(HedgeApp.MakeLongPath(Path.Combine(root, Path.GetFileName(folder))));
                     foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
-                        Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(root, directoryName)));
+                    {
+                        Directory.CreateDirectory(HedgeApp.MakeLongPath(dirPath.Replace(folder, Path.Combine(root, directoryName))));
+                    }
 
                     // Copies all the files from the Directories.
                     foreach (string filePath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
-                        File.Copy(filePath, filePath.Replace(folder, Path.Combine(root, directoryName)), true);
+                    {
+                        File.Copy(HedgeApp.MakeLongPath(filePath), HedgeApp.MakeLongPath(filePath.Replace(folder, Path.Combine(root, directoryName))), true);
+                    }
                 }
             }
         }
@@ -519,6 +594,39 @@ namespace HedgeModManager
             }
 
             return invalid;
+        }
+
+        public string Resolve(string name)
+        {
+            foreach (var code in CodesDatabase.Codes)
+            {
+                if (code.Name == name)
+                {
+                    return code.Body;
+                }
+            }
+
+            foreach (var mod in Mods)
+            {
+                if (!mod.Enabled)
+                {
+                    continue;
+                }
+
+                if (mod.Codes?.Codes != null)
+                {
+                    foreach (var code in mod.Codes.Codes)
+                    {
+                        if (code.Name == name)
+                        {
+                            return code.Body;
+                        }
+                    }
+
+                }
+            }
+
+            return null;
         }
 
         public IEnumerator<ModInfo> GetEnumerator()
