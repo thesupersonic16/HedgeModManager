@@ -61,27 +61,30 @@
     <system:String xml:space="preserve" x:Key="ModsUINoMods">...Здесь как-то пусто.&#x0a;Загрузите какие-нибудь моды!</system:String>
 
     <!-- Codes UI Strings -->
-    <system:String x:Key="CodesUIName"    >Название</system:String>
-    <system:String x:Key="CodesUICategory">Категория</system:String>
-    <system:String x:Key="CodesUIDownload">Загрузить пользовательские коды</system:String>
-    <system:String x:Key="CodesUIUpdate"  >Обновить коды от сообщества</system:String>
-    <system:String x:Key="CodesUISearch"  >Поиск:</system:String>
-    <system:String x:Key="CodesUIInfo"    >Нажмите два раза по этому коду для большей информации.</system:String>
-    <system:String x:Key="CodesUIInfoHint">Наведите курсор на код для большей информации.</system:String>
-    <system:String x:Key="CodesUINoInfo"  >Нет информации.</system:String>
-	<system:String x:Key="CodesUICopyCode">Скопировать код в буфер обмена</system:String>
-    <system:String x:Key="CodesUIExpand"  >Раскрыть всё</system:String>
-    <system:String x:Key="CodesUICollapse">Закрыть всё</system:String>
+    <system:String x:Key="CodesUIName"        >Название</system:String>
+    <system:String x:Key="CodesUICategory"    >Категория</system:String>
+    <system:String x:Key="CodesUIDownload"    >Загрузить пользовательские коды</system:String>
+    <system:String x:Key="CodesUIUpdate"      >Обновить коды от сообщества</system:String>
+    <system:String x:Key="CodesUISearch"      >Поиск:</system:String>
+    <system:String x:Key="CodesUIInfo"        >Нажмите два раза по этому коду для большей информации.</system:String>
+    <system:String x:Key="CodesUIInfoHint"    >Наведите курсор на код для большей информации.</system:String>
+    <system:String x:Key="CodesUINoInfo"      >Нет информации.</system:String>
+	<system:String x:Key="CodesUICopyCode"    >Скопировать код в буфер обмена</system:String>
+    <system:String x:Key="CodesUIExpand"      >Раскрыть всё</system:String>
+    <system:String x:Key="CodesUIExpandSub"   >Раскрыть все дочерние ветки</system:String>
+    <system:String x:Key="CodesUICollapse"    >Закрыть всё</system:String>
+    <system:String x:Key="CodesUICollapseSub" >Закрыть все дочерние ветки</system:String>
     <system:String x:Key="CodesUINullCategory">Без категории</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Установленные коды несовместимы с загрузчиком кодов.&#x0a;Пожалуйста, обновите коды, а также загрузчик кодов.&#x0a;ВНИМАНИЕ: Это приведет к удалению всех пользовательских кодов.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">Получение кодов...</system:String>
 	
 	<!-- Diff UI Strings -->
     <system:String x:Key="DiffUITitle"   >Список изменений</system:String>
-    <system:String x:Key="DiffUIAdded"   >Добавлено: {0}</system:String>
-    <system:String x:Key="DiffUIModified">Изменено: {0}</system:String>
-    <system:String x:Key="DiffUIRemoved" >Удалено: {0}</system:String>
-    <system:String x:Key="DiffUIRenamed" >Переименовано: {0}</system:String>
+    <system:String x:Key="DiffUIAdded"   >Добавлено</system:String>
+    <system:String x:Key="DiffUIModified">Изменено</system:String>
+    <system:String x:Key="DiffUIRemoved" >Удалено</system:String>
+    <system:String x:Key="DiffUIRenamed" >Переименовано</system:String>
+    <system:String x:Key="DiffUIMoved"   >Перемещено</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
@@ -99,17 +102,18 @@
     <system:String x:Key="SettingsUILabelProfile"   >Профиль:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >Папка с модами:</system:String>
     <!--   Hedge Mod Manager -->
-    <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"  >Проверять загрузчик модов на наличие обновлений</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"  >Проверять коды на наличие обновлений</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates">Проверять моды на наличие обновлений</system:String>
-    <system:String x:Key="SettingsUIKeepHMMOpen"    >Оставить Hedge Mod Manager открытым после запуска игры</system:String>
-    <system:String x:Key="SettingsUICodesUseTreeView">Изменить вид списка кодов на древовидный</system:String>
-    <system:String x:Key="SettingsUICheckHMMUpdate" >Проверить наличие обновлений</system:String>
-    <system:String x:Key="SettingsUIAboutHMM"       >О программе Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUILanguage"       >Язык:</system:String>
-    <system:String x:Key="SettingsUITheme"          >Тема:</system:String>
-    <system:String x:Key="SettingsUIReleaseChannel" >Канал обновлений:</system:String>
+    <system:String x:Key="SettingsUIHMMHeader"          >Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"      >Проверять загрузчик модов на наличие обновлений</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"      >Проверять коды на наличие обновлений</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates"    >Проверять моды на наличие обновлений</system:String>
+    <system:String x:Key="SettingsUIUpdateCodesOnLaunch">Автоматически обновлять коды от сообщества при запуске</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"        >Оставить Hedge Mod Manager открытым после запуска игры</system:String>
+    <system:String x:Key="SettingsUICodesUseTreeView"   >Изменить вид списка кодов на древовидный</system:String>
+    <system:String x:Key="SettingsUICheckHMMUpdate"     >Проверить наличие обновлений</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"           >О программе Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUILanguage"           >Язык:</system:String>
+    <system:String x:Key="SettingsUITheme"              >Тема:</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel"     >Канал обновлений:</system:String>
     <system:String x:Key="SettingsUIChangingChannelTitle" >Изменение каналов выпусков</system:String>
     <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Вы изменяете канал обновлений на Release.&#x0a;&#x0a;Вы действительно хотите продолжить? Вам придётся перезапустить Hedge Mod Manager, чтобы изменения вступили в силу.</system:String>
     <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Вы изменяете канал обновлений на Development.&#x0a;&#x0a;Вы действительно хотите продолжить? Вам придётся перезапустить Hedge Mod Manager, чтобы изменения вступили в силу.</system:String>
@@ -193,8 +197,12 @@
     <system:String xml:space="preserve" x:Key="DialogUIModNewest">{0} уже обновлен до последней версии.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate">Доступна новая версия {0}! ({1})</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Вы действительно хотите прервать обновление?&#x0a;Это может привести к повреждению файлов {0}</system:String> 
-    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >WinRAR или 7-Zip не найдены!&#x0a;Они обязательны для распаковки модов&#x0a;&#x0a;Убедитесь, что одна из этих программ установлена.</system:String>   
-    
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >WinRAR или 7-Zip не найдены!&#x0a;Они обязательны для распаковки модов&#x0a;&#x0a;Убедитесь, что одна из этих программ установлена.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">Новое обновление в канале Release</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >В канале Release появилось новое обновление. Использование канала Development может привести к нежелательной нестабильности.&#x0a;&#x0a;Вы хотите переключить канал обновлений на Release?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorHeader" >Произошла ошибка при загрузке конфигурации мода</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorBody"   >Мод "{0}" содержит нерабочую схему конфигурации.&#x0a;&#x0a;Пожалуйста, свяжитесь с автором мода "{1}" для поддержки.</system:String>
+
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >завершена</system:String>
     <system:String x:Key="StatusUIUpdateCompletedPlural"        >завершена</system:String>
