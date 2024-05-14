@@ -27,7 +27,7 @@
     <system:String x:Key="MainUIRefreshModList">Обновить список модов</system:String>
     <system:String x:Key="MainUISave"          >Сохранить</system:String>
     <system:String x:Key="MainUISaveAndPlay"   >Сохранить и запустить игру</system:String>
-	<system:String x:Key="MainUIConfigureMod"  >Настроить мод</system:String>
+    <system:String x:Key="MainUIConfigureMod"  >Настроить мод</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Невозможно скачать загрузчик модов</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Невозможно установить загрузчик модов.&#x0a;Убедитесь, что у вас есть разрешения на запись файлов игры.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Невозможно удалить загрузчик модов.&#x0a;Убедитесь, что игра сейчас не запущена.</system:String>
@@ -69,7 +69,7 @@
     <system:String x:Key="CodesUIInfo"        >Нажмите два раза по этому коду для большей информации.</system:String>
     <system:String x:Key="CodesUIInfoHint"    >Наведите курсор на код для большей информации.</system:String>
     <system:String x:Key="CodesUINoInfo"      >Нет информации.</system:String>
-	<system:String x:Key="CodesUICopyCode"    >Скопировать код в буфер обмена</system:String>
+    <system:String x:Key="CodesUICopyCode"    >Скопировать код в буфер обмена</system:String>
     <system:String x:Key="CodesUIExpand"      >Раскрыть всё</system:String>
     <system:String x:Key="CodesUIExpandSub"   >Раскрыть все дочерние ветки</system:String>
     <system:String x:Key="CodesUICollapse"    >Закрыть всё</system:String>
@@ -78,7 +78,7 @@
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Установленные коды несовместимы с загрузчиком кодов.&#x0a;Пожалуйста, обновите коды, а также загрузчик кодов.&#x0a;ВНИМАНИЕ: Это приведет к удалению всех пользовательских кодов.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">Получение кодов...</system:String>
 	
-	<!-- Diff UI Strings -->
+    <!-- Diff UI Strings -->
     <system:String x:Key="DiffUITitle"   >Список изменений</system:String>
     <system:String x:Key="DiffUIAdded"   >Добавлено</system:String>
     <system:String x:Key="DiffUIModified">Изменено</system:String>
