@@ -1217,3 +1217,134 @@ Code "Disable Planar Reflections" in "Graphics" by "Skyth"
 
 Patch "Restart Doesn't Reduce Life Count" in "Cheats" by "M&M"
 WriteProtected<byte>(0xD06919, 0xEB, 0x29);
+
+Patch "Display Hub World Red Rings in Order" in "Fixes" by "brianuuu" 
+WriteAsmHook(
+$@"
+	; ecx = stage ID * 5
+	lea     eax, [ecx + ecx * 4]
+	mov     ecx, eax
+
+	; edx = bit mask
+	mov     edx, 1
+	rol     edx, cl
+
+	; find red ring bits
+	pop     edi
+	mov     edi, [edi+0x7C]
+	add     edi, 0x0A064
+	shr     ecx, 5
+
+	; prepare data
+	xor     eax, eax
+	push    ebx
+	push    esi
+	mov     ebx, 1
+	mov     esi, 5
+
+	; test bit
+LoopCheck:
+	test    [edi+ecx*4], edx
+	jz      NotCollected
+	add     eax, ebx
+
+NotCollected:
+	rol     edx, 1
+	shl     ebx, 1
+	sub     esi, 1
+	jnz     LoopCheck
+
+	pop     esi
+	pop     ebx
+", 0xEE4470, HookBehavior.Replace);
+
+// StageNameLogo_TestRedRingBits
+WriteAsmHook(
+$@"
+	; eax = current bit, [ebx+0x110] = red ring bits
+	mov     ecx, eax
+	mov     edx, 1
+	shl     edx, cl
+
+	test    [ebx+0x110], edx
+	mov     ecx, [ebx+0x110]
+	mov     ecx, esp
+	jnz     NotCollected
+	
+	mov 	eax, 0xEE48C6
+	jmp     eax
+
+NotCollected:
+	mov 	eax, 0xEE4895
+	jmp     eax
+", 0xEE488B, HookBehavior.Replace);
+
+// initial count check (StageNameLogo)
+WriteProtected<byte>(0xEE4869, 0x1F)
+
+// big red ring count check (StageNameLogo)
+WriteProtected<byte>(0xEE4EA5, 0x1F)
+WriteProtected<byte>(0xEE5905, 0x1F)
+WriteProtected<byte>(0xEE50D6, 0x1F)
+
+// CHudGateMenuMain_GetRedRingBits
+WriteAsmHook(
+$@"
+	; ecx = stage ID * 5
+	lea     eax, [ecx + ecx * 4]
+	mov     ecx, eax
+
+	; edx = bit mask
+	mov     edx, 1
+	rol     edx, cl
+
+	; find red ring bits
+	pop		ebx
+	push 	edi
+	mov     edi, [ebx+0x7C]
+	add     edi, 0x0A064
+	shr     ecx, 5
+
+	; prepare data
+	xor     eax, eax
+	push    esi
+	mov     ebx, 1
+	mov     esi, 5
+
+	; test bit
+LoopCheck:
+	test    [edi+ecx*4], edx
+	jz      NotCollected
+	add     eax, ebx
+
+NotCollected:
+	rol     edx, 1
+	shl     ebx, 1
+	sub     esi, 1
+	jnz     LoopCheck
+
+	pop     esi
+	pop 	edi
+", 0x107EA13, HookBehavior.Replace);
+
+// CHudGateMenuMain_GetRedRingBits
+WriteAsmHook(
+$@"
+	; ebx = current bit, esi = red ring bits
+	mov     ecx, ebx
+	mov     edx, 1
+	shl     edx, cl
+
+	test    esi, edx
+	jz     	NotCollected
+	
+	push 	1
+	mov 	eax, 0x107EA71
+	jmp     eax
+
+NotCollected:
+	push 	0
+	mov 	eax, 0x107EA71
+	jmp     eax
+	
+", 0x107EA6A, HookBehavior.Replace);
