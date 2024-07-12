@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:local="clr-namespace:HedgeModManager"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
-        MinHeight="640" MinWidth="580" Height="640" Width="580" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
+        MinHeight="662" MinWidth="585" Height="662" Width="585" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
         <local:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
         <local:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
         <local:ModUpdateToBrushConverter x:Key="ModUpdateToBrushConverter"/>
@@ -25,6 +27,18 @@
             <MenuItem Header="{DynamicResource ModsUIModDelete}" Click="UI_RemoveMod_Click" InputGestureText="(Delete)"/>
             <MenuItem x:Name="ContextMenuItemCheckUpdateAll" Header="{DynamicResource ModsUICheckUpdatesAll}" Click="UI_CheckUpdates_AllMods"/>
         </ContextMenu>
+        <ContextMenu x:Key="CodesTreeContextMenu">
+            <MenuItem Header="{DynamicResource CodesUICopyCode}"     Click="UI_CodesView_CopyToClipboard_Click" Tag="Item" Visibility="Collapsed"/>
+            <Separator Style="{DynamicResource SeparatorThemeStyle}" Tag="Item" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUIExpandSub}"    Click="UI_CodesTree_ExpandAllChildren_Click"   Tag="Node" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUICollapseSub}"  Click="UI_CodesTree_CollapseAllChildren_Click" Tag="Node" Visibility="Collapsed"/>
+            <Separator Style="{DynamicResource SeparatorThemeStyle}" Tag="Node" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUIExpand}"       Click="UI_CodesTree_ExpandAll_Click"/>
+            <MenuItem Header="{DynamicResource CodesUICollapse}"     Click="UI_CodesTree_CollapseAll_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="CodesListContextMenu">
+            <MenuItem Header="{DynamicResource CodesUICopyCode}" Click="UI_CodesView_CopyToClipboard_Click"/>
+        </ContextMenu>
     </Window.Resources>
     <Grid>
         <Grid Margin="-3,2,-3,-4">
@@ -33,7 +47,9 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                
                 <TextBlock x:Name="StatusLbl" Margin="175,2,4,4" FontSize="12" TextAlignment="Right" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                
                 <TabControl x:Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Margin="-2,0,-2,5" SelectionChanged="MainTabControl_SelectionChanged">
                     <TabItem x:Name="ModsTab" Header="{DynamicResource MainUIMods}">
                         <Grid>
@@ -69,7 +85,7 @@
                                     </Style>
                                 </ListView.ItemContainerStyle>
                                 <ListView.View>
-                                    <GridView>
+                                    <GridView AllowsColumnReorder="False">
                                         <GridViewColumn Header="{DynamicResource ModsUIName}" Width="200">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -153,6 +169,7 @@
                             </Border>
                         </Grid>
                     </TabItem>
+                    
                     <TabItem x:Name="CodesTab" Header="{DynamicResource MainUICodes}" Selector.Selected="UI_CodesTab_Click" Margin="1,0,-1,0">
                         <Grid>
                             <GroupBox Margin="10,5,10,5" Style="{StaticResource RoundBorder}">
@@ -164,12 +181,138 @@
                                 </Grid>
                             </GroupBox>
                             <Grid>
-                                <Grid Margin="10,5,10,41" >
+                                <Grid Name="CodesTreeContainer" Margin="10,5,10,41" Visibility="Collapsed">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Name="CodesTreeDescriptionColumn" Width="225" MinWidth="225"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TreeView x:Name="CodesTree" BorderThickness="0" Margin="0,2,1,0" PreviewKeyDown="CodesList_OnPreviewKeyDown"
+                                              ContextMenu="{DynamicResource CodesTreeContextMenu}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                              Background="{DynamicResource HMM.Window.BackgroundBrush}" ContextMenuOpening="CodesTree_ContextMenuOpening"
+                                              PreviewMouseRightButtonDown="CodesTree_PreviewMouseRightButtonDown">
+                                        <TreeView.Resources>
+                                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                                             Color="{DynamicResource HMM.Button.HoverColor}"/>
+                                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                                             Color="{DynamicResource HMM.Button.HoverColor}"/>
+                                        </TreeView.Resources>
+                                        <TreeView.ItemContainerStyle>
+                                            <Style TargetType="{x:Type TreeViewItem}">
+                                                <Setter      Property="IsExpanded"        Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                                <EventSetter Event="RequestBringIntoView" Handler="CodesTree_Item_RequestBringIntoView"/>
+                                            </Style>
+                                        </TreeView.ItemContainerStyle>
+                                        <TreeView.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                                <HierarchicalDataTemplate.ItemContainerStyle>
+                                                    <Style TargetType="{x:Type TreeViewItem}">
+                                                        <Setter Property="ToolTipService.ToolTip">
+                                                            <Setter.Value>
+                                                                <ToolTip Content="{DynamicResource CodesUIInfo}" Tag="{Binding Path=Description}">
+                                                                    <ToolTip.Style>
+                                                                        <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                                            <Style.Triggers>
+                                                                                <Trigger Property="Tag" Value="{x:Static sys:String.Empty}">
+                                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                </Trigger>
+                                                                                <Trigger Property="Tag" Value="{x:Null}">
+                                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                </Trigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </ToolTip.Style>
+                                                                </ToolTip>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Setter      Property="IsExpanded"        Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                                        <EventSetter Event="RequestBringIntoView" Handler="CodesTree_Item_RequestBringIntoView"/>
+                                                        <EventSetter Event="MouseDoubleClick"     Handler="CodesView_Item_MouseDoubleClick"/>
+                                                        <EventSetter Event="MouseEnter"           Handler="CodesView_Item_MouseEnter"/>
+                                                        <EventSetter Event="MouseLeave"           Handler="CodesView_Item_MouseLeave"/>
+                                                        <EventSetter Event="Selected"             Handler="CodesView_Item_Selected"/>
+                                                    </Style>
+                                                </HierarchicalDataTemplate.ItemContainerStyle>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="125"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <CheckBox IsChecked="{Binding Path=Enabled}" Margin="0,2,4,2" IsTabStop="False"
+                                                              Visibility="{Binding Path=IsCategory, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </HierarchicalDataTemplate>
+                                        </TreeView.ItemTemplate>
+                                    </TreeView>
+
+                                    <!-- Fix for border inconsistency above the download button in the tree view -->
+                                    <Border BorderBrush="{DynamicResource HMM.Window.BorderBrush}" BorderThickness="1" CornerRadius="8,0,0,0"/>
+
+                                    <GridSplitter Grid.Column="1"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Stretch"
+                                                  Background="{DynamicResource HMM.Window.BorderBrush}" 
+                                                  ShowsPreview="True"
+                                                  Width="1"
+                                                  MouseDoubleClick="CodesTreeDescription_GridSplitter_MouseDoubleClick"/>
+
+                                    <Grid Grid.Column="2" Background="{DynamicResource HMM.Window.BackgroundBrush}" MouseDown="CodesViewDescription_MouseDown">
+                                        <Border BorderBrush="{DynamicResource HMM.Window.BorderBrush}" BorderThickness="1" CornerRadius="0,8,0,0">
+                                            <TextBlock Name="CodesTreeDescription"
+                                                       Margin="8,2.5,5,5"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       TextWrapping="WrapWithOverflow"
+                                                       Text="{DynamicResource CodesUIInfoHint}"
+                                                       FontStyle="Italic"
+                                                       Foreground="#FF646464"/>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid Name="CodesListContainer" Margin="10,5,10,41" Visibility="Collapsed">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Name="CodesListDescriptionRow" Height="24" MinHeight="24"/>
+                                    </Grid.RowDefinitions>
+                                    
                                     <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
-                                          dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" PreviewKeyDown="CodesList_OnPreviewKeyDown">
+                                          PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                                <Setter Property="ContextMenu" Value="{DynamicResource CodesListContextMenu}"/>
+                                                <Setter Property="ToolTip">
+                                                    <Setter.Value>
+                                                        <ToolTip Content="{DynamicResource CodesUIInfo}" Tag="{Binding Description}">
+                                                            <ToolTip.Style>
+                                                                <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="Tag" Value="{x:Static sys:String.Empty}">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="Tag" Value="{x:Null}">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </ToolTip.Style>
+                                                        </ToolTip>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <EventSetter Event="MouseDoubleClick" Handler="CodesView_Item_MouseDoubleClick"/>
+                                                <EventSetter Event="MouseEnter"       Handler="CodesView_Item_MouseEnter"/>
+                                                <EventSetter Event="MouseLeave"       Handler="CodesView_Item_MouseLeave"/>
+                                                <EventSetter Event="Selected"         Handler="CodesView_Item_Selected"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
                                         <ListView.View>
-                                            <GridView AllowsColumnReorder="True">
-                                                <GridViewColumn Header="{DynamicResource CodesUIName}" Width="370">
+                                            <GridView AllowsColumnReorder="False">
+                                                <GridViewColumn Header="{DynamicResource CodesUIName}" Width="285">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal">
@@ -179,7 +322,8 @@
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
-                                                <GridViewColumn Header="{DynamicResource ModsUIAuthor}" DisplayMemberBinding="{Binding Author}" Width="152"/>
+                                                <GridViewColumn Header="{DynamicResource CodesUICategory}" DisplayMemberBinding="{Binding Category}" Width="85"/>
+                                                <GridViewColumn Header="{DynamicResource ModsUIAuthor}"    DisplayMemberBinding="{Binding Author}"   Width="125"/>
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
@@ -188,13 +332,35 @@
                                                HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock x:Name="CodesStatusLbl" Text="{DynamicResource CodesUIFetching}" IsVisibleChanged="OnFetchStatusVisibilityChanged"/>
                                     </StackPanel>
+
+                                    <GridSplitter Grid.Row="1"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Center"
+                                                  Background="{DynamicResource HMM.Window.BorderBrush}" 
+                                                  ShowsPreview="True"
+                                                  Height="1"
+                                                  MouseDoubleClick="CodesListDescription_GridSplitter_MouseDoubleClick"/>
+                                    
+                                    <Grid Grid.Row="2" Background="{DynamicResource HMM.Window.BackgroundBrush}" MouseDown="CodesViewDescription_MouseDown">
+                                        <Border BorderBrush="{DynamicResource HMM.Window.BorderBrush}" BorderThickness="1,0,1,1">
+                                            <TextBlock Name="CodesListDescription"
+                                                       Margin="8,2.5,5,5"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       TextWrapping="WrapWithOverflow"
+                                                       Text="{DynamicResource CodesUIInfoHint}"
+                                                       FontStyle="Italic"
+                                                       Foreground="#FF646464"/>
+                                        </Border>
+                                    </Grid>
+
+                                    <Border x:Name="CodesFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,0" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
+                                            <Label Content="{DynamicResource CodesUISearch}" Margin="0,-3,0,0"/>
+                                            <TextBox x:Name="TextBox_CodesSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_CodeSearch_TextChanged" LostFocus="TextBox_CodeSearch_LostFocus"/>
+                                        </StackPanel>
+                                    </Border>
                                 </Grid>
-                                <Border x:Name="CodesFind" BorderThickness="1,1,1,1" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="8,8,0,0" Margin="0,2,20,41" Visibility="Collapsed" BorderBrush="{DynamicResource HMM.Window.BorderBrush}" Background="{DynamicResource HMM.Window.BackgroundBrush}">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4,6,4,4">
-                                        <Label Content="{DynamicResource CodesUISearch}" Margin="0,-3,0,0"/>
-                                        <TextBox x:Name="TextBox_CodesSearch" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="150" Margin="0,0,6,0" TextChanged="TextBox_CodeSearch_TextChanged" LostFocus="TextBox_CodeSearch_LostFocus"/>
-                                    </StackPanel>
-                                </Border>
                             </Grid>
                         </Grid>
                     </TabItem>
@@ -248,10 +414,12 @@
                             <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2">
                                 <Grid>
                                     <StackPanel x:Name="HMMSettingsSackPanel" Margin="10,10,0,0">
-                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"   IsChecked="{Binding CPKREDIR.CheckForUpdates}"    Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"   IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}" IsChecked="{Binding CPKREDIR.CheckForModUpdates}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"     IsChecked="{Binding CPKREDIR.KeepOpen}"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"       IsChecked="{Binding Path=(local:RegistryConfig.CheckManagerUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"       IsChecked="{Binding Path=(local:RegistryConfig.CheckLoaderUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"     IsChecked="{Binding Path=(local:RegistryConfig.CheckModUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIUpdateCodesOnLaunch}" IsChecked="{Binding Path=(local:RegistryConfig.UpdateCodesOnLaunch)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"         IsChecked="{Binding Path=(local:RegistryConfig.KeepOpen)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView"/>
                                     </StackPanel>
 
                                     <Grid>
@@ -292,6 +460,7 @@
                         </Grid>
                     </TabItem>
                 </TabControl>
+                
                 <Grid Grid.Row="1" Background="{DynamicResource HMM.Window.DialogBottom}">
                     <Grid Margin="8,1,8,0" VerticalAlignment="Center" Height="56">
                         <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Width="280" HorizontalAlignment="Left" Margin="0,8,5,8" SelectionChanged="Game_Changed">

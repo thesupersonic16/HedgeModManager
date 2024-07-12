@@ -23,14 +23,15 @@ namespace HedgeModManager
         {
             GameName = "SonicGenerations",
             ExecutableName = "SonicGenerations.exe",
+            SaveName = "cpkredir.sav",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
             Folders = new [] { "disk/bb", "disk/bb2", "disk/bb3" },
             AppID = "71340",
             GBProtocol = "hedgemmgens",
             Is64Bit = false,
-            ModLoader = ModLoaders.GenerationsCodeLoader,
-            CodesURL = Resources.URL_GCL_CODES,
+            ModLoader = ModLoaders.HE1ModLoader,
+            CodesURL = Resources.URL_BLUEBLUR_CODES,
             GamePath = Path.Combine("Sonic Generations", "SonicGenerations.exe")
         };
 
@@ -38,21 +39,24 @@ namespace HedgeModManager
         {
             GameName = "SonicLostWorld",
             ExecutableName = "slw.exe",
+            SaveName = "cpkredir.sav",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
             Folders = new[] { "disk/sonic2013_patch_0" },
             AppID = "329440",
             GBProtocol = "hedgemmlw",
             Is64Bit = false,
-            ModLoader = ModLoaders.LostCodeLoader,
-            CodesURL = Resources.URL_LCL_CODES,
+            ModLoader = ModLoaders.HE1ModLoader,
+            CodesURL = Resources.URL_SONIC2013_CODES,
             GamePath = Path.Combine("Sonic Lost World", "slw.exe")
         };
 
+        // TODO: Change SaveName to "savedata.xml" once we have code to transfer fallback saves to the new name.
         public static Game SonicForces = new Game()
         {
             GameName = "SonicForces",
             ExecutableName = "Sonic Forces.exe",
+            SaveName = "cpkredir.sav",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
             Folders = new[] { "disk/wars_patch" },
@@ -60,7 +64,7 @@ namespace HedgeModManager
             GBProtocol = "hedgemmforces",
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
-            CodesURL = Resources.URL_FML_CODES,
+            CodesURL = Resources.URL_WARS_CODES,
             GamePath = Path.Combine("SonicForces", "build", "main", "projects", "exec", "Sonic Forces.exe")
         };
 
@@ -75,7 +79,7 @@ namespace HedgeModManager
             GBProtocol = "hedgemmtenpex",
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
-            CodesURL = Resources.URL_TML_CODES,
+            CodesURL = Resources.URL_TENPEX_CODES,
             GamePath = Path.Combine("PuyoPuyoTetris2", "PuyoPuyoTetris2.exe")
         };
 
@@ -90,7 +94,7 @@ namespace HedgeModManager
             GBProtocol = "hedgemmmusashi",
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
-            CodesURL = Resources.URL_MML_CODES,
+            CodesURL = Resources.URL_MUSASHI_CODES,
             GamePath = Path.Combine("Tokyo2020", "musashi.exe")
         };
 
@@ -101,28 +105,48 @@ namespace HedgeModManager
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
             Folders = new[] { "PCCriPak" },
+            AppID = "2055290",
             EGSID = "e5071e19d08c45a6bdda5d92fbd0a03e",
             GBProtocol = "hedgemmrainbow",
             Is64Bit = true,
             ModLoader = ModLoaders.RainbowModLoader,
-            CodesURL = Resources.URL_RML_CODES,
-            GamePath = Path.Combine("SonicColorsUltimate", "rainbow Shipping", "Sonic Colors - Ultimate.exe")
+            CodesURL = Resources.URL_RAINBOW_CODES,
+            GamePath = Path.Combine("SonicColorsUltimate", "exec", "SonicColorsUltimate.exe"),
+            GamePathEGS = Path.Combine("SonicColorsUltimate", "rainbow Shipping", "Sonic Colors - Ultimate.exe")
         };
 
         public static Game SonicOrigins = new Game()
         {
             GameName = "SonicOrigins",
             ExecutableName = "SonicOrigins.exe",
+            SaveName = "savedata",
             SupportsCPKREDIR = false,
-            SupportsSaveRedirection = false,
+            SupportsSaveRedirection = true,
             Folders = new[] { "raw", "Sonic1u", "Sonic2u", "Sonic3ku", "SonicCDu" },
             AppID = "1794960",
             EGSID = "5070a8e44cf74ba3b9a4ca0c0dce5cf1",
             GBProtocol = "hedgemmhite",
             Is64Bit = true,
             ModLoader = ModLoaders.HiteModLoader,
-            CodesURL = Resources.URL_HML_CODES,
+            CodesURL = Resources.URL_HITE_CODES,
             GamePath = Path.Combine("SonicOrigins", "build", "main", "projects", "exec", "SonicOrigins.exe")
+        };
+
+        public static Game SonicFrontiers = new Game()
+        {
+            GameName = "SonicFrontiers",
+            ExecutableName = "SonicFrontiers.exe",
+            SaveName = "savedata",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = new[] { "raw" },
+            AppID = "1237320",
+            EGSID = "c5ca98fa240c4eb796835f97126df8e7",
+            GBProtocol = "hedgemmrangers",
+            Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader,
+            CodesURL = Resources.URL_RANGERS_CODES,
+            GamePath = Path.Combine("SonicFrontiers", "SonicFrontiers.exe")
         };
 
         public static IEnumerable<Game> GetSupportedGames()
@@ -134,27 +158,24 @@ namespace HedgeModManager
             yield return Tokyo2020;
             yield return SonicColorsUltimate;
             yield return SonicOrigins;
+            yield return SonicFrontiers;
         }
     }
 
     internal static class EmbeddedLoaders
     {
-        public static byte[] GenerationsCodeLoader;
-        public static byte[] LostCodeLoader;
+        public static byte[] HE1ModLoader;
         public static byte[] HE2ModLoader;
         public static byte[] RainbowModLoader;
-        public static byte[] HiteModLoader;
 
         static EmbeddedLoaders()
         {
             using (var stream = new MemoryStream(Resources.DAT_LOADERS_ZIP))
             using (var zip = new ZipArchive(stream))
             {
-                GenerationsCodeLoader = GetFile("SonicGenerationsCodeLoader.dll");
-                LostCodeLoader = GetFile("LostCodeLoader.dll");
+                HE1ModLoader = GetFile("HE1ML.dll");
                 HE2ModLoader = GetFile("HE2ModLoader.dll");
                 RainbowModLoader = GetFile("RainbowModLoader.dll");
-                HiteModLoader = GetFile("HiteModLoader.dll");
 
                 byte[] GetFile(string name)
                 {
@@ -174,6 +195,7 @@ namespace HedgeModManager
     {
         public string GameName = "NoGame";
         public string ExecutableName = string.Empty;
+        public string SaveName = string.Empty;
         public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
         public bool SupportsSaveRedirection = false;
@@ -184,6 +206,7 @@ namespace HedgeModManager
         public bool Is64Bit = false;
         public string CodesURL;
         public string GamePath = string.Empty;
+        public string GamePathEGS = string.Empty;
 
         public override string ToString() => Localise("Game" + GameName, GameName);
     }
@@ -215,23 +238,7 @@ namespace HedgeModManager
                 switch (Launcher)
                 {
                     case GameLauncher.Steam:
-                        if (HedgeApp.IsLinux)
-                        {
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = $"start",
-                                Arguments = $"/unix /usr/bin/xdg-open steam://run/{BaseGame.AppID}",
-                                UseShellExecute = true
-                            });
-                        }
-                        else
-                        {
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = $"steam://run/{BaseGame.AppID}",
-                                UseShellExecute = true
-                            });
-                        }
+                        HedgeApp.StartURL($"steam://run/{BaseGame.AppID}", true);
                         break;
                     case GameLauncher.Epic:
                         Process.Start(new ProcessStartInfo
@@ -239,6 +246,9 @@ namespace HedgeModManager
                             FileName = $"com.epicgames.launcher://apps/{BaseGame.EGSID}?action=launch&silent=true",
                             UseShellExecute = true
                         });
+                        break;
+                    case GameLauncher.Heroic:
+                        HedgeApp.StartURL($"heroic://launch/{BaseGame.EGSID}", true);
                         break;
                     default:
                         Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
@@ -250,7 +260,21 @@ namespace HedgeModManager
             }
             else
             {
-                Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
+                string path = "";
+                switch (Launcher)
+                {
+                    case GameLauncher.Steam:
+                        path = Path.Combine(startDirectory, Path.GetFileName(BaseGame.GamePath));
+                        break;
+                    case GameLauncher.Heroic:
+                    case GameLauncher.Epic:
+                        path = Path.Combine(startDirectory, Path.GetFileName(BaseGame.GamePathEGS));
+                        break;
+                    default:
+                        break;
+                }
+
+                Process.Start(new ProcessStartInfo(path)
                 {
                     WorkingDirectory = startDirectory
                 });
@@ -310,7 +334,8 @@ namespace HedgeModManager
     {
         None,
         Steam,
-        Epic
+        Epic,
+        Heroic
     }
 
     public class CodeLoaderInfo

@@ -1,145 +1,871 @@
 ﻿!!VERSION 1.0
 
-Patch "Disable Auto Save Icon" by "Hyper"
-// 1.0.0: 0x140403FAC
-WriteProtected<byte>(ScanSignature("\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x48\x8D\x6C\x24\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\xDA\x48\x8B\xF9\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x33\xF6\x48\x85\xC0\x74\x16\x48\x85\xFF\x48\x8D\x97\x00\x00\x00\x00\x48\x8B\xC8\x48\x0F\x44\xD6\xE8\x00\x00\x00\x00\x0F\x57\xC0\xC7\x45\x00\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\xC6\x45\xBB\x80\xF3\x0F\x7F\x45\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x89\x75\xCF\xE8\x00\x00\x00\x00\x48\x8B\x15\x00\x00\x00\x00\x48\x8D\x4D\xA7\x48\x89\x45\xAF\xC7\x45\x00\x00\x00\x00\x00\xC6\x45\xBB\x15\xE8\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x48\x8B\xD8", "xxxx?xxxx?xxxx?xxxxx?xxx????xxxxxxx????xxxxxxx????xxxxxxxxxxxxx????xxxxxxxx????xxxxx?????xxx????xxxxxxxx?xxx?????xxx?????xxxx????xxx????xxxxxxxxxx?????xxxxx????x????xxxxxxx????xxx") + 0x1C, 0xE9, 0x94, 0x01, 0x00, 0x00);
-
-Code "Enable Lives in Anniversary Mode" by "ĐeäTh"
-static long rsdkV3Flags;
-static long rsdkV4Flags;
-static long rsdkGlobals;
-
-if (rsdkV3Flags == 0)
+Library "Bitwise" by "Hyper"
 {
-    var result = ScanSignature("\x48\x63\xFB\x48\x8B\xCE\x48\x8B\xD7\x48\xC1\xE2\x05\x49\x03\xD6\xE8\x00\x00\x00\x00\x3C\x01\x74\x2D\x0F\xB6\x05\x00\x00\x00\x00\xFF\xC3\x3B\xD8\x7C\xDA\xB8\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x6C\x24\x00\x48\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x41\x5E\xC3\x48\x8D\x05\x00\x00\x00\x00\x89\x2C\xB8\x8B\xC3\xEB\xD7",
-    "xxxxxxxxxxxxxxxxx????xxxxxxx????xxxxxxx????xxxx?xxxx?xxxx?xxxx?xxxxxxxxxx????xxxxxxx") + 0x46;
-    rsdkV3Flags = (long)result + *((int*)IntPtr.Add(new IntPtr(result), 3)) + 7;
-    return;
-}
-
-if (rsdkV4Flags == 0)
-{
-    var result = ScanSignature("\x4C\x8D\x35\x00\x00\x00\x00\x4C\x89\x7C\x24\x00\x4C\x8D\x3D\x00\x00\x00\x00\x66\x66\x0F\x1F\x84\x00\x00\x00\x00\x00\x48\x63\xD3\x48\x8B\xCD\x48\xC1\xE2\x05\x49\x03\xD7\xE8\x00\x00\x00\x00\x3C\x01\x75\x0B\xBB\x00\x00\x00\x00\x41\x89\x34\xBE\x8B\xFB\x0F\xB6\x05\x00\x00\x00\x00\xFF\xC3\x48\xFF\xC7\x3B\xD8\x7C\xCF\x4C\x8B\x7C\x24\x00\x4C\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x5E\x5D\x5B\xC3",
-        "xxx????xxxx?xxx????xxxxxx????xxxxxxxxxxxxxx????xxxxx????xxxxxxxxx????xxxxxxxxxxxxx?xxxx?xxxx?xxxxxxxx");
-    rsdkV4Flags = (long)result + *((int*)IntPtr.Add(new IntPtr(result), 3)) + 7;
-    return;
-}
-
-if (rsdkGlobals == 0)
-{
-    var result = ScanSignature("\x48\x8B\x05\x00\x00\x00\x00\x8B\x80\x00\x00\x00\x00\x85\xC0\x78\x2D\x83\xF8\x01\x7E\x1F\x83\xF8\x02\x74\x11\x83\xC0\xFC\x83\xF8\x02\x77\x1B\x48\x8D\x0D\x00\x00\x00\x00\xEB\x19\x48\x8D\x0D\x00\x00\x00\x00\xEB\x10\x48\x8D\x0D\x00\x00\x00\x00\xEB\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\xB2\x02\x4C\x8B\x80\x00\x00\x00\x00\x41\xFF\xD0\x48\x8B\x0D\x00\x00\x00\x00\x66\x89\x41\x04",
-    "xxx????xx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxx????xxxxx????xxxxx????xxx????xxxxx????xxxxxx????xxxx");
-    rsdkGlobals = (long)result + *((int*)IntPtr.Add(new IntPtr(result), 3)) + 7;
-    return;
-}
-
-// Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-if (*(byte*)(rsdkV4Flags + 0x1A4) == 1)
-{
-    // Sonic 1 Coin Mode
-    WriteProtected<byte>(rsdkV4Flags + 0x1F4, 0x00);
-}
-
-// Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-if (*(byte*)(rsdkV4Flags + 0x23C) == 1)
-{
-    // Sonic 2 Coin Mode
-    WriteProtected<byte>(rsdkV4Flags + 0x288, 0x00);
-}
-
-// Check if rsdkV3 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-if (*(byte*)(rsdkV3Flags + 0x1DC) == 1)
-{
-    // Sonic CD Coin Mode
-    WriteProtected<byte>(rsdkV3Flags + 0x220, 0x00);
-}
-
-// Sonic 3&K Coin Mode and HUD Update
-if (*(long*)rsdkGlobals != 0)
-{
-    // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
-    // Version 1.00: rsdkGlobals + 0x447D08
-    // Version 1.04: rsdkGlobals + 0x4C3508 (Thanks to RDC)
-    if (*(byte*)(*(long*)rsdkGlobals + 0x4C3508) == 1)
+    public long Set(long @base, uint offset, bool isOffsetBitIndex = true)
     {
-        // HUD Update
-        // Version 1.00: rsdkGlobals + 0x447D20
-        // Version 1.04: rsdkGlobals + 0x4C34D4 (Thanks to RDC)
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x4C34D4, 0x00);
+        return @base | (isOffsetBitIndex ? (1L << (int)offset) : offset);
+    }
 
-        // Coin Mode
-        // Version 1.00: rsdkGlobals + 0x447CD4
-        // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x4C3520, 0x00);
+    public long Reset(long @base, uint offset, bool isOffsetBitIndex = true)
+    {
+        return @base & (isOffsetBitIndex ? (1L << (int)offset) : offset);
+    }
+
+    public bool Test(long @base, uint offset, bool isOffsetBitIndex = true)
+    {
+        return (@base & (isOffsetBitIndex ? (1L << (int)offset) : offset)) != 0;
     }
 }
 
-Code "Enable Lives in Mirror Mode" by "ĐeäTh"
-static long rsdkV3Flags;
-static long rsdkV4Flags;
-static long rsdkGlobals;
-
-if (rsdkV3Flags == 0)
+Library "Helpers" by "Hyper"
 {
-    var result = ScanSignature("\x48\x63\xFB\x48\x8B\xCE\x48\x8B\xD7\x48\xC1\xE2\x05\x49\x03\xD6\xE8\x00\x00\x00\x00\x3C\x01\x74\x2D\x0F\xB6\x05\x00\x00\x00\x00\xFF\xC3\x3B\xD8\x7C\xDA\xB8\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x6C\x24\x00\x48\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x41\x5E\xC3\x48\x8D\x05\x00\x00\x00\x00\x89\x2C\xB8\x8B\xC3\xEB\xD7",
-    "xxxxxxxxxxxxxxxxx????xxxxxxx????xxxxxxx????xxxx?xxxx?xxxx?xxxx?xxxxxxxxxx????xxxxxxx") + 0x46;
-    rsdkV3Flags = (long)result + *((int*)IntPtr.Add(new IntPtr(result), 3)) + 7;
-    return;
+    #define UNMANAGED_FUNCTION(returnType, functionName, ...) \
+        [System.Runtime.InteropServices.UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.StdCall)] \
+        private delegate returnType T##functionName(__VA_ARGS__); \
+        private static T##functionName _del##functionName = new T##functionName(functionName); \
+        private static long _fp##functionName = (long)System.Runtime.InteropServices.Marshal.GetFunctionPointerForDelegate(_del##functionName); \
+        public returnType functionName(__VA_ARGS__)
+
+    #define GET_UNMANAGED_FUNCTION_PTR(functionName) _fp##functionName
+
+    #define CREATE_FUNCTION_PTR(returnType, functionName, location, ...) \
+        [System.Runtime.InteropServices.UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.StdCall)] \
+        private delegate returnType T##functionName(__VA_ARGS__); \
+        private static long _addr##functionName = location;
+
+    #define GET_FUNCTION_PTR(functionName) System.Runtime.InteropServices.Marshal.GetDelegateForFunctionPointer<T##functionName>((IntPtr)_addr##functionName)
+
+    #define TO_STRING_PTR(str) (long)System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(str)
+
+    #define FROM_STRING_PTR(ptr) System.Runtime.InteropServices.Marshal.PtrToStringAnsi((IntPtr)ptr)
 }
 
-if (rsdkV4Flags == 0)
+Library "Memory" by "Hyper"
 {
-    var result = ScanSignature("\x4C\x8D\x35\x00\x00\x00\x00\x4C\x89\x7C\x24\x00\x4C\x8D\x3D\x00\x00\x00\x00\x66\x66\x0F\x1F\x84\x00\x00\x00\x00\x00\x48\x63\xD3\x48\x8B\xCD\x48\xC1\xE2\x05\x49\x03\xD7\xE8\x00\x00\x00\x00\x3C\x01\x75\x0B\xBB\x00\x00\x00\x00\x41\x89\x34\xBE\x8B\xFB\x0F\xB6\x05\x00\x00\x00\x00\xFF\xC3\x48\xFF\xC7\x3B\xD8\x7C\xCF\x4C\x8B\x7C\x24\x00\x4C\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x5E\x5D\x5B\xC3",
-        "xxx????xxxx?xxx????xxxxxx????xxxxxxxxxxxxxx????xxxxx????xxxxxxxxx????xxxxxxxxxxxxx?xxxx?xxxx?xxxxxxxx");
-    rsdkV4Flags = (long)result + *((int*)IntPtr.Add(new IntPtr(result), 3)) + 7;
-    return;
-}
+    using System.Collections.Generic;
 
-if (rsdkGlobals == 0)
-{
-    var result = ScanSignature("\x48\x8B\x05\x00\x00\x00\x00\x8B\x80\x00\x00\x00\x00\x85\xC0\x78\x2D\x83\xF8\x01\x7E\x1F\x83\xF8\x02\x74\x11\x83\xC0\xFC\x83\xF8\x02\x77\x1B\x48\x8D\x0D\x00\x00\x00\x00\xEB\x19\x48\x8D\x0D\x00\x00\x00\x00\xEB\x10\x48\x8D\x0D\x00\x00\x00\x00\xEB\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\xB2\x02\x4C\x8B\x80\x00\x00\x00\x00\x41\xFF\xD0\x48\x8B\x0D\x00\x00\x00\x00\x66\x89\x41\x04",
-    "xxx????xx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxx????xxxxx????xxxxx????xxx????xxxxx????xxxxxx????xxxx");
-    rsdkGlobals = (long)result + *((int*)IntPtr.Add(new IntPtr(result), 3)) + 7;
-    return;
-}
+    private static Dictionary<IntPtr, List<byte>> _preservedMemory = new();
 
-// Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_MIRRORING
-if (*(byte*)(rsdkV4Flags + 0x1A4) == 3)
-{
-    // Sonic 1 Coin Mode
-    WriteProtected<byte>(rsdkV4Flags + 0x1F4, 0x00);
-}
-
-// Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_MIRRORING
-if (*(byte*)(rsdkV4Flags + 0x23C) == 3)
-{
-    // Sonic 2 Coin Mode
-    WriteProtected<byte>(rsdkV4Flags + 0x288, 0x00);
-}
-
-// Check if rsdkV3 game.playMode is set to BOOT_PLAYMODE_MIRRORING
-if (*(byte*)(rsdkV3Flags + 0x1DC) == 3)
-{
-    // Sonic CD Coin Mode
-    WriteProtected<byte>(rsdkV3Flags + 0x220, 0x00);
-}
-
-// Sonic 3&K Coin Mode and HUD Update
-if (*(long*)rsdkGlobals != 0)
-{
-    // Check if game.playMode is set to BOOT_PLAYMODE_MIRRORING
-    // Version 1.00: rsdkGlobals + 0x447D08
-    // Version 1.04: rsdkGlobals + 0x4C3508 (Thanks to RDC)
-    if (*(byte*)(*(long*)rsdkGlobals + 0x4C3508) == 3)
+    public void Preserve(IntPtr location, long length, bool preserveOnce = true)
     {
-        // HUD Update
-        // Version 1.00: rsdkGlobals + 0x447D20
-        // Version 1.04: rsdkGlobals + 0x4C34D4 (Thanks to RDC)
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x4C34D4, 0x00);
+        if (location == IntPtr.Zero)
+            return;
 
-        // Coin Mode
-        // Version 1.00: rsdkGlobals + 0x447CD4
-        // Version 1.04: rsdkGlobals + 0x4C3520 (Thanks to RDC)
-        WriteProtected<byte>(*(long*)rsdkGlobals + 0x4C3520, 0x00);
+        if (preserveOnce)
+        {
+            if (_preservedMemory.ContainsKey(location))
+                return;
+        }
+        else
+        {
+            if (_preservedMemory.ContainsKey(location))
+                _preservedMemory.Remove(location);
+        }
+        
+        List<byte> buffer = new();
+        for (long i = 0; i < length; i++)
+            buffer.Add(Read<byte>(location.ToInt64() + i));
+
+        _preservedMemory.Add(location, buffer);
     }
+
+    public void Preserve(long location, long length, bool preserveOnce = true)
+    {
+        Preserve(new IntPtr(location), length, preserveOnce);
+    }
+
+    public void Restore(IntPtr location)
+    {
+        if (location == IntPtr.Zero)
+            return;
+
+        if (!_preservedMemory.ContainsKey(location))
+            return;
+
+        long i = 0;
+        foreach (byte b in _preservedMemory[location])
+        {
+            WriteProtected<byte>(location.ToInt64() + i, b);
+            i++;
+        }
+    }
+
+    public void Restore(long location)
+    {
+        Restore(new IntPtr(location));
+    }
+
+    public long ReadCall(long addr)
+    {
+        if (addr == 0)
+            return 0;
+
+        return addr + Read<int>(addr + 0x01) + 0x05;
+    }
+
+    public long ReadJump(long addr)
+    {
+        if (addr == 0)
+            return 0;
+
+        sbyte jmpType = -1;
+        byte opcode = Read<byte>(addr);
+
+        if ((opcode & 0xF0) == 0x70)
+        {
+            jmpType = 0;
+        }
+        else
+        {
+            switch (opcode)
+            {
+                case 0xE3:
+                case 0xEB:
+                    jmpType = 0;
+                    break;
+
+                case 0xE9:
+                    jmpType = 1;
+                    break;
+
+                case 0x0F:
+                    jmpType = 2;
+                    break;
+
+                case 0xFF:
+                    jmpType = 3;
+                    break;
+            }
+        }
+
+        switch (jmpType)
+        {
+            case 0:
+                return addr + Read<byte>(addr + 0x01) + 0x02;
+
+            case 1:
+                return addr + Read<int>(addr + 0x01) + 0x05;
+
+            case 2:
+                return addr + Read<int>(addr + 0x02) + 0x06;
+
+            case 3:
+                return Read<long>(addr + 0x06);
+        }
+
+        return 0;
+    }
+
+    public long ReadThunk(long addr, long offset = 0)
+    {
+        return ReadJump(ReadCall(addr) + offset);
+    }
+}
+
+Library "Reflection" by "Hyper"
+{
+    #lib "Resources"
+
+    using System.Collections.Generic;
+
+    private static bool _isInitialised = false;
+    private static List<string> _rflPointersQueue = new();
+    private static Dictionary<string, object> _rflBackups = new();
+    private static Dictionary<string, long> _rflPointers = new();
+
+    public class ReflectionInfo<T>
+    {
+        public string Name;
+        public Type Type;
+        public T* pData;
+
+        public ReflectionInfo(string name, T* pData)
+        {
+            this.Name = name;
+            this.Type = typeof(T);
+            this.pData = pData;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} : 0x{((IntPtr)pData).ToString("X16")}";
+        }
+    }
+
+    private void Init()
+    {
+    	if (_isInitialised)
+    		return;
+    	
+    	long GetReflectionPtr(string resourceName, string resourceType, long pResourceData)
+    	{
+    		if (resourceType != "ResReflection")
+    			return pResourceData;
+
+    		if (_rflPointersQueue.Contains(resourceName))
+    		{
+    			long ptr = *(long*)(pResourceData + 0x60);
+
+    			if (_rflPointers.ContainsKey(resourceName))
+    			{
+    				_rflPointers[resourceName] = ptr;
+    			}
+    			else
+    			{
+    				_rflPointers.Add(resourceName, ptr);
+    			}
+    		}
+
+    		return pResourceData;
+    	}
+
+    	Resources.AddResourceDataAction(GetReflectionPtr);
+
+    	_isInitialised = true;
+    }
+
+    public T* GetDataPtr<T>(string rflName)
+    {
+    	Init();
+
+    	if (!_rflPointersQueue.Contains(rflName))
+    		_rflPointersQueue.Add(rflName);
+
+    	if (!_rflPointers.ContainsKey(rflName))
+    		return null;
+
+        long ptr = _rflPointers[rflName];
+
+        if (ptr == 0)
+            return null;
+
+        // Check for BINA signature.
+        if (*(int*)(ptr - 0x40) != 0x414E4942)
+            return null;
+
+        var result = (T*)ptr;
+
+    	if (result != null && !_rflBackups.ContainsKey(rflName))
+            _rflBackups.Add(rflName, *result);
+
+    	return result;
+    }
+
+    public ReflectionInfo<T> GetDataInfo<T>(string rflName)
+    {
+        return new ReflectionInfo<T>(rflName, GetDataPtr<T>(rflName));
+    }
+
+    public object GetOriginalData(string rflName)
+    {
+        if (!_rflBackups.ContainsKey(rflName))
+            return null;
+
+        return _rflBackups[rflName];
+    }
+
+    public T GetOriginalData<T>(string rflName)
+    {
+        return (T)GetOriginalData(rflName);
+    }
+}
+
+Library "ReflectionHelpers" by "Hyper"
+{
+    #lib "Bitwise"
+    #lib "Reflection"
+    
+    #define RFL_GET_PARAM(info, hierarchy) info.pData->hierarchy
+
+    #define RFL_SET_PARAM(info, hierarchy, value) info.pData->hierarchy = value
+
+    #define RFL_RESET_PARAM(info, type, hierarchy) info.pData->hierarchy = Reflection.GetOriginalData<type>(info.Name).hierarchy
+}
+
+Library "Resources" by "Hyper"
+{
+    #include "Helpers" noemit
+    
+    #lib "Memory"
+    
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+    
+    private static bool _isInitialised = false;
+    
+    private static string _currentResourceName = string.Empty;
+    private static string _currentResourceType = string.Empty;
+    
+    public delegate string TResourceNotifyAction(string resourceName, string resourceType);
+    private static List<TResourceNotifyAction> _resourceNotifyActions = new();
+    
+    public delegate long TResourceDataAction(string resourceName, string resourceType, long pResourceData);
+    private static List<TResourceDataAction> _resourceDataActions = new();
+    
+    UNMANAGED_FUNCTION(long, GetResourceInfo, long pResourceName, long pResourceTypeName)
+    {
+        _currentResourceName = Marshal.PtrToStringAnsi((IntPtr)pResourceName);
+        _currentResourceType = Marshal.PtrToStringAnsi((IntPtr)pResourceTypeName);
+    
+    	foreach (TResourceNotifyAction action in _resourceNotifyActions)
+    		pResourceName = (long)Marshal.StringToHGlobalAnsi(action.Invoke(_currentResourceName, _currentResourceType));
+    	
+        return pResourceName;
+    }
+    
+    UNMANAGED_FUNCTION(long, GetResourceData, long pResourceData)
+    {
+    	foreach (TResourceDataAction action in _resourceDataActions)
+    		pResourceData = action.Invoke(_currentResourceName, _currentResourceType, pResourceData);
+    
+        return pResourceData;
+    }
+    
+    private void Init()
+    {
+    	if (_isInitialised)
+    		return;
+    
+        /* 0x1405E8313 */
+        long sigLoadResourceCaller = ScanSignature
+        (
+            "\xE8\xCC\xCC\xCC\xCC\x48\x85\xC0\x74\x22\x80\x78\x10\x00",
+            "x????xxxxxxxxx"
+        );
+    
+        if (sigLoadResourceCaller == 0)
+            return;
+    
+        WriteAsmHook
+        (
+            $@"
+                sub  rsp, 0xD0
+                mov  rdi, r8
+                mov  rbx, rdx
+                mov  rsi, rcx
+                mov  rcx, rdx
+                mov  rdx, [rdi]
+                mov  rax, {GET_UNMANAGED_FUNCTION_PTR(GetResourceInfo)}
+                call rax
+                mov  rdx, [rcx]
+                mov  rbx, rdx
+            ",
+    
+            /* 0x140790E9B */
+            ScanSignature
+            (
+                "\x48\x81\xEC\xD0\x00\x00\x00\x49\x8B\xF8\x48\x8B\xDA",
+                "xxxxxxxxxxxxx"
+            ),
+    
+            HookBehavior.Replace
+        );
+    
+        WriteAsmHook
+        (
+            $@"
+                mov  rcx, rax
+                mov  rax, {GET_UNMANAGED_FUNCTION_PTR(GetResourceData)}
+                call rax
+                lea  r11, qword ptr [rsp + 0xD8 + 0xFFFFFFFFFFFFFFF8]
+                mov  rbx, qword ptr [r11 + 0x10]
+                mov  rsi, qword ptr [r11 + 0x18]
+    			mov  rsp, r11
+            ",
+            
+            /* 0x140790F76 */
+            Memory.ReadCall(sigLoadResourceCaller) + 0xE6,
+    
+            HookBehavior.Replace
+        );
+    
+    	_isInitialised = true;
+    }
+    
+    /*
+    	Use notify actions for redirecting resources.
+    	Redirected resources must already have their data present in memory loaded from their respective Packfiles.
+        
+    	Example;
+    
+    	string NotifyRedirectDashPanelResource(string resourceName, string resourceType)
+    	{
+    		if (resourceName == "cmn_obj_dashpanel")
+    			return "cmnisl_obj_dashpanel";
+    
+    		return resourceName;
+    	}
+    
+    	Resources.AddResourceNotifyAction(NotifyRedirectDashPanelResource);
+    */
+    public void AddResourceNotifyAction(TResourceNotifyAction action)
+    {
+    	Init();
+    
+    	if (_resourceNotifyActions.Contains(action))
+    		return;
+    
+    	_resourceNotifyActions.Add(action);
+    }
+    
+    public void RemoveResourceNotifyAction(TResourceNotifyAction action)
+    {
+    	Init();
+    
+    	if (!_resourceNotifyActions.Contains(action))
+    		return;
+    
+    	_resourceNotifyActions.Remove(action);
+    }
+        
+    /*
+    	Use data actions for reading resource data.
+        
+    	Example;
+    
+    	SonicParameters.Root* pSonicParameters;
+    
+    	long GetSonicParametersPointer(string resourceName, string resourceType, long pResourceData)
+    	{
+    		if (resourceName == "player_common" && resourceType == "ResReflection")
+    			pSonicParameters = (SonicParameters.Root*)(*(long*)(pResourceData + 0x60));
+    
+    		return pResourceData;
+    	}
+    
+    	Resources.AddResourceDataAction(GetSonicParametersPointer);
+    */
+    public void AddResourceDataAction(TResourceDataAction action)
+    {
+    	Init();
+    
+    	if (_resourceDataActions.Contains(action))
+    		return;
+    
+    	_resourceDataActions.Add(action);
+    }
+    
+    public void RemoveResourceDataAction(TResourceDataAction action)
+    {
+    	Init();
+    
+    	if (!_resourceDataActions.Contains(action))
+    		return;
+    
+    	_resourceDataActions.Remove(action);
+    }
+}
+
+Library "RSDK" by "Hyper & ĐeäTh"
+{
+    private static bool _isInitialised = false;
+
+    private static long _pRSDKv3Data = 0;
+    private static long _pRSDKv4Data = 0;
+    private static long _pRSDKGlobals = 0;
+
+    private static int _pRSDKGlobalsOffset = 0;
+
+    private void Init()
+    {
+        if (_isInitialised)
+            return;
+
+        long sig = ScanSignature
+        (
+            "\x48\x63\xFB\x48\x8B\xCE\x48\x8B\xD7\x48\xC1\xE2\x05\x49\x03\xD6\xE8\x00\x00\x00\x00\x3C\x01\x74\x2D\x0F\xB6\x05\x00\x00\x00\x00\xFF\xC3\x3B\xD8\x7C\xDA\xB8\x00\x00\x00\x00\x48\x8B\x5C\x24\x00\x48\x8B\x6C\x24\x00\x48\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x41\x5E\xC3\x48\x8D\x05\x00\x00\x00\x00\x89\x2C\xB8\x8B\xC3\xEB\xD7",
+            "xxxxxxxxxxxxxxxxx????xxxxxxx????xxxxxxx????xxxx?xxxx?xxxx?xxxx?xxxxxxxxxx????xxxxxxx"
+        )
+        + 0x46;
+
+        _pRSDKv3Data = (long)sig + *((int*)IntPtr.Add(new IntPtr(sig), 3)) + 7;
+
+        sig = ScanSignature
+        (
+            "\x4C\x8D\x35\x00\x00\x00\x00\x4C\x89\x7C\x24\x00\x4C\x8D\x3D\x00\x00\x00\x00\x66\x66\x0F\x1F\x84\x00\x00\x00\x00\x00\x48\x63\xD3\x48\x8B\xCD\x48\xC1\xE2\x05\x49\x03\xD7\xE8\x00\x00\x00\x00\x3C\x01\x75\x0B\xBB\x00\x00\x00\x00\x41\x89\x34\xBE\x8B\xFB\x0F\xB6\x05\x00\x00\x00\x00\xFF\xC3\x48\xFF\xC7\x3B\xD8\x7C\xCF\x4C\x8B\x7C\x24\x00\x4C\x8B\x74\x24\x00\x48\x8B\x7C\x24\x00\x48\x83\xC4\x20\x5E\x5D\x5B\xC3",
+            "xxx????xxxx?xxx????xxxxxx????xxxxxxxxxxxxxx????xxxxx????xxxxxxxxx????xxxxxxxxxxxxx?xxxx?xxxx?xxxxxxxx"
+        );
+
+        _pRSDKv4Data = (long)sig + *((int*)IntPtr.Add(new IntPtr(sig), 3)) + 7;
+
+        sig = ScanSignature
+        (
+            "\x48\x8B\x05\x00\x00\x00\x00\x8B\x80\x00\x00\x00\x00\x85\xC0\x78\x2D\x83\xF8\x01\x7E\x1F\x83\xF8\x02\x74\x11\x83\xC0\xFC\x83\xF8\x02\x77\x1B\x48\x8D\x0D\x00\x00\x00\x00\xEB\x19\x48\x8D\x0D\x00\x00\x00\x00\xEB\x10\x48\x8D\x0D\x00\x00\x00\x00\xEB\x07\x48\x8D\x0D\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\xB2\x02\x4C\x8B\x80\x00\x00\x00\x00\x41\xFF\xD0\x48\x8B\x0D\x00\x00\x00\x00\x66\x89\x41\x04",
+            "xxx????xx????xxxxxxxxxxxxxxxxxxxxxxxxx????xxxxx????xxxxx????xxxxx????xxx????xxxxx????xxxxxx????xxxx"
+        );
+
+        _pRSDKGlobals = (long)sig + *((int*)IntPtr.Add(new IntPtr(sig), 3)) + 7;
+
+        _pRSDKGlobalsOffset = *((int*)IntPtr.Add(new IntPtr(sig), 9));
+
+        _isInitialised = true;
+    }
+
+    public long GetRSDKv3DataPtr()
+    {
+        Init();
+
+        return _pRSDKv3Data;
+    }
+
+    public long GetRSDKv4DataPtr()
+    {
+        Init();
+
+        return _pRSDKv4Data;
+    }
+
+    public long GetRSDKGlobalsPtr()
+    {
+        Init();
+
+        return _pRSDKGlobals;
+    }
+
+    public long GetRSDKGlobalsOffset()
+    {
+        Init();
+
+        return _pRSDKGlobalsOffset;
+    }
+
+    public long GetRSDKGlobalsAbsPtr()
+    {
+        Init();
+
+        if (_pRSDKGlobals == 0)
+            return 0;
+
+        return *(long*)_pRSDKGlobals + _pRSDKGlobalsOffset;
+    }
+}
+
+Patch "Disable Auto Save Icon" in "UI" by "Hyper"
+{
+    WriteProtected<byte>
+    (
+        // v1.0.0: 0x140403FAC
+        ScanSignature
+        (
+            "\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x48\x8D\x6C\x24\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\xDA\x48\x8B\xF9\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCB\xE8\x00\x00\x00\x00\x33\xF6\x48\x85\xC0\x74\x16\x48\x85\xFF\x48\x8D\x97\x00\x00\x00\x00\x48\x8B\xC8\x48\x0F\x44\xD6\xE8\x00\x00\x00\x00\x0F\x57\xC0\xC7\x45\x00\x00\x00\x00\x00\x48\x8D\x8F\x00\x00\x00\x00\xC6\x45\xBB\x80\xF3\x0F\x7F\x45\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x48\xC7\x45\x00\x00\x00\x00\x00\x89\x75\xCF\xE8\x00\x00\x00\x00\x48\x8B\x15\x00\x00\x00\x00\x48\x8D\x4D\xA7\x48\x89\x45\xAF\xC7\x45\x00\x00\x00\x00\x00\xC6\x45\xBB\x15\xE8\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8B\xD0\x48\x8B\xCF\xE8\x00\x00\x00\x00\x48\x8B\xD8",
+            "xxxx?xxxx?xxxx?xxxxx?xxx????xxxxxxx????xxxxxxx????xxxxxxxxxxxxx????xxxxxxxx????xxxxx?????xxx????xxxxxxxx?xxx?????xxx?????xxxx????xxx????xxxxxxxxxx?????xxxxx????x????xxxxxxx????xxx"
+        )
+        + 0x1C,
+
+        0xE9, 0x94, 0x01, 0x00, 0x00
+    );
+}
+
+Code "Enable Lives in Anniversary Mode" in "Gameplay" by "ĐeäTh" does "Enabling this code will cause Anniversary Mode to use a different set of saves from normal, and your regular Anniversary Mode saves will be inaccessible."
+//
+    #lib "RSDK"
+//
+{
+    // Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
+    // Version 1.0.0 and 1.0.4: RSDKv4DataPtr + 0x1A4
+    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x1FC) == 1)
+    {
+        // Sonic 1 Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x1FC, 0x00);
+    }
+
+    // Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
+    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x23C) == 1)
+    {
+        // Sonic 2 Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x288, 0x00);
+    }
+
+    // Check if RSDKv3 game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
+    if (*(byte*)(RSDK.GetRSDKv3DataPtr() + 0x1DC) == 1)
+    {
+        // Sonic CD Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv3DataPtr() + 0x220, 0x00);
+    }
+
+    // Sonic 3&K Coin Mode and HUD Update
+    if (RSDK.GetRSDKGlobalsAbsPtr() != 0)
+    {
+        // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
+        // Version 1.0.0: RSDKGlobalsPtr + 0x447D08
+        // Version 1.0.4: RSDKGlobalsPtr + 0x4C3508 (Thanks to RDC)
+        // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x104
+        if (*(byte*)(RSDK.GetRSDKGlobalsAbsPtr() + 0x10C) == 1)
+        {
+            // HUD Update
+            // Version 1.0.0: RSDKGlobalsPtr + 0x447D20
+            // Version 1.0.4: RSDKGlobalsPtr + 0x4C34D4 (Thanks to RDC)
+            WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() + 0xD0, 0x00);
+
+            // Coin Mode
+            // Version 1.0.0: RSDKGlobalsPtr + 0x447CD4
+            // Version 1.0.4: RSDKGlobalsPtr + 0x4C3520 (Thanks to RDC)
+            // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x124
+            WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() + 0x124, 0x00);
+        }
+    }
+}
+
+Code "Enable Lives in Mirror Mode" in "Gameplay" by "ĐeäTh" does "Enabling this code will cause Mirror Mode to use a different set of saves from normal, and your regular Mirror Mode saves will be inaccessible."
+//
+    #lib "RSDK"
+//
+{
+    // Check if Sonic 1 game.playMode is set to BOOT_PLAYMODE_MIRRORING
+    // Version 1.0.0 and 1.0.4: RSDKv4DataPtr + 0x1A4
+    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x1FC) == 3)
+    {
+        // Sonic 1 Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x1FC, 0x00);
+    }
+
+    // Check if Sonic 2 game.playMode is set to BOOT_PLAYMODE_MIRRORING
+    if (*(byte*)(RSDK.GetRSDKv4DataPtr() + 0x23C) == 3)
+    {
+        // Sonic 2 Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv4DataPtr() + 0x288, 0x00);
+    }
+
+    // Check if RSDKv3 game.playMode is set to BOOT_PLAYMODE_MIRRORING
+    if (*(byte*)(RSDK.GetRSDKv3DataPtr() + 0x1DC) == 3)
+    {
+        // Sonic CD Coin Mode
+        WriteProtected<byte>(RSDK.GetRSDKv3DataPtr() + 0x220, 0x00);
+    }
+
+    // Sonic 3&K Coin Mode and HUD Update
+    if (RSDK.GetRSDKGlobalsAbsPtr() != 0)
+    {
+        // Check if game.playMode is set to BOOT_PLAYMODE_ANNIVERSARY
+        // Version 1.0.0: RSDKGlobalsPtr + 0x447D08
+        // Version 1.0.4: RSDKGlobalsPtr + 0x4C3508 (Thanks to RDC)
+        // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x104
+        if (*(byte*)(RSDK.GetRSDKGlobalsAbsPtr() + 0x10C) == 3)
+        {
+            // HUD Update
+            // Version 1.0.0: RSDKGlobalsPtr + 0x447D20
+            // Version 1.0.4: RSDKGlobalsPtr + 0x4C34D4 (Thanks to RDC)
+            WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() + 0xD0, 0x00);
+
+            // Coin Mode
+            // Version 1.0.0: RSDKGlobalsPtr + 0x447CD4
+            // Version 1.0.4: RSDKGlobalsPtr + 0x4C3520 (Thanks to RDC)
+            // Version 2.0.0: RSDKGlobalsPtr + RSDKGlobalsOffset + 0x124
+            WriteProtected<byte>(RSDK.GetRSDKGlobalsPtr() + 0x124, 0x00);
+        }
+    }
+}
+
+Code "Disable Super Music in S3&K" in "Audio" by "MegAmi" does "Due to how the cheat works, the Super music may still play in some instances, such as after the AIZ Act 1 bombing cutscene."
+//
+    #lib "RSDK"
+//
+{
+    if (RSDK.GetRSDKGlobalsAbsPtr() == 0)
+        return;
+    
+    WriteProtected<byte>(RSDK.GetRSDKGlobalsAbsPtr() - 0x08, 0x00);
+}
+
+Code "Locked 30 FPS for Main Menu" in "Graphics" by "MegAmi" does "Limits the main menu to running at 30 FPS. This works similarly to how the Switch version's FPS cap works, meaning the actual games are unaffected."
+//
+	#include "ReflectionHelpers" noemit
+
+	#lib "UIRflParam"
+//
+{
+	var UIRflParamInfo = Reflection.GetDataInfo<UIRflParam.Root>("ui_rfl_param");
+
+	if (UIRflParamInfo.pData == null)
+		return;
+
+	RFL_SET_PARAM(UIRflParamInfo, menuParam.fpsParam.isFPS30, true);
+}
+
+Library "UIRflParam"
+{
+    using System.Numerics;
+    using System.Runtime.InteropServices;
+
+    [StructLayout(LayoutKind.Explicit, Size = 4)]
+    public struct InputHelpRflParam
+    {
+        [FieldOffset(0)] public float itemMargin;
+    }
+
+    public enum MainMenuMode : sbyte
+    {
+        MAINMENU_MODE_SONIC1 = 0,
+        MAINMENU_MODE_SONICCD = 1,
+        MAINMENU_MODE_SONIC2 = 2,
+        MAINMENU_MODE_SONIC3K = 3,
+        MAINMENU_MODE_MISSION = 4,
+        MAINMENU_MODE_DATA = 5,
+        MAINMENU_MODE_NUM = 6
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 2)]
+    public struct AllMapMenuItemParam
+    {
+        [FieldOffset(0)] public MainMenuMode menuMode;
+        [FieldOffset(1)] public bool isRepeate;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 8)]
+    public struct AllMapMenuRflParam
+    {
+        [FieldOffset(0)] public AllMapMenuItemParam itemUp;
+        [FieldOffset(2)] public AllMapMenuItemParam itemDown;
+        [FieldOffset(4)] public AllMapMenuItemParam itemLeft;
+        [FieldOffset(6)] public AllMapMenuItemParam itemRight;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 60)]
+    public struct MainMenuRflParam
+    {
+        [FieldOffset(0)]  public float textScrollSpeed;
+        [FieldOffset(4)]  public bool textScrollLoop;
+        [FieldOffset(5)]  public unsafe fixed byte /* AllMapMenuRflParam[6] */ _allMapMenu[48];
+
+        public unsafe AllMapMenuRflParam* allMapMenu
+        {
+            get
+            {
+                fixed (byte* p_allMapMenu = _allMapMenu)
+                    return (AllMapMenuRflParam*)p_allMapMenu;
+            }
+        }
+
+        [FieldOffset(56)] public float backTitleInputTime;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 2)]
+    public struct MenuFPSRflParam
+    {
+        [FieldOffset(0)] public bool fixedFrame;
+        [FieldOffset(1)] public bool isFPS30;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 88)]
+    public struct MenuRflParam
+    {
+        [FieldOffset(0)]  public InputHelpRflParam inputHelpParam;
+        [FieldOffset(4)]  public MainMenuRflParam mainMenuParam;
+        [FieldOffset(64)] public MenuFPSRflParam fpsParam;
+        [FieldOffset(66)] public MenuFPSRflParam fpsParamNX;
+        [FieldOffset(68)] public MenuFPSRflParam fpsParamORBIS;
+        [FieldOffset(70)] public MenuFPSRflParam fpsParamDURANGO;
+        [FieldOffset(72)] public float missionOutWaitTimer;
+        [FieldOffset(76)] public float mydataOutWaitTimer;
+        [FieldOffset(80)] public float museumOutWaitTimer;
+        [FieldOffset(84)] public float optionOutWaitTimer;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 80)]
+    public struct AdvertiseRflParam
+    {
+        [FieldOffset(0)]  public float CESA_autoTimer;
+        [FieldOffset(4)]  public float CESA_skipTimer;
+        [FieldOffset(8)]  public float CESA_startTimer;
+        [FieldOffset(12)] public float CESA_endTimer;
+        [FieldOffset(16)] public float CAUTION_LIGHT_autoTimer;
+        [FieldOffset(20)] public float CAUTION_LIGHT_skipTimer;
+        [FieldOffset(24)] public float CAUTION_LIGHT_startTimer;
+        [FieldOffset(28)] public float CAUTION_LIGHT_endTimer;
+        [FieldOffset(32)] public float SEGA_LOGO_autoTimer;
+        [FieldOffset(36)] public float SEGA_LOGO_skipTimer;
+        [FieldOffset(40)] public float SEGA_LOGO_startTimer;
+        [FieldOffset(44)] public float SEGA_LOGO_endTimer;
+        [FieldOffset(48)] public float SONICTEAM_LOGO_autoTimer;
+        [FieldOffset(52)] public float SONICTEAM_LOGO_skipTimer;
+        [FieldOffset(56)] public float SONICTEAM_LOGO_startTimer;
+        [FieldOffset(60)] public float SONICTEAM_LOGO_endTimer;
+        [FieldOffset(64)] public float RSDK_CRI_LOGO_autoTimer;
+        [FieldOffset(68)] public float RSDK_CRI_LOGO_skipTimer;
+        [FieldOffset(72)] public float RSDK_CRI_LOGO_startTimer;
+        [FieldOffset(76)] public float RSDK_CRI_LOGO_endTimer;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 12)]
+    public struct TitleRflParam
+    {
+        [FieldOffset(0)] public float toMovieTimer;
+        [FieldOffset(4)] public float movieVolume;
+        [FieldOffset(8)] public float cancelInputTime;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 12)]
+    public struct OptionLanguageEditRflParam
+    {
+        [FieldOffset(0)] public unsafe fixed bool enableEdit[12];
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 120)]
+    public struct OptionLetterBoxEditRflParam
+    {
+        [FieldOffset(0)]  public unsafe fixed int enableDLC1LetterBoxKinds[10];
+        [FieldOffset(40)] public unsafe fixed int enableDLC2LetterBoxKinds[20];
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 16)]
+    public struct CString
+    {
+        [FieldOffset(0)] public long pValue;
+
+        public string Value
+        {
+        	get => Marshal.PtrToStringAnsi((IntPtr)pValue);
+        	set => pValue = (long)Marshal.StringToHGlobalAnsi(value);
+        }
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 72)]
+    public struct OptionLicensePFParam
+    {
+        [FieldOffset(0)]  public CString addText;
+        [FieldOffset(16)] public int addTextSize;
+        [FieldOffset(24)] public CString addCommonTagJP;
+        [FieldOffset(40)] public CString addCommonTagUS;
+        [FieldOffset(56)] public CString addCommonTagEU;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 368)]
+    public struct OptionLicenseRflParam
+    {
+        [FieldOffset(0)]   public int commonTextSize;
+        [FieldOffset(8)]   public OptionLicensePFParam licensePS;
+        [FieldOffset(80)]  public OptionLicensePFParam licenseXBOX;
+        [FieldOffset(152)] public OptionLicensePFParam licenseSWITCH;
+        [FieldOffset(224)] public OptionLicensePFParam licenseSTEAM;
+        [FieldOffset(296)] public OptionLicensePFParam licenseEPIC;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 520)]
+    public struct OptionRflParam
+    {
+        [FieldOffset(0)]   public OptionLanguageEditRflParam languageEdit;
+        [FieldOffset(12)]  public OptionLetterBoxEditRflParam letterBoxEdit;
+        [FieldOffset(136)] public OptionLicenseRflParam licenseParam;
+        [FieldOffset(504)] public int ui_seekbarActionMove;
+        [FieldOffset(508)] public float ui_seekbarWheelRatio;
+        [FieldOffset(512)] public int applyTimer;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 4)]
+    public struct SaveIconRflParam
+    {
+        [FieldOffset(0)] public float minimumDisplayTime;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 712)]
+    public struct Root
+    {
+        [FieldOffset(0)]   public MenuRflParam menuParam;
+        [FieldOffset(88)]  public AdvertiseRflParam advertiseParam;
+        [FieldOffset(168)] public TitleRflParam titleParam;
+        [FieldOffset(184)] public OptionRflParam optionParam;
+        [FieldOffset(704)] public SaveIconRflParam saveIconParam;
+    }
+
 }
