@@ -22,27 +22,41 @@ namespace HedgeModManager
             if (HedgeApp.IsLinux)
             {
                 string home = Environment.GetEnvironmentVariable("WINEHOMEDIR").Replace("\\??\\", "");
-                SteamLocation = Path.Combine(home, ".steam/steam");
-            }
-
-            var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
-                    .OpenSubKey("SOFTWARE\\Wow6432Node\\Valve\\Steam");
-
-            if (key == null)
-            {
-                key = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default)
-                    .OpenSubKey("Software\\Valve\\Steam");
-                if (key != null && key.GetValue("SteamPath") is string steamPath)
+                string steamPath = Path.Combine(home, ".steam/steam");
+                if (Directory.Exists(steamPath))
                     SteamLocation = steamPath;
             }
-            else
+
+            // Local Machine
             {
-                if (key == null)
+                var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
+                        .OpenSubKey("SOFTWARE\\Wow6432Node\\Valve\\Steam");
+                if (key == null || key.GetValue("InstallPath") == null)
+                {
+                    if (key != null)
+                        key.Close();
+
                     key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
                     .OpenSubKey("SOFTWARE\\Valve\\Steam");
+                }
+                if (key != null)
+                {
+                    if (key.GetValue("InstallPath") is string steamPath && Directory.Exists(steamPath))
+                        SteamLocation = steamPath;
+                    key.Close();
+                }
+            }
 
-                if (key != null && key.GetValue("InstallPath") is string steamPath)
-                    SteamLocation = steamPath;
+            // Current User
+            {
+                var key = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default)
+                .OpenSubKey("Software\\Valve\\Steam");
+                if (key != null)
+                {
+                    if (key.GetValue("SteamPath") is string steamPath && Directory.Exists(steamPath))
+                        SteamLocation = steamPath;
+                    key.Close();
+                }
             }
         }
 
