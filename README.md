@@ -23,7 +23,7 @@ A mod manager for Hedgehog Engine games on PC.
 It's simple, just grab the [latest version from GitHub](https://github.com/thesupersonic16/HedgeModManager/releases/latest) (or grab the latest compile from [GitHub Actions](https://nightly.link/thesupersonic16/HedgeModManager/workflows/build/rewrite/HedgeModManager-Release.zip)) then extract all the files anywhere and run `HedgeModManager.exe`.
 
 ### Linux/Steam Deck
-In case you want to use HedgeModManager on Linux/Steam Deck, the setup process is a bit more involved. Check out [this guide](https://github.com/thesupersonic16/HedgeModManager/wiki/Running-on-Linux-(Wine)) on the wiki.
+In case you want to use HedgeModManager on Linux/Steam Deck, the setup process is a bit more involved. Check out [this guide](https://github.com/thesupersonic16/HedgeModManager/wiki/Running-on-Linux-(Bottles)) on the wiki.
 
 ## How do I install mods?
 There are multiple ways of installing mods, one of the easy ways of installing mods is by dragging its zip/7z/rar/folder into the mod list along with also being able to drag and drop multiple files and/or folders.
