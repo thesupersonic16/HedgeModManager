@@ -70,7 +70,7 @@
                                       Margin="10,5,10,41" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" SizeChanged="ModsList_SizeChanged"
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                                       dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
-                                      dd:DragDrop.DropHandler="{Binding}">
+                                      dd:DragDrop.DropHandler="{Binding}" AlternationCount="2">
                                 <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                         <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
@@ -282,7 +282,7 @@
                                     </Grid.RowDefinitions>
                                     
                                     <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
-                                          PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click">
+                                          PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click" AlternationCount="2">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                                 <Setter Property="ContextMenu" Value="{DynamicResource CodesListContextMenu}"/>
