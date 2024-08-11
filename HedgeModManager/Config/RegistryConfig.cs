@@ -1,5 +1,4 @@
-﻿using HedgeModManager.Serialization;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Reflection;
 
 namespace HedgeModManager
@@ -23,6 +22,7 @@ namespace HedgeModManager
         public static bool CheckModUpdates { get; set; } = true;
         public static bool KeepOpen { get; set; } = true;
         public static bool AllowEvents { get; set; } = true;
+        public static bool UseAlternatingRows { get; set; } = true;
 
         static RegistryConfig()
         {
@@ -45,6 +45,7 @@ namespace HedgeModManager
             key.SetValue(nameof(CheckModUpdates), CheckModUpdates ? 1 : 0);
             key.SetValue(nameof(KeepOpen), KeepOpen ? 1 : 0);
             key.SetValue(nameof(AllowEvents), AllowEvents ? 1 : 0);
+            key.SetValue(nameof(UseAlternatingRows), UseAlternatingRows ? 1 : 0);
             key.Close();
         }
 
@@ -75,6 +76,7 @@ namespace HedgeModManager
             CheckModUpdates         = (int)key.GetValue(nameof(CheckModUpdates), 1) != 0;
             KeepOpen                = (int)key.GetValue(nameof(KeepOpen), 1) != 0;
             AllowEvents             = (int)key.GetValue(nameof(AllowEvents), 1) != 0;
+            UseAlternatingRows      = (int)key.GetValue(nameof(UseAlternatingRows), 1) != 0;
             key.Close();
         }
     }

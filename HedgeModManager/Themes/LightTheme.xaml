@@ -14,6 +14,7 @@
     <Color           x:Key="HMM.Window.BackgroundColor1" A="255" R="238" G="238" B="238"/>
     <SolidColorBrush x:Key="HMM.Window.BackgroundBrush1" Color="{DynamicResource HMM.Window.BackgroundColor1}"/>
     <SolidColorBrush x:Key="HMM.Window.BackgroundBrush2" Color="#FFDDDDDD"/>
+    <SolidColorBrush x:Key="HMM.Window.BackgroundBrush3" Color="#FFF0F0F0"/>
     <SolidColorBrush x:Key="HMM.Window.ForegroundBrush" Color="#FF000000"/>
     <SolidColorBrush x:Key="HMM.Window.LightForegroundBrush" Color="Gray"/>
     <SolidColorBrush x:Key="HMM.Window.BorderBrush" Color="#FFBBBBBB"/>

@@ -2348,6 +2348,9 @@ namespace HedgeModManager
         private void CheckBox_RegistryConfig_Checked(object sender, RoutedEventArgs e)
         {
             RegistryConfig.Save();
+
+            // Update alternating row visual.
+            ModsList.AlternationCount = CodesList.AlternationCount = RegistryConfig.UseAlternatingRows ? 2 : 0;
         }
 
         private void CheckBox_CodesUseTreeView_Checked(object sender, RoutedEventArgs e)

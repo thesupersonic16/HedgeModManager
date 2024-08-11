@@ -34,6 +34,8 @@ namespace HedgeModManager.UI
         public bool HasNoMods => Mods.Count == 0;
         public bool HasNoCodes => ModsDB.CodesDatabase.Codes.Count == 0;
 
+        public int RowAlternationCount => RegistryConfig.UseAlternatingRows ? 2 : 0;
+
         public event PropertyChangedEventHandler PropertyChanged;
         
         public void DragOver(IDropInfo dropInfo)

@@ -927,7 +927,7 @@
                         <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush}"/>
                     </Trigger>
                     <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                        <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush2}"/>
+                        <Setter Property="Background" Value="{DynamicResource HMM.Window.BackgroundBrush3}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>

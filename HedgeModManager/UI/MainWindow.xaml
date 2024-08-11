@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
-        MinHeight="662" MinWidth="585" Height="662" Width="585" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
+        MinHeight="666" MinWidth="585" Height="666" Width="585" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
@@ -70,7 +70,7 @@
                                       Margin="10,5,10,41" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" SizeChanged="ModsList_SizeChanged"
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                                       dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
-                                      dd:DragDrop.DropHandler="{Binding}" AlternationCount="2">
+                                      dd:DragDrop.DropHandler="{Binding}" AlternationCount="{Binding RowAlternationCount}">
                                 <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                         <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
@@ -280,9 +280,14 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Name="CodesListDescriptionRow" Height="24" MinHeight="24"/>
                                     </Grid.RowDefinitions>
-                                    
-                                    <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
-                                          PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click" AlternationCount="2">
+
+                                    <ListView x:Name="CodesList"
+                                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
+                                              SelectedItem="{Binding SelectedCode}"
+                                              SizeChanged="CodesList_SizeChanged"
+                                              PreviewKeyDown="CodesList_OnPreviewKeyDown"
+                                              GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click"
+                                              AlternationCount="{Binding RowAlternationCount}">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                                 <Setter Property="ContextMenu" Value="{DynamicResource CodesListContextMenu}"/>
@@ -419,7 +424,8 @@
                                         <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"     IsChecked="{Binding Path=(local:RegistryConfig.CheckModUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
                                         <CheckBox Content="{DynamicResource SettingsUIUpdateCodesOnLaunch}" IsChecked="{Binding Path=(local:RegistryConfig.UpdateCodesOnLaunch)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
                                         <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"         IsChecked="{Binding Path=(local:RegistryConfig.KeepOpen)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIUseAlternatingRows}"  IsChecked="{Binding Path=(local:RegistryConfig.UseAlternatingRows)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked"/>
                                     </StackPanel>
 
                                     <Grid>
@@ -463,7 +469,7 @@
                 
                 <Grid Grid.Row="1" Background="{DynamicResource HMM.Window.DialogBottom}">
                     <Grid Margin="8,1,8,0" VerticalAlignment="Center" Height="56">
-                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Width="280" HorizontalAlignment="Left" Margin="0,8,5,8" SelectionChanged="Game_Changed">
+                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Width="285" HorizontalAlignment="Left" Margin="0,8,5,8" SelectionChanged="Game_Changed">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
