@@ -73,8 +73,7 @@ namespace HedgeModManager
             body.AppendLine($"    Process Level: " + (HedgeApp.RunningAsAdmin() ? "Administrator" : "User"));
             try
             {
-                body.AppendLine($"    Game: {HedgeApp.CurrentGame}");
-                body.AppendLine($"    GameInstall: {HedgeApp.GetGameInstall(HedgeApp.CurrentGame)}");
+                body.AppendLine($"    GameInstall: {HedgeApp.CurrentGameInstall}");
             } catch { }
             if (UpdateStatus != null) body.AppendLine($"    Update Status: {UpdateStatus}");
             if (useMarkdown) body.AppendLine("```");
@@ -145,7 +144,7 @@ namespace HedgeModManager
         private void Button_Report_Click(object sender, RoutedEventArgs e)
         {
             string url = $"{ReportRepository}/issues/new";
-            url += $"?title=[{HedgeApp.CurrentGame?.GameName}] ";
+            url += $"?title=[{HedgeApp.CurrentGameInstall.Game?.GameName}] ";
             url += $"&body={Uri.EscapeDataString(GetReport(true, true))}";
             Process.Start(url);
 

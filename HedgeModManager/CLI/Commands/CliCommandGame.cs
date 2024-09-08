@@ -14,7 +14,7 @@ namespace HedgeModManager.CLI.Commands
         {
             string gameName = (string)command.Inputs[0];
             HedgeApp.SelectGameInstall(HedgeApp.GameInstalls.FirstOrDefault(
-                t => t.BaseGame.GameName.ToLowerInvariant() == gameName.ToLowerInvariant()));
+                t => t.Game.GameName.ToLowerInvariant() == gameName.ToLowerInvariant()));
         }
     }
 }

@@ -55,7 +55,7 @@ namespace HedgeModManager
 
                 try
                 {
-                    archive.CreateEntryFromFile(Path.Combine(HedgeApp.StartDirectory, "profiles.json"), "profiles.json");
+                    archive.CreateEntryFromFile(Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "profiles.json"), "profiles.json");
                 }
                 catch { }
 
@@ -96,20 +96,21 @@ namespace HedgeModManager
         public static string CreateReport()
         {
             StringBuilder body = new StringBuilder();
-            var modloader = HedgeApp.CurrentGame.ModLoader;
+            var gameInstall = HedgeApp.CurrentGameInstall;
+            var modloader = gameInstall.Game.ModLoader;
             string loaderPath = modloader != null
-                ? Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ModLoader.ModLoaderFileName)
+                ? Path.Combine(gameInstall.GameDirectory, gameInstall.Game.ModLoader.ModLoaderFileName)
                 : null;
-            string cpkredirPath = Path.Combine(HedgeApp.StartDirectory, "cpkredir.dll");
-            string gamePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecutableName);
+            string cpkredirPath = Path.Combine(gameInstall.GameDirectory, "cpkredir.dll");
+            string gamePath = gameInstall.ExecutablePath;
 
-            body.AppendLine($"Start Directory: {HedgeApp.StartDirectory}");
+            body.AppendLine($"Game Directory: {gameInstall.GameDirectory}");
             if (modloader != null)
                 body.AppendLine(File.Exists(loaderPath)
                     ? $"Loader Hash: {HedgeApp.ComputeMD5Hash(loaderPath)}"
-                    : $"{HedgeApp.CurrentGame.ModLoader?.ModLoaderName} does not exist!");
+                    : $"{gameInstall.Game.ModLoader?.ModLoaderName} does not exist!");
 
-            if (HedgeApp.CurrentGame.SupportsCPKREDIR)
+            if (gameInstall.Game.SupportsCPKREDIR)
             {
                 body.AppendLine(File.Exists(cpkredirPath)
                     ? $"CPKREDIR Hash: {HedgeApp.ComputeMD5Hash(cpkredirPath)}"
@@ -117,7 +118,7 @@ namespace HedgeModManager
 
                 try
                 {
-                    if (HedgeApp.CurrentGame.SupportsCPKREDIR)
+                    if (HedgeApp.CurrentGameInstall.Game.SupportsCPKREDIR)
                         body.AppendLine($"CPKREDIR Installed: {HedgeApp.IsCPKREDIRInstalled(gamePath)}");
                 }
                 catch { }
@@ -125,7 +126,7 @@ namespace HedgeModManager
 
             try
             {
-                body.AppendLine($"{HedgeApp.CurrentGame.ExecutableName} Hash: {HedgeApp.ComputeMD5Hash(gamePath)}");
+                body.AppendLine($"{gamePath} Hash: {HedgeApp.ComputeMD5Hash(gamePath)}");
             }
             catch(Exception e)
             {
@@ -159,7 +160,7 @@ namespace HedgeModManager
         {
             var body = new StringBuilder();
             int directoryLevel = 0;
-            GetDirectory(new DirectoryInfo(HedgeApp.StartDirectory));
+            GetDirectory(new DirectoryInfo(HedgeApp.CurrentGameInstall.GameDirectory));
             return body.ToString();
 
             void GetDirectory(DirectoryInfo info)

@@ -8,8 +8,8 @@ namespace HedgeModManager
         private const string PersonalizePath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
         public static string ConfigPath { get; } = @"SOFTWARE\HEDGEMM";
-        public static string LastGameDirectory;
-        public static string ExtraGameDirectories;
+        public static string LastGameInstall;
+        public static string CustomGames;
         public static string UILanguage;
         public static string UITheme;
 
@@ -33,8 +33,8 @@ namespace HedgeModManager
         {
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
             key.SetValue("ExecutablePath", Assembly.GetExecutingAssembly().Location);
-            key.SetValue("LastGame", LastGameDirectory);
-            key.SetValue(nameof(ExtraGameDirectories), ExtraGameDirectories);
+            key.SetValue(nameof(LastGameInstall), LastGameInstall);
+            key.SetValue(nameof(CustomGames), CustomGames);
             key.SetValue(nameof(UILanguage), UILanguage);
             key.SetValue(nameof(UITheme), UITheme);
             key.SetValue(nameof(CodesSortingColumnIndex), CodesSortingColumnIndex);
@@ -64,8 +64,8 @@ namespace HedgeModManager
             }
 
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
-            LastGameDirectory       = (string)key.GetValue("LastGame", string.Empty);
-            ExtraGameDirectories    = (string)key.GetValue(nameof(ExtraGameDirectories), string.Empty);
+            LastGameInstall         = (string)key.GetValue(nameof(LastGameInstall), string.Empty);
+            CustomGames             = (string)key.GetValue(nameof(CustomGames), string.Empty);
             UILanguage              = (string)key.GetValue(nameof(UILanguage), HedgeApp.PCCulture);
             UITheme                 = (string)key.GetValue(nameof(UITheme), useLightMode ? "LightTheme" : "DarkerTheme");
             CodesSortingColumnIndex = (int)key.GetValue(nameof(CodesSortingColumnIndex), 1);
