@@ -69,7 +69,7 @@ namespace HedgeModManager
             AppID = "637100",
             GBProtocol = "hedgemmforces",
             Is64Bit = true,
-            ModLoader = ModLoaders.HE2ModLoader,
+            ModLoader = ModLoaders.HE2ModLoaderD3D11,
             CodesURL = Resources.URL_WARS_CODES,
             GamePaths = [Path.Combine("SonicForces", "build", "main", "projects", "exec", "Sonic Forces.exe")]
         };

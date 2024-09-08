@@ -37,6 +37,19 @@ namespace HedgeModManager
             IncompatibleFileCallback = ModLoader.IncompatibleByOriginalName("HE2ModLoader.dll")
         };
 
+        // Temporary workaround for Sonic Forces
+        public static ModLoader HE2ModLoaderD3D11 = new ModLoader()
+        {
+            ModLoaderDownloadURL = Resources.URL_HE2ML_DL,
+            ModLoaderData = EmbeddedLoaders.HE2ModLoader,
+            ModLoaderName = "Hedgehog Engine 2 Mod Loader",
+            ModLoaderID = "HE2ModLoader",
+            ModLoaderFileName = "d3d11.dll",
+            DirectXVersion = 11,
+            IncompatibleFiles = new[] { "dinput8.dll" },
+            IncompatibleFileCallback = ModLoader.IncompatibleByOriginalName("HE2ModLoader.dll")
+        };
+
         public static ModLoader RainbowModLoader = new ModLoader()
         {
             ModLoaderDownloadURL = Resources.URL_RML_DL,
