@@ -9,7 +9,7 @@
 A mod manager for Hedgehog Engine games on PC.
 
 ### Current Supported Games
-- [Sonic Generations](https://store.steampowered.com/bundle/43314)
+- [Sonic Generations](https://store.steampowered.com/app/71340)
 - [Sonic Lost World](https://store.steampowered.com/app/329440)
 - [Sonic Forces](https://store.steampowered.com/app/637100)
 - [Puyo Puyo Tetris 2](https://store.steampowered.com/app/1259790)
