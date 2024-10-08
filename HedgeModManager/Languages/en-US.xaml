@@ -29,6 +29,8 @@
     <system:String x:Key="MainUISaveAndPlay"   >Save and Play</system:String>
     <system:String x:Key="MainUIConfigureMod"  >Configure Mod</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Failed to download mod loader.</system:String>
+    <system:String x:Key="MainUISelectGameTitle">Select Game Executable</system:String>
+    <system:String x:Key="MainUISelectGameFilter">Windows Executable</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Failed to install mod loader.&#x0a;Please make sure you have permissions to write game files.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Failed to uninstall mod loader.&#x0a;Please make sure no games are currently running.</system:String>
 
@@ -109,6 +111,7 @@
     <system:String x:Key="SettingsUIUpdateCodesOnLaunch">Automatically update community codes on launch</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"        >Keep Hedge Mod Manager open after starting a game</system:String>
     <system:String x:Key="SettingsUICodesUseTreeView"   >Use tree view for codes list</system:String>
+    <system:String x:Key="SettingsUIUseAlternatingRows" >Use alternating row colors</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate"     >Check for Updates</system:String>
     <system:String x:Key="SettingsUIAboutHMM"           >About Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"           >Language:</system:String>
@@ -200,6 +203,8 @@
     <system:String xml:space="preserve" x:Key="DialogUINoDecompressor"        >Could not find 7-Zip or WinRAR!&#x0a;This is required to extract the mod data&#x0a;&#x0a;Please make sure you have either one installed on your system.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">New Release Channel Update</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >There is a new update on the Release channel. Sticking with the Development channel may result in unwanted instability.&#x0a;&#x0a;Would you like to switch to the Release channel?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorHeader" >Failed To Load Mod Configuration</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorBody"   >The mod "{0}" contains a malformed configuration schema.&#x0a;&#x0a;Please contact the mod author "{1}" for support.</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >completed</system:String>
@@ -256,6 +261,7 @@
     <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
     <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
     <system:String x:Key="GameNoGame">No Game Detected!</system:String>
+    <system:String x:Key="GameAddGame">Add Game</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>
     <system:String x:Key="LauncherHeroic">Heroic</system:String>

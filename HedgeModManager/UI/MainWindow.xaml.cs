@@ -37,6 +37,7 @@ using System.Xml.Linq;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using HedgeModManager.CodeCompiler;
 using HedgeModManager.Diagnostics;
+using Microsoft.Win32;
 
 namespace HedgeModManager
 {
@@ -121,13 +122,13 @@ namespace HedgeModManager
 
         public void RefreshProfiles()
         {
-            if (HedgeApp.CurrentGame == Games.Unknown)
+            if (HedgeApp.CurrentGameInstall.Game == Games.Unknown)
                 return;
 
             HedgeApp.ModProfiles.Clear();
             try
             {
-                string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+                string profilePath = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "profiles.json");
                 if (File.Exists(profilePath))
                     HedgeApp.ModProfiles = JsonConvert.DeserializeObject<List<ModProfile>>(File.ReadAllText(profilePath));
 
@@ -278,7 +279,7 @@ namespace HedgeModManager
         public void RefreshMods()
         {
             // Don't refresh when there is no games
-            if (HedgeApp.CurrentGame == Games.Unknown)
+            if (HedgeApp.CurrentGameInstall.Game == Games.Unknown)
                 return;
 
             CodesList.Items.Clear();
@@ -385,22 +386,26 @@ namespace HedgeModManager
         public void RefreshUI()
         {
             ModsTab.IsEnabled = CodesTab.IsEnabled = ComboBox_ModProfile.IsEnabled = MLSettingsGrid.IsEnabled
-                = HMMSettingsSackPanel.IsEnabled = SaveButton.IsEnabled = SavePlayButton.IsEnabled = HedgeApp.CurrentGame != Games.Unknown;
+                = HMMSettingsSackPanel.IsEnabled = SaveButton.IsEnabled = SavePlayButton.IsEnabled = HedgeApp.CurrentGameInstall.Game != Games.Unknown;
             // I am lazy
-            ComboBox_ModProfile.Visibility = HedgeApp.CurrentGame != Games.Unknown ? Visibility.Visible : Visibility.Collapsed;
+            ComboBox_ModProfile.Visibility = HedgeApp.CurrentGameInstall.Game != Games.Unknown ? Visibility.Visible : Visibility.Collapsed;
 
             CodesTree.ClearSelectedItems();
 
-            if (HedgeApp.AprilFools)
-                SavePlayButton.Content = "Save & Pay";
+            // Add dummy add game option to the end
+            if (HedgeApp.GameInstalls[HedgeApp.GameInstalls.Count - 1] != MainWindowViewModel.GameInstallAddGame)
+            {
+                HedgeApp.GameInstalls.Remove(MainWindowViewModel.GameInstallAddGame);
+                HedgeApp.GameInstalls.Add(MainWindowViewModel.GameInstallAddGame);
+            }
 
             // No game selected
-            if (HedgeApp.CurrentGame == Games.Unknown)
+            if (HedgeApp.CurrentGameInstall.Game == Games.Unknown)
             {
                 ViewModel = new MainWindowViewModel
                 {
                     ModsDB = new ModsDB(),
-                    Games = HedgeApp.GameInstalls,
+                    Games = new ObservableCollection<GameInstall>(HedgeApp.GameInstalls),
                     DevBuild = !string.IsNullOrEmpty(HedgeApp.RepoCommit)
                 };
                 DataContext = ViewModel;
@@ -441,7 +446,7 @@ namespace HedgeModManager
             {
                 CPKREDIR = HedgeApp.Config,
                 ModsDB = ModsDatabase,
-                Games = HedgeApp.GameInstalls,
+                Games = new ObservableCollection<GameInstall>(HedgeApp.GameInstalls),
                 Mods = new ObservableCollection<ModInfo>(ModsDatabase.Mods),
                 Profiles = new ObservableCollection<ModProfile>(HedgeApp.ModProfiles),
                 SelectedModProfile = SelectedModProfile,
@@ -456,19 +461,21 @@ namespace HedgeModManager
 
             Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString}) - {SelectedModProfile?.Name}" + (HedgeApp.IsLinux ? " (Linux)" : "");
 
-            if (HedgeApp.CurrentGame.ModLoader != null)
+            var gameInstall = HedgeApp.CurrentGameInstall;
+
+            if (gameInstall.Game.ModLoader != null)
             {
                 Button_OtherLoader.IsEnabled = true;
-                Button_DownloadCodes.IsEnabled = !string.IsNullOrEmpty(HedgeApp.CurrentGame.CodesURL);
+                Button_DownloadCodes.IsEnabled = !string.IsNullOrEmpty(gameInstall.Game.CodesURL);
             }
 
-            var exeDir = HedgeApp.StartDirectory;
-            var modloader = HedgeApp.CurrentGame.ModLoader;
-            bool hasOtherModLoader = modloader != null && File.Exists(Path.Combine(exeDir, modloader.ModLoaderFileName));
-            IsCPKREDIRInstalled = HedgeApp.CurrentGame.SupportsCPKREDIR ? HedgeApp.IsCPKREDIRInstalled(Path.Combine(exeDir, HedgeApp.CurrentGame.ExecutableName)) : hasOtherModLoader;
+            var modloader = gameInstall.Game.ModLoader;
+            bool hasOtherModLoader = modloader != null && File.Exists(Path.Combine(gameInstall.GameDirectory, modloader.ModLoaderFileName));
+            IsCPKREDIRInstalled = gameInstall.Game.SupportsCPKREDIR ? HedgeApp.IsCPKREDIRInstalled(gameInstall.ExecutablePath) : hasOtherModLoader;
 
             ComboBox_GameStatus.SelectedValue = HedgeApp.CurrentGameInstall;
             Button_OtherLoader.Content = Localise(hasOtherModLoader ? "SettingsUIUninstallLoader" : "SettingsUIInstallLoader");
+            Events.OnMainUIRefresh(this);
         }
 
         public void FilterCodes(string text)
@@ -549,7 +556,7 @@ namespace HedgeModManager
 
             try
             {
-                await Singleton.GetInstance<HttpClient>().DownloadFileAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}",
+                await Singleton.GetInstance<HttpClient>().DownloadFileAsync(HedgeApp.CurrentGameInstall.Game.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}",
                     Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath), null, token);
 
                 Dispatcher.Invoke(Refresh);
@@ -570,19 +577,23 @@ namespace HedgeModManager
 
         public async Task CheckForCodeUpdates()
         {
-            if (HedgeApp.CurrentGame == Games.Unknown)
+            if (HedgeApp.CurrentGameInstall.Game == Games.Unknown)
                 return;
 
             var codesPath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
+
             if (!File.Exists(codesPath))
+            {
+                UpdateCodes();
                 return;
+            }
 
             try
             {
                 // Codes from disk.
                 var localCodes = CodeFile.FromFile(codesPath);
 
-                var remoteContents = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}");
+                var remoteContents = await Singleton.GetInstance<HttpClient>().GetStringAsync(HedgeApp.CurrentGameInstall.Game.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}");
                 var remoteCodes = CodeFile.FromText(remoteContents);
 
                 var diff = remoteCodes.CalculateDiff(localCodes).ToList();
@@ -756,7 +767,7 @@ namespace HedgeModManager
             if (!RegistryConfig.KeepOpen)
                 Dispatcher.Invoke(() => Close());
 
-            UpdateStatus(string.Format(Localise("StatusUIStartingGame"), HedgeApp.CurrentGame));
+            UpdateStatus(string.Format(Localise("StatusUIStartingGame"), HedgeApp.CurrentGameInstall.Game));
             return Task.CompletedTask;
         }
 
@@ -968,45 +979,45 @@ namespace HedgeModManager
             if (!RegistryConfig.CheckLoaderUpdates)
                 return;
 
-            if (HedgeApp.CurrentGame.ModLoader == null)
+            if (HedgeApp.CurrentGameInstall.Game.ModLoader == null)
                 return;
             
             await WaitTasks(Task.CurrentId);
             await Task.Yield();
 
-            UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), HedgeApp.CurrentGame.ModLoader.ModLoaderName));
+            UpdateStatus(string.Format(Localise("StatusUICheckingForLoaderUpdate"), HedgeApp.CurrentGameInstall.Game.ModLoader.ModLoaderName));
             try
             {
                 using (var stream = await Singleton.GetInstance<HttpClient>().GetStreamAsync(HMMResources.URL_LOADERS_INI))
                 {
-                    var loaderInfo = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
+                    var loaderInfo = HedgeApp.GetCodeLoaderInfo();
                     // Check if there is a loader version, if not return
                     if (loaderInfo?.LoaderVersion == null)
                         return;
 
                     var ini = new IniFile(stream);
-                    var name = HedgeApp.GetCodeLoaderName(HedgeApp.CurrentGame);
-                    var mlID = HedgeApp.CurrentGame.ModLoader.ModLoaderID ?? HedgeApp.CurrentGame.ToString();
+                    var name = HedgeApp.GetCodeLoaderName();
+                    var mlID = HedgeApp.CurrentGameInstall.Game.ModLoader.ModLoaderID ?? HedgeApp.CurrentGameInstall.Game.ToString();
                     var info = ini[mlID];
                     var newVersion = new Version(info["LoaderVersion"]);
 
                     if (HedgeApp.ExpandVersion(newVersion) == loaderInfo.LoaderVersion)
                     {
-                        UpdateStatus(string.Format(Localise("StatusUILoaderUpToDate"), HedgeApp.CurrentGame.ModLoader.ModLoaderName));
+                        UpdateStatus(string.Format(Localise("StatusUILoaderUpToDate"), HedgeApp.CurrentGameInstall.Game.ModLoader.ModLoaderName));
                         return;
                     }
 
                     Dispatcher.Invoke(() =>
                     {
-                        var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGame.ModLoader.ModLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
+                        var dialog = new HedgeMessageBox($"{HedgeApp.CurrentGameInstall.Game.ModLoader.ModLoaderName} ({info["LoaderVersion"]})", info["LoaderChangelog"].Replace("\\n", "\n"), textAlignment: TextAlignment.Left);
 
                         dialog.AddButton(Localise("CommonUIUpdate"), () =>
                         {
                             dialog.Close();
                             if (HedgeApp.InstallOtherLoader(false))
-                                UpdateStatus($"Updated {HedgeApp.CurrentGame.ModLoader.ModLoaderName} to {info["LoaderVersion"]}");
+                                UpdateStatus($"Updated {HedgeApp.CurrentGameInstall.Game.ModLoader.ModLoaderName} to {info["LoaderVersion"]}");
                             else
-                                UpdateStatus($"Failed to update {HedgeApp.CurrentGame.ModLoader.ModLoaderName} to {info["LoaderVersion"]}");
+                                UpdateStatus($"Failed to update {HedgeApp.CurrentGameInstall.Game.ModLoader.ModLoaderName} to {info["LoaderVersion"]}");
                         });
 
                         dialog.AddButton(Localise("CommonUIIgnore"), () =>
@@ -1020,13 +1031,13 @@ namespace HedgeModManager
             }
             catch
             {
-                UpdateStatus(string.Format(Localise("StatusUIFailedLoaderUpdateCheck"), HedgeApp.CurrentGame.ModLoader.ModLoaderName));
+                UpdateStatus(string.Format(Localise("StatusUIFailedLoaderUpdateCheck"), HedgeApp.CurrentGameInstall.Game.ModLoader.ModLoaderName));
             }
         }
 
         protected void CheckCodeCompatibility()
         {
-            var info = HedgeApp.GetCodeLoaderInfo(HedgeApp.CurrentGame);
+            var info = HedgeApp.GetCodeLoaderInfo();
             if (CodesDatabase.Codes.Count == 0 || info == null)
                 return;
             
@@ -1046,7 +1057,7 @@ namespace HedgeModManager
 
         public void EnableSaveRedirIfUsed()
         {
-            HedgeApp.Config.SaveFileFallback = HedgeApp.CurrentGame.SaveName;
+            HedgeApp.Config.SaveFileFallback = HedgeApp.CurrentGameInstall.Game.SaveName;
 
             if (HedgeApp.Config.EnableFallbackSaveRedirection)
             {
@@ -1067,21 +1078,21 @@ namespace HedgeModManager
 
         public void ShowMissingOtherLoaderWarning()
         {
-            if (HedgeApp.CurrentGame.ModLoader == null)
+            if (HedgeApp.CurrentGameInstall.Game.ModLoader == null)
                 return;
-            bool loaderInstalled = File.Exists(Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ModLoader.ModLoaderFileName));
+            bool loaderInstalled = File.Exists(Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, HedgeApp.CurrentGameInstall.Game.ModLoader.ModLoaderFileName));
             if (loaderInstalled)
                 return;
 
             Dispatcher.Invoke(() =>
             {
-                var dialog = new HedgeMessageBox(Localise("MainUIMissingLoaderHeader"), string.Format(Localise("MainUIMissingLoaderDesc"), HedgeApp.CurrentGame));
+                var dialog = new HedgeMessageBox(Localise("MainUIMissingLoaderHeader"), string.Format(Localise("MainUIMissingLoaderDesc"), HedgeApp.CurrentGameInstall.Game));
 
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
                     dialog.Close();
                     if (HedgeApp.InstallOtherLoader(false))
-                        UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGame.ModLoader.ModLoaderName));
+                        UpdateStatus(string.Format(Localise("StatusUIInstalledLoader"), HedgeApp.CurrentGameInstall.Game.ModLoader.ModLoaderName));
                 });
 
                 dialog.AddButton(Localise("CommonUINo"), () =>
@@ -1097,7 +1108,7 @@ namespace HedgeModManager
         {
             try
             {
-                string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+                string profilePath = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "profiles.json");
                 File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
                 ShowMissingOtherLoaderWarning();
                 EnableSaveRedirIfUsed();
@@ -1107,8 +1118,8 @@ namespace HedgeModManager
                 }
                 if (HedgeApp.IsLinux)
                 {
-                    Linux.PatchRegistry(HedgeApp.CurrentGame);
-                    Linux.LinkRuntimeToProtonPrefix(HedgeApp.CurrentGame);
+                    Linux.PatchRegistry(HedgeApp.CurrentGameInstall.Game);
+                    Linux.LinkRuntimeToProtonPrefix(HedgeApp.CurrentGameInstall.Game);
                 }
                 Refresh();
                 UpdateStatus(Localise("StatusUIModsDBSaved"));
@@ -1118,7 +1129,7 @@ namespace HedgeModManager
             catch (UnauthorizedAccessException)
             {
                 HedgeApp.CreateOKMessageBox(Localise("CommonUIError"),
-                    string.Format(Localise("DialogUINoGameDirAccess"), HedgeApp.StartDirectory))
+                    string.Format(Localise("DialogUINoGameDirAccess"), HedgeApp.CurrentGameInstall.GameDirectory))
                     .ShowDialog();
             }
             catch (Exception ex)
@@ -1217,16 +1228,16 @@ namespace HedgeModManager
 
         public bool CheckDepends()
         {
-            return !DependsHandler.AskToInstallRuntime(HedgeApp.CurrentGame.AppID,
-                HedgeApp.CurrentGame.Is64Bit ? DependTypes.VS2019x64 : DependTypes.VS2019x86);
+            return !DependsHandler.AskToInstallRuntime(HedgeApp.CurrentGameInstall.Game.AppID,
+                HedgeApp.CurrentGameInstall.Game.Is64Bit ? DependTypes.VS2019x64 : DependTypes.VS2019x86);
         }
 
         public bool CheckDepend(string id, string filePath, string dependName, string downloadURL, string fileName)
         {
             bool abort = false;
-            if (HedgeApp.CurrentGame.AppID == id && !File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), filePath)))
+            if (HedgeApp.CurrentGameInstall.Game.AppID == id && !File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), filePath)))
             {
-                var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGame, dependName));
+                var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGameInstall.Game, dependName));
 
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
@@ -1257,40 +1268,12 @@ namespace HedgeModManager
             StatusTimer = new Timer((state) => UpdateStatus(string.Empty));
 
             // Check if a game is selected
-            if (HedgeApp.CurrentGame == Games.Unknown)
+            if (HedgeApp.CurrentGameInstall.Game == Games.Unknown)
                 return;
 
             RefreshProfiles();
             Refresh();
             await CheckForUpdatesAsync();
-
-            if (HedgeApp.AprilFools)
-            {
-                var random = new Random();
-                if (random.Next(10) == 0)
-                {
-                    CleaningGrid.Visibility = Visibility.Visible;
-                    DispatcherTimer timer = new DispatcherTimer();
-                    timer.Interval = TimeSpan.FromMilliseconds(175);
-                    int skipped = 0;
-                    SaveButton.IsEnabled = SavePlayButton.IsEnabled = false;
-                    timer.Tick += (sender, e) =>
-                    {
-                        if (random.Next(5) == 0)
-                            ++skipped;
-                        if (ViewModel.Mods.Count <= skipped)
-                        {
-                            RefreshUI();
-                            RefreshButton.IsEnabled = SaveButton.IsEnabled = SavePlayButton.IsEnabled = true;
-                            CleaningGrid.Visibility = Visibility.Collapsed;
-                            timer.Stop();
-                            return;
-                        }
-                        ViewModel.Mods.RemoveAt(skipped);
-                    };
-                    timer.Start();
-                }
-            }
         }
 
         private void UI_RemoveMod_Click(object sender, RoutedEventArgs e)
@@ -1490,7 +1473,7 @@ namespace HedgeModManager
                 mod.IncludeDirs.Add(".");
                 var editor = new EditModWindow(mod) { Owner = this };
                 if (editor.ShowDialog().Value)
-                    ModsDatabase.CreateMod(mod, HedgeApp.CurrentGame.Folders, true);
+                    ModsDatabase.CreateMod(mod, HedgeApp.CurrentGameInstall.Game.Folders, true);
             }
 
             if (choice != -1)
@@ -1504,7 +1487,7 @@ namespace HedgeModManager
         {
             for (int i = 1; i < int.MaxValue; i++)
             {
-                var title = $"{HedgeApp.CurrentGame} Mod {i}";
+                var title = $"{HedgeApp.CurrentGameInstall.Game} Mod {i}";
                 title = string.Concat(title.Split(Path.GetInvalidFileNameChars()));
                 if (!Directory.Exists(Path.Combine(ModsDatabase.RootDirectory, title)))
                     return title;
@@ -1518,8 +1501,60 @@ namespace HedgeModManager
             StatusTimer?.Change(4000, Timeout.Infinite);
         }
 
+        public void RemoveGameInstall(GameInstall install)
+        {
+            if (!install.IsCustom)
+                return;
+
+            HedgeApp.GameInstalls.Remove(install);
+            HedgeApp.SaveGameInstalls();
+            if (HedgeApp.CurrentGameInstall == install)
+            {
+                if (HedgeApp.GameInstalls.Count <= 1)
+                {
+                    // Switch to no game state
+                    HedgeApp.GameInstalls.Insert(0, new GameInstall(Games.Unknown, null, null, GameLauncher.None));
+                    HedgeApp.SelectGameInstall(HedgeApp.GameInstalls.FirstOrDefault());
+                }
+                ComboBox_GameStatus.SelectedIndex = 0;
+            }
+            else RefreshUI();
+        }
+
         private async void Game_Changed(object sender, SelectionChangedEventArgs e)
         {
+            if (ComboBox_GameStatus.SelectedItem == MainWindowViewModel.GameInstallAddGame)
+            {
+                e.Handled = true;
+                ComboBox_GameStatus.SelectedItem = HedgeApp.CurrentGameInstall;
+
+                var ofd = new OpenFileDialog
+                {
+                    Title = Localise("MainUISelectGameTitle"),
+                    Filter = Localise("MainUISelectGameFilter") + "|*.exe",
+                };
+
+                if (ofd.ShowDialog() == true)
+                {
+                    var game = HedgeApp.AddGameInstallByPath(ofd.FileName);
+                    if (game != null)
+                    {
+                        // Force update
+                        ViewModel.Games = null;
+                        HedgeApp.SelectGameInstall(game);
+                        ResetWatchers();
+                        RefreshProfiles();
+                        Refresh();
+                        UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGameInstall.Game));
+                        await CheckForUpdatesAsync();
+                    } else
+                    {
+                        new HedgeMessageBox(Localise("CommonUIError"), Localise("MainUIInvalidGame")).ShowDialog();
+                    }
+                }
+                return;
+            }
+
             if (ComboBox_GameStatus.SelectedItem != null && ComboBox_GameStatus.SelectedItem != HedgeApp.CurrentGameInstall)
             {
                 SetCodesTreeExpandedState(false);
@@ -1533,14 +1568,13 @@ namespace HedgeModManager
 
                 try
                 {
-                    if (HedgeApp.CurrentGame.SupportsCPKREDIR)
+                    if (HedgeApp.CurrentGameInstall.Game.SupportsCPKREDIR)
                     {
                         // Remove old patch
-                        string exePath = Path.Combine(HedgeApp.StartDirectory, HedgeApp.CurrentGame.ExecutableName);
-                        if (HedgeApp.IsCPKREDIRInstalled(exePath))
-                            HedgeApp.InstallCPKREDIR(exePath, false);
+                        if (HedgeApp.IsCPKREDIRInstalled(HedgeApp.CurrentGameInstall.ExecutablePath))
+                            HedgeApp.InstallCPKREDIR(HedgeApp.CurrentGameInstall.ExecutablePath, false);
 
-                        HedgeApp.CurrentGame.ModLoader.MakeCompatible(HedgeApp.StartDirectory);
+                        HedgeApp.CurrentGameInstall.Game.ModLoader.MakeCompatible(HedgeApp.CurrentGameInstall.GameDirectory);
                     }
                 }
                 catch
@@ -1551,7 +1585,7 @@ namespace HedgeModManager
                 ResetWatchers();
                 RefreshProfiles();
                 Refresh();
-                UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGame));
+                UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGameInstall.Game));
                 await CheckForUpdatesAsync();
             }
 
@@ -1560,8 +1594,8 @@ namespace HedgeModManager
 
         private void UpdateCodes(string newContents = null, List<DiffBlock> diff = null)
         {
-            string codesFilePath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
-            bool codesFileExists = File.Exists(codesFilePath);
+            var codesFilePath = Path.Combine(ModsDatabase.RootDirectory, ModsDB.CodesTextPath);
+            var codesFileExists = File.Exists(codesFilePath);
 
             try
             {
@@ -1577,7 +1611,7 @@ namespace HedgeModManager
                     Refresh();
                     CodesOutdated = false;
 
-                    if (oldCodes != null)
+                    if (codesFileExists)
                     {
                         diff ??= oldCodes.CalculateDiff(new CodeFile(codesFilePath)).ToList();
                         DisplayDiff(diff);
@@ -1586,8 +1620,8 @@ namespace HedgeModManager
                     return;
                 }
 
-                var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGame),
-                    HedgeApp.CurrentGame.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}", codesFilePath)
+                var downloader = new DownloadWindow(LocaliseFormat("StatusUIDownloadingCodes", HedgeApp.CurrentGameInstall.Game),
+                    HedgeApp.CurrentGameInstall.Game.CodesURL + $"?t={DateTime.Now:yyyyMMddHHmmss}", codesFilePath)
                 {
                     DownloadCompleted = () =>
                     {
@@ -1598,79 +1632,79 @@ namespace HedgeModManager
                         CodesOutdated = false;
 
                         // Don't display diff for initial download.
-                        if (oldCodes != null)
+                        if (codesFileExists)
                             DisplayDiff(new CodeFile(codesFilePath).CalculateDiff(oldCodes).ToList());
                     }
                 };
 
-                UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGame));
+                UpdateStatus(string.Format(Localise("StatusUIDownloadingCodes"), HedgeApp.CurrentGameInstall.Game));
                 downloader.Start();
             }
             catch
             {
                 UpdateStatus(Localise("StatusUIDownloadFailed"));
             }
+        }
 
-            void DisplayDiff(List<DiffBlock> blocks)
+        private void DisplayDiff(List<DiffBlock> blocks)
+        {
+            if (blocks.Count == 0)
             {
-                if (blocks.Count == 0)
-                {
-                    UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
-                    return;
-                }
+                UpdateStatus(Localise("StatusUINoCodeUpdatesFound"));
+                return;
+            }
 
-                var sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-                foreach (var block in blocks)
-                {
-                    sb.AppendLine($"- {DiffBlockToString(block)}");
+            foreach (var block in blocks)
+            {
+                sb.AppendLine($"- {DiffBlockToString(block)}");
 
-                    bool isCodeEnabled = ModsDatabase.Codes.Find
-                    (
-                        x =>
-                        {
-                            if (block.Data.Key is CSharpCode cc)
-                            {
-                                if (x.EndsWith(cc.Name))
-                                    return true;
-                            }
-
-                            return false;
-                        }
-                    )
-                    != null;
-
-                    var code = ViewModel.ModsDB.CodesDatabase.Codes.Find
-                    (
-                        x =>
-                        {
-                            if (block.Data.Value is CSharpCode cc)
-                            {
-                                if (x.Name == cc.Name && x.Category == cc.Category)
-                                    return true;
-                            }
-
-                            return false;
-                        }
-                    );
-
-                    if (code != null)
-                        code.Enabled = isCodeEnabled;
-                }
-
-                SaveConfig();
-
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                {
-                    var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), type: InputType.MarkDown)
+                bool isCodeEnabled = ModsDatabase.Codes.Find
+                (
+                    x =>
                     {
-                        MaxHeight = 550,
-                        MaxWidth = 800
-                    };
+                        if (block.Data.Key is CSharpCode cc)
+                        {
+                            if (x.EndsWith(cc.Name))
+                                return true;
+                        }
 
-                    box.AddButton(Localise("CommonUIOK"), box.Close);
-                    box.ShowDialog();
-                }
+                        return false;
+                    }
+                )
+                != null;
+
+                var code = ViewModel.ModsDB.CodesDatabase.Codes.Find
+                (
+                    x =>
+                    {
+                        if (block.Data.Value is CSharpCode cc)
+                        {
+                            if (x.Name == cc.Name && x.Category == cc.Category)
+                                return true;
+                        }
+
+                        return false;
+                    }
+                );
+
+                if (code != null)
+                    code.Enabled = isCodeEnabled;
+            }
+
+            SaveConfig();
+
+            if (!string.IsNullOrEmpty(sb.ToString()))
+            {
+                var box = new HedgeMessageBox(Localise("DiffUITitle"), sb.ToString(), type: InputType.MarkDown)
+                {
+                    MaxHeight = 550,
+                    MaxWidth = 800
+                };
+
+                box.AddButton(Localise("CommonUIOK"), box.Close);
+                box.ShowDialog();
             }
         }
 
@@ -1719,9 +1753,9 @@ namespace HedgeModManager
                 {
                     HedgeApp.ModsDbPath = dialog.SelectedFolder;
                     ViewModel.CPKREDIR.ModsDbIni = Path.Combine(HedgeApp.ModsDbPath, SelectedModProfile.ModDBPath);
-                    if (ViewModel.CPKREDIR.ModsDbIni.StartsWith(HedgeApp.StartDirectory))
-                        ViewModel.CPKREDIR.ModsDbIni = ViewModel.CPKREDIR.ModsDbIni.Substring(HedgeApp.StartDirectory.Length + 1);
-                    ViewModel.CPKREDIR.Save(Path.Combine(HedgeApp.StartDirectory, "cpkredir.ini"));
+                    if (ViewModel.CPKREDIR.ModsDbIni.StartsWith(HedgeApp.CurrentGameInstall.GameDirectory))
+                        ViewModel.CPKREDIR.ModsDbIni = ViewModel.CPKREDIR.ModsDbIni.Substring(HedgeApp.CurrentGameInstall.GameDirectory.Length + 1);
+                    ViewModel.CPKREDIR.Save(Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "cpkredir.ini"));
                     Refresh();
                     UpdateStatus(Localise("StatusUIModsDBLocationChanged"));
                 }
@@ -1904,8 +1938,13 @@ namespace HedgeModManager
                     }
                     catch { }
                 }
+                if (Keyboard.IsKeyDown(Key.F12))
+                {
+                    RemoveGameInstall(HedgeApp.CurrentGameInstall);
+                }
 
-            }else
+            }
+            else
             {
                 if (Keyboard.IsKeyDown(Key.F5))
                 {
@@ -1987,7 +2026,7 @@ namespace HedgeModManager
             SelectedModProfile = ComboBox_ModProfile.SelectedItem as ModProfile ?? HedgeApp.ModProfiles.First();
             SelectedModProfile.Enabled = true;
             HedgeApp.Config.ModProfile = SelectedModProfile.Name;
-            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            string profilePath = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "profiles.json");
             HedgeApp.Config.Save(HedgeApp.ConfigPath);
             File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             RefreshMods();
@@ -2006,7 +2045,7 @@ namespace HedgeModManager
             HedgeApp.ModProfiles.Clear();
             HedgeApp.ModProfiles.AddRange(ViewModel.Profiles);
             // Save profiles
-            string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+            string profilePath = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "profiles.json");
             File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
             Refresh();
         }
@@ -2374,6 +2413,9 @@ namespace HedgeModManager
         private void CheckBox_RegistryConfig_Checked(object sender, RoutedEventArgs e)
         {
             RegistryConfig.Save();
+
+            // Update alternating row visual.
+            ModsList.AlternationCount = CodesList.AlternationCount = RegistryConfig.UseAlternatingRows ? 2 : 0;
         }
 
         private void CheckBox_CodesUseTreeView_Checked(object sender, RoutedEventArgs e)

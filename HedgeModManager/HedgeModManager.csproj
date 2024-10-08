@@ -45,6 +45,7 @@
     <None Include="Resources\Keys.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Graphics\EasterEggs\icon128SonicGMI.png" />
     <Resource Include="Resources\Graphics\Games\PuyoPuyoTetris2.png" />
     <Resource Include="Resources\Graphics\Games\SonicColorsUltimate.png" />
     <Resource Include="Resources\Graphics\Games\SonicForces.png" />
@@ -54,7 +55,7 @@
     <Resource Include="Resources\Graphics\Games\SonicOrigins.png" />
     <Resource Include="Resources\Graphics\Games\Tokyo2020.png" />
     <Resource Include="Resources\Graphics\icon256.png" />
-    <Resource Include="Resources\Graphics\splash.png" />
+    <Resource Include="Resources\Graphics\EasterEggs\splashBirthday.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -109,6 +110,8 @@
     <Compile Remove="Resources\MemoryService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Resources\Graphics\EasterEggs\icon128SonicGMI.png" />
+    <None Remove="Resources\Graphics\EasterEggs\iconSonicGMI.ico" />
     <None Remove="Resources\Graphics\Games\PuyoPuyoTetris2.png" />
     <None Remove="Resources\Graphics\Games\SonicColorsUltimate.png" />
     <None Remove="Resources\Graphics\Games\SonicForces.png" />
@@ -117,7 +120,7 @@
     <None Remove="Resources\Graphics\Games\SonicLostWorld.png" />
     <None Remove="Resources\Graphics\Games\SonicOrigins.png" />
     <None Remove="Resources\Graphics\Games\Tokyo2020.png" />
-    <None Remove="Resources\Graphics\splash.png" />
+    <None Remove="Resources\Graphics\splashBirthday.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

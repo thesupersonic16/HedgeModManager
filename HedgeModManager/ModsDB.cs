@@ -352,7 +352,7 @@ namespace HedgeModManager
         public static void InstallModArchiveUsingZipFile(string path, string root)
         {
             // Path to the install temp folder
-            string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install", Guid.NewGuid().ToString());
+            string tempDirectory = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "temp_install", Guid.NewGuid().ToString());
 
             // Deletes the temp Directory if it exists
             if (Directory.Exists(tempDirectory))
@@ -394,7 +394,7 @@ namespace HedgeModManager
                 string exe = Path.Combine(exePath, "7z.exe");
 
                 // Path to the install temp directory
-                string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
+                string tempDirectory = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "temp_install");
 
                 if (Directory.Exists(tempDirectory))
                     DeleteReadOnlyDirectory(tempDirectory);
@@ -426,7 +426,7 @@ namespace HedgeModManager
             if (key != null && key.GetValue("exe64") is string exePath)
             {
                 // Path to the install temp directory
-                string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
+                string tempDirectory = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "temp_install");
 
                 // Deletes the temp directory if it exists
                 if (Directory.Exists(tempDirectory))
@@ -480,13 +480,17 @@ namespace HedgeModManager
                     }
 
                     // Creates all of the directories.
-                    Directory.CreateDirectory(Path.Combine(root, Path.GetFileName(folder)));
+                    Directory.CreateDirectory(HedgeApp.MakeLongPath(Path.Combine(root, Path.GetFileName(folder))));
                     foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
-                        Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(root, directoryName)));
+                    {
+                        Directory.CreateDirectory(HedgeApp.MakeLongPath(dirPath.Replace(folder, Path.Combine(root, directoryName))));
+                    }
 
                     // Copies all the files from the Directories.
                     foreach (string filePath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
-                        File.Copy(filePath, filePath.Replace(folder, Path.Combine(root, directoryName)), true);
+                    {
+                        File.Copy(HedgeApp.MakeLongPath(filePath), HedgeApp.MakeLongPath(filePath.Replace(folder, Path.Combine(root, directoryName))), true);
+                    }
                 }
             }
         }

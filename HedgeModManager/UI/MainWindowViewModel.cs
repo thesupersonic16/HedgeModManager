@@ -11,6 +11,7 @@ using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using HedgeModManager.CodeCompiler;
 using HedgeModManager.Exceptions;
+using HedgeModManager.Properties;
 using Newtonsoft.Json;
 using static HedgeModManager.Lang;
 
@@ -18,9 +19,12 @@ namespace HedgeModManager.UI
 {
     public class MainWindowViewModel : INotifyPropertyChanged, IDropTarget
     {
+        // Dummy GameInstall for adding games
+        public static GameInstall GameInstallAddGame { get; set; } = new GameInstall(HedgeModManager.Games.AddGame, null, null, GameLauncher.None);
+
         public CPKREDIRConfig CPKREDIR { get; set; }
         public ModsDB ModsDB { get; set; }
-        public IEnumerable<GameInstall> Games { get; set; }
+        public ObservableCollection<GameInstall> Games { get; set; } = new ObservableCollection<GameInstall>();
         public ObservableCollection<ModInfo> Mods { get; set; } = new ObservableCollection<ModInfo>();
         public ObservableCollection<ModInfo> ModsSearch { get; set; } = new ObservableCollection<ModInfo>();
         public ObservableCollection<ModProfile> Profiles { get; set; } = new ObservableCollection<ModProfile>();
@@ -33,6 +37,8 @@ namespace HedgeModManager.UI
 
         public bool HasNoMods => Mods.Count == 0;
         public bool HasNoCodes => ModsDB.CodesDatabase.Codes.Count == 0;
+
+        public int RowAlternationCount => RegistryConfig.UseAlternatingRows ? 2 : 0;
 
         public event PropertyChangedEventHandler PropertyChanged;
         
@@ -86,7 +92,7 @@ namespace HedgeModManager.UI
                         Profiles.Add(result.Profile);
                         result.Database.SaveDBSync(false);
                         // Save profiles
-                        string profilePath = Path.Combine(HedgeApp.StartDirectory, "profiles.json");
+                        string profilePath = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "profiles.json");
                         File.WriteAllText(profilePath, JsonConvert.SerializeObject(HedgeApp.ModProfiles));
 
                     }

@@ -53,9 +53,9 @@ namespace HedgeModManager
                 default:
                     throw new Exception("Unknown dependency!");
             }
-            if (HedgeApp.CurrentGame.AppID == id && !CheckIfInstalled(type))
+            if (HedgeApp.CurrentGameInstall.Game.AppID == id && !CheckIfInstalled(type))
             {
-                var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGame.GameName, dependName));
+                var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGameInstall.Game.GameName, dependName));
 
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
