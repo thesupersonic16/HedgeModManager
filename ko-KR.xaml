@@ -59,7 +59,7 @@
     <system:String x:Key="ModsUIFeatureCodeDisable"  >이 모드는 커스텀 코드를 포함하지 않습니다.</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >모드의 로드 순서를 바꾸려면 모드를 끌어다 놓으십시오.</system:String>
     <system:String x:Key="ModsUISearch"         >검색:</system:String>
-    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager가 하나 이상의 유효하지 않은 포함 경로를 가진 모드를 감지했습니다.&#x0a;Hedge Mod Manager가 이 문제를 고쳐 보기를 원하십니까?</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">헤지 모드 매니저가 하나 이상의 유효하지 않은 포함 경로를 가진 모드를 감지했습니다.&#x0a;헤지 모드 매니저가 이 문제를 고쳐 보기를 원하십니까?</system:String>
     <system:String xml:space="preserve" x:Key="ModsUINoMods">...여기는 아무 것도 없습니다.&#x0a;모드를 구하러 가봅시다!</system:String>
 
     <!-- Codes UI Strings -->
@@ -104,22 +104,22 @@
     <system:String x:Key="SettingsUILabelProfile"   >프로필:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >모드 경로:</system:String>
     <!--   Hedge Mod Manager -->
-    <system:String x:Key="SettingsUIHMMHeader"          >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"      >자동으로 Hedge Mod Manager 업데이트 확인</system:String>
+    <system:String x:Key="SettingsUIHMMHeader"          >헤지 모드 매니저</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"      >자동으로 헤지 모드 매니저 업데이트 확인</system:String>
     <system:String x:Key="SettingsUICheckCLUpdate"      >자동으로 모드로더 업데이트 확인</system:String>
     <system:String x:Key="SettingsUICheckModUpdates"    >자동으로 모드 업데이트 확인</system:String>
     <system:String x:Key="SettingsUIUpdateCodesOnLaunch">실행 시 자동으로 커뮤니티 코드 업데이트</system:String>
-    <system:String x:Key="SettingsUIKeepHMMOpen"        >게임 시작 후에도 Hedge Mod Manager 켜두기</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"        >게임 시작 후에도 헤지 모드 매니저 켜두기</system:String>
     <system:String x:Key="SettingsUICodesUseTreeView"   >코드 목록을 수형도로 보기</system:String>
     <system:String x:Key="SettingsUIUseAlternatingRows" >줄마다 색 다르게 하기</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate"     >업데이트 확인</system:String>
-    <system:String x:Key="SettingsUIAboutHMM"           >Hedge Mod Manager에 대하여</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"           >헤지 모드 매니저에 대하여</system:String>
     <system:String x:Key="SettingsUILanguage"           >언어:</system:String>
     <system:String x:Key="SettingsUITheme"              >테마:</system:String>
     <system:String x:Key="SettingsUIReleaseChannel"     >업데이트 채널:</system:String>
     <system:String x:Key="SettingsUIChangingChannelTitle" >릴리즈 채널 변경</system:String>
-    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">릴리즈 채널로 변경하려 하고 있습니다.&#x0a;&#x0a;계속하시겠습니까? 채널을 변경하기 위해서는 Hedge Mod Manager를 재시작해야 합니다.</system:String>
-    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">개발 채널로 변경하려 하고 있습니다. 이 채널은 테스트하지 않은 기능과 버그가 있을 수 있습니다.&#x0a;&#x0a;계속하시겠습니까? 채널을 변경하기 위해서는 Hedge Mod Manager를 재시작해야 합니다.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">릴리즈 채널로 변경하려 하고 있습니다.&#x0a;&#x0a;계속하시겠습니까? 채널을 변경하기 위해서는 헤지 모드 매니저를 재시작해야 합니다.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">개발 채널로 변경하려 하고 있습니다. 이 채널은 테스트하지 않은 기능과 버그가 있을 수 있습니다.&#x0a;&#x0a;계속하시겠습니까? 채널을 변경하기 위해서는 헤지 모드 매니저를 재시작해야 합니다.</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"    >모드 설치 방법을 선택하세요</system:String>
@@ -141,7 +141,7 @@
     <system:String x:Key="OptionsWindowUIError"      >설정을 선택해 주십시오!</system:String>
 
     <!-- AboutWindow UI Strings -->
-    <system:String x:Key="AboutWindowUITitle"      >Hedge Mod Manager에 대하여</system:String>
+    <system:String x:Key="AboutWindowUITitle"      >헤지 모드 매니저에 대하여</system:String>
     <system:String x:Key="AboutWindowUILine1"      >헤지혹 엔진 모드를 쉽게 로드하기 위해 개발된 프로그램입니다.</system:String>
     <system:String x:Key="AboutWindowUILine2"      >지원되는 게임 중 하나를 정식으로 소유하고 있어야 합니다.</system:String>
     <system:String x:Key="AboutWindowUICredits"    >크레딧</system:String>
@@ -195,7 +195,7 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >코드 업데이트 없음</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >Hedge Mod Manager가 게임 경로에 접근할 수 없었습니다.&#x0a;Users 그룹이 이하의 경로와 모든 폴더 및 파일에 &quot;쓰기&quot; 권한이 있는지 확인해 주십시오.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >헤지 모드 매니저가 게임 경로에 접근할 수 없었습니다.&#x0a;Users 그룹이 이하의 경로와 모든 폴더 및 파일에 &quot;쓰기&quot; 권한이 있는지 확인해 주십시오.&#x0a;&#x0a;{0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"             >정말로 &quot;{0}&quot;를 삭제하시겠습니까?&#x0a;이 작업은 취소할 수 없습니다!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest"             >{0}은/는 이미 최신 버전입니다.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             >{0}의 최신 버전을 이용할 수 있습니다! ({1})</system:String>
@@ -225,7 +225,7 @@
     <system:String x:Key="ModDownloaderFailed">모드 다운로드 실패</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">다운로드 도중 오류가 발생했습니다. 서버가 다운되어 있거나 과부하 상태일 수 있습니다. 나중에 다시 시도하십시오. &#x0a;&#x0a;자세한 정보: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">게임 탐색 실패</system:String>
-    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager가 {0}의 설치를 찾을 수 없었습니다.</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">헤지 모드 매니저가 {0}의 설치를 찾을 수 없었습니다.</system:String>
 
     <!-- Mod Updates Window Strings -->
     <system:String x:Key="ModUpdatesChangelog"    >변경점</system:String>
@@ -234,16 +234,16 @@
     <system:String x:Key="ModDownloadsTitle"      >모드 다운로드</system:String>
 
     <!-- Exception Window Strings -->
-    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager 충돌</system:String>
-    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager에 예외가 발생했습니다!</system:String>
-    <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager에 오류가 발생했습니다!</system:String>
+    <system:String x:Key="ExceptionWindowTitle"           >헤지 모드 매니저 충돌</system:String>
+    <system:String x:Key="ExceptionWindowCrash"           >헤지 모드 매니저에 예외가 발생했습니다!</system:String>
+    <system:String x:Key="ExceptionWindowUnhandled"       >헤지 모드 매니저에 오류가 발생했습니다!</system:String>
     <system:String x:Key="ExceptionWindowButtonCopyLog"   >클립보드에 로그 복사</system:String>
     <system:String x:Key="ExceptionWindowButtonIgnore"    >무시하고 닫기</system:String>
     <system:String x:Key="ExceptionWindowButtonReport"    >GitHub에 오류 보고</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >새 업데이트가 있습니다!</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >이 Hedge Mod Manager의 버전이 오래된 것 같습니다.&#x0a;먼저 업데이트를 하고 오류가 여전히 발생하는지 확인하는 것을 강력히 권장합니다.&#x0a;지금 업데이트하시겠습니까?</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >이 헤지 모드 매니저의 버전이 오래된 것 같습니다.&#x0a;먼저 업데이트를 하고 오류가 여전히 발생하는지 확인하는 것을 강력히 권장합니다.&#x0a;지금 업데이트하시겠습니까?</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">업데이트 오류!</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager를 업데이트할 수 없었습니다!&#x0a;최신 버전을 직접 다운로드해 주십시오.</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >헤지 모드 매니저를 업데이트할 수 없었습니다!&#x0a;최신 버전을 직접 다운로드해 주십시오.</system:String>
 
     <!-- Themes -->
     <system:String x:Key="ThemeDark"  >다크</system:String>
