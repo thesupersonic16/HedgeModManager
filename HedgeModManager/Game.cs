@@ -227,6 +227,7 @@ namespace HedgeModManager
 
         public string GameName => GetGameTitle();
         public Uri GameImage { get { return HedgeApp.GetResourceUri($"Resources/Graphics/Games/{Game?.GameName}.png"); } }
+        public bool IsAddGame => Game == Games.AddGame;
 
         public GameInstall(Game game, string directory, string executablePath, GameLauncher launcher, bool custom = false)
         {
