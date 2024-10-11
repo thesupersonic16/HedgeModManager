@@ -255,6 +255,7 @@
     <system:String x:Key="GameSonicColorsUltimate">소닉 컬러즈: 얼티밋</system:String>
     <system:String x:Key="GameSonicOrigins">소닉 오리진스</system:String>
     <system:String x:Key="GameSonicFrontiers">소닉 프론티어</system:String>
+    <system:String x:Key="GameSonicXShadowGenerations">소닉×섀도우 제너레이션즈</system:String>
     <system:String x:Key="GameNoGame">감지된 게임 없음!</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>

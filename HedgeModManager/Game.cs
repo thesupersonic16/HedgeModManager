@@ -153,6 +153,22 @@ namespace HedgeModManager
             GamePaths = [Path.Combine("SonicFrontiers", "SonicFrontiers.exe")]
         };
 
+        public static Game SonicXShadowGenerations = new Game()
+        {
+            GameName = "SonicXShadowGenerations",
+            SaveName = "savedata",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = new[] { "raw" },
+            AppID = "2513280",
+            EGSID = "",	// Get when game releases
+            GBProtocol = "hedgemmmiller",
+            Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader,	// Needs to be unique due to HE1 being present
+            CodesURL = Resources.URL_MILLER_CODES,
+            GamePaths = []	// Get when game releases
+        };
+
         public static IEnumerable<Game> GetSupportedGames()
         {
             yield return SonicGenerations;
@@ -163,6 +179,7 @@ namespace HedgeModManager
             yield return SonicColorsUltimate;
             yield return SonicOrigins;
             yield return SonicFrontiers;
+            yield return SonicXShadowGenerations;
         }
     }
 

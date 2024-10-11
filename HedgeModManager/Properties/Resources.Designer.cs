@@ -337,6 +337,15 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicXShadowGenerations.hmm.
+        /// </summary>
+        internal static string URL_MILLER_CODES {
+            get {
+                return ResourceManager.GetString("URL_MILLER_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/RainbowModLoader.dll.
         /// </summary>
         internal static string URL_RML_DL {

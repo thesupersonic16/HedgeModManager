@@ -184,6 +184,9 @@ Do you want run the HMM Auto Installer?</value>
   <data name="URL_RANGERS_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicFrontiers.hmm</value>
   </data>
+  <data name="URL_MILLER_CODES" xml:space="preserve">
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicXShadowGenerations.hmm</value>
+  </data>
   <data name="URL_RML_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/RainbowModLoader.dll</value>
   </data>

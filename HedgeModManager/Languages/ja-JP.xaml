@@ -249,6 +249,7 @@
     <system:String x:Key="GameSonicColorsUltimate">ソニックカラーズ アルティメット</system:String>
     <system:String x:Key="GameSonicOrigins">ソニックオリジンズ</system:String>
     <system:String x:Key="GameSonicFrontiers">ソニックフロンティア</system:String>
+    <system:String x:Key="GameSonicXShadowGenerations">ソニック × シャドウ ジェネレーションズ</system:String>
     <system:String x:Key="GameNoGame">ゲームが見つかりません！</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>

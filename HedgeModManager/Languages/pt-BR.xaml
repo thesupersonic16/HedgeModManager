@@ -230,5 +230,8 @@
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
     <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
     <system:String x:Key="GameSonicColorsUltimate">Sonic Colours: Ultimate</system:String>
+    <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
+    <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
+    <system:String x:Key="GameSonicXShadowGenerations">SONIC X SHADOW GENERATIONS</system:String>
 
 </ResourceDictionary>
