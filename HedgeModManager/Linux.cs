@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,6 +13,27 @@ namespace HedgeModManager
 {
     public static class Linux
     {
+
+        /// <summary>
+        /// Performs any patches needed to let HedgeModManager to operate correctly
+        /// </summary>
+        /// <returns></returns>
+        public static bool PatchHMMRegistry()
+        {
+            var regCurrentUser = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default);
+            if (regCurrentUser != null)
+            {
+                var dllOverrides = regCurrentUser.CreateSubKey("Software\\Wine\\DllOverrides");
+
+                if (dllOverrides != null)
+                {
+                    dllOverrides.SetValue("d3d11", "native,builtin");
+                    dllOverrides.SetValue("dinput8", "native,builtin");
+                }
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Performs any patches needed for mods to execute correctly

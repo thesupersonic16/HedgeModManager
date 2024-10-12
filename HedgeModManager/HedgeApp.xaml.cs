@@ -189,6 +189,8 @@ namespace HedgeModManager
             if (CurrentCulture != null)
                 LoadLanguage(CurrentCulture.FileName);
             CountLanguages();
+            if (IsLinux)
+                Linux.PatchHMMRegistry();
 #if DEBUG
             // Find a Steam Game
             GameInstalls = GameInstall.SearchForGames(nameof(Games.SonicGenerations));
