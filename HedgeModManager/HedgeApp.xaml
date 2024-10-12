@@ -1266,9 +1266,9 @@
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
                                                     <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledColor}" />
                                                 </ColorAnimationUsingKeyFrames>
-                                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
+                                                <!--<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="Border">
                                                     <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource HMM.Button.DisabledTextColor}" />
-                                                </ColorAnimationUsingKeyFrames>
+                                                </ColorAnimationUsingKeyFrames>-->
                                             </Storyboard>
                                         </VisualState>
                                         <VisualState x:Name="Focus">

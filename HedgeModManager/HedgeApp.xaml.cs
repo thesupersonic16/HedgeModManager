@@ -542,14 +542,11 @@ namespace HedgeModManager
             if (gameinstall == null)
                 return;
 
-            foreach (var game in Games.GetSupportedGames())
+            CurrentGameInstall = gameinstall;
+            if (gameinstall.Game != Games.Unknown)
             {
-                if (game == gameinstall.Game)
-                {
-                    CurrentGameInstall = gameinstall;
-                    RegistryConfig.LastGameInstall = gameinstall.ExecutablePath;
-                    RegistryConfig.Save();
-                }
+                RegistryConfig.LastGameInstall = gameinstall.ExecutablePath;
+                RegistryConfig.Save();
             }
             try
             {
