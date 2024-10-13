@@ -1,4 +1,4 @@
-<ResourceDictionary 
+﻿<ResourceDictionary 
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:system="clr-namespace:System;assembly=mscorlib">
@@ -29,6 +29,8 @@
     <system:String x:Key="MainUISaveAndPlay"   >저장 후 플레이</system:String>
     <system:String x:Key="MainUIConfigureMod"  >모드 설정</system:String>
     <system:String x:Key="MainUIMLDownloadFail">모드로더를 다운로드하지 못했습니다.</system:String>
+    <system:String x:Key="MainUISelectGameTitle">게임 실행 파일 선택</system:String>
+    <system:String x:Key="MainUISelectGameFilter">Windows 실행 파일</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">모드로더를 설치하지 못했습니다.&#x0a;게임 파일에 쓰기 권한이 있는지 확인해 주십시오.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">모드로더를 삭제하지 못했습니다.&#x0a;현재 실행중인 게임이 없는지 확인해 주십시오.</system:String>
 
@@ -57,7 +59,7 @@
     <system:String x:Key="ModsUIFeatureCodeDisable"  >이 모드는 커스텀 코드를 포함하지 않습니다.</system:String>
     <system:String x:Key="ModsUIModDragDrop"    >모드의 로드 순서를 바꾸려면 모드를 끌어다 놓으십시오.</system:String>
     <system:String x:Key="ModsUISearch"         >검색:</system:String>
-    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager가 하나 이상의 유효하지 않은 포함 경로를 가진 모드를 감지했습니다.&#x0a;Hedge Mod Manager가 이 문제를 고쳐 보기를 원하십니까?</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">헤지 모드 매니저가 하나 이상의 유효하지 않은 포함 경로를 가진 모드를 감지했습니다.&#x0a;헤지 모드 매니저가 이 문제를 고쳐 보기를 원하십니까?</system:String>
     <system:String xml:space="preserve" x:Key="ModsUINoMods">...여기는 아무 것도 없습니다.&#x0a;모드를 구하러 가봅시다!</system:String>
 
     <!-- Codes UI Strings -->
@@ -102,21 +104,22 @@
     <system:String x:Key="SettingsUILabelProfile"   >프로필:</system:String>
     <system:String x:Key="SettingsUILabelMDir"      >모드 경로:</system:String>
     <!--   Hedge Mod Manager -->
-    <system:String x:Key="SettingsUIHMMHeader"          >Hedge Mod Manager</system:String>
-    <system:String x:Key="SettingsUICheckMLUpdate"      >모드로더 업데이트 확인</system:String>
-    <system:String x:Key="SettingsUICheckCLUpdate"      >코드로더 업데이트 확인</system:String>
-    <system:String x:Key="SettingsUICheckModUpdates"    >모드 업데이트 확인</system:String>
+    <system:String x:Key="SettingsUIHMMHeader"          >헤지 모드 매니저</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"      >자동으로 헤지 모드 매니저 업데이트 확인</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"      >자동으로 모드로더 업데이트 확인</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates"    >자동으로 모드 업데이트 확인</system:String>
     <system:String x:Key="SettingsUIUpdateCodesOnLaunch">실행 시 자동으로 커뮤니티 코드 업데이트</system:String>
-    <system:String x:Key="SettingsUIKeepHMMOpen"        >게임 시작 후에도 Hedge Mod Manager 켜두기</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"        >게임 시작 후에도 헤지 모드 매니저 켜두기</system:String>
     <system:String x:Key="SettingsUICodesUseTreeView"   >코드 목록을 수형도로 보기</system:String>
+    <system:String x:Key="SettingsUIUseAlternatingRows" >줄마다 색 다르게 하기</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate"     >업데이트 확인</system:String>
-    <system:String x:Key="SettingsUIAboutHMM"           >Hedge Mod Manager에 대하여</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"           >헤지 모드 매니저에 대하여</system:String>
     <system:String x:Key="SettingsUILanguage"           >언어:</system:String>
     <system:String x:Key="SettingsUITheme"              >테마:</system:String>
     <system:String x:Key="SettingsUIReleaseChannel"     >업데이트 채널:</system:String>
     <system:String x:Key="SettingsUIChangingChannelTitle" >릴리즈 채널 변경</system:String>
-    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">릴리즈 채널을 변경하려 하고 있습니다.&#x0a;&#x0a;계속하시겠습니까? 채널을 변경하기 위해서는 Hedge Mod Manager를 재시작해야 합니다.</system:String>
-    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">개발 채널로 변경하려 하고 있습니다. 이 채널은 테스트하지 않은 기능과 버그가 있을 수 있습니다.&#x0a;&#x0a;계속하시겠습니까? 채널을 변경하기 위해서는 Hedge Mod Manager를 재시작해야 합니다.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">릴리즈 채널로 변경하려 하고 있습니다.&#x0a;&#x0a;계속하시겠습니까? 채널을 변경하기 위해서는 헤지 모드 매니저를 재시작해야 합니다.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">개발 채널로 변경하려 하고 있습니다. 이 채널은 테스트하지 않은 기능과 버그가 있을 수 있습니다.&#x0a;&#x0a;계속하시겠습니까? 채널을 변경하기 위해서는 헤지 모드 매니저를 재시작해야 합니다.</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"    >모드 설치 방법을 선택하세요</system:String>
@@ -127,18 +130,18 @@
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">{0}의 모드를 로드하기 위해서는 모드로더가 설치되어 있어야 합니다.&#x0a;지금 설치하시겠습니까?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"    >모드를 불러올 경로를 지정해 주십시오...</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle"  >런타임 누락 감지됨!</system:String>
-    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0}가 올바르게 작동하기 위해서는 {1}이/가 설치되어 있어야 합니다.&#x0a;HMM이 이 런타임을 설치하게 하시겠습니까?</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0}가 올바르게 작동하기 위해서는 {1}이/가 설치되어 있어야 합니다.&#x0a;HMM에서 이 런타임을 설치하시겠습니까?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">하나 이상의 활성화된 모드가 정상적으로 작동하기 위해서 세이브 파일 경로 변경을 필요로 합니다. 이 기능을 활성화하시겠습니까?&#x0a;지금 무엇을 하고 있는지 잘 이해하고 계신 경우에만 &apos;아니오&apos;를 선택해 주십시오.</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" >모드 의존 관계를 해결하지 못했습니다</system:String>
     <system:String x:Key="MainUIMissingDepends"       >다음 모드는 의존 관계가 없습니다:</system:String>
     <system:String x:Key="MainUIMissingDependsResolve">GB 모드 해결</system:String>
-    <system:String x:Key="MainUIResolvable" xml:space="preserve">&apos;GB 모드 해결&apos;을 클릭하면&#x0a;GameBanana에서 의존 관계를 자동으로 해결할 수 있습니다.</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">&apos;GB 모드 해결&apos;을 클릭하면&#x0a;게임바나나에서 의존 관계를 자동으로 해결할 수 있습니다.</system:String>
 
     <!-- OptionsWindow UI Strings -->
     <system:String x:Key="OptionsWindowUIError"      >설정을 선택해 주십시오!</system:String>
 
     <!-- AboutWindow UI Strings -->
-    <system:String x:Key="AboutWindowUITitle"      >Hedge Mod Manager에 대하여</system:String>
+    <system:String x:Key="AboutWindowUITitle"      >헤지 모드 매니저에 대하여</system:String>
     <system:String x:Key="AboutWindowUILine1"      >헤지혹 엔진 모드를 쉽게 로드하기 위해 개발된 프로그램입니다.</system:String>
     <system:String x:Key="AboutWindowUILine2"      >지원되는 게임 중 하나를 정식으로 소유하고 있어야 합니다.</system:String>
     <system:String x:Key="AboutWindowUICredits"    >크레딧</system:String>
@@ -149,7 +152,7 @@
     <system:String x:Key="ProfileWindowUIRenameTitle">프로필 이름 변경</system:String>
     <system:String x:Key="ProfileWindowUICreateTitle">프로필 작성</system:String>
     <system:String x:Key="ProfileWindowUIName"       >이름</system:String>
-    <system:String x:Key="ProfileWindowUIFile"       >파일명</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >파일 이름</system:String>
     <system:String x:Key="ProfileWindowUICreate"     >만들기</system:String>
     <system:String x:Key="ProfileWindowUIRename"     >이름 변경</system:String>
     <system:String x:Key="ProfileWindowUIClone"      >복사</system:String>
@@ -192,7 +195,7 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >코드 업데이트 없음</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >Hedge Mod Manager가 게임 경로에 접근할 수 없었습니다.&#x0a;Users 그룹이 이하의 경로와 모든 폴더 및 파일에 &quot;쓰기&quot; 권한이 있는지 확인해 주십시오.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >헤지 모드 매니저가 게임 경로에 접근할 수 없었습니다.&#x0a;Users 그룹이 이하의 경로와 모든 폴더 및 파일에 &quot;쓰기&quot; 권한이 있는지 확인해 주십시오.&#x0a;&#x0a;{0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"             >정말로 &quot;{0}&quot;를 삭제하시겠습니까?&#x0a;이 작업은 취소할 수 없습니다!</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModNewest"             >{0}은/는 이미 최신 버전입니다.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             >{0}의 최신 버전을 이용할 수 있습니다! ({1})</system:String>
@@ -200,6 +203,8 @@
     <system:String xml:space="preserve" x:Key="DialogUINoDecompressor"        >7-Zip 또는 WinRAR를 찾을 수 없었습니다!&#x0a;이것들은 모드 데이터를 추출하는 데 필요합니다.&#x0a;&#x0a;둘 중 하나가 시스템에 설치되어 있는지 확인해 주십시오.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">새 릴리즈 채널 업데이트</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >릴리즈 채널에 새 업데이트가 있습니다. 개발 채널에 남아 있으면 원치 않은 문제가 발생할 수 있습니다.&#x0a;&#x0a;릴리즈 채널로 변경하시겠습니까?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorHeader" >모드 설정 불러오기 실패</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorBody"   >"{0}" 모드가 잘못된 설정 형식을 포함하고 있습니다.&#x0a;&#x0a;지원을 위해서는 "{1}" 모드 제작자에게 연락하십시오.</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >완료</system:String>
@@ -220,25 +225,25 @@
     <system:String x:Key="ModDownloaderFailed">모드 다운로드 실패</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">다운로드 도중 오류가 발생했습니다. 서버가 다운되어 있거나 과부하 상태일 수 있습니다. 나중에 다시 시도하십시오. &#x0a;&#x0a;자세한 정보: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">게임 탐색 실패</system:String>
-    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager가 {0}의 설치를 찾을 수 없었습니다.</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">헤지 모드 매니저가 {0}의 설치를 찾을 수 없었습니다.</system:String>
 
     <!-- Mod Updates Window Strings -->
     <system:String x:Key="ModUpdatesChangelog"    >변경점</system:String>
-    <system:String x:Key="ModDownloadsDescription">자세한 정보</system:String>
+    <system:String x:Key="ModDownloadsDescription">설명</system:String>
     <system:String x:Key="ModUpdatesTitle"        >모드 업데이트</system:String>
     <system:String x:Key="ModDownloadsTitle"      >모드 다운로드</system:String>
 
     <!-- Exception Window Strings -->
-    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager 충돌</system:String>
-    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager가 예외를 던졌습니다!</system:String>
-    <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager에 오류가 발생했습니다!</system:String>
+    <system:String x:Key="ExceptionWindowTitle"           >헤지 모드 매니저 충돌</system:String>
+    <system:String x:Key="ExceptionWindowCrash"           >헤지 모드 매니저에 예외가 발생했습니다!</system:String>
+    <system:String x:Key="ExceptionWindowUnhandled"       >헤지 모드 매니저에 오류가 발생했습니다!</system:String>
     <system:String x:Key="ExceptionWindowButtonCopyLog"   >클립보드에 로그 복사</system:String>
     <system:String x:Key="ExceptionWindowButtonIgnore"    >무시하고 닫기</system:String>
     <system:String x:Key="ExceptionWindowButtonReport"    >GitHub에 오류 보고</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >업데이트가 있습니다!</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >이 Hedge Mod Manager의 버전이 오래된 것 같습니다.&#x0a;먼저 업데이트를 하고 오류가 여전히 발생하는지 확인하는 것을 강력히 권장합니다.&#x0a;지금 업데이트하시겠습니까?</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >새 업데이트가 있습니다!</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >이 헤지 모드 매니저의 버전이 오래된 것 같습니다.&#x0a;먼저 업데이트를 하고 오류가 여전히 발생하는지 확인하는 것을 강력히 권장합니다.&#x0a;지금 업데이트하시겠습니까?</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle">업데이트 오류!</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager를 업데이트할 수 없었습니다!&#x0a;최신 버전을 직접 다운로드해 주십시오.</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >헤지 모드 매니저를 업데이트할 수 없었습니다!&#x0a;최신 버전을 직접 다운로드해 주십시오.</system:String>
 
     <!-- Themes -->
     <system:String x:Key="ThemeDark"  >다크</system:String>
@@ -247,7 +252,7 @@
     <system:String x:Key="ThemeLight" >라이트</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameSonicGenerations">소닉 제네레이션즈</system:String>
+    <system:String x:Key="GameSonicGenerations">소닉 제너레이션즈</system:String>
     <system:String x:Key="GameSonicLostWorld">소닉 로스트 월드</system:String>
     <system:String x:Key="GameSonicForces">소닉 포시즈</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">뿌요뿌요 테트리스 2</system:String>
@@ -256,8 +261,9 @@
     <system:String x:Key="GameSonicOrigins">소닉 오리진스</system:String>
     <system:String x:Key="GameSonicFrontiers">소닉 프론티어</system:String>
     <system:String x:Key="GameNoGame">감지된 게임 없음!</system:String>
-    <system:String x:Key="LauncherSteam">Steam</system:String>
-    <system:String x:Key="LauncherEpic">Epic Games</system:String>
+    <system:String x:Key="GameAddGame">게임 추가</system:String>
+    <system:String x:Key="LauncherSteam">스팀</system:String>
+    <system:String x:Key="LauncherEpic">에픽 게임즈</system:String>
     <system:String x:Key="LauncherHeroic">Heroic</system:String>
 
 </ResourceDictionary>
