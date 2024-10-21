@@ -31,6 +31,8 @@
     <system:String x:Key="MainUIMLDownloadFail">Failed to download mod loader.</system:String>
     <system:String x:Key="MainUISelectGameTitle">Select Game Executable</system:String>
     <system:String x:Key="MainUISelectGameFilter">Windows Executable</system:String>
+    <system:String x:Key="MainUIInvalidGameHeader">Unrecognized Game</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIInvalidGame">Hedge Mod Manager is unable to determine the game from&#x0a;the selected executable.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Failed to install mod loader.&#x0a;Please make sure you have permissions to write game files.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Failed to uninstall mod loader.&#x0a;Please make sure no games are currently running.</system:String>
 

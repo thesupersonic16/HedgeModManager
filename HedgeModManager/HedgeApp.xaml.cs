@@ -189,6 +189,8 @@ namespace HedgeModManager
             if (CurrentCulture != null)
                 LoadLanguage(CurrentCulture.FileName);
             CountLanguages();
+            if (IsLinux)
+                Linux.PatchHMMRegistry();
 #if DEBUG
             // Find a Steam Game
             GameInstalls = GameInstall.SearchForGames(nameof(Games.SonicGenerations));
@@ -540,14 +542,11 @@ namespace HedgeModManager
             if (gameinstall == null)
                 return;
 
-            foreach (var game in Games.GetSupportedGames())
+            CurrentGameInstall = gameinstall;
+            if (gameinstall.Game != Games.Unknown)
             {
-                if (game == gameinstall.Game)
-                {
-                    CurrentGameInstall = gameinstall;
-                    RegistryConfig.LastGameInstall = gameinstall.ExecutablePath;
-                    RegistryConfig.Save();
-                }
+                RegistryConfig.LastGameInstall = gameinstall.ExecutablePath;
+                RegistryConfig.Save();
             }
             try
             {

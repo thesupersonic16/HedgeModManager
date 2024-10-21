@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,6 +13,27 @@ namespace HedgeModManager
 {
     public static class Linux
     {
+
+        /// <summary>
+        /// Performs any patches needed to let HedgeModManager to operate correctly
+        /// </summary>
+        /// <returns></returns>
+        public static bool PatchHMMRegistry()
+        {
+            var regCurrentUser = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default);
+            if (regCurrentUser != null)
+            {
+                var dllOverrides = regCurrentUser.CreateSubKey("Software\\Wine\\DllOverrides");
+
+                if (dllOverrides != null)
+                {
+                    dllOverrides.SetValue("d3d11", "native,builtin");
+                    dllOverrides.SetValue("dinput8", "native,builtin");
+                }
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Performs any patches needed for mods to execute correctly
@@ -75,7 +97,7 @@ namespace HedgeModManager
                 
                 // GameBanana
                 foreach (Game game in Games.GetSupportedGames())
-                    GenerateDesktopAndRegister($"{game.GBProtocol}.desktop", $"Hedge Mod Manager ({game.GameName})", $"{baseExec} -gb \"%u\"", icon, false, $"x-scheme-handler/{game.GBProtocol}");
+                    GenerateDesktopAndRegister($"{game.GBProtocol}.desktop", $"Hedge Mod Manager ({game.GameName})", $"{baseExec} \"-gb %u\"", icon, false, $"x-scheme-handler/{game.GBProtocol}");
             }
 
             return true;
@@ -90,6 +112,7 @@ namespace HedgeModManager
         {
             string directory = Path.Combine(GetHomeDirectory(), ".local/share/applications");
             string mimeappsPath = Path.Combine(GetHomeDirectory(), ".config/mimeapps.list");
+            string mimeCachePath = Path.Combine(directory, "mimeinfo.cache");
             string filePath = Path.Combine(directory, fileName);
 
             // Create applications folder
@@ -126,6 +149,19 @@ namespace HedgeModManager
 
             using (var stream = File.OpenWrite(mimeappsPath))
                 mimeapps.Write(stream);
+
+            // Write to cache
+            IniFile mimeCache;
+            if (!File.Exists(mimeCachePath))
+                mimeCache = new IniFile();
+            else
+                mimeCache = new IniFile(mimeCachePath);
+
+            mimeCache.UseQuotes = false;
+            mimeCache["MIME Cache"][mimeType] = fileName + ';';
+
+            using (var stream = File.OpenWrite(mimeCachePath))
+                mimeCache.Write(stream);
 
             return true;
         }

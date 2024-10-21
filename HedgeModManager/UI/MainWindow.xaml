@@ -473,13 +473,26 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Border Width="32" Height="32" CornerRadius="3" RenderOptions.BitmapScalingMode="Fant">
+                                        <Border Width="32" Height="32" CornerRadius="3" RenderOptions.BitmapScalingMode="Fant" x:Name="GameImageBorder">
                                             <Border.Background>
                                                 <ImageBrush ImageSource="{Binding GameImage}"/>
                                             </Border.Background>
                                         </Border>
+                                        <Viewbox x:Name="AddGameViewbox" Width="32" Height="32">
+                                            <Path x:Name="AddGamePath" Fill="{DynamicResource HMM.Window.LightForegroundBrush}" Data="{DynamicResource AddGameGeometry}"/>
+                                        </Viewbox>
                                         <Label Content="{Binding GameName}" VerticalAlignment="Center" />
                                     </StackPanel>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsAddGame}" Value="True">
+                                            <Setter TargetName="GameImageBorder" Property="Visibility" Value="Collapsed" />
+                                            <Setter TargetName="AddGameViewbox" Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsAddGame}" Value="False">
+                                            <Setter TargetName="GameImageBorder" Property="Visibility" Value="Visible" />
+                                            <Setter TargetName="AddGameViewbox" Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

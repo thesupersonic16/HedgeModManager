@@ -383,10 +383,24 @@ namespace HedgeModManager
             }
         }
 
+        public void ForceRefresh()
+        {
+            ResetWatchers();
+            RefreshProfiles();
+            Refresh();
+        }
+
         public void RefreshUI()
         {
-            ModsTab.IsEnabled = CodesTab.IsEnabled = ComboBox_ModProfile.IsEnabled = MLSettingsGrid.IsEnabled
-                = HMMSettingsSackPanel.IsEnabled = SaveButton.IsEnabled = SavePlayButton.IsEnabled = HedgeApp.CurrentGameInstall.Game != Games.Unknown;
+            ModsTab.IsEnabled
+                = CodesTab.IsEnabled
+                = ComboBox_ModProfile.IsEnabled // TODO: Find out why this crashes on animation
+                = MLSettingsGrid.IsEnabled
+                = HMMSettingsSackPanel.IsEnabled
+                = SaveButton.IsEnabled
+                = SavePlayButton.IsEnabled
+                = HedgeApp.CurrentGameInstall.Game != Games.Unknown;
+
             // I am lazy
             ComboBox_ModProfile.Visibility = HedgeApp.CurrentGameInstall.Game != Games.Unknown ? Visibility.Visible : Visibility.Collapsed;
 
@@ -773,6 +787,9 @@ namespace HedgeModManager
 
         private void SetupWatcher()
         {
+            if (HedgeApp.CurrentGameInstall.Game == Games.Unknown)
+                return;
+
             if (!Directory.Exists(HedgeApp.ModsDbPath))
                 return;
 
@@ -1517,8 +1534,8 @@ namespace HedgeModManager
                     HedgeApp.SelectGameInstall(HedgeApp.GameInstalls.FirstOrDefault());
                 }
                 ComboBox_GameStatus.SelectedIndex = 0;
+                ForceRefresh();
             }
-            else RefreshUI();
         }
 
         private async void Game_Changed(object sender, SelectionChangedEventArgs e)
@@ -1539,17 +1556,17 @@ namespace HedgeModManager
                     var game = HedgeApp.AddGameInstallByPath(ofd.FileName);
                     if (game != null)
                     {
-                        // Force update
-                        ViewModel.Games = null;
+                        HedgeApp.GameInstalls.RemoveAll(t => t.Game == Games.Unknown);
                         HedgeApp.SelectGameInstall(game);
-                        ResetWatchers();
-                        RefreshProfiles();
-                        Refresh();
+                        ForceRefresh();
                         UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGameInstall.Game));
                         await CheckForUpdatesAsync();
-                    } else
+                    }
+                    else
                     {
-                        new HedgeMessageBox(Localise("CommonUIError"), Localise("MainUIInvalidGame")).ShowDialog();
+                        var messageBox = new HedgeMessageBox(Localise("MainUIInvalidGameHeader"), Localise("MainUIInvalidGame"));
+                        messageBox.AddButton(Localise("Close"), messageBox.Close);
+                        messageBox.ShowDialog();
                     }
                 }
                 return;
