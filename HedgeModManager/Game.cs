@@ -153,6 +153,7 @@ namespace HedgeModManager
             GamePaths = [Path.Combine("SonicFrontiers", "SonicFrontiers.exe")]
         };
 
+        // TODO: implement loader.
         public static Game SonicGenerations2024 = new Game()
         {
             GameName = "SonicGenerations2024",
@@ -165,7 +166,7 @@ namespace HedgeModManager
             EGSID = "a88805d3fbec4ca9bfc248105f6adb0a",
             GBProtocol = "hedgemmmillersonic",
             Is64Bit = true,
-            ModLoader = ModLoaders.HE2ModLoader, // Needs updating
+            ModLoader = ModLoaders.HE2ModLoader, // TODO: use HE1ML?
             CodesURL = Resources.URL_MILLER_SONIC_CODES,
             GamePaths = [Path.Combine("SONIC_X_SHADOW_GENERATIONS", "SONIC_GENERATIONS.exe")],
             Timestamps = [0x66F6109A]
@@ -183,7 +184,7 @@ namespace HedgeModManager
             EGSID = "a88805d3fbec4ca9bfc248105f6adb0a",
             GBProtocol = "hedgemmmillershadow",
             Is64Bit = true,
-            ModLoader = ModLoaders.HE2ModLoader, // Needs updating
+            ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_MILLER_SHADOW_CODES,
             GamePaths = [Path.Combine("SONIC_X_SHADOW_GENERATIONS", "SONIC_X_SHADOW_GENERATIONS.exe")],
             Timestamps = [0x66F609C2]
@@ -192,7 +193,7 @@ namespace HedgeModManager
         public static IEnumerable<Game> GetSupportedGames()
         {
             yield return SonicGenerations;
-            yield return SonicGenerations2024;
+            // yield return SonicGenerations2024;
             yield return SonicLostWorld;
             yield return SonicForces;
             yield return PuyoPuyoTetris2;
