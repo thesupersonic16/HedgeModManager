@@ -13,6 +13,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <local:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
         <local:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
         <local:ModUpdateToBrushConverter x:Key="ModUpdateToBrushConverter"/>
@@ -408,10 +409,16 @@
                                         <!--<CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"                Visibility="{Binding HiddenMode, Converter={StaticResource BoolToVisibilityConverter}}"/>-->
                                     </StackPanel>
 
-                                    <StackPanel Margin="0,80,10,0" HorizontalAlignment="Right" Width="200">
-                                        <Button x:Name="Button_OpenMods"    Content="{DynamicResource SettingsUIOpenMods}"        Click="UI_OpenMods_Click"    Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
-                                        <Button                             Content="{DynamicResource SettingsUIOpenGameDir}"     Click="UI_OpenGameDir_Click" Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
-                                        <Button x:Name="Button_OtherLoader" Content="{DynamicResource SettingsUIUninstallLoader}" Click="UI_OtherLoader_Click"                  HorizontalAlignment="Stretch" Height="27" IsEnabled="False"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <StackPanel Margin="0,80,10,0" HorizontalAlignment="Right" Width="120">
+                                            <Button Content="{DynamicResource SettingsUIRemoveGame}" Click="UI_RemoveGame_Click" Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27" Visibility="{Binding IsCustomGame, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="0,80,10,0" HorizontalAlignment="Right" Width="200">
+                                            <Button x:Name="Button_OpenMods"    Content="{DynamicResource SettingsUIOpenMods}"        Click="UI_OpenMods_Click"    Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
+                                            <Button                             Content="{DynamicResource SettingsUIOpenGameDir}"     Click="UI_OpenGameDir_Click" Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
+                                            <Button x:Name="Button_OtherLoader" Content="{DynamicResource SettingsUIUninstallLoader}" Click="UI_OtherLoader_Click"                  HorizontalAlignment="Stretch" Height="27" IsEnabled="False"/>
+                                        </StackPanel>
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>

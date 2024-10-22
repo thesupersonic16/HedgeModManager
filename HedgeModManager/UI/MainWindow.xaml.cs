@@ -1754,6 +1754,11 @@ namespace HedgeModManager
             HedgeApp.StartURL(HedgeApp.CurrentGameInstall.GameDirectory);
         }
 
+        private void UI_RemoveGame_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveGameInstall(HedgeApp.CurrentGameInstall);
+        }
+
         private void UI_ChangeDatabasePath_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new FolderBrowserDialog
