@@ -216,6 +216,7 @@ namespace HedgeModManager
     {
         public string GameName = "NoGame";
         public string SaveName = string.Empty;
+        public string ModsDirectoryName = "mods";
         public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
         public bool SupportsSaveRedirection = false;
