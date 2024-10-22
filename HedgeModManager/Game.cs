@@ -143,7 +143,7 @@ namespace HedgeModManager
             SaveName = "savedata",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
-            Folders = new[] { "raw" },
+            Folders = ["raw"],
             AppID = "1237320",
             EGSID = "c5ca98fa240c4eb796835f97126df8e7",
             GBProtocol = "hedgemmrangers",
@@ -153,20 +153,40 @@ namespace HedgeModManager
             GamePaths = [Path.Combine("SonicFrontiers", "SonicFrontiers.exe")]
         };
 
-        public static Game SonicXShadowGenerations = new Game()
+        public static Game SonicGenerations2024 = new Game()
         {
-            GameName = "SonicXShadowGenerations",
+            GameName = "SonicGenerations2024",
+            ModsDirectoryName = "mods_sonic",
             SaveName = "savedata",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
-            Folders = new[] { "raw" },
+            Folders = ["raw"],
             AppID = "2513280",
-            EGSID = "",	// Get when game releases
-            GBProtocol = "hedgemmmiller",
+            EGSID = "a88805d3fbec4ca9bfc248105f6adb0a",
+            GBProtocol = "hedgemmmillersonic",
             Is64Bit = true,
-            ModLoader = ModLoaders.HE2ModLoader,	// Needs to be unique due to HE1 being present
-            CodesURL = Resources.URL_MILLER_CODES,
-            GamePaths = []	// Get when game releases
+            ModLoader = ModLoaders.HE2ModLoader, // Needs updating
+            CodesURL = Resources.URL_MILLER_SONIC_CODES,
+            GamePaths = [Path.Combine("SONIC_X_SHADOW_GENERATIONS", "SONIC_GENERATIONS.exe")],
+            Timestamps = [0x66F6109A]
+        };
+
+        public static Game SonicXShadowGenerations = new Game()
+        {
+            GameName = "SonicXShadowGenerations",
+            ModsDirectoryName = "mods_shadow",
+            SaveName = "savedata",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = ["raw"],
+            AppID = "2513280",
+            EGSID = "a88805d3fbec4ca9bfc248105f6adb0a",
+            GBProtocol = "hedgemmmillershadow",
+            Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader, // Needs updating
+            CodesURL = Resources.URL_MILLER_SHADOW_CODES,
+            GamePaths = [Path.Combine("SONIC_X_SHADOW_GENERATIONS", "SONIC_X_SHADOW_GENERATIONS.exe")],
+            Timestamps = [0x66F609C2]
         };
 
         public static IEnumerable<Game> GetSupportedGames()
@@ -179,6 +199,7 @@ namespace HedgeModManager
             yield return SonicColorsUltimate;
             yield return SonicOrigins;
             yield return SonicFrontiers;
+            yield return SonicGenerations2024;
             yield return SonicXShadowGenerations;
         }
     }

@@ -51,6 +51,7 @@
     <Resource Include="Resources\Graphics\Games\SonicForces.png" />
     <Resource Include="Resources\Graphics\Games\SonicFrontiers.png" />
     <Resource Include="Resources\Graphics\Games\SonicGenerations.png" />
+    <Resource Include="Resources\Graphics\Games\SonicGenerations2024.png" />
     <Resource Include="Resources\Graphics\Games\SonicLostWorld.png" />
     <Resource Include="Resources\Graphics\Games\SonicOrigins.png" />
     <Resource Include="Resources\Graphics\Games\SonicXShadowGenerations.png" />
@@ -118,6 +119,7 @@
     <None Remove="Resources\Graphics\Games\SonicForces.png" />
     <None Remove="Resources\Graphics\Games\SonicFrontiers.png" />
     <None Remove="Resources\Graphics\Games\SonicGenerations.png" />
+    <None Remove="Resources\Graphics\Games\SonicGenerations2024.png" />
     <None Remove="Resources\Graphics\Games\SonicLostWorld.png" />
     <None Remove="Resources\Graphics\Games\SonicOrigins.png" />
     <None Remove="Resources\Graphics\Games\SonicXShadowGenerations.png" />
