@@ -192,6 +192,7 @@ namespace HedgeModManager
         public static IEnumerable<Game> GetSupportedGames()
         {
             yield return SonicGenerations;
+            yield return SonicGenerations2024;
             yield return SonicLostWorld;
             yield return SonicForces;
             yield return PuyoPuyoTetris2;
@@ -199,7 +200,6 @@ namespace HedgeModManager
             yield return SonicColorsUltimate;
             yield return SonicOrigins;
             yield return SonicFrontiers;
-            yield return SonicGenerations2024;
             yield return SonicXShadowGenerations;
         }
     }
