@@ -304,7 +304,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicXShadowGenerations.hmm.
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/ShadowGenerations.hmm.
         /// </summary>
         internal static string URL_MILLER_SHADOW_CODES {
             get {
@@ -313,7 +313,7 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/Generations2024.hmm.
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicGenerations2024.hmm.
         /// </summary>
         internal static string URL_MILLER_SONIC_CODES {
             get {

@@ -185,7 +185,7 @@ Do you want run the HMM Auto Installer?</value>
     <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicFrontiers.hmm</value>
   </data>
   <data name="URL_MILLER_SHADOW_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicXShadowGenerations.hmm</value>
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/ShadowGenerations.hmm</value>
   </data>
   <data name="URL_RML_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/RainbowModLoader.dll</value>
@@ -203,6 +203,6 @@ Do you want run the HMM Auto Installer?</value>
     <value>..\resources\version.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="URL_MILLER_SONIC_CODES" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/Generations2024.hmm</value>
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicGenerations2024.hmm</value>
   </data>
 </root>
