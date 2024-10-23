@@ -225,7 +225,7 @@
     <system:String x:Key="ThemeLight">Claro</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameSonicGenerations">Sonic Generations</system:String>
+    <system:String x:Key="GameSonicGenerations">Sonic Generations (2011)</system:String>
     <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
     <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
@@ -233,7 +233,8 @@
     <system:String x:Key="GameSonicColorsUltimate">Sonic Colours: Ultimate</system:String>
     <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
     <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
-    <system:String x:Key="GameSonicXShadowGenerations">SONIC X SHADOW GENERATIONS</system:String>
+    <system:String x:Key="GameSonicGenerations2024">Sonic Generations (2024)</system:String>
+    <system:String x:Key="GameShadowGenerations">Shadow Generations</system:String>
     <system:String x:Key="GameNoGame">Nenhum Jogo Detetado!</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>

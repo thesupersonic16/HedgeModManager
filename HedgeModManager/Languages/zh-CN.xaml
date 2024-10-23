@@ -242,7 +242,7 @@
     <system:String x:Key="ThemeLight" >明亮</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameSonicGenerations">索尼克 世代</system:String>
+    <system:String x:Key="GameSonicGenerations">索尼克 世代 (2011)</system:String>
     <system:String x:Key="GameSonicLostWorld">索尼克 失落世界</system:String>
     <system:String x:Key="GameSonicForces">索尼克 力量</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">魔法气泡 特趣思 俄罗斯方块 2</system:String>
@@ -250,7 +250,8 @@
     <system:String x:Key="GameSonicColorsUltimate">索尼克 缤纷色彩 究极版</system:String>
     <system:String x:Key="GameSonicOrigins">索尼克 起源</system:String>
     <system:String x:Key="GameSonicFrontiers">索尼克 未知边境</system:String>
-    <system:String x:Key="GameSonicXShadowGenerations">索尼克×夏特 世代重启</system:String>
+    <system:String x:Key="GameSonicGenerations2024">索尼克 世代 (2024)</system:String>
+    <system:String x:Key="GameShadowGenerations">夏特 世代重启</system:String>
     <system:String x:Key="GameNoGame">未能检测游戏</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>

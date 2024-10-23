@@ -241,7 +241,7 @@
     <system:String x:Key="ThemeLight" >ライト</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameSonicGenerations">ソニックジェネレーションズ</system:String>
+    <system:String x:Key="GameSonicGenerations">ソニックジェネレーションズ (2011)</system:String>
     <system:String x:Key="GameSonicLostWorld">ソニックロストワールド</system:String>
     <system:String x:Key="GameSonicForces">ソニックフォース</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">ぷよぷよテトリス 2</system:String>
@@ -249,7 +249,8 @@
     <system:String x:Key="GameSonicColorsUltimate">ソニックカラーズ アルティメット</system:String>
     <system:String x:Key="GameSonicOrigins">ソニックオリジンズ</system:String>
     <system:String x:Key="GameSonicFrontiers">ソニックフロンティア</system:String>
-    <system:String x:Key="GameSonicXShadowGenerations">ソニック × シャドウ ジェネレーションズ</system:String>
+    <system:String x:Key="GameSonicGenerations2024">ソニックジェネレーションズ (2024)</system:String>
+    <system:String x:Key="GameShadowGenerations">シャドウジェネレーションズ</system:String>
     <system:String x:Key="GameNoGame">ゲームが見つかりません！</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>

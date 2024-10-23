@@ -172,9 +172,9 @@ namespace HedgeModManager
             Timestamps = [0x66F6109A]
         };
 
-        public static Game SonicXShadowGenerations = new Game()
+        public static Game ShadowGenerations = new Game()
         {
-            GameName = "SonicXShadowGenerations",
+            GameName = "ShadowGenerations",
             ModsDirectoryName = "mods_shadow",
             SaveName = "savedata",
             SupportsCPKREDIR = false,
@@ -201,7 +201,7 @@ namespace HedgeModManager
             yield return SonicColorsUltimate;
             yield return SonicOrigins;
             yield return SonicFrontiers;
-            yield return SonicXShadowGenerations;
+            yield return ShadowGenerations;
         }
     }
 
