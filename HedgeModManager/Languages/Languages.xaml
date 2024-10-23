@@ -10,6 +10,7 @@
         <local:LangEntry FileName="nl-NL" Name="Dutch (Netherlands)"/>
         <local:LangEntry FileName="de-DE" Name="Deutsch (German)"/>
         <local:LangEntry FileName="fr-FR" Name="Français (France)"/>
+        <local:LangEntry FileName="pl-PL" Name="Polski (Polish)"/>
         <local:LangEntry FileName="pt-PT" Name="Português (Portugal)"/>
         <local:LangEntry FileName="pt-BR" Name="Português (Brazil)"/>
         <local:LangEntry FileName="zh-TW" Name="中文繁體 (Chinese Traditional)"/>

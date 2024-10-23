@@ -1,0 +1,241 @@
+<ResourceDictionary 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Common UI Strings -->
+    <system:String x:Key="CommonUIClose"   >Zamknij</system:String>
+    <system:String x:Key="CommonUIOK"      >OK</system:String>
+    <system:String x:Key="CommonUICancel"  >Anuluj</system:String>
+    <system:String x:Key="CommonUIYes"     >Tak</system:String>
+    <system:String x:Key="CommonUIBlocked" >Zablokowane</system:String>
+    <system:String x:Key="CommonUINo"      >Nie</system:String>
+    <system:String x:Key="CommonUIRetry"   >Spróbuj Ponownie</system:String>
+    <system:String x:Key="CommonUIUpdate"  >Zaaktualizuj</system:String>
+    <system:String x:Key="CommonUIDownload">Pobierz</system:String>
+    <system:String x:Key="CommonUIDelete"  >Usuń</system:String>
+    <system:String x:Key="CommonUINone"    >Żadne</system:String>
+    <system:String x:Key="CommonUIIgnore"  >Ignoruj</system:String>
+    <system:String x:Key="CommonUIWarning" >OSTRZEŻENIE</system:String>
+    <system:String x:Key="CommonUIError"   >BŁĄD</system:String>
+
+    <!-- Main UI Strings -->
+    <system:String x:Key="MainUIMods"          >Mody</system:String>
+    <system:String x:Key="MainUICodes"         >Kody</system:String>
+    <system:String x:Key="MainUISettings"      >Ustawienia</system:String>
+    <system:String x:Key="MainUIAddMod"        >Dodaj moda</system:String>
+    <system:String x:Key="MainUIRefreshModList">Odśwież listę</system:String>
+    <system:String x:Key="MainUISave"          >Zapisz</system:String>
+    <system:String x:Key="MainUISaveAndPlay"   >Zapisz i graj</system:String>
+    <system:String x:Key="MainUIConfigureMod"  >Konfiguruj moda</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">Pobieranie programu ładującego mody nie powiodło się.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Instalowanie programu ładującego mody nie powiodło się.&#x0a;Upewnij się, że masz uprawnienia do zapisywania plików gry.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Instalowanie programu ładującego mody nie powiodło się.&#x0a;Upewnij się, że żadne gry nie działają w tle.</system:String>
+
+    <!-- Mods UI Strings -->
+    <system:String x:Key="ModsUIName"           >Nazwa</system:String>
+    <system:String x:Key="ModsUIVersion"        >Wersja</system:String>
+    <system:String x:Key="ModsUIAuthor"         >Autor</system:String>
+    <system:String x:Key="ModsUIFeatures"       >Funkcje</system:String>
+    <system:String x:Key="ModsUIModDescription" >Opis</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Ulubione</system:String>
+    <system:String x:Key="ModsUIModConfigure"   >Konfiguruj moda</system:String>
+    <system:String x:Key="ModsUIModOpenFolder"  >Otwórz folder zawierający moda</system:String>
+    <system:String x:Key="ModsUIModCheckUpdates">Sprawdź, czy są aktualizacje</system:String>
+    <system:String x:Key="ModsUICheckUpdatesAll">Sprawdź, czy wszystkie mody mają aktualizacje</system:String>
+    <system:String x:Key="ModsUIModEdit"        >Edytuj moda</system:String>
+    <system:String x:Key="ModsUIModDelete"      >Usuń moda</system:String>
+    <system:String x:Key="ModsUIFeatureConfig"  >Ten mod nie może być zkonfigurowany</system:String>
+    <system:String x:Key="ModsUIFeatureConfigDisable">Ten mod nie wspiera konfiguracji.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdate"       >Ten mod wspiera aktualizowanie.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateDisable">Ten mod nie wspiera aktualizowania.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateFailed" >Nie udało się sprawdzić, czy ten mod ma aktualizacje.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateBlocked">Ten mod został zablokowany ze sprawdzania aktualizacji.</system:String>
+    <system:String x:Key="ModsUIFeatureSave"         >Ten mod wykorzystuje przekierowywanie zapisu.</system:String>
+    <system:String x:Key="ModsUIFeatureSaveDisable"  >Ten mod nie wspiera przekierowywania zapisu.</system:String>
+    <system:String x:Key="ModsUIFeatureCode"         >Ten mod zawiera niestandardowy kod.</system:String>
+    <system:String x:Key="ModsUIFeatureCodeDisable"  >Ten mod nie zawiera niestandardowy kod..</system:String>
+    <system:String x:Key="ModsUIModDragDrop"    >Przeciągnij i upuść elementy, aby zmienić kolejność ładowania modów.</system:String>
+    <system:String x:Key="ModsUISearch"         >Wyszukaj: </system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager wykrył, że jeden lub więcej modów ma nieprawidłowe katalogi dołączania.&#x0a;Czy chcesz, aby Hedge Mod Manager spróbował to naprawić?</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUINoMods">...Nie ma tu zbyt wiele.&#x0a;Idź zainstaluj pare modów!</system:String>
+
+    <!-- Codes UI Strings -->
+    <system:String x:Key="CodesUIName"    >Nazwa</system:String>
+    <system:String x:Key="CodesUIDownload">Pobierz kody społeczności</system:String>
+    <system:String x:Key="CodesUIUpdate"  >Zaaktualizuj kody społeczności</system:String>
+    <system:String x:Key="CodesUISearch"  >Wyszukaj: </system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Zainstalowane kody są niekompatybilne z programem ładującym kody.&#x0a;Zaktualizuj kody i program ładujący kody.&#x0a;OSTRZEŻENIE: Spowoduje to usunięcie wszelkich niestandardowych kodów.</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIFetching">Pobieranie kodów...</system:String>
+
+    <!-- Settings UI Strings -->
+    <!--   Game & Mod Loader -->
+    <system:String x:Key="SettingsUIGMLHeader"      >Gra &amp; Program ładujący mody</system:String>
+    <system:String x:Key="SettingsUIInstallLoader"  >Zainstaluj program ładujący mody</system:String>
+    <system:String x:Key="SettingsUIUninstallLoader">Odinstaluj program ładujący mody</system:String>
+    <system:String x:Key="SettingsUIOpenMods"       >Otwórz katalog modów</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >Otwórz katalog gry</system:String>
+    <system:String x:Key="SettingsUIEnableML"       >Włącz program ładujący mody</system:String>
+    <system:String x:Key="SettingsUIEnableDebug"    >Włącz konsole debugowania</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >Włącz przekierowanie pliku zapisu</system:String>
+    <system:String x:Key="SettingsUIUseLauncher"    >Użyj launchera gry</system:String>
+    <system:String x:Key="SettingsUILabelLoaders"   >Programy ładujące:</system:String>
+    <system:String x:Key="SettingsUILabelGame"      >Gra:</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >Profil:</system:String>
+    <system:String x:Key="SettingsUILabelMDir"      >Katalog Modów:</system:String>
+    <!--   Hedge Mod Manager -->
+    <system:String x:Key="SettingsUIHMMHeader"      >Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"  >Sprawdź, czy są aktualizacje programu ładującego mody</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"  >Sprawdź, czy są aktualizacje programu ładującego kody</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates">Sprawdź, czy są aktualizacje modów</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"    >Nie zamykaj Hedge Mod Managera po rozpoczęciu gry</system:String>
+    <system:String x:Key="SettingsUICheckHMMUpdate" >Sprawdź. czy są aktualizacje</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"       >O Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUILanguage"       >Język:</system:String>
+    <system:String x:Key="SettingsUITheme"          >Motyw:</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel" >Kanał Aktualizacji:</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >Zmienianie Kanałów Aktualizacji</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Za chwilę przełączysz się na kanał Release.&#x0a;&#x0a;Jesteś pewien, że chcesz kontynuować? Hedge Mod Manager będzie musiał zostać ponownie uruchomiony, aby zmienić kanały.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Za chwilę przełączysz się na kanał Development. Ten kanał może zawierać nieprzetestowane funkcje i błędy.&#x0a;&#x0a;Jesteś pewien, że chcesz kontynuować? Hedge Mod Manager będzie musiał zostać ponownie uruchomiony, aby zmienić kanały.</system:String>
+
+    <!-- MainWindow UI Strings -->
+    <system:String x:Key="MainUIInstallFormHeader"    >Zainstaluj mod przez...</system:String>
+    <system:String x:Key="MainUIInstallFormOptionDir" >Instalowanie z foldera</system:String>
+    <system:String x:Key="MainUIInstallFormOptionArc" >Instalowanie z archiwum</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew" >Tworzeniu jednego (Dla Deweloperów!)</system:String>
+    <system:String x:Key="MainUIMissingLoaderHeader"  >Program Ładujący Mody jeszcze nie zainstalowany!</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Aby {0} mógł rozpocząć ładowanie modów, program ładujący mody musi być zainstalowany.&#x0a;Czy chcesz go teraz zainstalować?</system:String>
+    <system:String x:Key="MainUISelectModsDBTitle"    >Wybierz, skąd załadować mody...</system:String>
+    <system:String x:Key="MainUIRuntimeMissingTitle"  >Wykryto brakujące środowisko uruchomieniowe!</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">{0} wymaga zainstalowania {1} dla modów &#x0a; aby działać poprawnie, czy chcesz, aby HMM zainstalował to środowisko uruchomieniowe?</system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Co najmniej jeden włączony mod wymaga przekierowania pliku zapisu, aby działał poprawnie. Włączyć tę funkcję?&#x0a;Kliknij nie tylko wtedy, gdy wiesz, co robisz.</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" >Nie udało się rozwiązać zależności modów</system:String>
+    <system:String x:Key="MainUIMissingDepends"       >W następujących modach brakuje zależności:</system:String>
+    <system:String x:Key="MainUIMissingDependsResolve">Rozwiąż Mody GB</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">Jedna lub więcej zależności może zostać rozwiązana automatycznie&#x0a;z GameBanana, klikając „Rozwiąż Mody GB”.</system:String>
+
+    <!-- OptionsWindow UI Strings -->
+    <system:String x:Key="OptionsWindowUIError"      >Proszę wybrać opcję!</system:String>
+
+    <!-- AboutWindow UI Strings -->
+    <system:String x:Key="AboutWindowUITitle"      >O Hedge Mod Manager</system:String>
+    <system:String x:Key="AboutWindowUILine1"      >Program zaprojektowany, aby pomóc ludziom w łatwym ładowaniu modów do gier z silnikiem Hedgehog Engine.</system:String>
+    <system:String x:Key="AboutWindowUILine2"      >Wymaga legalnie posiadanej wersji jednej z obsługiwanych gier.</system:String>
+    <system:String x:Key="AboutWindowUICredits"    >Uznania</system:String>
+    <system:String x:Key="AboutWindowUITranslators">Tłumacze</system:String>
+
+    <!-- ProfileWindow UI Strings -->
+    <system:String x:Key="ProfileWindowUITitle"      >Zarządzaj Profilami</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">Zmień Nazwę Profilu</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">Stwórz Profil</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >Nazwa</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >Nazwa Pliku</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >Stwórz</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >Zmień Nazwę</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Skolnuj</system:String>
+    <system:String x:Key="ProfileWindowUIExport"     >Eksportuj</system:String>
+    <system:String x:Key="ProfileWindowUIImport"     >Importuj</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >Usuń Profil</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >Nazwa:</system:String>
+    <system:String x:Key="ProfileWindowUIImportFail" >Nie udało się zaimportować profilu moda</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingMods"   >Nie znaleziono następujących modów:</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >Nie znaleziono następujących kodów:</system:String>
+
+    <!-- EditModWindow UI Strings -->
+    <system:String x:Key="EditModWindowUIHeader">Podaj kilka szczegółów dotyczących swojego moda.</system:String>
+
+    <!-- PropertyEditor UI Strings -->
+    <system:String x:Key="PropertyEditorUIName" >Nazwa</system:String>
+    <system:String x:Key="PropertyEditorUIValue">Wartość</system:String>
+
+    <!-- Status UI Strings -->
+    <system:String x:Key="StatusUILoadedMods"             >Załadowano {0} modów</system:String>
+    <system:String x:Key="StatusUICheckingModUpdates"     >Sprawdzanie, czy jest {0} aktualizacji</system:String>
+    <system:String x:Key="StatusUIFailedToUpdate"         >Nie udało się zaktualizować {0}! {1}</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Zakończono sprawdzanie aktualizacji modów: {0} ukończono, {1} nie powiodło się</system:String>
+    <system:String x:Key="StatusUIStartingGame"           >Uruchamianie {0}</system:String>
+    <system:String x:Key="StatusUICheckingForUpdates"     >Sprawdzanie, czy są aktualizacje.</system:String>
+    <system:String x:Key="StatusUINoUpdatesFound"         >Nie znaleziono żadnych aktualizacji</system:String>
+    <system:String x:Key="StatusUIFailedToCheckUpdates"   >Sprawdzanie, czy są aktualizacje nie powiodło się</system:String>
+    <system:String x:Key="StatusUICheckingForLoaderUpdate">Sprawdzanie, czy jest {0} aktualizacje</system:String>
+    <system:String x:Key="StatusUILoaderUpToDate"         >{0} jest aktualny</system:String>
+    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Sprawdzanie, czy jest {0} aktualizaji nie powiodło się</system:String>
+    <system:String x:Key="StatusUIInstalledLoader"        >Zainstalowano {0}</system:String>
+    <system:String x:Key="StatusUIDeletedMod"             >Usunięto {0}</system:String>
+    <system:String x:Key="StatusUIModsDBSaved"            >Baza zapisanych modów</system:String>
+    <system:String x:Key="StatusUIModsDBLocationChanged"  >Zaktualizowano lokalizacje bazy danych</system:String>
+    <system:String x:Key="StatusUIGameChange"             >Zmieniono grę na {0}</system:String>
+    <system:String x:Key="StatusUIDownloadingCodes"       >Pobieranie kodów do {0}</system:String>
+    <system:String x:Key="StatusUIDownloadFinished"       >Pobieranie powiodło się</system:String>
+    <system:String x:Key="StatusUIDownloadFailed"         >Pobieranie nie powiodło się</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >Aktualizację kodów dostępne!</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >Nie znaleziono aktualizacji kodów</system:String>
+
+    <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager nie mógł uzyskać dostępu do katalogu gry.&#x0a;Upewnij się, że grupa Użytkownicy ma &quot;Zapisywanie&quot; ustawiono na opcję Zezwól na poniższy katalog oraz wszystkie jego pliki i foldery.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >Czy na pewno chcesz usunąć &quot;{0}&quot;?&#x0a;Tej czynności nie można cofnąć!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} jest już aktualne.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >Dostępna nowsza wersja {0}! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Czy na pewno chcesz anulować aktualizację?&#x0a;Może to spowodować uszkodzenie {0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Nie można znaleźć 7-Zip ani WinRAR!&#x0a;Jest to wymagane do wyodrębnienia danych moda.&#x0a;&#x0a;Upewnij się, że masz jeden z nich zainstalowany w systemie.</system:String>
+
+    <!-- Status UI Lang Stuff Strings -->
+    <system:String x:Key="StatusUIUpdateCompletedSingular"      >zakończono</system:String>
+    <system:String x:Key="StatusUIUpdateCompletedPlural"        >zakończone</system:String>
+    <system:String x:Key="StatusUIUpdateFailedSingular"         >nie udało się</system:String>
+    <system:String x:Key="StatusUIUpdateFailedPlural"           >nie udały się</system:String>
+
+    <!-- Mod Config UI Strings -->
+    <system:String x:Key="ModConfigUITitle">Konfiguruj {0}</system:String>
+
+    <!-- Mod Description UI Strings -->
+    <system:String x:Key="ModDescriptionUIAbout">O {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">Stworzone przez</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">Stworzone</system:String>
+    <system:String x:Key="ModDescriptionUIDate"></system:String>
+
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">Nie udało się pobrać moda</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Podczas pobierania wystąpił błąd. Serwery mogą być wyłączone lub przeciążone. Spróbuj ponownie później. &#x0a;&#x0a;Szczegóły: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">Nie udało się znaleźć gry</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager nie mógł znaleźć instalacji {0}</system:String>
+
+    <!-- Mod Updates Window Strings -->
+    <system:String x:Key="ModUpdatesChangelog"    >Lista zmian</system:String>
+    <system:String x:Key="ModDownloadsDescription">Opis</system:String>
+    <system:String x:Key="ModUpdatesTitle"        >Aktualizacje modów</system:String>
+    <system:String x:Key="ModDownloadsTitle"      >Pobieranie modów</system:String>
+
+    <!-- Exception Window Strings -->
+    <system:String x:Key="ExceptionWindowTitle"           >Awaria Hedge Mod Manager</system:String>
+    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager rzucił wyjątek!</system:String>
+    <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager napotkał błąd!!</system:String>
+    <system:String x:Key="ExceptionWindowButtonCopyLog"   >Skopiuj dziennik do schowka</system:String>
+    <system:String x:Key="ExceptionWindowButtonIgnore"    >Zignoruj i zamknij</system:String>
+    <system:String x:Key="ExceptionWindowButtonReport"    >Prześlij raport na GitHub</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Dostępna nowa aktualizacja!</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Wygląda na to, że ta wersja Hedge Mod Manager jest nieaktualna.&#x0a;Zdecydowanie zaleca się pierwszą aktualizację i sprawdzenie, czy problem nadal występuje.&#x0a;Czy chcesz zaktualizować teraz?</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorTitle">Błąd aktualizacji!</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager nie mógł się zaaktualizować!&#x0a;Pobierz najnowszą wersję ręcznie.</system:String>
+
+    <!-- Themes -->
+    <system:String x:Key="ThemeDark"  >Ciemny</system:String>
+    <system:String x:Key="ThemeDarker">Ciemniejszy</system:String>
+    <system:String x:Key="ThemeOLED"  >OLED</system:String>
+    <system:String x:Key="ThemeLight" >Jasny</system:String>
+
+    <!-- Games -->
+    <system:String x:Key="GameSonicGenerations">Sonic Generations</system:String>
+    <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
+    <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
+    <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colours: Ultimate</system:String>
+    <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
+    <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
+    <system:String x:Key="GameNoGame">Nie wykryto żadnej gry!</system:String>
+    <system:String x:Key="LauncherSteam">Steam</system:String>
+    <system:String x:Key="LauncherEpic">Epic Games</system:String>
+    <system:String x:Key="LauncherHeroic">Heroic</system:String>
+
+</ResourceDictionary>
