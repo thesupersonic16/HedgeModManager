@@ -184,7 +184,7 @@ namespace HedgeModManager
             EGSID = "a88805d3fbec4ca9bfc248105f6adb0a",
             GBProtocol = "hedgemmmillershadow",
             Is64Bit = true,
-            ModLoader = ModLoaders.HE2ModLoader,
+            ModLoader = ModLoaders.HE2ModLoaderD3D11,
             CodesURL = Resources.URL_MILLER_SHADOW_CODES,
             GamePaths = [Path.Combine("SONIC_X_SHADOW_GENERATIONS", "SONIC_X_SHADOW_GENERATIONS.exe")],
             Timestamps = [0x66F609C2]
@@ -193,7 +193,6 @@ namespace HedgeModManager
         public static IEnumerable<Game> GetSupportedGames()
         {
             yield return SonicGenerations;
-            // yield return SonicGenerations2024;
             yield return SonicLostWorld;
             yield return SonicForces;
             yield return PuyoPuyoTetris2;
@@ -201,6 +200,7 @@ namespace HedgeModManager
             yield return SonicColorsUltimate;
             yield return SonicOrigins;
             yield return SonicFrontiers;
+            // yield return SonicGenerations2024;
             yield return ShadowGenerations;
         }
     }
