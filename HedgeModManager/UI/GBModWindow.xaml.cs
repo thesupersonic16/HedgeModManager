@@ -51,6 +51,20 @@ namespace HedgeModManager.UI
             InitializeComponent();
         }
 
+        public Tuple<GameInstall, bool?> SelectGameInstall()
+        {
+            // Get compaitble games
+            var compatibleGames = Games.GetSupportedGames().Where(t => t.GBProtocol == Protocol).ToList();
+            List<GameInstall> compatibleGameInstalls = HedgeApp.GameInstalls.Where(t => compatibleGames.Contains(t.Game)).ToList();
+
+            if (compatibleGameInstalls.Count <= 1)
+                return new(compatibleGameInstalls.FirstOrDefault(), true);
+
+            var selector = new GBModGameSelectorWindow(compatibleGameInstalls);
+            selector.ShowDialog();
+            return new (selector.SelectedGame, selector.DialogResult);
+        }
+
         private void Screenshot_Click(object sender, RoutedEventArgs e)
         {
             var shot = (GBAPIScreenshotData)((Button)sender).Tag;
@@ -93,6 +107,34 @@ namespace HedgeModManager.UI
             DownloadButton.Visibility = Visibility.Collapsed;
             Progress.Visibility = Visibility.Visible;
 
+            var (gameInstall, result) = SelectGameInstall();
+
+            if (gameInstall == null)
+            {
+                DownloadButton.Visibility = Visibility.Visible;
+                Progress.Visibility = Visibility.Collapsed;
+
+                // No game
+                if (result == true)
+                {
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        var dialog = new HedgeMessageBox(Localise("CommonUIError"), LocaliseFormat("ModDownloaderNoGameMes", Localise($"Game{Game.GameName}")));
+                        dialog.AddButton(Localise("CommonUIClose"), () =>
+                        {
+                            dialog.Close();
+                            DialogResult = false;
+                            Close();
+                        });
+                        dialog.ShowDialog();
+                    });
+                    return;
+                }
+
+                // Cancelled
+                return;
+            }
+
             try
             {
                 var progress = new Progress<double?>((v) =>
@@ -111,23 +153,7 @@ namespace HedgeModManager.UI
                     }
                 });
 
-                var game = HedgeApp.GetGameInstall(Game);
-                if (game == null)
-                {
-                    await Dispatcher.InvokeAsync(() =>
-                    {
-                        var dialog = new HedgeMessageBox(Localise("CommonUIError"), LocaliseFormat("ModDownloaderNoGameMes", Localise($"Game{Game.GameName}")));
-                        dialog.AddButton(Localise("CommonUIClose"), () =>
-                        {
-                            dialog.Close();
-                            DialogResult = false;
-                            Close();
-                        });
-                        dialog.ShowDialog();
-                    });
-                    return;
-                }
-                HedgeApp.Config = new CPKREDIRConfig(game);
+                HedgeApp.Config = new CPKREDIRConfig(gameInstall);
                 var mod = (GBAPIItemDataBasic)DataContext;
 
                 using (var resp = await Singleton.GetInstance<HttpClient>().GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
@@ -139,7 +165,7 @@ namespace HedgeModManager.UI
                     using (var destinationFile = File.Create(destinationPath, 8192, FileOptions.Asynchronous))
                         await resp.Content.CopyToAsync(destinationFile, progress);
                     
-                    ModsDB.InstallMod(destinationPath, Path.Combine(game.GameDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
+                    ModsDB.InstallMod(destinationPath, Path.Combine(gameInstall.GameDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
                     File.Delete(destinationPath);
 
                     // a dialog would be nice here but i ain't adding strings

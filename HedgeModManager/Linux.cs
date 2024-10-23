@@ -94,9 +94,11 @@ namespace HedgeModManager
             if (baseExec != null)
             {
                 GenerateDesktopAndRegister("hedgemm.desktop", "Hedge Mod Manager", $"{baseExec} \"%u\"", icon, true, "x-scheme-handler/hedgemm");
-                
+
                 // GameBanana
-                foreach (Game game in Games.GetSupportedGames())
+                foreach (var game in Games.GetSupportedGames()
+                    .GroupBy(t => t.GBProtocol)
+                    .Select(t => t.First()))
                     GenerateDesktopAndRegister($"{game.GBProtocol}.desktop", $"Hedge Mod Manager ({game.GameName})", $"{baseExec} \"-gb %u\"", icon, false, $"x-scheme-handler/{game.GBProtocol}");
             }
 

@@ -236,6 +236,11 @@
     <system:String x:Key="ModUpdatesTitle"        >Mod Updates</system:String>
     <system:String x:Key="ModDownloadsTitle"      >Mod Downloads</system:String>
 
+    <!-- Game Selector Window Strings -->
+    <system:String x:Key="GameSelectorTitle"      >Select Game...</system:String>
+    <system:String x:Key="GameSelectorHeader"     >Multiple Games Detected</system:String>
+    <system:String x:Key="GameSelectorDescription">Please select a game below to install the mod into.</system:String>
+
     <!-- Exception Window Strings -->
     <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Crash</system:String>
     <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager Has Thrown an Exception!</system:String>

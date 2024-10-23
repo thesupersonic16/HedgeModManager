@@ -574,10 +574,10 @@ namespace HedgeModManager
 
         public static void InstallGBHandlers()
         {
-            foreach (var game in Games.GetSupportedGames())
-            {
+            foreach (var game in Games.GetSupportedGames()
+                .GroupBy(t => t.GBProtocol)
+                .Select(t => t.First()))
                 GBAPI.InstallGBHandler(game);
-            }
         }
 
         /// <summary>
