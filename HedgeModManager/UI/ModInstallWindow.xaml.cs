@@ -107,7 +107,7 @@ namespace HedgeModManager.UI
                 }
 
                 // Load game config
-                HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.GameDirectory, "cpkredir.ini"));
+                HedgeApp.Config = new CPKREDIRConfig(game);
 
                 using (var resp = await Singleton.GetInstance<HttpClient>().GetAsync(ModDownloadInfo.DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
                 {

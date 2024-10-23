@@ -29,7 +29,7 @@ namespace HedgeModManager
         public int ReadBlockSizeKB { get; set; } = 4096;
 
         [IniField("CPKREDIR", true)]
-        public string ModsDbIni { get; set; } = "mods\\ModsDB.ini";
+        public string ModsDbIni { get; set; } = null;
 
         [IniField("CPKREDIR", "EnableSaveFileRedirection", true)]
         public bool EnableSaveFileRedirection { get; set; } = false;
@@ -62,16 +62,31 @@ namespace HedgeModManager
         public CPKREDIRConfig(string path)
         {
             if (File.Exists(path))
+                Load(path);
+            else
+                Save(path);
+        }
+
+        public CPKREDIRConfig(GameInstall gameInstall)
+        {
+            string path = Path.Combine(gameInstall.GameDirectory, "cpkredir.ini");
+            if (File.Exists(path))
             {
-                using (var stream = File.OpenRead(path))
-                {
-                    var file = new IniFile(stream);
-                    IniSerializer.Deserialize(this, file);
-                }
+                Load(path);
             }
             else
             {
+                ModsDbIni = Path.Combine(gameInstall.Game.ModsDirectoryName, "ModsDB.ini");
                 Save(path);
+            }
+        }
+
+        public void Load(string path)
+        {
+            using (var stream = File.OpenRead(path))
+            {
+                var file = new IniFile(stream);
+                IniSerializer.Deserialize(this, file);
             }
         }
 

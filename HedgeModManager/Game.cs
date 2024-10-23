@@ -143,7 +143,7 @@ namespace HedgeModManager
             SaveName = "savedata",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
-            Folders = new[] { "raw" },
+            Folders = ["raw"],
             AppID = "1237320",
             EGSID = "c5ca98fa240c4eb796835f97126df8e7",
             GBProtocol = "hedgemmrangers",
@@ -153,9 +153,47 @@ namespace HedgeModManager
             GamePaths = [Path.Combine("SonicFrontiers", "SonicFrontiers.exe")]
         };
 
+        // TODO: implement loader.
+        public static Game SonicGenerations2024 = new Game()
+        {
+            GameName = "SonicGenerations2024",
+            ModsDirectoryName = "mods_sonic",
+            SaveName = "savedata",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = ["raw"],
+            AppID = "2513280",
+            EGSID = "a88805d3fbec4ca9bfc248105f6adb0a",
+            GBProtocol = "hedgemmmillersonic",
+            Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader, // TODO: use HE1ML?
+            CodesURL = Resources.URL_MILLER_SONIC_CODES,
+            GamePaths = [Path.Combine("SONIC_X_SHADOW_GENERATIONS", "SONIC_GENERATIONS.exe")],
+            Timestamps = [0x66F6109A]
+        };
+
+        public static Game SonicXShadowGenerations = new Game()
+        {
+            GameName = "SonicXShadowGenerations",
+            ModsDirectoryName = "mods_shadow",
+            SaveName = "savedata",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = ["raw"],
+            AppID = "2513280",
+            EGSID = "a88805d3fbec4ca9bfc248105f6adb0a",
+            GBProtocol = "hedgemmmillershadow",
+            Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader,
+            CodesURL = Resources.URL_MILLER_SHADOW_CODES,
+            GamePaths = [Path.Combine("SONIC_X_SHADOW_GENERATIONS", "SONIC_X_SHADOW_GENERATIONS.exe")],
+            Timestamps = [0x66F609C2]
+        };
+
         public static IEnumerable<Game> GetSupportedGames()
         {
             yield return SonicGenerations;
+            // yield return SonicGenerations2024;
             yield return SonicLostWorld;
             yield return SonicForces;
             yield return PuyoPuyoTetris2;
@@ -163,6 +201,7 @@ namespace HedgeModManager
             yield return SonicColorsUltimate;
             yield return SonicOrigins;
             yield return SonicFrontiers;
+            yield return SonicXShadowGenerations;
         }
     }
 
@@ -199,6 +238,7 @@ namespace HedgeModManager
     {
         public string GameName = "NoGame";
         public string SaveName = string.Empty;
+        public string ModsDirectoryName = "mods";
         public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
         public bool SupportsSaveRedirection = false;

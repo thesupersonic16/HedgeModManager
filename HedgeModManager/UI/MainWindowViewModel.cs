@@ -37,6 +37,7 @@ namespace HedgeModManager.UI
 
         public bool HasNoMods => Mods.Count == 0;
         public bool HasNoCodes => ModsDB.CodesDatabase.Codes.Count == 0;
+        public bool IsCustomGame => HedgeApp.CurrentGameInstall.IsCustom;
 
         public int RowAlternationCount => RegistryConfig.UseAlternatingRows ? 2 : 0;
 

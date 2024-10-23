@@ -101,6 +101,7 @@
     <system:String x:Key="SettingsUIEnableDebug"    >Enable debug console</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Redirect default save file</system:String>
     <system:String x:Key="SettingsUIUseLauncher"    >Use game launcher</system:String>
+    <system:String x:Key="SettingsUIRemoveGame"     >Remove Game</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Loaders:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Game:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Profile:</system:String>
@@ -254,7 +255,7 @@
     <system:String x:Key="ThemeLight" >Light</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameSonicGenerations">Sonic Generations</system:String>
+    <system:String x:Key="GameSonicGenerations">Sonic Generations (2011)</system:String>
     <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
     <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
@@ -262,6 +263,8 @@
     <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
     <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
     <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
+    <system:String x:Key="GameSonicGenerations2024">Sonic Generations (2024)</system:String>
+    <system:String x:Key="GameSonicXShadowGenerations">Shadow Generations</system:String>
     <system:String x:Key="GameNoGame">No Game Detected!</system:String>
     <system:String x:Key="GameAddGame">Add Game</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>

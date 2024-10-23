@@ -250,6 +250,7 @@
     <system:String x:Key="GameSonicColorsUltimate">索尼克 缤纷色彩 究极版</system:String>
     <system:String x:Key="GameSonicOrigins">索尼克 起源</system:String>
     <system:String x:Key="GameSonicFrontiers">索尼克 未知边境</system:String>
+    <system:String x:Key="GameSonicXShadowGenerations">索尼克×夏特 世代重启</system:String>
     <system:String x:Key="GameNoGame">未能检测游戏</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>

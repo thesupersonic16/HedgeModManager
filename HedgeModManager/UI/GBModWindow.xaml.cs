@@ -127,7 +127,7 @@ namespace HedgeModManager.UI
                     });
                     return;
                 }
-                HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.GameDirectory, "cpkredir.ini"));
+                HedgeApp.Config = new CPKREDIRConfig(game);
                 var mod = (GBAPIItemDataBasic)DataContext;
 
                 using (var resp = await Singleton.GetInstance<HttpClient>().GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))

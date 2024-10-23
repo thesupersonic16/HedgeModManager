@@ -17,6 +17,7 @@ A mod manager for Hedgehog Engine games on PC.
 - Sonic Colours: Ultimate ([Steam](https://store.steampowered.com/app/2055290), [Epic Games Store](https://www.epicgames.com/store/p/sonic-colors-ultimate))
 - Sonic Origins ([Steam](https://store.steampowered.com/app/1794960), [Epic Games Store](https://store.epicgames.com/en-US/p/sonic-origins))
 - Sonic Frontiers ([Steam](https://store.steampowered.com/app/1237320), [Epic Games Store](https://store.epicgames.com/en-US/p/sonic-frontiers))
+- SONIC X SHADOW GENERATIONS ([Steam](https://store.steampowered.com/app/2513280), [Epic Games Store](https://store.epicgames.com/en-US/p/sonic-x-shadow-generations))
 
 ## So how do I use this?
 ### Windows
