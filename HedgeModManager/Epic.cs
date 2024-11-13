@@ -103,7 +103,7 @@ namespace HedgeModManager
                 string fullPath = Path.Combine(installation.Value.InstallPath, installation.Value.Executable);
                 
                 if (File.Exists(fullPath))
-                    games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.Heroic));
+                    games.Add(new GameInstall(game, null, fullPath, GameLauncher.Heroic));
             }
 
             return games;
@@ -137,18 +137,23 @@ namespace HedgeModManager
 
             foreach (var game in Games.GetSupportedGames())
             {
-                var installation = launcherInstalled.InstallationList.FirstOrDefault(x =>
-                    x.AppName.Equals(game.EGSID, StringComparison.OrdinalIgnoreCase));
+                var installation = launcherInstalled.InstallationList
+                    .FirstOrDefault(x => x.AppName.Equals(game.EGSID, StringComparison.OrdinalIgnoreCase));
 
                 if (installation == null)
                     continue;
 
-                string gamePath = game.GamePathEGS == String.Empty ? game.GamePath : game.GamePathEGS;
+                foreach (string gamePath in game.GamePaths)
+                {
+                    string path = gamePath;
+                    // Remove first folder from path
+                    if (path.Contains(Path.DirectorySeparatorChar))
+                        path = path.Substring(path.IndexOf(Path.DirectorySeparatorChar) + 1);
 
-                string fullPath = Path.Combine(installation.InstallLocation, gamePath.Substring(gamePath.IndexOf('\\') + 1));
-
-                if (File.Exists(fullPath))
-                    games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.Epic));
+                    var fullPath = Path.Combine(installation.InstallLocation, path);
+                    if (File.Exists(fullPath))
+                        games.Add(new GameInstall(game, null, fullPath, GameLauncher.Epic));
+                }
             }
 
             return games;

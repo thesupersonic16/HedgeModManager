@@ -327,9 +327,6 @@ namespace GameBananaAPI
         [JsonProperty("_nFilesize")]
         public int FileSize { get; set; }
 
-        [JsonProperty("_sRelativeImageDir")]
-        public string ImageDirectory { get; set; }
-
         [JsonProperty("_sFile100")]
         public string FileSmall { get; set; }
 
@@ -337,7 +334,7 @@ namespace GameBananaAPI
         {
             get
             {
-                return $"http://files.gamebanana.com/{ImageDirectory}/{FileName}";
+                return $"https://images.gamebanana.com/img/ss/mods/{FileName}";
             }
         }
 
@@ -345,7 +342,7 @@ namespace GameBananaAPI
         {
             get
             {
-                return $"http://files.gamebanana.com/{ImageDirectory}/{FileSmall}";
+                return $"https://images.gamebanana.com/img/ss/mods/{FileSmall}";
             }
         }
     }

@@ -1,0 +1,265 @@
+﻿<ResourceDictionary 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Common UI Strings -->
+    <system:String x:Key="CommonUIClose"   >Bezárás</system:String>
+    <system:String x:Key="CommonUIOK"      >OK</system:String>
+    <system:String x:Key="CommonUICancel"  >Mégse</system:String>
+    <system:String x:Key="CommonUIYes"     >Igen</system:String>
+    <system:String x:Key="CommonUIBlocked" >Blokkolva</system:String>
+    <system:String x:Key="CommonUINo"      >Nem</system:String>
+    <system:String x:Key="CommonUIRetry"   >Újra</system:String>
+    <system:String x:Key="CommonUIUpdate"  >Frissítés</system:String>
+    <system:String x:Key="CommonUIDownload">Letöltés</system:String>
+    <system:String x:Key="CommonUIDelete"  >Törlés</system:String>
+    <system:String x:Key="CommonUINone"    >Nincs</system:String>
+    <system:String x:Key="CommonUIIgnore"  >Kihagyás</system:String>
+    <system:String x:Key="CommonUIWarning" >FIGYELMEZTETÉS</system:String>
+    <system:String x:Key="CommonUIError"   >HIBA</system:String>
+
+    <!-- Main UI Strings -->
+    <system:String x:Key="MainUIMods"          >Modok</system:String>
+    <system:String x:Key="MainUICodes"         >Kódok</system:String>
+    <system:String x:Key="MainUISettings"      >Beállítások</system:String>
+    <system:String x:Key="MainUIAddMod"        >Mod hozzáadása</system:String>
+    <system:String x:Key="MainUIRefreshModList">Lista frissítése</system:String>
+    <system:String x:Key="MainUISave"          >Mentés</system:String>
+    <system:String x:Key="MainUISaveAndPlay"   >Mentés és indítás</system:String>
+    <system:String x:Key="MainUIConfigureMod"  >Mod konfigurálása</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">Nem sikerült letölteni a modbetöltőt.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Nem sikerült telepíteni a modbetöltőt.&#x0a;Kérjük, ellenőrizze, hogy rendelkezik-e játékfájlok írási jogosultságával!</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">A modbetöltő eltávolítása sikertelen volt.&#x0a;Kérjük, győződjön meg róla, hogy jelenleg nem futnak játékok!</system:String>
+
+    <!-- Mods UI Strings -->
+    <system:String x:Key="ModsUIName"           >Név</system:String>
+    <system:String x:Key="ModsUIVersion"        >Verzió</system:String>
+    <system:String x:Key="ModsUIAuthor"         >Szerző</system:String>
+    <system:String x:Key="ModsUIFeatures"       >Funkciók</system:String>
+    <system:String x:Key="ModsUIModDescription" >Leírás</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Kedvenc</system:String>
+    <system:String x:Key="ModsUIModConfigure"   >Mod konfigurálása</system:String>
+    <system:String x:Key="ModsUIModOpenFolder"  >Tartalmazó mappa megnyitása</system:String>
+    <system:String x:Key="ModsUIModCheckUpdates">Frissítések ellenőrzése</system:String>
+    <system:String x:Key="ModsUICheckUpdatesAll">Az összes mod frissítéseinek ellenőrzése</system:String>
+    <system:String x:Key="ModsUIModEdit"        >Mod szerkesztése</system:String>
+    <system:String x:Key="ModsUIModDelete"      >Mod törlése</system:String>
+    <system:String x:Key="ModsUIFeatureConfig"  >Ez a mod konfigurálható.</system:String>
+    <system:String x:Key="ModsUIFeatureConfigDisable">Ez a mod nem támogatja a konfigurálást.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdate"       >Ez a mod támogatja a frissítést.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateDisable">Ez a mod nem támogatja a frissítést.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateFailed" >A mod frissítéseinek ellenőrzése sikertelen volt.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateBlocked">Erre a modra le van tiltva a frissítések ellenőrzése.</system:String>
+    <system:String x:Key="ModsUIFeatureSave"         >Ez a mod mentés átirányítást használ.</system:String>
+    <system:String x:Key="ModsUIFeatureSaveDisable"  >Ez a mod nem támogatja a mentés átirányítását.</system:String>
+    <system:String x:Key="ModsUIFeatureCode"         >Ez a mod egyéni kódot tartalmaz.</system:String>
+    <system:String x:Key="ModsUIFeatureCodeDisable"  >Ez a mod nem tartalmaz egyéni kódot.</system:String>
+    <system:String x:Key="ModsUIModDragDrop"         >A modok betöltési sorrendje megváltoztatható fogd és vidd módszerrel.</system:String>
+    <system:String x:Key="ModsUISearch"              >Keresés: </system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">A Hedge Mod Manager azt észlelte, hogy 1 vagy több modnál érvénytelen az include mappa.&#x0a;Engedélyezi a Hedge Mod Manager-nek, hogy megpróbálja ezt kijavítani?</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUINoMods">...Itt nincs sok minden.&#x0a;Menj, szerezz néhány modot!</system:String>
+
+    <!-- Codes UI Strings -->
+    <system:String x:Key="CodesUIName"        >Név</system:String>
+    <system:String x:Key="CodesUICategory"    >Kategória</system:String>
+    <system:String x:Key="CodesUIDownload"    >Közösségi kódok letöltése</system:String>
+    <system:String x:Key="CodesUIUpdate"      >Közösségi kódok frissítése</system:String>
+    <system:String x:Key="CodesUISearch"      >Keresés: </system:String>
+    <system:String x:Key="CodesUIInfo"        >További információkért kattintson duplán erre a kódra!</system:String>
+    <system:String x:Key="CodesUIInfoHint"    >További információkért húzza az egeret a kód fölé!</system:String>
+    <system:String x:Key="CodesUINoInfo"      >Nincs elérhető információ.</system:String>
+    <system:String x:Key="CodesUICopyCode"    >Kód másolása a vágólapra</system:String>
+    <system:String x:Key="CodesUIExpand"      >Mind kibontása</system:String>
+    <system:String x:Key="CodesUIExpandSub"   >Az összes alá tartozó elem kibontása</system:String>
+    <system:String x:Key="CodesUICollapse"    >Mind összecsukása</system:String>
+    <system:String x:Key="CodesUICollapseSub" >Az összes alá tartozó elem összecsukása</system:String>
+    <system:String x:Key="CodesUINullCategory">Nem besorolt</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">A telepített kódok nem kompatibilisek a kódbetöltővel.&#x0a;Kérjük, frissítse a kódokat és a kódbetöltőt!&#x0a;FIGYELEM: Ez töröl minden egyéni kódot.</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIFetching">Kódok lekérése...</system:String>
+
+    <!-- Diff UI Strings -->
+    <system:String x:Key="DiffUITitle"   >Változásnapló</system:String>
+    <system:String x:Key="DiffUIAdded"   >Hozzáadva</system:String>
+    <system:String x:Key="DiffUIModified">Módosítva</system:String>
+    <system:String x:Key="DiffUIRemoved" >Eltávolítva</system:String>
+    <system:String x:Key="DiffUIRenamed" >Átnevezve</system:String>
+    <system:String x:Key="DiffUIMoved"   >Áthelyezve</system:String>
+
+    <!-- Settings UI Strings -->
+    <!--   Game & Mod Loader -->
+    <system:String x:Key="SettingsUIGMLHeader"      >Játék- és modbetöltő</system:String>
+    <system:String x:Key="SettingsUIInstallLoader"  >Modbetöltő telepítése</system:String>
+    <system:String x:Key="SettingsUIUninstallLoader">Modbetöltő eltávolítása</system:String>
+    <system:String x:Key="SettingsUIOpenMods"       >Modok mappájának megnyitása</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >Játék mappájának megnyitása</system:String>
+    <system:String x:Key="SettingsUIEnableML"       >Modbetöltő engedélyezése</system:String>
+    <system:String x:Key="SettingsUIEnableDebug"    >Hibakeresési konzol engedélyezése</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >Alapértelmezett mentési fájl helyének átirányítása</system:String>
+    <system:String x:Key="SettingsUIUseLauncher"    >Játékbetöltő használata</system:String>
+    <system:String x:Key="SettingsUILabelLoaders"   >Betöltők:</system:String>
+    <system:String x:Key="SettingsUILabelGame"      >Játék:</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >Profil:</system:String>
+    <system:String x:Key="SettingsUILabelMDir"      >Modok mappája:</system:String>
+    <!--   Hedge Mod Manager -->
+    <system:String x:Key="SettingsUIHMMHeader"          >Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"      >Ellenőrizze automatikusan a Hedge Mod Manager frissítéseit</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"      >Ellenőrizze automatikusan a modbetöltő frissítéseit</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates"    >Ellenőrizze automatikusan a modok frissítéseit</system:String>
+    <system:String x:Key="SettingsUIUpdateCodesOnLaunch">Közösségi kódok automatikus frissítése indításkor</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"        >Hedge Mod Manager maradjon nyitva a játék indítása után</system:String>
+    <system:String x:Key="SettingsUICodesUseTreeView"   >Fa nézet használata a kódok listájához</system:String>
+    <system:String x:Key="SettingsUICheckHMMUpdate"     >Frissítések keresése</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"           >A Hedge Mod Manager-ről</system:String>
+    <system:String x:Key="SettingsUILanguage"           >Nyelv:</system:String>
+    <system:String x:Key="SettingsUITheme"              >Téma:</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel"     >Frissítési csatorna:</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >Frissítési csatorna váltása</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Váltás a Release csatornára.&#x0a;&#x0a;Biztos, hogy folytatni szeretné? A csatornaváltáshoz a Hedge Mod Manager-t újra kell indítani.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">A Development csatornára fog váltani. Ez a csatorna tartalmazhat nem tesztelt funkciókat és hibákat.&#x0a;&#x0a;Biztos, hogy folytatni szeretné? A csatornaváltáshoz a Hedge Mod Manager-t újra kell indítani.</system:String>
+
+    <!-- MainWindow UI Strings -->
+    <system:String x:Key="MainUIInstallFormHeader"    >Mod telepítése...</system:String>
+    <system:String x:Key="MainUIInstallFormOptionDir" >Telepítés mappából</system:String>
+    <system:String x:Key="MainUIInstallFormOptionArc" >Telepítés archívumból</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew" >Új létrehozása (fejlesztőknek!)</system:String>
+    <system:String x:Key="MainUIMissingLoaderHeader"  >A modbetöltő még nincs telepítve!</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Ahhoz, hogy {0} modokat tölthessen be, a modbetöltőnek telepítve kell lennie.&#x0a;Szeretné most telepíteni?</system:String>
+    <system:String x:Key="MainUISelectModsDBTitle"    >Válassza ki, honnan legyenek a modok betöltve...</system:String>
+    <system:String x:Key="MainUIRuntimeMissingTitle"  >Hiányzó csomagot észlelt a rendszer!</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">A &#x0a; modok megfelelő működéséhez {0} követelményei miatt {1} telepítése szükséges. Engedélyezi, hogy a HMM telepítse ezt?</system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Egy vagy több engedélyezett modnak szüksége van a mentési fájl átirányítására a megfelelő működéshez. Engedélyezi ezt a funkciót?&#x0a;Csak akkor kattintson a nem gombra, ha tudja, mit csinál.</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" >Nem sikerült feloldani a mod függőségeket</system:String>
+    <system:String x:Key="MainUIMissingDepends"       >A következő modok függőségei hiányoznak:</system:String>
+    <system:String x:Key="MainUIMissingDependsResolve">GB modok függőségeinek feloldása</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">Egy vagy több függőség automatikusan feloldható&#x0a;GameBanana-ról a "GB modok függőségeinek feloldása" gombra kattintva.</system:String>
+
+    <!-- OptionsWindow UI Strings -->
+    <system:String x:Key="OptionsWindowUIError"      >Kérjük, válasszon egy opciót!</system:String>
+
+    <!-- AboutWindow UI Strings -->
+    <system:String x:Key="AboutWindowUITitle"      >A Hedge Mod Manager-ről</system:String>
+    <system:String x:Key="AboutWindowUILine1"      >A program célja, hogy segítsen az embereknek könnyen betölteni Hedgehog Engine modokat.</system:String>
+    <system:String x:Key="AboutWindowUILine2"      >A támogatott játékok egyikének jogszerűen birtokolt verziója szükséges.</system:String>
+    <system:String x:Key="AboutWindowUICredits"    >Készítők</system:String>
+    <system:String x:Key="AboutWindowUITranslators">Fordítók</system:String>
+
+    <!-- ProfileWindow UI Strings -->
+    <system:String x:Key="ProfileWindowUITitle"      >Profilok kezelése</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">Profil átnevezése</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">Profil létrehozása</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >Név</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >Fájlnév</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >Létrehozás</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >Átnevezés</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Klónozás</system:String>
+    <system:String x:Key="ProfileWindowUIExport"     >Exportálás</system:String>
+    <system:String x:Key="ProfileWindowUIImport"     >Importálás</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >Profil törlése</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >Név:</system:String>
+    <system:String x:Key="ProfileWindowUIImportFail" >Sikertelen a mod profil importálása</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingMods"   >A következő modok nem találhatók:</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >A következő kódok nem találhatók:</system:String>
+
+    <!-- EditModWindow UI Strings -->
+    <system:String x:Key="EditModWindowUIHeader">Kérjük, adjon meg néhány adatot a modjáról!</system:String>
+
+    <!-- PropertyEditor UI Strings -->
+    <system:String x:Key="PropertyEditorUIName" >Név</system:String>
+    <system:String x:Key="PropertyEditorUIValue">Érték</system:String>
+
+    <!-- Status UI Strings -->
+    <system:String x:Key="StatusUILoadedMods"             >{0} mod betöltve</system:String>
+    <system:String x:Key="StatusUICheckingModUpdates"     >{0} frissítéseinek ellenőrzése</system:String>
+    <system:String x:Key="StatusUIFailedToUpdate"         >{0} frissítése sikertelen. {1}</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Mod frissítések ellenőrzése befejeződött: {0} sikeres, {1} sikertelen</system:String>
+    <system:String x:Key="StatusUIStartingGame"           >{0} indítása</system:String>
+    <system:String x:Key="StatusUICheckingForUpdates"     >Frissítések ellenőrzése</system:String>
+    <system:String x:Key="StatusUINoUpdatesFound"         >Nem található frissítés</system:String>
+    <system:String x:Key="StatusUIFailedToCheckUpdates"   >A frissítések ellenőrzése sikertelen volt.</system:String>
+    <system:String x:Key="StatusUICheckingForLoaderUpdate">{0} frissítéseinek ellenőrzése</system:String>
+    <system:String x:Key="StatusUILoaderUpToDate"         >{0} naprakész</system:String>
+    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">{0} frissítéseinek ellenőrzése sikertelen volt</system:String>
+    <system:String x:Key="StatusUIInstalledLoader"        >{0} telepítve</system:String>
+    <system:String x:Key="StatusUIDeletedMod"             >{0} törölve</system:String>
+    <system:String x:Key="StatusUIModsDBSaved"            >Mod adatbázis mentve</system:String>
+    <system:String x:Key="StatusUIModsDBLocationChanged"  >Az adatbázis helye frissítve</system:String>
+    <system:String x:Key="StatusUIGameChange"             >Játék váltása a következőre: {0}</system:String>
+    <system:String x:Key="StatusUIDownloadingCodes"       >Kódok letöltése a következőhöz: {0}</system:String>
+    <system:String x:Key="StatusUIDownloadFinished"       >A letöltés befejeződött</system:String>
+    <system:String x:Key="StatusUIDownloadFailed"         >A letöltés sikertelen volt</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >Kód frissítés elérhető.</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >Nem érhető el kód frissítés</system:String>
+
+    <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >A Hedge Mod Manager nem tudott hozzáférni a játék mappájához.&#x0a;Kérjük, ellenőrizze, hogy a Felhasználók csoportban az &quot;Írás&quot; engedélyezve van-e az alábbi mappában és annak összes fájljában és mappájában!&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"             >Biztos, hogy törölni szeretné a &quot;{0}&quot;?&#x0a;Ez a művelet nem vonható vissza!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"             >{0} már naprakész.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             >A(z) {0} újabb verziója elérhető! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate"       >Biztos, hogy meg kívánja szakítani a frissítést?&#x0a;Ez tönkreteheti a következőt: {0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor"        >A 7-Zip vagy a WinRAR program nem található.&#x0a;Szükséges a mod adatainak kicsomagolásához&#x0a;&#x0a;Kérjük, győződjön meg róla, hogy valamelyik telepítve van a rendszerén!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">Új kiadási csatorna frissítés</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >Új frissítés jelent meg a Release csatornán. A Development csatornán való maradás nem kívánt instabilitást eredményezhet.&#x0a;&#x0a;Szeretne a Release csatornára váltani?</system:String>
+
+    <!-- Status UI Lang Stuff Strings -->
+    <system:String x:Key="StatusUIUpdateCompletedSingular"      >befejezve</system:String>
+    <system:String x:Key="StatusUIUpdateCompletedPlural"        >befejezve</system:String>
+    <system:String x:Key="StatusUIUpdateFailedSingular"         >sikertelen</system:String>
+    <system:String x:Key="StatusUIUpdateFailedPlural"           >sikertelen</system:String>
+
+    <!-- Mod Config UI Strings -->
+    <system:String x:Key="ModConfigUITitle">{0} konfigurálása</system:String>
+
+    <!-- Mod Description UI Strings -->
+    <system:String x:Key="ModDescriptionUIAbout">A következőről: {0}</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">Készítette</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">ekkor</system:String>
+    <system:String x:Key="ModDescriptionUIDate">Ezen a napon</system:String>
+
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">Sikertelen a mod letöltése</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Hiba történt a letöltés során. Lehet, hogy a szerverek leálltak vagy túlterheltek. Kérjük, próbálja meg újra később! &#x0a;&#x0a;Részletek: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">Nem sikerült megtalálni a játékot</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">A Hedge Mod Manager nem találta a következőt: {0}</system:String>
+
+    <!-- Mod Updates Window Strings -->
+    <system:String x:Key="ModUpdatesChangelog"    >Változásnapló</system:String>
+    <system:String x:Key="ModDownloadsDescription">Leírás</system:String>
+    <system:String x:Key="ModUpdatesTitle"        >Mod frissítések</system:String>
+    <system:String x:Key="ModDownloadsTitle"      >Mod letöltések</system:String>
+
+    <!-- Exception Window Strings -->
+    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager összeomlott</system:String>
+    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager kivételt dobott.</system:String>
+    <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager hibába ütközött.</system:String>
+    <system:String x:Key="ExceptionWindowButtonCopyLog"   >Napló másolása a vágólapra</system:String>
+    <system:String x:Key="ExceptionWindowButtonIgnore"    >Kihagy és bezárás</system:String>
+    <system:String x:Key="ExceptionWindowButtonReport"    >Jelentés beküldése a GitHub-ra</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Új frissítés érhető el!</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Úgy tűnik, hogy a Hedge Mod Manager ezen verziója elavult.&#x0a;Erősen ajánlott először frissíteni, és megnézni, hogy a probléma továbbra is fennáll-e.&#x0a;Szeretne most frissíteni?</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorTitle">Hiba történt a frissítés közben.</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >A Hedge Mod Manager frissítése nem sikerült.&#x0a;Kérjük, töltse le manuálisan a legújabb verziót!</system:String>
+
+    <!-- Themes -->
+    <system:String x:Key="ThemeDark"  >Sötét</system:String>
+    <system:String x:Key="ThemeDarker">Sötétebb</system:String>
+    <system:String x:Key="ThemeOLED"  >OLED</system:String>
+    <system:String x:Key="ThemeLight" >Világos</system:String>
+
+    <!-- Games -->
+    <system:String x:Key="GameSonicGenerations">Sonic Generations (2011)</system:String>
+    <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
+    <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
+    <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
+    <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
+    <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
+    <system:String x:Key="GameSonicGenerations2024">Sonic Generations (2024)</system:String>
+    <system:String x:Key="GameShadowGenerations">Shadow Generations</system:String>
+    <system:String x:Key="GameNoGame">Nem található játék.</system:String>
+    <system:String x:Key="LauncherSteam">Steam</system:String>
+    <system:String x:Key="LauncherEpic">Epic Games</system:String>
+    <system:String x:Key="LauncherHeroic">Heroic</system:String>
+
+</ResourceDictionary>

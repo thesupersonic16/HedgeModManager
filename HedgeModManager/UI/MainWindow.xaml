@@ -9,10 +9,11 @@
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
-        MinHeight="662" MinWidth="585" Height="662" Width="585" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
+        MinHeight="666" MinWidth="585" Height="666" Width="585" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <local:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
         <local:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
         <local:ModUpdateToBrushConverter x:Key="ModUpdateToBrushConverter"/>
@@ -70,7 +71,7 @@
                                       Margin="10,5,10,41" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" SizeChanged="ModsList_SizeChanged"
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                                       dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
-                                      dd:DragDrop.DropHandler="{Binding}">
+                                      dd:DragDrop.DropHandler="{Binding}" AlternationCount="{Binding RowAlternationCount}">
                                 <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                         <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
@@ -280,9 +281,14 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Name="CodesListDescriptionRow" Height="24" MinHeight="24"/>
                                     </Grid.RowDefinitions>
-                                    
-                                    <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
-                                          PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click">
+
+                                    <ListView x:Name="CodesList"
+                                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
+                                              SelectedItem="{Binding SelectedCode}"
+                                              SizeChanged="CodesList_SizeChanged"
+                                              PreviewKeyDown="CodesList_OnPreviewKeyDown"
+                                              GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click"
+                                              AlternationCount="{Binding RowAlternationCount}">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                                 <Setter Property="ContextMenu" Value="{DynamicResource CodesListContextMenu}"/>
@@ -403,10 +409,16 @@
                                         <!--<CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"                Visibility="{Binding HiddenMode, Converter={StaticResource BoolToVisibilityConverter}}"/>-->
                                     </StackPanel>
 
-                                    <StackPanel Margin="0,80,10,0" HorizontalAlignment="Right" Width="200">
-                                        <Button x:Name="Button_OpenMods"    Content="{DynamicResource SettingsUIOpenMods}"        Click="UI_OpenMods_Click"    Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
-                                        <Button                             Content="{DynamicResource SettingsUIOpenGameDir}"     Click="UI_OpenGameDir_Click" Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
-                                        <Button x:Name="Button_OtherLoader" Content="{DynamicResource SettingsUIUninstallLoader}" Click="UI_OtherLoader_Click"                  HorizontalAlignment="Stretch" Height="27" IsEnabled="False"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <StackPanel Margin="0,80,10,0" HorizontalAlignment="Right" Width="120">
+                                            <Button Content="{DynamicResource SettingsUIRemoveGame}" Click="UI_RemoveGame_Click" Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27" Visibility="{Binding IsCustomGame, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="0,80,10,0" HorizontalAlignment="Right" Width="200">
+                                            <Button x:Name="Button_OpenMods"    Content="{DynamicResource SettingsUIOpenMods}"        Click="UI_OpenMods_Click"    Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
+                                            <Button                             Content="{DynamicResource SettingsUIOpenGameDir}"     Click="UI_OpenGameDir_Click" Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
+                                            <Button x:Name="Button_OtherLoader" Content="{DynamicResource SettingsUIUninstallLoader}" Click="UI_OtherLoader_Click"                  HorizontalAlignment="Stretch" Height="27" IsEnabled="False"/>
+                                        </StackPanel>
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
@@ -419,7 +431,8 @@
                                         <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"     IsChecked="{Binding Path=(local:RegistryConfig.CheckModUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
                                         <CheckBox Content="{DynamicResource SettingsUIUpdateCodesOnLaunch}" IsChecked="{Binding Path=(local:RegistryConfig.UpdateCodesOnLaunch)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
                                         <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"         IsChecked="{Binding Path=(local:RegistryConfig.KeepOpen)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIUseAlternatingRows}"  IsChecked="{Binding Path=(local:RegistryConfig.UseAlternatingRows)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked"/>
                                     </StackPanel>
 
                                     <Grid>
@@ -463,17 +476,30 @@
                 
                 <Grid Grid.Row="1" Background="{DynamicResource HMM.Window.DialogBottom}">
                     <Grid Margin="8,1,8,0" VerticalAlignment="Center" Height="56">
-                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Width="280" HorizontalAlignment="Left" Margin="0,8,5,8" SelectionChanged="Game_Changed">
+                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Width="285" HorizontalAlignment="Left" Margin="0,8,5,8" SelectionChanged="Game_Changed">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Border Width="32" Height="32" CornerRadius="3" RenderOptions.BitmapScalingMode="Fant">
+                                        <Border Width="32" Height="32" CornerRadius="3" RenderOptions.BitmapScalingMode="Fant" x:Name="GameImageBorder">
                                             <Border.Background>
                                                 <ImageBrush ImageSource="{Binding GameImage}"/>
                                             </Border.Background>
                                         </Border>
+                                        <Viewbox x:Name="AddGameViewbox" Width="32" Height="32">
+                                            <Path x:Name="AddGamePath" Fill="{DynamicResource HMM.Window.LightForegroundBrush}" Data="{DynamicResource AddGameGeometry}"/>
+                                        </Viewbox>
                                         <Label Content="{Binding GameName}" VerticalAlignment="Center" />
                                     </StackPanel>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsAddGame}" Value="True">
+                                            <Setter TargetName="GameImageBorder" Property="Visibility" Value="Collapsed" />
+                                            <Setter TargetName="AddGameViewbox" Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsAddGame}" Value="False">
+                                            <Setter TargetName="GameImageBorder" Property="Visibility" Value="Visible" />
+                                            <Setter TargetName="AddGameViewbox" Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

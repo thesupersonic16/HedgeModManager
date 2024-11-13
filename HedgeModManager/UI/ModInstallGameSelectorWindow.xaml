@@ -1,0 +1,44 @@
+<Window x:Class="HedgeModManager.UI.ModInstallGameSelectorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HedgeModManager.UI"
+        xmlns:controls="clr-namespace:HedgeModManager.Controls"
+        mc:Ignorable="d"
+        Title="{StaticResource GameSelectorTitle}" Height="240" Width="400"
+        MinHeight="240" MinWidth="400" ResizeMode="NoResize"
+        Style="{DynamicResource HedgeWindow}" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="Header" Text="{StaticResource GameSelectorHeader}" TextAlignment="Center" FontSize="30" Foreground="{DynamicResource HMM.Window.HeaderAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20,0" TextWrapping="Wrap"/>
+        <Grid Width="Auto" Margin="5,0" Grid.Row="1">
+            <TextBlock HorizontalAlignment="Center" Margin="0,10" Text="{StaticResource GameSelectorDescription}" />
+            <ComboBox x:Name="GameComboBox" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedGame}" Width="300" Height="40" HorizontalAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="32" Height="32" CornerRadius="3" RenderOptions.BitmapScalingMode="Fant" x:Name="GameImageBorder">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{Binding GameImage}"/>
+                                </Border.Background>
+                            </Border>
+                            <Label Content="{Binding GameName}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+
+        <Grid HorizontalAlignment="Stretch" Grid.Row="2" Margin="-4,0,-4,-4" Background="{DynamicResource HMM.Window.DialogBottom}">
+            <StackPanel x:Name="Stack" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,0,5,0">
+                <Button Width="60" Height="23" Margin="5" Content="{StaticResource CommonUIOK}" Click="Ok_Click" IsDefault="True"/>
+                <Button Width="60" Height="23" Margin="5" Content="{StaticResource CommonUICancel}" IsCancel="True"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

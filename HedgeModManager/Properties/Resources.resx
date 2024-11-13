@@ -122,7 +122,7 @@
     <value>..\Resources\ModLoader\EmbeddedLoaders.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="GBStyleSheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GBStyleSheet.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\Resources\GBStyleSheet.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="ICO_HedgeModManager" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Graphics\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -184,6 +184,9 @@ Do you want run the HMM Auto Installer?</value>
   <data name="URL_RANGERS_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicFrontiers.hmm</value>
   </data>
+  <data name="URL_MILLER_SHADOW_CODES" xml:space="preserve">
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/ShadowGenerations.hmm</value>
+  </data>
   <data name="URL_RML_DL" xml:space="preserve">
     <value>https://github.com/thesupersonic16/HedgeModManager/raw/rewrite/HedgeModManager/Resources/ModLoader/RainbowModLoader.dll</value>
   </data>
@@ -197,6 +200,9 @@ Do you want run the HMM Auto Installer?</value>
     <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicForces.hmm</value>
   </data>
   <data name="Version" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\version.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\resources\version.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
+  </data>
+  <data name="URL_MILLER_SONIC_CODES" xml:space="preserve">
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicGenerations2024.hmm</value>
   </data>
 </root>

@@ -268,7 +268,7 @@ namespace HedgeModManager
             if (ConfigSchema == null || !File.Exists(fileName))
                 return;
 
-            if (ConfigSchema.TryLoad(this))
+            if (ConfigSchema.TryLoad(this, fileName))
                 ConfigSchema.SaveIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
         }
 

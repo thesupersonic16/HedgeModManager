@@ -103,9 +103,14 @@ namespace HedgeModManager.UI
 
         public bool TryLoad(ModInfo mod)
         {
+            return TryLoad(mod, Path.Combine(mod.RootDirectory, mod.ConfigSchema.IniFile));
+        }
+
+        public bool TryLoad(ModInfo mod, string iniPath)
+        {
             try
             {
-                LoadValuesFromIni(Path.Combine(mod.RootDirectory, mod.ConfigSchema.IniFile));
+                LoadValuesFromIni(iniPath);
                 return true;
             }
             catch 
