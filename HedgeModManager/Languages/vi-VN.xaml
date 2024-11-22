@@ -20,7 +20,7 @@
     <system:String x:Key="CommonUIError"  >LỖI</system:String>
 
     <!-- Main UI Strings -->
-    <system:String x:Key="MainUIMods"          >mod</system:String>
+    <system:String x:Key="MainUIMods"          >Mod</system:String>
     <system:String x:Key="MainUICodes"         >Mã</system:String>
     <system:String x:Key="MainUISettings"      >Cài đặt</system:String>
     <system:String x:Key="MainUIAddMod"        >Thêm Mod</system:String>
@@ -29,6 +29,10 @@
     <system:String x:Key="MainUISaveAndPlay"   >Lưu và chơi</system:String>
     <system:String x:Key="MainUIConfigureMod"  >Chỉnh sửa Mod</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Tải xuống trình chứa mod thất bại</system:String>
+    <system:String x:Key="MainUISelectGameTitle">Chọn tệp thực thi của game</system:String>
+    <system:String x:Key="MainUISelectGameFilter">Tệp thực thi Windows</system:String>
+    <system:String x:Key="MainUIInvalidGameHeader">Game không nhận diện được</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIInvalidGame">Hedge Mod Manager không thể nhận diện được game&#x0a;từ tệp thực thi này.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Cài đặt trình chứa mod thất bại.&#x0a;Hãy đảm bảo bạn có quyền ghi tệp trò chơi.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Gỡ cài đặt trình chứa mod thất bại.&#x0a;Hãy đảm bảo không có trò chơi nào hiện đang chạy.</system:String>
 
@@ -97,6 +101,7 @@
     <system:String x:Key="SettingsUIEnableDebug"    >Bật bảng điều khiển gỡ lỗi</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Bật chuyển hướng tệp lưu</system:String>
     <system:String x:Key="SettingsUIUseLauncher"    >Dùng trình chạy game</system:String>
+    <system:String x:Key="SettingsUIRemoveGame"     >Xóa Game</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Trình chứa mã:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Trò chơi:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Hồ sơ:</system:String>
@@ -109,6 +114,7 @@
     <system:String x:Key="SettingsUIUpdateCodesOnLaunch">Tự động cập nhật mã khi mở phần mềm này</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"    >Giữ Hedge Mod Manager mở sau khi bắt đầu trò chơi</system:String>
     <system:String x:Key="SettingsUICodesUseTreeView" >Xem mã bằng TreeView</system:String>
+    <system:String x:Key="SettingsUIUseAlternatingRows" >Sử dụng màu xen kẽ cho các hàng</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate"   >Kiểm tra cập nhật</system:String>
     <system:String x:Key="SettingsUIAboutHMM"       >Về Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"       >Ngôn ngữ:</system:String>
@@ -200,6 +206,8 @@
     <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Không tìm thấy 7-Zip hoặc WinRAR!&#x0a;Thao tác giải nén yêu cầu một phần mềm hoàn chỉnh&#x0a;&#x0a;Hãy đảm bảo bạn đã cài ít nhất một trong hai phần mềm này.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">Cập nhật mới từ kênh phát hành</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >Có một bản cập nhật mới từ kênh phát hành. Hiện bạn đang ở kênh phát triển, có thể gây ra sự cố ngoài ý muốn.&#x0a;&#x0a;Bạn có muốn chuyển sang kênh phát hành không?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorHeader" >Tải cấu hình mod thất bại</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorBody"   >Bản mod "{0}" chứa cấu trúc cấu hình không hợp lệ.&#x0a;&#x0a;Hãy liên hệ tác giả của bản mod "{1}" để được hỗ trợ.</system:String>
     
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >Hoàn thành</system:String>
@@ -227,6 +235,11 @@
     <system:String x:Key="ModDownloadsDescription">Mô tả</system:String>
     <system:String x:Key="ModUpdatesTitle"    >Các bản cập nhật</system:String>
     <system:String x:Key="ModDownloadsTitle"  >Các bản tải xuống</system:String>
+	
+    <!-- Game Selector Window Strings -->
+    <system:String x:Key="GameSelectorTitle"      >Chọn Game...</system:String>
+    <system:String x:Key="GameSelectorHeader"     >Đã phát hiện nhiều game</system:String>
+    <system:String x:Key="GameSelectorDescription">Hãy chọn game dưới đây để cài mod vào.</system:String>
 
     <!-- Exception Window Strings -->
     <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager bị hỏng</system:String>
@@ -258,6 +271,7 @@
     <system:String x:Key="GameSonicGenerations2024">Sonic Generations (2024)</system:String>
     <system:String x:Key="GameShadowGenerations">Shadow Generations</system:String>
     <system:String x:Key="GameNoGame">Không phát hiện được game!</system:String>
+    <system:String x:Key="GameAddGame">Thêm Game</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>
     <system:String x:Key="LauncherHeroic">Heroic</system:String>
