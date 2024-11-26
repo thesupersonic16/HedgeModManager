@@ -124,7 +124,7 @@
     <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Du bist dabei auf den Release-Kanal zu wechseln.&#x0a;&#x0a;Bist du sicher, dass du fortfahren möchtest? Der Hedge Mod Manager muss neugestartet werden, um den Kanal zu wechseln.</system:String>
     <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Du bist dabei auf den Development-Kanal zu wechseln. Dieser Kanal kann ungetestete Features und Bugs beinhalten.&#x0a;&#x0a;Bist du sicher, dass du fortfahren möchtest? Der Hedge Mod Manager muss neugestartet werden, um den Kanal zu wechseln.</system:String>
 
-<!-- MainWindow UI Strings -->
+	<!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"    >Installiere Mod mit...</system:String>
     <system:String x:Key="MainUIInstallFormOptionDir" >Aus Ordner installieren</system:String>
     <system:String x:Key="MainUIInstallFormOptionArc" >Aus Archiv installieren</system:String>
