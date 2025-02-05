@@ -82,6 +82,8 @@ namespace HedgeModManager
                     title += $" - {mainWindow.SelectedModProfile?.Name}";
                 if (HedgeApp.IsLinux)
                     title += " (Linux)";
+                if (HedgeApp.IsMacOS)
+                    title += " (macOS)";
                 mainWindow.Title = title;
             }
         }

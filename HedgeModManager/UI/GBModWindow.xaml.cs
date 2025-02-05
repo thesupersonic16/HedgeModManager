@@ -289,7 +289,7 @@ namespace HedgeModManager.UI
                 Imagebar.Children.Add(button);
             }
 
-            if (HedgeApp.IsLinux)
+            if (HedgeApp.IsLinux || HedgeApp.IsMacOS)
             {
                 Description.Text = string.Empty;
                 Description.Visibility = Visibility.Collapsed;

@@ -17,7 +17,6 @@ namespace HedgeModManager
 
         public static void Init()
         {
-            // Not sure about OSX
             // Assume Steam is located in the home folder for Linux
             if (HedgeApp.IsLinux)
             {
