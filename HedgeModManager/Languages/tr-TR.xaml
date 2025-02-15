@@ -1,0 +1,279 @@
+<ResourceDictionary 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Common UI Strings -->
+    <system:String x:Key="CommonUIClose"   >Kapat</system:String>
+    <system:String x:Key="CommonUIOK"      >Devam</system:String>
+    <system:String x:Key="CommonUICancel"  >İptal</system:String>
+    <system:String x:Key="CommonUIYes"     >Evet</system:String>
+    <system:String x:Key="CommonUIBlocked" >Engellendi</system:String>
+    <system:String x:Key="CommonUINo"      >Hayır</system:String>
+    <system:String x:Key="CommonUIRetry"   >Tekrar Dene</system:String>
+    <system:String x:Key="CommonUIUpdate"  >Güncelle</system:String>
+    <system:String x:Key="CommonUIDownload">İndir</system:String>
+    <system:String x:Key="CommonUIDelete"  >Sil</system:String>
+    <system:String x:Key="CommonUINone"    >Hiç Biri</system:String>
+    <system:String x:Key="CommonUIIgnore"  >Görmezden Gel</system:String>
+    <system:String x:Key="CommonUIWarning" >UYARI</system:String>
+    <system:String x:Key="CommonUIError"   >HATA</system:String>
+
+    <!-- Main UI Strings -->
+    <system:String x:Key="MainUIMods"          >Modlar</system:String>
+    <system:String x:Key="MainUICodes"         >Kodlar</system:String>
+    <system:String x:Key="MainUISettings"      >Ayarlar</system:String>
+    <system:String x:Key="MainUIAddMod"        >Mod Ekle</system:String>
+    <system:String x:Key="MainUIRefreshModList">Listeyi Yenile</system:String>
+    <system:String x:Key="MainUISave"          >Kaydet</system:String>
+    <system:String x:Key="MainUISaveAndPlay"   >Kaydet ve Oyna</system:String>
+    <system:String x:Key="MainUIConfigureMod"  >Modu Yapılandır</system:String>
+    <system:String x:Key="MainUIMLDownloadFail">Mod Yükleyicisini İndirmede Başarısız Olundu.</system:String>
+    <system:String x:Key="MainUISelectGameTitle">Oyun Çalıştırıcsını Seç</system:String>
+    <system:String x:Key="MainUISelectGameFilter">Windows Çalıştırıcısı</system:String>
+    <system:String x:Key="MainUIInvalidGameHeader">Tanınmayan Oyun</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIInvalidGame">Hedge Mod Manager seçili çalıştırıcıyı&#x0a;tanıyamamaktadır.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Mod yükleyici kurulamadı.&#x0a;Lütfen oyun dosyalarını değiştirme izniniz olduğunu kontrol ediniz.</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Mod yükleyici kurulamadı.&#x0a;Lütfen hiç bir oyunun çalışmadığından emin olunuz.</system:String>
+
+    <!-- Mods UI Strings -->
+    <system:String x:Key="ModsUIName"           >İsim</system:String>
+    <system:String x:Key="ModsUIVersion"        >Sürüm</system:String>
+    <system:String x:Key="ModsUIAuthor"         >Yapımcı</system:String>
+    <system:String x:Key="ModsUIFeatures"       >Özellikler</system:String>
+    <system:String x:Key="ModsUIModDescription" >Açıklama</system:String>
+    <system:String x:Key="ModsUIModFavorite"    >Favoriler</system:String>
+    <system:String x:Key="ModsUIModConfigure"   >Modu Yapılandır</system:String>
+    <system:String x:Key="ModsUIModOpenFolder"  >Mod Dosyasını Aç</system:String>
+    <system:String x:Key="ModsUIModCheckUpdates">Güncellemeleri Kontrol Et</system:String>
+    <system:String x:Key="ModsUICheckUpdatesAll">Tüm Modarın Güncellemelerini Kontrol Et</system:String>
+    <system:String x:Key="ModsUIModEdit"        >Modu Düzenle</system:String>
+    <system:String x:Key="ModsUIModDelete"      >Modu Sil</system:String>
+    <system:String x:Key="ModsUIFeatureConfig"  >Bu mod düzenlenebilir.</system:String>
+    <system:String x:Key="ModsUIFeatureConfigDisable">Bu mod yapılandırmaları desteklemiyor.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdate"       >Bu mod güncellemeleri destekliyor.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateDisable">Bu mod güncellemeleri desteklemiyor.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateFailed" >Bu modun güncellemeleri kontrol edilemedi.</system:String>
+    <system:String x:Key="ModsUIFeatureUpdateBlocked">Bu modun güncellemeleri kontrol etmesi engellendi.</system:String>
+    <system:String x:Key="ModsUIFeatureSave"         >Bu mod kayıt yönetimini destekliyor.</system:String>
+    <system:String x:Key="ModsUIFeatureSaveDisable"  >Bu mod kayıt yönetimini desteklemiyor.</system:String>
+    <system:String x:Key="ModsUIFeatureCode"         >Bu mod özel koda sahip.</system:String>
+    <system:String x:Key="ModsUIFeatureCodeDisable"  >Bu mod özel koda sahip değil.</system:String>
+    <system:String x:Key="ModsUIModDragDrop"    >Mod sıralamasını değiştirmek için modları sürükle.</system:String>
+    <system:String x:Key="ModsUISearch"         >Ara:</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUIInvalidIncludeDirs">Hedge Mod Manager bir veya birden fazla modun yanlış dizine sahip olduğunu fark etti.&#x0a;Hedge Mod Manager&apos;ın bunu düzeltmeyi denemesini ister misin?</system:String>
+    <system:String xml:space="preserve" x:Key="ModsUINoMods">...Burası baya boş.&#x0a;Hadi biraz mod indir!</system:String>
+
+    <!-- Codes UI Strings -->
+    <system:String x:Key="CodesUIName"        >İsim</system:String>
+    <system:String x:Key="CodesUICategory"    >Kategori</system:String>
+    <system:String x:Key="CodesUIDownload"    >Topluluk Kodları İndir</system:String>
+    <system:String x:Key="CodesUIUpdate"      >Topluluk Kodlarını Güncelle</system:String>
+    <system:String x:Key="CodesUISearch"      >Ara:</system:String>
+    <system:String x:Key="CodesUIInfo"        >Daha fazla bilgi için bu koda çift tıkla.</system:String>
+    <system:String x:Key="CodesUIInfoHint"    >Daha fazla bilgi için imleci kodun üstüne getir.</system:String>
+    <system:String x:Key="CodesUINoInfo"      >Bilgi bulunmamakta.</system:String>
+    <system:String x:Key="CodesUICopyCode"    >Kodu panoya kopyala.</system:String>
+    <system:String x:Key="CodesUIExpand"      >Hepsini Genişlet</system:String>
+    <system:String x:Key="CodesUIExpandSub"   >Sekmenin Tüm Satırlarını Genişlet</system:String>
+    <system:String x:Key="CodesUICollapse"    >Hepsini Küçült</system:String>
+    <system:String x:Key="CodesUICollapseSub" >Sekmenin Tüm Satırlarını Küçült</system:String>
+    <system:String x:Key="CodesUINullCategory">Kategorize Edilmemiş</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Kurulan kodlar kod yükleyici ile uyumsuz.&#x0a;Lütfen kodları ve kod yükleyicisini güncelleyin.&#x0a;UYARI: Bu tüm özel kodları silecektir.</system:String>
+    <system:String xml:space="preserve" x:Key="CodesUIFetching">Kodlar Toplanıyor...</system:String>
+
+    <!-- Diff UI Strings -->
+    <system:String x:Key="DiffUITitle"   >Değişim Notları</system:String>
+    <system:String x:Key="DiffUIAdded"   >Eklenenler</system:String>
+    <system:String x:Key="DiffUIModified">Değiştirilenler</system:String>
+    <system:String x:Key="DiffUIRemoved" >Kaldırılanlar</system:String>
+    <system:String x:Key="DiffUIRenamed" >İsmi Değiştirilenler</system:String>
+    <system:String x:Key="DiffUIMoved"   >Yeri Değiştirilenler</system:String>
+
+    <!-- Settings UI Strings -->
+    <!--   Game & Mod Loader -->
+    <system:String x:Key="SettingsUIGMLHeader"      >Oyun &amp; Mod Yükleyici</system:String>
+    <system:String x:Key="SettingsUIInstallLoader"  >Mod Yükleyiciyi Kur</system:String>
+    <system:String x:Key="SettingsUIUninstallLoader">Mod Yükleyiciyi Kaldır</system:String>
+    <system:String x:Key="SettingsUIOpenMods"       >Modların Olduğu Klasörü Aç</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >Oyunun Olduğu Klasörü Aç</system:String>
+    <system:String x:Key="SettingsUIEnableML"       >Mod yükleyiciyi aç</system:String>
+    <system:String x:Key="SettingsUIEnableDebug"    >Debug konsolunu aç</system:String>
+    <system:String x:Key="SettingsUIEnableSRedir"   >Varsayılan kayıt yerinin yerini değiştir</system:String>
+    <system:String x:Key="SettingsUIUseLauncher"    >Oyun Başlatıcısını Kullan</system:String>
+    <system:String x:Key="SettingsUIRemoveGame"     >Oyunu Kaldır</system:String>
+    <system:String x:Key="SettingsUILabelLoaders"   >Yükleyiciler:</system:String>
+    <system:String x:Key="SettingsUILabelGame"      >Oyun:</system:String>
+    <system:String x:Key="SettingsUILabelProfile"   >Profil:</system:String>
+    <system:String x:Key="SettingsUILabelMDir"      >Mod Lokasyonu:</system:String>
+    <!--   Hedge Mod Manager -->
+    <system:String x:Key="SettingsUIHMMHeader"          >Hedge Mod Manager</system:String>
+    <system:String x:Key="SettingsUICheckMLUpdate"      >Hedge Mod Manager güncellemelerini otomatik olarak kontrol et</system:String>
+    <system:String x:Key="SettingsUICheckCLUpdate"      >Mod yükleyici güncellemelerini otomatik olarak kontrol et</system:String>
+    <system:String x:Key="SettingsUICheckModUpdates"    >Mod  güncellemelerini otomatik olarak kontrol et</system:String>
+    <system:String x:Key="SettingsUIUpdateCodesOnLaunch">Açılırken topluluk kodlarının güncellemelerini otomatik olarak kontrol et</system:String>
+    <system:String x:Key="SettingsUIKeepHMMOpen"        >Oyun başlatıldığında Hedgehog Mod Manager'ı açık tut</system:String>
+    <system:String x:Key="SettingsUICodesUseTreeView"   >Kod listesi için tree view kullan</system:String>
+    <system:String x:Key="SettingsUIUseAlternatingRows" >Değişken satır renkleri kullan</system:String>
+    <system:String x:Key="SettingsUICheckHMMUpdate"     >Güncellemeleri Kontrol Et</system:String>
+    <system:String x:Key="SettingsUIAboutHMM"           >Hedge Mod Manager Hakkında</system:String>
+    <system:String x:Key="SettingsUILanguage"           >Dil:</system:String>
+    <system:String x:Key="SettingsUITheme"              >Tema:</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel"     >Güncelleme Kanalı:</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >Güncelleme Kanalı Değiştiriliyor</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Piyasa Kanalına geçmek üzeresin.&#x0a;&#x0a;Devam etmek istediğine emin misin? Hedge Mod Manager yeniden başlatılması gerekecektir.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Geliştirici Kanalına geçmek üzersin. Bu kanalda hatalar ve yapım aşamasındaki özellikler olabilir.&#x0a;&#x0a;Devam etmek istediğine emin misin? Hedge Mod Manager yeniden başlatılması gerekecektir.</system:String>
+
+    <!-- MainWindow UI Strings -->
+    <system:String x:Key="MainUIInstallFormHeader"    >Mod Ekleme Yolu Seç</system:String>
+    <system:String x:Key="MainUIInstallFormOptionDir" >Klasörden ekle</system:String>
+    <system:String x:Key="MainUIInstallFormOptionArc" >Arşivden ekle</system:String>
+    <system:String x:Key="MainUIInstallFormOptionNew" >Mod yaparak (geliştiriciler için!)</system:String>
+    <system:String x:Key="MainUIMissingLoaderHeader"  >Mod Yükleyici heniz kurulmadı!</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc">Modların yüklenilmesi {0} için, mod yükleyicisinin kurulması gerek.&#x0a;Şimdi kurmak ister misiniz?</system:String>
+    <system:String x:Key="MainUISelectModsDBTitle"    >Modların nerden eklenilceğini seç</system:String>
+    <system:String x:Key="MainUIRuntimeMissingTitle"  >Eksik Runtime tespit edildi!</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">Modların düzgün kurulması için {0}  {1} 'a ihtiyaç duymaktadır &#x0a; , HMM'nin bu runtime'ı kurmasını ister misiniz?</system:String>
+    <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Bir veya birden fazla mod düzgün çalışmak için kayıt yönetimine ihtiyaç duyuyor. Bu özelliği aç?&#x0a;Hayıra yalnızda ne yaptığını biliyorsan bas.</system:String>
+    <system:String x:Key="MainUIMissingDependsHeader" >Mod bağı sorunu çözülemedi</system:String>
+    <system:String x:Key="MainUIMissingDepends"       >Gösterilecek modların eksik bağları bulunmakta:</system:String>
+    <system:String x:Key="MainUIMissingDependsResolve">GB modlarını düzelt</system:String>
+    <system:String x:Key="MainUIResolvable" xml:space="preserve">Bir veya birden fazla mod bağı &#x0a;GB modlarını düzelt &quot;tuşuna basılarak çözülebilir&quot;.</system:String>
+
+    <!-- OptionsWindow UI Strings -->
+    <system:String x:Key="OptionsWindowUIError"      >Lütfen bir seçenek seç!</system:String>
+
+    <!-- AboutWindow UI Strings -->
+    <system:String x:Key="AboutWindowUITitle"      >Hedge Mod Manager Hakkında</system:String>
+    <system:String x:Key="AboutWindowUILine1"      >İnsanların Hedgehog Engine modlarını kolaylıkla kurmalarını sağlayan bir program.</system:String>
+    <system:String x:Key="AboutWindowUILine2"      >Desteklenen oyunların yasal yollarla temin edilmiş kopyaları gerekmektedir.</system:String>
+    <system:String x:Key="AboutWindowUICredits"    >Yapımcılar</system:String>
+    <system:String x:Key="AboutWindowUITranslators">Çevirmenler</system:String>
+
+    <!-- ProfileWindow UI Strings -->
+    <system:String x:Key="ProfileWindowUITitle"      >Profilleri Düzenle</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">Profil Adı Değiştir</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">Profil Oluştur</system:String>
+    <system:String x:Key="ProfileWindowUIName"       >İsim</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >Dosya Adı</system:String>
+    <system:String x:Key="ProfileWindowUICreate"     >Oluştur</system:String>
+    <system:String x:Key="ProfileWindowUIRename"     >İsimi Değiştir</system:String>
+    <system:String x:Key="ProfileWindowUIClone"      >Kopyala</system:String>
+    <system:String x:Key="ProfileWindowUIExport"     >Çıkart</system:String>
+    <system:String x:Key="ProfileWindowUIImport"     >Dışardan Yükle</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >Profili Sil</system:String>
+    <system:String x:Key="ProfileWindowUINameLabel"  >İsmi:</system:String>
+    <system:String x:Key="ProfileWindowUIImportFail" >Mod Profilini Dışardan Yükleme Başarısız Oldu</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingMods"   >Şu modlar bulunamadı:</system:String>
+    <system:String x:Key="ProfileWindowUIImportMissingCodes"  >Şu kodlar bulunamadı:</system:String>
+
+    <!-- EditModWindow UI Strings -->
+    <system:String x:Key="EditModWindowUIHeader">Lütfen modun hakkında bazı detayları yaz.</system:String>
+
+    <!-- PropertyEditor UI Strings -->
+    <system:String x:Key="PropertyEditorUIName" >İsim</system:String>
+    <system:String x:Key="PropertyEditorUIValue">Değer</system:String>
+
+    <!-- Status UI Strings -->
+    <system:String x:Key="StatusUILoadedMods"             > {0} mod yüklendi</system:String>
+    <system:String x:Key="StatusUICheckingModUpdates"     >Güncellemeler kontrol {0} ediliyor</system:String>
+    <system:String x:Key="StatusUIFailedToUpdate"         > {0} güncellenemedi! {1}</system:String>
+    <system:String x:Key="StatusUIModUpdateCheckFinish"   >Mod güncellemeleri kontrol edildi: {0} tamamlandı, {1} başarısız oldu</system:String>
+    <system:String x:Key="StatusUIStartingGame"           >Başlatılıyor {0}</system:String>
+    <system:String x:Key="StatusUICheckingForUpdates"     >Güncellemeler kontrol ediliyor</system:String>
+    <system:String x:Key="StatusUINoUpdatesFound"         >Güncelleme bulunmadı</system:String>
+    <system:String x:Key="StatusUIFailedToCheckUpdates"   >Güncellemeler kontrol edilmedi</system:String>
+    <system:String x:Key="StatusUICheckingForLoaderUpdate">Güncellemeler kontrol {0} ediliyor</system:String>
+    <system:String x:Key="StatusUILoaderUpToDate"         >{0} güncel</system:String>
+    <system:String x:Key="StatusUIFailedLoaderUpdateCheck">Güncellemeler kontrol {0} edilmedi</system:String>
+    <system:String x:Key="StatusUIInstalledLoader"        > {0} tane kuruldu</system:String>
+    <system:String x:Key="StatusUIDeletedMod"             > {0} tane silindi</system:String>
+    <system:String x:Key="StatusUIModsDBSaved"            >Mod veritabanı kaydedildi</system:String>
+    <system:String x:Key="StatusUIModsDBLocationChanged"  >Veritabanı yeri kaydedildi</system:String>
+    <system:String x:Key="StatusUIGameChange"             >Şu oyuna geçildi {0}</system:String>
+    <system:String x:Key="StatusUIDownloadingCodes"       > {0} için kodlar indiriliyor</system:String>
+    <system:String x:Key="StatusUIDownloadFinished"       >İnidrme tamamlandı</system:String>
+    <system:String x:Key="StatusUIDownloadFailed"         >İndirme tamamlanamadı</system:String>
+    <system:String x:Key="StatusUICodeUpdatesAvailable"   >Kod güncellemeleri mevcut!</system:String>
+    <system:String x:Key="StatusUINoCodeUpdatesFound"     >Kod güncellemeleri bulunmadı</system:String>
+
+    <!-- Dialog UI Strings -->
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >Hedge Mod Manager oyun klasörüne erişemedi.&#x0a;Lütfen Kullanıcı grubunun &quot;Yazma'ya&quot; aşağıdaki konumda izin verdiğinden emin olun.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"             >Şunu silmek istediğinizden emin misin? &quot;{0}&quot;?&#x0a;Bunun geri dönüşü yoktur!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"             >{0} zaten güncel.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             > {0} yeni bir versiyonu geldi! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate"       >Güncellemeyi iptal etmek istediğine emin misin?&#x0a; {0} modunu bozabilir.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor"        >7-Zip or WinRAR bulunamadı!&#x0a;Onlar mod verisini çıkarmak için gereklidir.&#x0a;&#x0a;Lütfen ikisnden birinin sisteminize yükleyiniz.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">Yeni Piyasa Kanalı Güncellemesi</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >Piyasa Kanalında yeni bir güncelleme var. Geliştirici Kanalında kalmak istenmeyen sonuçlara yol açabilir.&#x0a;&#x0a;Piyasa Kanalına geçmek ister misin?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorHeader" >Mod Yapılandırması yüklenemedi</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorBody"   > &quot;{0}&quot; modu bozuk yapılandırma temeline sahip.&#x0a;&#x0a;Lütfen destek için yapımcı &quot;{1}&quot; ile iletişime geçin.</system:String>
+
+    <!-- Status UI Lang Stuff Strings -->
+    <system:String x:Key="StatusUIUpdateCompletedSingular"      >tamamlandı</system:String>
+    <system:String x:Key="StatusUIUpdateCompletedPlural"        >tamamlandı</system:String>
+    <system:String x:Key="StatusUIUpdateFailedSingular"         >tamamlanmadı</system:String>
+    <system:String x:Key="StatusUIUpdateFailedPlural"           >tamamlanmadı</system:String>
+
+    <!-- Mod Config UI Strings -->
+    <system:String x:Key="ModConfigUITitle"> {0} modunu yapılandır</system:String>
+
+    <!-- Mod Description UI Strings -->
+    <system:String x:Key="ModDescriptionUIAbout"> {0} hakkında</system:String>
+    <system:String x:Key="ModDescriptionUIMadeBy">Yapımcısı</system:String>
+    <system:String x:Key="ModDescriptionUIMadeOn">Yapıldığı Program</system:String>
+    <system:String x:Key="ModDescriptionUIDate">tarih</system:String>
+
+    <!-- Mod Downloader Strings -->
+    <system:String x:Key="ModDownloaderFailed">Mod İndirilemedi</system:String>
+    <system:String xml:space="preserve" x:Key="ModDownloaderWebError">İndirme sırasında bir hata gerçekleşti. Sunucular kapalı veya çok yoğun olabilir. Lütfen daha sonra tekrar deneyin. &#x0a;&#x0a;Detaylar: {0}</system:String>
+    <system:String x:Key="ModDownloaderNoGame">Oyun bulunamadı</system:String>
+    <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager {0} oyununu bulamadı</system:String>
+
+    <!-- Mod Updates Window Strings -->
+    <system:String x:Key="ModUpdatesChangelog"    >Değiştirilenler</system:String>
+    <system:String x:Key="ModDownloadsDescription">Açıklama</system:String>
+    <system:String x:Key="ModUpdatesTitle"        >Mod Güncellemeleri</system:String>
+    <system:String x:Key="ModDownloadsTitle"      >Mod İndirmeleri</system:String>
+
+    <!-- Game Selector Window Strings -->
+    <system:String x:Key="GameSelectorTitle"      >Oyun seçin...</system:String>
+    <system:String x:Key="GameSelectorHeader"     >Birden fazla oyun tespit edildi</system:String>
+    <system:String x:Key="GameSelectorDescription">Lütfen modu kuracağınız oyunu seçin.</system:String>
+
+    <!-- Exception Window Strings -->
+    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Çöktü</system:String>
+    <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager Bir Hata ile Karşılaştı</system:String>
+    <system:String x:Key="ExceptionWindowUnhandled"       >Hedge Mod Manager Bir Hata ile Karşılaştı!</system:String>
+    <system:String x:Key="ExceptionWindowButtonCopyLog"   >Dökümü Panoya Kopyala</system:String>
+    <system:String x:Key="ExceptionWindowButtonIgnore"    >Boşver ve Kapat</system:String>
+    <system:String x:Key="ExceptionWindowButtonReport"    >Github'a bir rapor paylaş</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Yeni Güncelleme Mevcut!</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Görünüşe bakılırsa bu Hedgehog Mod Manager'ın sürümü eski.&#x0a;Problem devam ederse güncellemeniz şiddetle tavsiye edilir.&#x0a;Şimdi güncellemek ister misiniz?</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorTitle">Update Error!</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager güncellenemedi!&#x0a;Lütfen en son ki sürümü manuel olarak indirin.</system:String>
+
+    <!-- Themes -->
+    <system:String x:Key="ThemeDark"  >Karanlık</system:String>
+    <system:String x:Key="ThemeDarker">Daha Karanlık</system:String>
+    <system:String x:Key="ThemeOLED"  >OLED</system:String>
+    <system:String x:Key="ThemeLight" >Açık</system:String>
+
+    <!-- Games -->
+    <system:String x:Key="GameSonicGenerations">Sonic Generations (2011)</system:String>
+    <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
+    <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
+    <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
+    <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colours: Ultimate</system:String>
+    <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
+    <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
+    <system:String x:Key="GameSonicGenerations2024">Sonic Generations (2024)</system:String>
+    <system:String x:Key="GameShadowGenerations">Shadow Generations</system:String>
+    <system:String x:Key="GameNoGame">Oyun tespit edilemedi!</system:String>
+    <system:String x:Key="GameAddGame">Oyun ekle</system:String>
+    <system:String x:Key="LauncherSteam">Steam</system:String>
+    <system:String x:Key="LauncherEpic">Epic Games</system:String>
+    <system:String x:Key="LauncherHeroic">Heroic</system:String>
+
+</ResourceDictionary>

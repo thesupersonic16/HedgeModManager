@@ -21,6 +21,7 @@
         <local:LangEntry FileName="ja-JP" Name="日本語 (Japanese)"/>
         <local:LangEntry FileName="ko-KR" Name="한국어 (Korean)"/>
         <local:LangEntry FileName="hu-HU" Name="Magyar (Hungarian)"/>
+		<local:LangEntry FileName="tr-TR" Name="Türkçe (Turkish)"/>
     </local:LanguageList>
     
 </ResourceDictionary>
