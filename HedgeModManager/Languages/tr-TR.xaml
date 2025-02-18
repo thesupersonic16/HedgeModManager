@@ -133,7 +133,7 @@
     <system:String xml:space="preserve" x:Key="MainUIMissingLoaderDesc"> {0} modunun yüklenilmesi için, mod yükleyicisinin kurulması gerek.&#x0a;Şimdi kurmak ister misiniz?</system:String>
     <system:String x:Key="MainUISelectModsDBTitle"    >Modların nereden eklenileceğini seç</system:String>
     <system:String x:Key="MainUIRuntimeMissingTitle"  >Eksik Runtime tespit edildi!</system:String>
-    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">Modların düzgün kurulması için {0}  {1} 'a ihtiyaç duymaktadır &#x0a; , HMM'nin bu runtime'ı kurmasını ister misiniz?</system:String>
+    <system:String x:Key="MainUIRuntimeMissingMsg" xml:space="preserve">Modların düzgün kurulması için {0} {1} 'a ihtiyaç duymaktadır &#x0a; , HMM'nin bu runtime'ı kurmasını ister misiniz?</system:String>
     <system:String x:Key="MainUISaveFileRedirectionDisabled" xml:space="preserve">Bir veya birden fazla mod düzgün çalışmak için kayıt yönlendirmesine ihtiyaç duyuyor. Bu özelliği aç?&#x0a;Hayıra yalnızcda ne yaptığını biliyorsan bas.</system:String>
     <system:String x:Key="MainUIMissingDependsHeader" >Mod bağı sorunu çözülemedi</system:String>
     <system:String x:Key="MainUIMissingDepends"       >Gösterilecek modların eksik bağları bulunmakta:</system:String>
@@ -190,7 +190,7 @@
     <system:String x:Key="StatusUIDeletedMod"             > {0} modu silindi</system:String>
     <system:String x:Key="StatusUIModsDBSaved"            >Mod veritabanı kaydedildi</system:String>
     <system:String x:Key="StatusUIModsDBLocationChanged"  >Veritabanı yeri kaydedildi</system:String>
-    <system:String x:Key="StatusUIGameChange"             >Şu oyuna geçildi {0}</system:String>
+    <system:String x:Key="StatusUIGameChange"             > {0} oyununa geçildi</system:String>
     <system:String x:Key="StatusUIDownloadingCodes"       > {0} için kodlar indiriliyor</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >İnidrme tamamlandı</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >İndirme tamamlanamadı</system:String>
@@ -200,8 +200,8 @@
     <!-- Dialog UI Strings -->
     <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >Hedge Mod Manager oyun klasörüne erişemedi.&#x0a;Lütfen Kullanıcı grubunun &quot;Yazma'ya&quot; aşağıdaki konumda izin verdiğinden emin olun.&#x0a;&#x0a;{0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"             >&quot;{0}&quot;?&#x0a; modunu silmek istediğinizden emin misin? Bunun geri dönüşü yoktur!</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModNewest"             >{0} zaten güncel.</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             > {0} yeni sürüm mevcut! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"             > {0} zaten güncel.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             > {0} yeni sürümü mevcut! ({1})</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate"       >Güncellemeyi iptal etmek istediğine emin misin?&#x0a; {0} modunu bozabilir.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINoDecompressor"        >7-Zip or WinRAR bulunamadı!&#x0a;Onlar mod verisini çıkarmak için gereklidir.&#x0a;&#x0a;Lütfen ikisinden birini sisteminize yükleyiniz.</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">Yeni Piyasa Kanalı Güncellemesi</system:String>
