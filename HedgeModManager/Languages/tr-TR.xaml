@@ -184,7 +184,7 @@
     <system:String x:Key="StatusUINoUpdatesFound"         >Güncelleme bulunmadı</system:String>
     <system:String x:Key="StatusUIFailedToCheckUpdates"   >Güncellemeler kontrol edilmedi</system:String>
     <system:String x:Key="StatusUICheckingForLoaderUpdate"> {0} modunun güncellemeleri kontrol ediliyor</system:String>
-    <system:String x:Key="StatusUILoaderUpToDate"         >{0} güncel</system:String>
+    <system:String x:Key="StatusUILoaderUpToDate"         > {0} güncel</system:String>
     <system:String x:Key="StatusUIFailedLoaderUpdateCheck"> {0} modunun güncellemeleri kontrol edilemedi</system:String>
     <system:String x:Key="StatusUIInstalledLoader"        > {0} modu kuruldu</system:String>
     <system:String x:Key="StatusUIDeletedMod"             > {0} modu silindi</system:String>
