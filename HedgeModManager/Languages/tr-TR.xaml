@@ -250,7 +250,7 @@
     <system:String x:Key="ExceptionWindowButtonReport"    >Github'da bir rapor paylaş</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"  >Yeni Güncelleme Mevcut!</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve" >Görünüşe bakılırsa bu Hedge Mod Manager'ın sürümü eski.&#x0a;Problem devam ederse güncellemeniz şiddetle tavsiye edilir.&#x0a;Şimdi güncellemek ister misiniz?</system:String>
-    <system:String x:Key="ExceptionWindowUpdateErrorTitle">Update Error!</system:String>
+    <system:String x:Key="ExceptionWindowUpdateErrorTitle">Güncelleme Hatası!</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve" >Hedge Mod Manager güncellenemedi!&#x0a;Lütfen en son sürümü manuel olarak indirin.</system:String>
 
     <!-- Themes -->
