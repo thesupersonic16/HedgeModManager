@@ -319,9 +319,10 @@ namespace HedgeModManager
                                 return x.EndsWith(y.Name);
 
                             if (string.IsNullOrEmpty(y.Category))
-                                return y.Name == x;
+                                return y.Name == x || y.ID == x;
 
-                            return x.StartsWith(y.Category + "/") && x.EndsWith(y.Name);
+                            return (x.StartsWith(y.Category + "/") && x.EndsWith(y.Name))
+                                   || x == y.ID;
                         }
                     );
 
@@ -752,12 +753,17 @@ namespace HedgeModManager
                 {
                     if (code.Enabled)
                     {
-                        ModsDatabase.Codes.Add
-                        (
-                            string.IsNullOrEmpty(code.Category)
-                                ? code.Name
-                                : $"{code.Category}/{code.Name}"
-                        );
+                        if (!string.IsNullOrEmpty(code.ID))
+                        {
+                            ModsDatabase.Codes.Add(code.ID);
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(code.Category))
+                                ModsDatabase.Codes.Add($"{code.Category}/{code.Name}");
+                            else
+                                ModsDatabase.Codes.Add(code.Name);
+                        }
                     }
                 }
 
@@ -1840,12 +1846,16 @@ namespace HedgeModManager
             var itemConfigure = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemConfigure");
             var itemCheckUpdate = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemCheckUpdate");
             var itemCheckUpdateAll = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemCheckUpdateAll");
+            var itemCheckEdit = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemEdit");
 
             if (itemConfigure != null)
                 itemConfigure.IsEnabled = mod.HasSchema;
 
             if (itemCheckUpdateAll != null)
                 itemCheckUpdateAll.IsEnabled = !CheckingForUpdates;
+
+            if (itemCheckEdit != null)
+                itemCheckEdit.IsEnabled = !mod.ReadOnly;
 
             if (itemCheckUpdate != null)
             {

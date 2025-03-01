@@ -260,6 +260,7 @@
     <system:String x:Key="ThemeLight" >Light</system:String>
 
     <!-- Games -->
+    <system:String x:Key="GameUnleashedRecompiled">Unleashed Recompiled</system:String>
     <system:String x:Key="GameSonicGenerations">Sonic Generations (2011)</system:String>
     <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
     <system:String x:Key="GameSonicForces">Sonic Forces</system:String>

@@ -1035,6 +1035,8 @@ namespace HedgeModManager
         [CanBeNull]
         public static CodeLoaderInfo GetCodeLoaderInfo()
         {
+            if (CurrentGameInstall.Game.ModLoader == null)
+                return null;
             try
             {
                 var minCodeVersion = "0.1";
