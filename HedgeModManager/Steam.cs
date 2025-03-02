@@ -22,9 +22,20 @@ namespace HedgeModManager
             if (HedgeApp.IsLinux)
             {
                 string home = Environment.GetEnvironmentVariable("WINEHOMEDIR").Replace("\\??\\", "");
-                string steamPath = Path.Combine(home, ".steam/steam");
-                if (Directory.Exists(steamPath))
-                    SteamLocation = steamPath;
+                var paths = new List<string>
+                {
+                    Path.Combine(home, ".steam/steam"),
+                    Path.Combine(home, ".var/app/com.valvesoftware.Steam/.steam/steam")
+                };
+
+                foreach (string path in paths)
+                {
+                    if (Directory.Exists(path))
+                    {
+                        SteamLocation = path;
+                        break;
+                    }
+                }
             }
 
             // Local Machine

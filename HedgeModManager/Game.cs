@@ -1,4 +1,5 @@
 ﻿using HedgeModManager.Properties;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,8 +7,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static HedgeModManager.Lang;
 
 namespace HedgeModManager
@@ -20,12 +19,6 @@ namespace HedgeModManager
 
         public static Game Unknown = new Game();
         
-        // For GUI use
-        public static Game AddGame { get; set; } = new Game()
-        {
-            GameName = "AddGame",
-        };
-
         public static Game SonicGenerations = new Game()
         {
             GameName = "SonicGenerations",
@@ -191,6 +184,22 @@ namespace HedgeModManager
             Timestamps = [0x66F609C2, 0x66F55857]
         };
 
+        public static Game UnleashedRecompiled = new Game()
+        {
+            GameName = "UnleashedRecompiled",
+            SaveName = "",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = [],
+            AppID = "",
+            GBProtocol = "hedgemmswa",
+            Is64Bit = true,
+            ModLoader = null,
+            CodesURL = Resources.URL_SWA_CODES,
+            GamePaths = [":HKEY_CURRENT_USER\\SOFTWARE\\UnleashedRecomp"],
+            SupportsCodeCompilation = false
+        };
+
         public static IEnumerable<Game> GetSupportedGames()
         {
             yield return SonicGenerations;
@@ -203,6 +212,7 @@ namespace HedgeModManager
             yield return SonicFrontiers;
             // yield return SonicGenerations2024;
             yield return ShadowGenerations;
+            yield return UnleashedRecompiled;
         }
     }
 
@@ -251,6 +261,7 @@ namespace HedgeModManager
         public string CodesURL;
         public string[] GamePaths = [];
         public uint[] Timestamps = null;
+        public bool SupportsCodeCompilation = true;
 
         public override string ToString() => Localise("Game" + GameName, GameName);
     }
@@ -268,7 +279,6 @@ namespace HedgeModManager
 
         public string GameName => GetGameTitle();
         public Uri GameImage { get { return HedgeApp.GetResourceUri($"Resources/Graphics/Games/{Game?.GameName}.png"); } }
-        public bool IsAddGame => Game == Games.AddGame;
 
         public GameInstall(Game game, string directory, string executablePath, GameLauncher launcher, bool custom = false)
         {
@@ -325,7 +335,6 @@ namespace HedgeModManager
         {
             var steamGames = Steam.SearchForGames();
             var epicGames = Epic.SearchForGames();
-
             var games = new List<GameInstall>();
 
             if (steamGames != null)
@@ -333,6 +342,30 @@ namespace HedgeModManager
 
             if (epicGames != null)
                 games.AddRange(epicGames);
+
+            // Search for registry searchable games
+            var hives = new Dictionary<string, RegistryKey>()
+            {
+                { "HKEY_CURRENT_USER", Registry.CurrentUser }
+            };
+            foreach (var game in Games.GetSupportedGames())
+            {
+                foreach (string path in game.GamePaths
+                    .Where(x => x.StartsWith(":") && x.Contains("\\")))
+                {
+                    string hiveName = path.Substring(1).Split('\\')[0];
+                    string keyPath = path.Substring(hiveName.Length + 2);
+                    var hive = hives[hiveName];
+                    var key = hive.OpenSubKey(keyPath);
+                    if (key == null)
+                        continue;
+
+                    string exePath = key.GetValue("ExecutableFilePath") as string;
+                    string dirPath = key.GetValue("RootDirectoryPath") as string;
+                    if (File.Exists(exePath))
+                        games.Add(new GameInstall(game, dirPath, exePath, GameLauncher.None));
+                }
+            }
 
             // Extra directories
             if (!string.IsNullOrEmpty(RegistryConfig.CustomGames))

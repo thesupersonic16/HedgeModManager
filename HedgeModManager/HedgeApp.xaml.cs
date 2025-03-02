@@ -503,7 +503,10 @@ namespace HedgeModManager
 
                 foreach (var game in Games.GetSupportedGames())
                 {
-                    if (game.Timestamps != null && game.Timestamps.Any(t => t == timestamp))
+                    // Timestamps was actually a flawed idea. using file name for now
+                    //if (game.Timestamps != null && game.Timestamps.Any(t => t == timestamp))
+                    if (game.GamePaths
+                        .Any(x => Path.GetFileName(x).Equals(Path.GetFileName(path), StringComparison.InvariantCultureIgnoreCase)))
                     {
                         gameInstall.Game = game;
                         GameInstalls.Add(gameInstall);
@@ -1032,6 +1035,8 @@ namespace HedgeModManager
         [CanBeNull]
         public static CodeLoaderInfo GetCodeLoaderInfo()
         {
+            if (CurrentGameInstall.Game.ModLoader == null)
+                return null;
             try
             {
                 var minCodeVersion = "0.1";

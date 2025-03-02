@@ -185,7 +185,7 @@ namespace HedgeModManager
 
             foreach (var code in profile.ActiveCodes)
             {
-                var dbCode = MainWindow.CodesDatabase.Codes.FirstOrDefault(c => c.Name == code);
+                var dbCode = MainWindow.CodesDatabase.Codes.FirstOrDefault(c => c.Name == code || c.ID == code);
                 if (dbCode == null)
                 {
                     result.UnresolvedCodes.Add(code);

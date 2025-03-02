@@ -28,7 +28,11 @@
     <system:String x:Key="MainUISave"            >Speichern</system:String>
     <system:String x:Key="MainUISaveAndPlay"     >Speichern und Starten</system:String>
     <system:String x:Key="MainUIConfigureMod"    >Mod konfigurieren</system:String>
-    <system:String x:Key="MainUIMLDownloadFail"  >Konnte den Mod-Loader nicht runterladen.</system:String>
+    <system:String x:Key="MainUIMLDownloadFail"  >Konnte den Mod-Loader nicht herunterladen.</system:String>
+    <system:String x:Key="MainUISelectGameTitle">Ausführbare Spieldatei auswählen</system:String>
+    <system:String x:Key="MainUISelectGameFilter">Ausführbare Windows-Datei</system:String>
+    <system:String x:Key="MainUIInvalidGameHeader">Unbekanntes Spiel</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIInvalidGame">Hedge Mod Manager konnte das Spiel nicht anhand&#x0a;der ausgewählten Ausführungsdatei bestimmen.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Konnte den Mod-Loader nicht installieren.&#x0a;Stelle sicher, dass du Berechtigungen zum Beschreiben der Spieldateien hast.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Konnte den Mod-Loader nicht deinstallieren.&#x0a;Stelle sicher, dass du Berechtigungen zum Beschreiben der Spieldateien hast.</system:String>
 
@@ -97,6 +101,7 @@
     <system:String x:Key="SettingsUIEnableDebug"    >Aktiviere Debug-Konsole</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Aktiviere Speicherdaten-Verschiebung</system:String>
     <system:String x:Key="SettingsUIUseLauncher"    >Nutze Spiel-Launcher</system:String>
+    <system:String x:Key="SettingsUIRemoveGame"     >Spiel entfernen</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Loader:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Spiel:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Profil:</system:String>
@@ -109,12 +114,13 @@
     <system:String x:Key="SettingsUIUpdateCodesOnLaunch">Aktualisiere Community-Codes beim Start automatisch</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"        >Hedge Mod Manager nach Spielstart offen lassen</system:String>
     <system:String x:Key="SettingsUICodesUseTreeView"   >Wechsle zur Baumansicht für Codes</system:String>
+    <system:String x:Key="SettingsUIUseAlternatingRows" >Verwende abwechselnde Zeilenfarben</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate"     >Suche nach Updates</system:String>
     <system:String x:Key="SettingsUIAboutHMM"           >Über den Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"           >Sprache:</system:String>
     <system:String x:Key="SettingsUITheme"              >Design:</system:String>
     <system:String x:Key="SettingsUIReleaseChannel"     >Update-Kanal:</system:String>
-    <system:String x:Key="SettingsUIChangingChannelTitle" >Ändere Release-Kanal</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >Ändere Update-Kanal</system:String>
     <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Du bist dabei auf den Release-Kanal zu wechseln.&#x0a;&#x0a;Bist du sicher, dass du fortfahren möchtest? Der Hedge Mod Manager muss neugestartet werden, um den Kanal zu wechseln.</system:String>
     <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Du bist dabei auf den Development-Kanal zu wechseln. Dieser Kanal kann ungetestete Features und Bugs beinhalten.&#x0a;&#x0a;Bist du sicher, dass du fortfahren möchtest? Der Hedge Mod Manager muss neugestartet werden, um den Kanal zu wechseln.</system:String>
 
@@ -230,6 +236,11 @@
     <system:String x:Key="ModUpdatesTitle"        >Mod Updates</system:String>
     <system:String x:Key="ModDownloadsTitle"      >Mod Downloads</system:String>
 
+    <!-- Game Selector Window Strings -->
+    <system:String x:Key="GameSelectorTitle"      >Wähle Spiel aus...</system:String>
+    <system:String x:Key="GameSelectorHeader"     >Mehrere Spiele erkannt</system:String>
+    <system:String x:Key="GameSelectorDescription">Bitte wähle ein Spiel aus, in welches die Mod installiert werden soll.</system:String>
+
     <!-- Exception Window Strings -->
     <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Absturz</system:String>
     <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager hat einen Ausnahmefehler ausgeworfen!</system:String>
@@ -247,7 +258,7 @@
     <system:String x:Key="ThemeDarker">Dunkler</system:String>
     <system:String x:Key="ThemeOLED"  >OLED</system:String>
     <system:String x:Key="ThemeLight" >Hell</system:String>
-    
+
     <!-- Games -->
     <system:String x:Key="GameSonicGenerations">Sonic Generations (2011)</system:String>
     <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
@@ -260,6 +271,7 @@
     <system:String x:Key="GameSonicGenerations2024">Sonic Generations (2024)</system:String>
     <system:String x:Key="GameShadowGenerations">Shadow Generations</system:String>
     <system:String x:Key="GameNoGame">Kein Spiel erkannt!</system:String>
+    <system:String x:Key="GameAddGame">Spiel hinzufügen</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>
     <system:String x:Key="LauncherHeroic">Heroic</system:String>

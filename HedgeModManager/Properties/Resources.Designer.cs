@@ -367,6 +367,15 @@ namespace HedgeModManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/UnleashedRecompiled.hmm.
+        /// </summary>
+        internal static string URL_SWA_CODES {
+            get {
+                return ResourceManager.GetString("URL_SWA_CODES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/PuyoPuyoTetris2.hmm.
         /// </summary>
         internal static string URL_TENPEX_CODES {

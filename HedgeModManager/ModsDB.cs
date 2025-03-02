@@ -234,7 +234,7 @@ namespace HedgeModManager
                 IniSerializer.Serialize(this, stream);
             }
 
-            if (compileCodes)
+            if (compileCodes && HedgeApp.CurrentGameInstall.Game.SupportsCodeCompilation)
             {
                 var codes = new List<CSharpCode>();
 
