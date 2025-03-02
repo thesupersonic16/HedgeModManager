@@ -19,12 +19,6 @@ namespace HedgeModManager
 
         public static Game Unknown = new Game();
         
-        // For GUI use
-        public static Game AddGame { get; set; } = new Game()
-        {
-            GameName = "AddGame",
-        };
-
         public static Game UnleashedRecompiled = new Game()
         {
             GameName = "UnleashedRecompiled",
@@ -285,7 +279,6 @@ namespace HedgeModManager
 
         public string GameName => GetGameTitle();
         public Uri GameImage { get { return HedgeApp.GetResourceUri($"Resources/Graphics/Games/{Game?.GameName}.png"); } }
-        public bool IsAddGame => Game == Games.AddGame;
 
         public GameInstall(Game game, string directory, string executablePath, GameLauncher launcher, bool custom = false)
         {

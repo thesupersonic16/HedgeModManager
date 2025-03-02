@@ -407,13 +407,6 @@ namespace HedgeModManager
 
             CodesTree.ClearSelectedItems();
 
-            // Add dummy add game option to the end
-            if (HedgeApp.GameInstalls[HedgeApp.GameInstalls.Count - 1] != MainWindowViewModel.GameInstallAddGame)
-            {
-                HedgeApp.GameInstalls.Remove(MainWindowViewModel.GameInstallAddGame);
-                HedgeApp.GameInstalls.Add(MainWindowViewModel.GameInstallAddGame);
-            }
-
             // No game selected
             if (HedgeApp.CurrentGameInstall.Game == Games.Unknown)
             {
@@ -1546,38 +1539,6 @@ namespace HedgeModManager
 
         private async void Game_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBox_GameStatus.SelectedItem == MainWindowViewModel.GameInstallAddGame)
-            {
-                e.Handled = true;
-                ComboBox_GameStatus.SelectedItem = HedgeApp.CurrentGameInstall;
-
-                var ofd = new OpenFileDialog
-                {
-                    Title = Localise("MainUISelectGameTitle"),
-                    Filter = Localise("MainUISelectGameFilter") + "|*.exe",
-                };
-
-                if (ofd.ShowDialog() == true)
-                {
-                    var game = HedgeApp.AddGameInstallByPath(ofd.FileName);
-                    if (game != null)
-                    {
-                        HedgeApp.GameInstalls.RemoveAll(t => t.Game == Games.Unknown);
-                        HedgeApp.SelectGameInstall(game);
-                        ForceRefresh();
-                        UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGameInstall.Game));
-                        await CheckForUpdatesAsync();
-                    }
-                    else
-                    {
-                        var messageBox = new HedgeMessageBox(Localise("MainUIInvalidGameHeader"), Localise("MainUIInvalidGame"));
-                        messageBox.AddButton(Localise("Close"), messageBox.Close);
-                        messageBox.ShowDialog();
-                    }
-                }
-                return;
-            }
-
             if (ComboBox_GameStatus.SelectedItem != null && ComboBox_GameStatus.SelectedItem != HedgeApp.CurrentGameInstall)
             {
                 SetCodesTreeExpandedState(false);
