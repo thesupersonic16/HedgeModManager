@@ -260,7 +260,6 @@
     <system:String x:Key="ThemeLight" >Light</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameUnleashedRecompiled">Unleashed Recompiled</system:String>
     <system:String x:Key="GameSonicGenerations">Sonic Generations (2011)</system:String>
     <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
     <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
@@ -271,6 +270,7 @@
     <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
     <system:String x:Key="GameSonicGenerations2024">Sonic Generations (2024)</system:String>
     <system:String x:Key="GameShadowGenerations">Shadow Generations</system:String>
+    <system:String x:Key="GameUnleashedRecompiled">Unleashed Recompiled</system:String>
     <system:String x:Key="GameNoGame">No Game Detected!</system:String>
     <system:String x:Key="GameAddGame">Add Game</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>

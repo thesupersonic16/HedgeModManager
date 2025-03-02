@@ -19,22 +19,6 @@ namespace HedgeModManager
 
         public static Game Unknown = new Game();
         
-        public static Game UnleashedRecompiled = new Game()
-        {
-            GameName = "UnleashedRecompiled",
-            SaveName = "",
-            SupportsCPKREDIR = false,
-            SupportsSaveRedirection = true,
-            Folders = [],
-            AppID = "",
-            GBProtocol = "hedgemmswas",
-            Is64Bit = true,
-            ModLoader = null,
-            CodesURL = Resources.URL_SWA_CODES,
-            GamePaths = [":HKEY_CURRENT_USER\\SOFTWARE\\UnleashedRecomp"],
-            SupportsCodeCompilation = false
-        };
-
         public static Game SonicGenerations = new Game()
         {
             GameName = "SonicGenerations",
@@ -200,9 +184,24 @@ namespace HedgeModManager
             Timestamps = [0x66F609C2, 0x66F55857]
         };
 
+        public static Game UnleashedRecompiled = new Game()
+        {
+            GameName = "UnleashedRecompiled",
+            SaveName = "",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = [],
+            AppID = "",
+            GBProtocol = "hedgemmswas",
+            Is64Bit = true,
+            ModLoader = null,
+            CodesURL = Resources.URL_SWA_CODES,
+            GamePaths = [":HKEY_CURRENT_USER\\SOFTWARE\\UnleashedRecomp"],
+            SupportsCodeCompilation = false
+        };
+
         public static IEnumerable<Game> GetSupportedGames()
         {
-            yield return UnleashedRecompiled;
             yield return SonicGenerations;
             yield return SonicLostWorld;
             yield return SonicForces;
@@ -213,6 +212,7 @@ namespace HedgeModManager
             yield return SonicFrontiers;
             // yield return SonicGenerations2024;
             yield return ShadowGenerations;
+            yield return UnleashedRecompiled;
         }
     }
 
@@ -337,6 +337,12 @@ namespace HedgeModManager
             var epicGames = Epic.SearchForGames();
             var games = new List<GameInstall>();
 
+            if (steamGames != null)
+                games.AddRange(steamGames);
+
+            if (epicGames != null)
+                games.AddRange(epicGames);
+
             // Search for registry searchable games
             var hives = new Dictionary<string, RegistryKey>()
             {
@@ -360,13 +366,6 @@ namespace HedgeModManager
                         games.Add(new GameInstall(game, dirPath, exePath, GameLauncher.None));
                 }
             }
-
-
-            if (steamGames != null)
-                games.AddRange(steamGames);
-
-            if (epicGames != null)
-                games.AddRange(epicGames);
 
             // Extra directories
             if (!string.IsNullOrEmpty(RegistryConfig.CustomGames))
