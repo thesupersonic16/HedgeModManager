@@ -73,6 +73,7 @@ namespace HedgeModManager
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
         public static bool IsLinux = false;
+        public static bool IsMacOS = false;
 
         public static HttpClient HttpClient { get; private set; }
         public static string UserAgent { get; }
@@ -115,12 +116,23 @@ namespace HedgeModManager
             Singleton.SetInstance(HttpClient);
             Singleton.SetInstance<IWindowService>(new WindowServiceImplWindows());
 
-            // Check for Wine, assuming Linux
+            // Check for Wine
             RegistryKey key = null;
             if ((key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).OpenSubKey("SOFTWARE\\Wine")) != null)
             {
                 key.Close();
-                IsLinux = true;
+
+                if ((key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).OpenSubKey("SOFTWARE\\Wine\\Mac Driver")) != null)
+                {
+                    key.Close();
+
+                    IsMacOS = true;
+                }
+                else
+                {
+                    IsLinux = true;
+                }
+
             }
 
 
@@ -189,7 +201,7 @@ namespace HedgeModManager
             if (CurrentCulture != null)
                 LoadLanguage(CurrentCulture.FileName);
             CountLanguages();
-            if (IsLinux)
+            if (IsLinux || IsMacOS)
                 Linux.PatchHMMRegistry();
 #if DEBUG
             // Find a Steam Game

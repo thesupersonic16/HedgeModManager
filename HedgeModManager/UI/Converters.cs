@@ -65,8 +65,8 @@ namespace HedgeModManager
         
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // HTML rendering currently does not work on Linux
-            if (HedgeApp.IsLinux)
+            // HTML rendering currently does not work on Linux & Mac
+            if (HedgeApp.IsLinux || HedgeApp.IsMacOS)
                 return string.Empty;
 
             string md = value?.ToString();

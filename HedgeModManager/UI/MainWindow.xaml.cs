@@ -418,7 +418,7 @@ namespace HedgeModManager
                 };
                 DataContext = ViewModel;
 
-                Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString})" + (HedgeApp.IsLinux ? " (Linux)" : "");
+                Title = $"{HedgeApp.ProgramName} ({HedgeApp.VersionString})" + (HedgeApp.IsLinux ? " (Linux)" : "") + (HedgeApp.IsMacOS ? " (macOS)" : "");
 
                 MainTabControl.SelectedItem = SettingsTab;
                 ComboBox_GameStatus.SelectedValue = HedgeApp.GameInstalls.FirstOrDefault();
