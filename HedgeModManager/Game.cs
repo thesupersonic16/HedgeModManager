@@ -192,7 +192,7 @@ namespace HedgeModManager
             SupportsSaveRedirection = true,
             Folders = [],
             AppID = "",
-            GBProtocol = "hedgemmswas",
+            GBProtocol = "hedgemmswa",
             Is64Bit = true,
             ModLoader = null,
             CodesURL = Resources.URL_SWA_CODES,
