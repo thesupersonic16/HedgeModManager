@@ -218,7 +218,7 @@ namespace HedgeModManager
 
             foreach (var mod in Mods)
             {
-                var id = HedgeApp.GenerateSeededGuid(mod.RootDirectory.GetHashCode()).ToString();
+                string id = Guid.NewGuid().ToString();
 
                 if (mod.Enabled)
                     ActiveMods.Add(id);
