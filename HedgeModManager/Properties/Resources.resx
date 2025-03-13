@@ -199,6 +199,9 @@ Do you want run the HMM Auto Installer?</value>
   <data name="URL_WARS_CODES" xml:space="preserve">
     <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/SonicForces.hmm</value>
   </data>
+  <data name="URL_SWA_CODES" xml:space="preserve">
+    <value>https://raw.githubusercontent.com/hedge-dev/HMMCodes/build/UnleashedRecompiled.hmm</value>
+  </data>
   <data name="Version" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\version.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>

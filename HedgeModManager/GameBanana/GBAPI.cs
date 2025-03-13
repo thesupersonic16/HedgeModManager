@@ -190,7 +190,7 @@ namespace GameBananaAPI
 
         public static bool? ParseCommandLine(string line)
         {
-            string[] split = line.Split(',');
+            string[] split = line.Replace("https//", "https://").Split(',');
             if (split.Length < 3) // help, I ddont know math
                 return false;
 

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using YamlDotNet.Core.Tokens;
+using Newtonsoft.Json.Linq;
 
 namespace HedgeModManager.Serialization
 {
@@ -24,13 +26,14 @@ namespace HedgeModManager.Serialization
                 if (fieldAttribute == null)
                     continue;
 
-                var group = string.IsNullOrEmpty(fieldAttribute.Group) ? "Main" : fieldAttribute.Group;
-                var name = string.IsNullOrEmpty(fieldAttribute.Name) ? property.Name : fieldAttribute.Name;
+                var groups = fieldAttribute.Groups;
+                if (groups == null || groups.Length == 0)
+                    groups = ["Main"];
 
-                if (!file.Groups.ContainsKey(group))
+                if (groups.Any(x => !file.Groups.ContainsKey(x)))
                     return false;
 
-                if (!file[group].Params.ContainsKey(name))
+                if (groups.Any(x => !file[x].Params.ContainsKey(fieldAttribute.Name)))
                     return false;
             }
 
@@ -40,13 +43,14 @@ namespace HedgeModManager.Serialization
                 if (fieldAttribute == null)
                     continue;
 
-                var group = string.IsNullOrEmpty(fieldAttribute.Group) ? "Main" : fieldAttribute.Group;
-                var name = string.IsNullOrEmpty(fieldAttribute.Name) ? field.Name : fieldAttribute.Name;
+                var groups = fieldAttribute.Groups;
+                if (groups == null || groups.Length == 0)
+                    groups = ["Main"];
 
-                if (!file.Groups.ContainsKey(group))
+                if (groups.Any(x => !file.Groups.ContainsKey(x)))
                     return false;
 
-                if (!file[group].Params.ContainsKey(name))
+                if (groups.Any(x => !file[x].Params.ContainsKey(fieldAttribute.Name)))
                     return false;
             }
 
@@ -70,7 +74,7 @@ namespace HedgeModManager.Serialization
                 if (fieldAttribute == null)
                     continue;
 
-                var group = string.IsNullOrEmpty(fieldAttribute.Group) ? "Main" : fieldAttribute.Group;
+                var group = fieldAttribute.Groups.FirstOrDefault() ?? "Main";
                 var name = string.IsNullOrEmpty(fieldAttribute.Name) ? property.Name : fieldAttribute.Name;
                 var value = property.GetValue(obj);
                 WriteValue(name, group, value, property.PropertyType);
@@ -82,7 +86,7 @@ namespace HedgeModManager.Serialization
                 if (fieldAttribute == null)
                     continue;
 
-                var group = string.IsNullOrEmpty(fieldAttribute.Group) ? "Main" : fieldAttribute.Group;
+                var group = fieldAttribute.Groups.FirstOrDefault() ?? "Main";
                 var name = string.IsNullOrEmpty(fieldAttribute.Name) ? field.Name : fieldAttribute.Name;
                 var value = field.GetValue(obj);
                 WriteValue(name, group, value, field.FieldType);
@@ -172,45 +176,64 @@ namespace HedgeModManager.Serialization
 
             foreach (var property in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
             {
+                // Check if group exists
+                IniGroupCheck groupCheckAttribute = property.GetCustomAttribute<IniGroupCheck>();
+                if (groupCheckAttribute != null)
+                    property.SetValue(obj, file.Groups.ContainsKey(groupCheckAttribute.Group));
+
                 IniField fieldAttribute = property.GetCustomAttribute<IniField>();
                 if (fieldAttribute == null)
                     continue;
-                
-                var group = string.IsNullOrEmpty(fieldAttribute.Group) ? "Main" : fieldAttribute.Group;
+
+                var groups = fieldAttribute.Groups;
+                if (groups == null || groups.Length == 0)
+                    groups = ["Main"];
+
                 var name = string.IsNullOrEmpty(fieldAttribute.Name) ? property.Name : fieldAttribute.Name;
                 var valueType = property.PropertyType;
 
-                if (file.Groups.ContainsKey(group))
+                foreach (string group in groups)
                 {
-                    // Ignore reading if missing
-                    if (fieldAttribute.UseDefault && !file[group].Params.ContainsKey(name))
-                        continue;
+                    if (file.Groups.ContainsKey(group))
+                    {
+                        // Ignore reading if missing
+                        if (fieldAttribute.UseDefault && !file[group].Params.ContainsKey(name))
+                            continue;
 
-                    var value = ReadField(group, name, valueType);
-                    if (value != null)
-                        property.SetValue(obj, value);
+                        var value = ReadField(group, name, valueType);
+                        if (value != null)
+                            property.SetValue(obj, value);
+                        break;
+                    }
                 }
             }
 
-            foreach(var field in obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
+            foreach (var field in obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance))
             {
                 IniField fieldAttribute = field.GetCustomAttribute<IniField>();
                 if (fieldAttribute == null)
                     continue;
 
-                var group = string.IsNullOrEmpty(fieldAttribute.Group) ? "Main" : fieldAttribute.Group;
+                var groups = fieldAttribute.Groups;
+                if (groups == null || groups.Length == 0)
+                    groups = ["Main"];
+
                 var name = string.IsNullOrEmpty(fieldAttribute.Name) ? field.Name : fieldAttribute.Name;
                 var valueType = field.FieldType;
 
-                if (file.Groups.ContainsKey(group))
+                foreach (string group in groups)
                 {
-                    // Ignore reading if missing
-                    if (fieldAttribute.UseDefault && !file[group].Params.ContainsKey(name))
-                        continue;
+                    if (file.Groups.ContainsKey(group))
+                    {
+                        // Ignore reading if missing
+                        if (fieldAttribute.UseDefault && !file[group].Params.ContainsKey(name))
+                            continue;
 
-                    var value = ReadField(group, name, valueType);
-                    if (value != null)
-                        field.SetValue(obj, value);
+                        var value = ReadField(group, name, valueType);
+                        if (value != null)
+                            field.SetValue(obj, value);
+                        break;
+                    }
                 }
             }
 
@@ -288,11 +311,18 @@ namespace HedgeModManager.Serialization
         }
     }
 
+    // Workaround
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    public class IniGroupCheck(string group) : Attribute
+    {
+        public string Group = group;
+    }
+
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public class IniField : Attribute
     {
         public string Name;
-        public string Group;
+        public string[] Groups;
         public bool UseDefault = false;
 
         public IniField()
@@ -300,27 +330,32 @@ namespace HedgeModManager.Serialization
 
         }
 
+        public IniField(string[] groups)
+        {
+            Groups = groups;
+        }
+
         public IniField(string group)
         {
-            Group = group;
+            Groups = [group];
         }
 
         public IniField(string group, string name)
         {
-            Group = group;
+            Groups = [group];
             Name = name;
         }
 
         public IniField(string group, string name, bool useDefault)
         {
-            Group = group;
+            Groups = [group];
             Name = name;
             UseDefault = useDefault;
         }
 
         public IniField(string group, bool useDefault)
         {
-            Group = group;
+            Groups = [group];
             UseDefault = useDefault;
         }
 

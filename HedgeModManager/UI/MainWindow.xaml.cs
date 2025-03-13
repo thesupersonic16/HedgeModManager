@@ -319,9 +319,10 @@ namespace HedgeModManager
                                 return x.EndsWith(y.Name);
 
                             if (string.IsNullOrEmpty(y.Category))
-                                return y.Name == x;
+                                return y.Name == x || y.ID == x;
 
-                            return x.StartsWith(y.Category + "/") && x.EndsWith(y.Name);
+                            return (x.StartsWith(y.Category + "/") && x.EndsWith(y.Name))
+                                   || x == y.ID;
                         }
                     );
 
@@ -405,13 +406,6 @@ namespace HedgeModManager
             ComboBox_ModProfile.Visibility = HedgeApp.CurrentGameInstall.Game != Games.Unknown ? Visibility.Visible : Visibility.Collapsed;
 
             CodesTree.ClearSelectedItems();
-
-            // Add dummy add game option to the end
-            if (HedgeApp.GameInstalls[HedgeApp.GameInstalls.Count - 1] != MainWindowViewModel.GameInstallAddGame)
-            {
-                HedgeApp.GameInstalls.Remove(MainWindowViewModel.GameInstallAddGame);
-                HedgeApp.GameInstalls.Add(MainWindowViewModel.GameInstallAddGame);
-            }
 
             // No game selected
             if (HedgeApp.CurrentGameInstall.Game == Games.Unknown)
@@ -752,12 +746,17 @@ namespace HedgeModManager
                 {
                     if (code.Enabled)
                     {
-                        ModsDatabase.Codes.Add
-                        (
-                            string.IsNullOrEmpty(code.Category)
-                                ? code.Name
-                                : $"{code.Category}/{code.Name}"
-                        );
+                        if (!string.IsNullOrEmpty(code.ID))
+                        {
+                            ModsDatabase.Codes.Add(code.ID);
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(code.Category))
+                                ModsDatabase.Codes.Add($"{code.Category}/{code.Name}");
+                            else
+                                ModsDatabase.Codes.Add(code.Name);
+                        }
                     }
                 }
 
@@ -1540,38 +1539,6 @@ namespace HedgeModManager
 
         private async void Game_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBox_GameStatus.SelectedItem == MainWindowViewModel.GameInstallAddGame)
-            {
-                e.Handled = true;
-                ComboBox_GameStatus.SelectedItem = HedgeApp.CurrentGameInstall;
-
-                var ofd = new OpenFileDialog
-                {
-                    Title = Localise("MainUISelectGameTitle"),
-                    Filter = Localise("MainUISelectGameFilter") + "|*.exe",
-                };
-
-                if (ofd.ShowDialog() == true)
-                {
-                    var game = HedgeApp.AddGameInstallByPath(ofd.FileName);
-                    if (game != null)
-                    {
-                        HedgeApp.GameInstalls.RemoveAll(t => t.Game == Games.Unknown);
-                        HedgeApp.SelectGameInstall(game);
-                        ForceRefresh();
-                        UpdateStatus(string.Format(Localise("StatusUIGameChange"), HedgeApp.CurrentGameInstall.Game));
-                        await CheckForUpdatesAsync();
-                    }
-                    else
-                    {
-                        var messageBox = new HedgeMessageBox(Localise("MainUIInvalidGameHeader"), Localise("MainUIInvalidGame"));
-                        messageBox.AddButton(Localise("Close"), messageBox.Close);
-                        messageBox.ShowDialog();
-                    }
-                }
-                return;
-            }
-
             if (ComboBox_GameStatus.SelectedItem != null && ComboBox_GameStatus.SelectedItem != HedgeApp.CurrentGameInstall)
             {
                 SetCodesTreeExpandedState(false);
@@ -1840,12 +1807,16 @@ namespace HedgeModManager
             var itemConfigure = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemConfigure");
             var itemCheckUpdate = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemCheckUpdate");
             var itemCheckUpdateAll = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemCheckUpdateAll");
+            var itemCheckEdit = HedgeApp.FindChild<MenuItem>(listItem.ContextMenu, "ContextMenuItemEdit");
 
             if (itemConfigure != null)
                 itemConfigure.IsEnabled = mod.HasSchema;
 
             if (itemCheckUpdateAll != null)
                 itemCheckUpdateAll.IsEnabled = !CheckingForUpdates;
+
+            if (itemCheckEdit != null)
+                itemCheckEdit.IsEnabled = !mod.ReadOnly;
 
             if (itemCheckUpdate != null)
             {

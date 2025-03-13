@@ -52,25 +52,29 @@ namespace HedgeModManager
         [PropertyTools.DataAnnotations.Browsable(false)]
         public bool Favorite { get; set; }
 
+        [PropertyTools.DataAnnotations.Browsable(false)]
+        [IniGroupCheck("Details")]
+        public bool ReadOnly { get; set; } = false;
+
         // Desc
         [PropertyTools.DataAnnotations.Category("Description")]
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string Title { get; set; } = string.Empty;
 
         [DataType(DataType.MultilineText)]
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string Description { get; set; } = string.Empty;
 
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string Version { get; set; } = string.Empty;
 
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string Date { get; set; } = string.Empty;
 
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string Author { get; set; } = string.Empty;
 
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string AuthorURL { get; set; } = string.Empty;
 
         // Main
@@ -220,6 +224,8 @@ namespace HedgeModManager
 
         public void Save()
         {
+            if (ReadOnly)
+                return;
             string oldDescription = Description;
             Description = oldDescription.Replace("\r", "").Replace("\n", "\\n");
             using (var stream = File.Create(Path.Combine(RootDirectory, "mod.ini")))
