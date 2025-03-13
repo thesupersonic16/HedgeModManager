@@ -189,7 +189,7 @@
     <system:String x:Key="StatusUIInstalledLoader"        > {0} modu kuruldu</system:String>
     <system:String x:Key="StatusUIDeletedMod"             > {0} modu silindi</system:String>
     <system:String x:Key="StatusUIModsDBSaved"            >Mod veritabanı kaydedildi</system:String>
-    <system:String x:Key="StatusUIModsDBLocationChanged"  >Veritabanı yeri kaydedildi</system:String>
+    <system:String x:Key="StatusUIModsDBLocationChanged"  >Veritabanın yeri kaydedildi</system:String>
     <system:String x:Key="StatusUIGameChange"             > {0} oyununa geçildi</system:String>
     <system:String x:Key="StatusUIDownloadingCodes"       > {0} için kodlar indiriliyor</system:String>
     <system:String x:Key="StatusUIDownloadFinished"       >İnidrme tamamlandı</system:String>
@@ -265,11 +265,12 @@
     <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
     <system:String x:Key="GameTokyo2020">Olympic Games Tokyo 2020</system:String>
-    <system:String x:Key="GameSonicColorsUltimate">Sonic Colours: Ultimate</system:String>
+    <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
     <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
     <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
     <system:String x:Key="GameSonicGenerations2024">Sonic Generations (2024)</system:String>
     <system:String x:Key="GameShadowGenerations">Shadow Generations</system:String>
+    <system:String x:Key="GameUnleashedRecompiled">Unleashed Recompiled</system:String>
     <system:String x:Key="GameNoGame">Oyun tespit edilemedi!</system:String>
     <system:String x:Key="GameAddGame">Oyun ekle</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
