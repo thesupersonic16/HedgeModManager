@@ -373,7 +373,7 @@ namespace HedgeModManager
             string exePath = null;
             // Check if file exists next to the main assembly
             if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "7z.exe")))
-                exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "7z.exe");
+                exePath = AppDomain.CurrentDomain.BaseDirectory;
             // Find the path from the registry
             if (exePath == null)
             {
