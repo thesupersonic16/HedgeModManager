@@ -192,7 +192,7 @@
     <system:String x:Key="StatusUIModsDBLocationChanged"  >Veritabanın yeri kaydedildi</system:String>
     <system:String x:Key="StatusUIGameChange"             > {0} oyununa geçildi</system:String>
     <system:String x:Key="StatusUIDownloadingCodes"       > {0} için kodlar indiriliyor</system:String>
-    <system:String x:Key="StatusUIDownloadFinished"       >İnidrme tamamlandı</system:String>
+    <system:String x:Key="StatusUIDownloadFinished"       >İndirme tamamlandı</system:String>
     <system:String x:Key="StatusUIDownloadFailed"         >İndirme tamamlanamadı</system:String>
     <system:String x:Key="StatusUICodeUpdatesAvailable"   >Kod güncellemeleri mevcut!</system:String>
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >Kod güncellemeleri bulunmadı</system:String>
