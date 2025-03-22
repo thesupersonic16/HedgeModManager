@@ -464,35 +464,39 @@ namespace HedgeModManager
             if (File.Exists(Path.Combine(path, "mod.ini")))
                 directories.Add(path);
 
-            // Check if there is any mods
-            if (directories.Count > 0)
+            try
             {
-                foreach (string folder in directories)
+                // Check if there is any mods
+                if (directories.Count > 0)
                 {
-                    string directoryName = Path.GetFileName(folder);
-
-                    // If it doesn't know the name of the mod its installing
-                    if (directoryName == "temp_install")
+                    foreach (string folder in directories)
                     {
-                        var mod = new ModInfo(folder);
-                        directoryName = new string(mod.Title.Where(x => !Path.GetInvalidFileNameChars()
-                            .Contains(x)).ToArray());
-                    }
+                        string directoryName = Path.GetFileName(folder);
 
-                    // Creates all of the directories.
-                    Directory.CreateDirectory(HedgeApp.MakeLongPath(Path.Combine(root, Path.GetFileName(folder))));
-                    foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
-                    {
-                        Directory.CreateDirectory(HedgeApp.MakeLongPath(dirPath.Replace(folder, Path.Combine(root, directoryName))));
-                    }
+                        // If it doesn't know the name of the mod its installing
+                        if (directoryName == "temp_install")
+                        {
+                            var mod = new ModInfo(folder);
+                            directoryName = new string(mod.Title.Where(x => !Path.GetInvalidFileNameChars()
+                                .Contains(x)).ToArray());
+                        }
 
-                    // Copies all the files from the Directories.
-                    foreach (string filePath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
-                    {
-                        File.Copy(HedgeApp.MakeLongPath(filePath), HedgeApp.MakeLongPath(filePath.Replace(folder, Path.Combine(root, directoryName))), true);
+                        // Creates all of the directories.
+                        Directory.CreateDirectory(HedgeApp.MakeLongPath(Path.Combine(root, Path.GetFileName(folder))));
+                        foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
+                        {
+                            Directory.CreateDirectory(HedgeApp.MakeLongPath(dirPath.Replace(folder, Path.Combine(root, directoryName))));
+                        }
+
+                        // Copies all the files from the Directories.
+                        foreach (string filePath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
+                        {
+                            File.Copy(HedgeApp.MakeLongPath(filePath), HedgeApp.MakeLongPath(filePath.Replace(folder, Path.Combine(root, directoryName))), true);
+                        }
                     }
                 }
             }
+            catch (IOException e) { }
         }
 
         public static void DeleteReadOnlyDirectory(string dir)
