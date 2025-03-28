@@ -36,10 +36,7 @@ namespace HedgeModManager.Updates
             };
         }
 
-        public async Task<string> GetChangelog()
-        {
-            return Item.Body;
-        }
+        public Task<string> GetChangelog() => Task.FromResult(Item.Body);
 
         public async Task ExecuteAsync(ExecuteConfig config, CancellationToken cancellationToken = default)
         {

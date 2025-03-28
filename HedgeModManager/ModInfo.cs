@@ -213,7 +213,7 @@ namespace HedgeModManager
             {
                 IniSerializer.Deserialize(this, stream);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

@@ -1677,7 +1677,7 @@ namespace HedgeModManager
                     code.Enabled = isCodeEnabled;
             }
 
-            SaveConfig();
+            SaveConfig().ConfigureAwait(false).GetAwaiter().GetResult();
 
             if (!string.IsNullOrEmpty(sb.ToString()))
             {

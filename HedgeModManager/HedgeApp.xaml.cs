@@ -783,10 +783,10 @@ namespace HedgeModManager
 
                 downloader.Start();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 CreateOKMessageBox("Hedge Mod Manager",
-                    installed ? Lang.Localise("MainUIMLUninstallFail") : Lang.Localise("MainUIMLInstallFail")).ShowDialog();
+                    installed ? Localise("MainUIMLUninstallFail") : Localise("MainUIMLInstallFail")).ShowDialog();
                 return false;
             }
             return true;

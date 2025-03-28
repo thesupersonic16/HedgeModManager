@@ -496,7 +496,7 @@ namespace HedgeModManager
                     }
                 }
             }
-            catch (IOException e) { }
+            catch (IOException) { }
         }
 
         public static void DeleteReadOnlyDirectory(string dir)
