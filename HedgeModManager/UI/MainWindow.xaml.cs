@@ -1186,8 +1186,7 @@ namespace HedgeModManager
                                 try
                                 {
                                     var gbItem = await GBAPI.PopulateItemDataAsync(new GBAPIItemDataBasic("Mod", id));
-                                    var file = gbItem.Files.FirstOrDefault(t =>
-                                        t.Value.Files.Any(s => s.Contains("mod.ini"))).Value;
+                                    var file = gbItem.Files.FirstOrDefault().Value;
                                     if (file != null)
                                         updateInfo.Add(
                                             new ModUpdateGameBanana(depend.Title, gbItem, file, ModsDatabase));
