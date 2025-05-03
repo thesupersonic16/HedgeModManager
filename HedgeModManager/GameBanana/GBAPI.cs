@@ -152,6 +152,16 @@ namespace GameBananaAPI
 
             item.ItemType = type;
             item.ItemID = id;
+
+            // Populate file list
+            foreach (var file in item.Files)
+            {
+                request = $"https://api.gamebanana.com/Core/Item/Data?itemtype=File&itemid={file.Key}&fields=aFlattenedFileList()&return_keys=1";
+                response = await Singleton.GetInstance<HttpClient>().GetStringAsync(request);
+                response = Uri.UnescapeDataString(response);
+                file.Value.Files = JsonConvert.DeserializeObject<JObject>(response).First.First.ToObject<List<string>>();
+            }
+
             return item;
         }
 
@@ -267,6 +277,7 @@ namespace GameBananaAPI
         public int DateAdded { get; set; }
         [JsonProperty("_nDownloadCount")]
         public string DownloadCount { get; set; }
+        public List<string> Files { get; set; }
     }
 
     public class GBAPIItemDataBasic : GBAPIItemData
