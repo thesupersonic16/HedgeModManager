@@ -393,6 +393,10 @@ namespace HedgeModManager
             {
                 string exe = Path.Combine(exePath, "7z.exe");
 
+                // There are reports of 7-Zip registry existing while 7-Zip isn't actually installed
+                if (!File.Exists(exe))
+                    return false;
+
                 // Path to the install temp directory
                 string tempDirectory = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "temp_install");
 
@@ -425,6 +429,9 @@ namespace HedgeModManager
             // Checks if WinRAR is installed by checking if the key and path value exists
             if (key != null && key.GetValue("exe64") is string exePath)
             {
+                if (!File.Exists(exePath))
+                    return false;
+
                 // Path to the install temp directory
                 string tempDirectory = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "temp_install");
 
