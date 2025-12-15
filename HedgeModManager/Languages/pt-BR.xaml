@@ -213,7 +213,7 @@
     <system:String x:Key="ExceptionWindowButtonIgnore"                          >Ignorar and Fechar</system:String>
     <system:String x:Key="ExceptionWindowButtonReport"                          >Enviar Relatório ao GitHub</system:String>
     <system:String x:Key="ExceptionWindowNewUpdateTitle"                        >Nova Atualização Disponível!</system:String>
-    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve"    >Parece que esta versão do Hedge Mod Manager encontra-se desatualizada.&#x0a;É recomenda-se que atualize primeiro e verifique se o problema ainda persiste.&#x0a;Deseja atualizar agora?</system:String>
+    <system:String x:Key="ExceptionWindowNewUpdateText" xml:space="preserve"    >Parece que esta versão do Hedge Mod Manager encontra-se desatualizada.&#x0a;É recomendado que atualize primeiro e verifique se o problema ainda persiste.&#x0a;Deseja atualizar agora?</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorTitle"                      >Erro na Atualização!</system:String>
     <system:String x:Key="ExceptionWindowUpdateErrorText" xml:space="preserve"  >Não foi possível atualizar o Hedge Mod Manager!&#x0a;Por favor transfira manualmente a última versão.</system:String>
 
@@ -237,4 +237,5 @@
 
 
 </ResourceDictionary>
+
 
