@@ -143,7 +143,7 @@ namespace HedgeModManager
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_RANGERS_CODES,
-            GamePaths = [Path.Combine("SonicFrontiers", "SonicFrontiers.exe")],
+            GamePaths = ["SonicFrontiers.exe", Path.Combine("SonicFrontiers", "SonicFrontiers.exe")],
             Timestamps = [0x65510C9C]
         };
 
@@ -410,6 +410,39 @@ namespace HedgeModManager
             return !string.IsNullOrEmpty(preference)
                 ? games.OrderBy(x => x.Game.GameName != preference).ToList()
                 : games;
+        }
+
+        /// <summary>
+        /// Detects which game is installed in the given directory by checking for known executables
+        /// </summary>
+        /// <param name="directory">Directory to search</param>
+        /// <param name="executablePath">Output: Full path to the detected executable</param>
+        /// <returns>The detected Game, or null if no game was found</returns>
+        public static Game DetectGameFromDirectory(string directory, out string executablePath)
+        {
+            executablePath = null;
+
+            if (string.IsNullOrEmpty(directory) || !Directory.Exists(directory))
+                return null;
+
+            foreach (var game in Games.GetSupportedGames())
+            {
+                foreach (var gamePath in game.GamePaths)
+                {
+                    // Skip registry-based paths
+                    if (gamePath.StartsWith(":"))
+                        continue;
+
+                    string testPath = Path.Combine(directory, gamePath);
+                    if (File.Exists(testPath))
+                    {
+                        executablePath = testPath;
+                        return game;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public static void HandleGameInstallDuplicates(List<GameInstall> games)

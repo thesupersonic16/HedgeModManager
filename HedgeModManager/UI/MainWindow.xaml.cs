@@ -1721,6 +1721,95 @@ namespace HedgeModManager
             HedgeApp.StartURL(HedgeApp.CurrentGameInstall.GameDirectory);
         }
 
+        private void UI_AddCustomGame_Click(object sender, RoutedEventArgs e)
+        {
+            // Open folder browser
+            var dialog = new FolderBrowserDialog
+            {
+                Title = "Select the folder containing your game executable"
+            };
+
+            if (!dialog.ShowDialog())
+                return; // User cancelled
+
+            string selectedPath = dialog.SelectedFolder;
+
+            // Try to detect which game this is
+            var detectedGame = GameInstall.DetectGameFromDirectory(selectedPath, out string executablePath);
+
+            // If we couldn't detect the game, show error
+            if (detectedGame == null)
+            {
+                HedgeApp.CreateOKMessageBox(
+                    "Game Not Found",
+                    "Could not detect a supported game in this directory.\n\n" +
+                    "Make sure you selected the folder containing the game executable.\n\n" +
+                    "Supported games:\n" +
+                    "• Sonic Generations\n" +
+                    "• Sonic Lost World\n" +
+                    "• Sonic Forces\n" +
+                    "• Sonic Colors: Ultimate\n" +
+                    "• Sonic Origins\n" +
+                    "• Sonic Frontiers\n" +
+                    "• SONIC X SHADOW GENERATIONS\n" +
+                    "• Puyo Puyo Tetris 2\n" +
+                    "• Olympic Games Tokyo 2020\n" +
+                    "• Unleashed Recompiled"
+                ).ShowDialog();
+                return;
+            }
+
+            // Create a custom game install
+            var customInstall = new GameInstall(
+                detectedGame,
+                selectedPath,
+                executablePath,
+                GameLauncher.None,
+                custom: true
+            );
+
+            // Check if this game is already in the list
+            bool alreadyExists = HedgeApp.GameInstalls.Any(g =>
+                g.ExecutablePath?.Equals(executablePath, StringComparison.OrdinalIgnoreCase) == true
+            );
+
+            if (alreadyExists)
+            {
+                HedgeApp.CreateOKMessageBox(
+                    "Already Added",
+                    $"This game is already in your list:\n{detectedGame}"
+                ).ShowDialog();
+                return;
+            }
+
+            // Add to the games list
+            HedgeApp.GameInstalls.Add(customInstall);
+            ViewModel.Games.Add(customInstall);
+
+            // Save to registry so it persists
+            SaveCustomGameToRegistry(customInstall);
+
+            // Select the newly added game
+            ComboBox_GameStatus.SelectedItem = customInstall;
+
+            UpdateStatus($"Added {detectedGame} from {selectedPath}");
+        }
+
+        private void SaveCustomGameToRegistry(GameInstall install)
+        {
+            // Format: "path|GameName|Launcher"
+            string entry = $"{install.ExecutablePath}|{install.Game.GameName}|{install.Launcher}";
+
+            // Get existing custom games
+            string existing = RegistryConfig.CustomGames ?? "";
+
+            // Add new entry
+            if (string.IsNullOrEmpty(existing))
+                RegistryConfig.CustomGames = entry;
+            else
+                RegistryConfig.CustomGames = existing + ";" + entry;
+        }
+
         private void UI_RemoveGame_Click(object sender, RoutedEventArgs e)
         {
             RemoveGameInstall(HedgeApp.CurrentGameInstall);

@@ -210,7 +210,7 @@ namespace HedgeModManager.UI
             ImportProfile(ofd.FileName);
         }
 
-        public void DragOver(IDropInfo dropInfo)
+        public new void DragOver(IDropInfo dropInfo)
         {
             dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
             var dataObject = dropInfo.Data as IDataObject;
@@ -220,7 +220,7 @@ namespace HedgeModManager.UI
                 dropInfo.Effects = DragDropEffects.Move;
         }
 
-        public void Drop(IDropInfo dropInfo)
+        public new void Drop(IDropInfo dropInfo)
         {
             var dataObject = dropInfo.Data as DataObject;
             if (dataObject != null && dataObject.ContainsFileDropList())
