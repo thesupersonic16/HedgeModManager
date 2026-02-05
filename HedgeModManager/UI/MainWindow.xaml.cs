@@ -2112,19 +2112,26 @@ namespace HedgeModManager
                     {
                         var update = await HedgeApp.CheckForUpdatesDevAsync();
                         box.Close();
-                        var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.zip");
-                        var artifact = update.Item3;
-                        var workflow = update.Item2;
-                        var downloader = new DownloadWindow($"Downloading {artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})",
-                            string.Format(HMMResources.URL_HMM_DEV, workflow.CheckSuiteID, artifact.ID), path)
+                        if (update.Item1)
                         {
-                            DownloadCompleted = () =>
+                            var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.zip");
+                            var artifact = update.Item3;
+                            var workflow = update.Item2;
+                            var downloader = new DownloadWindow($"Downloading {artifact.Name} ({workflow.HeadSHA.Substring(0, 7)})",
+                                string.Format(HMMResources.URL_HMM_DEV, workflow.CheckSuiteID, artifact.ID), path)
                             {
-                                HedgeApp.UnInstallOtherLoader();
-                                HedgeApp.PerformUpdate(path, "application/x-zip-compressed");
-                            }
-                        };
-                        downloader.Start();
+                                DownloadCompleted = () =>
+                                {
+                                    HedgeApp.UnInstallOtherLoader();
+                                    HedgeApp.PerformUpdate(path, "application/x-zip-compressed");
+                                }
+                            };
+                            downloader.Start();
+                        }
+                        else
+                        {
+                            ComboBox_Channel.SelectedItem = currentChannel;
+                        }
                     }
                 });
                 box.AddButton(Localise("CommonUINo"), () =>

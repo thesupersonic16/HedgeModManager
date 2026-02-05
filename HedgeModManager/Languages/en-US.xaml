@@ -208,6 +208,7 @@
     <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >There is a new update on the Release channel. Sticking with the Development channel may result in unwanted instability.&#x0a;&#x0a;Would you like to switch to the Release channel?</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorHeader" >Failed To Load Mod Configuration</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorBody"   >The mod "{0}" contains a malformed configuration schema.&#x0a;&#x0a;Please contact the mod author "{1}" for support.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIGitHubError"           >Failed to connect to GitHub servers.&#x0a;&#x0a;Please make sure Hedge Mod Manager has network access.</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >completed</system:String>
