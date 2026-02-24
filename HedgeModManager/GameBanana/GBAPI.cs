@@ -3,23 +3,35 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using HedgeModManager.UI;
-using System.IO;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
-using System.Windows;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace GameBananaAPI
 {
     public class GBAPI
     {
+        private static bool _serverRunning = false;
+
+        public static Dictionary<string, string> GameIDMappings = new()
+        {
+            { "6059" , "SonicGenerations" },
+            { "6160" , "SonicForces" },
+            { "6093" , "SonicLostWorld" },
+            { "8707" , "PuyoPuyoTetris2" },
+            { "11375", "SonicColorsUltimate" },
+            { "15780", "SonicOrigins" },
+            { "15779", "SonicFrontiers" },
+            { "19886", "ShadowGenerations" },
+            { "6559" , "UnleashedRecompiled" },
+            { "21975", "UnleashedRecompiled" },
+        };
 
         // TODO: Add Core/List support
         public enum GBAPIRequestType
@@ -191,6 +203,49 @@ namespace GameBananaAPI
         public static bool? ParseCommandLine(string line)
         {
             string[] split = line.Replace("https//", "https://").Split(',');
+
+            if (line.StartsWith("hedgemm://gamebanana/pair", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var splits = line.TrimEnd('/').Split('/');
+                if (splits.Length < 2)
+                    return false;
+                string id = splits[splits.Length - 2];
+                string key = splits[splits.Length - 1];
+
+                RegistryConfig.GameBananaRemoteInstallID = id;
+                RegistryConfig.GameBananaRemoteInstallKey = key;
+                RegistryConfig.Save();
+
+                _ = RunRemoteInstallServer();
+                return false;
+            }
+
+            if (line.StartsWith("hedgemm://gamebanana/install", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var splits = line.Substring("hedgemm://gamebanana/install".Length + 1).Split(',');
+
+                if (splits.Length != 4)
+                    return false;
+
+                string gameID      = splits[0];
+                string downloadURL = splits[1];
+                string itemType    = splits[2];
+                string itemID      = splits[3];
+                string gameName    = GameIDMappings.ContainsKey(gameID) 
+                    ? GameIDMappings[gameID] 
+                    : gameID;
+
+                if (int.TryParse(split[3], out int id))
+                {
+                    return new GBModWindow(itemType, id, downloadURL, gameName).ShowDialog();
+                }
+                else
+                {
+                    HedgeApp.CreateOKMessageBox("Error", $"Invalid GameBanana item id {split[2]}").ShowDialog();
+                    return false;
+                }
+            }
+
             if (split.Length < 3) // help, I ddont know math
                 return false;
 
@@ -213,6 +268,67 @@ namespace GameBananaAPI
                 HedgeApp.CreateOKMessageBox("Error", ex.Message).ShowDialog();
                 return false;
             }
+        }
+
+        public static async Task<string[]> FetchRemoteInstallQueue(string memberID, string secretKey, string appID)
+        {
+            string url = $"https://gamebanana.com/apiv11/RemoteInstall/{memberID}/{secretKey}/{appID}";
+
+            var response = HedgeApp.HttpClient.GetAsync(url);
+            if (!response.Result.IsSuccessStatusCode)
+                return [];
+
+            try
+            {
+                var content = await response.Result.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<string[]>(content);
+            }
+            catch { }
+            return [];
+        }
+
+        public static async Task RunRemoteInstallServer(CancellationToken c = default)
+        {
+            if (string.IsNullOrEmpty(RegistryConfig.GameBananaRemoteInstallID) || string.IsNullOrEmpty(RegistryConfig.GameBananaRemoteInstallKey))
+                return;
+
+            if (_serverRunning)
+                return;
+            _serverRunning = true;
+            try
+            {
+                var lastPoll = DateTime.MinValue;
+                var refreshTime = TimeSpan.FromSeconds(60);
+                while (!c.IsCancellationRequested)
+                {
+                    if (DateTime.Now - lastPoll < refreshTime)
+                    {
+                        await Task.Delay(250, c);
+                        continue;
+                    }
+
+                    string memberID = RegistryConfig.GameBananaRemoteInstallID;
+                    string secretKey = RegistryConfig.GameBananaRemoteInstallKey;
+                    var uris = await FetchRemoteInstallQueue(memberID, secretKey, "HedgeModManager");
+                    lastPoll = DateTime.Now;
+                    if (uris == null)
+                        continue;
+
+                    _ = Dispatcher.CurrentDispatcher.InvokeAsync(async () =>
+                    {
+                        foreach (var uri in uris)
+                        {
+                            try
+                            {
+                                ParseCommandLine(uri);
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    });
+                }
+            }catch { }
         }
 
     }

@@ -191,6 +191,7 @@ namespace HedgeModManager
             CountLanguages();
             if (IsLinux)
                 Linux.PatchHMMRegistry();
+            _ = GBAPI.RunRemoteInstallServer();
 #if DEBUG
             // Find a Steam Game
             GameInstalls = GameInstall.SearchForGames(nameof(Games.SonicGenerations));
@@ -242,6 +243,10 @@ namespace HedgeModManager
                 {
                     string url = arg.Substring("hedgemm://install/".Length);
                     new ModInstallWindow(url).ShowDialog();
+                }
+                else if (arg.StartsWith("hedgemm://gamebanana/", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    GBAPI.ParseCommandLine(arg);
                 }
                 Shutdown();
             }

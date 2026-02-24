@@ -94,7 +94,7 @@ namespace HedgeModManager.UI
             Progress.Visibility = Visibility.Visible;
 
             var compatibleGames = Games.GetSupportedGames()
-                .Where(t => t.GBProtocol == Protocol)
+                .Where(t => t.GBProtocol == Protocol || t.GameName == Protocol)
                 .ToList();
 
             var (gameInstall, result) = 
@@ -224,7 +224,7 @@ namespace HedgeModManager.UI
                 var game = Games.Unknown;
                 foreach (var gam in Games.GetSupportedGames())
                 {
-                    if (gam.GBProtocol == Protocol)
+                    if (gam.GBProtocol == Protocol || gam.GameName == Protocol)
                     {
                         game = gam;
                         break;
