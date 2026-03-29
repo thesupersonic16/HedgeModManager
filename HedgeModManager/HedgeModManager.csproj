@@ -87,6 +87,9 @@
       <Version>2.3.2</Version>
     </PackageReference>
     <PackageReference Include="HedgeModManager.CodeCompiler" Version="0.2.114" />
+      <PackageReference Include="ILMerge.Fody" Version="1.24.0">
+          <PrivateAssets>all</PrivateAssets>
+      </PackageReference>
     <PackageReference Include="Markdig">
       <Version>0.25.0</Version>
     </PackageReference>

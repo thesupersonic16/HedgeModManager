@@ -4,6 +4,12 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
+// Exclude bad IL merges
+// System Libraries
+// WPF Libraries, WPF references break with ILMerge
+// Mono.Cecil errors because I have no idea
+[assembly: ILMerge.ExcludeAssemblies(@"Mono.*|System.*|Microsoft.*|GongSolutions.WPF.DragDrop|PropertyTools.Wpf|HtmlRenderer\.WPF")]
+
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
