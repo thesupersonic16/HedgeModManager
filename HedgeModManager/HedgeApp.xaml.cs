@@ -158,6 +158,11 @@ namespace HedgeModManager
             {
                 ProgramName += " Development";
                 VersionString += $"-{RepoCommit.Substring(0, 7)}";
+            }else if (IsLinux)
+            {
+                string caption = "End of Support Warning";
+                string text = "Hedge Mod Manager 7 is no longer supported on Linux.\n\nPlease upgrade to Hedge Mod Manager 8 or newer.";
+                MessageBox.Show(text, caption, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             var application = new HedgeApp();
