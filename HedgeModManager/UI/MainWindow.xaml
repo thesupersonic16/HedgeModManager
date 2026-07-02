@@ -476,7 +476,7 @@
                 
                 <Grid Grid.Row="1" Background="{DynamicResource HMM.Window.DialogBottom}">
                     <Grid Margin="8,1,8,0" VerticalAlignment="Center" Height="56">
-                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Width="285" HorizontalAlignment="Left" Margin="0,8,5,8" SelectionChanged="Game_Changed">
+                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Width="200" HorizontalAlignment="Left" Margin="0,8,5,8" SelectionChanged="Game_Changed">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -490,6 +490,14 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
+                        
+                        <Button x:Name="Button_AddCustomGame" 
+                                Content="Add Game..." 
+                                Width="80" 
+                                HorizontalAlignment="Left" 
+                                Margin="205,8,0,8" 
+                                Click="UI_AddCustomGame_Click"
+                                ToolTip="Browse for a game directory"/>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <Button x:Name="SaveButton"     Content="{DynamicResource MainUISave}"        Width="130" Margin="5,8,5,8" Click="UI_Save_Click"/>
