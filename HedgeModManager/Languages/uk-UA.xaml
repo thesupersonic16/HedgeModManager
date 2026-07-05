@@ -238,7 +238,7 @@
 
     <!-- Game Selector Window Strings -->
     <system:String x:Key="GameSelectorTitle"      >Виберіть гру...</system:String>
-    <system:String x:Key="GameSelectorHeader"     >Знайдейно декілька ігор</system:String>
+    <system:String x:Key="GameSelectorHeader"     >Знайдено декілька ігор</system:String>
     <system:String x:Key="GameSelectorDescription">Будь ласка, виберіть гру нижче, у яку встановлюватимете мод.</system:String>
 
     <!-- Exception Window Strings -->
