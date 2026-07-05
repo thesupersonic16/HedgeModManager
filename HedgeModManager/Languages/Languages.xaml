@@ -17,6 +17,7 @@
         <local:LangEntry FileName="ru-RU" Name="Русский (Russian)"/>
         <local:LangEntry FileName="es-MX" Name="Español (Mexico)"/>
         <local:LangEntry FileName="vi-VN" Name="Tiếng Việt (Vietnamese)"/>
+        <local:LangEntry FileName="tr-TR" Name="Türkçe (Turkish)"/>
         <local:LangEntry FileName="it-IT" Name="Italiano (Italy)"/>
         <local:LangEntry FileName="ja-JP" Name="日本語 (Japanese)"/>
         <local:LangEntry FileName="ko-KR" Name="한국어 (Korean)"/>
