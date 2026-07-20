@@ -18,7 +18,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Hedge Mod Manager")]
-[assembly: AssemblyCopyright("Copyright © NeverFinishAnything 2025")]
+[assembly: AssemblyCopyright("Copyright © NeverFinishAnything 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -57,5 +57,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("7.14.0.3")]
-[assembly: AssemblyFileVersion("7.14.0.3")]
+[assembly: AssemblyVersion("7.15.0.0")]
+[assembly: AssemblyFileVersion("7.15.0.0")]

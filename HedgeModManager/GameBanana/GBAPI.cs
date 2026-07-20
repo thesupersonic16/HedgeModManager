@@ -11,13 +11,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
-using System.Windows.Threading;
+using System.Windows;
 
 namespace GameBananaAPI
 {
     public class GBAPI
     {
         private static bool _serverRunning = false;
+        private static CancellationTokenSource _serverCancellationTokenSource = new CancellationTokenSource();
 
         public static Dictionary<string, string> GameIDMappings = new()
         {
@@ -216,7 +217,8 @@ namespace GameBananaAPI
                 RegistryConfig.GameBananaRemoteInstallKey = key;
                 RegistryConfig.Save();
 
-                _ = RunRemoteInstallServer();
+                HedgeApp.CreateOKMessageBox("Success", $"GameBanana Remote Install Paired Successfully").ShowDialog();
+                _ = RunRemoteInstallServer(_serverCancellationTokenSource.Token);
                 return false;
             }
 
@@ -270,13 +272,13 @@ namespace GameBananaAPI
             }
         }
 
-        public static async Task<string[]> FetchRemoteInstallQueue(string memberID, string secretKey, string appID)
+        public static async Task<string[]> FetchRemoteInstallQueue(string memberID, string secretKey, string appID, CancellationToken c = default)
         {
             string url = $"https://gamebanana.com/apiv11/RemoteInstall/{memberID}/{secretKey}/{appID}";
 
-            var response = HedgeApp.HttpClient.GetAsync(url);
+            var response = HedgeApp.HttpClient.GetAsync(url, c);
             if (!response.Result.IsSuccessStatusCode)
-                return [];
+                return ["error"];
 
             try
             {
@@ -298,7 +300,7 @@ namespace GameBananaAPI
             try
             {
                 var lastPoll = DateTime.MinValue;
-                var refreshTime = TimeSpan.FromSeconds(60);
+                var refreshTime = TimeSpan.FromSeconds(30);
                 while (!c.IsCancellationRequested)
                 {
                     if (DateTime.Now - lastPoll < refreshTime)
@@ -309,14 +311,18 @@ namespace GameBananaAPI
 
                     string memberID = RegistryConfig.GameBananaRemoteInstallID;
                     string secretKey = RegistryConfig.GameBananaRemoteInstallKey;
-                    var uris = await FetchRemoteInstallQueue(memberID, secretKey, "HedgeModManager");
+                    var uris = await FetchRemoteInstallQueue(memberID, secretKey, "HedgeModManager", c);
                     lastPoll = DateTime.Now;
                     if (uris == null)
                         continue;
+                    
+                    // TODO: Implement feedback
+                    if (uris.Length == 1 && uris[0] == "error")
+                        break;
 
-                    _ = Dispatcher.CurrentDispatcher.InvokeAsync(async () =>
+                    Application.Current.Dispatcher.Invoke(() =>
                     {
-                        foreach (var uri in uris)
+                        foreach (string uri in uris)
                         {
                             try
                             {
@@ -329,6 +335,7 @@ namespace GameBananaAPI
                     });
                 }
             }catch { }
+            _serverRunning = false;
         }
 
     }
