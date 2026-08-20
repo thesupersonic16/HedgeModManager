@@ -15,13 +15,27 @@ using HedgeModManager.Serialization;
 using HedgeModManager.UI;
 using Newtonsoft.Json;
 using static HedgeModManager.Lang;
+using HedgeModManager.CodeCompiler;
+using HedgeModManager.CodeCompiler.PreProcessor;
+using HedgeModManager.Foundation;
 
 namespace HedgeModManager
 {
-    public class ModsDB : IEnumerable<ModInfo>
+    public class ModsDB : IEnumerable<ModInfo>, IIncludeResolver
     {
+        public static readonly Version LatestManifestVersion = new(1, 1);
+
+        public const string CompiledCodesName = "Codes.dll";
+        public const string CodesTextPath = "Codes.hmm";
+        public const string ExtraCodesTextPath = "ExtraCodes.hmm";
+        public const string InternalsDirectory = ".hedgemm";
+        public static readonly string WorkCodesPath = Path.Combine("work", "Codes");
+
         public CodeFile CodesDatabase = new CodeFile();
         public List<ModInfo> Mods = new List<ModInfo>();
+
+        [IniField("Main")]
+        public string ManifestVersion { get; set; } = "0.0";
 
         [IniField("Main", "ActiveMod")]
         public List<string> ActiveMods = new List<string>();
@@ -176,20 +190,35 @@ namespace HedgeModManager
             }
         }
 
+        public Version GetManifestVersion()
+        {
+            if (Version.TryParse(ManifestVersion, out var ver))
+                return ver;
+
+            return LatestManifestVersion;
+        }
+
+        public bool IsManifestLatest()
+        {
+            return GetManifestVersion() == LatestManifestVersion;
+        }
+
         public void SaveDBSync(bool compileCodes = true)
         {
             SaveDB(compileCodes).GetAwaiter().GetResult();
         }
 
-        public async Task SaveDB(bool compileCodes = true)
+        public async Task<bool> SaveDB(bool compileCodes = true)
         {
+            ManifestVersion = LatestManifestVersion.ToString();
+
             ActiveMods.Clear();
             FavoriteMods.Clear();
             mMods.Clear();
 
             foreach (var mod in Mods)
             {
-                var id = HedgeApp.GenerateSeededGuid(mod.RootDirectory.GetHashCode()).ToString();
+                string id = Guid.NewGuid().ToString();
 
                 if (mod.Enabled)
                     ActiveMods.Add(id);
@@ -205,13 +234,13 @@ namespace HedgeModManager
                 IniSerializer.Serialize(this, stream);
             }
 
-            if (compileCodes)
+            if (compileCodes && HedgeApp.CurrentGameInstall.Game.SupportsCodeCompilation)
             {
-                var codes = new List<Code>();
+                var codes = new List<CSharpCode>();
 
                 foreach (var code in CodesDatabase.Codes)
                 {
-                    if (code.Enabled)
+                    if (code.Enabled || code.Type == CodeType.Library)
                         codes.Add(code);
                 }
 
@@ -221,8 +250,50 @@ namespace HedgeModManager
                         codes.AddRange(mod.Codes.Codes);
                 }
 
-                await CodeProvider.CompileCodes(codes, CodeProvider.CompiledCodesPath);
+                var compiledPath = Path.Combine(RootDirectory, CompiledCodesName);
+                var report = await CodeProvider.CompileCodes(codes, compiledPath, this);
+                if (report.HasErrors)
+                {
+                    try
+                    {
+                        File.Delete(compiledPath);
+                    }
+                    catch
+                    {
+                        // ignore
+                    }
+                    var sb = new StringBuilder();
+                    sb.AppendLine("Error Compiling Codes");
+
+                    foreach (var file in report.Blocks)
+                    {
+                        if (!string.IsNullOrEmpty(file.Key))
+                        {
+                            sb.AppendLine($"    - {file.Key}");
+                        }
+
+                        foreach (var block in file.Value)
+                        {
+                            sb.AppendLine($"        {block.Severity} {block.Message}");
+                        }
+
+                        sb.AppendLine();
+                    }
+
+                    var dialog = new ExceptionWindow(new Exception(sb.ToString()))
+                    {
+                        Header =
+                        {
+                            Content = "Error Compiling Codes"
+                        },
+                        ReportRepository = "https://github.com/hedge-dev/HMMCodes"
+                    };
+                    dialog.ShowDialog();
+                    return false;
+                }
             }
+
+            return true;
         }
 
         public ModInfo GetModFromActiveGUID(string id)
@@ -281,7 +352,7 @@ namespace HedgeModManager
         public static void InstallModArchiveUsingZipFile(string path, string root)
         {
             // Path to the install temp folder
-            string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install", Guid.NewGuid().ToString());
+            string tempDirectory = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "temp_install", Guid.NewGuid().ToString());
 
             // Deletes the temp Directory if it exists
             if (Directory.Exists(tempDirectory))
@@ -302,7 +373,7 @@ namespace HedgeModManager
             string exePath = null;
             // Check if file exists next to the main assembly
             if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "7z.exe")))
-                exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "7z.exe");
+                exePath = AppDomain.CurrentDomain.BaseDirectory;
             // Find the path from the registry
             if (exePath == null)
             {
@@ -322,8 +393,12 @@ namespace HedgeModManager
             {
                 string exe = Path.Combine(exePath, "7z.exe");
 
+                // There are reports of 7-Zip registry existing while 7-Zip isn't actually installed
+                if (!File.Exists(exe))
+                    return false;
+
                 // Path to the install temp directory
-                string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
+                string tempDirectory = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "temp_install");
 
                 if (Directory.Exists(tempDirectory))
                     DeleteReadOnlyDirectory(tempDirectory);
@@ -354,8 +429,11 @@ namespace HedgeModManager
             // Checks if WinRAR is installed by checking if the key and path value exists
             if (key != null && key.GetValue("exe64") is string exePath)
             {
+                if (!File.Exists(exePath))
+                    return false;
+
                 // Path to the install temp directory
-                string tempDirectory = Path.Combine(HedgeApp.StartDirectory, "temp_install");
+                string tempDirectory = Path.Combine(HedgeApp.CurrentGameInstall.GameDirectory, "temp_install");
 
                 // Deletes the temp directory if it exists
                 if (Directory.Exists(tempDirectory))
@@ -393,31 +471,39 @@ namespace HedgeModManager
             if (File.Exists(Path.Combine(path, "mod.ini")))
                 directories.Add(path);
 
-            // Check if there is any mods
-            if (directories.Count > 0)
+            try
             {
-                foreach (string folder in directories)
+                // Check if there is any mods
+                if (directories.Count > 0)
                 {
-                    string directoryName = Path.GetFileName(folder);
-
-                    // If it doesn't know the name of the mod its installing
-                    if (directoryName == "temp_install")
+                    foreach (string folder in directories)
                     {
-                        var mod = new ModInfo(folder);
-                        directoryName = new string(mod.Title.Where(x => !Path.GetInvalidFileNameChars()
-                            .Contains(x)).ToArray());
+                        string directoryName = Path.GetFileName(folder);
+
+                        // If it doesn't know the name of the mod its installing
+                        if (directoryName == "temp_install")
+                        {
+                            var mod = new ModInfo(folder);
+                            directoryName = new string(mod.Title.Where(x => !Path.GetInvalidFileNameChars()
+                                .Contains(x)).ToArray());
+                        }
+
+                        // Creates all of the directories.
+                        Directory.CreateDirectory(HedgeApp.MakeLongPath(Path.Combine(root, Path.GetFileName(folder))));
+                        foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
+                        {
+                            Directory.CreateDirectory(HedgeApp.MakeLongPath(dirPath.Replace(folder, Path.Combine(root, directoryName))));
+                        }
+
+                        // Copies all the files from the Directories.
+                        foreach (string filePath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
+                        {
+                            File.Copy(HedgeApp.MakeLongPath(filePath), HedgeApp.MakeLongPath(filePath.Replace(folder, Path.Combine(root, directoryName))), true);
+                        }
                     }
-
-                    // Creates all of the directories.
-                    Directory.CreateDirectory(Path.Combine(root, Path.GetFileName(folder)));
-                    foreach (string dirPath in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
-                        Directory.CreateDirectory(dirPath.Replace(folder, Path.Combine(root, directoryName)));
-
-                    // Copies all the files from the Directories.
-                    foreach (string filePath in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories))
-                        File.Copy(filePath, filePath.Replace(folder, Path.Combine(root, directoryName)), true);
                 }
             }
+            catch (IOException) { }
         }
 
         public static void DeleteReadOnlyDirectory(string dir)
@@ -519,6 +605,39 @@ namespace HedgeModManager
             }
 
             return invalid;
+        }
+
+        public string Resolve(string name)
+        {
+            foreach (var code in CodesDatabase.Codes)
+            {
+                if (code.Name == name)
+                {
+                    return code.Body;
+                }
+            }
+
+            foreach (var mod in Mods)
+            {
+                if (!mod.Enabled)
+                {
+                    continue;
+                }
+
+                if (mod.Codes?.Codes != null)
+                {
+                    foreach (var code in mod.Codes.Codes)
+                    {
+                        if (code.Name == name)
+                        {
+                            return code.Body;
+                        }
+                    }
+
+                }
+            }
+
+            return null;
         }
 
         public IEnumerator<ModInfo> GetEnumerator()

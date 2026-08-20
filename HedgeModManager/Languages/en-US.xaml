@@ -29,6 +29,10 @@
     <system:String x:Key="MainUISaveAndPlay"   >Save and Play</system:String>
     <system:String x:Key="MainUIConfigureMod"  >Configure Mod</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Failed to download mod loader.</system:String>
+    <system:String x:Key="MainUISelectGameTitle">Select Game Executable</system:String>
+    <system:String x:Key="MainUISelectGameFilter">Windows Executable</system:String>
+    <system:String x:Key="MainUIInvalidGameHeader">Unrecognized Game</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIInvalidGame">Hedge Mod Manager is unable to determine the game from&#x0a;the selected executable.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Failed to install mod loader.&#x0a;Please make sure you have permissions to write game files.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Failed to uninstall mod loader.&#x0a;Please make sure no games are currently running.</system:String>
 
@@ -61,27 +65,30 @@
     <system:String xml:space="preserve" x:Key="ModsUINoMods">...There is not a lot here.&#x0a;Go get some mods!</system:String>
 
     <!-- Codes UI Strings -->
-    <system:String x:Key="CodesUIName"    >Name</system:String>
-    <system:String x:Key="CodesUICategory">Category</system:String>
-    <system:String x:Key="CodesUIDownload">Download Community Codes</system:String>
-    <system:String x:Key="CodesUIUpdate"  >Update Community Codes</system:String>
-    <system:String x:Key="CodesUISearch"  >Search: </system:String>
-    <system:String x:Key="CodesUIInfo"    >Double-click this code for more information.</system:String>
-    <system:String x:Key="CodesUIInfoHint">Hover over a code for more information.</system:String>
-    <system:String x:Key="CodesUINoInfo"  >No information available.</system:String>
-    <system:String x:Key="CodesUICopyCode">Copy Code to Clipboard</system:String>
-    <system:String x:Key="CodesUIExpand"  >Expand All</system:String>
-    <system:String x:Key="CodesUICollapse">Collapse All</system:String>
+    <system:String x:Key="CodesUIName"        >Name</system:String>
+    <system:String x:Key="CodesUICategory"    >Category</system:String>
+    <system:String x:Key="CodesUIDownload"    >Download Community Codes</system:String>
+    <system:String x:Key="CodesUIUpdate"      >Update Community Codes</system:String>
+    <system:String x:Key="CodesUISearch"      >Search: </system:String>
+    <system:String x:Key="CodesUIInfo"        >Double-click this code for more information.</system:String>
+    <system:String x:Key="CodesUIInfoHint"    >Hover over a code for more information.</system:String>
+    <system:String x:Key="CodesUINoInfo"      >No information available.</system:String>
+    <system:String x:Key="CodesUICopyCode"    >Copy Code to Clipboard</system:String>
+    <system:String x:Key="CodesUIExpand"      >Expand All</system:String>
+    <system:String x:Key="CodesUIExpandSub"   >Expand All Children of Node</system:String>
+    <system:String x:Key="CodesUICollapse"    >Collapse All</system:String>
+    <system:String x:Key="CodesUICollapseSub" >Collapse All Children of Node</system:String>
     <system:String x:Key="CodesUINullCategory">Uncategorized</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">The installed codes are incompatible with the code loader.&#x0a;Please update the codes and the code loader.&#x0a;WARNING: This will erase any custom codes.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">Fetching codes...</system:String>
 
     <!-- Diff UI Strings -->
     <system:String x:Key="DiffUITitle"   >Changelog</system:String>
-    <system:String x:Key="DiffUIAdded"   >Added: {0}</system:String>
-    <system:String x:Key="DiffUIModified">Modified: {0}</system:String>
-    <system:String x:Key="DiffUIRemoved" >Removed: {0}</system:String>
-    <system:String x:Key="DiffUIRenamed" >Renamed: {0}</system:String>
+    <system:String x:Key="DiffUIAdded"   >Added</system:String>
+    <system:String x:Key="DiffUIModified">Modified</system:String>
+    <system:String x:Key="DiffUIRemoved" >Removed</system:String>
+    <system:String x:Key="DiffUIRenamed" >Renamed</system:String>
+    <system:String x:Key="DiffUIMoved"   >Moved</system:String>
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
@@ -94,6 +101,7 @@
     <system:String x:Key="SettingsUIEnableDebug"    >Enable debug console</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Redirect default save file</system:String>
     <system:String x:Key="SettingsUIUseLauncher"    >Use game launcher</system:String>
+    <system:String x:Key="SettingsUIRemoveGame"     >Remove Game</system:String>
     <system:String x:Key="SettingsUILabelLoaders"   >Loaders:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Game:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Profile:</system:String>
@@ -106,14 +114,15 @@
     <system:String x:Key="SettingsUIUpdateCodesOnLaunch">Automatically update community codes on launch</system:String>
     <system:String x:Key="SettingsUIKeepHMMOpen"        >Keep Hedge Mod Manager open after starting a game</system:String>
     <system:String x:Key="SettingsUICodesUseTreeView"   >Use tree view for codes list</system:String>
+    <system:String x:Key="SettingsUIUseAlternatingRows" >Use alternating row colors</system:String>
     <system:String x:Key="SettingsUICheckHMMUpdate"     >Check for Updates</system:String>
     <system:String x:Key="SettingsUIAboutHMM"           >About Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"           >Language:</system:String>
     <system:String x:Key="SettingsUITheme"              >Theme:</system:String>
     <system:String x:Key="SettingsUIReleaseChannel"     >Update Channel:</system:String>
-    <system:String x:Key="SettingsUIChangingChannelTitle" >Changing Release Channels</system:String>
-    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">You are about to change to the Release channel.&#x0a;&#x0a;Are you sure you want to continue? Hedge Mod Manager will need to restart to change channels.</system:String>
-    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">You are about to change to the Development channel. This channel may contain untested features and bugs.&#x0a;&#x0a;Are you sure you want to continue? Hedge Mod Manager will need to restart to change channels.</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >Switching Update Channel</system:String>
+    <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">You are about to switch to the Release channel.&#x0a;&#x0a;Are you sure you want to continue? Hedge Mod Manager will need to restart to switch channels.</system:String>
+    <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">You are about to switch to the Development channel. This channel may contain untested features and bugs.&#x0a;&#x0a;Are you sure you want to continue? Hedge Mod Manager will need to restart to switch channels.</system:String>
 
     <!-- MainWindow UI Strings -->
     <system:String x:Key="MainUIInstallFormHeader"    >Install a mod by...</system:String>
@@ -189,12 +198,17 @@
     <system:String x:Key="StatusUINoCodeUpdatesFound"     >No code updates found</system:String>
 
     <!-- Dialog UI Strings -->
-    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess">Hedge Mod Manager could not access the game directory.&#x0a;Please ensure the Users group has &quot;Write&quot; set to Allow on the directory below and all of its files and folders.&#x0a;&#x0a;{0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"      >Are you sure you want to delete &quot;{0}&quot;?&#x0a;This action cannot be undone!</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModNewest"      >{0} is already up to date.</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >A newer version of {0} available! ({1})</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Are you sure you want to cancel updating?&#x0a;This may corrupt {0}</system:String>
-    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Could not find 7-Zip or WinRAR!&#x0a;This is required to extract the mod data&#x0a;&#x0a;Please make sure you have either one installed on your system.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoGameDirAccess"       >Hedge Mod Manager could not access the game directory.&#x0a;Please ensure the Users group has &quot;Write&quot; set to Allow on the directory below and all of its files and folders.&#x0a;&#x0a;{0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIDeleteMod"             >Are you sure you want to delete &quot;{0}&quot;?&#x0a;This action cannot be undone!</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModNewest"             >{0} is already up to date.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModUpdate"             >A newer version of {0} available! ({1})</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate"       >Are you sure you want to cancel updating?&#x0a;This may corrupt {0}</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINoDecompressor"        >Could not find 7-Zip or WinRAR!&#x0a;This is required to extract the mod data&#x0a;&#x0a;Please make sure you have either one installed on your system.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">New Release Channel Update</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >There is a new update on the Release channel. Sticking with the Development channel may result in unwanted instability.&#x0a;&#x0a;Would you like to switch to the Release channel?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorHeader" >Failed To Load Mod Configuration</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorBody"   >The mod "{0}" contains a malformed configuration schema.&#x0a;&#x0a;Please contact the mod author "{1}" for support.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIGitHubError"           >Failed to connect to GitHub servers.&#x0a;&#x0a;Please make sure Hedge Mod Manager has network access.</system:String>
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >completed</system:String>
@@ -223,6 +237,11 @@
     <system:String x:Key="ModUpdatesTitle"        >Mod Updates</system:String>
     <system:String x:Key="ModDownloadsTitle"      >Mod Downloads</system:String>
 
+    <!-- Game Selector Window Strings -->
+    <system:String x:Key="GameSelectorTitle"      >Select Game...</system:String>
+    <system:String x:Key="GameSelectorHeader"     >Multiple Games Detected</system:String>
+    <system:String x:Key="GameSelectorDescription">Please select a game below to install the mod into.</system:String>
+
     <!-- Exception Window Strings -->
     <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Crash</system:String>
     <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager Has Thrown an Exception!</system:String>
@@ -242,7 +261,7 @@
     <system:String x:Key="ThemeLight" >Light</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameSonicGenerations">Sonic Generations</system:String>
+    <system:String x:Key="GameSonicGenerations">Sonic Generations (2011)</system:String>
     <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
     <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
@@ -250,7 +269,11 @@
     <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
     <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
     <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
+    <system:String x:Key="GameSonicGenerations2024">Sonic Generations (2024)</system:String>
+    <system:String x:Key="GameShadowGenerations">Shadow Generations</system:String>
+    <system:String x:Key="GameUnleashedRecompiled">Unleashed Recompiled</system:String>
     <system:String x:Key="GameNoGame">No Game Detected!</system:String>
+    <system:String x:Key="GameAddGame">Add Game</system:String>
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>
     <system:String x:Key="LauncherHeroic">Heroic</system:String>

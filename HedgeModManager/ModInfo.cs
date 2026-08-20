@@ -9,6 +9,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using HedgeModManager.CodeCompiler;
+using HedgeModManager.Foundation;
 using HedgeModManager.Misc;
 using HedgeModManager.Serialization;
 using HedgeModManager.UI;
@@ -50,25 +52,29 @@ namespace HedgeModManager
         [PropertyTools.DataAnnotations.Browsable(false)]
         public bool Favorite { get; set; }
 
+        [PropertyTools.DataAnnotations.Browsable(false)]
+        [IniGroupCheck("Details")]
+        public bool ReadOnly { get; set; } = false;
+
         // Desc
         [PropertyTools.DataAnnotations.Category("Description")]
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string Title { get; set; } = string.Empty;
 
         [DataType(DataType.MultilineText)]
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string Description { get; set; } = string.Empty;
 
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string Version { get; set; } = string.Empty;
 
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string Date { get; set; } = string.Empty;
 
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string Author { get; set; } = string.Empty;
 
-        [IniField("Desc")]
+        [IniField(["Desc", "Details"])]
         public string AuthorURL { get; set; } = string.Empty;
 
         // Main
@@ -150,13 +156,28 @@ namespace HedgeModManager
                     if (File.Exists(schemaPath))
                     {
                         ConfigSchema = JsonConvert.DeserializeObject<FormSchema>(File.ReadAllText(schemaPath));
-                        ConfigSchema?.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
+                        // Don't continue if schema fails to load
+                        if (!ConfigSchema.TryLoad(this))
+                            ConfigSchema = null;
                     }
 
-                    var codesPath = Path.Combine(RootDirectory, CodeFile);
-                    if (File.Exists(codesPath))
+                    foreach (var codeFile in CodeFile.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        Codes = HedgeModManager.CodeFile.FromFile(codesPath);
+                        var codesPath = Path.Combine(RootDirectory, codeFile.Trim());
+                        if (File.Exists(codesPath))
+                        {
+                            var codes = CodeCompiler.CodeFile.FromFile(codesPath);
+                            foreach (var code in codes.Codes)
+                            {
+                                if (code.IsExecutable())
+                                    code.Name = $"{Title}\\{code.Name}";
+                            }
+
+                            if (Codes == null)
+                                Codes = codes;
+                            else
+                                Codes.Codes.AddRange(codes.Codes);
+                        }
                     }
                 }
 
@@ -192,7 +213,7 @@ namespace HedgeModManager
             {
                 IniSerializer.Deserialize(this, stream);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -203,6 +224,8 @@ namespace HedgeModManager
 
         public void Save()
         {
+            if (ReadOnly)
+                return;
             string oldDescription = Description;
             Description = oldDescription.Replace("\r", "").Replace("\n", "\\n");
             using (var stream = File.Create(Path.Combine(RootDirectory, "mod.ini")))
@@ -241,8 +264,8 @@ namespace HedgeModManager
             if (!Directory.Exists(Path.GetDirectoryName(fileName)))
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
 
-            ConfigSchema.LoadValuesFromIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
-            ConfigSchema.SaveIni(fileName);
+            if (ConfigSchema.TryLoad(this))
+                ConfigSchema.SaveIni(fileName);
         }
 
         public void ImportConfig(ModProfile profile)
@@ -251,8 +274,8 @@ namespace HedgeModManager
             if (ConfigSchema == null || !File.Exists(fileName))
                 return;
 
-            ConfigSchema.LoadValuesFromIni(fileName);
-            ConfigSchema.SaveIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
+            if (ConfigSchema.TryLoad(this, fileName))
+                ConfigSchema.SaveIni(Path.Combine(RootDirectory, ConfigSchema.IniFile));
         }
 
         public void FixIncludeDirectories()

@@ -93,6 +93,39 @@ namespace HedgeModManager.UI
             DownloadButton.Visibility = Visibility.Collapsed;
             Progress.Visibility = Visibility.Visible;
 
+            var compatibleGames = Games.GetSupportedGames()
+                .Where(t => t.GBProtocol == Protocol || t.GameName == Protocol)
+                .ToList();
+
+            var (gameInstall, result) = 
+                ModInstallGameSelectorWindow.SelectGameInstall(compatibleGames);
+
+            if (gameInstall == null)
+            {
+                DownloadButton.Visibility = Visibility.Visible;
+                Progress.Visibility = Visibility.Collapsed;
+
+                // No game
+                if (result == true)
+                {
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        var dialog = new HedgeMessageBox(Localise("CommonUIError"), LocaliseFormat("ModDownloaderNoGameMes", Localise($"Game{Game.GameName}")));
+                        dialog.AddButton(Localise("CommonUIClose"), () =>
+                        {
+                            dialog.Close();
+                            DialogResult = false;
+                            Close();
+                        });
+                        dialog.ShowDialog();
+                    });
+                    return;
+                }
+
+                // Cancelled
+                return;
+            }
+
             try
             {
                 var progress = new Progress<double?>((v) =>
@@ -111,23 +144,7 @@ namespace HedgeModManager.UI
                     }
                 });
 
-                var game = HedgeApp.GetGameInstall(Game);
-                if (game == null)
-                {
-                    await Dispatcher.InvokeAsync(() =>
-                    {
-                        var dialog = new HedgeMessageBox(Localise("CommonUIError"), LocaliseFormat("ModDownloaderNoGameMes", Localise($"Game{Game.GameName}")));
-                        dialog.AddButton(Localise("CommonUIClose"), () =>
-                        {
-                            dialog.Close();
-                            DialogResult = false;
-                            Close();
-                        });
-                        dialog.ShowDialog();
-                    });
-                    return;
-                }
-                HedgeApp.Config = new CPKREDIRConfig(Path.Combine(game.GameDirectory, "cpkredir.ini"));
+                HedgeApp.Config = new CPKREDIRConfig(gameInstall);
                 var mod = (GBAPIItemDataBasic)DataContext;
 
                 using (var resp = await Singleton.GetInstance<HttpClient>().GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
@@ -139,7 +156,7 @@ namespace HedgeModManager.UI
                     using (var destinationFile = File.Create(destinationPath, 8192, FileOptions.Asynchronous))
                         await resp.Content.CopyToAsync(destinationFile, progress);
                     
-                    ModsDB.InstallMod(destinationPath, Path.Combine(game.GameDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
+                    ModsDB.InstallMod(destinationPath, Path.Combine(gameInstall.GameDirectory, Path.GetDirectoryName(HedgeApp.Config.ModsDbIni)));
                     File.Delete(destinationPath);
 
                     // a dialog would be nice here but i ain't adding strings
@@ -173,17 +190,17 @@ namespace HedgeModManager.UI
                         HorizontalAlignment.Right, TextAlignment.Center, InputType.MarkDown);
                     dialog.Owner = this;
 
+                    dialog.AddButton(Localise("CommonUIRetry"), () =>
+                    {
+                        dialog.Close();
+                        Download_Click(sender, e);
+                    });
+
                     dialog.AddButton(Localise("CommonUICancel"), () =>
                     {
                         dialog.Close();
                         DialogResult = false;
                         Close();
-                    });
-
-                    dialog.AddButton(Localise("CommonUIRetry"), () =>
-                    {
-                        dialog.Close();
-                        Download_Click(sender, e);
                     });
 
                     dialog.ShowDialog();
@@ -207,7 +224,7 @@ namespace HedgeModManager.UI
                 var game = Games.Unknown;
                 foreach (var gam in Games.GetSupportedGames())
                 {
-                    if (gam.GBProtocol == Protocol)
+                    if (gam.GBProtocol == Protocol || gam.GameName == Protocol)
                     {
                         game = gam;
                         break;

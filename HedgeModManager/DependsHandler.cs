@@ -53,9 +53,9 @@ namespace HedgeModManager
                 default:
                     throw new Exception("Unknown dependency!");
             }
-            if (HedgeApp.CurrentGame.AppID == id && !CheckIfInstalled(type))
+            if (HedgeApp.CurrentGameInstall.Game.AppID == id && !CheckIfInstalled(type))
             {
-                var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGame.GameName, dependName));
+                var dialog = new HedgeMessageBox(Localise("MainUIRuntimeMissingTitle"), string.Format(Localise("MainUIRuntimeMissingMsg"), HedgeApp.CurrentGameInstall.Game.GameName, dependName));
 
                 dialog.AddButton(Localise("CommonUIYes"), () =>
                 {
@@ -97,6 +97,9 @@ namespace HedgeModManager
 
         private static bool CheckVCRuntime(string platform)
         {
+            // Ignore on Linux
+            if (HedgeApp.IsLinux)
+                return true;
             var reg = Registry.LocalMachine.OpenSubKey($"Software\\WOW6432Node\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\{platform}");
             // If null then try get it from the 32-bit Registry
             if (reg == null)

@@ -1,15 +1,15 @@
 !!VERSION 1.0
 
-Patch "Don't Lose Rings" in "Cheats" by "Sajid"
-WriteNop(ASLR(0x866900), 2)
+Patch "Disable Ring Loss" in "Cheats" by "Sajid" does "Disables the loss of rings upon being damaged by an enemy."
+WriteNop(ASLR(0x00866900), 2)
 
-Patch "Disable Super Music" in "Audio" by "Sajid"
-WriteNop(ASLR(0x91ABAD), 6)
+Patch "Disable Super Music" in "Audio" by "Sajid" does "Prevents the Super Sonic theme from overwriting the stage music."
+WriteNop(ASLR(0x0091ABAD), 6)
 
-Patch "Invisible Cloak Sonic (Requires jump or spin)" in "Graphics" by "Muzzarino"
-WriteNop(ASLR(0x85C68E), 6)
+Patch "Invisible Cloak Sonic" in "Graphics" by "Muzzarino" does "Turns Sonic's textures into a highly reflective material to blend in (requires the Jump or Spin button to be pressed to enable it)."
+WriteNop(ASLR(0x0085C68E), 6)
 
-Patch "Enable Stage Retry Option" in "UI" by "Sajid"
+Patch "Enable Stage Retry Option" in "UI" by "Sajid" does "Enables the Retry option from the game's time attack mode in normal play."
 WriteAsmHook
 (
     ASLR(0x005169E3),
@@ -17,35 +17,35 @@ WriteAsmHook
     "mov DWORD PTR [ebp+8], 1"
 )
 
-Patch "16:10 In-Game Resolution" in "Graphics" by "ĐeäTh"
-WriteProtected<int>(ASLR(0xD56D30), 0x3FCCCCCD)
+Patch "16:10 In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 16:10 aspect ratio. Perfect for the Steam Deck."
+WriteProtected<int>(ASLR(0x00D56D30), 0x3FCCCCCD)
 
-Patch "21:9 (2560x1080) In-Game Resolution" in "Graphics" by "ĐeäTh"
-WriteProtected<int>(ASLR(0xD56D30), 0x4017B426)
+Patch "21:9 (2560x1080) In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 21:9 (2560x1080) aspect ratio."
+WriteProtected<int>(ASLR(0x00D56D30), 0x4017B426)
 
-Patch "21:9 (3440x1440) In-Game Resolution" in "Graphics" by "ĐeäTh"
-WriteProtected<int>(ASLR(0xD56D30), 0x4018E38E)
+Patch "21:9 (3440x1440) In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 21:9 (3440x1440) aspect ratio."
+WriteProtected<int>(ASLR(0x00D56D30), 0x4018E38E)
 
-Patch "21:9 (3840x1600) In-Game Resolution" in "Graphics" by "ĐeäTh"
-WriteProtected<int>(ASLR(0xD56D30), 0x4019999A)
+Patch "21:9 (3840x1600) In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 21:9 (3840x1600) aspect ratio."
+WriteProtected<int>(ASLR(0x00D56D30), 0x4019999A)
 
-Patch "32:9 In-Game Resolution" in "Graphics" by "ĐeäTh"
-WriteProtected<int>(ASLR(0xD56D30), 0x40638E39)
+Patch "32:9 In-Game Resolution" in "Graphics" by "ĐeäTh" does "Changes the game in-game resolution to a 32:9 aspect ratio."
+WriteProtected<int>(ASLR(0x00D56D30), 0x40638E39)
 
 Code "Widescreen Support" in "Graphics" by "Muzzarino" does "Dynamically adjusts the aspect ratio to match the game resolution (recommended for ultrawide)."
-var ptr = GetPointer(ASLR(0xFD3CA8))
-WriteProtected<float>(ASLR(0xD56D30), ptr != 0 ? (float)(Read<uint>(ptr + 0xF8)) / (float)(Read<uint>(ptr + 0xFC)) : 16f / 9f)
-WriteProtected<double>(ASLR(0xEB2E00), (Double)Read<float>(ASLR(0xD56D30)))
-WriteProtected<float>(ASLR(0xFB6AF0), 2f * (float)Math.Atan((float)Math.Tan(60f * 0.00872664625997164788461845384244) / (Read<float>(ASLR(0xD56D30)) < 16f / 9f ? Read<float>(ASLR(0xD56D30)) : 16f / 9f) * (16f / 9f)))
-WriteProtected<float>(ASLR(0xD6F364), 720f / (Read<float>(ASLR(0xD56D30)) < 16f / 9f ? Read<float>(ASLR(0xD56D30)) : 16f / 9f) * (16f / 9f)))
-WriteProtected<float>(ASLR(0xD6F360), Read<float>(ASLR(0xD6F364)) * Read<float>(ASLR(0xD56D30)))
+var ptr = GetPointer(ASLR(0x00FD3CA8))
+WriteProtected<float>(ASLR(0x00D56D30), ptr != 0 ? (float)(Read<uint>(ptr + 0xF8)) / (float)(Read<uint>(ptr + 0xFC)) : 16f / 9f)
+WriteProtected<double>(ASLR(0x00EB2E00), (Double)Read<float>(ASLR(0x00D56D30)))
+WriteProtected<float>(ASLR(0x00FB6AF0), 2f * (float)Math.Atan((float)Math.Tan(60f * 0.00872664625997164788461845384244) / (Read<float>(ASLR(0x00D56D30)) < 16f / 9f ? Read<float>(ASLR(0x00D56D30)) : 16f / 9f) * (16f / 9f)))
+WriteProtected<float>(ASLR(0x00D6F364), 720f / (Read<float>(ASLR(0x00D56D30)) < 16f / 9f ? Read<float>(ASLR(0x00D56D30)) : 16f / 9f) * (16f / 9f)))
+WriteProtected<float>(ASLR(0x00D6F360), Read<float>(ASLR(0x00D6F364)) * Read<float>(ASLR(0x00D56D30)))
 
-string code = $@"mulss xmm0,[{ASLR(0xE737E4)}]
+string code = $@"mulss xmm0,[{ASLR(0x00E737E4)}]
 cvtps2pd xmm0,xmm0
 pushad
-mov eax,{ASLR(0xC76D12)}
+mov eax,{ASLR(0x00C76D12)}
 call eax
-mov eax,{ASLR(0xC64010)}
+mov eax,{ASLR(0x00C64010)}
 call eax
 cvtsi2sd xmm2,eax
 cvtsi2sd xmm1,edx
@@ -62,17 +62,17 @@ fld qword ptr [esp]
 add esp,0x8
 fld1
 fpatan
-fdiv dword ptr [{ASLR(0xE737E4)}]
+fdiv dword ptr [{ASLR(0x00E737E4)}]
 fstp dword ptr [esp]
-mov eax,{ASLR(0x8FF5B0)}
+mov eax,{ASLR(0x008FF5B0)}
 call eax"
 
-string code2 = $@"mulss xmm0,[{ASLR(0xE737E4)}]
+string code2 = $@"mulss xmm0,[{ASLR(0x00E737E4)}]
 cvtps2pd xmm0,xmm0
 pushad
-mov eax,{ASLR(0xC76D12)}
+mov eax,{ASLR(0x00C76D12)}
 call eax
-mov eax,{ASLR(0xC64010)}
+mov eax,{ASLR(0x00C64010)}
 call eax
 cvtsi2sd xmm2,eax
 cvtsi2sd xmm1,edx
@@ -89,12 +89,12 @@ fld qword ptr [esp]
 add esp,0x8
 fld1
 fpatan
-fdiv dword ptr [{ASLR(0xE737E4)}]
+fdiv dword ptr [{ASLR(0x00E737E4)}]
 fstp dword ptr [esp+0x4]
-mov eax,{ASLR(0x967820)}
+mov eax,{ASLR(0x00967820)}
 call eax"
 
-string code3 = $@"mov eax,[{ASLR(0xFD3CA8)}]
+string code3 = $@"mov eax,[{ASLR(0x00FD3CA8)}]
 test eax,eax
 je NoVPaddress
 mov edx,[eax+0xFC]
@@ -106,10 +106,10 @@ cvtdq2ps xmm1,xmm1
 sub esp,0x8
 movss [esp],xmm0
 movss [esp+0x4],xmm1
-mov eax,[{ASLR(0xFD3CA8)}]
+mov eax,[{ASLR(0x00FD3CA8)}]
 movd xmm0,[eax+0xF8]
 movd xmm1,[eax+0xFC]
-mov eax,{ASLR(0xC64010)}
+mov eax,{ASLR(0x00C64010)}
 call eax
 sar eax,1
 sar edx,1
@@ -143,75 +143,75 @@ add esp,0x8
 cvtps2dq xmm0,xmm0
 cvtps2dq xmm1,xmm1"
 
-string code5 = $@"mov eax,{ASLR(0xC64010)}
+string code5 = $@"mov eax,{ASLR(0x00C64010)}
 call eax
 cvtsi2ss xmm3,eax
 cvtsi2ss xmm2,edx
 divss xmm3,xmm2"
 
-string code6 = $@"mov eax,{ASLR(0xC76F67)}
+string code6 = $@"mov eax,{ASLR(0x00C76F67)}
 call eax
 movss xmm1,xmm0
-divss xmm0,[{ASLR(0xD56D30)}]
-divss xmm0,[{ASLR(0xD56D2C)}]
+divss xmm0,[{ASLR(0x00D56D30)}]
+divss xmm0,[{ASLR(0x00D56D2C)}]
 maxss xmm0,xmm1"
 
 string code7 = $@"movss xmm0,xmm5
 divss xmm0,[edi+0x1B4]
-minss xmm0,[{ASLR(0xD56D30)}]
-divss xmm0,[{ASLR(0xD56D30)}]
+minss xmm0,[{ASLR(0x00D56D30)}]
+divss xmm0,[{ASLR(0x00D56D30)}]
 mulss xmm5,xmm0"
 
 string code8 = $@"movss xmm4,[edi+0x1B0]
 divss xmm4,[edi+0x1B4]
-maxss xmm4,[{ASLR(0xD56D30)}]
-divss xmm4,[{ASLR(0xD56D30)}]
+maxss xmm4,[{ASLR(0x00D56D30)}]
+divss xmm4,[{ASLR(0x00D56D30)}]
 divss xmm7,xmm4"
 
-string code9 = $@"movss xmm6,[{ASLR(0xD56D30)}]
-divss xmm0,[{ASLR(0xD56D2C)}]
+string code9 = $@"movss xmm6,[{ASLR(0x00D56D30)}]
+divss xmm0,[{ASLR(0x00D56D2C)}]
 minss xmm6,xmm0
 divss xmm6,xmm0
 movss xmm0,xmm6"
 
-string code10 = $@"movss xmm5,[{ASLR(0xE72E24)}]
-divss xmm5,[{ASLR(0xD56D2C)}]
-minss xmm5,[{ASLR(0xD56D30)}]
+string code10 = $@"movss xmm5,[{ASLR(0x00E72E24)}]
+divss xmm5,[{ASLR(0x00D56D2C)}]
+minss xmm5,[{ASLR(0x00D56D30)}]
 divss xmm2,xmm5
-mulss xmm2,[{ASLR(0xD56D30)}]"
+mulss xmm2,[{ASLR(0x00D56D30)}]"
 
-string code11 = $@"movss xmm5,[{ASLR(0xE72E24)}]
-divss xmm5,[{ASLR(0xD56D2C)}]
-maxss xmm5,[{ASLR(0xD56D30)}]
+string code11 = $@"movss xmm5,[{ASLR(0x00E72E24)}]
+divss xmm5,[{ASLR(0x00D56D2C)}]
+maxss xmm5,[{ASLR(0x00D56D30)}]
 mulss xmm1,xmm5
-divss xmm1,[{ASLR(0xD56D30)}]"
+divss xmm1,[{ASLR(0x00D56D30)}]"
 
-if (Read<byte>(ASLR(0x4178AB)) == 0xE8)
+if (Read<byte>(ASLR(0x004178AB)) == 0xE8)
 {
-    WriteAsmHook(code, ASLR(0x4178AB), HookBehavior.Replace)
-    WriteAsmHook(code, ASLR(0x419601), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x41E9D0), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x42589C), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x4272F5), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x427DF0), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x428878), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x4292FE), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x437490), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x43CB11), HookBehavior.Replace)
-    WriteAsmHook(code2, ASLR(0x530664), HookBehavior.Replace)
-    WriteAsmHook(code3, ASLR(0x5305F9), HookBehavior.Replace)
-    WriteAsmHook(code4, ASLR(0x4A824C), HookBehavior.Before)
-    WriteAsmHook(code5, ASLR(0x401737), HookBehavior.Replace)
-    WriteAsmHook(code6, ASLR(0x43D41E), HookBehavior.Replace)
-    WriteAsmHook(code6, ASLR(0x441D41), HookBehavior.Replace)
-    WriteAsmHook(code7, ASLR(0x49C380), HookBehavior.Before)
-    WriteAsmHook(code8, ASLR(0x49C3BA), HookBehavior.Before)
-    WriteAsmHook(code9, ASLR(0x41EA22), HookBehavior.Before)
-    WriteAsmHook(code10, ASLR(0x8FF420), HookBehavior.Before)
-    WriteAsmHook(code11, ASLR(0x8FF456), HookBehavior.Before)
+    WriteAsmHook(code, ASLR(0x004178AB), HookBehavior.Replace)
+    WriteAsmHook(code, ASLR(0x00419601), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x0041E9D0), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x0042589C), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x004272F5), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x00427DF0), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x00428878), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x004292FE), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x00437490), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x0043CB11), HookBehavior.Replace)
+    WriteAsmHook(code2, ASLR(0x00530664), HookBehavior.Replace)
+    WriteAsmHook(code3, ASLR(0x005305F9), HookBehavior.Replace)
+    WriteAsmHook(code4, ASLR(0x004A824C), HookBehavior.Before)
+    WriteAsmHook(code5, ASLR(0x00401737), HookBehavior.Replace)
+    WriteAsmHook(code6, ASLR(0x0043D41E), HookBehavior.Replace)
+    WriteAsmHook(code6, ASLR(0x00441D41), HookBehavior.Replace)
+    WriteAsmHook(code7, ASLR(0x0049C380), HookBehavior.Before)
+    WriteAsmHook(code8, ASLR(0x0049C3BA), HookBehavior.Before)
+    WriteAsmHook(code9, ASLR(0x0041EA22), HookBehavior.Before)
+    WriteAsmHook(code10, ASLR(0x008FF420), HookBehavior.Before)
+    WriteAsmHook(code11, ASLR(0x008FF456), HookBehavior.Before)
 }
 
-Patch "Disable Lockon (Except for Unbeatable Bosses)" in "Gameplay" by "Sajid"
+Patch "Disable Lockon (Except for Unbeatable Bosses)" in "Gameplay" by "Sajid" does "Disables the player's ability to Homing Attack or Kick enemies and objects. Enabled for a few bosses to prevent softlocks."
 WriteProtected<uint>(ASLR(0x00537D15), 0x5005)
 WriteProtected<uint>(ASLR(0x0053AFD1), 0x1003)
 WriteProtected<uint>(ASLR(0x005A8121), 0x1003)
@@ -220,16 +220,16 @@ WriteProtected<uint>(ASLR(0x00587A71), 0x1003)
 WriteProtected<uint>(ASLR(0x0059889A), 0x5005)
 WriteProtected<uint>(ASLR(0x0058FDC1), 0x1003)
 
-Patch "Disable Voice Option Completely" in "UI" by "M&M"
-WriteNop(ASLR(0x4A3D82), 5)
+Patch "Disable Voice Option Completely" in "Audio" by "M&M" does "Prevents any sound considered as 'Voice' from playing, which in result prevents the music from lowering in volume. This is preferable over lowering the 'Voice' volume to 0 in the game's settings."
+WriteNop(ASLR(0x004A3D82), 5)
 
-Patch "Enable DLC Music in Battle Mode" in "Audio" by "ĐeäTh"
+Patch "Enable DLC Music in Battle Mode" in "Audio" by "ĐeäTh" does "Enables the level music of the DLC levels to play during the game's multiplayer mode."
 WriteNop(ASLR(0x0095B570), 6)
 
 Patch "Sideways Wall Jump Fix" in "Fixes" by "Sajid"
 WriteNop(ASLR(0x008C142C), 2)
 
-Patch "DLC Stages Always Replayable" in "Cheats" by "ĐeäTh"
+Patch "DLC Stages Always Replayable" in "Cheats" by "ĐeäTh" does "Disables the 100000 score requirement for unlocking the DLC levels once they are completed. Instead they will always stay on the world map."
 WriteNop(ASLR(0x0090D2BC), 2);
 String code = $@"mov eax, {ASLR(0x0090D210)}
 push 0
@@ -269,11 +269,11 @@ WriteProtected<byte>(ASLR(0x00912338), 0x57);
 WriteProtected<byte>(ASLR(0x00912326), 0x6A, 0x00);
 WriteNop(ASLR(0x0094594F), 12);
 
-Patch "Disable DLC Prizes" in "Gameplay" by "ĐeäTh"
+Patch "Disable DLC Prizes" in "Gameplay" by "ĐeäTh" does "Disables the prizes given by the DLC levels (bomb wisp) upon completion."
 WriteNop(ASLR(0x0094595B), 12);
 WriteNop(ASLR(0x00945630), 5);
 
-Patch "Fix Depth Of Field Draw Order" in "Fixes" by "Sajid"
+Patch "Fix Depth Of Field Draw Order" in "Fixes" by "Sajid" does "Changes the pseudo-dof implementation of the game into the proper one seen on Wii U."
 static int p_DofRes = (int)ASLR(0x00FEFC7C);
 static int p_GrassRes = (int)ASLR(0x00FB6D1C);
 static int p_ShadowRes = (int)ASLR(0x00FB6D1D);
@@ -449,28 +449,28 @@ fixed(float* multiplierPtr = &ms_RenderTextureMultiplier)
 WriteProtected<float>(ASLR(0x00D61CE8), 5120);
 WriteProtected<float>(ASLR(0x00D593B0), 2160);
 
-Patch "Force Language to Japanese" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to Japanese" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 0");
 
-Patch "Force Language to English" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to English" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 1");
 
-Patch "Force Language to French" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to French" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 2");
 
-Patch "Force Language to German" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to German" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 3");
 
-Patch "Force Language to Italian" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to Italian" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 4");
 
-Patch "Force Language to Spanish" in "UI" by "M&M & ĐeäTh"
+Patch "Force Language to Spanish" in "System" by "M&M & ĐeäTh"
 WriteAsmHook(ASLR(0x004AB9FF), HookBehavior.Replace, "mov eax, 5");
 
 Patch "Disable Wisp Hints" in "UI" by "Sajid"
 WriteNop(ASLR(0x0091AAF8), 6)
 
-Patch "Fix Rigid Bodies Falling Through Collision" in "Fixes" by "ĐeäTh & Darío"
+Patch "Fix Rigid Bodies Falling Through Collision" in "Fixes" by "ĐeäTh & Darío" does "Fixes enemies falling through the collision of the level occasionally."
 static int p_updateBroadphaseAndResetCollisionInformationOfWarpedBody = (int)ASLR(0x00AED500);
 static int p_setLinearVelocity = (int)ASLR(0x00B88220);
 
@@ -488,7 +488,7 @@ WriteAsmHook
 )
 
 Patch "Fix Depth Effects On Intel GPUs" in "Fixes" by "Skyth"
-WriteAsmHook(ASLR(0xC2B233), HookBehavior.Replace, @"
+WriteAsmHook(ASLR(0x00C2B233), HookBehavior.Replace, @"
 mov eax, dword ptr [ebp + 8]
 
 loop:
@@ -516,16 +516,16 @@ mov eax, [ecx + 0x64]
 mov ecx, [eax]
 ");
 
-Patch "Fix Pull Switch Grip Height" in "Fixes" by "ĐeäTh"
+Patch "Fix Pull Switch Grip Height" in "Fixes" by "ĐeäTh" does "Fixes the position of Sonic's grip compared to the light switches found in Silent Forest Act 4."
 WriteProtected<float>(ASLR(0x00DF2D14), -10.5f)
 
 Patch "No Instant Death Bomb Carts" in "Cheats" by "ĐeäTh"
 WriteNop(ASLR(0x007D82A2), 3);
 
-Patch "Infinite Bounce Attacks" in "Gameplay" by "ĐeäTh"
+Patch "Infinite Bounce Attacks" in "Cheats" by "ĐeäTh" does "Disables the 3 times limit on the bounce attack."
 WriteNop(ASLR(0x008CA177), 4);
 
-Patch "Traditional Countdown Timer" in "UI" by "ĐeäTh" does "Displays the timer in the typical 00:00.00 format, rather than counting down in seconds."
+Patch "Traditional Countdown Timer" in "UI" by "ĐeäTh" does "Displays the timer in the typical 00:00.00 format instead of the 000 format found in the game. The timer's functionality is not changed."
 // Allow bigger time constraints to be displayed on HUD
 WriteProtected<int>(ASLR(0x00501CC5), 3599);
 WriteProtected<int>(ASLR(0x00501CCC), 3599);
@@ -587,3 +587,13 @@ fixed(int* millisecondsPtr = &ms_milliseconds)
         ASLR(0x00501CE0), HookBehavior.Replace
     )
 }
+
+Patch "Disable Player Model Scaling" by "ĐeäTh" in "Graphics" does "Disables the scaling applied to Sonic's model during gameplay (includes a version of the 'Fix Pull Switch Grip Height' code in it, the use of the two together is unnecessary)."
+// Nop out the app::GOCVisualTransformed::SetLocalScale(0.9f, 0.9f, 0.9f); in app::Player::RegisterBodyModel()
+WriteNop(ASLR(0x008FE046), 41);
+
+// Adjust Spin Model Spin Scale
+WriteProtected<float>(ASLR(0x00E03670), 1.5f * 1.0f / 0.9f, 1.5f * 1.0f / 0.9f, 1.5f * 1.0f / 0.9f)
+
+// Adjust Grip Position for Light Switches in Silent Forest Act 4
+WriteProtected<float>(ASLR(0x00DF2D14), -11.7f)

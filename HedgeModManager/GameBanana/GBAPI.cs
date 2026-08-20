@@ -3,23 +3,36 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using HedgeModManager.UI;
-using System.IO;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Windows;
 
 namespace GameBananaAPI
 {
     public class GBAPI
     {
+        private static bool _serverRunning = false;
+        private static CancellationTokenSource _serverCancellationTokenSource = new CancellationTokenSource();
+
+        public static Dictionary<string, string> GameIDMappings = new()
+        {
+            { "6059" , "SonicGenerations" },
+            { "6160" , "SonicForces" },
+            { "6093" , "SonicLostWorld" },
+            { "8707" , "PuyoPuyoTetris2" },
+            { "11375", "SonicColorsUltimate" },
+            { "15780", "SonicOrigins" },
+            { "15779", "SonicFrontiers" },
+            { "19886", "ShadowGenerations" },
+            { "6559" , "UnleashedRecompiled" },
+            { "21975", "UnleashedRecompiled" },
+        };
 
         // TODO: Add Core/List support
         public enum GBAPIRequestType
@@ -156,7 +169,7 @@ namespace GameBananaAPI
             // Populate file list
             foreach (var file in item.Files)
             {
-                request = $"https://api.gamebanana.com/Core/Item/Data?itemtype=File&itemid={file.Key}&fields=Metadata().aArchiveFilesList()&return_keys=1";
+                request = $"https://api.gamebanana.com/Core/Item/Data?itemtype=File&itemid={file.Key}&fields=aFlattenedFileList()&return_keys=1";
                 response = await Singleton.GetInstance<HttpClient>().GetStringAsync(request);
                 response = Uri.UnescapeDataString(response);
                 file.Value.Files = JsonConvert.DeserializeObject<JObject>(response).First.First.ToObject<List<string>>();
@@ -190,7 +203,51 @@ namespace GameBananaAPI
 
         public static bool? ParseCommandLine(string line)
         {
-            string[] split = line.Split(',');
+            string[] split = line.Replace("https//", "https://").Split(',');
+
+            if (line.StartsWith("hedgemm://gamebanana/pair", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var splits = line.TrimEnd('/').Split('/');
+                if (splits.Length < 2)
+                    return false;
+                string id = splits[splits.Length - 2];
+                string key = splits[splits.Length - 1];
+
+                RegistryConfig.GameBananaRemoteInstallID = id;
+                RegistryConfig.GameBananaRemoteInstallKey = key;
+                RegistryConfig.Save();
+
+                HedgeApp.CreateOKMessageBox("Success", $"GameBanana Remote Install Paired Successfully").ShowDialog();
+                _ = RunRemoteInstallServer(_serverCancellationTokenSource.Token);
+                return false;
+            }
+
+            if (line.StartsWith("hedgemm://gamebanana/install", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var splits = line.Substring("hedgemm://gamebanana/install".Length + 1).Split(',');
+
+                if (splits.Length != 4)
+                    return false;
+
+                string gameID      = splits[0];
+                string downloadURL = splits[1];
+                string itemType    = splits[2];
+                string itemID      = splits[3];
+                string gameName    = GameIDMappings.ContainsKey(gameID) 
+                    ? GameIDMappings[gameID] 
+                    : gameID;
+
+                if (int.TryParse(split[3], out int id))
+                {
+                    return new GBModWindow(itemType, id, downloadURL, gameName).ShowDialog();
+                }
+                else
+                {
+                    HedgeApp.CreateOKMessageBox("Error", $"Invalid GameBanana item id {split[2]}").ShowDialog();
+                    return false;
+                }
+            }
+
             if (split.Length < 3) // help, I ddont know math
                 return false;
 
@@ -213,6 +270,72 @@ namespace GameBananaAPI
                 HedgeApp.CreateOKMessageBox("Error", ex.Message).ShowDialog();
                 return false;
             }
+        }
+
+        public static async Task<string[]> FetchRemoteInstallQueue(string memberID, string secretKey, string appID, CancellationToken c = default)
+        {
+            string url = $"https://gamebanana.com/apiv11/RemoteInstall/{memberID}/{secretKey}/{appID}";
+
+            var response = HedgeApp.HttpClient.GetAsync(url, c);
+            if (!response.Result.IsSuccessStatusCode)
+                return ["error"];
+
+            try
+            {
+                var content = await response.Result.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<string[]>(content);
+            }
+            catch { }
+            return [];
+        }
+
+        public static async Task RunRemoteInstallServer(CancellationToken c = default)
+        {
+            if (string.IsNullOrEmpty(RegistryConfig.GameBananaRemoteInstallID) || string.IsNullOrEmpty(RegistryConfig.GameBananaRemoteInstallKey))
+                return;
+
+            if (_serverRunning)
+                return;
+            _serverRunning = true;
+            try
+            {
+                var lastPoll = DateTime.MinValue;
+                var refreshTime = TimeSpan.FromSeconds(30);
+                while (!c.IsCancellationRequested)
+                {
+                    if (DateTime.Now - lastPoll < refreshTime)
+                    {
+                        await Task.Delay(250, c);
+                        continue;
+                    }
+
+                    string memberID = RegistryConfig.GameBananaRemoteInstallID;
+                    string secretKey = RegistryConfig.GameBananaRemoteInstallKey;
+                    var uris = await FetchRemoteInstallQueue(memberID, secretKey, "HedgeModManager", c);
+                    lastPoll = DateTime.Now;
+                    if (uris == null)
+                        continue;
+                    
+                    // TODO: Implement feedback
+                    if (uris.Length == 1 && uris[0] == "error")
+                        break;
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        foreach (string uri in uris)
+                        {
+                            try
+                            {
+                                ParseCommandLine(uri);
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    });
+                }
+            }catch { }
+            _serverRunning = false;
         }
 
     }
@@ -327,9 +450,6 @@ namespace GameBananaAPI
         [JsonProperty("_nFilesize")]
         public int FileSize { get; set; }
 
-        [JsonProperty("_sRelativeImageDir")]
-        public string ImageDirectory { get; set; }
-
         [JsonProperty("_sFile100")]
         public string FileSmall { get; set; }
 
@@ -337,7 +457,7 @@ namespace GameBananaAPI
         {
             get
             {
-                return $"http://files.gamebanana.com/{ImageDirectory}/{FileName}";
+                return $"https://images.gamebanana.com/img/ss/mods/{FileName}";
             }
         }
 
@@ -345,7 +465,7 @@ namespace GameBananaAPI
         {
             get
             {
-                return $"http://files.gamebanana.com/{ImageDirectory}/{FileSmall}";
+                return $"https://images.gamebanana.com/img/ss/mods/{FileSmall}";
             }
         }
     }

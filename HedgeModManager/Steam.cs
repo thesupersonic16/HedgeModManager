@@ -22,27 +22,52 @@ namespace HedgeModManager
             if (HedgeApp.IsLinux)
             {
                 string home = Environment.GetEnvironmentVariable("WINEHOMEDIR").Replace("\\??\\", "");
-                SteamLocation = Path.Combine(home, ".steam/steam");
+                var paths = new List<string>
+                {
+                    Path.Combine(home, ".steam/steam"),
+                    Path.Combine(home, ".var/app/com.valvesoftware.Steam/.steam/steam")
+                };
+
+                foreach (string path in paths)
+                {
+                    if (Directory.Exists(path))
+                    {
+                        SteamLocation = path;
+                        break;
+                    }
+                }
             }
 
-            var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
-                    .OpenSubKey("SOFTWARE\\Wow6432Node\\Valve\\Steam");
+            // Local Machine
+            {
+                var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
+                        .OpenSubKey("SOFTWARE\\Wow6432Node\\Valve\\Steam");
+                if (key == null || key.GetValue("InstallPath") == null)
+                {
+                    if (key != null)
+                        key.Close();
 
-            if (key == null)
-            {
-                key = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default)
-                    .OpenSubKey("Software\\Valve\\Steam");
-                if (key != null && key.GetValue("SteamPath") is string steamPath)
-                    SteamLocation = steamPath;
-            }
-            else
-            {
-                if (key == null)
                     key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default)
                     .OpenSubKey("SOFTWARE\\Valve\\Steam");
+                }
+                if (key != null)
+                {
+                    if (key.GetValue("InstallPath") is string steamPath && Directory.Exists(steamPath))
+                        SteamLocation = steamPath;
+                    key.Close();
+                }
+            }
 
-                if (key != null && key.GetValue("InstallPath") is string steamPath)
-                    SteamLocation = steamPath;
+            // Current User
+            {
+                var key = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default)
+                .OpenSubKey("Software\\Valve\\Steam");
+                if (key != null)
+                {
+                    if (key.GetValue("SteamPath") is string steamPath && Directory.Exists(steamPath))
+                        SteamLocation = steamPath;
+                    key.Close();
+                }
             }
         }
 
@@ -50,6 +75,9 @@ namespace HedgeModManager
         {
             return Path.Combine(SteamLocation, "config/avatarcache/", SID64 + ".png");
         }
+
+        public static string GetProtonPrefixPath(string gameId) =>
+            Path.Combine(SteamLocation, $"steamapps\\compatdata\\{gameId}\\pfx");
 
         public static List<GameInstall> SearchForGames()
         {
@@ -98,10 +126,11 @@ namespace HedgeModManager
                 {
                     foreach (var game in Games.GetSupportedGames())
                     {
-                        var fullPath = Path.Combine(libraryPath, game.GamePath);
-                        if (File.Exists(fullPath))
+                        foreach (string gamePath in game.GamePaths)
                         {
-                            games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.Steam));
+                            var fullPath = Path.Combine(libraryPath, gamePath);
+                            if (File.Exists(fullPath))
+                                games.Add(new GameInstall(game, null, fullPath, GameLauncher.Steam));
                         }
                     }
                 }

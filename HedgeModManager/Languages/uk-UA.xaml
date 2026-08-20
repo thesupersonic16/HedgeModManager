@@ -23,12 +23,16 @@
     <system:String x:Key="MainUIMods"          >Моди</system:String>
     <system:String x:Key="MainUICodes"         >Коди</system:String>
     <system:String x:Key="MainUISettings"      >Налаштування</system:String>
-    <system:String x:Key="MainUIAddMod"        >Додати Мод</system:String>
-    <system:String x:Key="MainUIRefreshModList">Оновити Список</system:String>
+    <system:String x:Key="MainUIAddMod"        >Додати мод</system:String>
+    <system:String x:Key="MainUIRefreshModList">Оновити список</system:String>
     <system:String x:Key="MainUISave"          >Зберегти</system:String>
-    <system:String x:Key="MainUISaveAndPlay"   >Зберег. та Запус.</system:String>
-    <system:String x:Key="MainUIConfigureMod"  >Налаштування Мода</system:String>
+    <system:String x:Key="MainUISaveAndPlay"   >Зберегти та запустити</system:String>
+    <system:String x:Key="MainUIConfigureMod"  >Налаштування мода</system:String>
     <system:String x:Key="MainUIMLDownloadFail">Не вдалося завантажити завантажувач модів.</system:String>
+    <system:String x:Key="MainUISelectGameTitle">Вибрати виконуваний файл гри</system:String>
+    <system:String x:Key="MainUISelectGameFilter">Виконуваний файл Windows</system:String>	
+    <system:String x:Key="MainUIInvalidGameHeader">Нерозпізнана гра</system:String>
+    <system:String xml:space="preserve" x:Key="MainUIInvalidGame">Hedge Mod Manager не вдалося розпізнати гру з&#x0a;обраного виконуваного файлу гри.</system:String>	
     <system:String xml:space="preserve" x:Key="MainUIMLInstallFail">Не вдалося встановити завантажувач модів.&#x0a;Будь ласка, переконайтеся, що у вас є права на запис ігрових файлів.</system:String>
     <system:String xml:space="preserve" x:Key="MainUIMLUninstallFail">Не вдалося видалити завантажувач модів.&#x0a;Будь ласка, переконайтеся, що на даний момент гра не запущена.</system:String>
 
@@ -63,54 +67,60 @@
     <!-- Codes UI Strings -->
     <system:String x:Key="CodesUIName"    >Назва</system:String>
     <system:String x:Key="CodesUICategory">Категорія</system:String>
-    <system:String x:Key="CodesUIDownload">Завантажити Користувацькі Коди</system:String>
-    <system:String x:Key="CodesUIUpdate"  >Оновити Користувацькі Коди</system:String>
+    <system:String x:Key="CodesUIDownload">Завантажити користувацькі коди</system:String>
+    <system:String x:Key="CodesUIUpdate"  >Оновити користувацькі коди</system:String>
     <system:String x:Key="CodesUISearch"  >Пошук: </system:String>
     <system:String x:Key="CodesUIInfo"    >Двічі клацніть цей код, щоб дізнатися більше.</system:String>
     <system:String x:Key="CodesUIInfoHint">Наведіть курсор на код, щоб дізнатися більше.</system:String>
     <system:String x:Key="CodesUINoInfo"  >Інформація відсутня.</system:String>
     <system:String x:Key="CodesUICopyCode">Копіювати код до буфера обміну</system:String>
     <system:String x:Key="CodesUIExpand"  >Розгорнути все</system:String>
+    <system:String x:Key="CodesUIExpandSub"   >Розгорнути усі дочірні гілки</system:String>	
     <system:String x:Key="CodesUICollapse">Згорнути все</system:String>
+    <system:String x:Key="CodesUICollapseSub" >Згорнути усі дочірні гілки</system:String>	
     <system:String x:Key="CodesUINullCategory">Без категорії</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIVersionIncompatible">Встановлені коди несумісні з завантажувачем кодів.&#x0a;Будь ласка, оновіть коди та завантажувач кодів.&#x0a;ПОПЕРЕДЖЕННЯ: Це призведе до видалення всіх користувацьких кодів.</system:String>
     <system:String xml:space="preserve" x:Key="CodesUIFetching">Отримання кодів...</system:String>
 
     <!-- Diff UI Strings -->
     <system:String x:Key="DiffUITitle"   >Список змін</system:String>
-    <system:String x:Key="DiffUIAdded"   >Додано: {0}</system:String>
-    <system:String x:Key="DiffUIModified">Змінено: {0}</system:String>
-    <system:String x:Key="DiffUIRemoved" >Видалено: {0}</system:String>
-    <system:String x:Key="DiffUIRenamed" >Перейменовано: {0}</system:String>
+    <system:String x:Key="DiffUIAdded"   >Додано</system:String>
+    <system:String x:Key="DiffUIModified">Змінено</system:String>
+    <system:String x:Key="DiffUIRemoved" >Видалено</system:String>
+    <system:String x:Key="DiffUIRenamed" >Перейменовано</system:String>
+    <system:String x:Key="DiffUIMoved"   >Переміщено</system:String>	
 
     <!-- Settings UI Strings -->
     <!--   Game & Mod Loader -->
-    <system:String x:Key="SettingsUIGMLHeader"      >Гра &amp; Завантажувач Модів</system:String>
-    <system:String x:Key="SettingsUIInstallLoader"  >Встановити Завантажувач Модів</system:String>
-    <system:String x:Key="SettingsUIUninstallLoader">Видалити Завантажувач Модів</system:String>
-    <system:String x:Key="SettingsUIOpenMods"       >Відкрити Каталог Модифікацій</system:String>
-    <system:String x:Key="SettingsUIOpenGameDir"    >Відкрити Каталог Ігор</system:String>
+    <system:String x:Key="SettingsUIGMLHeader"      >Гра та завантажувач модів</system:String>
+    <system:String x:Key="SettingsUIInstallLoader"  >Встановити завантажувач модів</system:String>
+    <system:String x:Key="SettingsUIUninstallLoader">Видалити завантажувач модів</system:String>
+    <system:String x:Key="SettingsUIOpenMods"       >Відкрити каталог модифікацій</system:String>
+    <system:String x:Key="SettingsUIOpenGameDir"    >Відкрити каталог ігор</system:String>
     <system:String x:Key="SettingsUIEnableML"       >Увімкнути завантажувач модів</system:String>
     <system:String x:Key="SettingsUIEnableDebug"    >Увімкнути консоль налагодження</system:String>
     <system:String x:Key="SettingsUIEnableSRedir"   >Увімкнути перенаправлення файлів збереження</system:String>
     <system:String x:Key="SettingsUIUseLauncher"    >Використовувати лаунчер гри</system:String>
+    <system:String x:Key="SettingsUIRemoveGame"     >Видалити гру</system:String>	
     <system:String x:Key="SettingsUILabelLoaders"   >Завантажувач:</system:String>
     <system:String x:Key="SettingsUILabelGame"      >Гра:</system:String>
     <system:String x:Key="SettingsUILabelProfile"   >Профіль:</system:String>
-    <system:String x:Key="SettingsUILabelMDir"      >Каталог Модів:</system:String>
+    <system:String x:Key="SettingsUILabelMDir"      >Каталог модів:</system:String>
     <!--   Hedge Mod Manager -->
     <system:String x:Key="SettingsUIHMMHeader"       >Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUICheckMLUpdate"   >Перевірити наявність оновлень завантажувача модифікацій</system:String>
     <system:String x:Key="SettingsUICheckCLUpdate"   >Перевірити наявність оновлень кодів</system:String>
     <system:String x:Key="SettingsUICheckModUpdates" >Перевірити наявність оновлень модів</system:String>
+    <system:String x:Key="SettingsUIUpdateCodesOnLaunch">Автоматично оновлювати коди після запуску</system:String>	
     <system:String x:Key="SettingsUIKeepHMMOpen"     >Тримати Hedge Mod Manager відкритим після запуску гри</system:String>
     <system:String x:Key="SettingsUICodesUseTreeView">Використовувати деревоподібний список кодів</system:String>
+    <system:String x:Key="SettingsUIUseAlternatingRows" >Чергування кольорів рядків</system:String>	
     <system:String x:Key="SettingsUICheckHMMUpdate"  >Перевірити наявність оновлень</system:String>
     <system:String x:Key="SettingsUIAboutHMM"        >Про Hedge Mod Manager</system:String>
     <system:String x:Key="SettingsUILanguage"        >Мова (Language):</system:String>
     <system:String x:Key="SettingsUITheme"           >Тема:</system:String>
-    <system:String x:Key="SettingsUIReleaseChannel"  >Канал Оновлень:</system:String>
-    <system:String x:Key="SettingsUIChangingChannelTitle" >Зміна Каналів Випуску</system:String>
+    <system:String x:Key="SettingsUIReleaseChannel"  >Канал оновлень:</system:String>
+    <system:String x:Key="SettingsUIChangingChannelTitle" >Зміна каналів випуску</system:String>
     <system:String x:Key="SettingsUIChangeChannelRel" xml:space="preserve">Ви збираєтеся перейти на канал Реліз.&#x0a;&#x0a;Ви впевнені, що хочете продовжити? Hedge Mod Manager потрібно перезапустити, щоб змінити канали.</system:String>
     <system:String x:Key="SettingsUIChangeChannelDev" xml:space="preserve">Ви зараз перейдете на канал Розробка. Цей канал може містити неперевірені функції та помилки.&#x0a;&#x0a;Ви впевнені, що хочете продовжити? Hedge Mod Manager потрібно перезапустити, щоб змінити канал.</system:String>
 
@@ -138,20 +148,20 @@
     <system:String x:Key="AboutWindowUILine1"      >Програма, розроблена, щоб допомогти людям легко завантажувати моди для Hedgehog Engine.</system:String>
     <system:String x:Key="AboutWindowUILine2"      >Потрібні ліцензійні версії підтримуваних ігор.</system:String>
     <system:String x:Key="AboutWindowUICredits"    >Автори</system:String>
-    <system:String x:Key="AboutWindowUITranslators">Перекладачи</system:String>
+    <system:String x:Key="AboutWindowUITranslators">Перекладачі</system:String>
 
     <!-- ProfileWindow UI Strings -->
-    <system:String x:Key="ProfileWindowUITitle"      >Керування Профілями</system:String>
-    <system:String x:Key="ProfileWindowUIRenameTitle">Перейменувати Профіль</system:String>
-    <system:String x:Key="ProfileWindowUICreateTitle">Зробити Профіль</system:String>
+    <system:String x:Key="ProfileWindowUITitle"      >Керування профілями</system:String>
+    <system:String x:Key="ProfileWindowUIRenameTitle">Перейменувати профіль</system:String>
+    <system:String x:Key="ProfileWindowUICreateTitle">Зробити профіль</system:String>
     <system:String x:Key="ProfileWindowUIName"       >Назва</system:String>
-    <system:String x:Key="ProfileWindowUIFile"       >Назва Файла</system:String>
+    <system:String x:Key="ProfileWindowUIFile"       >Назва файлу</system:String>
     <system:String x:Key="ProfileWindowUICreate"     >Зробити</system:String>
     <system:String x:Key="ProfileWindowUIRename"     >Перейменувати</system:String>
     <system:String x:Key="ProfileWindowUIClone"      >Клонувати</system:String>
     <system:String x:Key="ProfileWindowUIExport"     >Експорт</system:String>
     <system:String x:Key="ProfileWindowUIImport"     >Імпорт</system:String>
-    <system:String x:Key="ProfileWindowUIDelete"     >Видалити Профіль</system:String>
+    <system:String x:Key="ProfileWindowUIDelete"     >Видалити профіль</system:String>
     <system:String x:Key="ProfileWindowUINameLabel"  >Назва:</system:String>
     <system:String x:Key="ProfileWindowUIImportFail" >Не вдалося імпортувати профіль мода</system:String>
     <system:String x:Key="ProfileWindowUIImportMissingMods"   >Наступні модифікації не було знайдено:</system:String>
@@ -165,7 +175,7 @@
     <system:String x:Key="PropertyEditorUIValue">Значення</system:String>
 
     <!-- Status UI Strings -->
-    <system:String x:Key="StatusUILoadedMods"             >Завантажено {0} модів</system:String>
+    <system:String x:Key="StatusUILoadedMods"             >Завантажено модів: {0}</system:String>
     <system:String x:Key="StatusUICheckingModUpdates"     >Перевірка наявності оновлень для {0}</system:String>
     <system:String x:Key="StatusUIFailedToUpdate"         >Не вдалося оновити {0}! {1}</system:String>
     <system:String x:Key="StatusUIModUpdateCheckFinish"   >Перевірка на наявність оновлень мода: {0} виконано, {1} не виконано</system:String>
@@ -194,6 +204,10 @@
     <system:String xml:space="preserve" x:Key="DialogUIModUpdate"      >Доступна нова версія {0}! ({1})</system:String>
     <system:String xml:space="preserve" x:Key="DialogUIModCancelUpdate">Ви впевнені, що хочете скасувати оновлення?&#x0a;Це може призвести до пошкодження {0}</system:String>
     <system:String xml:space="preserve" x:Key="DialogUINoDecompressor" >Не вдалося знайти 7-Zip або WinRAR!&#x0a;Це потрібно для вилучення даних мода&#x0a;&#x0a;Будь ласка, переконайтеся, що у вашій системі встановлені ці програми.</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDevTitle">Нове оновлення на каналі Реліз</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUINewRelUpdateOnDev"     >На каналі Реліз є нове оновлення. Залишаючись на каналі Розробка може призвести до небажаної нестабільності.&#x0a;&#x0a;Бажаєте перейти на канал Реліз?</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorHeader" >Не вдалося завантажити налаштування мода</system:String>
+    <system:String xml:space="preserve" x:Key="DialogUIConfigLoadErrorBody"   >Мод "{0}" містить неправильно сформовану схему конфігурації.&#x0a;&#x0a;Будь ласка, зв'яжіться з автором "{1}" для підтримки.</system:String>	
 
     <!-- Status UI Lang Stuff Strings -->
     <system:String x:Key="StatusUIUpdateCompletedSingular"      >виконано</system:String>
@@ -208,10 +222,10 @@
     <system:String x:Key="ModDescriptionUIAbout">Про {0}</system:String>
     <system:String x:Key="ModDescriptionUIMadeBy">Зробив</system:String>
     <system:String x:Key="ModDescriptionUIMadeOn">Зроблено на</system:String>
-    <system:String x:Key="ModDescriptionUIDate">на</system:String>
+    <system:String x:Key="ModDescriptionUIDate">у</system:String>
 
     <!-- Mod Downloader Strings -->
-    <system:String x:Key="ModDownloaderFailed">Не Вдалося Завантажити Мод</system:String>
+    <system:String x:Key="ModDownloaderFailed">Не вдалося завантажити мод</system:String>
     <system:String xml:space="preserve" x:Key="ModDownloaderWebError">Під час завантаження сталася помилка. Сервери можуть бути непрацюючими або перевантаженими. Будь ласка, спробуйте пізніше. &#x0a;&#x0a;Деталі: {0}</system:String>
     <system:String x:Key="ModDownloaderNoGame">Не вдалось знайти гру</system:String>
     <system:String x:Key="ModDownloaderNoGameMes">Hedge Mod Manager не вдалося знайти інсталяцію {0}</system:String>
@@ -222,8 +236,13 @@
     <system:String x:Key="ModUpdatesTitle"        >Оновлення модів</system:String>
     <system:String x:Key="ModDownloadsTitle"      >Завантаження модів</system:String>
 
+    <!-- Game Selector Window Strings -->
+    <system:String x:Key="GameSelectorTitle"      >Виберіть гру...</system:String>
+    <system:String x:Key="GameSelectorHeader"     >Знайдейно декілька ігор</system:String>
+    <system:String x:Key="GameSelectorDescription">Будь ласка, виберіть гру нижче, у яку встановлюватимете мод.</system:String>
+
     <!-- Exception Window Strings -->
-    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager Вилетів</system:String>
+    <system:String x:Key="ExceptionWindowTitle"           >Hedge Mod Manager вилетів</system:String>
     <system:String x:Key="ExceptionWindowCrash"           >Hedge Mod Manager зробив виключення!</system:String>
     <system:String x:Key="ExceptionWindowUnhandled"       >Виникла помилка у Hedge Mod Manager</system:String>
     <system:String x:Key="ExceptionWindowButtonCopyLog"   >Копіювання журналу до буфера обміну</system:String>
@@ -238,10 +257,10 @@
     <system:String x:Key="ThemeDark"  >Темна</system:String>
     <system:String x:Key="ThemeDarker">Темніша</system:String>
     <system:String x:Key="ThemeOLED"  >OLED</system:String>
-    <system:String x:Key="ThemeLight" >Свтіла</system:String>
+    <system:String x:Key="ThemeLight" >Світла</system:String>
 
     <!-- Games -->
-    <system:String x:Key="GameSonicGenerations">Sonic Generations</system:String>
+    <system:String x:Key="GameSonicGenerations">Sonic Generations (2011)</system:String>
     <system:String x:Key="GameSonicLostWorld">Sonic Lost World</system:String>
     <system:String x:Key="GameSonicForces">Sonic Forces</system:String>
     <system:String x:Key="GamePuyoPuyoTetris2">Puyo Puyo Tetris 2</system:String>
@@ -249,7 +268,10 @@
     <system:String x:Key="GameSonicColorsUltimate">Sonic Colors: Ultimate</system:String>
     <system:String x:Key="GameSonicOrigins">Sonic Origins</system:String>
     <system:String x:Key="GameSonicFrontiers">Sonic Frontiers</system:String>
-    <system:String x:Key="GameNoGame">Гру Не Виявлено!</system:String>
+    <system:String x:Key="GameSonicGenerations2024">Sonic Generations (2024)</system:String>
+    <system:String x:Key="GameShadowGenerations">Shadow Generations</system:String>
+    <system:String x:Key="GameNoGame">Гру не виявлено!</system:String>
+    <system:String x:Key="GameAddGame">Додати гру</system:String>	
     <system:String x:Key="LauncherSteam">Steam</system:String>
     <system:String x:Key="LauncherEpic">Epic Games</system:String>
     <system:String x:Key="LauncherHeroic">Heroic</system:String>

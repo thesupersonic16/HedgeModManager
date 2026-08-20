@@ -8,14 +8,23 @@ namespace HedgeModManager
         private const string PersonalizePath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
         public static string ConfigPath { get; } = @"SOFTWARE\HEDGEMM";
-        public static string LastGameDirectory;
-        public static string ExtraGameDirectories;
+        public static string LastGameInstall;
+        public static string CustomGames;
         public static string UILanguage;
         public static string UITheme;
+        public static string GameBananaRemoteInstallID;
+        public static string GameBananaRemoteInstallKey;
 
         public static int CodesSortingColumnIndex = 1;
 
-        public static bool CodesUseTreeView = true;
+        public static bool CodesUseTreeView { get; set; } = true;
+        public static bool UpdateCodesOnLaunch { get; set; } = true;
+        public static bool CheckManagerUpdates { get; set; } = true;
+        public static bool CheckLoaderUpdates { get; set; } = true;
+        public static bool CheckModUpdates { get; set; } = true;
+        public static bool KeepOpen { get; set; } = true;
+        public static bool AllowEvents { get; set; } = true;
+        public static bool UseAlternatingRows { get; set; } = true;
 
         static RegistryConfig()
         {
@@ -26,12 +35,21 @@ namespace HedgeModManager
         {
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
             key.SetValue("ExecutablePath", Assembly.GetExecutingAssembly().Location);
-            key.SetValue("LastGame", LastGameDirectory);
-            key.SetValue(nameof(ExtraGameDirectories), ExtraGameDirectories);
+            key.SetValue(nameof(LastGameInstall), LastGameInstall);
+            key.SetValue(nameof(CustomGames), CustomGames);
             key.SetValue(nameof(UILanguage), UILanguage);
             key.SetValue(nameof(UITheme), UITheme);
+            key.SetValue(nameof(GameBananaRemoteInstallID), GameBananaRemoteInstallID);
+            key.SetValue(nameof(GameBananaRemoteInstallKey), GameBananaRemoteInstallKey);
             key.SetValue(nameof(CodesSortingColumnIndex), CodesSortingColumnIndex);
             key.SetValue(nameof(CodesUseTreeView), CodesUseTreeView ? 1 : 0);
+            key.SetValue(nameof(UpdateCodesOnLaunch), UpdateCodesOnLaunch ? 1 : 0);
+            key.SetValue(nameof(CheckManagerUpdates), CheckManagerUpdates ? 1 : 0);
+            key.SetValue(nameof(CheckLoaderUpdates), CheckLoaderUpdates ? 1 : 0);
+            key.SetValue(nameof(CheckModUpdates), CheckModUpdates ? 1 : 0);
+            key.SetValue(nameof(KeepOpen), KeepOpen ? 1 : 0);
+            key.SetValue(nameof(AllowEvents), AllowEvents ? 1 : 0);
+            key.SetValue(nameof(UseAlternatingRows), UseAlternatingRows ? 1 : 0);
             key.Close();
         }
 
@@ -50,12 +68,21 @@ namespace HedgeModManager
             }
 
             var key = Registry.CurrentUser.CreateSubKey(ConfigPath);
-            LastGameDirectory       = (string)key.GetValue("LastGame", string.Empty);
-            ExtraGameDirectories    = (string)key.GetValue(nameof(ExtraGameDirectories), string.Empty);
-            UILanguage              = (string)key.GetValue(nameof(UILanguage), HedgeApp.PCCulture);
-            UITheme                 = (string)key.GetValue(nameof(UITheme), useLightMode ? "LightTheme" : "DarkerTheme");
-            CodesSortingColumnIndex = (int)key.GetValue(nameof(CodesSortingColumnIndex), 1);
-            CodesUseTreeView        = (int)key.GetValue(nameof(CodesUseTreeView), 1) != 0;
+            LastGameInstall            = (string)key.GetValue(nameof(LastGameInstall), string.Empty);
+            CustomGames                = (string)key.GetValue(nameof(CustomGames), string.Empty);
+            UILanguage                 = (string)key.GetValue(nameof(UILanguage), HedgeApp.PCCulture);
+            UITheme                    = (string)key.GetValue(nameof(UITheme), useLightMode ? "LightTheme" : "DarkerTheme");
+            GameBananaRemoteInstallID  = (string)key.GetValue(nameof(GameBananaRemoteInstallID), string.Empty);
+            GameBananaRemoteInstallKey = (string)key.GetValue(nameof(GameBananaRemoteInstallKey), string.Empty);
+            CodesSortingColumnIndex    = (int)key.GetValue(nameof(CodesSortingColumnIndex), 1);
+            CodesUseTreeView           = (int)key.GetValue(nameof(CodesUseTreeView), 1) != 0;
+            UpdateCodesOnLaunch        = (int)key.GetValue(nameof(UpdateCodesOnLaunch), 1) != 0;
+            CheckManagerUpdates        = (int)key.GetValue(nameof(CheckManagerUpdates), 1) != 0;
+            CheckLoaderUpdates         = (int)key.GetValue(nameof(CheckLoaderUpdates), 1) != 0;
+            CheckModUpdates            = (int)key.GetValue(nameof(CheckModUpdates), 1) != 0;
+            KeepOpen                   = (int)key.GetValue(nameof(KeepOpen), 1) != 0;
+            AllowEvents                = (int)key.GetValue(nameof(AllowEvents), 1) != 0;
+            UseAlternatingRows         = (int)key.GetValue(nameof(UseAlternatingRows), 1) != 0;
             key.Close();
         }
     }

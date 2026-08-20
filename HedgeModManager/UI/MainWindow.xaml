@@ -9,10 +9,11 @@
         mc:Ignorable="d"
         Title="Hedge Mod Manager (7.0)" Unloaded="MainWindow_OnUnloaded"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown"
-        MinHeight="662" MinWidth="585" Height="662" Width="585" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
+        MinHeight="666" MinWidth="585" Height="666" Width="585" WindowStartupLocation="CenterScreen" Style="{StaticResource HedgeWindow}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <local:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
         <local:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
         <local:ModUpdateToBrushConverter x:Key="ModUpdateToBrushConverter"/>
@@ -23,15 +24,18 @@
             <MenuItem x:Name="ContextMenuItemConfigure" Header="{DynamicResource ModsUIModConfigure}" Click="UI_ConfigureMod_Click" InputGestureText="(Ctrl+C)"/>
             <MenuItem Header="{DynamicResource ModsUIModOpenFolder}" Click="UI_Open_Folder" InputGestureText="(Ctrl+O)"/>
             <MenuItem x:Name="ContextMenuItemCheckUpdate" Header="{DynamicResource ModsUIModCheckUpdates}" Click="UI_Update_Mod" InputGestureText="(Ctrl+U)"/>
-            <MenuItem Header="{DynamicResource ModsUIModEdit}" Click="UI_Edit_Mod" InputGestureText="(Ctrl+E)"/>
+            <MenuItem x:Name="ContextMenuItemEdit" Header="{DynamicResource ModsUIModEdit}" Click="UI_Edit_Mod" InputGestureText="(Ctrl+E)"/>
             <MenuItem Header="{DynamicResource ModsUIModDelete}" Click="UI_RemoveMod_Click" InputGestureText="(Delete)"/>
             <MenuItem x:Name="ContextMenuItemCheckUpdateAll" Header="{DynamicResource ModsUICheckUpdatesAll}" Click="UI_CheckUpdates_AllMods"/>
         </ContextMenu>
         <ContextMenu x:Key="CodesTreeContextMenu">
-            <MenuItem Header="{DynamicResource CodesUICopyCode}" Click="UI_CodesView_CopyToClipboard_Click" Tag="Item" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUICopyCode}"     Click="UI_CodesView_CopyToClipboard_Click" Tag="Item" Visibility="Collapsed"/>
             <Separator Style="{DynamicResource SeparatorThemeStyle}" Tag="Item" Visibility="Collapsed"/>
-            <MenuItem Header="{DynamicResource CodesUIExpand}"           Click="UI_CodesTree_ExpandAll_Click"/>
-            <MenuItem Header="{DynamicResource CodesUICollapse}"         Click="UI_CodesTree_CollapseAll_Click"/>
+            <MenuItem Header="{DynamicResource CodesUIExpandSub}"    Click="UI_CodesTree_ExpandAllChildren_Click"   Tag="Node" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUICollapseSub}"  Click="UI_CodesTree_CollapseAllChildren_Click" Tag="Node" Visibility="Collapsed"/>
+            <Separator Style="{DynamicResource SeparatorThemeStyle}" Tag="Node" Visibility="Collapsed"/>
+            <MenuItem Header="{DynamicResource CodesUIExpand}"       Click="UI_CodesTree_ExpandAll_Click"/>
+            <MenuItem Header="{DynamicResource CodesUICollapse}"     Click="UI_CodesTree_CollapseAll_Click"/>
         </ContextMenu>
         <ContextMenu x:Key="CodesListContextMenu">
             <MenuItem Header="{DynamicResource CodesUICopyCode}" Click="UI_CodesView_CopyToClipboard_Click"/>
@@ -67,7 +71,7 @@
                                       Margin="10,5,10,41" ItemsSource="{Binding Mods}" SelectedItem="{Binding SelectedMod}" SizeChanged="ModsList_SizeChanged"
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                                       dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseVisualSourceItemSizeForDragAdorner="True"
-                                      dd:DragDrop.DropHandler="{Binding}">
+                                      dd:DragDrop.DropHandler="{Binding}" AlternationCount="{Binding RowAlternationCount}">
                                 <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                         <EventSetter Event="MouseDoubleClick" Handler="UI_MouseDoubleClick"/>
@@ -193,12 +197,12 @@
                                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
                                                              Color="{DynamicResource HMM.Button.HoverColor}"/>
                                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                                             Color="{DynamicResource HMM.Button.HoverColor}" />
+                                                             Color="{DynamicResource HMM.Button.HoverColor}"/>
                                         </TreeView.Resources>
                                         <TreeView.ItemContainerStyle>
                                             <Style TargetType="{x:Type TreeViewItem}">
-                                                <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
-                                                <EventSetter Event="RequestBringIntoView" Handler="CodesTree_ViewItem_RequestBringIntoView"/>
+                                                <Setter      Property="IsExpanded"        Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                                <EventSetter Event="RequestBringIntoView" Handler="CodesTree_Item_RequestBringIntoView"/>
                                             </Style>
                                         </TreeView.ItemContainerStyle>
                                         <TreeView.ItemTemplate>
@@ -207,7 +211,7 @@
                                                     <Style TargetType="{x:Type TreeViewItem}">
                                                         <Setter Property="ToolTipService.ToolTip">
                                                             <Setter.Value>
-                                                                <ToolTip Content="{DynamicResource CodesUIInfo}" Tag="{Binding Path=Code.Description}">
+                                                                <ToolTip Content="{DynamicResource CodesUIInfo}" Tag="{Binding Path=Description}">
                                                                     <ToolTip.Style>
                                                                         <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
                                                                             <Style.Triggers>
@@ -223,10 +227,12 @@
                                                                 </ToolTip>
                                                             </Setter.Value>
                                                         </Setter>
-                                                        <EventSetter Event="MouseDoubleClick" Handler="CodesView_Item_MouseDoubleClick"/>
-                                                        <EventSetter Event="MouseEnter"       Handler="CodesView_Item_MouseEnter"/>
-                                                        <EventSetter Event="MouseLeave"       Handler="CodesView_Item_MouseLeave"/>
-                                                        <EventSetter Event="Selected"         Handler="CodesView_Item_Selected"/>
+                                                        <Setter      Property="IsExpanded"        Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                                        <EventSetter Event="RequestBringIntoView" Handler="CodesTree_Item_RequestBringIntoView"/>
+                                                        <EventSetter Event="MouseDoubleClick"     Handler="CodesView_Item_MouseDoubleClick"/>
+                                                        <EventSetter Event="MouseEnter"           Handler="CodesView_Item_MouseEnter"/>
+                                                        <EventSetter Event="MouseLeave"           Handler="CodesView_Item_MouseLeave"/>
+                                                        <EventSetter Event="Selected"             Handler="CodesView_Item_Selected"/>
                                                     </Style>
                                                 </HierarchicalDataTemplate.ItemContainerStyle>
                                                 <Grid>
@@ -236,8 +242,8 @@
                                                     </Grid.ColumnDefinitions>
 
                                                     <StackPanel Orientation="Horizontal">
-                                                        <CheckBox IsChecked="{Binding Path=Code.Enabled}" Margin="0,2,4,2" IsTabStop="False"
-                                                              Visibility="{Binding Path=IsRoot, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                                                        <CheckBox IsChecked="{Binding Path=Enabled}" Margin="0,2,4,2" IsTabStop="False"
+                                                              Visibility="{Binding Path=IsCategory, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
                                                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
                                                     </StackPanel>
                                                 </Grid>
@@ -275,9 +281,14 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Name="CodesListDescriptionRow" Height="24" MinHeight="24"/>
                                     </Grid.RowDefinitions>
-                                    
-                                    <ListView x:Name="CodesList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" SelectedItem="{Binding SelectedCode}" SizeChanged="CodesList_SizeChanged"
-                                          PreviewKeyDown="CodesList_OnPreviewKeyDown" GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click">
+
+                                    <ListView x:Name="CodesList"
+                                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White"
+                                              SelectedItem="{Binding SelectedCode}"
+                                              SizeChanged="CodesList_SizeChanged"
+                                              PreviewKeyDown="CodesList_OnPreviewKeyDown"
+                                              GridViewColumnHeader.Click="CodesList_GridViewColumnHeader_Click"
+                                              AlternationCount="{Binding RowAlternationCount}">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                                 <Setter Property="ContextMenu" Value="{DynamicResource CodesListContextMenu}"/>
@@ -398,10 +409,16 @@
                                         <!--<CheckBox Content="{DynamicResource SettingsUILoadTopBottom}" IsChecked="{Binding ModsDB.ReverseLoadOrder}"                Visibility="{Binding HiddenMode, Converter={StaticResource BoolToVisibilityConverter}}"/>-->
                                     </StackPanel>
 
-                                    <StackPanel Margin="0,80,10,0" HorizontalAlignment="Right" Width="200">
-                                        <Button x:Name="Button_OpenMods"    Content="{DynamicResource SettingsUIOpenMods}"        Click="UI_OpenMods_Click"    Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
-                                        <Button                             Content="{DynamicResource SettingsUIOpenGameDir}"     Click="UI_OpenGameDir_Click" Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
-                                        <Button x:Name="Button_OtherLoader" Content="{DynamicResource SettingsUIUninstallLoader}" Click="UI_OtherLoader_Click"                  HorizontalAlignment="Stretch" Height="27" IsEnabled="False"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <StackPanel Margin="0,80,10,0" HorizontalAlignment="Right" Width="120">
+                                            <Button Content="{DynamicResource SettingsUIRemoveGame}" Click="UI_RemoveGame_Click" Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27" Visibility="{Binding IsCustomGame, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="0,80,10,0" HorizontalAlignment="Right" Width="200">
+                                            <Button x:Name="Button_OpenMods"    Content="{DynamicResource SettingsUIOpenMods}"        Click="UI_OpenMods_Click"    Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
+                                            <Button                             Content="{DynamicResource SettingsUIOpenGameDir}"     Click="UI_OpenGameDir_Click" Margin="0,0,0,5" HorizontalAlignment="Stretch" Height="27"/>
+                                            <Button x:Name="Button_OtherLoader" Content="{DynamicResource SettingsUIUninstallLoader}" Click="UI_OtherLoader_Click"                  HorizontalAlignment="Stretch" Height="27" IsEnabled="False"/>
+                                        </StackPanel>
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
@@ -409,12 +426,13 @@
                             <GroupBox Header="{DynamicResource SettingsUIHMMHeader}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2">
                                 <Grid>
                                     <StackPanel x:Name="HMMSettingsSackPanel" Margin="10,10,0,0">
-                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"       IsChecked="{Binding CPKREDIR.CheckForUpdates}"     Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"       IsChecked="{Binding CPKREDIR.CheckLoaderUpdates}"  Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"     IsChecked="{Binding CPKREDIR.CheckForModUpdates}"  Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUIUpdateCodesOnLaunch}" IsChecked="{Binding CPKREDIR.UpdateCodesOnLaunch}" Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"         IsChecked="{Binding CPKREDIR.KeepOpen}"            Margin="0,0,0,5"/>
-                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckMLUpdate}"       IsChecked="{Binding Path=(local:RegistryConfig.CheckManagerUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckCLUpdate}"       IsChecked="{Binding Path=(local:RegistryConfig.CheckLoaderUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICheckModUpdates}"     IsChecked="{Binding Path=(local:RegistryConfig.CheckModUpdates)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIUpdateCodesOnLaunch}" IsChecked="{Binding Path=(local:RegistryConfig.UpdateCodesOnLaunch)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIKeepHMMOpen}"         IsChecked="{Binding Path=(local:RegistryConfig.KeepOpen)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUICodesUseTreeView}"    Checked="CheckBox_CodesUseTreeView_Checked" Unchecked="CheckBox_CodesUseTreeView_Checked" Name="CheckBox_CodesUseTreeView" Margin="0,0,0,5"/>
+                                        <CheckBox Content="{DynamicResource SettingsUIUseAlternatingRows}"  IsChecked="{Binding Path=(local:RegistryConfig.UseAlternatingRows)}" Checked="CheckBox_RegistryConfig_Checked" Unchecked="CheckBox_RegistryConfig_Checked"/>
                                     </StackPanel>
 
                                     <Grid>
@@ -458,11 +476,11 @@
                 
                 <Grid Grid.Row="1" Background="{DynamicResource HMM.Window.DialogBottom}">
                     <Grid Margin="8,1,8,0" VerticalAlignment="Center" Height="56">
-                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Width="280" HorizontalAlignment="Left" Margin="0,8,5,8" SelectionChanged="Game_Changed">
+                        <ComboBox x:Name="ComboBox_GameStatus" ItemsSource="{Binding Games}" Width="285" HorizontalAlignment="Left" Margin="0,8,5,8" SelectionChanged="Game_Changed">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Border Width="32" Height="32" CornerRadius="3" RenderOptions.BitmapScalingMode="Fant">
+                                        <Border Width="32" Height="32" CornerRadius="3" RenderOptions.BitmapScalingMode="Fant" x:Name="GameImageBorder">
                                             <Border.Background>
                                                 <ImageBrush ImageSource="{Binding GameImage}"/>
                                             </Border.Background>

@@ -1,4 +1,5 @@
 ﻿using HedgeModManager.Properties;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,8 +7,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static HedgeModManager.Lang;
 
 namespace HedgeModManager
@@ -19,133 +18,186 @@ namespace HedgeModManager
         public const string EmbeddedCPKREDIRVersion = "0.5.0.8";
 
         public static Game Unknown = new Game();
+        
         public static Game SonicGenerations = new Game()
         {
             GameName = "SonicGenerations",
-            ExecutableName = "SonicGenerations.exe",
             SaveName = "cpkredir.sav",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
-            Folders = new [] { "disk/bb", "disk/bb2", "disk/bb3" },
+            Folders = ["disk/bb", "disk/bb2", "disk/bb3"],
             AppID = "71340",
             GBProtocol = "hedgemmgens",
             Is64Bit = false,
-            ModLoader = ModLoaders.GenerationsCodeLoader,
+            ModLoader = ModLoaders.HE1ModLoader,
             CodesURL = Resources.URL_BLUEBLUR_CODES,
-            GamePath = Path.Combine("Sonic Generations", "SonicGenerations.exe")
+            GamePaths = [Path.Combine("Sonic Generations", "SonicGenerations.exe")],
+            Timestamps = [0x4ED631A1]
         };
 
         public static Game SonicLostWorld = new Game()
         {
             GameName = "SonicLostWorld",
-            ExecutableName = "slw.exe",
             SaveName = "cpkredir.sav",
             SupportsCPKREDIR = true,
             SupportsSaveRedirection = true,
-            Folders = new[] { "disk/sonic2013_patch_0" },
+            Folders = ["disk/sonic2013_patch_0"],
             AppID = "329440",
             GBProtocol = "hedgemmlw",
             Is64Bit = false,
-            ModLoader = ModLoaders.LostCodeLoader,
+            ModLoader = ModLoaders.HE1ModLoader,
             CodesURL = Resources.URL_SONIC2013_CODES,
-            GamePath = Path.Combine("Sonic Lost World", "slw.exe")
+            GamePaths = [Path.Combine("Sonic Lost World", "slw.exe")],
+            Timestamps = [0x5677710B]
         };
 
         // TODO: Change SaveName to "savedata.xml" once we have code to transfer fallback saves to the new name.
         public static Game SonicForces = new Game()
         {
             GameName = "SonicForces",
-            ExecutableName = "Sonic Forces.exe",
             SaveName = "cpkredir.sav",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
-            Folders = new[] { "disk/wars_patch" },
+            Folders = ["disk/wars_patch"],
             AppID = "637100",
             GBProtocol = "hedgemmforces",
             Is64Bit = true,
-            ModLoader = ModLoaders.HE2ModLoader,
+            ModLoader = ModLoaders.HE2ModLoaderD3D11,
             CodesURL = Resources.URL_WARS_CODES,
-            GamePath = Path.Combine("SonicForces", "build", "main", "projects", "exec", "Sonic Forces.exe")
+            GamePaths = [Path.Combine("SonicForces", "build", "main", "projects", "exec", "Sonic Forces.exe")]
         };
 
         public static Game PuyoPuyoTetris2 = new Game()
         {
             GameName = "PuyoPuyoTetris2",
-            ExecutableName = "PuyoPuyoTetris2.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
-            Folders = new[] { "raw" },
+            Folders = ["raw"],
             AppID = "1259790",
             GBProtocol = "hedgemmtenpex",
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_TENPEX_CODES,
-            GamePath = Path.Combine("PuyoPuyoTetris2", "PuyoPuyoTetris2.exe")
+            GamePaths = [Path.Combine("PuyoPuyoTetris2", "PuyoPuyoTetris2.exe")]
         };
 
         public static Game Tokyo2020 = new Game()
         {
             GameName = "Tokyo2020",
-            ExecutableName = "musashi.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
-            Folders = new[] { "musashi_0" },
+            Folders = ["musashi_0"],
             AppID = "981890",
             GBProtocol = "hedgemmmusashi",
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_MUSASHI_CODES,
-            GamePath = Path.Combine("Tokyo2020", "musashi.exe")
+            GamePaths = [Path.Combine("Tokyo2020", "musashi.exe")]
         };
 
         public static Game SonicColorsUltimate = new Game()
         {
             GameName = "SonicColorsUltimate",
-            ExecutableName = "Sonic Colors - Ultimate.exe",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = false,
-            Folders = new[] { "PCCriPak" },
+            Folders = ["PCCriPak"],
             AppID = "2055290",
             EGSID = "e5071e19d08c45a6bdda5d92fbd0a03e",
             GBProtocol = "hedgemmrainbow",
             Is64Bit = true,
             ModLoader = ModLoaders.RainbowModLoader,
             CodesURL = Resources.URL_RAINBOW_CODES,
-            GamePath = Path.Combine("SonicColorsUltimate", "exec", "SonicColorsUltimate.exe"),
-            GamePathEGS = Path.Combine("SonicColorsUltimate", "rainbow Shipping", "Sonic Colors - Ultimate.exe")
+            GamePaths = [
+                Path.Combine("SonicColorsUltimate", "exec", "SonicColorsUltimate.exe"),
+                Path.Combine("SonicColorsUltimate", "rainbow Shipping", "Sonic Colors - Ultimate.exe")
+            ]
         };
 
         public static Game SonicOrigins = new Game()
         {
             GameName = "SonicOrigins",
-            ExecutableName = "SonicOrigins.exe",
             SaveName = "savedata",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
-            Folders = new[] { "raw", "Sonic1u", "Sonic2u", "Sonic3ku", "SonicCDu" },
+            Folders = ["raw", "Sonic1u", "Sonic2u", "Sonic3ku", "SonicCDu"],
             AppID = "1794960",
             EGSID = "5070a8e44cf74ba3b9a4ca0c0dce5cf1",
             GBProtocol = "hedgemmhite",
             Is64Bit = true,
             ModLoader = ModLoaders.HiteModLoader,
             CodesURL = Resources.URL_HITE_CODES,
-            GamePath = Path.Combine("SonicOrigins", "build", "main", "projects", "exec", "SonicOrigins.exe")
+            GamePaths = [Path.Combine("SonicOrigins", "build", "main", "projects", "exec", "SonicOrigins.exe")],
+            Timestamps = [0x65041AFB]
         };
 
         public static Game SonicFrontiers = new Game()
         {
             GameName = "SonicFrontiers",
-            ExecutableName = "SonicFrontiers.exe",
             SaveName = "savedata",
             SupportsCPKREDIR = false,
             SupportsSaveRedirection = true,
-            Folders = new[] { "raw" },
+            Folders = ["raw"],
             AppID = "1237320",
+            EGSID = "c5ca98fa240c4eb796835f97126df8e7",
             GBProtocol = "hedgemmrangers",
             Is64Bit = true,
             ModLoader = ModLoaders.HE2ModLoader,
             CodesURL = Resources.URL_RANGERS_CODES,
-            GamePath = Path.Combine("SonicFrontiers", "SonicFrontiers.exe")
+            GamePaths = [Path.Combine("SonicFrontiers", "SonicFrontiers.exe")],
+            Timestamps = [0x65510C9C]
+        };
+
+        // TODO: implement loader.
+        public static Game SonicGenerations2024 = new Game()
+        {
+            GameName = "SonicGenerations2024",
+            ModsDirectoryName = "mods_sonic",
+            SaveName = "savedata",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = ["raw"],
+            AppID = "2513280",
+            EGSID = "a88805d3fbec4ca9bfc248105f6adb0a",
+            GBProtocol = "hedgemmmillersonic",
+            Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoader, // TODO: use HE1ML?
+            CodesURL = Resources.URL_MILLER_SONIC_CODES,
+            GamePaths = [Path.Combine("SONIC_X_SHADOW_GENERATIONS", "SONIC_GENERATIONS.exe")],
+            Timestamps = [0x66F6109A]
+        };
+
+        public static Game ShadowGenerations = new Game()
+        {
+            GameName = "ShadowGenerations",
+            ModsDirectoryName = "mods_shadow",
+            SaveName = "savedata",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = ["raw"],
+            AppID = "2513280",
+            EGSID = "a88805d3fbec4ca9bfc248105f6adb0a",
+            GBProtocol = "hedgemmmillershadow",
+            Is64Bit = true,
+            ModLoader = ModLoaders.HE2ModLoaderD3D11,
+            CodesURL = Resources.URL_MILLER_SHADOW_CODES,
+            GamePaths = [Path.Combine("SONIC_X_SHADOW_GENERATIONS", "SONIC_X_SHADOW_GENERATIONS.exe")],
+            Timestamps = [0x66F609C2, 0x66F55857]
+        };
+
+        public static Game UnleashedRecompiled = new Game()
+        {
+            GameName = "UnleashedRecompiled",
+            SaveName = "",
+            SupportsCPKREDIR = false,
+            SupportsSaveRedirection = true,
+            Folders = [],
+            AppID = "",
+            GBProtocol = "hedgemmswa",
+            Is64Bit = true,
+            ModLoader = null,
+            CodesURL = Resources.URL_SWA_CODES,
+            GamePaths = [":HKEY_CURRENT_USER\\SOFTWARE\\UnleashedRecomp"],
+            SupportsCodeCompilation = false
         };
 
         public static IEnumerable<Game> GetSupportedGames()
@@ -158,27 +210,26 @@ namespace HedgeModManager
             yield return SonicColorsUltimate;
             yield return SonicOrigins;
             yield return SonicFrontiers;
+            // yield return SonicGenerations2024;
+            yield return ShadowGenerations;
+            yield return UnleashedRecompiled;
         }
     }
 
     internal static class EmbeddedLoaders
     {
-        public static byte[] GenerationsCodeLoader;
-        public static byte[] LostCodeLoader;
+        public static byte[] HE1ModLoader;
         public static byte[] HE2ModLoader;
         public static byte[] RainbowModLoader;
-        public static byte[] HiteModLoader;
 
         static EmbeddedLoaders()
         {
             using (var stream = new MemoryStream(Resources.DAT_LOADERS_ZIP))
             using (var zip = new ZipArchive(stream))
             {
-                GenerationsCodeLoader = GetFile("SonicGenerationsCodeLoader.dll");
-                LostCodeLoader = GetFile("LostCodeLoader.dll");
+                HE1ModLoader = GetFile("HE1ML.dll");
                 HE2ModLoader = GetFile("HE2ModLoader.dll");
                 RainbowModLoader = GetFile("RainbowModLoader.dll");
-                HiteModLoader = GetFile("HiteModLoader.dll");
 
                 byte[] GetFile(string name)
                 {
@@ -197,8 +248,8 @@ namespace HedgeModManager
     public class Game
     {
         public string GameName = "NoGame";
-        public string ExecutableName = string.Empty;
         public string SaveName = string.Empty;
+        public string ModsDirectoryName = "mods";
         public ModLoader ModLoader = null;
         public bool SupportsCPKREDIR = false;
         public bool SupportsSaveRedirection = false;
@@ -208,53 +259,63 @@ namespace HedgeModManager
         public string GBProtocol;
         public bool Is64Bit = false;
         public string CodesURL;
-        public string GamePath = string.Empty;
-        public string GamePathEGS = string.Empty;
+        public string[] GamePaths = [];
+        public uint[] Timestamps = null;
+        public bool SupportsCodeCompilation = true;
 
         public override string ToString() => Localise("Game" + GameName, GameName);
     }
 
     public class GameInstall
     {
-        public Game BaseGame;
+        public static GameInstall Unknown = new GameInstall(Games.Unknown, null, null, GameLauncher.None);
+
+        public Game Game;
         public string GameDirectory;
+        public string ExecutablePath;
         public GameLauncher Launcher;
         public bool ShowLauncher = false;
+        public bool IsCustom { get; set; } = false;
 
-        public string GameName { get { return Localise("Game" + BaseGame?.GameName, BaseGame?.GameName) + (ShowLauncher ? $" ({Localise("Launcher" + Launcher)})" : ""); } }
-        public Uri GameImage { get { return HedgeApp.GetResourceUri($"Resources/Graphics/Games/{BaseGame?.GameName}.png"); } }
+        public string GameName => GetGameTitle();
+        public Uri GameImage { get { return HedgeApp.GetResourceUri($"Resources/Graphics/Games/{Game?.GameName}.png"); } }
 
-        public GameInstall(Game game, string directory, GameLauncher launcher)
+        public GameInstall(Game game, string directory, string executablePath, GameLauncher launcher, bool custom = false)
         {
-            BaseGame = game;
-            GameDirectory = directory;
+            Game = game;
+            if (string.IsNullOrEmpty(directory) && !string.IsNullOrEmpty(executablePath))
+                GameDirectory = Path.GetDirectoryName(executablePath);
+            else
+                GameDirectory = directory;
+            ExecutablePath = executablePath;
             Launcher = launcher;
+            IsCustom = custom;
         }
 
         public void StartGame(bool useLauncher = true, string startDirectory = null)
         {
             if (string.IsNullOrEmpty(startDirectory))
-                startDirectory = HedgeApp.StartDirectory;
+                startDirectory = GameDirectory;
 
             if (useLauncher)
             {
                 switch (Launcher)
                 {
                     case GameLauncher.Steam:
-                        HedgeApp.StartURL($"steam://run/{BaseGame.AppID}", true);
+                        HedgeApp.StartURL($"steam://run/{Game.AppID}", true);
                         break;
                     case GameLauncher.Epic:
                         Process.Start(new ProcessStartInfo
                         {
-                            FileName = $"com.epicgames.launcher://apps/{BaseGame.EGSID}?action=launch&silent=true",
+                            FileName = $"com.epicgames.launcher://apps/{Game.EGSID}?action=launch&silent=true",
                             UseShellExecute = true
                         });
                         break;
                     case GameLauncher.Heroic:
-                        HedgeApp.StartURL($"heroic://launch/{BaseGame.EGSID}", true);
+                        HedgeApp.StartURL($"heroic://launch/{Game.EGSID}", true);
                         break;
                     default:
-                        Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
+                        Process.Start(new ProcessStartInfo(ExecutablePath)
                         {
                             WorkingDirectory = startDirectory
                         });
@@ -263,7 +324,7 @@ namespace HedgeModManager
             }
             else
             {
-                Process.Start(new ProcessStartInfo(Path.Combine(startDirectory, BaseGame.ExecutableName))
+                Process.Start(new ProcessStartInfo(ExecutablePath)
                 {
                     WorkingDirectory = startDirectory
                 });
@@ -274,7 +335,6 @@ namespace HedgeModManager
         {
             var steamGames = Steam.SearchForGames();
             var epicGames = Epic.SearchForGames();
-
             var games = new List<GameInstall>();
 
             if (steamGames != null)
@@ -283,40 +343,114 @@ namespace HedgeModManager
             if (epicGames != null)
                 games.AddRange(epicGames);
 
-            // Extra directories
-            if (!string.IsNullOrEmpty(RegistryConfig.ExtraGameDirectories))
+            // Search for registry searchable games
+            var hives = new Dictionary<string, RegistryKey>()
             {
-                foreach (string path in RegistryConfig.ExtraGameDirectories.Split(';'))
+                { "HKEY_CURRENT_USER", Registry.CurrentUser }
+            };
+            foreach (var game in Games.GetSupportedGames())
+            {
+                foreach (string path in game.GamePaths
+                    .Where(x => x.StartsWith(":") && x.Contains("\\")))
                 {
-                    if (Directory.Exists(path))
-                    {
-                        foreach (var game in Games.GetSupportedGames())
-                        {
-                            string fullPath = Path.Combine(path, game.ExecutableName);
-                            if (File.Exists(fullPath))
-                            {
-                                games.Add(new GameInstall(game, Path.GetDirectoryName(fullPath), GameLauncher.None));
-                            }
-                        }
-                    }
+                    string hiveName = path.Substring(1).Split('\\')[0];
+                    string keyPath = path.Substring(hiveName.Length + 2);
+                    var hive = hives[hiveName];
+                    var key = hive.OpenSubKey(keyPath);
+                    if (key == null)
+                        continue;
+
+                    string exePath = key.GetValue("ExecutableFilePath") as string;
+                    string dirPath = key.GetValue("RootDirectoryPath") as string;
+                    if (File.Exists(exePath))
+                        games.Add(new GameInstall(game, dirPath, exePath, GameLauncher.None));
                 }
             }
 
-            // Check for dupes
-            foreach (var game in games.GroupBy(t => t.BaseGame).Where(t => t.Count() > 1).Select(t => t.Key))
+            // Extra directories
+            if (!string.IsNullOrEmpty(RegistryConfig.CustomGames))
             {
-                foreach (var install in games.Where(t => t.BaseGame == game))
+                foreach (string entry in RegistryConfig.CustomGames.Split(';'))
+                {
+                    string[] split = entry.Split('|');
+                    // Should follow the format below, can be a directory at this point for compatibility
+                    // e.g. "A:\Games\Sonic Generations\SonicGenerations.exe|SonicGenerations|Steam"
+                    string path = split[0];
+                    var game = Games.Unknown;
+                    var launcher = GameLauncher.None;
+
+                    if (split.Length > 1)
+                        game = Games.GetSupportedGames().FirstOrDefault(x => x.GameName == split[1]);
+
+                    if (split.Length > 2)
+                        Enum.TryParse(split[2], out launcher);
+
+                    // Guess game for compatibility
+                    if (game == Games.Unknown && Directory.Exists(path))
+                    {
+                        game = Games.GetSupportedGames().FirstOrDefault(x =>
+                        {
+                            foreach (string gamePath in x.GamePaths)
+                            {
+                                if (File.Exists(Path.Combine(path, gamePath)))
+                                    return true;
+                            }
+                            return false;
+                        });
+                        path = Path.Combine(path, game.GamePaths[0]);
+                    }
+
+                    if (File.Exists(path))
+                        games.Add(new GameInstall(game, null, path, launcher, true));
+                }
+            }
+
+            HandleGameInstallDuplicates(games);
+
+            return !string.IsNullOrEmpty(preference)
+                ? games.OrderBy(x => x.Game.GameName != preference).ToList()
+                : games;
+        }
+
+        public static void HandleGameInstallDuplicates(List<GameInstall> games)
+        {
+            // Reset launcher visibility
+            games.ForEach(game => game.ShowLauncher = false);
+
+            // Show launcher for duplicates
+            foreach (var game in games.GroupBy(t => t.Game).Where(t => t.Count() > 1).Select(t => t.Key))
+            {
+                foreach (var install in games.Where(t => t.Game == game))
                 {
                     install.ShowLauncher = true;
                 }
             }
 
-            return !string.IsNullOrEmpty(preference)
-                ? games.OrderBy(x => x.BaseGame.GameName != preference).ToList()
-                : games;
+            // Remove duplicates with same path
+            foreach (var game in games.GroupBy(t => t.ExecutablePath).Where(t => t.Count() > 1).Select(t => t.Key))
+            {
+                var installs = games.Where(t => t.ExecutablePath == game).ToList();
+                for (int i = installs.Count - 1; i > 0; i--)
+                    games.Remove(installs[i]);
+            }
         }
 
-        public override string ToString() => Localise("Game" + BaseGame.GameName, BaseGame.GameName);
+        public string GetGameTitle()
+        {
+            string title = Localise("Game" + Game.GameName, Game.GameName);
+
+            if (ShowLauncher)
+            {
+                if (Launcher == GameLauncher.None)
+                    title += $" ({Path.GetFileNameWithoutExtension(ExecutablePath)})";
+                else
+                    title += $" ({Localise("Launcher" + Launcher)})";
+            }
+
+            return title;
+        }
+
+        public override string ToString() => Localise("Game" + Game.GameName, Game.GameName);
     }
 
     public enum GameLauncher

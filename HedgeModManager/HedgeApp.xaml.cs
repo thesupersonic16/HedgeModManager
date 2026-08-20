@@ -42,9 +42,11 @@ using HedgeModManager.Updates;
 using System.Security;
 using System.Windows.Interop;
 using System.Windows.Shell;
+using HedgeModManager.Annotations;
 using static HedgeModManager.Lang;
 using Microsoft.Win32;
 using HedgeModManager.CLI;
+using HedgeModManager.CodeCompiler;
 
 namespace HedgeModManager
 {
@@ -59,20 +61,18 @@ namespace HedgeModManager
         public static Version Version = Assembly.GetExecutingAssembly().GetName().Version;
         public static string StartDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static string AppPath = Path.Combine(StartDirectory, AppDomain.CurrentDomain.FriendlyName);
-        public static string ProgramName = "Hedge Mod Manager";
+        public static string ProgramName { get; set; } = "Hedge Mod Manager";
         public static string VersionString = $"{Version.Major}.{Version.Minor}-{Version.Revision}";
         public static string ModsDbPath;
         public static string ConfigPath;
-        public static string CPKREDIRVersion;
         public static string[] Args;
-        public static Game CurrentGame = Games.Unknown;
-        public static GameInstall CurrentGameInstall;
+        public static GameInstall CurrentGameInstall = GameInstall.Unknown;
         public static CPKREDIRConfig Config;
         public static List<GameInstall> GameInstalls = null;
         public static string PCCulture = "";
         public static NetworkConfig NetworkConfiguration = new Singleton<NetworkConfig>(new NetworkConfig());
         public static List<ModProfile> ModProfiles = new List<ModProfile>();
-        public static bool AprilFools, IizukaBirthday, IsLinux = false;
+        public static bool IsLinux = false;
 
         public static HttpClient HttpClient { get; private set; }
         public static string UserAgent { get; }
@@ -115,9 +115,6 @@ namespace HedgeModManager
             Singleton.SetInstance(HttpClient);
             Singleton.SetInstance<IWindowService>(new WindowServiceImplWindows());
 
-            AprilFools      = DateTime.Now.Day == 1 && DateTime.Now.Month == 4;
-            IizukaBirthday  = DateTime.Now.Day == 16 && DateTime.Now.Month == 3;
-
             // Check for Wine, assuming Linux
             RegistryKey key = null;
             if ((key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).OpenSubKey("SOFTWARE\\Wine")) != null)
@@ -158,7 +155,15 @@ namespace HedgeModManager
 
             // Include commit hash if defined
             if (!string.IsNullOrEmpty(RepoCommit))
+            {
+                ProgramName += " Development";
                 VersionString += $"-{RepoCommit.Substring(0, 7)}";
+            }else if (IsLinux)
+            {
+                string caption = "End of Support Warning";
+                string text = "Hedge Mod Manager 7 is no longer supported on Linux.\n\nPlease upgrade to Hedge Mod Manager 8 or newer.";
+                MessageBox.Show(text, caption, MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
 
             var application = new HedgeApp();
             application.InitializeComponent();
@@ -174,15 +179,6 @@ namespace HedgeModManager
             };
 #endif
 
-            SplashScreen splashScreen = null;
-            if (AprilFools || IizukaBirthday)
-            {
-                splashScreen = new ("Resources/Graphics/splash.png");
-                splashScreen.Show(false, true);
-            }
-
-            // Gets the embeded version
-            CPKREDIRVersion = GetCPKREDIRFileVersion(true);
             RegistryConfig.Load();
             _ = LoadNetworkConfigAsync();
 
@@ -198,12 +194,13 @@ namespace HedgeModManager
             if (CurrentCulture != null)
                 LoadLanguage(CurrentCulture.FileName);
             CountLanguages();
+            if (IsLinux)
+                Linux.PatchHMMRegistry();
+            _ = GBAPI.RunRemoteInstallServer();
 #if DEBUG
             // Find a Steam Game
-            GameInstalls = GameInstall.SearchForGames("SonicGenerations");
-            var steamGame = GameInstalls.FirstOrDefault();
-            SelectGameInstall(steamGame);
-            StartDirectory = steamGame.GameDirectory;
+            GameInstalls = GameInstall.SearchForGames(nameof(Games.SonicGenerations));
+            SelectGameInstall(GameInstalls.FirstOrDefault());
             if (File.Exists("key.priv.xml"))
             {
                 using (var stream = File.OpenRead("key.priv.xml"))
@@ -214,62 +211,29 @@ namespace HedgeModManager
             }
 #else
             GameInstalls = GameInstall.SearchForGames();
-            if (FindAndSetLocalGame() == null)
-            {
-                if (!string.IsNullOrEmpty(RegistryConfig.LastGameDirectory) && CurrentGame == Games.Unknown)
-                {
-                    StartDirectory = RegistryConfig.LastGameDirectory;
-                    FindAndSetLocalGame();
-                }
-            }
 
+            // Select the last game install
+            var selectedGameInstall = GameInstalls.FirstOrDefault();
+            if (!string.IsNullOrEmpty(RegistryConfig.LastGameInstall))
+            {
+                var gameInstall = GameInstalls
+                    .FirstOrDefault(t => t.ExecutablePath == RegistryConfig.LastGameInstall);
+                if (gameInstall != null)
+                    selectedGameInstall = gameInstall;
+            }
+            SelectGameInstall(selectedGameInstall);
 #endif
 
             if (GameInstalls.Count == 0)
-                GameInstalls.Add(new GameInstall(Games.Unknown, null, GameLauncher.None));
-
-            bool modsDbValidPath = !string.IsNullOrEmpty(ModsDbPath) && Directory.Exists(ModsDbPath);
-            if (!modsDbValidPath && !string.IsNullOrEmpty(StartDirectory))
-                ModsDbPath = Path.Combine(StartDirectory, "Mods");
-            if (!string.IsNullOrEmpty(StartDirectory))
-                ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
-
-            if (CurrentGame.SupportsCPKREDIR)
             {
-                if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))
-                {
-                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
-                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
-                }
+                GameInstalls.Add(new GameInstall(Games.Unknown, null, null, GameLauncher.None));
+                SelectGameInstall(GameInstalls.FirstOrDefault());
             }
 
-            // Try to remove old patch
-            try
-            {
-                if (CurrentGame.SupportsCPKREDIR)
-                {
-                    string exePath = Path.Combine(StartDirectory, CurrentGame.ExecutableName);
-                    if (IsCPKREDIRInstalled(exePath))
-                        InstallCPKREDIR(exePath, false);
-                }
-            }
-            catch { }
-
-            if (AprilFools)
-            {
-                var random = new Random();
-                if (random.Next(10) == 0)
-                {
-                    var langDict = new ResourceDictionary { Source = new Uri("Languages/en-UW.xaml", UriKind.Relative) };
-                    Current.Resources.MergedDictionaries.RemoveAt(3);
-                    Current.Resources.MergedDictionaries.Insert(3, langDict);
-                }
-            }
 
             CodeProvider.TryLoadRoslyn();
 
-            if (splashScreen != null)
-                splashScreen.Close(TimeSpan.FromSeconds(0.5));
+            Events.OnStartUp();
 
             application.Run();
         }
@@ -285,6 +249,10 @@ namespace HedgeModManager
                     string url = arg.Substring("hedgemm://install/".Length);
                     new ModInstallWindow(url).ShowDialog();
                 }
+                else if (arg.StartsWith("hedgemm://gamebanana/", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    GBAPI.ParseCommandLine(arg);
+                }
                 Shutdown();
             }
 
@@ -293,6 +261,21 @@ namespace HedgeModManager
 
             base.OnStartup(e);
             MainWindow.Show();
+        }
+
+        public static string MakeLongPath(string path)
+        {
+            if (path.StartsWith(@"\\?\"))
+            {
+                return path;
+            }
+
+            if (!Path.IsPathRooted(path))
+            {
+                path = Path.GetFullPath(path);
+            }
+
+            return @"\\?\" + path;
         }
 
         private static async Task LoadNetworkConfigAsync()
@@ -318,41 +301,6 @@ namespace HedgeModManager
                     dict[args[i]] = null;
             }
             return dict;
-        }
-
-        public static GameInstall FindAndSetLocalGame()
-        {
-            foreach (var game in Games.GetSupportedGames())
-            {
-                if (File.Exists(Path.Combine(StartDirectory, game.ExecutableName)))
-                {
-                    var steamGame = GameInstalls.FirstOrDefault(x => x.BaseGame == game);
-                    if (steamGame == null)
-                    {
-                        steamGame = new GameInstall(game, StartDirectory, GameLauncher.None);
-                        GameInstalls.Add(steamGame);
-                    }
-                    CurrentGame = game;
-                    CurrentGameInstall = steamGame;
-                    try
-                    {
-                        RegistryConfig.LastGameDirectory = StartDirectory;
-                        RegistryConfig.Save();
-                        ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
-                        Config = new CPKREDIRConfig(ConfigPath);
-                        ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni));
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        Current.MainWindow = CreateOKMessageBox(Localise("CommonUIError"),
-                            string.Format(Localise("DialogUINoGameDirAccess"), StartDirectory));
-                        Current.MainWindow.ShowDialog();
-                        Environment.Exit(-1);
-                    }
-                    return steamGame;
-                }
-            }
-            return null;
         }
 
         public static async void DumpLanguage(string culture)
@@ -454,9 +402,9 @@ namespace HedgeModManager
             while (Current.Resources.MergedDictionaries.Count > 5)
                 Current.Resources.MergedDictionaries.RemoveAt(5);
             // No need to load the fallback language on top
-            if (culture == "en-AU")
-                return;
-            Current.Resources.MergedDictionaries.Add(langDict);
+            if (culture != "en-AU")
+                Current.Resources.MergedDictionaries.Add(langDict);
+            Events.OnLanguageLoad(langDict, culture);
         }
 
         public static void LoadLanguageFolder()
@@ -552,6 +500,53 @@ namespace HedgeModManager
         }
 
         /// <summary>
+        /// Creates a new GameInstall from a path
+        /// </summary>
+        /// <param name="path">Path to the supported game's exe file</param>
+        /// <returns></returns>
+        public static GameInstall AddGameInstallByPath(string path)
+        {
+            try
+            {
+                GameInstall gameInstall = new GameInstall(Games.Unknown, null, path, GameLauncher.None, true);
+                int timestamp = GetPETimestampSeconds(path);
+
+                foreach (var game in Games.GetSupportedGames())
+                {
+                    // Timestamps was actually a flawed idea. using file name for now
+                    //if (game.Timestamps != null && game.Timestamps.Any(t => t == timestamp))
+                    if (game.GamePaths
+                        .Any(x => Path.GetFileName(x).Equals(Path.GetFileName(path), StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        gameInstall.Game = game;
+                        GameInstalls.Add(gameInstall);
+                        SaveGameInstalls();
+                        return gameInstall;
+                    }
+                }
+
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Saves all the custom game installs to the registry
+        /// </summary>
+        public static void SaveGameInstalls()
+        {
+            GameInstall.HandleGameInstallDuplicates(GameInstalls);
+            RegistryConfig.CustomGames = string.Join(";", 
+                GameInstalls
+                .Where(t => t.IsCustom)
+                .Select(t => $"{t.ExecutablePath}|{t.Game.GameName}|{t.Launcher}"));
+            RegistryConfig.Save();
+        }
+
+        /// <summary>
         /// Sets the CurrentGame to the passed GameInstall
         /// </summary>
         /// <param name="gameinstall">Game to select</param>
@@ -560,35 +555,31 @@ namespace HedgeModManager
             if (gameinstall == null)
                 return;
 
-            foreach (var game in Games.GetSupportedGames())
+            CurrentGameInstall = gameinstall;
+            if (gameinstall.Game != Games.Unknown)
             {
-                if (game == gameinstall.BaseGame)
-                {
-                    CurrentGame = game;
-                    CurrentGameInstall = gameinstall;
-                    StartDirectory = gameinstall.GameDirectory;
-                    RegistryConfig.LastGameDirectory = StartDirectory;
-                    RegistryConfig.Save();
-                }
+                RegistryConfig.LastGameInstall = gameinstall.ExecutablePath;
+                RegistryConfig.Save();
             }
             try
             {
-                if (HedgeApp.CurrentGame != Games.Unknown)
+                if (CurrentGameInstall.Game != Games.Unknown)
                 {
-                    ConfigPath = Path.Combine(StartDirectory, "cpkredir.ini");
-                    Config = new CPKREDIRConfig(ConfigPath);
+                    ConfigPath = Path.Combine(CurrentGameInstall.GameDirectory, "cpkredir.ini");
+                    Config = new CPKREDIRConfig(CurrentGameInstall);
 
-                    ModsDbPath = Path.Combine(StartDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
+                    ModsDbPath = Path.Combine(CurrentGameInstall.GameDirectory, Path.GetDirectoryName(Config.ModsDbIni) ?? "Mods");
                     if (!Directory.Exists(ModsDbPath))
                     {
-                        ModsDbPath = Path.Combine(StartDirectory, "Mods");
+                        // Reset mod directory path
+                        ModsDbPath = Path.Combine(CurrentGameInstall.GameDirectory, CurrentGameInstall.Game.ModsDirectoryName);
                     }
                 }
             }
             catch (UnauthorizedAccessException)
             {
                 Current.MainWindow = CreateOKMessageBox(Localise("CommonUIError"),
-                    string.Format(Localise("DialogUINoGameDirAccess"), StartDirectory));
+                    string.Format(Localise("DialogUINoGameDirAccess"), CurrentGameInstall.GameDirectory));
                 Current.MainWindow.ShowDialog();
                 Environment.Exit(-1);
             }
@@ -596,10 +587,10 @@ namespace HedgeModManager
 
         public static void InstallGBHandlers()
         {
-            foreach (var game in Games.GetSupportedGames())
-            {
+            foreach (var game in Games.GetSupportedGames()
+                .GroupBy(t => t.GBProtocol)
+                .Select(t => t.First()))
                 GBAPI.InstallGBHandler(game);
-            }
         }
 
         /// <summary>
@@ -609,7 +600,7 @@ namespace HedgeModManager
         /// <returns>GameInstall thats linked to the passed Game</returns>
         public static GameInstall GetGameInstall(Game game)
         {
-            return GameInstalls.FirstOrDefault(t => t.BaseGame == game);
+            return GameInstalls.FirstOrDefault(t => t.Game == game);
         }
 
         /// <summary>
@@ -689,62 +680,123 @@ namespace HedgeModManager
             return box;
         }
 
-        public static bool InstallOtherLoader(bool toggle = true)
+        public static bool UnInstallOtherLoader()
         {
-            bool installed = false;
+            if (CurrentGameInstall == null || CurrentGameInstall.Game.ModLoader == null)
+                return false;
+
             try
             {
-                if (CurrentGame.SupportsCPKREDIR)
+                var path = Path.Combine(CurrentGameInstall.GameDirectory, CurrentGameInstall.Game.ModLoader.ModLoaderFileName);
+                if (File.Exists(path))
                 {
-                    if (!File.Exists(Path.Combine(StartDirectory, "cpkredir.dll")))
-                    {
-                        File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
-                        File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
-                    }
-                }
-
-                // Do not attempt if no loader exists
-                if (CurrentGame.ModLoader == null)
-                    return false;
-
-                string DLLFileName = Path.Combine(StartDirectory, CurrentGame.ModLoader.ModLoaderFileName);
-
-                if (File.Exists(DLLFileName) && toggle)
-                {
-                    installed = true;
-                    File.Delete(DLLFileName);
+                    File.Delete(path);
                     return true;
                 }
 
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static bool InstallOtherLoader(bool toggle = true)
+        {
+            bool installed = false;
+            bool isZip = false;
+            try
+            {
+                // Do not attempt if no loader exists
+                if (CurrentGameInstall.Game.ModLoader == null)
+                    return false;
+
+                string filePath = Path.Combine(CurrentGameInstall.GameDirectory, CurrentGameInstall.Game.ModLoader.ModLoaderFileName);
+                CurrentGameInstall.Game.ModLoader.MakeCompatible(CurrentGameInstall.GameDirectory);
+
+                if (File.Exists(filePath) && toggle)
+                {
+                    installed = true;
+                    File.Delete(filePath);
+                    return true;
+                }
+
+                // Change path to .zip if download URL contains it
+                if (CurrentGameInstall.Game.ModLoader.ModLoaderDownloadURL.EndsWith(".zip"))
+                {
+                    filePath = Path.Combine(CurrentGameInstall.GameDirectory, CurrentGameInstall.Game.ModLoader.ModLoaderID + ".zip");
+                    isZip = true;
+                }
+
                 // Downloads the loader
-                var downloader = new DownloadWindow($"Downloading {CurrentGame.ModLoader.ModLoaderName}",
-                    CurrentGame.ModLoader.ModLoaderDownloadURL, DLLFileName);
+                var downloader = new DownloadWindow($"Downloading {CurrentGameInstall.Game.ModLoader.ModLoaderName}",
+                    CurrentGameInstall.Game.ModLoader.ModLoaderDownloadURL, filePath);
 
                 downloader.DownloadFailed += (ex) =>
                 {
-                    var loader = CurrentGame.ModLoader.ModLoaderData;
+                    var loader = CurrentGameInstall.Game.ModLoader.ModLoaderData;
                     if (loader != null)
-                        File.WriteAllBytes(DLLFileName, loader);
+                        File.WriteAllBytes(filePath, loader);
                     else
                     {
                         CreateOKMessageBox("Hedge Mod Manager", Lang.Localise("MainUIMLDownloadFail")).ShowDialog();
-                        if (File.Exists(DLLFileName))
+                        if (File.Exists(filePath))
                         {
                             try
                             {
-                                File.Delete(DLLFileName);
+                                File.Delete(filePath);
                             }
                             catch { }
                         }
                     }
                 };
 
+                downloader.DownloadCompleted += () =>
+                {
+                    if (isZip && File.Exists(filePath))
+                    {
+                        // Extract archive
+                        //ZipFile.ExtractToDirectory(filePath, StartDirectory, true);
+
+                        // .NET Framework workaround
+                        using (var stream = File.OpenRead(filePath))
+                        {
+                            using (var zip = new ZipArchive(stream))
+                            {
+                                foreach (var entry in 
+                                    zip.Entries.Where(x => Path.GetFileName(x.FullName).Length != 0))
+                                {
+                                    string fullPath = Path.GetFullPath(Path.Combine(CurrentGameInstall.GameDirectory, entry.FullName));
+
+                                    Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+                                    entry.ExtractToFile(fullPath, true);
+                                }
+                            }
+                        }
+
+                        // Note: This will not work if the DLL within the zip is not {ModLoaderID}.dll
+                        // Replace modloader
+                        string loaderPath = Path.Combine(CurrentGameInstall.GameDirectory, CurrentGameInstall.Game.ModLoader.ModLoaderFileName);
+                        if (File.Exists(loaderPath))
+                            File.Delete(loaderPath);
+                        File.Move(Path.ChangeExtension(filePath, ".dll"), loaderPath);
+
+                        // Delete temp file
+                        try
+                        {
+                            File.Delete(filePath);
+                        }
+                        catch { }
+                    }
+                };
+
                 downloader.Start();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 CreateOKMessageBox("Hedge Mod Manager",
-                    installed ? Lang.Localise("MainUIMLUninstallFail") : Lang.Localise("MainUIMLInstallFail")).ShowDialog();
+                    installed ? Localise("MainUIMLUninstallFail") : Localise("MainUIMLInstallFail")).ShowDialog();
                 return false;
             }
             return true;
@@ -807,8 +859,14 @@ namespace HedgeModManager
 
         public static async Task<(bool, WorkflowRunInfo, ArtifactInfo)> CheckForUpdatesDevAsync()
         {
-            var runs = await GitHubAPI.GetAllRuns(RepoOwner, RepoName);
-            var workflow = runs.Runs.FirstOrDefault();
+            var runs = await GitHubAPI.GetAllRuns(RepoOwner, RepoName, "build.yml");
+            if (runs == null)
+            {
+                // No runs found or API error
+                CreateOKMessageBox(Localise("CommonUIError"), Localise("DialogUIGitHubError")).ShowDialog();
+                return (false, null, null);
+            }
+            var workflow = runs.Runs?.FirstOrDefault();
             if (workflow == null)
                 return (false, null, null);
 
@@ -920,55 +978,6 @@ namespace HedgeModManager
             }
         }
 
-        public static string GetCPKREDIRVersionString()
-        {
-            var temp = Path.Combine(StartDirectory, "cpkredir.dll");
-            FileVersionInfo info = null;
-            if (!File.Exists(temp))
-            {
-                temp = Path.GetTempFileName();
-                File.WriteAllBytes(temp, HMMResources.DAT_CPKREDIR_DLL);
-                info = FileVersionInfo.GetVersionInfo(temp);
-                File.Delete(temp);
-            }
-
-            info = info ?? FileVersionInfo.GetVersionInfo(temp);
-            return $"{info.ProductName} v{info.FileVersion}";
-        }
-
-        private static string GetCPKREDIRFileVersion(bool? packed = null)
-        {
-            string version = null;
-            var temp = Path.Combine(StartDirectory, "cpkredir.dll");
-            if (File.Exists(temp) && packed != true)
-                version = FileVersionInfo.GetVersionInfo(temp).FileVersion;
-
-            if (version == null && packed != false)
-            {
-                version = Games.EmbeddedCPKREDIRVersion;
-            }
-
-            return version;
-        }
-
-        /// <summary>
-        /// Checks the current version of CPKREDIR with the embeded one and updates it if the current is older
-        /// </summary>
-        public static void UpdateCPKREDIR()
-        {
-            if (GetCPKREDIRFileVersion(false) is string currentVersionString)
-            {
-                if (int.TryParse(CPKREDIRVersion.Replace(".", ""), out int packedVersion) &&
-                    int.TryParse(currentVersionString.Replace(".", ""), out int currentVersion) &&
-                    packedVersion > currentVersion)
-                {
-                    // Write embeded CPKREDIR
-                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.dll"), HMMResources.DAT_CPKREDIR_DLL);
-                    File.WriteAllBytes(Path.Combine(StartDirectory, "cpkredir.txt"), HMMResources.DAT_CPKREDIR_TXT);
-                }
-            }
-        }
-
         public static Version ExpandVersion(Version version)
         {
             var build = version.Build;
@@ -977,14 +986,34 @@ namespace HedgeModManager
             return new Version(version.Major, version.Minor, build == -1 ? 0 : build, revision == -1 ? 0 : revision);
         }
 
-        public static string GetCodeLoaderVersion(Game game)
+        public static int GetPETimestampSeconds(string path)
+        {
+            using (var stream = File.OpenRead(path))
+            {
+                var buffer = new byte[0x1000];
+                stream.Read(buffer, 0, buffer.Length);
+
+                var dosHeader = BitConverter.ToUInt16(buffer, 0);
+                if (dosHeader != 0x5A4D)
+                    return -1;
+
+                var peHeaderOffset = BitConverter.ToInt32(buffer, 0x3C);
+                var peHeader = BitConverter.ToUInt32(buffer, peHeaderOffset);
+                if (peHeader != 0x00004550)
+                    return -1;
+
+                var timestamp = BitConverter.ToInt32(buffer, peHeaderOffset + 0x8);
+                return timestamp;
+            }
+        }
+        public static string GetCodeLoaderVersion()
         {
             try
             {
-                if (game.ModLoader == null)
+                if (CurrentGameInstall.Game.ModLoader == null)
                     return null;
 
-                var loaderPath = Path.Combine(StartDirectory, game.ModLoader.ModLoaderFileName);
+                var loaderPath = Path.Combine(CurrentGameInstall.GameDirectory, CurrentGameInstall.Game.ModLoader.ModLoaderFileName);
 
                 if (!File.Exists(loaderPath))
                     return null;
@@ -998,14 +1027,14 @@ namespace HedgeModManager
             }
         }
 
-        public static string GetCodeLoaderName(Game game)
+        public static string GetCodeLoaderName()
         {
             try
             {
-                if (game.ModLoader == null)
+                if (CurrentGameInstall.Game.ModLoader == null)
                     return null;
 
-                var loaderPath = Path.Combine(StartDirectory, game.ModLoader.ModLoaderFileName);
+                var loaderPath = Path.Combine(CurrentGameInstall.GameDirectory, CurrentGameInstall.Game.ModLoader.ModLoaderFileName);
 
                 if (!File.Exists(loaderPath))
                     return null;
@@ -1019,17 +1048,20 @@ namespace HedgeModManager
             }
         }
 
-        public static CodeLoaderInfo GetCodeLoaderInfo(Game game)
+        [CanBeNull]
+        public static CodeLoaderInfo GetCodeLoaderInfo()
         {
+            if (CurrentGameInstall.Game.ModLoader == null)
+                return null;
             try
             {
                 var minCodeVersion = "0.1";
                 var maxCodeVersion = minCodeVersion;
-                var loaderVersion = GetCodeLoaderVersion(game);
+                var loaderVersion = GetCodeLoaderVersion();
 
                 if (loaderVersion != minCodeVersion)
                 {
-                    using (var res = new DllResource(Path.Combine(StartDirectory, game.ModLoader.ModLoaderFileName)))
+                    using (var res = new DllResource(Path.Combine(CurrentGameInstall.GameDirectory, CurrentGameInstall.Game.ModLoader.ModLoaderFileName)))
                     {
                         minCodeVersion = res.GetString(Games.CodeLoaderMinCodeVersionStringId);
                         maxCodeVersion = res.GetString(Games.CodeLoaderMaxCodeVersionStringId);
@@ -1043,7 +1075,7 @@ namespace HedgeModManager
             }
             catch
             {
-                return new CodeLoaderInfo(new Version("0.1"), new Version("9999.9999"));
+                return null;
             }
         }
 
@@ -1153,6 +1185,7 @@ namespace HedgeModManager
                 // Cursed
                 Unsafe.Unbox<Thickness>(window.FindResource("HedgeWindowGridMargin")) = new Thickness(2);
             }
+            Events.OnWindowLoaded(window);
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
